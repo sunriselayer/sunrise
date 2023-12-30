@@ -56,16 +56,15 @@ import (
 	blobmodulekeeper "sunrise/x/blob/keeper"
 	grantmodulekeeper "sunrise/x/blobgrant/keeper"
 	streammodulekeeper "sunrise/x/blobstream/keeper"
-	sunrisemodulekeeper "sunrise/x/sunrise/keeper"
-
 	liquidstakingmodulekeeper "sunrise/x/liquidstaking/keeper"
+	sunrisemodulekeeper "sunrise/x/sunrise/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"sunrise/docs"
 )
 
 const (
-	AccountAddressPrefix = "cosmos"
+	AccountAddressPrefix = "sunrise"
 	Name                 = "sunrise"
 )
 
