@@ -70,6 +70,9 @@ require (
 	github.com/bits-and-blooms/bitset v1.8.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
 	github.com/bufbuild/protocompile v0.6.0 // indirect
+	github.com/celestiaorg/merkletree v0.0.0-20210714075610-a84dc3ddbbe4 // indirect
+	github.com/celestiaorg/nmt v0.20.0 // indirect
+	github.com/celestiaorg/rsmt2d v0.11.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -160,7 +163,9 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
+	github.com/klauspost/cpuid/v2 v2.1.1 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
+	github.com/klauspost/reedsolomon v1.11.8 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.7 // indirect
