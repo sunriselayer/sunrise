@@ -1,13 +1,13 @@
 syntax = "proto3";
-package sunrise.grant;
+package sunrise.blobgrant;
 
 import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/grant/params.proto";
+import "sunrise/blobgrant/params.proto";
 
-option go_package = "sunrise/x/grant/types";
+option go_package = "sunrise/x/blobgrant/types";
 
 // Msg defines the Msg service.
 service Msg {
@@ -21,7 +21,7 @@ service Msg {
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "sunrise/x/grant/MsgUpdateParams";
+  option (amino.name) = "sunrise/x/blobgrant/MsgUpdateParams";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];

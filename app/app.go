@@ -54,8 +54,8 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	blobmodulekeeper "sunrise/x/blob/keeper"
+	grantmodulekeeper "sunrise/x/blobgrant/keeper"
 	streammodulekeeper "sunrise/x/blobstream/keeper"
-	grantmodulekeeper "sunrise/x/grant/keeper"
 	sunrisemodulekeeper "sunrise/x/sunrise/keeper"
 
 	liquidstakingmodulekeeper "sunrise/x/liquidstaking/keeper"

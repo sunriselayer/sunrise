@@ -3,7 +3,7 @@ package grant
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "sunrise/api/sunrise/grant"
+	modulev1 "sunrise/api/sunrise/blobgrant"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

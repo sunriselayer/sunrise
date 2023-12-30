@@ -3,8 +3,8 @@ package grant
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/grant/keeper"
-	"sunrise/x/grant/types"
+	"sunrise/x/blobgrant/keeper"
+	"sunrise/x/blobgrant/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

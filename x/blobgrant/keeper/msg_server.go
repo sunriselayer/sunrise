@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"sunrise/x/grant/types"
+	"sunrise/x/blobgrant/types"
 )
 
 type msgServer struct {

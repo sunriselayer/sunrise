@@ -72,16 +72,16 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	blobmodulev1 "sunrise/api/sunrise/blob/module"
+	grantmodulev1 "sunrise/api/sunrise/blobgrant/module"
 	streammodulev1 "sunrise/api/sunrise/blobstream/module"
-	grantmodulev1 "sunrise/api/sunrise/grant/module"
 	liquidstakingmodulev1 "sunrise/api/sunrise/liquidstaking/module"
 	sunrisemodulev1 "sunrise/api/sunrise/sunrise/module"
 	_ "sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "sunrise/x/blob/types"
+	_ "sunrise/x/blobgrant/module" // import for side-effects
+	grantmoduletypes "sunrise/x/blobgrant/types"
 	_ "sunrise/x/blobstream/module" // import for side-effects
 	streammoduletypes "sunrise/x/blobstream/types"
-	_ "sunrise/x/grant/module" // import for side-effects
-	grantmoduletypes "sunrise/x/grant/types"
 	_ "sunrise/x/liquidstaking/module" // import for side-effects
 	liquidstakingmoduletypes "sunrise/x/liquidstaking/types"
 	_ "sunrise/x/sunrise/module" // import for side-effects

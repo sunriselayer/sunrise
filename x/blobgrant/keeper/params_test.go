@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	keepertest "sunrise/testutil/keeper"
-	"sunrise/x/grant/types"
+	"sunrise/x/blobgrant/types"
 )
 
 func TestGetParams(t *testing.T) {

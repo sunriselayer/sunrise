@@ -1,12 +1,12 @@
 syntax = "proto3";
-package sunrise.grant.module;
+package sunrise.blobgrant.module;
 
 import "cosmos/app/v1alpha1/module.proto";
 
 // Module is the config object for the module.
 message Module {
   option (cosmos.app.v1alpha1.module) = {
-    go_import: "sunrise/x/grant"
+    go_import: "sunrise/x/blobgrant"
   };
 
   // authority defines the custom module authority. If not set, defaults to the governance module.

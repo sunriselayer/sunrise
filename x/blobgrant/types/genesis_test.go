@@ -3,8 +3,9 @@ package types_test
 import (
 	"testing"
 
+	"sunrise/x/blobgrant/types"
+
 	"github.com/stretchr/testify/require"
-	"sunrise/x/grant/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

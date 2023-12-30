@@ -1,19 +1,19 @@
 syntax = "proto3";
-package sunrise.grant;
+package sunrise.blobgrant;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "sunrise/grant/params.proto";
+import "sunrise/blobgrant/params.proto";
 
-option go_package = "sunrise/x/grant/types";
+option go_package = "sunrise/x/blobgrant/types";
 
 // Query defines the gRPC querier service.
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunrise/grant/params";
+    option (google.api.http).get = "/sunrise/blobgrant/params";
   }
 }
 

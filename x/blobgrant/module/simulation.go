@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
 	"sunrise/testutil/sample"
-	grantsimulation "sunrise/x/grant/simulation"
-	"sunrise/x/grant/types"
+	grantsimulation "sunrise/x/blobgrant/simulation"
+	"sunrise/x/blobgrant/types"
 )
 
 // avoid unused import issue

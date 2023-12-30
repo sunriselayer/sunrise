@@ -3,11 +3,12 @@ package grant_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	keepertest "sunrise/testutil/keeper"
 	"sunrise/testutil/nullify"
-	"sunrise/x/grant/module"
-	"sunrise/x/grant/types"
+	grant "sunrise/x/blobgrant/module"
+	"sunrise/x/blobgrant/types"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenesis(t *testing.T) {

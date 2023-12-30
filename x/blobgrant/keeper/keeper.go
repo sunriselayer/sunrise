@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/grant/types"
+	"sunrise/x/blobgrant/types"
 )
 
 type (

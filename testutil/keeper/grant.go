@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/grant/keeper"
-	"sunrise/x/grant/types"
+	"sunrise/x/blobgrant/keeper"
+	"sunrise/x/blobgrant/types"
 )
 
 func GrantKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
