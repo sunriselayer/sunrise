@@ -2,7 +2,7 @@
 
 ## Abstract
 
-This module is originally from <https://github.com/celestiaorg/celestia-app/tree/main/x/tokenfilter>.
+This module is originally from <https://sunrise/tree/main/x/tokenfilter>.
 
 The IBC token filter prevents non-native tokens from being transferred through the IBC transfer module from a counterparty chain to the host chain. This is useful if a chain wishes to only permit
 their native token within their state machine.
