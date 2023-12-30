@@ -54,9 +54,10 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	blobmodulekeeper "sunrise/x/blob/keeper"
+	streammodulekeeper "sunrise/x/blobstream/keeper"
 	grantmodulekeeper "sunrise/x/grant/keeper"
-	streammodulekeeper "sunrise/x/stream/keeper"
 	sunrisemodulekeeper "sunrise/x/sunrise/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"sunrise/docs"

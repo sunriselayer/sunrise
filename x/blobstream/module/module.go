@@ -21,8 +21,8 @@ import (
 	// this line is used by starport scaffolding # 1
 
 	modulev1 "sunrise/api/sunrise/stream/module"
-	"sunrise/x/stream/keeper"
-	"sunrise/x/stream/types"
+	"sunrise/x/blobstream/keeper"
+	"sunrise/x/blobstream/types"
 )
 
 var (

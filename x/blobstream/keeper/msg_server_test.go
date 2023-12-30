@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	keepertest "sunrise/testutil/keeper"
-	"sunrise/x/stream/keeper"
-	"sunrise/x/stream/types"
+	"sunrise/x/blobstream/keeper"
+	"sunrise/x/blobstream/types"
 )
 
 func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, context.Context) {

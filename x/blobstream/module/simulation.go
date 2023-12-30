@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
 	"sunrise/testutil/sample"
-	streamsimulation "sunrise/x/stream/simulation"
-	"sunrise/x/stream/types"
+	streamsimulation "sunrise/x/blobstream/simulation"
+	"sunrise/x/blobstream/types"
 )
 
 // avoid unused import issue

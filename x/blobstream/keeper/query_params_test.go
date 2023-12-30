@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	keepertest "sunrise/testutil/keeper"
-	"sunrise/x/stream/types"
+	"sunrise/x/blobstream/types"
 )
 
 func TestParamsQuery(t *testing.T) {

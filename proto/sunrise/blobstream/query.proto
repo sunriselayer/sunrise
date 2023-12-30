@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/stream/params.proto";
 
-option go_package = "sunrise/x/stream/types";
+option go_package = "sunrise/x/blobstream/types";
 
 // Query defines the gRPC querier service.
 service Query {

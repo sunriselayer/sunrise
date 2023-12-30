@@ -3,8 +3,8 @@ package stream
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/stream/keeper"
-	"sunrise/x/stream/types"
+	"sunrise/x/blobstream/keeper"
+	"sunrise/x/blobstream/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

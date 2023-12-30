@@ -3,8 +3,9 @@ package types_test
 import (
 	"testing"
 
+	"sunrise/x/blobstream/types"
+
 	"github.com/stretchr/testify/require"
-	"sunrise/x/stream/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

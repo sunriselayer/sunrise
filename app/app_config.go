@@ -77,10 +77,10 @@ import (
 	sunrisemodulev1 "sunrise/api/sunrise/sunrise/module"
 	_ "sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "sunrise/x/blob/types"
+	_ "sunrise/x/blobstream/module" // import for side-effects
+	streammoduletypes "sunrise/x/blobstream/types"
 	_ "sunrise/x/grant/module" // import for side-effects
 	grantmoduletypes "sunrise/x/grant/types"
-	_ "sunrise/x/stream/module" // import for side-effects
-	streammoduletypes "sunrise/x/stream/types"
 	_ "sunrise/x/sunrise/module" // import for side-effects
 	sunrisemoduletypes "sunrise/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport

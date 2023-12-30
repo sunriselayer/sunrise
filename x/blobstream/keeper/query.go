@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"sunrise/x/stream/types"
+	"sunrise/x/blobstream/types"
 )
 
 var _ types.QueryServer = Keeper{}

@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/stream/types"
+	"sunrise/x/blobstream/types"
 )
 
 type (

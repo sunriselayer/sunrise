@@ -3,11 +3,12 @@ package stream_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	keepertest "sunrise/testutil/keeper"
 	"sunrise/testutil/nullify"
-	"sunrise/x/stream/module"
-	"sunrise/x/stream/types"
+	stream "sunrise/x/blobstream/module"
+	"sunrise/x/blobstream/types"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenesis(t *testing.T) {
