@@ -55,6 +55,7 @@ import (
 
 	blobmodulekeeper "sunrise/x/blob/keeper"
 	grantmodulekeeper "sunrise/x/grant/keeper"
+	streammodulekeeper "sunrise/x/stream/keeper"
 	sunrisemodulekeeper "sunrise/x/sunrise/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
@@ -121,6 +122,7 @@ type App struct {
 	SunriseKeeper sunrisemodulekeeper.Keeper
 	BlobKeeper    blobmodulekeeper.Keeper
 	GrantKeeper   grantmodulekeeper.Keeper
+	StreamKeeper  streammodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -261,6 +263,7 @@ func New(
 		&app.SunriseKeeper,
 		&app.BlobKeeper,
 		&app.GrantKeeper,
+		&app.StreamKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

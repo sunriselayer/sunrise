@@ -73,11 +73,14 @@ import (
 
 	blobmodulev1 "sunrise/api/sunrise/blob/module"
 	grantmodulev1 "sunrise/api/sunrise/grant/module"
+	streammodulev1 "sunrise/api/sunrise/stream/module"
 	sunrisemodulev1 "sunrise/api/sunrise/sunrise/module"
 	_ "sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "sunrise/x/blob/types"
 	_ "sunrise/x/grant/module" // import for side-effects
 	grantmoduletypes "sunrise/x/grant/types"
+	_ "sunrise/x/stream/module" // import for side-effects
+	streammoduletypes "sunrise/x/stream/types"
 	_ "sunrise/x/sunrise/module" // import for side-effects
 	sunrisemoduletypes "sunrise/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -120,6 +123,7 @@ var (
 		sunrisemoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
+		streammoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -147,6 +151,7 @@ var (
 		sunrisemoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
+		streammoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -168,6 +173,7 @@ var (
 		sunrisemoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
+		streammoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -328,6 +334,10 @@ var (
 			{
 				Name:   grantmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&grantmodulev1.Module{}),
+			},
+			{
+				Name:   streammoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&streammodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
