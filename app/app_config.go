@@ -74,6 +74,7 @@ import (
 	blobmodulev1 "sunrise/api/sunrise/blob/module"
 	streammodulev1 "sunrise/api/sunrise/blobstream/module"
 	grantmodulev1 "sunrise/api/sunrise/grant/module"
+	liquidstakingmodulev1 "sunrise/api/sunrise/liquidstaking/module"
 	sunrisemodulev1 "sunrise/api/sunrise/sunrise/module"
 	_ "sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "sunrise/x/blob/types"
@@ -81,6 +82,8 @@ import (
 	streammoduletypes "sunrise/x/blobstream/types"
 	_ "sunrise/x/grant/module" // import for side-effects
 	grantmoduletypes "sunrise/x/grant/types"
+	_ "sunrise/x/liquidstaking/module" // import for side-effects
+	liquidstakingmoduletypes "sunrise/x/liquidstaking/types"
 	_ "sunrise/x/sunrise/module" // import for side-effects
 	sunrisemoduletypes "sunrise/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -124,6 +127,7 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		liquidstakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -152,6 +156,7 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		liquidstakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -174,6 +179,7 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		liquidstakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -338,6 +344,10 @@ var (
 			{
 				Name:   streammoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&streammodulev1.Module{}),
+			},
+			{
+				Name:   liquidstakingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&liquidstakingmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
