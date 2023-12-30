@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sunrise.stream;
+package sunrise.blobstream;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
@@ -13,7 +13,7 @@ option go_package = "sunrise/x/blobstream/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunrise/stream/params";
+    option (google.api.http).get = "/sunrise/blobstream/params";
   }
 }
 
