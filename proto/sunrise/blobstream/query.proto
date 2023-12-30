@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "sunrise/stream/params.proto";
+import "sunrise/blobstream/params.proto";
 
 option go_package = "sunrise/x/blobstream/types";
 
