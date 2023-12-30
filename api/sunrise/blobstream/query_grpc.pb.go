@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: sunrise/stream/query.proto
+// source: sunrise/blobstream/query.proto
 
-package stream
+package blobstream
 
 import (
 	context "context"
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName = "/sunrise.stream.Query/Params"
+	Query_Params_FullMethodName = "/sunrise.blobstream.Query/Params"
 )
 
 // QueryClient is the client API for Query service.
@@ -98,7 +98,7 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Query_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "sunrise.stream.Query",
+	ServiceName: "sunrise.blobstream.Query",
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -107,5 +107,5 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "sunrise/stream/query.proto",
+	Metadata: "sunrise/blobstream/query.proto",
 }

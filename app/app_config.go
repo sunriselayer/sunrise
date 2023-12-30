@@ -72,8 +72,8 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	blobmodulev1 "sunrise/api/sunrise/blob/module"
+	streammodulev1 "sunrise/api/sunrise/blobstream/module"
 	grantmodulev1 "sunrise/api/sunrise/grant/module"
-	streammodulev1 "sunrise/api/sunrise/stream/module"
 	sunrisemodulev1 "sunrise/api/sunrise/sunrise/module"
 	_ "sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "sunrise/x/blob/types"

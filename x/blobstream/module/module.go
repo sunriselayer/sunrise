@@ -20,7 +20,7 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "sunrise/api/sunrise/stream/module"
+	modulev1 "sunrise/api/sunrise/blobstream/module"
 	"sunrise/x/blobstream/keeper"
 	"sunrise/x/blobstream/types"
 )

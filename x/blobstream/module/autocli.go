@@ -3,7 +3,7 @@ package stream
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "sunrise/api/sunrise/stream"
+	modulev1 "sunrise/api/sunrise/blobstream"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
