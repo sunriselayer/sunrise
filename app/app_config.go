@@ -71,7 +71,10 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
+	blobmodulev1 "sunrise/api/sunrise/blob/module"
 	sunrisemodulev1 "sunrise/api/sunrise/sunrise/module"
+	_ "sunrise/x/blob/module" // import for side-effects
+	blobmoduletypes "sunrise/x/blob/types"
 	_ "sunrise/x/sunrise/module" // import for side-effects
 	sunrisemoduletypes "sunrise/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -112,6 +115,7 @@ var (
 		circuittypes.ModuleName,
 		// chain modules
 		sunrisemoduletypes.ModuleName,
+		blobmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -137,6 +141,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		sunrisemoduletypes.ModuleName,
+		blobmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -156,6 +161,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		sunrisemoduletypes.ModuleName,
+		blobmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -308,6 +314,10 @@ var (
 			{
 				Name:   sunrisemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&sunrisemodulev1.Module{}),
+			},
+			{
+				Name:   blobmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&blobmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
