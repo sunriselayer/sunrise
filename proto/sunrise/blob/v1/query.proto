@@ -1,11 +1,11 @@
 syntax = "proto3";
-package sunrise.blob;
+package sunrise.blob.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "sunrise/blob/params.proto";
+import "sunrise/blob/v1/params.proto";
 
 option go_package = "sunrise/x/blob/types";
 

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sunrise.blob.module;
+package sunrise.blob.v1.module;
 
 import "cosmos/app/v1alpha1/module.proto";
 
