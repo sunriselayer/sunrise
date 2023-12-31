@@ -31,3 +31,13 @@ func (k Keeper) SetParams(ctx context.Context, params types.Params) error {
 
 	return nil
 }
+
+// GasPerBlobByte returns the GasPerBlobByte param
+func (k Keeper) GasPerBlobByte(ctx context.Context) (res uint32) {
+	return k.GetParams(ctx).GasPerBlobByte
+}
+
+// GovMaxSquareSize returns the GovMaxSquareSize param
+func (k Keeper) GovMaxSquareSize(ctx context.Context) (res uint64) {
+	return k.GetParams(ctx).GovMaxSquareSize
+}

@@ -1,6 +1,8 @@
 package ante
 
 import (
+	"context"
+
 	"sunrise/x/blob/types"
 
 	"cosmossdk.io/errors"
@@ -47,6 +49,6 @@ func (d MinGasPFBDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 }
 
 type BlobKeeper interface {
-	GasPerBlobByte(ctx sdk.Context) uint32
-	GovMaxSquareSize(ctx sdk.Context) uint64
+	GasPerBlobByte(ctx context.Context) uint32
+	GovMaxSquareSize(ctx context.Context) uint64
 }

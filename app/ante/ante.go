@@ -4,9 +4,9 @@ import (
 	blobante "sunrise/x/blob/ante"
 	blob "sunrise/x/blob/keeper"
 
+	"cosmossdk.io/x/tx/signing"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	"github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
@@ -17,7 +17,7 @@ func NewAnteHandler(
 	bankKeeper authtypes.BankKeeper,
 	blobKeeper blob.Keeper,
 	feegrantKeeper ante.FeegrantKeeper,
-	signModeHandler signing.SignModeHandler,
+	signModeHandler *signing.HandlerMap,
 	sigGasConsumer ante.SignatureVerificationGasConsumer,
 	channelKeeper *ibckeeper.Keeper,
 ) sdk.AnteHandler {
@@ -60,9 +60,6 @@ func NewAnteHandler(
 		blobante.NewMinGasPFBDecorator(blobKeeper),
 		// Ensure that the tx's total blob size is <= the max blob size.
 		blobante.NewMaxBlobSizeDecorator(blobKeeper),
-		// Ensure that tx's with a MsgSubmitProposal have at least one proposal
-		// message.
-		NewGovProposalDecorator(),
 		// Side effect: increment the nonce for all tx signers.
 		ante.NewIncrementSequenceDecorator(accountKeeper),
 		// Ensure that the tx is not a IBC packet or update message that has already been processed.

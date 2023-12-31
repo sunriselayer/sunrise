@@ -11,6 +11,10 @@ import (
 	"sunrise/x/blob/types"
 )
 
+const (
+	payForBlobGasDescriptor = "pay for blob"
+)
+
 type (
 	Keeper struct {
 		cdc          codec.BinaryCodec
