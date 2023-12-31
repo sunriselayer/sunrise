@@ -69,9 +69,9 @@ service Query {
     option (google.api.http).get = "/sunrise/blobstream/v1/data_commitment/latest";
   }
 
-  // EVMAddress returns the evm address associated with a supplied
+  // EvmAddress returns the evm address associated with a supplied
   // validator address
-  rpc EVMAddress(QueryEVMAddressRequest) returns (QueryEVMAddressResponse) {
+  rpc EvmAddress(QueryEvmAddressRequest) returns (QueryEvmAddressResponse) {
     option (google.api.http).get = "/sunrise/blobstream/v1/evm_address";
   }
 }
@@ -140,8 +140,8 @@ message QueryDataCommitmentRangeForHeightResponse {
   DataCommitment data_commitment = 1;
 }
 
-// QueryEVMAddressRequest
-message QueryEVMAddressRequest { string validator_address = 1; }
+// QueryEvmAddressRequest
+message QueryEvmAddressRequest { string validator_address = 1; }
 
-// QueryEVMAddressResponse
-message QueryEVMAddressResponse { string evm_address = 1; }
+// QueryEvmAddressResponse
+message QueryEvmAddressResponse { string evm_address = 1; }

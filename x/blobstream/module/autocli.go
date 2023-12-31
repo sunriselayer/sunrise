@@ -1,4 +1,4 @@
-package stream
+package blobstream
 
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"

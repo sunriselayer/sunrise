@@ -1,4 +1,4 @@
-package stream
+package blobstream
 
 import (
 	"math/rand"
@@ -9,13 +9,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
 	"sunrise/testutil/sample"
-	streamsimulation "sunrise/x/blobstream/simulation"
+	blobstreamsimulation "sunrise/x/blobstream/simulation"
 	"sunrise/x/blobstream/types"
 )
 
 // avoid unused import issue
 var (
-	_ = streamsimulation.FindAccount
+	_ = blobstreamsimulation.FindAccount
 	_ = rand.Rand{}
 	_ = sample.AccAddress
 	_ = sdk.AccAddress{}

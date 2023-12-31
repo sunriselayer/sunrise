@@ -27,7 +27,7 @@ const (
 	Query_LatestUnbondingHeight_FullMethodName          = "/sunrise.blobstream.v1.Query/LatestUnbondingHeight"
 	Query_DataCommitmentRangeForHeight_FullMethodName   = "/sunrise.blobstream.v1.Query/DataCommitmentRangeForHeight"
 	Query_LatestDataCommitment_FullMethodName           = "/sunrise.blobstream.v1.Query/LatestDataCommitment"
-	Query_EVMAddress_FullMethodName                     = "/sunrise.blobstream.v1.Query/EVMAddress"
+	Query_EvmAddress_FullMethodName                     = "/sunrise.blobstream.v1.Query/EvmAddress"
 )
 
 // QueryClient is the client API for Query service.
@@ -56,9 +56,9 @@ type QueryClient interface {
 	DataCommitmentRangeForHeight(ctx context.Context, in *QueryDataCommitmentRangeForHeightRequest, opts ...grpc.CallOption) (*QueryDataCommitmentRangeForHeightResponse, error)
 	// LatestDataCommitment returns the latest data commitment in store
 	LatestDataCommitment(ctx context.Context, in *QueryLatestDataCommitmentRequest, opts ...grpc.CallOption) (*QueryLatestDataCommitmentResponse, error)
-	// EVMAddress returns the evm address associated with a supplied
+	// EvmAddress returns the evm address associated with a supplied
 	// validator address
-	EVMAddress(ctx context.Context, in *QueryEVMAddressRequest, opts ...grpc.CallOption) (*QueryEVMAddressResponse, error)
+	EvmAddress(ctx context.Context, in *QueryEvmAddressRequest, opts ...grpc.CallOption) (*QueryEvmAddressResponse, error)
 }
 
 type queryClient struct {
@@ -141,9 +141,9 @@ func (c *queryClient) LatestDataCommitment(ctx context.Context, in *QueryLatestD
 	return out, nil
 }
 
-func (c *queryClient) EVMAddress(ctx context.Context, in *QueryEVMAddressRequest, opts ...grpc.CallOption) (*QueryEVMAddressResponse, error) {
-	out := new(QueryEVMAddressResponse)
-	err := c.cc.Invoke(ctx, Query_EVMAddress_FullMethodName, in, out, opts...)
+func (c *queryClient) EvmAddress(ctx context.Context, in *QueryEvmAddressRequest, opts ...grpc.CallOption) (*QueryEvmAddressResponse, error) {
+	out := new(QueryEvmAddressResponse)
+	err := c.cc.Invoke(ctx, Query_EvmAddress_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -176,9 +176,9 @@ type QueryServer interface {
 	DataCommitmentRangeForHeight(context.Context, *QueryDataCommitmentRangeForHeightRequest) (*QueryDataCommitmentRangeForHeightResponse, error)
 	// LatestDataCommitment returns the latest data commitment in store
 	LatestDataCommitment(context.Context, *QueryLatestDataCommitmentRequest) (*QueryLatestDataCommitmentResponse, error)
-	// EVMAddress returns the evm address associated with a supplied
+	// EvmAddress returns the evm address associated with a supplied
 	// validator address
-	EVMAddress(context.Context, *QueryEVMAddressRequest) (*QueryEVMAddressResponse, error)
+	EvmAddress(context.Context, *QueryEvmAddressRequest) (*QueryEvmAddressResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -210,8 +210,8 @@ func (UnimplementedQueryServer) DataCommitmentRangeForHeight(context.Context, *Q
 func (UnimplementedQueryServer) LatestDataCommitment(context.Context, *QueryLatestDataCommitmentRequest) (*QueryLatestDataCommitmentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LatestDataCommitment not implemented")
 }
-func (UnimplementedQueryServer) EVMAddress(context.Context, *QueryEVMAddressRequest) (*QueryEVMAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EVMAddress not implemented")
+func (UnimplementedQueryServer) EvmAddress(context.Context, *QueryEvmAddressRequest) (*QueryEvmAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EvmAddress not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -370,20 +370,20 @@ func _Query_LatestDataCommitment_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_EVMAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryEVMAddressRequest)
+func _Query_EvmAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEvmAddressRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).EVMAddress(ctx, in)
+		return srv.(QueryServer).EvmAddress(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_EVMAddress_FullMethodName,
+		FullMethod: Query_EvmAddress_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).EVMAddress(ctx, req.(*QueryEVMAddressRequest))
+		return srv.(QueryServer).EvmAddress(ctx, req.(*QueryEvmAddressRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -428,8 +428,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_LatestDataCommitment_Handler,
 		},
 		{
-			MethodName: "EVMAddress",
-			Handler:    _Query_EVMAddress_Handler,
+			MethodName: "EvmAddress",
+			Handler:    _Query_EvmAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

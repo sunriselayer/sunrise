@@ -39,10 +39,10 @@ message MsgUpdateParamsResponse {}
 
 // MsgRegisterEvmAddress registers an evm address to a validator.
 message MsgRegisterEvmAddress {
-  option (cosmos.msg.v1.signer) = "validator_address";
+  option (cosmos.msg.v1.signer) = "address";
 
-  // The operating address of the validator.
-  string validator_address = 1
+  // The acc address of the validator.
+  string address = 1
   [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // The matching HEX encoded EVM address.

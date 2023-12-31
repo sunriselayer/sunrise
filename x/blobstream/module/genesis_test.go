@@ -1,4 +1,4 @@
-package stream_test
+package blobstream_test
 
 import (
 	"testing"

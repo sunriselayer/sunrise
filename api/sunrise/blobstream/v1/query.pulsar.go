@@ -6398,25 +6398,25 @@ func (x *fastReflection_QueryDataCommitmentRangeForHeightResponse) ProtoMethods(
 }
 
 var (
-	md_QueryEVMAddressRequest                   protoreflect.MessageDescriptor
-	fd_QueryEVMAddressRequest_validator_address protoreflect.FieldDescriptor
+	md_QueryEvmAddressRequest                   protoreflect.MessageDescriptor
+	fd_QueryEvmAddressRequest_validator_address protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_blobstream_v1_query_proto_init()
-	md_QueryEVMAddressRequest = File_sunrise_blobstream_v1_query_proto.Messages().ByName("QueryEVMAddressRequest")
-	fd_QueryEVMAddressRequest_validator_address = md_QueryEVMAddressRequest.Fields().ByName("validator_address")
+	md_QueryEvmAddressRequest = File_sunrise_blobstream_v1_query_proto.Messages().ByName("QueryEvmAddressRequest")
+	fd_QueryEvmAddressRequest_validator_address = md_QueryEvmAddressRequest.Fields().ByName("validator_address")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryEVMAddressRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryEvmAddressRequest)(nil)
 
-type fastReflection_QueryEVMAddressRequest QueryEVMAddressRequest
+type fastReflection_QueryEvmAddressRequest QueryEvmAddressRequest
 
-func (x *QueryEVMAddressRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryEVMAddressRequest)(x)
+func (x *QueryEvmAddressRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEvmAddressRequest)(x)
 }
 
-func (x *QueryEVMAddressRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryEvmAddressRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_blobstream_v1_query_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6428,43 +6428,43 @@ func (x *QueryEVMAddressRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryEVMAddressRequest_messageType fastReflection_QueryEVMAddressRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryEVMAddressRequest_messageType{}
+var _fastReflection_QueryEvmAddressRequest_messageType fastReflection_QueryEvmAddressRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEvmAddressRequest_messageType{}
 
-type fastReflection_QueryEVMAddressRequest_messageType struct{}
+type fastReflection_QueryEvmAddressRequest_messageType struct{}
 
-func (x fastReflection_QueryEVMAddressRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryEVMAddressRequest)(nil)
+func (x fastReflection_QueryEvmAddressRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEvmAddressRequest)(nil)
 }
-func (x fastReflection_QueryEVMAddressRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryEVMAddressRequest)
+func (x fastReflection_QueryEvmAddressRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEvmAddressRequest)
 }
-func (x fastReflection_QueryEVMAddressRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEVMAddressRequest
+func (x fastReflection_QueryEvmAddressRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEvmAddressRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryEVMAddressRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEVMAddressRequest
+func (x *fastReflection_QueryEvmAddressRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEvmAddressRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryEVMAddressRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryEVMAddressRequest_messageType
+func (x *fastReflection_QueryEvmAddressRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEvmAddressRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryEVMAddressRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryEVMAddressRequest)
+func (x *fastReflection_QueryEvmAddressRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryEvmAddressRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryEVMAddressRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryEVMAddressRequest)(x)
+func (x *fastReflection_QueryEvmAddressRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryEvmAddressRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6472,10 +6472,10 @@ func (x *fastReflection_QueryEVMAddressRequest) Interface() protoreflect.ProtoMe
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryEVMAddressRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryEvmAddressRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ValidatorAddress != "" {
 		value := protoreflect.ValueOfString(x.ValidatorAddress)
-		if !f(fd_QueryEVMAddressRequest_validator_address, value) {
+		if !f(fd_QueryEvmAddressRequest_validator_address, value) {
 			return
 		}
 	}
@@ -6492,15 +6492,15 @@ func (x *fastReflection_QueryEVMAddressRequest) Range(f func(protoreflect.FieldD
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryEVMAddressRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryEvmAddressRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressRequest.validator_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressRequest.validator_address":
 		return x.ValidatorAddress != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6510,15 +6510,15 @@ func (x *fastReflection_QueryEVMAddressRequest) Has(fd protoreflect.FieldDescrip
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryEvmAddressRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressRequest.validator_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressRequest.validator_address":
 		x.ValidatorAddress = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6528,16 +6528,16 @@ func (x *fastReflection_QueryEVMAddressRequest) Clear(fd protoreflect.FieldDescr
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryEVMAddressRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEvmAddressRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressRequest.validator_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressRequest.validator_address":
 		value := x.ValidatorAddress
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6551,15 +6551,15 @@ func (x *fastReflection_QueryEVMAddressRequest) Get(descriptor protoreflect.Fiel
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryEvmAddressRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressRequest.validator_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressRequest.validator_address":
 		x.ValidatorAddress = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6573,40 +6573,40 @@ func (x *fastReflection_QueryEVMAddressRequest) Set(fd protoreflect.FieldDescrip
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEvmAddressRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressRequest.validator_address":
-		panic(fmt.Errorf("field validator_address of message sunrise.blobstream.v1.QueryEVMAddressRequest is not mutable"))
+	case "sunrise.blobstream.v1.QueryEvmAddressRequest.validator_address":
+		panic(fmt.Errorf("field validator_address of message sunrise.blobstream.v1.QueryEvmAddressRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryEVMAddressRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEvmAddressRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressRequest.validator_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressRequest.validator_address":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryEVMAddressRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryEvmAddressRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.blobstream.v1.QueryEVMAddressRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.blobstream.v1.QueryEvmAddressRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6614,7 +6614,7 @@ func (x *fastReflection_QueryEVMAddressRequest) WhichOneof(d protoreflect.OneofD
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryEVMAddressRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryEvmAddressRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6625,7 +6625,7 @@ func (x *fastReflection_QueryEVMAddressRequest) GetUnknown() protoreflect.RawFie
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryEvmAddressRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6637,7 +6637,7 @@ func (x *fastReflection_QueryEVMAddressRequest) SetUnknown(fields protoreflect.R
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryEVMAddressRequest) IsValid() bool {
+func (x *fastReflection_QueryEvmAddressRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -6647,9 +6647,9 @@ func (x *fastReflection_QueryEVMAddressRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryEVMAddressRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryEvmAddressRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryEVMAddressRequest)
+		x := input.Message.Interface().(*QueryEvmAddressRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6675,7 +6675,7 @@ func (x *fastReflection_QueryEVMAddressRequest) ProtoMethods() *protoiface.Metho
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEVMAddressRequest)
+		x := input.Message.Interface().(*QueryEvmAddressRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6712,7 +6712,7 @@ func (x *fastReflection_QueryEVMAddressRequest) ProtoMethods() *protoiface.Metho
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEVMAddressRequest)
+		x := input.Message.Interface().(*QueryEvmAddressRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6744,10 +6744,10 @@ func (x *fastReflection_QueryEVMAddressRequest) ProtoMethods() *protoiface.Metho
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEVMAddressRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEvmAddressRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEVMAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEvmAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6818,25 +6818,25 @@ func (x *fastReflection_QueryEVMAddressRequest) ProtoMethods() *protoiface.Metho
 }
 
 var (
-	md_QueryEVMAddressResponse             protoreflect.MessageDescriptor
-	fd_QueryEVMAddressResponse_evm_address protoreflect.FieldDescriptor
+	md_QueryEvmAddressResponse             protoreflect.MessageDescriptor
+	fd_QueryEvmAddressResponse_evm_address protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_blobstream_v1_query_proto_init()
-	md_QueryEVMAddressResponse = File_sunrise_blobstream_v1_query_proto.Messages().ByName("QueryEVMAddressResponse")
-	fd_QueryEVMAddressResponse_evm_address = md_QueryEVMAddressResponse.Fields().ByName("evm_address")
+	md_QueryEvmAddressResponse = File_sunrise_blobstream_v1_query_proto.Messages().ByName("QueryEvmAddressResponse")
+	fd_QueryEvmAddressResponse_evm_address = md_QueryEvmAddressResponse.Fields().ByName("evm_address")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryEVMAddressResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryEvmAddressResponse)(nil)
 
-type fastReflection_QueryEVMAddressResponse QueryEVMAddressResponse
+type fastReflection_QueryEvmAddressResponse QueryEvmAddressResponse
 
-func (x *QueryEVMAddressResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryEVMAddressResponse)(x)
+func (x *QueryEvmAddressResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEvmAddressResponse)(x)
 }
 
-func (x *QueryEVMAddressResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryEvmAddressResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_blobstream_v1_query_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6848,43 +6848,43 @@ func (x *QueryEVMAddressResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryEVMAddressResponse_messageType fastReflection_QueryEVMAddressResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryEVMAddressResponse_messageType{}
+var _fastReflection_QueryEvmAddressResponse_messageType fastReflection_QueryEvmAddressResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEvmAddressResponse_messageType{}
 
-type fastReflection_QueryEVMAddressResponse_messageType struct{}
+type fastReflection_QueryEvmAddressResponse_messageType struct{}
 
-func (x fastReflection_QueryEVMAddressResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryEVMAddressResponse)(nil)
+func (x fastReflection_QueryEvmAddressResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEvmAddressResponse)(nil)
 }
-func (x fastReflection_QueryEVMAddressResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryEVMAddressResponse)
+func (x fastReflection_QueryEvmAddressResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEvmAddressResponse)
 }
-func (x fastReflection_QueryEVMAddressResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEVMAddressResponse
+func (x fastReflection_QueryEvmAddressResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEvmAddressResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryEVMAddressResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryEVMAddressResponse
+func (x *fastReflection_QueryEvmAddressResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEvmAddressResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryEVMAddressResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryEVMAddressResponse_messageType
+func (x *fastReflection_QueryEvmAddressResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEvmAddressResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryEVMAddressResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryEVMAddressResponse)
+func (x *fastReflection_QueryEvmAddressResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryEvmAddressResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryEVMAddressResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryEVMAddressResponse)(x)
+func (x *fastReflection_QueryEvmAddressResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryEvmAddressResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6892,10 +6892,10 @@ func (x *fastReflection_QueryEVMAddressResponse) Interface() protoreflect.ProtoM
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryEVMAddressResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryEvmAddressResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.EvmAddress != "" {
 		value := protoreflect.ValueOfString(x.EvmAddress)
-		if !f(fd_QueryEVMAddressResponse_evm_address, value) {
+		if !f(fd_QueryEvmAddressResponse_evm_address, value) {
 			return
 		}
 	}
@@ -6912,15 +6912,15 @@ func (x *fastReflection_QueryEVMAddressResponse) Range(f func(protoreflect.Field
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryEVMAddressResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryEvmAddressResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressResponse.evm_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressResponse.evm_address":
 		return x.EvmAddress != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6930,15 +6930,15 @@ func (x *fastReflection_QueryEVMAddressResponse) Has(fd protoreflect.FieldDescri
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryEvmAddressResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressResponse.evm_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressResponse.evm_address":
 		x.EvmAddress = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6948,16 +6948,16 @@ func (x *fastReflection_QueryEVMAddressResponse) Clear(fd protoreflect.FieldDesc
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryEVMAddressResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEvmAddressResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressResponse.evm_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressResponse.evm_address":
 		value := x.EvmAddress
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6971,15 +6971,15 @@ func (x *fastReflection_QueryEVMAddressResponse) Get(descriptor protoreflect.Fie
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryEvmAddressResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressResponse.evm_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressResponse.evm_address":
 		x.EvmAddress = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6993,40 +6993,40 @@ func (x *fastReflection_QueryEVMAddressResponse) Set(fd protoreflect.FieldDescri
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEvmAddressResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressResponse.evm_address":
-		panic(fmt.Errorf("field evm_address of message sunrise.blobstream.v1.QueryEVMAddressResponse is not mutable"))
+	case "sunrise.blobstream.v1.QueryEvmAddressResponse.evm_address":
+		panic(fmt.Errorf("field evm_address of message sunrise.blobstream.v1.QueryEvmAddressResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryEVMAddressResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryEvmAddressResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.blobstream.v1.QueryEVMAddressResponse.evm_address":
+	case "sunrise.blobstream.v1.QueryEvmAddressResponse.evm_address":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEVMAddressResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobstream.v1.QueryEvmAddressResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEVMAddressResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.blobstream.v1.QueryEvmAddressResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryEVMAddressResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryEvmAddressResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.blobstream.v1.QueryEVMAddressResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.blobstream.v1.QueryEvmAddressResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -7034,7 +7034,7 @@ func (x *fastReflection_QueryEVMAddressResponse) WhichOneof(d protoreflect.Oneof
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryEVMAddressResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryEvmAddressResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -7045,7 +7045,7 @@ func (x *fastReflection_QueryEVMAddressResponse) GetUnknown() protoreflect.RawFi
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryEVMAddressResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryEvmAddressResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -7057,7 +7057,7 @@ func (x *fastReflection_QueryEVMAddressResponse) SetUnknown(fields protoreflect.
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryEVMAddressResponse) IsValid() bool {
+func (x *fastReflection_QueryEvmAddressResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -7067,9 +7067,9 @@ func (x *fastReflection_QueryEVMAddressResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryEVMAddressResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryEvmAddressResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryEVMAddressResponse)
+		x := input.Message.Interface().(*QueryEvmAddressResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7095,7 +7095,7 @@ func (x *fastReflection_QueryEVMAddressResponse) ProtoMethods() *protoiface.Meth
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEVMAddressResponse)
+		x := input.Message.Interface().(*QueryEvmAddressResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7132,7 +7132,7 @@ func (x *fastReflection_QueryEVMAddressResponse) ProtoMethods() *protoiface.Meth
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryEVMAddressResponse)
+		x := input.Message.Interface().(*QueryEvmAddressResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -7164,10 +7164,10 @@ func (x *fastReflection_QueryEVMAddressResponse) ProtoMethods() *protoiface.Meth
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEVMAddressResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEvmAddressResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEVMAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEvmAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -7787,8 +7787,8 @@ func (x *QueryDataCommitmentRangeForHeightResponse) GetDataCommitment() *DataCom
 	return nil
 }
 
-// QueryEVMAddressRequest
-type QueryEVMAddressRequest struct {
+// QueryEvmAddressRequest
+type QueryEvmAddressRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -7796,8 +7796,8 @@ type QueryEVMAddressRequest struct {
 	ValidatorAddress string `protobuf:"bytes,1,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
 }
 
-func (x *QueryEVMAddressRequest) Reset() {
-	*x = QueryEVMAddressRequest{}
+func (x *QueryEvmAddressRequest) Reset() {
+	*x = QueryEvmAddressRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_blobstream_v1_query_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7805,26 +7805,26 @@ func (x *QueryEVMAddressRequest) Reset() {
 	}
 }
 
-func (x *QueryEVMAddressRequest) String() string {
+func (x *QueryEvmAddressRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryEVMAddressRequest) ProtoMessage() {}
+func (*QueryEvmAddressRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryEVMAddressRequest.ProtoReflect.Descriptor instead.
-func (*QueryEVMAddressRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryEvmAddressRequest.ProtoReflect.Descriptor instead.
+func (*QueryEvmAddressRequest) Descriptor() ([]byte, []int) {
 	return file_sunrise_blobstream_v1_query_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *QueryEVMAddressRequest) GetValidatorAddress() string {
+func (x *QueryEvmAddressRequest) GetValidatorAddress() string {
 	if x != nil {
 		return x.ValidatorAddress
 	}
 	return ""
 }
 
-// QueryEVMAddressResponse
-type QueryEVMAddressResponse struct {
+// QueryEvmAddressResponse
+type QueryEvmAddressResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -7832,8 +7832,8 @@ type QueryEVMAddressResponse struct {
 	EvmAddress string `protobuf:"bytes,1,opt,name=evm_address,json=evmAddress,proto3" json:"evm_address,omitempty"`
 }
 
-func (x *QueryEVMAddressResponse) Reset() {
-	*x = QueryEVMAddressResponse{}
+func (x *QueryEvmAddressResponse) Reset() {
+	*x = QueryEvmAddressResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_blobstream_v1_query_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7841,18 +7841,18 @@ func (x *QueryEVMAddressResponse) Reset() {
 	}
 }
 
-func (x *QueryEVMAddressResponse) String() string {
+func (x *QueryEvmAddressResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryEVMAddressResponse) ProtoMessage() {}
+func (*QueryEvmAddressResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryEVMAddressResponse.ProtoReflect.Descriptor instead.
-func (*QueryEVMAddressResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryEvmAddressResponse.ProtoReflect.Descriptor instead.
+func (*QueryEvmAddressResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_blobstream_v1_query_proto_rawDescGZIP(), []int{17}
 }
 
-func (x *QueryEVMAddressResponse) GetEvmAddress() string {
+func (x *QueryEvmAddressResponse) GetEvmAddress() string {
 	if x != nil {
 		return x.EvmAddress
 	}
@@ -7950,12 +7950,12 @@ var file_sunrise_blobstream_v1_query_proto_rawDesc = []byte{
 	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x74, 0x72, 0x65,
 	0x61, 0x6d, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74,
 	0x6d, 0x65, 0x6e, 0x74, 0x52, 0x0e, 0x64, 0x61, 0x74, 0x61, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74,
-	0x6d, 0x65, 0x6e, 0x74, 0x22, 0x45, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x56, 0x4d,
+	0x6d, 0x65, 0x6e, 0x74, 0x22, 0x45, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x76, 0x6d,
 	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b,
 	0x0a, 0x11, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72,
 	0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x76, 0x61, 0x6c, 0x69, 0x64,
 	0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x3a, 0x0a, 0x17, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x45, 0x56, 0x4d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x75, 0x65, 0x72, 0x79, 0x45, 0x76, 0x6d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x65, 0x76, 0x6d, 0x5f, 0x61, 0x64,
 	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x76, 0x6d,
 	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x32, 0xe8, 0x0d, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72,
@@ -8059,13 +8059,13 @@ var file_sunrise_blobstream_v1_query_proto_rawDesc = []byte{
 	0x65, 0x22, 0x35, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2f, 0x12, 0x2d, 0x2f, 0x73, 0x75, 0x6e, 0x72,
 	0x69, 0x73, 0x65, 0x2f, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x2f, 0x76,
 	0x31, 0x2f, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x6d, 0x65, 0x6e,
-	0x74, 0x2f, 0x6c, 0x61, 0x74, 0x65, 0x73, 0x74, 0x12, 0x97, 0x01, 0x0a, 0x0a, 0x45, 0x56, 0x4d,
+	0x74, 0x2f, 0x6c, 0x61, 0x74, 0x65, 0x73, 0x74, 0x12, 0x97, 0x01, 0x0a, 0x0a, 0x45, 0x76, 0x6d,
 	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
 	0x65, 0x2e, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x2e, 0x76, 0x31, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x56, 0x4d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x76, 0x6d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
 	0x2e, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x2e, 0x76, 0x31, 0x2e, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x45, 0x56, 0x4d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x75, 0x65, 0x72, 0x79, 0x45, 0x76, 0x6d, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x24, 0x12, 0x22,
 	0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x62, 0x6c, 0x6f, 0x62, 0x73, 0x74, 0x72,
 	0x65, 0x61, 0x6d, 0x2f, 0x76, 0x31, 0x2f, 0x65, 0x76, 0x6d, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65,
@@ -8115,8 +8115,8 @@ var file_sunrise_blobstream_v1_query_proto_goTypes = []interface{}{
 	(*QueryLatestDataCommitmentResponse)(nil),           // 13: sunrise.blobstream.v1.QueryLatestDataCommitmentResponse
 	(*QueryDataCommitmentRangeForHeightRequest)(nil),    // 14: sunrise.blobstream.v1.QueryDataCommitmentRangeForHeightRequest
 	(*QueryDataCommitmentRangeForHeightResponse)(nil),   // 15: sunrise.blobstream.v1.QueryDataCommitmentRangeForHeightResponse
-	(*QueryEVMAddressRequest)(nil),                      // 16: sunrise.blobstream.v1.QueryEVMAddressRequest
-	(*QueryEVMAddressResponse)(nil),                     // 17: sunrise.blobstream.v1.QueryEVMAddressResponse
+	(*QueryEvmAddressRequest)(nil),                      // 16: sunrise.blobstream.v1.QueryEvmAddressRequest
+	(*QueryEvmAddressResponse)(nil),                     // 17: sunrise.blobstream.v1.QueryEvmAddressResponse
 	(*Params)(nil),                                      // 18: sunrise.blobstream.v1.Params
 	(*anypb.Any)(nil),                                   // 19: google.protobuf.Any
 	(*Valset)(nil),                                      // 20: sunrise.blobstream.v1.Valset
@@ -8136,7 +8136,7 @@ var file_sunrise_blobstream_v1_query_proto_depIdxs = []int32{
 	10, // 10: sunrise.blobstream.v1.Query.LatestUnbondingHeight:input_type -> sunrise.blobstream.v1.QueryLatestUnbondingHeightRequest
 	14, // 11: sunrise.blobstream.v1.Query.DataCommitmentRangeForHeight:input_type -> sunrise.blobstream.v1.QueryDataCommitmentRangeForHeightRequest
 	12, // 12: sunrise.blobstream.v1.Query.LatestDataCommitment:input_type -> sunrise.blobstream.v1.QueryLatestDataCommitmentRequest
-	16, // 13: sunrise.blobstream.v1.Query.EVMAddress:input_type -> sunrise.blobstream.v1.QueryEVMAddressRequest
+	16, // 13: sunrise.blobstream.v1.Query.EvmAddress:input_type -> sunrise.blobstream.v1.QueryEvmAddressRequest
 	1,  // 14: sunrise.blobstream.v1.Query.Params:output_type -> sunrise.blobstream.v1.QueryParamsResponse
 	3,  // 15: sunrise.blobstream.v1.Query.AttestationRequestByNonce:output_type -> sunrise.blobstream.v1.QueryAttestationRequestByNonceResponse
 	5,  // 16: sunrise.blobstream.v1.Query.LatestAttestationNonce:output_type -> sunrise.blobstream.v1.QueryLatestAttestationNonceResponse
@@ -8145,7 +8145,7 @@ var file_sunrise_blobstream_v1_query_proto_depIdxs = []int32{
 	11, // 19: sunrise.blobstream.v1.Query.LatestUnbondingHeight:output_type -> sunrise.blobstream.v1.QueryLatestUnbondingHeightResponse
 	15, // 20: sunrise.blobstream.v1.Query.DataCommitmentRangeForHeight:output_type -> sunrise.blobstream.v1.QueryDataCommitmentRangeForHeightResponse
 	13, // 21: sunrise.blobstream.v1.Query.LatestDataCommitment:output_type -> sunrise.blobstream.v1.QueryLatestDataCommitmentResponse
-	17, // 22: sunrise.blobstream.v1.Query.EVMAddress:output_type -> sunrise.blobstream.v1.QueryEVMAddressResponse
+	17, // 22: sunrise.blobstream.v1.Query.EvmAddress:output_type -> sunrise.blobstream.v1.QueryEvmAddressResponse
 	14, // [14:23] is the sub-list for method output_type
 	5,  // [5:14] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
@@ -8354,7 +8354,7 @@ func file_sunrise_blobstream_v1_query_proto_init() {
 			}
 		}
 		file_sunrise_blobstream_v1_query_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryEVMAddressRequest); i {
+			switch v := v.(*QueryEvmAddressRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8366,7 +8366,7 @@ func file_sunrise_blobstream_v1_query_proto_init() {
 			}
 		}
 		file_sunrise_blobstream_v1_query_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryEVMAddressResponse); i {
+			switch v := v.(*QueryEvmAddressResponse); i {
 			case 0:
 				return &v.state
 			case 1:

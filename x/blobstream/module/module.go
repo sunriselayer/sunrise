@@ -1,4 +1,4 @@
-package stream
+package blobstream
 
 import (
 	"context"
@@ -23,6 +23,8 @@ import (
 	modulev1 "sunrise/api/sunrise/blobstream/module"
 	"sunrise/x/blobstream/keeper"
 	"sunrise/x/blobstream/types"
+
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 )
 
 var (
@@ -182,6 +184,7 @@ type ModuleInputs struct {
 
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
+	StakingKeeper stakingkeeper.Keeper
 }
 
 type ModuleOutputs struct {
@@ -202,6 +205,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
+		in.StakingKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,
