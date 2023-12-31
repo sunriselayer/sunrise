@@ -15,7 +15,7 @@ import (
 
 	"github.com/cometbft/cometbft/crypto/merkle"
 	tmbytes "github.com/cometbft/cometbft/libs/bytes"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cometbft/cometbft/types"
 )
 
@@ -101,7 +101,7 @@ func NewShareInclusionProof(
 		rows[i-startRow] = shares
 	}
 
-	var shareProofs []*tmproto.NMTProof //nolint:prealloc
+	var shareProofs []*cmtproto.NMTProof //nolint:prealloc
 	var rawShares [][]byte
 	for i, row := range rows {
 		// create an nmt to generate a proof.
@@ -143,7 +143,7 @@ func NewShareInclusionProof(
 			return types.ShareProof{}, err
 		}
 
-		shareProofs = append(shareProofs, &tmproto.NMTProof{
+		shareProofs = append(shareProofs, &cmtproto.NMTProof{
 			Start:    int32(proof.Start()),
 			End:      int32(proof.End()),
 			Nodes:    proof.Nodes(),

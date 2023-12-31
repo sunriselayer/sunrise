@@ -18,7 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 )
 
 const rejectedPropBlockLog = "Rejected proposal block:"
@@ -51,7 +51,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
 	)
-	sdkCtx := app.NewProposalContext(tmproto.Header{
+	sdkCtx := app.NewProposalContext(cmtproto.Header{
 		ChainID: app.ChainID(),
 		Height:  req.Height,
 		Time:    req.Time,

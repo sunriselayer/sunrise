@@ -12,7 +12,7 @@ import (
 	appns "sunrise/pkg/namespace"
 
 	abci "github.com/cometbft/cometbft/abci/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cometbft/cometbft/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -22,7 +22,7 @@ const TxInclusionQueryPath = "txInclusionProof"
 // Querier defines the logic performed when the ABCI client using the Query
 // method with the custom prove.QueryPath. The index of the transaction being
 // proved must be appended to the path. The marshalled bytes of the transaction
-// proof (tmproto.ShareProof) are returned.
+// proof (cmtproto.ShareProof) are returned.
 //
 // example path for proving the third transaction in that block:
 // custom/txInclusionProof/3
@@ -37,7 +37,7 @@ func QueryTxInclusionProof(_ sdk.Context, path []string, req abci.RequestQuery) 
 	}
 
 	// unmarshal the block data that is passed from the ABCI client
-	pbb := new(tmproto.Block)
+	pbb := new(cmtproto.Block)
 	err = pbb.Unmarshal(req.Data)
 	if err != nil {
 		return nil, fmt.Errorf("error reading block: %w", err)
@@ -82,7 +82,7 @@ func QueryShareInclusionProof(_ sdk.Context, path []string, req abci.RequestQuer
 	}
 
 	// unmarshal the block data that is passed from the ABCI client
-	pbb := new(tmproto.Block)
+	pbb := new(cmtproto.Block)
 	err = pbb.Unmarshal(req.Data)
 	if err != nil {
 		return nil, fmt.Errorf("error reading block: %w", err)

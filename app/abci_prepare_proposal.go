@@ -10,7 +10,7 @@ import (
 	"sunrise/pkg/square"
 
 	abci "github.com/cometbft/cometbft/abci/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 
 	storetypes "cosmossdk.io/store/types"
@@ -19,7 +19,7 @@ import (
 
 // NewProposalContext returns a context with a branched version of the state
 // that is safe to query during ProcessProposal.
-func (app *App) NewProposalContext(header tmproto.Header) sdk.Context {
+func (app *App) NewProposalContext(header cmtproto.Header) sdk.Context {
 	// use custom query multistore if provided
 	ms := app.CommitMultiStore().CacheMultiStore()
 	ctx := sdk.NewContext(ms, header, false, app.Logger()).WithBlockGasMeter(storetypes.NewInfiniteGasMeter())
@@ -39,7 +39,7 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 
 	// create a context using a branch of the state and loaded using the
 	// proposal height and chain-id
-	sdkCtx := app.NewProposalContext(tmproto.Header{
+	sdkCtx := app.NewProposalContext(cmtproto.Header{
 		ChainID: app.ChainID(),
 		Height:  req.Height,
 		Time:    req.Time,
