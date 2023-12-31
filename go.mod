@@ -4,7 +4,7 @@ go 1.21
 
 replace (
 	// sunrise-core
-	github.com/cometbft/cometbft => github.com/sunrise-zone/sunrise-core v0.38.3-0.20231230101549-9f98c027086f
+	github.com/cometbft/cometbft => github.com/sunrise-zone/sunrise-core v0.38.3-0.20231231025910-32991fef438b
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb

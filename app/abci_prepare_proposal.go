@@ -37,7 +37,7 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		app.BankKeeper,
 		app.BlobKeeper,
 		app.FeeGrantKeeper,
-		app.GetTxConfig().SignModeHandler(),
+		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
 	)
@@ -58,12 +58,12 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 	if app.LastBlockHeight() == 0 {
 		txs = make([][]byte, 0)
 	} else {
-		txs = FilterTxs(app.Logger(), sdkCtx, handler, app.txConfig, req.BlockData.Txs)
+		txs = FilterTxs(app.Logger(), sdkCtx, handler, app.txConfig, req.Txs)
 	}
 
 	// build the square from the set of valid and prioritised transactions.
 	// The txs returned are the ones used in the square and block
-	dataSquare, txs, err := square.Build(txs, app.GetBaseApp().AppVersion(sdkCtx), app.GovSquareSizeUpperBound(sdkCtx))
+	dataSquare, txs, err := square.Build(txs, app.BaseApp.AppVersion(), app.GovSquareSizeUpperBound(sdkCtx))
 	if err != nil {
 		panic(err)
 	}
