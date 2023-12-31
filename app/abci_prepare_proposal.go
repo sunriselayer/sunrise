@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/binary"
 	"time"
 
 	"sunrise/app/ante"
@@ -9,9 +10,23 @@ import (
 	"sunrise/pkg/square"
 
 	abci "github.com/cometbft/cometbft/abci/types"
-	core "github.com/cometbft/cometbft/proto/tendermint/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
+
+	storetypes "cosmossdk.io/store/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+// NewProposalContext returns a context with a branched version of the state
+// that is safe to query during ProcessProposal.
+func (app *App) NewProposalContext(header tmproto.Header) sdk.Context {
+	// use custom query multistore if provided
+	ms := app.CommitMultiStore().CacheMultiStore()
+	ctx := sdk.NewContext(ms, header, false, app.Logger()).WithBlockGasMeter(storetypes.NewInfiniteGasMeter())
+	ctx = ctx.WithConsensusParams(app.GetConsensusParams(ctx))
+
+	return ctx
+}
 
 // PrepareProposal fulfills the celestia-core version of the ABCI interface by
 // preparing the proposal block data. The square size is determined by first
@@ -21,10 +36,11 @@ import (
 // immediately halt the node for visibility and so they can be quickly resolved.
 func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 	defer telemetry.MeasureSince(time.Now(), "prepare_proposal")
+
 	// create a context using a branch of the state and loaded using the
 	// proposal height and chain-id
-	sdkCtx := app.NewProposalContext(core.Header{
-		ChainID: req.ChainId,
+	sdkCtx := app.NewProposalContext(tmproto.Header{
+		ChainID: app.ChainID(),
 		Height:  req.Height,
 		Time:    req.Time,
 	})
@@ -93,13 +109,15 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		panic(err)
 	}
 
+	txs = append(txs, dah.Hash())
+	squareSize := uint64(dataSquare.Size())
+	squareSizeBigEndican := make([]byte, 8)
+	binary.BigEndian.PutUint64(squareSizeBigEndican, squareSize)
+	txs = append(txs, squareSizeBigEndican)
+
 	// tendermint doesn't need to use any of the erasure data, as only the
 	// protobuf encoded version of the block data is gossiped.
 	return &abci.ResponsePrepareProposal{
-		BlockData: &core.Data{
-			Txs:        txs,
-			SquareSize: uint64(dataSquare.Size()),
-			Hash:       dah.Hash(),
-		},
+		Txs: txs,
 	}, nil
 }

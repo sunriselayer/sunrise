@@ -2,6 +2,7 @@ package app
 
 import (
 	"bytes"
+	"encoding/binary"
 	"fmt"
 	"time"
 
@@ -16,6 +17,8 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 )
 
 const rejectedPropBlockLog = "Rejected proposal block:"
@@ -48,7 +51,11 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
 	)
-	sdkCtx := app.NewProposalContext(req.Header)
+	sdkCtx := app.NewProposalContext(tmproto.Header{
+		ChainID: app.ChainID(),
+		Height:  req.Height,
+		Time:    req.Time,
+	})
 
 	// iterate over all txs and ensure that all blobTxs are valid, PFBs are correctly signed and non
 	// blobTxs have no PFBs present
@@ -114,16 +121,22 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 	}
 
 	// Construct the data square from the block's transactions
-	dataSquare, err := square.Construct(req.Txs, app.BaseApp.AppVersion(sdkCtx), app.GovSquareSizeUpperBound(sdkCtx))
+	dataSquare, err := square.Construct(req.Txs, app.BaseApp.AppVersion(), app.GovSquareSizeUpperBound(sdkCtx))
 	if err != nil {
 		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to compute data square from transactions:", err)
 		return reject(err)
 	}
 
 	// TODO: check len
-	dataHash := req.Txs[len(req.Txs)-2]
-	squareSizeBigEndian := req.Txs[len(req.Txs)-1]
-	squareSize := uint64(0)
+	length := len(req.Txs)
+	if length < 2 {
+		err := fmt.Errorf("txs must contain the data hash and the square size at the end, and its length must not be lower than 2")
+		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
+		return reject(err)
+	}
+	dataHash := req.Txs[length-2]
+	squareSizeBigEndian := req.Txs[length-1]
+	squareSize := binary.BigEndian.Uint64(squareSizeBigEndian)
 
 	// Assert that the square size stated by the proposer is correct
 	if uint64(dataSquare.Size()) != squareSize {
