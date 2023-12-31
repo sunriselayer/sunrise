@@ -1,9 +1,9 @@
 syntax = "proto3";
-package sunrise.blobstream;
+package sunrise.blobstream.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/blobstream/params.proto";
+import "sunrise/blobstream/v1/params.proto";
 
 option go_package = "sunrise/x/blobstream/types";
 

@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package sunrise.blobstream;
+package sunrise.blobstream.v1;
 
 import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/blobstream/params.proto";
+import "sunrise/blobstream/v1/params.proto";
 
 option go_package = "sunrise/x/blobstream/types";
 
@@ -37,9 +37,16 @@ message MsgUpdateParams {
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
 
+// MsgRegisterEvmAddress registers an evm address to a validator.
 message MsgRegisterEvmAddress {
-  option (cosmos.msg.v1.signer) = "creator";
-  string creator = 1;
+  option (cosmos.msg.v1.signer) = "validator_address";
+
+  // The operating address of the validator.
+  string validator_address = 1
+  [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // The matching HEX encoded EVM address.
+  string evm_address = 2;
 }
 
 message MsgRegisterEvmAddressResponse {}

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sunrise.blobstream;
+package sunrise.blobstream.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
@@ -11,5 +11,5 @@ message Params {
   option (amino.name) = "sunrise/x/blobstream/Params";
   option (gogoproto.equal) = true;
 
-  
+  uint64 data_commitment_window = 1;
 }
