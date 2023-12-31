@@ -18910,14 +18910,60 @@ paths:
               parameters.
       tags:
         - Msg
-  /sunrise.blob.Msg/PayForBlobs:
-    post:
-      operationId: SunriseBlobMsg_PayForBlobs
+  /sunrise/blob/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseBlobV1Query_Params
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  gas_per_blob_byte:
+                    type: integer
+                    format: int64
+                  gov_max_square_size:
+                    type: string
+                    format: uint64
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /sunrise.blob.v1.Msg/PayForBlobs:
+    post:
+      operationId: SunriseBlobV1Msg_PayForBlobs
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            title: >-
+              MsgPayForBlobsResponse describes the response returned after the
+              submission of a PayForBlobs
         default:
           description: An unexpected error response.
           schema:
@@ -18938,21 +18984,72 @@ paths:
                   additionalProperties: {}
       parameters:
         - name: body
+          description: MsgPayForBlobs pays for the inclusion of a blob in the block.
           in: body
           required: true
           schema:
             type: object
             properties:
-              creator:
+              signer:
                 type: string
+                description: |-
+                  signer is the bech32 encoded signer address. See
+                  https://en.bitcoin.it/wiki/Bech32.
+              namespaces:
+                type: array
+                items:
+                  type: string
+                  format: byte
+                description: >-
+                  namespaces is a list of namespaces that the blobs are
+                  associated with. A
+
+                  namespace is a byte slice of length 29 where the first byte is
+                  the
+
+                  namespaceVersion and the subsequent 28 bytes are the
+                  namespaceId.
+              blob_sizes:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+                description: >-
+                  blob_sizes is a list of blob sizes (one per blob). Each size
+                  is in bytes.
+              share_commitments:
+                type: array
+                items:
+                  type: string
+                  format: byte
+                description: >-
+                  share_commitments is a list of share commitments (one per
+                  blob).
+              share_versions:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+                description: >-
+                  share_versions are the versions of the share format that the
+                  blobs
+
+                  associated with this message should use when included in a
+                  block. The
+
+                  share_versions specified must match the share_versions used to
+                  generate the
+
+                  share_commitment in this message.
+            description: MsgPayForBlobs pays for the inclusion of a blob in the block.
       tags:
         - Msg
-  /sunrise.blob.Msg/UpdateParams:
+  /sunrise.blob.v1.Msg/UpdateParams:
     post:
       summary: |-
         UpdateParams defines a (governance) operation for updating the module
         parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseBlobMsg_UpdateParams
+      operationId: SunriseBlobV1Msg_UpdateParams
       responses:
         '200':
           description: A successful response.
@@ -18997,6 +19094,13 @@ paths:
               params:
                 description: 'NOTE: All parameters must be supplied.'
                 type: object
+                properties:
+                  gas_per_blob_byte:
+                    type: integer
+                    format: int64
+                  gov_max_square_size:
+                    type: string
+                    format: uint64
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
@@ -19056,6 +19160,79 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunrise/blobstream/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseBlobstreamQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /sunrise.blobstream.Msg/RegisterEvmAddress:
+    post:
+      operationId: SunriseBlobstreamMsg_RegisterEvmAddress
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+      tags:
+        - Msg
   /sunrise.blobstream.Msg/UpdateParams:
     post:
       summary: |-
@@ -19104,10 +19281,7 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
@@ -26859,14 +27033,85 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
-  sunrise.blob.MsgPayForBlobs:
+  sunrise.blob.v1.Params:
     type: object
     properties:
-      creator:
+      gas_per_blob_byte:
+        type: integer
+        format: int64
+      gov_max_square_size:
         type: string
-  sunrise.blob.MsgPayForBlobsResponse:
+        format: uint64
+    description: Params defines the parameters for the module.
+  sunrise.blob.v1.QueryParamsResponse:
     type: object
-  sunrise.blob.MsgUpdateParams:
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          gas_per_blob_byte:
+            type: integer
+            format: int64
+          gov_max_square_size:
+            type: string
+            format: uint64
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  sunrise.blob.v1.MsgPayForBlobs:
+    type: object
+    properties:
+      signer:
+        type: string
+        description: |-
+          signer is the bech32 encoded signer address. See
+          https://en.bitcoin.it/wiki/Bech32.
+      namespaces:
+        type: array
+        items:
+          type: string
+          format: byte
+        description: >-
+          namespaces is a list of namespaces that the blobs are associated with.
+          A
+
+          namespace is a byte slice of length 29 where the first byte is the
+
+          namespaceVersion and the subsequent 28 bytes are the namespaceId.
+      blob_sizes:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: >-
+          blob_sizes is a list of blob sizes (one per blob). Each size is in
+          bytes.
+      share_commitments:
+        type: array
+        items:
+          type: string
+          format: byte
+        description: share_commitments is a list of share commitments (one per blob).
+      share_versions:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: >-
+          share_versions are the versions of the share format that the blobs
+
+          associated with this message should use when included in a block. The
+
+          share_versions specified must match the share_versions used to
+          generate the
+
+          share_commitment in this message.
+    description: MsgPayForBlobs pays for the inclusion of a blob in the block.
+  sunrise.blob.v1.MsgPayForBlobsResponse:
+    type: object
+    title: >-
+      MsgPayForBlobsResponse describes the response returned after the
+      submission of a PayForBlobs
+  sunrise.blob.v1.MsgUpdateParams:
     type: object
     properties:
       authority:
@@ -26877,15 +27122,19 @@ definitions:
       params:
         description: 'NOTE: All parameters must be supplied.'
         type: object
+        properties:
+          gas_per_blob_byte:
+            type: integer
+            format: int64
+          gov_max_square_size:
+            type: string
+            format: uint64
     description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.blob.MsgUpdateParamsResponse:
+  sunrise.blob.v1.MsgUpdateParamsResponse:
     type: object
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.blob.Params:
-    type: object
-    description: Params defines the parameters for the module.
   sunrise.blobgrant.MsgUpdateParams:
     type: object
     properties:
@@ -26909,6 +27158,23 @@ definitions:
   sunrise.blobgrant.Params:
     type: object
     description: Params defines the parameters for the module.
+  sunrise.blobstream.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  sunrise.blobstream.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  sunrise.blobstream.MsgRegisterEvmAddress:
+    type: object
+    properties:
+      creator:
+        type: string
+  sunrise.blobstream.MsgRegisterEvmAddressResponse:
+    type: object
   sunrise.blobstream.MsgUpdateParams:
     type: object
     properties:
@@ -26918,10 +27184,7 @@ definitions:
           authority is the address that controls the module (defaults to x/gov
           unless overwritten).
       params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
+        description: 'NOTE: All parameters must be supplied.'
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.blobstream.MsgUpdateParamsResponse:
@@ -26929,9 +27192,6 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.blobstream.Params:
-    type: object
-    description: Params defines the parameters for the module.
   sunrise.liquidstaking.MsgUpdateParams:
     type: object
     properties:

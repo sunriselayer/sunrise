@@ -24,6 +24,7 @@ require (
 	cosmossdk.io/x/circuit v0.1.0
 	cosmossdk.io/x/evidence v0.1.0
 	cosmossdk.io/x/feegrant v0.1.0
+	cosmossdk.io/x/tx v0.12.0
 	cosmossdk.io/x/upgrade v0.1.1
 	github.com/bufbuild/buf v1.27.2
 	github.com/celestiaorg/rsmt2d v0.11.0
@@ -42,6 +43,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
+	github.com/tendermint/tendermint v0.35.9
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
 	google.golang.org/grpc v1.59.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
@@ -57,7 +59,6 @@ require (
 	connectrpc.com/connect v1.11.1 // indirect
 	connectrpc.com/otelconnect v0.6.0 // indirect
 	cosmossdk.io/collections v0.4.0 // indirect
-	cosmossdk.io/x/tx v0.12.0 // indirect
 	filippo.io/edwards25519 v1.0.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
 	github.com/99designs/keyring v1.2.1 // indirect
