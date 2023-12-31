@@ -35,8 +35,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type MsgUpdateParams struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// params defines the module parameters to update.
-	//
 	// NOTE: All parameters must be supplied.
 	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
 }
@@ -126,15 +124,97 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+type MsgPayForBlobs struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+}
+
+func (m *MsgPayForBlobs) Reset()         { *m = MsgPayForBlobs{} }
+func (m *MsgPayForBlobs) String() string { return proto.CompactTextString(m) }
+func (*MsgPayForBlobs) ProtoMessage()    {}
+func (*MsgPayForBlobs) Descriptor() ([]byte, []int) {
+	return fileDescriptor_97a70dd4e71523a6, []int{2}
+}
+func (m *MsgPayForBlobs) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgPayForBlobs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgPayForBlobs.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgPayForBlobs) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgPayForBlobs.Merge(m, src)
+}
+func (m *MsgPayForBlobs) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgPayForBlobs) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgPayForBlobs.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgPayForBlobs proto.InternalMessageInfo
+
+func (m *MsgPayForBlobs) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+type MsgPayForBlobsResponse struct {
+}
+
+func (m *MsgPayForBlobsResponse) Reset()         { *m = MsgPayForBlobsResponse{} }
+func (m *MsgPayForBlobsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgPayForBlobsResponse) ProtoMessage()    {}
+func (*MsgPayForBlobsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_97a70dd4e71523a6, []int{3}
+}
+func (m *MsgPayForBlobsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgPayForBlobsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgPayForBlobsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgPayForBlobsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgPayForBlobsResponse.Merge(m, src)
+}
+func (m *MsgPayForBlobsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgPayForBlobsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgPayForBlobsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgPayForBlobsResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.blob.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.blob.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgPayForBlobs)(nil), "sunrise.blob.MsgPayForBlobs")
+	proto.RegisterType((*MsgPayForBlobsResponse)(nil), "sunrise.blob.MsgPayForBlobsResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/blob/tx.proto", fileDescriptor_97a70dd4e71523a6) }
 
 var fileDescriptor_97a70dd4e71523a6 = []byte{
-	// 318 bytes of a gzipped FileDescriptorProto
+	// 386 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2d, 0x2e, 0xcd, 0x2b,
 	0xca, 0x2c, 0x4e, 0xd5, 0x4f, 0xca, 0xc9, 0x4f, 0xd2, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f,
 	0xc9, 0x17, 0xe2, 0x81, 0x0a, 0xeb, 0x81, 0x84, 0xa5, 0x04, 0x13, 0x73, 0x33, 0xf3, 0xf2, 0xf5,
@@ -149,12 +229,17 @@ var fileDescriptor_97a70dd4e71523a6 = []byte{
 	0xc8, 0x5e, 0xd4, 0x83, 0x98, 0xee, 0xc4, 0x79, 0xe2, 0x9e, 0x3c, 0xc3, 0x8a, 0xe7, 0x1b, 0xb4,
 	0x18, 0x83, 0xa0, 0xca, 0xad, 0x0c, 0x9b, 0x9e, 0x6f, 0xd0, 0x42, 0x18, 0xd4, 0xf5, 0x7c, 0x83,
 	0x96, 0x1c, 0xcc, 0xc9, 0x15, 0x10, 0x47, 0xa3, 0xb9, 0x51, 0x49, 0x92, 0x4b, 0x1c, 0x4d, 0x28,
-	0x28, 0xb5, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0xd5, 0x28, 0x89, 0x8b, 0xd9, 0xb7, 0x38, 0x5d, 0x28,
-	0x84, 0x8b, 0x07, 0xc5, 0x57, 0xb2, 0xa8, 0xae, 0x41, 0xd3, 0x2d, 0xa5, 0x8a, 0x57, 0x1a, 0x66,
-	0xb8, 0x14, 0x6b, 0x03, 0xc8, 0xe5, 0x4e, 0x7a, 0x27, 0x1e, 0xc9, 0x31, 0x5e, 0x78, 0x24, 0xc7,
-	0xf8, 0xe0, 0x91, 0x1c, 0xe3, 0x84, 0xc7, 0x72, 0x0c, 0x17, 0x1e, 0xcb, 0x31, 0xdc, 0x78, 0x2c,
-	0xc7, 0x10, 0x25, 0x82, 0xe6, 0xf0, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0x70, 0x68, 0x1b,
-	0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x77, 0xe9, 0xd0, 0x1f, 0x0c, 0x02, 0x00, 0x00,
+	0x28, 0xb5, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0x55, 0xc9, 0x82, 0x8b, 0xcf, 0xb7, 0x38, 0x3d, 0x20,
+	0xb1, 0xd2, 0x2d, 0xbf, 0xc8, 0x29, 0x27, 0x3f, 0xa9, 0x58, 0x48, 0x82, 0x8b, 0x3d, 0xb9, 0x28,
+	0x35, 0xb1, 0x24, 0xbf, 0x08, 0xe2, 0x9d, 0x20, 0x18, 0xd7, 0x8a, 0x07, 0x64, 0x33, 0x8c, 0xa7,
+	0x24, 0xc1, 0x25, 0x86, 0xaa, 0x13, 0x66, 0xa6, 0xd1, 0x56, 0x46, 0x2e, 0x66, 0xdf, 0xe2, 0x74,
+	0xa1, 0x10, 0x2e, 0x1e, 0x94, 0xa0, 0x92, 0x45, 0xf5, 0x22, 0x9a, 0x93, 0xa4, 0x54, 0xf1, 0x4a,
+	0xc3, 0x4c, 0x17, 0x0a, 0xe4, 0xe2, 0x46, 0x76, 0xae, 0x0c, 0x86, 0x2e, 0x24, 0x59, 0x29, 0x15,
+	0x7c, 0xb2, 0x30, 0x23, 0xa5, 0x58, 0x1b, 0x40, 0x21, 0xec, 0xa4, 0x77, 0xe2, 0x91, 0x1c, 0xe3,
+	0x85, 0x47, 0x72, 0x8c, 0x0f, 0x1e, 0xc9, 0x31, 0x4e, 0x78, 0x2c, 0xc7, 0x70, 0xe1, 0xb1, 0x1c,
+	0xc3, 0x8d, 0xc7, 0x72, 0x0c, 0x51, 0x22, 0x68, 0x01, 0x5c, 0x52, 0x59, 0x90, 0x5a, 0x9c, 0xc4,
+	0x06, 0x4e, 0x15, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4a, 0xb1, 0x42, 0x0f, 0xb4, 0x02,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -172,6 +257,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	PayForBlobs(ctx context.Context, in *MsgPayForBlobs, opts ...grpc.CallOption) (*MsgPayForBlobsResponse, error)
 }
 
 type msgClient struct {
@@ -191,11 +277,21 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) PayForBlobs(ctx context.Context, in *MsgPayForBlobs, opts ...grpc.CallOption) (*MsgPayForBlobsResponse, error) {
+	out := new(MsgPayForBlobsResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.blob.Msg/PayForBlobs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	PayForBlobs(context.Context, *MsgPayForBlobs) (*MsgPayForBlobsResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -204,6 +300,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) PayForBlobs(ctx context.Context, req *MsgPayForBlobs) (*MsgPayForBlobsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PayForBlobs not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -228,6 +327,24 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_PayForBlobs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgPayForBlobs)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).PayForBlobs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.blob.Msg/PayForBlobs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).PayForBlobs(ctx, req.(*MsgPayForBlobs))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.blob.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -235,6 +352,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "PayForBlobs",
+			Handler:    _Msg_PayForBlobs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -304,6 +425,59 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgPayForBlobs) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgPayForBlobs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgPayForBlobs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgPayForBlobsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgPayForBlobsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgPayForBlobsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -331,6 +505,28 @@ func (m *MsgUpdateParams) Size() (n int) {
 }
 
 func (m *MsgUpdateParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgPayForBlobs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgPayForBlobsResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -487,6 +683,138 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgPayForBlobs) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgPayForBlobs: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgPayForBlobs: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgPayForBlobsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgPayForBlobsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgPayForBlobsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
