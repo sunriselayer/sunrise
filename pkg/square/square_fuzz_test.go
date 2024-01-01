@@ -3,13 +3,13 @@ package square_test
 import (
 	"testing"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/da"
 	"sunrise/pkg/inclusion"
 	"sunrise/pkg/shares"
 	"sunrise/pkg/square"
+	"sunrise/testutil"
 	"sunrise/testutil/testnode"
 	blob "sunrise/x/blob/types"
 
@@ -38,7 +38,7 @@ func FuzzSquare(f *testing.F) {
 		if normalTxCount < 0 || pfbCount < 0 {
 			t.Skip()
 		}
-		encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+		encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
 		rand := tmrand.NewRand()
 		rand.Seed(seed)
 		signer, err := testnode.NewOfflineSigner()
@@ -64,7 +64,7 @@ func FuzzSquare(f *testing.F) {
 		dah, err := da.NewDataAvailabilityHeader(eds)
 		require.NoError(t, err)
 
-		decoder := encoding.MakeConfig(app.ModuleEncodingRegisters...).TxConfig.TxDecoder()
+		decoder := encoding.MakeConfig(testutil.ModuleBasics...).TxConfig.TxDecoder()
 
 		builder, err := square.NewBuilder(appconsts.DefaultSquareSizeUpperBound, appconsts.LatestVersion, orderedTxs...)
 		require.NoError(t, err)

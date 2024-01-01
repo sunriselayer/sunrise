@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/blob"
 	appns "sunrise/pkg/namespace"
 	"sunrise/pkg/shares"
 	"sunrise/pkg/user"
+	"sunrise/testutil"
 	"sunrise/testutil/blobfactory"
 	"sunrise/x/blob/types"
 
@@ -38,14 +38,13 @@ type Context struct {
 }
 
 func NewContext(goCtx context.Context, kr keyring.Keyring, tmCfg *tmconfig.Config, chainID string) Context {
-	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	ecfg := encoding.MakeConfig(testutil.ModuleBasics...)
 	cctx := client.Context{}.
 		WithKeyring(kr).
 		WithHomeDir(tmCfg.RootDir).
 		WithChainID(chainID).
 		WithInterfaceRegistry(ecfg.InterfaceRegistry).
 		WithCodec(ecfg.Codec).
-		WithLegacyAmino(ecfg.Amino).
 		WithTxConfig(ecfg.TxConfig).
 		WithAccountRetriever(authtypes.AccountRetriever{})
 
@@ -259,8 +258,6 @@ func (c *Context) PostData(account, broadcastMode string, ns appns.Namespace, bl
 		res, err = c.BroadcastTxSync(blobTx)
 	case flags.BroadcastAsync:
 		res, err = c.BroadcastTxAsync(blobTx)
-	case flags.BroadcastBlock:
-		res, err = c.BroadcastTxCommit(blobTx)
 	default:
 		return nil, fmt.Errorf("unsupported broadcast mode %s; supported modes: sync, async, block", c.BroadcastMode)
 	}
@@ -284,7 +281,7 @@ func (c *Context) FillBlock(squareSize int, account string, broadcastMode string
 	}
 
 	if broadcastMode == "" {
-		broadcastMode = flags.BroadcastBlock
+		broadcastMode = flags.BroadcastSync
 	}
 
 	// create the tx the size of the square minus one row

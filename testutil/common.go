@@ -1,4 +1,4 @@
-package util
+package testutil
 
 import (
 	"bytes"
@@ -26,6 +26,7 @@ import (
 	ccrypto "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/std"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -49,7 +50,7 @@ import (
 
 var (
 	// ModuleBasics is a mock module basic manager for testing
-	ModuleBasics = app.ModuleBasics
+	ModuleBasics = []sdkmodule.AppModuleBasic{}
 	// TestingStakeParams is a set of staking params for testing
 	TestingStakeParams = stakingtypes.Params{
 		UnbondingTime:     100,

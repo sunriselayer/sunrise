@@ -3,8 +3,8 @@ package blobfactory_test
 import (
 	"testing"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
+	"sunrise/testutil"
 	"sunrise/testutil/blobfactory"
 	"sunrise/testutil/testnode"
 
@@ -19,7 +19,7 @@ func TestRandMultiBlobTxsSameSigner_Deterministic(t *testing.T) {
 	pfbCount := 10
 	signer, err := testnode.NewOfflineSigner()
 	require.NoError(t, err)
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
 	decoder := encCfg.TxConfig.TxDecoder()
 
 	rand1 := tmrand.NewRand()

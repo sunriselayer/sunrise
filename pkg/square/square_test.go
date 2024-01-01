@@ -7,7 +7,6 @@ import (
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/blob"
@@ -16,6 +15,7 @@ import (
 	appns "sunrise/pkg/namespace"
 	"sunrise/pkg/shares"
 	"sunrise/pkg/square"
+	"sunrise/testutil"
 	"sunrise/testutil/blobfactory"
 	"sunrise/testutil/testnode"
 	blobtypes "sunrise/x/blob/types"
@@ -130,7 +130,7 @@ func TestSquareTxShareRange(t *testing.T) {
 // prepare or process proposal, as the signatures will be invalid since this
 // does not query for relevant account numbers or sequences.
 func generateBlobTxsWithNamespaces(t *testing.T, namespaces []appns.Namespace, blobSizes [][]int) [][]byte {
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
 	const acc = "signer"
 	kr, _ := testnode.NewKeyring(acc)
 	return blobfactory.ManyMultiBlobTx(
@@ -185,7 +185,7 @@ func TestSquareBlobShareRange(t *testing.T) {
 
 func TestSquareDeconstruct(t *testing.T) {
 	rand := tmrand.NewRand()
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
 	t.Run("ConstructDeconstructParity", func(t *testing.T) {
 		// 8192 -> square size 128
 		for _, numTxs := range []int{2, 128, 1024, 8192} {
@@ -246,7 +246,7 @@ func TestSquareShareCommitments(t *testing.T) {
 	require.NoError(t, err)
 	dah, err := da.NewDataAvailabilityHeader(eds)
 	require.NoError(t, err)
-	decoder := encoding.MakeConfig(app.ModuleEncodingRegisters...).TxConfig.TxDecoder()
+	decoder := encoding.MakeConfig(testutil.ModuleBasics...).TxConfig.TxDecoder()
 
 	for pfbIndex := 0; pfbIndex < numTxs; pfbIndex++ {
 		wpfb, err := builder.GetWrappedPFB(pfbIndex + numTxs)

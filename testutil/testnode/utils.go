@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/hex"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
+	"sunrise/testutil"
 	"sunrise/testutil/testfactory"
 
 	sdkmath "cosmossdk.io/math"
@@ -43,7 +43,7 @@ func QueryWithoutProof(clientCtx client.Context, hashHexStr string) (*rpctypes.R
 }
 
 func NewKeyring(accounts ...string) (keyring.Keyring, []sdk.AccAddress) {
-	cdc := encoding.MakeConfig(app.ModuleEncodingRegisters...).Codec
+	cdc := encoding.MakeConfig(testutil.ModuleBasics...).Codec
 	kb := keyring.NewInMemory(cdc)
 
 	addresses := make([]sdk.AccAddress, len(accounts))

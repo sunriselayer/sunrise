@@ -7,7 +7,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/blob"
@@ -15,6 +14,7 @@ import (
 	"sunrise/pkg/shares"
 	"sunrise/pkg/square"
 	"sunrise/pkg/user"
+	"sunrise/testutil"
 	"sunrise/testutil/blobfactory"
 	"sunrise/testutil/testfactory"
 	"sunrise/testutil/testnode"
@@ -90,7 +90,7 @@ func GenerateOrderedRandomTxs(t *testing.T, signer *user.Signer, rand *tmrand.Ra
 func TestGenerateOrderedRandomTxs_Deterministic(t *testing.T) {
 	pfbCount := 10
 	noramlCount := 10
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
 
 	kr := testfactory.TestKeyring(encCfg.Codec)
 	signer, err := user.NewSigner(kr, nil, testnode.TestAddress(), encCfg.TxConfig, testfactory.ChainID, 1, 0)
@@ -118,7 +118,7 @@ func GenerateMixedRandomTxs(t *testing.T, signer *user.Signer, rand *tmrand.Rand
 func TestGenerateMixedRandomTxs_Deterministic(t *testing.T) {
 	pfbCount := 10
 	noramlCount := 10
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
 
 	kr := testfactory.TestKeyring(encCfg.Codec)
 	signer, err := user.NewSigner(kr, nil, testnode.TestAddress(), encCfg.TxConfig, testfactory.ChainID, 1, 0)

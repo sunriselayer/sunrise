@@ -5,12 +5,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/std"
+	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 )
-
-type ModuleRegister interface {
-	RegisterInterfaces(codectypes.InterfaceRegistry)
-}
 
 // Config specifies the concrete encoding types to use for a given app.
 // This is provided for compatibility between protobuf and amino implementations.
@@ -21,11 +18,13 @@ type Config struct {
 }
 
 // MakeConfig creates an encoding config for the app.
-func MakeConfig(regs ...ModuleRegister) Config {
+func MakeConfig(regs ...sdkmodule.AppModuleBasic) Config {
 	// create the codec
+	amino := codec.NewLegacyAmino()
 	interfaceRegistry := codectypes.NewInterfaceRegistry()
 
 	// register the standard types from the sdk
+	std.RegisterLegacyAminoCodec(amino)
 	std.RegisterInterfaces(interfaceRegistry)
 
 	// register specific modules
@@ -34,15 +33,19 @@ func MakeConfig(regs ...ModuleRegister) Config {
 	}
 
 	// create the final configuration
-	cdc := codec.NewProtoCodec(interfaceRegistry)
-	dec := tx.DefaultTxDecoder(cdc)
-	dec = indexWrapperDecoder(dec)
+	marshaler := codec.NewProtoCodec(interfaceRegistry)
+	txCfg := tx.NewTxConfig(marshaler, tx.DefaultSignModes)
 
-	txCfg, _ := tx.NewTxConfigWithOptions(cdc, tx.ConfigOptions{})
+	dec := txCfg.TxDecoder()
+	dec = IndexWrapperDecoder(dec)
+
+	txCfg, _ = tx.NewTxConfigWithOptions(marshaler, tx.ConfigOptions{
+		ProtoDecoder: dec,
+	})
 
 	return Config{
 		InterfaceRegistry: interfaceRegistry,
-		Codec:             cdc,
+		Codec:             marshaler,
 		TxConfig:          txCfg,
 	}
 }

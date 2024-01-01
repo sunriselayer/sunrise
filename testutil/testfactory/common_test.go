@@ -3,8 +3,8 @@ package testfactory_test
 import (
 	"testing"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
+	"sunrise/testutil"
 	"sunrise/testutil/testfactory"
 	"sunrise/testutil/testnode"
 
@@ -12,7 +12,7 @@ import (
 )
 
 func TestTestAccount(t *testing.T) {
-	enc := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	enc := encoding.MakeConfig(testutil.ModuleBasics...)
 	kr := testfactory.TestKeyring(enc.Codec)
 	record, err := kr.Key(testfactory.TestAccName)
 	require.NoError(t, err)

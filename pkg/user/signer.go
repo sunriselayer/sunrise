@@ -125,7 +125,7 @@ func SetupSigner(
 // SubmitTx forms a transaction from the provided messages, signs it, and submits it to the chain. TxOptions
 // may be provided to set the fee and gas limit.
 func (s *Signer) SubmitTx(ctx context.Context, msgs []sdktypes.Msg, opts ...TxOption) (*sdktypes.TxResponse, error) {
-	txBytes, err := s.CreateTx(ctx, msgs, opts...)
+	txBytes, err := s.CreateTx(msgs, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +144,7 @@ func (s *Signer) SubmitTx(ctx context.Context, msgs []sdktypes.Msg, opts ...TxOp
 // SubmitPayForBlob forms a transaction from the provided blobs, signs it, and submits it to the chain.
 // TxOptions may be provided to set the fee and gas limit.
 func (s *Signer) SubmitPayForBlob(ctx context.Context, blobs []*blob.Blob, opts ...TxOption) (*sdktypes.TxResponse, error) {
-	txBytes, err := s.CreatePayForBlob(ctx, blobs, opts...)
+	txBytes, err := s.CreatePayForBlob(blobs, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -162,26 +162,26 @@ func (s *Signer) SubmitPayForBlob(ctx context.Context, blobs []*blob.Blob, opts 
 
 // CreateTx forms a transaction from the provided messages and signs it. TxOptions may be optionally
 // used to set the gas limit and fee.
-func (s *Signer) CreateTx(ctx context.Context, msgs []sdktypes.Msg, opts ...TxOption) ([]byte, error) {
+func (s *Signer) CreateTx(msgs []sdktypes.Msg, opts ...TxOption) ([]byte, error) {
 	txBuilder := s.txBuilder(opts...)
 	if err := txBuilder.SetMsgs(msgs...); err != nil {
 		return nil, err
 	}
 
-	if err := s.signTransaction(ctx, txBuilder); err != nil {
+	if err := s.signTransaction(txBuilder); err != nil {
 		return nil, err
 	}
 
 	return s.enc.TxEncoder()(txBuilder.GetTx())
 }
 
-func (s *Signer) CreatePayForBlob(ctx context.Context, blobs []*blob.Blob, opts ...TxOption) ([]byte, error) {
+func (s *Signer) CreatePayForBlob(blobs []*blob.Blob, opts ...TxOption) ([]byte, error) {
 	msg, err := blobtypes.NewMsgPayForBlobs(s.address.String(), blobs...)
 	if err != nil {
 		return nil, err
 	}
 
-	txBytes, err := s.CreateTx(ctx, []sdktypes.Msg{msg}, opts...)
+	txBytes, err := s.CreateTx([]sdktypes.Msg{msg}, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -285,7 +285,7 @@ func (s *Signer) ForceSetSequence(seq uint64) {
 	s.lastSignedSequence = seq
 }
 
-func (s *Signer) signTransaction(ctx context.Context, builder client.TxBuilder) error {
+func (s *Signer) signTransaction(builder client.TxBuilder) error {
 	signers, err := builder.GetTx().GetSigners()
 	if err != nil {
 		return err
@@ -317,7 +317,7 @@ func (s *Signer) signTransaction(ctx context.Context, builder client.TxBuilder) 
 	}
 
 	// now we can use the data to produce the signature from the signer
-	signature, err := s.createSignature(ctx, builder, sequence)
+	signature, err := s.createSignature(builder, sequence)
 	if err != nil {
 		return fmt.Errorf("error creating signature: %w", err)
 	}
@@ -338,7 +338,7 @@ func (s *Signer) signTransaction(ctx context.Context, builder client.TxBuilder) 
 	return nil
 }
 
-func (s *Signer) createSignature(ctx context.Context, builder client.TxBuilder, sequence uint64) ([]byte, error) {
+func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]byte, error) {
 	signerData := authsigning.SignerData{
 		Address:       s.address.String(),
 		ChainID:       s.ChainID(),
@@ -348,7 +348,6 @@ func (s *Signer) createSignature(ctx context.Context, builder client.TxBuilder, 
 	}
 
 	bytesToSign, err := s.enc.SignModeHandler().GetSignBytes(
-		ctx,
 		signing.SignMode_SIGN_MODE_DIRECT,
 		signerData,
 		builder.GetTx(),
