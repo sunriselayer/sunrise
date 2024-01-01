@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
 	appns "sunrise/pkg/namespace"
+	"sunrise/testutil"
 	"sunrise/testutil/genesis"
 	blobtypes "sunrise/x/blob/types"
 
@@ -39,7 +39,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	t := s.T()
 	s.accounts = RandomAccounts(10)
 
-	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	ecfg := encoding.MakeConfig(testutil.ModuleBasics...)
 	blobGenState := blobtypes.DefaultGenesis()
 	blobGenState.Params.GovMaxSquareSize = uint64(appconsts.DefaultSquareSizeUpperBound)
 
@@ -68,12 +68,11 @@ func (s *IntegrationTestSuite) Test_verifyTimeIotaMs() {
 	}
 	require.NoError(err)
 	require.NotNil(params)
-	require.Equal(int64(1), params.ConsensusParams.Block.TimeIotaMs)
 }
 
 func (s *IntegrationTestSuite) TestPostData() {
 	require := s.Require()
-	_, err := s.cctx.PostData(s.accounts[0], flags.BroadcastBlock, appns.RandomBlobNamespace(), tmrand.Bytes(kibibyte))
+	_, err := s.cctx.PostData(s.accounts[0], flags.BroadcastSync, appns.RandomBlobNamespace(), tmrand.Bytes(kibibyte))
 	require.NoError(err)
 }
 
