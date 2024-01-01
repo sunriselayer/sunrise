@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"sunrise/x/blobstream"
+	blobstream "sunrise/x/blobstream/module"
 
 	"sunrise/app"
 	"sunrise/x/blobstream/keeper"

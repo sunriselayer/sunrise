@@ -9,7 +9,6 @@ import (
 )
 
 type ModuleRegister interface {
-	RegisterLegacyAminoCodec(*codec.LegacyAmino)
 	RegisterInterfaces(codectypes.InterfaceRegistry)
 }
 
@@ -19,23 +18,19 @@ type Config struct {
 	InterfaceRegistry codectypes.InterfaceRegistry
 	Codec             codec.Codec
 	TxConfig          client.TxConfig
-	Amino             *codec.LegacyAmino
 }
 
 // MakeConfig creates an encoding config for the app.
 func MakeConfig(regs ...ModuleRegister) Config {
 	// create the codec
-	amino := codec.NewLegacyAmino()
 	interfaceRegistry := codectypes.NewInterfaceRegistry()
 
 	// register the standard types from the sdk
-	std.RegisterLegacyAminoCodec(amino)
 	std.RegisterInterfaces(interfaceRegistry)
 
 	// register specific modules
 	for _, reg := range regs {
 		reg.RegisterInterfaces(interfaceRegistry)
-		reg.RegisterLegacyAminoCodec(amino)
 	}
 
 	// create the final configuration
@@ -49,6 +44,5 @@ func MakeConfig(regs ...ModuleRegister) Config {
 		InterfaceRegistry: interfaceRegistry,
 		Codec:             cdc,
 		TxConfig:          txCfg,
-		Amino:             amino,
 	}
 }
