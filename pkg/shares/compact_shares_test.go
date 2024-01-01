@@ -8,7 +8,7 @@ import (
 
 	"sunrise/pkg/appconsts"
 	appns "sunrise/pkg/namespace"
-	"sunrise/test/util/testfactory"
+	"sunrise/testutil/testfactory"
 
 	coretypes "github.com/cometbft/cometbft/types"
 	"github.com/stretchr/testify/assert"

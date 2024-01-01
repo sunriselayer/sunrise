@@ -10,7 +10,7 @@ import (
 	"sunrise/pkg/inclusion"
 	"sunrise/pkg/shares"
 	"sunrise/pkg/square"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/testnode"
 	blob "sunrise/x/blob/types"
 
 	"github.com/celestiaorg/rsmt2d"

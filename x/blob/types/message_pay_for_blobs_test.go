@@ -17,13 +17,13 @@ func TestMsgPayForBlobs_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgPayForBlobs{
-				Creator: "invalid_address",
+				Signer: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgPayForBlobs{
-				Creator: sample.AccAddress(),
+				Signer: sample.AccAddress(),
 			},
 		},
 	}

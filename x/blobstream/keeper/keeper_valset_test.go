@@ -5,9 +5,9 @@ import (
 	"errors"
 	"testing"
 
-	"sunrise/x/blobstream"
+	blobstream "sunrise/x/blobstream/module"
 
-	testutil "sunrise/test/util"
+	testutil "sunrise/testutil"
 	"sunrise/x/blobstream/types"
 
 	"github.com/cosmos/cosmos-sdk/x/staking"
@@ -22,11 +22,11 @@ func TestCurrentValsetNormalization(t *testing.T) {
 	// Setup the overflow test
 	maxPower64 := make([]uint64, 64)             // users with max power (approx 2^63)
 	expPower64 := make([]uint64, 64)             // expected scaled powers
-	evmAddrs64 := make([]gethcommon.Address, 64) // need 64 eth addresses for this test
+	EvmAddrs64 := make([]gethcommon.Address, 64) // need 64 eth addresses for this test
 	for i := 0; i < 64; i++ {
 		maxPower64[i] = uint64(9223372036854775807)
 		expPower64[i] = 67108864 // 2^32 split amongst 64 validators
-		evmAddrs64[i] = gethcommon.BytesToAddress(bytes.Repeat([]byte{byte(i + 1)}, 20))
+		EvmAddrs64[i] = gethcommon.BytesToAddress(bytes.Repeat([]byte{byte(i + 1)}, 20))
 	}
 
 	// any lower than this and a validator won't be created
@@ -174,7 +174,7 @@ func TestCheckingAttestationNonceInValsets(t *testing.T) {
 	}
 }
 
-func TestEVMAddresses(t *testing.T) {
+func TestEvmAddresses(t *testing.T) {
 	input := testutil.CreateTestEnvWithoutBlobstreamKeysInit(t)
 	k := input.BlobstreamKeeper
 
@@ -193,9 +193,9 @@ func TestEVMAddresses(t *testing.T) {
 		testutil.StakingAmount,
 	)
 
-	evmAddress, exists := k.GetEVMAddress(input.Context, testutil.ValAddrs[0])
+	EvmAddress, exists := k.GetEVMAddress(input.Context, testutil.ValAddrs[0])
 	require.True(t, exists)
-	require.Equal(t, types.DefaultEVMAddress(testutil.ValAddrs[0]), evmAddress)
+	require.Equal(t, types.DefaultEvmAddress(testutil.ValAddrs[0]), EvmAddress)
 
 	newEvmAddress := gethcommon.BytesToAddress([]byte("a"))
 	k.SetEVMAddress(input.Context, testutil.ValAddrs[0], newEvmAddress)
@@ -203,24 +203,24 @@ func TestEVMAddresses(t *testing.T) {
 	require.True(t, exists)
 	require.Equal(t, newEvmAddress, checkEvmAddress)
 
-	// squat the next validators default evm address
-	k.SetEVMAddress(input.Context, testutil.ValAddrs[0], types.DefaultEVMAddress(testutil.ValAddrs[1]))
+	// squat the next validators default Evm address
+	k.SetEVMAddress(input.Context, testutil.ValAddrs[0], types.DefaultEvmAddress(testutil.ValAddrs[1]))
 
 	msgServer := stakingkeeper.NewMsgServerImpl(input.StakingKeeper)
 	_, err := msgServer.CreateValidator(input.Context, testutil.NewTestMsgCreateValidator(testutil.ValAddrs[1], testutil.ConsPubKeys[1], testutil.StakingAmount))
 	require.Error(t, err)
 	require.True(t, errors.Is(err, types.ErrEVMAddressAlreadyExists), err.Error())
 
-	resp, err := k.EVMAddress(input.Context, &types.QueryEVMAddressRequest{
+	resp, err := k.EvmAddress(input.Context, &types.QueryEvmAddressRequest{
 		ValidatorAddress: testutil.ValAddrs[0].String(),
 	})
 	require.NoError(t, err)
-	require.Equal(t, types.DefaultEVMAddress(testutil.ValAddrs[1]).String(), resp.EvmAddress)
+	require.Equal(t, types.DefaultEvmAddress(testutil.ValAddrs[1]).String(), resp.EvmAddress)
 
-	_, err = k.EVMAddress(input.Context, &types.QueryEVMAddressRequest{})
+	_, err = k.EvmAddress(input.Context, &types.QueryEvmAddressRequest{})
 	require.Error(t, err)
 
-	resp, err = k.EVMAddress(input.Context, &types.QueryEVMAddressRequest{
+	resp, err = k.EvmAddress(input.Context, &types.QueryEvmAddressRequest{
 		ValidatorAddress: testutil.ValAddrs[1].String(),
 	})
 	require.NoError(t, err)

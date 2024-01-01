@@ -19,7 +19,7 @@ func SimulateMsgRegisterEvmAddress(
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		msg := &types.MsgRegisterEvmAddress{
-			Creator: simAccount.Address.String(),
+			Address: simAccount.Address.String(),
 		}
 
 		// TODO: Handling the RegisterEvmAddress simulation

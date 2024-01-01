@@ -7,7 +7,7 @@ import (
 	"sunrise/app"
 	"sunrise/app/ante"
 	"sunrise/app/encoding"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/testnode"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"

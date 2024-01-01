@@ -8,7 +8,7 @@ import (
 
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/square"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/testnode"
 
 	"github.com/stretchr/testify/require"
 )

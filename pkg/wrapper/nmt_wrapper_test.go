@@ -9,7 +9,7 @@ import (
 	"sunrise/pkg/appconsts"
 	appns "sunrise/pkg/namespace"
 	"sunrise/pkg/wrapper"
-	"sunrise/test/util/testfactory"
+	"sunrise/testutil/testfactory"
 
 	"github.com/celestiaorg/nmt"
 	nmtnamespace "github.com/celestiaorg/nmt/namespace"

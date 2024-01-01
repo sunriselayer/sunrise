@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	"sunrise/x/blobstream"
+	blobstream "sunrise/x/blobstream/module"
 
 	"sunrise/x/blobstream/keeper"
 	"sunrise/x/blobstream/types"
 
-	testutil "sunrise/test/util"
-	"sunrise/test/util/testfactory"
+	testutil "sunrise/testutil"
+	"sunrise/testutil/testfactory"
 
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
@@ -85,11 +85,11 @@ func TestValsetCreationWhenEditingEVMAddr(t *testing.T) {
 	msgServer := keeper.NewMsgServerImpl(input.BlobstreamKeeper)
 
 	newEVMAddr := testfactory.RandomEVMAddress()
-	registerMsg := types.NewMsgRegisterEVMAddress(
+	registerMsg := types.NewMsgRegisterEvmAddress(
 		testutil.ValAddrs[1],
 		newEVMAddr,
 	)
-	_, err := msgServer.RegisterEVMAddress(ctx, registerMsg)
+	_, err := msgServer.RegisterEvmAddress(ctx, registerMsg)
 	require.NoError(t, err)
 	staking.EndBlocker(ctx, input.StakingKeeper)
 	blobstream.EndBlocker(ctx, pk)

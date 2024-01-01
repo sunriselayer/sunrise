@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
-	"sunrise/x/blobstream"
+	blobstream "sunrise/x/blobstream/module"
 
-	testutil "sunrise/test/util"
+	testutil "sunrise/testutil"
 	"sunrise/x/blobstream/types"
 
 	"github.com/stretchr/testify/assert"

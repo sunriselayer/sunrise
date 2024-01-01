@@ -8,8 +8,8 @@ import (
 	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/user"
-	"sunrise/test/util/blobfactory"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/blobfactory"
+	"sunrise/testutil/testnode"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/rand"

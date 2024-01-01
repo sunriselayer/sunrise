@@ -15,9 +15,9 @@ import (
 	"sunrise/pkg/shares"
 	"sunrise/pkg/square"
 	"sunrise/pkg/user"
-	"sunrise/test/util/blobfactory"
-	"sunrise/test/util/testfactory"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/blobfactory"
+	"sunrise/testutil/testfactory"
+	"sunrise/testutil/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	coretypes "github.com/cometbft/cometbft/types"

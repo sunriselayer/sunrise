@@ -6,9 +6,9 @@ import (
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 
-	"sunrise/test/util/blobfactory"
-	"sunrise/test/util/testfactory"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/blobfactory"
+	"sunrise/testutil/testfactory"
+	"sunrise/testutil/testnode"
 
 	"sunrise/pkg/da"
 	"sunrise/pkg/proof"

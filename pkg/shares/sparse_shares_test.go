@@ -5,7 +5,7 @@ import (
 
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/blob"
-	"sunrise/test/util/testfactory"
+	"sunrise/testutil/testfactory"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

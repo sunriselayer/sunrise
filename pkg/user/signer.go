@@ -286,13 +286,16 @@ func (s *Signer) ForceSetSequence(seq uint64) {
 }
 
 func (s *Signer) signTransaction(builder client.TxBuilder) error {
-	signers := builder.GetTx().GetSigners()
+	signers, err := builder.GetTx().GetSigners()
+	if err != nil {
+		return err
+	}
 	if len(signers) != 1 {
 		return fmt.Errorf("expected 1 signer, got %d", len(signers))
 	}
 
-	if !s.address.Equals(signers[0]) {
-		return fmt.Errorf("expected signer %s, got %s", s.address.String(), signers[0].String())
+	if !s.address.Equals(sdktypes.AccAddress(signers[0])) {
+		return fmt.Errorf("expected signer %s, got %s", s.address.String(), sdktypes.AccAddress(signers[0]).String())
 	}
 
 	sequence := s.GetSequence()
@@ -308,7 +311,7 @@ func (s *Signer) signTransaction(builder client.TxBuilder) error {
 		Sequence: sequence,
 	}
 
-	err := builder.SetSignatures(draftsigV2)
+	err = builder.SetSignatures(draftsigV2)
 	if err != nil {
 		return fmt.Errorf("error setting draft signatures: %w", err)
 	}
@@ -335,7 +338,7 @@ func (s *Signer) signTransaction(builder client.TxBuilder) error {
 	return nil
 }
 
-func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]byte, error) {
+func (s *Signer) createSignature(ctx context.Context, builder client.TxBuilder, sequence uint64) ([]byte, error) {
 	signerData := authsigning.SignerData{
 		Address:       s.address.String(),
 		ChainID:       s.ChainID(),
@@ -345,6 +348,7 @@ func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]b
 	}
 
 	bytesToSign, err := s.enc.SignModeHandler().GetSignBytes(
+		ctx,
 		signing.SignMode_SIGN_MODE_DIRECT,
 		signerData,
 		builder.GetTx(),
@@ -353,7 +357,7 @@ func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]b
 		return nil, fmt.Errorf("error getting sign bytes: %w", err)
 	}
 
-	signature, _, err := s.keys.SignByAddress(s.address, bytesToSign)
+	signature, _, err := s.keys.SignByAddress(s.address, bytesToSign, signing.SignMode_SIGN_MODE_DIRECT)
 	if err != nil {
 		return nil, fmt.Errorf("error signing bytes: %w", err)
 	}

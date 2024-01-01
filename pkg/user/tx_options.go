@@ -5,9 +5,9 @@ import (
 
 	"sunrise/pkg/appconsts"
 
+	sdkmath "cosmossdk.io/math"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/tx"
 )
 
 type TxOption func(builder sdkclient.TxBuilder) sdkclient.TxBuilder
@@ -28,7 +28,7 @@ func SetFeeAmount(fees sdk.Coins) TxOption {
 
 func SetFee(fees uint64) TxOption {
 	return func(builder sdkclient.TxBuilder) sdkclient.TxBuilder {
-		builder.SetFeeAmount(sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdk.NewInt(int64(fees)))))
+		builder.SetFeeAmount(sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(int64(fees)))))
 		return builder
 	}
 }
@@ -43,13 +43,6 @@ func SetMemo(memo string) TxOption {
 func SetFeePayer(feePayer sdk.AccAddress) TxOption {
 	return func(builder sdkclient.TxBuilder) sdkclient.TxBuilder {
 		builder.SetFeePayer(feePayer)
-		return builder
-	}
-}
-
-func SetTip(tip *tx.Tip) TxOption {
-	return func(builder sdkclient.TxBuilder) sdkclient.TxBuilder {
-		builder.SetTip(tip)
 		return builder
 	}
 }

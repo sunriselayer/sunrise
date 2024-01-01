@@ -10,15 +10,16 @@ import (
 	"sunrise/pkg/blob"
 	"sunrise/pkg/inclusion"
 	"sunrise/pkg/namespace"
-	"sunrise/test/util/blobfactory"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/blobfactory"
+	"sunrise/testutil/testnode"
 	"sunrise/x/blob/types"
 
+	sdkmath "cosmossdk.io/math"
+	tmrand "github.com/cometbft/cometbft/libs/rand"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
 )
 
 func TestNewBlob(t *testing.T) {
@@ -139,7 +140,7 @@ func TestValidateBlobTx(t *testing.T) {
 			getTx: func() blob.BlobTx {
 				signerAddr := signer.Address()
 
-				sendMsg := banktypes.NewMsgSend(signerAddr, signerAddr, sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdk.NewInt(10))))
+				sendMsg := banktypes.NewMsgSend(signerAddr, signerAddr, sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(10))))
 				tx := blobfactory.ComplexBlobTxWithOtherMsgs(
 					t,
 					tmrand.NewRand(),

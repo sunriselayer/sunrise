@@ -7,7 +7,7 @@ import (
 
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/blob"
-	"sunrise/test/util/testfactory"
+	"sunrise/testutil/testfactory"
 
 	"github.com/celestiaorg/nmt/namespace"
 	"github.com/stretchr/testify/assert"

@@ -7,7 +7,7 @@ import (
 
 	"sunrise/pkg/appconsts"
 	appns "sunrise/pkg/namespace"
-	"sunrise/test/util/testfactory"
+	"sunrise/testutil/testfactory"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

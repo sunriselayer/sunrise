@@ -16,8 +16,8 @@ import (
 	appns "sunrise/pkg/namespace"
 	"sunrise/pkg/shares"
 	"sunrise/pkg/square"
-	"sunrise/test/util/blobfactory"
-	"sunrise/test/util/testnode"
+	"sunrise/testutil/blobfactory"
+	"sunrise/testutil/testnode"
 	blobtypes "sunrise/x/blob/types"
 
 	"github.com/celestiaorg/rsmt2d"
