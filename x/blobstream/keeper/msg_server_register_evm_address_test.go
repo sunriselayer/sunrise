@@ -8,15 +8,20 @@ import (
 	"github.com/stretchr/testify/require"
 	testutil "sunrise/testutil"
 	"sunrise/x/blobstream/types"
+
+	"sunrise/x/blobstream/keeper"
 )
 
 func TestRegisterEVMAddress(t *testing.T) {
 	input, sdkCtx := testutil.SetupFiveValChain(t)
 	k := input.BlobstreamKeeper
-	vals := input.StakingKeeper.GetValidators(sdkCtx, 100)
+	vals, err := input.StakingKeeper.GetValidators(sdkCtx, 100)
+	require.NoError(t, err)
 	require.GreaterOrEqual(t, len(vals), 1)
 	val := vals[0]
-	evmAddr, exists := k.GetEVMAddress(sdkCtx, val.GetOperator())
+	valoper, err := sdk.ValAddressFromBech32(val.GetOperator())
+	require.NoError(t, err)
+	evmAddr, exists := k.GetEVMAddress(sdkCtx, valoper)
 	require.True(t, exists)
 
 	// test again with an address that is not the validator
@@ -24,15 +29,17 @@ func TestRegisterEVMAddress(t *testing.T) {
 	require.NoError(t, err)
 	msg := types.NewMsgRegisterEvmAddress(valAddr, evmAddr)
 
-	_, err = k.RegisterEvmAddress(sdkCtx, msg)
+	msgServer := keeper.NewMsgServerImpl(k)
+
+	_, err = msgServer.RegisterEvmAddress(sdkCtx, msg)
 	require.Error(t, err)
 
 	// override the previous EVM address with a new one
 	evmAddr = common.BytesToAddress([]byte("evm_address"))
-	msg = types.NewMsgRegisterEvmAddress(val.GetOperator(), evmAddr)
-	_, err = k.RegisterEVMAddress(sdkCtx, msg)
+	msg = types.NewMsgRegisterEvmAddress(valoper, evmAddr)
+	_, err = msgServer.RegisterEvmAddress(sdkCtx, msg)
 	require.NoError(t, err)
 
-	addr, _ := k.GetEVMAddress(sdkCtx, val.GetOperator())
+	addr, _ := k.GetEVMAddress(sdkCtx, valoper)
 	require.Equal(t, evmAddr, addr)
 }

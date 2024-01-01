@@ -18,7 +18,7 @@ type Config struct {
 }
 
 // MakeConfig creates an encoding config for the app.
-func MakeConfig(regs ...sdkmodule.AppModuleBasic) Config {
+func MakeConfig(regs sdkmodule.BasicManager) Config {
 	// create the codec
 	amino := codec.NewLegacyAmino()
 	interfaceRegistry := codectypes.NewInterfaceRegistry()

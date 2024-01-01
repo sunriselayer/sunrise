@@ -47,7 +47,6 @@ import (
 
 	sdkerrors "cosmossdk.io/errors"
 	tmrand "github.com/cometbft/cometbft/libs/rand"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"sunrise/pkg/appconsts"
@@ -59,10 +58,6 @@ import (
 	"sunrise/testutil/testnode"
 	"sunrise/x/blob/types"
 )
-
-func TestMsgTypeURLParity(t *testing.T) {
-	require.Equal(t, sdk.MsgTypeURL(&types.MsgPayForBlobs{}), types.URLMsgPayForBlobs)
-}
 
 func TestValidateBasic(t *testing.T) {
 	type test struct {

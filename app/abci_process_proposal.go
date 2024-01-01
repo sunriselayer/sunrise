@@ -31,7 +31,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		if err := recover(); err != nil {
 			logInvalidPropBlock(app.Logger(), req.ProposerAddress, fmt.Sprintf("caught panic: %v", err))
 			telemetry.IncrCounter(1, "process_proposal", "panics")
-			resp, err := reject(fmt.Errorf("", err))
+			resp, err := reject(fmt.Errorf("%s", err))
 
 			retResp = resp
 			retErr = err

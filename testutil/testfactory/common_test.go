@@ -12,7 +12,7 @@ import (
 )
 
 func TestTestAccount(t *testing.T) {
-	enc := encoding.MakeConfig(testutil.ModuleBasics...)
+	enc := encoding.MakeConfig(testutil.ModuleBasics)
 	kr := testfactory.TestKeyring(enc.Codec)
 	record, err := kr.Key(testfactory.TestAccName)
 	require.NoError(t, err)

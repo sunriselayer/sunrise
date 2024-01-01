@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
+	"sunrise/testutil"
 
 	sdkmath "cosmossdk.io/math"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	coretypes "github.com/cometbft/cometbft/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,7 +21,7 @@ import (
 // Document will create a valid genesis doc with funded addresses.
 func Document(
 	ecfg encoding.Config,
-	params *tmproto.ConsensusParams,
+	params *coretypes.ConsensusParams,
 	chainID string,
 	gentxs []json.RawMessage,
 	addrs []string,
@@ -59,7 +58,7 @@ func Document(
 		return nil, err
 	}
 
-	state := app.ModuleBasics.DefaultGenesis(ecfg.Codec)
+	state := testutil.ModuleBasics.DefaultGenesis(ecfg.Codec)
 	state[authtypes.ModuleName] = ecfg.Codec.MustMarshalJSON(authGenState)
 	state[banktypes.ModuleName] = ecfg.Codec.MustMarshalJSON(bankGenState)
 	state[genutiltypes.ModuleName] = ecfg.Codec.MustMarshalJSON(genutilGenState)

@@ -90,7 +90,7 @@ func GenerateOrderedRandomTxs(t *testing.T, signer *user.Signer, rand *tmrand.Ra
 func TestGenerateOrderedRandomTxs_Deterministic(t *testing.T) {
 	pfbCount := 10
 	noramlCount := 10
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
 
 	kr := testfactory.TestKeyring(encCfg.Codec)
 	signer, err := user.NewSigner(kr, nil, testnode.TestAddress(), encCfg.TxConfig, testfactory.ChainID, 1, 0)
@@ -118,7 +118,7 @@ func GenerateMixedRandomTxs(t *testing.T, signer *user.Signer, rand *tmrand.Rand
 func TestGenerateMixedRandomTxs_Deterministic(t *testing.T) {
 	pfbCount := 10
 	noramlCount := 10
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
 
 	kr := testfactory.TestKeyring(encCfg.Codec)
 	signer, err := user.NewSigner(kr, nil, testnode.TestAddress(), encCfg.TxConfig, testfactory.ChainID, 1, 0)

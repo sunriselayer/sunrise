@@ -12,7 +12,6 @@ import (
 	testutil "sunrise/testutil"
 	"sunrise/testutil/testfactory"
 
-	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -47,7 +46,7 @@ func TestValsetCreationWhenValidatorUnbonds(t *testing.T) {
 
 	ctx = ctx.WithBlockHeight(1)
 	// run abci methods after chain init
-	staking.EndBlocker(ctx, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(ctx)
 	blobstream.EndBlocker(ctx, pk)
 
 	// current attestation expectedNonce should be 1 because a valset has been emitted upon chain init.
@@ -55,12 +54,12 @@ func TestValsetCreationWhenValidatorUnbonds(t *testing.T) {
 	require.Equal(t, uint64(1), currentAttestationNonce)
 
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1)
-	msgServer := stakingkeeper.NewMsgServerImpl(input.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&input.StakingKeeper)
 
 	undelegateMsg := testutil.NewTestMsgUnDelegateValidator(testutil.ValAddrs[0], testutil.StakingAmount)
 	_, err := msgServer.Undelegate(ctx, undelegateMsg)
 	require.NoError(t, err)
-	staking.EndBlocker(ctx, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(ctx)
 	blobstream.EndBlocker(ctx, pk)
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 10)
 
@@ -74,7 +73,7 @@ func TestValsetCreationWhenEditingEVMAddr(t *testing.T) {
 	ctx = ctx.WithBlockHeight(1)
 
 	// run abci methods after chain init
-	staking.EndBlocker(ctx, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(ctx)
 	blobstream.EndBlocker(ctx, pk)
 
 	// current attestation expectedNonce should be 1 because a valset has been emitted upon chain init.
@@ -91,7 +90,7 @@ func TestValsetCreationWhenEditingEVMAddr(t *testing.T) {
 	)
 	_, err := msgServer.RegisterEvmAddress(ctx, registerMsg)
 	require.NoError(t, err)
-	staking.EndBlocker(ctx, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(ctx)
 	blobstream.EndBlocker(ctx, pk)
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 10)
 
@@ -230,7 +229,7 @@ func TestDataCommitmentCreation(t *testing.T) {
 	ctx = ctx.WithBlockHeight(1)
 
 	// run abci methods after chain init
-	staking.EndBlocker(ctx, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(ctx)
 	blobstream.EndBlocker(ctx, qk)
 
 	// current attestation nonce should be 1 because a valset has been emitted
@@ -253,7 +252,7 @@ func TestDataCommitmentRange(t *testing.T) {
 
 	ctx = ctx.WithBlockHeight(1)
 	// run abci methods after chain init
-	staking.EndBlocker(ctx, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(ctx)
 	blobstream.EndBlocker(ctx, qk)
 
 	// current attestation nonce should be 1 because a valset has been emitted

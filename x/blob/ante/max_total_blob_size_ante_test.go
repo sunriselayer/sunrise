@@ -3,9 +3,9 @@ package ante_test
 import (
 	"testing"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/shares"
+	"sunrise/testutil"
 	ante "sunrise/x/blob/ante"
 	blob "sunrise/x/blob/types"
 
@@ -115,7 +115,7 @@ func TestMaxTotalBlobSizeAnteHandler(t *testing.T) {
 		},
 	}
 
-	txConfig := encoding.MakeConfig(app.ModuleEncodingRegisters...).TxConfig
+	txConfig := encoding.MakeConfig(testutil.ModuleBasics).TxConfig
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {

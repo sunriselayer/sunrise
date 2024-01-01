@@ -19,7 +19,7 @@ func SimulateMsgPayForBlobs(
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		msg := &types.MsgPayForBlobs{
-			Creator: simAccount.Address.String(),
+			Signer: simAccount.Address.String(),
 		}
 
 		// TODO: Handling the PayForBlobs simulation

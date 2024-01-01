@@ -50,7 +50,7 @@ import (
 
 var (
 	// ModuleBasics is a mock module basic manager for testing
-	ModuleBasics = []sdkmodule.AppModuleBasic{}
+	ModuleBasics = sdkmodule.NewBasicManager()
 	// TestingStakeParams is a set of staking params for testing
 	TestingStakeParams = stakingtypes.Params{
 		UnbondingTime:     100,
@@ -297,7 +297,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 
 	k := keeper.NewKeeper(marshaler, bsKey, getSubspace(paramsKeeper, bstypes.DefaultParamspace), &stakingKeeper)
 	testBlobstreamParams := bstypes.DefaultGenesis().Params
-	k.SetParams(ctx, *testBlobstreamParams)
+	k.SetParams(ctx, testBlobstreamParams)
 
 	stakingKeeper = *stakingKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(
@@ -307,10 +307,10 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 		),
 	)
 	return TestInput{
-		BlobstreamKeeper: *k,
+		BlobstreamKeeper: k,
 		AccountKeeper:    accountKeeper,
 		BankKeeper:       bankKeeper,
-		StakingKeeper:    stakingKeeper,
+		StakingKeeper:    *stakingKeeper,
 		SlashingKeeper:   slashingKeeper,
 		DistKeeper:       distKeeper,
 		Context:          ctx,
@@ -337,7 +337,6 @@ func MakeTestCodec() *codec.LegacyAmino {
 	sdk.RegisterLegacyAminoCodec(cdc)
 	ccodec.RegisterCrypto(cdc)
 	params.AppModuleBasic{}.RegisterLegacyAminoCodec(cdc)
-	bstypes.RegisterLegacyAminoCodec(cdc)
 	return cdc
 }
 
@@ -371,7 +370,7 @@ func SetupFiveValChain(t *testing.T) (TestInput, sdk.Context) {
 	}
 
 	// Run the staking endblocker to ensure valset is correct in state
-	staking.EndBlocker(input.Context, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(input.Context)
 
 	// Return the test input
 	return input, input.Context
@@ -403,7 +402,7 @@ func CreateValidator(
 
 	// Create a validator for that account using some tokens in the account
 	// and the staking handler
-	msgServer := stakingkeeper.NewMsgServerImpl(input.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&input.StakingKeeper)
 	_, err = msgServer.CreateValidator(input.Context, NewTestMsgCreateValidator(valAddr, consPubKey, stakingAmount))
 	require.NoError(t, err)
 }
@@ -452,7 +451,7 @@ func SetupTestChain(t *testing.T, weights []uint64) (TestInput, sdk.Context) {
 	input.StakingKeeper.SetParams(input.Context, TestingStakeParams)
 
 	// Initialize each of the validators
-	stakingMsgServer := stakingkeeper.NewMsgServerImpl(input.StakingKeeper)
+	stakingMsgServer := stakingkeeper.NewMsgServerImpl(&input.StakingKeeper)
 	bsMsgServer := keeper.NewMsgServerImpl(input.BlobstreamKeeper)
 	for i, weight := range weights {
 		consPrivKey := ed25519.GenPrivKey()
@@ -489,7 +488,7 @@ func SetupTestChain(t *testing.T, weights []uint64) (TestInput, sdk.Context) {
 		require.NoError(t, err)
 
 		// Run the staking endblocker to ensure valset is correct in state
-		staking.EndBlocker(input.Context, input.StakingKeeper)
+		input.StakingKeeper.EndBlocker(input.Context)
 	}
 
 	// some inputs can cause the validator creation not to work, this checks that

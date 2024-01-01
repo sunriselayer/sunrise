@@ -48,7 +48,7 @@ type Genesis struct {
 
 // NewDefaultGenesis creates a new default genesis with no accounts or validators.
 func NewDefaultGenesis() *Genesis {
-	ecfg := encoding.MakeConfig(testutil.ModuleBasics...)
+	ecfg := encoding.MakeConfig(testutil.ModuleBasics)
 	g := &Genesis{
 		ecfg:            ecfg,
 		ConsensusParams: app.DefaultConsensusParams(),

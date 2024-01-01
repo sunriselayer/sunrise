@@ -10,7 +10,6 @@ import (
 	testutil "sunrise/testutil"
 	"sunrise/x/blobstream/types"
 
-	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	gethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/assert"
@@ -85,7 +84,7 @@ func TestCheckingEarliestAvailableAttestationNonceInValsets(t *testing.T) {
 		testutil.StakingAmount,
 	)
 	// Run the staking endblocker to ensure valset is correct in state
-	staking.EndBlocker(input.Context, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(input.Context)
 
 	// init the latest attestation nonce
 	input.BlobstreamKeeper.SetLatestAttestationNonce(input.Context, blobstream.InitialLatestAttestationNonce)
@@ -135,7 +134,7 @@ func TestCheckingAttestationNonceInValsets(t *testing.T) {
 		testutil.StakingAmount,
 	)
 	// Run the staking endblocker to ensure valset is correct in state
-	staking.EndBlocker(input.Context, input.StakingKeeper)
+	input.StakingKeeper.EndBlocker(input.Context)
 	tests := []struct {
 		name          string
 		requestFunc   func() error
@@ -206,7 +205,7 @@ func TestEvmAddresses(t *testing.T) {
 	// squat the next validators default Evm address
 	k.SetEVMAddress(input.Context, testutil.ValAddrs[0], types.DefaultEvmAddress(testutil.ValAddrs[1]))
 
-	msgServer := stakingkeeper.NewMsgServerImpl(input.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&input.StakingKeeper)
 	_, err := msgServer.CreateValidator(input.Context, testutil.NewTestMsgCreateValidator(testutil.ValAddrs[1], testutil.ConsPubKeys[1], testutil.StakingAmount))
 	require.Error(t, err)
 	require.True(t, errors.Is(err, types.ErrEVMAddressAlreadyExists), err.Error())

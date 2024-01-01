@@ -18,7 +18,7 @@ import (
 // TestGenerateManyRandomRawSendTxsSameSigner_Deterministic tests whether with the same random seed the GenerateManyRandomRawSendTxsSameSigner function produces the same send transactions.
 func TestGenerateManyRandomRawSendTxsSameSigner_Deterministic(t *testing.T) {
 	normalTxCount := 10
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
 	TxDecoder := encCfg.TxConfig.TxDecoder()
 
 	kr, addr := testnode.NewKeyring(testfactory.TestAccName)

@@ -3,10 +3,10 @@ package ante_test
 import (
 	"testing"
 
-	"sunrise/app"
 	"sunrise/app/encoding"
 	"sunrise/pkg/appconsts"
 	"sunrise/pkg/shares"
+	"sunrise/testutil"
 	ante "sunrise/x/blob/ante"
 	blob "sunrise/x/blob/types"
 
@@ -20,7 +20,7 @@ const (
 )
 
 func TestPFBAnteHandler(t *testing.T) {
-	txConfig := encoding.MakeConfig(app.ModuleEncodingRegisters...).TxConfig
+	txConfig := encoding.MakeConfig(testutil.ModuleBasics).TxConfig
 	testCases := []struct {
 		name        string
 		pfb         *blob.MsgPayForBlobs

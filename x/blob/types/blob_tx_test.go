@@ -10,6 +10,7 @@ import (
 	"sunrise/pkg/blob"
 	"sunrise/pkg/inclusion"
 	"sunrise/pkg/namespace"
+	"sunrise/testutil"
 	"sunrise/testutil/blobfactory"
 	"sunrise/testutil/testnode"
 	"sunrise/x/blob/types"
@@ -36,7 +37,7 @@ func TestNewBlob(t *testing.T) {
 }
 
 func TestValidateBlobTx(t *testing.T) {
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
 	signer, err := testnode.NewOfflineSigner()
 	require.NoError(t, err)
 	ns1 := namespace.MustNewV0(bytes.Repeat([]byte{0x01}, namespace.NamespaceVersionZeroIDSize))
