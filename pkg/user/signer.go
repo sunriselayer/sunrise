@@ -13,7 +13,7 @@ import (
 	blobtypes "sunrise/x/blob/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
+	"github.com/cosmos/cosmos-sdk/client/grpc/cmtservice"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
@@ -108,7 +108,7 @@ func SetupSigner(
 	address sdktypes.AccAddress,
 	encCfg encoding.Config,
 ) (*Signer, error) {
-	resp, err := tmservice.NewServiceClient(conn).GetLatestBlock(ctx, &tmservice.GetLatestBlockRequest{})
+	resp, err := cmtservice.NewServiceClient(conn).GetLatestBlock(ctx, &cmtservice.GetLatestBlockRequest{})
 	if err != nil {
 		return nil, err
 	}
