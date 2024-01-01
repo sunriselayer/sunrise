@@ -1,4 +1,4 @@
-package ante_test
+package ante
 
 import (
 	"testing"
