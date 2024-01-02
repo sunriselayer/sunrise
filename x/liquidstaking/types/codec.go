@@ -8,6 +8,12 @@ import (
 )
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgLiquidStake{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgLiquidUnstake{},
+	)
 	// this line is used by starport scaffolding # 3
 
 	registry.RegisterImplementations((*sdk.Msg)(nil),

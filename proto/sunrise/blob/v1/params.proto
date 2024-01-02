@@ -11,9 +11,11 @@ message Params {
   option (amino.name) = "sunrise/x/blob/Params";
   option (gogoproto.equal) = true;
 
-  uint32 gas_per_blob_byte = 1
-  [ (gogoproto.moretags) = "yaml:\"gas_per_blob_byte\"" ];
+  uint32 gas_per_blob_byte = 1 [
+    (gogoproto.moretags) = "yaml:\"gas_per_blob_byte\""
+  ];
 
-uint64 gov_max_square_size = 2
-  [ (gogoproto.moretags) = "yaml:\"gov_max_square_size\"" ];
+  uint64 gov_max_square_size = 2 [
+    (gogoproto.moretags) = "yaml:\"gov_max_square_size\""
+  ];
 }

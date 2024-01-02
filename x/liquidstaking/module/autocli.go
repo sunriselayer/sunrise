@@ -28,6 +28,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "LiquidStake",
+					Use:            "liquid-stake",
+					Short:          "Send a liquid-stake tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "LiquidUnstake",
+					Use:            "liquid-unstake",
+					Short:          "Send a liquid-unstake tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

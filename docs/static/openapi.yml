@@ -18910,49 +18910,6 @@ paths:
               parameters.
       tags:
         - Msg
-  /sunrise/blob/params:
-    get:
-      summary: Parameters queries the parameters of the module.
-      operationId: SunriseBlobV1Query_Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-                properties:
-                  gas_per_blob_byte:
-                    type: integer
-                    format: int64
-                  gov_max_square_size:
-                    type: string
-                    format: uint64
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
   /sunrise.blob.v1.Msg/PayForBlobs:
     post:
       operationId: SunriseBlobV1Msg_PayForBlobs
@@ -19160,10 +19117,10 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise/blobstream/params:
+  /sunrise/liquidstaking/params:
     get:
       summary: Parameters queries the parameters of the module.
-      operationId: SunriseBlobstreamQuery_Params
+      operationId: SunriseLiquidstakingQuery_Params
       responses:
         '200':
           description: A successful response.
@@ -19196,9 +19153,9 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /sunrise.blobstream.Msg/RegisterEvmAddress:
+  /sunrise.liquidstaking.Msg/LiquidStake:
     post:
-      operationId: SunriseBlobstreamMsg_RegisterEvmAddress
+      operationId: SunriseLiquidstakingMsg_LiquidStake
       responses:
         '200':
           description: A successful response.
@@ -19233,22 +19190,14 @@ paths:
                 type: string
       tags:
         - Msg
-  /sunrise.blobstream.Msg/UpdateParams:
+  /sunrise.liquidstaking.Msg/LiquidUnstake:
     post:
-      summary: |-
-        UpdateParams defines a (governance) operation for updating the module
-        parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseBlobstreamMsg_UpdateParams
+      operationId: SunriseLiquidstakingMsg_LiquidUnstake
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
-            description: >-
-              MsgUpdateParamsResponse defines the response structure for
-              executing a
-
-              MsgUpdateParams message.
         default:
           description: An unexpected error response.
           schema:
@@ -19269,21 +19218,13 @@ paths:
                   additionalProperties: {}
       parameters:
         - name: body
-          description: MsgUpdateParams is the Msg/UpdateParams request type.
           in: body
           required: true
           schema:
             type: object
             properties:
-              authority:
+              creator:
                 type: string
-                description: >-
-                  authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
-              params:
-                description: 'NOTE: All parameters must be supplied.'
-                type: object
-            description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
   /sunrise.liquidstaking.Msg/UpdateParams:
@@ -19334,10 +19275,7 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
@@ -27033,30 +26971,6 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
-  sunrise.blob.v1.Params:
-    type: object
-    properties:
-      gas_per_blob_byte:
-        type: integer
-        format: int64
-      gov_max_square_size:
-        type: string
-        format: uint64
-    description: Params defines the parameters for the module.
-  sunrise.blob.v1.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        description: params holds all the parameters of this module.
-        type: object
-        properties:
-          gas_per_blob_byte:
-            type: integer
-            format: int64
-          gov_max_square_size:
-            type: string
-            format: uint64
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
   sunrise.blob.v1.MsgPayForBlobs:
     type: object
     properties:
@@ -27135,6 +27049,16 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
+  sunrise.blob.v1.Params:
+    type: object
+    properties:
+      gas_per_blob_byte:
+        type: integer
+        format: int64
+      gov_max_square_size:
+        type: string
+        format: uint64
+    description: Params defines the parameters for the module.
   sunrise.blobgrant.MsgUpdateParams:
     type: object
     properties:
@@ -27158,24 +27082,31 @@ definitions:
   sunrise.blobgrant.Params:
     type: object
     description: Params defines the parameters for the module.
-  sunrise.blobstream.Params:
+  sunrise.liquidstaking.Params:
     type: object
     description: Params defines the parameters for the module.
-  sunrise.blobstream.QueryParamsResponse:
+  sunrise.liquidstaking.QueryParamsResponse:
     type: object
     properties:
       params:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  sunrise.blobstream.MsgRegisterEvmAddress:
+  sunrise.liquidstaking.MsgLiquidStake:
     type: object
     properties:
       creator:
         type: string
-  sunrise.blobstream.MsgRegisterEvmAddressResponse:
+  sunrise.liquidstaking.MsgLiquidStakeResponse:
     type: object
-  sunrise.blobstream.MsgUpdateParams:
+  sunrise.liquidstaking.MsgLiquidUnstake:
+    type: object
+    properties:
+      creator:
+        type: string
+  sunrise.liquidstaking.MsgLiquidUnstakeResponse:
+    type: object
+  sunrise.liquidstaking.MsgUpdateParams:
     type: object
     properties:
       authority:
@@ -27187,34 +27118,11 @@ definitions:
         description: 'NOTE: All parameters must be supplied.'
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.blobstream.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  sunrise.liquidstaking.MsgUpdateParams:
-    type: object
-    properties:
-      authority:
-        type: string
-        description: >-
-          authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
-      params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
-        type: object
-    description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.liquidstaking.MsgUpdateParamsResponse:
     type: object
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.liquidstaking.Params:
-    type: object
-    description: Params defines the parameters for the module.
   sunrise.sunrise.MsgUpdateParams:
     type: object
     properties:

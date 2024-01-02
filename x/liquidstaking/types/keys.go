@@ -18,3 +18,14 @@ var (
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
+
+var (
+	// Keys for store prefixes
+	LiquidValidatorsKey = []byte{0xc0} // prefix for each key to a liquid validator
+)
+
+// GetLiquidValidatorKey creates the key for the liquid validator with address
+// VALUE: liquidstaking/LiquidValidator
+func GetLiquidValidatorKey(operatorAddr sdk.ValAddress) []byte {
+	return append(LiquidValidatorsKey, address.MustLengthPrefix(operatorAddr)...)
+}

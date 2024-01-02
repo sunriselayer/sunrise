@@ -19,7 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName = "/sunrise.liquidstaking.Query/Params"
+	Query_Params_FullMethodName           = "/sunrise.liquidstaking.Query/Params"
+	Query_LiquidValidators_FullMethodName = "/sunrise.liquidstaking.Query/LiquidValidators"
+	Query_VotingPower_FullMethodName      = "/sunrise.liquidstaking.Query/VotingPower"
+	Query_States_FullMethodName           = "/sunrise.liquidstaking.Query/States"
 )
 
 // QueryClient is the client API for Query service.
@@ -28,6 +31,12 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// LiquidValidators returns liquid validators with states of the liquidstaking module.
+	LiquidValidators(ctx context.Context, in *QueryLiquidValidatorsRequest, opts ...grpc.CallOption) (*QueryLiquidValidatorsResponse, error)
+	// VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
+	VotingPower(ctx context.Context, in *QueryVotingPowerRequest, opts ...grpc.CallOption) (*QueryVotingPowerResponse, error)
+	// States returns states of the liquidstaking module.
+	States(ctx context.Context, in *QueryStatesRequest, opts ...grpc.CallOption) (*QueryStatesResponse, error)
 }
 
 type queryClient struct {
@@ -47,12 +56,45 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) LiquidValidators(ctx context.Context, in *QueryLiquidValidatorsRequest, opts ...grpc.CallOption) (*QueryLiquidValidatorsResponse, error) {
+	out := new(QueryLiquidValidatorsResponse)
+	err := c.cc.Invoke(ctx, Query_LiquidValidators_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) VotingPower(ctx context.Context, in *QueryVotingPowerRequest, opts ...grpc.CallOption) (*QueryVotingPowerResponse, error) {
+	out := new(QueryVotingPowerResponse)
+	err := c.cc.Invoke(ctx, Query_VotingPower_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) States(ctx context.Context, in *QueryStatesRequest, opts ...grpc.CallOption) (*QueryStatesResponse, error) {
+	out := new(QueryStatesResponse)
+	err := c.cc.Invoke(ctx, Query_States_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// LiquidValidators returns liquid validators with states of the liquidstaking module.
+	LiquidValidators(context.Context, *QueryLiquidValidatorsRequest) (*QueryLiquidValidatorsResponse, error)
+	// VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
+	VotingPower(context.Context, *QueryVotingPowerRequest) (*QueryVotingPowerResponse, error)
+	// States returns states of the liquidstaking module.
+	States(context.Context, *QueryStatesRequest) (*QueryStatesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -62,6 +104,15 @@ type UnimplementedQueryServer struct {
 
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (UnimplementedQueryServer) LiquidValidators(context.Context, *QueryLiquidValidatorsRequest) (*QueryLiquidValidatorsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LiquidValidators not implemented")
+}
+func (UnimplementedQueryServer) VotingPower(context.Context, *QueryVotingPowerRequest) (*QueryVotingPowerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VotingPower not implemented")
+}
+func (UnimplementedQueryServer) States(context.Context, *QueryStatesRequest) (*QueryStatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method States not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -94,6 +145,60 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_LiquidValidators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLiquidValidatorsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LiquidValidators(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LiquidValidators_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LiquidValidators(ctx, req.(*QueryLiquidValidatorsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_VotingPower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVotingPowerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).VotingPower(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_VotingPower_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).VotingPower(ctx, req.(*QueryVotingPowerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_States_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryStatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).States(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_States_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).States(ctx, req.(*QueryStatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -104,6 +209,18 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "LiquidValidators",
+			Handler:    _Query_LiquidValidators_Handler,
+		},
+		{
+			MethodName: "VotingPower",
+			Handler:    _Query_VotingPower_Handler,
+		},
+		{
+			MethodName: "States",
+			Handler:    _Query_States_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

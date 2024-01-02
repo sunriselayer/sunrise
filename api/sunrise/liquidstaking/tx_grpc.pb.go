@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName = "/sunrise.liquidstaking.Msg/UpdateParams"
+	Msg_UpdateParams_FullMethodName  = "/sunrise.liquidstaking.Msg/UpdateParams"
+	Msg_LiquidStake_FullMethodName   = "/sunrise.liquidstaking.Msg/LiquidStake"
+	Msg_LiquidUnstake_FullMethodName = "/sunrise.liquidstaking.Msg/LiquidUnstake"
 )
 
 // MsgClient is the client API for Msg service.
@@ -29,6 +31,8 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error)
+	LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error)
 }
 
 type msgClient struct {
@@ -48,6 +52,24 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error) {
+	out := new(MsgLiquidStakeResponse)
+	err := c.cc.Invoke(ctx, Msg_LiquidStake_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error) {
+	out := new(MsgLiquidUnstakeResponse)
+	err := c.cc.Invoke(ctx, Msg_LiquidUnstake_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -55,6 +77,8 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	LiquidStake(context.Context, *MsgLiquidStake) (*MsgLiquidStakeResponse, error)
+	LiquidUnstake(context.Context, *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -64,6 +88,12 @@ type UnimplementedMsgServer struct {
 
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (UnimplementedMsgServer) LiquidStake(context.Context, *MsgLiquidStake) (*MsgLiquidStakeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LiquidStake not implemented")
+}
+func (UnimplementedMsgServer) LiquidUnstake(context.Context, *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LiquidUnstake not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -96,6 +126,42 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_LiquidStake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgLiquidStake)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).LiquidStake(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_LiquidStake_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).LiquidStake(ctx, req.(*MsgLiquidStake))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_LiquidUnstake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgLiquidUnstake)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).LiquidUnstake(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_LiquidUnstake_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).LiquidUnstake(ctx, req.(*MsgLiquidUnstake))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -106,6 +172,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "LiquidStake",
+			Handler:    _Msg_LiquidStake_Handler,
+		},
+		{
+			MethodName: "LiquidUnstake",
+			Handler:    _Msg_LiquidUnstake_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

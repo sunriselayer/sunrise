@@ -4,6 +4,9 @@ package sunrise.liquidstaking;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 
+import "cosmos_proto/cosmos.proto";
+import "sunrise/liquidstaking/liquidstaking.proto";
+
 option go_package = "sunrise/x/liquidstaking/types";
 
 // Params defines the parameters for the module.
@@ -11,5 +14,29 @@ message Params {
   option (amino.name) = "sunrise/x/liquidstaking/Params";
   option (gogoproto.equal) = true;
 
-  
+    // LiquidBondDenom specifies the denomination of the token receiving after LiquidStaking, The value is calculated
+  // through NetAmount.
+  string liquid_bond_denom = 1 [(gogoproto.moretags) = "yaml:\"liquid_bond_denom\""];
+
+  // WhitelistedValidators specifies the validators elected to become Active Liquid Validators.
+  repeated WhitelistedValidator whitelisted_validators = 2
+      [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"whitelisted_validators\""];
+
+  // UnstakeFeeRate specifies the fee rate when liquid unstake is requested, unbonded by subtracting it from
+  // unbondingAmount
+  string unstake_fee_rate = 3 [
+    (gogoproto.moretags)   = "yaml:\"unstake_fee_rate\"",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+
+  // MinLiquidStakingAmount specifies the minimum number of coins to be staked to the active liquid validators on liquid
+  // staking to minimize decimal loss and consider gas efficiency.
+  string min_liquid_staking_amount = 5 [
+    (gogoproto.moretags)   = "yaml:\"min_liquid_staking_amount\"",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (cosmos_proto.scalar)  = "cosmos.Int"
+  ];
 }
