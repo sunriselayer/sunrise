@@ -16,7 +16,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	chain "sunrise/app"
-	utils "sunrise/types"
+	utils "sunrise/pkg/utils"
 	"sunrise/x/liquidstaking/keeper"
 	"sunrise/x/liquidstaking/types"
 )

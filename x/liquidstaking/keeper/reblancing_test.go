@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	utils "sunrise/types"
+	utils "sunrise/pkg/utils"
 	"sunrise/x/liquidstaking/types"
 )
 

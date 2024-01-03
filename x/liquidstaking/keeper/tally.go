@@ -5,8 +5,9 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	utils "sunrise/pkg/utils"
 
 	"sunrise/x/liquidstaking/types"
 )
@@ -32,93 +33,6 @@ func (k Keeper) GetVoterBalanceByDenom(ctx sdk.Context, votes govtypes.Votes) ma
 	return denomAddrBalanceMap
 }
 
-func (k Keeper) TokenAmountFromAMMPositions(ctx sdk.Context, addr sdk.AccAddress, targetDenom string) sdk.Int {
-	tokenAmount := utils.ZeroInt
-
-	k.ammKeeper.IteratePositionsByOwner(ctx, addr, func(position ammtypes.Position) (stop bool) {
-		coin0, coin1, err := k.ammKeeper.PositionAssets(ctx, position.Id)
-		if err != nil {
-			k.Logger(ctx).Error("failed to get position assets", "error", err)
-			return false
-		}
-		if coin0.Denom == targetDenom {
-			tokenAmount = tokenAmount.Add(coin0.Amount)
-		} else if coin1.Denom == targetDenom {
-			tokenAmount = tokenAmount.Add(coin1.Amount)
-		}
-		return false
-	})
-
-	return tokenAmount
-}
-
-// GetBTokenSharePerPublicPositionShareMap creates a map of public position
-// share which contains targetDenom to calculate target denom value of public positions
-func (k Keeper) GetBTokenSharePerPublicPositionShareMap(ctx sdk.Context, targetDenom string) map[string]sdkmath.LegacyDec {
-	m := map[string]sdkmath.LegacyDec{}
-	k.liquidAMMKeeper.IterateAllPublicPositions(ctx, func(publicPosition liquidammtypes.PublicPosition) (stop bool) {
-		shareDenom := liquidammtypes.ShareDenom(publicPosition.Id)
-		bTokenSharePerPublicPositionShare := k.BTokenSharePerPublicPositionShare(ctx, publicPosition, targetDenom)
-		if bTokenSharePerPublicPositionShare.IsPositive() {
-			m[shareDenom] = bTokenSharePerPublicPositionShare
-		}
-		return false
-	})
-	return m
-}
-
-func (k Keeper) BTokenSharePerPublicPositionShare(ctx sdk.Context, publicPosition liquidammtypes.PublicPosition, targetDenom string) sdkmath.LegacyDec {
-	shareDenom := liquidammtypes.ShareDenom(publicPosition.Id)
-
-	ammPosition, found := k.liquidAMMKeeper.GetAMMPosition(ctx, publicPosition)
-	if !found {
-		// The public position is not initialized(gained liquidity) yet.
-		return utils.ZeroDec
-	}
-	coin0, coin1, err := k.ammKeeper.PositionAssets(ctx, ammPosition.Id)
-	if err != nil {
-		// TODO: panic instead?
-		return utils.ZeroDec
-	}
-	if coin0.Denom != targetDenom && coin1.Denom != targetDenom {
-		// The pool doesn't have target denom in its assets.
-		return utils.ZeroDec
-	}
-
-	publicPositionShareSupply := k.bankKeeper.GetSupply(ctx, shareDenom).Amount
-	if !publicPositionShareSupply.IsPositive() {
-		// No liquidity in the public position.
-		return utils.ZeroDec
-	}
-
-	bTokenSharePerPublicPositionShare := utils.ZeroDec
-	if coin0.Denom == targetDenom {
-		bTokenSharePerPublicPositionShare = coin0.Amount.ToDec().
-			QuoTruncate(publicPositionShareSupply.ToDec())
-	} else if coin1.Denom == targetDenom {
-		bTokenSharePerPublicPositionShare = coin1.Amount.ToDec().
-			QuoTruncate(publicPositionShareSupply.ToDec())
-	}
-	return bTokenSharePerPublicPositionShare
-}
-
-// TokenAmountFromFarmingPositions returns worth of staked tokens amount of exist farming positions including queued of the addr
-func (k Keeper) TokenAmountFromFarmingPositions(ctx sdk.Context, addr sdk.AccAddress, targetDenom string, tokenSharePerPoolCoinMap map[string]sdkmath.LegacyDec) sdk.Int {
-	tokenAmount := sdkmath.ZeroInt()
-
-	k.lpfarmKeeper.GetPosition(ctx, addr, targetDenom)
-	k.lpfarmKeeper.IteratePositionsByFarmer(ctx, addr, func(position lpfarmtypes.Position) bool {
-		if position.Denom == targetDenom {
-			tokenAmount = tokenAmount.Add(position.FarmingAmount)
-		} else if ratio, ok := tokenSharePerPoolCoinMap[position.Denom]; ok {
-			tokenAmount = tokenAmount.Add(utils.GetShareValue(position.FarmingAmount, ratio))
-		}
-		return false
-	})
-
-	return tokenAmount
-}
-
 func (k Keeper) GetVotingPower(ctx sdk.Context, addr sdk.AccAddress) types.VotingPower {
 	val, found := k.stakingKeeper.GetValidator(ctx, addr.Bytes())
 	validatorVotingPower := sdkmath.ZeroInt()
@@ -134,7 +48,7 @@ func (k Keeper) GetVotingPower(ctx sdk.Context, addr sdk.AccAddress) types.Votin
 }
 
 // CalcStakingVotingPower returns voting power of the addr by normal delegations except self-delegation
-func (k Keeper) CalcStakingVotingPower(ctx sdk.Context, addr sdk.AccAddress) sdk.Int {
+func (k Keeper) CalcStakingVotingPower(ctx sdk.Context, addr sdk.AccAddress) sdkmath.Int {
 	totalVotingPower := sdkmath.ZeroInt()
 	k.stakingKeeper.IterateDelegations(
 		ctx, addr,
@@ -156,7 +70,7 @@ func (k Keeper) CalcStakingVotingPower(ctx sdk.Context, addr sdk.AccAddress) sdk
 }
 
 // CalcLiquidStakingVotingPower returns voting power of the addr by liquid bond denom
-func (k Keeper) CalcLiquidStakingVotingPower(ctx sdk.Context, addr sdk.AccAddress) sdk.Int {
+func (k Keeper) CalcLiquidStakingVotingPower(ctx sdk.Context, addr sdk.AccAddress) sdkmath.Int {
 	liquidBondDenom := k.LiquidBondDenom(ctx)
 
 	// skip when no liquid bond token supply

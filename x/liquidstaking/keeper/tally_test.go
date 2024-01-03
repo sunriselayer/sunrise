@@ -3,11 +3,11 @@ package keeper_test
 import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	chain "sunrise/app"
-	utils "sunrise/types"
+	utils "sunrise/pkg/utils"
 	ammtypes "sunrise/x/amm/types"
 	liquidammtypes "sunrise/x/liquidamm/types"
 	"sunrise/x/liquidstaking/types"

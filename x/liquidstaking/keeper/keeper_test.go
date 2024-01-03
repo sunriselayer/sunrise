@@ -22,7 +22,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	chain "sunrise/app"
-	utils "sunrise/types"
+	utils "sunrise/pkg/utils"
 	ammtypes "sunrise/x/amm/types"
 	exchangetypes "sunrise/x/exchange/types"
 	liquidammtypes "sunrise/x/liquidamm/types"
