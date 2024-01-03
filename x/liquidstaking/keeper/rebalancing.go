@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
@@ -63,8 +64,8 @@ func (k Keeper) Rebalance(ctx sdk.Context, proxyAcc sdk.AccAddress, liquidVals t
 	}
 
 	// calculate rebalancing target map
-	targetMap := map[string]sdk.Int{}
-	totalTargetMap := sdk.ZeroInt()
+	targetMap := map[string]sdkmath.Int{}
+	totalTargetMap := sdkmath.ZeroInt()
 	for _, val := range liquidVals {
 		targetMap[val.OperatorAddress] = totalLiquidTokens.Mul(weightMap[val.OperatorAddress]).Quo(totalWeight)
 		totalTargetMap = totalTargetMap.Add(targetMap[val.OperatorAddress])
@@ -82,7 +83,7 @@ func (k Keeper) Rebalance(ctx sdk.Context, proxyAcc sdk.AccAddress, liquidVals t
 	}
 
 	failCount := 0
-	rebalancingThresholdAmt := rebalancingTrigger.Mul(totalLiquidTokens.ToDec()).TruncateInt()
+	rebalancingThresholdAmt := rebalancingTrigger.Mul(totalLiquidTokens.ToLegacyDec()).TruncateInt()
 
 	for i := 0; i < liquidVals.Len(); i++ {
 		// get min, max of liquid token gap

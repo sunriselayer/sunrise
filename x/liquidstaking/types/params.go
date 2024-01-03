@@ -1,6 +1,11 @@
 package types
 
 import (
+	"fmt"
+	"strings"
+
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
@@ -8,18 +13,18 @@ var (
 	DefaultLiquidBondDenom = "bstake"
 
 	// DefaultUnstakeFeeRate is the default Unstake Fee Rate.
-	DefaultUnstakeFeeRate = sdk.NewDecWithPrec(1, 3) // "0.001000000000000000"
+	DefaultUnstakeFeeRate = sdkmath.LegacyNewDecWithPrec(1, 3) // "0.001000000000000000"
 
 	// DefaultMinLiquidStakingAmount is the default minimum liquid staking amount.
-	DefaultMinLiquidStakingAmount = sdk.NewInt(1000000)
+	DefaultMinLiquidStakingAmount = sdkmath.NewInt(1000000)
 
 	// Const variables
 
 	// RebalancingTrigger if the maximum difference and needed each redelegation amount exceeds it, asset rebalacing will be executed.
-	RebalancingTrigger = sdk.NewDecWithPrec(1, 3) // "0.001000000000000000"
+	RebalancingTrigger = sdkmath.LegacyNewDecWithPrec(1, 3) // "0.001000000000000000"
 
 	// RewardTrigger If the sum of balance and the upcoming rewards of LiquidStakingProxyAcc exceeds it, the reward is automatically withdrawn and re-stake according to the weights.
-	RewardTrigger = sdk.NewDecWithPrec(1, 3) // "0.001000000000000000"
+	RewardTrigger = sdkmath.LegacyNewDecWithPrec(1, 3) // "0.001000000000000000"
 
 	// LiquidStakingProxyAcc is a proxy reserve account for delegation and undelegation.
 	LiquidStakingProxyAcc = farmingtypes.DeriveAddress(farmingtypes.AddressType32Bytes, ModuleName, "LiquidStakingProxyAcc")
@@ -114,7 +119,7 @@ func validateWhitelistedValidators(i interface{}) error {
 }
 
 func validateUnstakeFeeRate(i interface{}) error {
-	v, ok := i.(sdk.Dec)
+	v, ok := i.(sdkmath.LegacyDec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
@@ -127,7 +132,7 @@ func validateUnstakeFeeRate(i interface{}) error {
 		return fmt.Errorf("unstake fee rate must not be negative: %s", v)
 	}
 
-	if v.GT(sdk.OneDec()) {
+	if v.GT(sdkmath.LegacyOneDec()) {
 		return fmt.Errorf("unstake fee rate too large: %s", v)
 	}
 
@@ -135,7 +140,7 @@ func validateUnstakeFeeRate(i interface{}) error {
 }
 
 func validateMinLiquidStakingAmount(i interface{}) error {
-	v, ok := i.(sdk.Int)
+	v, ok := i.(sdkmath.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}

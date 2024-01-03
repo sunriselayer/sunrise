@@ -8,19 +8,23 @@ import (
 
 var _ sdk.Msg = &MsgLiquidUnstake{}
 
-func NewMsgLiquidUnstake(creator string) *MsgLiquidUnstake {
+func NewMsgLiquidUnstake(
+	liquidStaker sdk.AccAddress,
+	amount sdk.Coin,
+) *MsgLiquidUnstake {
 	return &MsgLiquidUnstake{
-		Creator: creator,
+		DelegatorAddress: liquidStaker.String(),
+		Amount:           amount,
 	}
 }
 
 func (msg *MsgLiquidUnstake) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.DelegatorAddress)
 	if err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid delegator address (%s)", err)
 	}
 	if ok := msg.Amount.IsZero(); ok {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unstaking amount must not be zero")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unstaking amount must not be zero")
 	}
 	if err := msg.Amount.Validate(); err != nil {
 		return err

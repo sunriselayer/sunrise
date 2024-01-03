@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -18,9 +19,9 @@ func (s *KeeperTestSuite) TestGetVoterBalanceByDenom() {
 	voter1, _ := sdk.AccAddressFromBech32("cosmos138w269yyeyj0unge54km8572lgf54l8e3yu8lg")
 	voter2, _ := sdk.AccAddressFromBech32("cosmos1u0wfxlachgzqpwnkcwj2vzy025ehzv0qlhujnr")
 
-	chain.InitAccountWithCoins(s.app, s.ctx, voter1, sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1000000))))
-	chain.InitAccountWithCoins(s.app, s.ctx, voter2, sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1000000))))
-	chain.InitAccountWithCoins(s.app, s.ctx, voter2, sdk.NewCoins(sdk.NewCoin(types.DefaultLiquidBondDenom, sdk.NewInt(500000))))
+	chain.InitAccountWithCoins(s.app, s.ctx, voter1, sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdkmath.NewInt(1000000))))
+	chain.InitAccountWithCoins(s.app, s.ctx, voter2, sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdkmath.NewInt(1000000))))
+	chain.InitAccountWithCoins(s.app, s.ctx, voter2, sdk.NewCoins(sdk.NewCoin(types.DefaultLiquidBondDenom, sdkmath.NewInt(500000))))
 
 	tp := govtypes.NewTextProposal("Test", "description")
 	proposal, err := s.app.GovKeeper.SubmitProposal(s.ctx, tp)
@@ -39,9 +40,9 @@ func (s *KeeperTestSuite) TestGetVoterBalanceByDenom() {
 	s.Require().Len(voterBalanceByDenom[sdk.DefaultBondDenom], 2)
 	s.Require().Len(voterBalanceByDenom[types.DefaultLiquidBondDenom], 1)
 
-	s.Require().EqualValues(voterBalanceByDenom[sdk.DefaultBondDenom][voter1.String()], sdk.NewInt(1000000))
-	s.Require().EqualValues(voterBalanceByDenom[sdk.DefaultBondDenom][voter2.String()], sdk.NewInt(1000000))
-	s.Require().EqualValues(voterBalanceByDenom[types.DefaultLiquidBondDenom][voter2.String()], sdk.NewInt(500000))
+	s.Require().EqualValues(voterBalanceByDenom[sdk.DefaultBondDenom][voter1.String()], sdkmath.NewInt(1000000))
+	s.Require().EqualValues(voterBalanceByDenom[sdk.DefaultBondDenom][voter2.String()], sdkmath.NewInt(1000000))
+	s.Require().EqualValues(voterBalanceByDenom[types.DefaultLiquidBondDenom][voter2.String()], sdkmath.NewInt(500000))
 }
 
 // test Liquid Staking gov voting power
@@ -52,10 +53,10 @@ func (s *KeeperTestSuite) TestSetLiquidStakingVotingPowers() {
 	// v1, v2, v3, v4
 	vals, valOpers, _ := s.CreateValidators([]int64{10000000, 10000000, 10000000, 10000000, 10000000})
 	params.WhitelistedValidators = []types.WhitelistedValidator{
-		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[2].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[3].String(), TargetWeight: sdk.NewInt(10)},
+		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[2].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[3].String(), TargetWeight: sdkmath.NewInt(10)},
 	}
 	s.keeper.SetParams(s.ctx, params)
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
@@ -72,7 +73,7 @@ func (s *KeeperTestSuite) TestSetLiquidStakingVotingPowers() {
 	delF := s.addrs[5] // vote, Balance of bToken case
 	delG := s.addrs[6] // vote, Balance of bToken case
 
-	_, err := s.app.StakingKeeper.Delegate(s.ctx, delG, sdk.NewInt(60000000), stakingtypes.Unbonded, val4, true)
+	_, err := s.app.StakingKeeper.Delegate(s.ctx, delG, sdkmath.NewInt(60000000), stakingtypes.Unbonded, val4, true)
 	s.Require().NoError(err)
 
 	// 7 addr B, C, D, E, F, G, H
@@ -96,12 +97,12 @@ func (s *KeeperTestSuite) TestSetLiquidStakingVotingPowers() {
 
 	s.assertTallyResult(80000000, 10000000, 0, 0, proposal)
 
-	delAbToken := sdk.NewInt(40000000)
-	delBbToken := sdk.NewInt(80000000)
-	delCbToken := sdk.NewInt(60000000)
-	delDbToken := sdk.NewInt(20000000)
-	delEbToken := sdk.NewInt(80000000)
-	delFbToken := sdk.NewInt(120000000)
+	delAbToken := sdkmath.NewInt(40000000)
+	delBbToken := sdkmath.NewInt(80000000)
+	delCbToken := sdkmath.NewInt(60000000)
+	delDbToken := sdkmath.NewInt(20000000)
+	delEbToken := sdkmath.NewInt(80000000)
+	delFbToken := sdkmath.NewInt(120000000)
 	newShares, bToken, err := s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delA, sdk.NewCoin(sdk.DefaultBondDenom, delAbToken))
 	s.Require().NoError(err)
 	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delA, liquidBondDenom).Amount, delAbToken)
@@ -126,7 +127,7 @@ func (s *KeeperTestSuite) TestSetLiquidStakingVotingPowers() {
 	s.Require().NoError(err)
 	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delF, liquidBondDenom).Amount, delFbToken)
 
-	totalPower := sdk.ZeroInt()
+	totalPower := sdkmath.ZeroInt()
 	totalShare := sdk.ZeroDec()
 	s.app.StakingKeeper.IterateBondedValidatorsByPower(s.ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
 		totalPower = totalPower.Add(validator.GetTokens())
@@ -138,14 +139,14 @@ func (s *KeeperTestSuite) TestSetLiquidStakingVotingPowers() {
 
 	// Test SetLiquidStakingVotingPowers
 	votingPowers := make(govtypes.AdditionalVotingPowers)
-	testVotingPowers := func(voter sdk.AccAddress, bTokenValue sdk.Int) {
+	testVotingPowers := func(voter sdk.AccAddress, bTokenValue sdkmath.Int) {
 		s.Require().Len(votingPowers[voter.String()], liquidValidators.Len())
-		totalVotingPower := sdk.ZeroDec()
+		totalVotingPower := sdkmath.LegacyZeroDec()
 		for _, v := range liquidValidators {
 			votingPower := votingPowers[voter.String()][v.OperatorAddress]
 			totalVotingPower = totalVotingPower.Add(votingPower)
 			// equal when all liquid validator has same currentWeight
-			s.Require().True(utils.DecApproxEqual(bTokenValue.ToDec().QuoInt64(int64(liquidValidators.Len())), votingPower))
+			s.Require().True(utils.DecApproxEqual(bTokenValue.ToLegacyDec().QuoInt64(int64(liquidValidators.Len())), votingPower))
 		}
 		s.Require().True(
 			utils.DecApproxEqual(s.keeper.CalcLiquidStakingVotingPower(s.ctx, voter).ToDec(),
@@ -179,10 +180,10 @@ func (s *KeeperTestSuite) TestSetLiquidStakingVotingPowers() {
 		sdk.NewCoins(sdk.NewInt64Coin(params.LiquidBondDenom, 40000000), sdk.NewInt64Coin(sdk.DefaultBondDenom, 44000000)))
 	setLiquidStakingVotingPowers()
 
-	publicPosition1 := s.createPublicPosition(pool1.Id, ammtypes.MinPrice, ammtypes.MaxPrice, sdk.NewInt(10000), utils.ZeroDec)
+	publicPosition1 := s.createPublicPosition(pool1.Id, ammtypes.MinPrice, ammtypes.MaxPrice, sdkmath.NewInt(10000), utils.ZeroDec)
 	s.mintShare(delC, publicPosition1.Id,
 		sdk.NewCoins(sdk.NewInt64Coin(params.LiquidBondDenom, 10000000), sdk.NewInt64Coin(sdk.DefaultBondDenom, 11000000)))
-	publicPosition2 := s.createPublicPosition(pool2.Id, ammtypes.MinPrice, ammtypes.MaxPrice, sdk.NewInt(10000), utils.ZeroDec)
+	publicPosition2 := s.createPublicPosition(pool2.Id, ammtypes.MinPrice, ammtypes.MaxPrice, sdkmath.NewInt(10000), utils.ZeroDec)
 	s.mintShare(delC, publicPosition2.Id,
 		sdk.NewCoins(sdk.NewInt64Coin(params.LiquidBondDenom, 10000000), sdk.NewInt64Coin(sdk.DefaultBondDenom, 11000000)))
 
@@ -233,10 +234,10 @@ func (s *KeeperTestSuite) TestGetVotingPower() {
 	// v1, v2, v3, v4
 	vals, valOpers, _ := s.CreateValidators([]int64{10000000, 10000000, 10000000, 10000000, 10000000})
 	params.WhitelistedValidators = []types.WhitelistedValidator{
-		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[2].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[3].String(), TargetWeight: sdk.NewInt(10)},
+		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[2].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[3].String(), TargetWeight: sdkmath.NewInt(10)},
 	}
 	s.keeper.SetParams(s.ctx, params)
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
@@ -249,57 +250,57 @@ func (s *KeeperTestSuite) TestGetVotingPower() {
 	delD := s.addrs[3] // Farming position of bToken case
 	delE := s.addrs[6] // normal staking case, balance of bToken case
 
-	s.assertVotingPower(delA, sdk.ZeroInt(), sdk.ZeroInt(), sdk.ZeroInt())
-	s.assertVotingPower(delE, sdk.ZeroInt(), sdk.ZeroInt(), sdk.ZeroInt())
-	s.assertVotingPower(vals[3], sdk.ZeroInt(), sdk.ZeroInt(), sdk.NewInt(10000000))
+	s.assertVotingPower(delA, sdkmath.ZeroInt(), sdkmath.ZeroInt(), sdkmath.ZeroInt())
+	s.assertVotingPower(delE, sdkmath.ZeroInt(), sdkmath.ZeroInt(), sdkmath.ZeroInt())
+	s.assertVotingPower(vals[3], sdkmath.ZeroInt(), sdkmath.ZeroInt(), sdkmath.NewInt(10000000))
 
-	_, err := s.app.StakingKeeper.Delegate(s.ctx, delE, sdk.NewInt(60000000), stakingtypes.Unbonded, val4, true)
+	_, err := s.app.StakingKeeper.Delegate(s.ctx, delE, sdkmath.NewInt(60000000), stakingtypes.Unbonded, val4, true)
 	s.Require().NoError(err)
 
-	s.assertVotingPower(delE, sdk.NewInt(60000000), sdk.ZeroInt(), sdk.ZeroInt())
-	s.assertVotingPower(vals[3], sdk.ZeroInt(), sdk.ZeroInt(), sdk.NewInt(70000000))
+	s.assertVotingPower(delE, sdkmath.NewInt(60000000), sdkmath.ZeroInt(), sdkmath.ZeroInt())
+	s.assertVotingPower(vals[3], sdkmath.ZeroInt(), sdkmath.ZeroInt(), sdkmath.NewInt(70000000))
 
-	delBbToken := sdk.NewInt(80000000)
-	delCbToken := sdk.NewInt(60000000)
-	delDbToken := sdk.NewInt(20000000)
-	delEbToken := sdk.NewInt(80000000)
+	delBbToken := sdkmath.NewInt(80000000)
+	delCbToken := sdkmath.NewInt(60000000)
+	delDbToken := sdkmath.NewInt(20000000)
+	delEbToken := sdkmath.NewInt(80000000)
 
 	newShares, bToken, err := s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delB, sdk.NewCoin(sdk.DefaultBondDenom, delBbToken))
 	s.Require().NoError(err)
 	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delB, liquidBondDenom).Amount, delBbToken)
-	s.assertVotingPower(delB, sdk.ZeroInt(), delBbToken, sdk.ZeroInt())
+	s.assertVotingPower(delB, sdkmath.ZeroInt(), delBbToken, sdkmath.ZeroInt())
 
 	newShares, bToken, err = s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delC, sdk.NewCoin(sdk.DefaultBondDenom, delCbToken))
 	s.Require().NoError(err)
 	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delC, liquidBondDenom).Amount, delCbToken)
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken, sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken, sdkmath.ZeroInt())
 
 	newShares, bToken, err = s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delD, sdk.NewCoin(sdk.DefaultBondDenom, delDbToken))
 	s.Require().NoError(err)
 	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delD, liquidBondDenom).Amount, delDbToken)
-	s.assertVotingPower(delD, sdk.ZeroInt(), delDbToken, sdk.ZeroInt())
+	s.assertVotingPower(delD, sdkmath.ZeroInt(), delDbToken, sdkmath.ZeroInt())
 
 	newShares, bToken, err = s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delE, sdk.NewCoin(sdk.DefaultBondDenom, delEbToken))
 	s.Require().NoError(err)
 	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delE, liquidBondDenom).Amount, delEbToken)
-	s.assertVotingPower(delE, sdk.NewInt(60000000), delEbToken, sdk.ZeroInt())
+	s.assertVotingPower(delE, sdkmath.NewInt(60000000), delEbToken, sdkmath.ZeroInt())
 
-	s.assertVotingPower(vals[3], sdk.ZeroInt(), sdk.ZeroInt(), sdk.NewInt(130000000)) // self bonding 10000000 + normal staking 60000000 + liquid staking 240000000/4
+	s.assertVotingPower(vals[3], sdkmath.ZeroInt(), sdkmath.ZeroInt(), sdkmath.NewInt(130000000)) // self bonding 10000000 + normal staking 60000000 + liquid staking 240000000/4
 
 	// Test balance of PoolTokens including bToken
 	_, pool1 := s.createMarketAndPool(params.LiquidBondDenom, sdk.DefaultBondDenom, utils.ParseDec("1.1"))
 	s.addLiquidity(
 		delB, pool1.Id, ammtypes.MinPrice, ammtypes.MaxPrice,
 		sdk.NewCoins(sdk.NewInt64Coin(params.LiquidBondDenom, 40000000), sdk.NewInt64Coin(sdk.DefaultBondDenom, 44000000)))
-	s.assertVotingPower(delB, sdk.ZeroInt(), delBbToken.SubRaw(1), sdk.ZeroInt()) // There might be small error
+	s.assertVotingPower(delB, sdkmath.ZeroInt(), delBbToken.SubRaw(1), sdkmath.ZeroInt()) // There might be small error
 
 	_, pool2 := s.createMarketAndPool(sdk.DefaultBondDenom, params.LiquidBondDenom, utils.ParseDec("1.1"))
 	s.addLiquidity(
 		delC, pool2.Id, ammtypes.MinPrice, ammtypes.MaxPrice,
 		sdk.NewCoins(sdk.NewInt64Coin(params.LiquidBondDenom, 40000000), sdk.NewInt64Coin(sdk.DefaultBondDenom, 44000000)))
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken.Sub(utils.OneInt), sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken.Sub(utils.OneInt), sdkmath.ZeroInt())
 
-	publicPosition1 := s.createPublicPosition(pool2.Id, ammtypes.MinPrice, ammtypes.MaxPrice, sdk.NewInt(10000), utils.ZeroDec)
+	publicPosition1 := s.createPublicPosition(pool2.Id, ammtypes.MinPrice, ammtypes.MaxPrice, sdkmath.NewInt(10000), utils.ZeroDec)
 	s.mintShare(delC, publicPosition1.Id,
 		sdk.NewCoins(sdk.NewInt64Coin(params.LiquidBondDenom, 10000000), sdk.NewInt64Coin(sdk.DefaultBondDenom, 11000000)))
 	s.mintShare(delC, publicPosition1.Id,
@@ -313,44 +314,44 @@ func (s *KeeperTestSuite) TestGetVotingPower() {
 			lpfarmtypes.NewDenomRewardAllocation(liquidammtypes.ShareDenom(publicPosition1.Id), utils.ParseCoins("300000stake")),
 		})
 	s.farm(delD, sdk.NewInt64Coin(params.LiquidBondDenom, 10000000))
-	s.assertVotingPower(delD, sdk.ZeroInt(), delDbToken, sdk.ZeroInt())
+	s.assertVotingPower(delD, sdkmath.ZeroInt(), delDbToken, sdkmath.ZeroInt())
 
 	// Test Farming Staking Position Staking of bToken without balance
 	s.advanceEpochDays()
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken.SubRaw(4), sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken.SubRaw(4), sdkmath.ZeroInt())
 
 	// Test Farming Queued Staking of bToken
 	s.farm(delD, sdk.NewInt64Coin(params.LiquidBondDenom, 10000000))
-	s.assertVotingPower(delD, sdk.ZeroInt(), delDbToken, sdk.ZeroInt())
+	s.assertVotingPower(delD, sdkmath.ZeroInt(), delDbToken, sdkmath.ZeroInt())
 
 	// Test Farming Staking Position Staking of bToken without balance
 	s.advanceEpochDays()
-	s.assertVotingPower(delD, sdk.ZeroInt(), delDbToken, sdk.ZeroInt())
+	s.assertVotingPower(delD, sdkmath.ZeroInt(), delDbToken, sdkmath.ZeroInt())
 
 	// Test Farming Queued Staking of PoolTokens including bToken
 	s.farm(delC, sdk.NewInt64Coin(liquidammtypes.ShareDenom(publicPosition1.Id), 5000000))
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken.SubRaw(4), sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken.SubRaw(4), sdkmath.ZeroInt())
 
 	// Test Farming Staking Position of PoolTokens including bToken
 	s.advanceEpochDays()
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken.SubRaw(4), sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken.SubRaw(4), sdkmath.ZeroInt())
 
 	// Test Farming Queued Staking of PoolTokens including bToken without balance
 	s.farm(delC, sdk.NewInt64Coin(liquidammtypes.ShareDenom(publicPosition1.Id), 5000000))
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken.SubRaw(4), sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken.SubRaw(4), sdkmath.ZeroInt())
 
 	// Test Farming Staking Position of PoolTokens including bToken
 	s.advanceEpochDays()
-	s.assertVotingPower(delC, sdk.ZeroInt(), delCbToken.SubRaw(4), sdk.ZeroInt())
+	s.assertVotingPower(delC, sdkmath.ZeroInt(), delCbToken.SubRaw(4), sdkmath.ZeroInt())
 
-	s.assertVotingPower(delA, sdk.ZeroInt(), sdk.ZeroInt(), sdk.ZeroInt())
-	s.assertVotingPower(delE, sdk.NewInt(60000000), delEbToken, sdk.ZeroInt())
+	s.assertVotingPower(delA, sdkmath.ZeroInt(), sdkmath.ZeroInt(), sdkmath.ZeroInt())
+	s.assertVotingPower(delE, sdkmath.NewInt(60000000), delEbToken, sdkmath.ZeroInt())
 
 	// send bToken of E to vals[3]
 	err = s.app.BankKeeper.SendCoins(s.ctx, delE, vals[3], sdk.NewCoins(sdk.NewCoin(liquidBondDenom, delEbToken)))
 	s.Require().NoError(err)
-	s.assertVotingPower(delE, sdk.NewInt(60000000), sdk.ZeroInt(), sdk.ZeroInt())
-	s.assertVotingPower(vals[3], sdk.ZeroInt(), delEbToken, sdk.NewInt(130000000)) // self bonding 10000000 + normal staking 60000000 + liquid staking 240000000/4
+	s.assertVotingPower(delE, sdkmath.NewInt(60000000), sdkmath.ZeroInt(), sdkmath.ZeroInt())
+	s.assertVotingPower(vals[3], sdkmath.ZeroInt(), delEbToken, sdkmath.NewInt(130000000)) // self bonding 10000000 + normal staking 60000000 + liquid staking 240000000/4
 }
 
 // test Liquid Staking gov power
@@ -359,7 +360,7 @@ func (s *KeeperTestSuite) TestTallyLiquidStakingGov2() {
 
 	vals, valOpers, _ := s.CreateValidators([]int64{10000000})
 	params.WhitelistedValidators = []types.WhitelistedValidator{
-		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdk.NewInt(10)},
+		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdkmath.NewInt(10)},
 	}
 	s.keeper.SetParams(s.ctx, params)
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
@@ -369,7 +370,7 @@ func (s *KeeperTestSuite) TestTallyLiquidStakingGov2() {
 	delA := s.addrs[0]
 	delB := s.addrs[1]
 
-	_, err := s.app.StakingKeeper.Delegate(s.ctx, delA, sdk.NewInt(50000000), stakingtypes.Unbonded, val1, true)
+	_, err := s.app.StakingKeeper.Delegate(s.ctx, delA, sdkmath.NewInt(50000000), stakingtypes.Unbonded, val1, true)
 	s.Require().NoError(err)
 
 	tp := govtypes.NewTextProposal("Test", "description")
@@ -383,52 +384,52 @@ func (s *KeeperTestSuite) TestTallyLiquidStakingGov2() {
 
 	cachedCtx, _ := s.ctx.CacheContext()
 	_, _, result := s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(50000000), result.Yes)
-	s.Require().Equal(sdk.NewInt(0), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Yes)
+	s.Require().Equal(sdkmath.NewInt(0), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
 	s.Require().NoError(s.app.GovKeeper.AddVote(s.ctx, proposal.ProposalId, vals[0], govtypes.NewNonSplitVoteOption(govtypes.OptionNo)))
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(50000000), result.Yes)
-	s.Require().Equal(sdk.NewInt(10000000), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Yes)
+	s.Require().Equal(sdkmath.NewInt(10000000), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
-	newShares, bToken, err := s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delB, sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(50000000)))
+	newShares, bToken, err := s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delB, sdk.NewCoin(sdk.DefaultBondDenom, sdkmath.NewInt(50000000)))
 	s.Require().NoError(err)
-	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delB, params.LiquidBondDenom).Amount, sdk.NewInt(50000000))
+	s.Require().EqualValues(newShares.TruncateInt(), bToken, s.app.BankKeeper.GetBalance(s.ctx, delB, params.LiquidBondDenom).Amount, sdkmath.NewInt(50000000))
 
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(50000000), result.Yes)
-	s.Require().Equal(sdk.NewInt(60000000), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Yes)
+	s.Require().Equal(sdkmath.NewInt(60000000), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
 	s.Require().NoError(s.app.GovKeeper.AddVote(s.ctx, proposal.ProposalId, delB, govtypes.NewNonSplitVoteOption(govtypes.OptionAbstain)))
 
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(50000000), result.Yes)
-	s.Require().Equal(sdk.NewInt(10000000), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(50000000), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Yes)
+	s.Require().Equal(sdkmath.NewInt(10000000), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Abstain)
 }
 
 // TestVotingPower tests voting power of staking, liquid staking
 func (s *KeeperTestSuite) TestVotingPower() {
 	params := types.DefaultParams()
 
-	selfDelegationAmount := sdk.NewInt(10000000)
-	normalStakingAmount := sdk.NewInt(50000000)
-	liquidStakingAmount := sdk.NewInt(50000000)
+	selfDelegationAmount := sdkmath.NewInt(10000000)
+	normalStakingAmount := sdkmath.NewInt(50000000)
+	liquidStakingAmount := sdkmath.NewInt(50000000)
 
 	vals, valOpers, pks := s.CreateValidators([]int64{selfDelegationAmount.Int64(), selfDelegationAmount.Int64()})
 	params.WhitelistedValidators = []types.WhitelistedValidator{
-		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdk.NewInt(5)},
+		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdkmath.NewInt(5)},
 	}
 	s.keeper.SetParams(s.ctx, params)
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
@@ -446,7 +447,7 @@ func (s *KeeperTestSuite) TestVotingPower() {
 
 	// no liquid staking voting power
 	lsvp := s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA)
-	s.Require().EqualValues(lsvp, sdk.ZeroInt())
+	s.Require().EqualValues(lsvp, sdkmath.ZeroInt())
 
 	tp := govtypes.NewTextProposal("Test", "description")
 	proposal, err := s.app.GovKeeper.SubmitProposal(s.ctx, tp)
@@ -458,18 +459,18 @@ func (s *KeeperTestSuite) TestVotingPower() {
 
 	cachedCtx, _ := s.ctx.CacheContext()
 	_, _, result := s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(50000000), result.Yes) // normalStakingAmount
-	s.Require().Equal(sdk.NewInt(0), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Yes) // normalStakingAmount
+	s.Require().Equal(sdkmath.NewInt(0), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
 	s.Require().NoError(s.app.GovKeeper.AddVote(s.ctx, proposal.ProposalId, vals[0], govtypes.NewNonSplitVoteOption(govtypes.OptionNo)))
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(50000000), result.Yes) // normalStakingAmount
-	s.Require().Equal(sdk.NewInt(10000000), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(50000000), result.Yes) // normalStakingAmount
+	s.Require().Equal(sdkmath.NewInt(10000000), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
 	newShares, bToken, err := s.keeper.LiquidStake(s.ctx, types.LiquidStakingProxyAcc, delA, sdk.NewCoin(sdk.DefaultBondDenom, liquidStakingAmount))
 	s.Require().NoError(err)
@@ -491,10 +492,10 @@ func (s *KeeperTestSuite) TestVotingPower() {
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
 	s.Require().Equal(votingPower.StakingVotingPower.Add(votingPower.LiquidStakingVotingPower), result.Yes)
-	s.Require().Equal(sdk.NewInt(100000000), result.Yes) // normalStakingAmount + liquidStakingAmount
-	s.Require().Equal(sdk.NewInt(10000000), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(100000000), result.Yes) // normalStakingAmount + liquidStakingAmount
+	s.Require().Equal(sdkmath.NewInt(10000000), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
 	// double sign second liquid validator
 	s.doubleSign(valOpers[1], sdk.ConsAddress(pks[1].Address()))
@@ -502,15 +503,15 @@ func (s *KeeperTestSuite) TestVotingPower() {
 	// reduced liquid staking voting power because of unbonded liquid validator by double sign
 	votingPower = s.keeper.GetVotingPower(s.ctx, delA)
 	s.Require().EqualValues(votingPower.StakingVotingPower, normalStakingAmount)
-	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdk.NewInt(33333334))
+	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdkmath.NewInt(33333334))
 
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
 	s.Require().Equal(votingPower.StakingVotingPower.Add(votingPower.LiquidStakingVotingPower), result.Yes)
-	s.Require().Equal(sdk.NewInt(83333334), result.Yes) // staking voting power + reduced liquid staking voting power
-	s.Require().Equal(sdk.NewInt(10000000), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(83333334), result.Yes) // staking voting power + reduced liquid staking voting power
+	s.Require().Equal(sdkmath.NewInt(10000000), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 
 	// rebalancing for non-active liquid validator by double sign, voting power don't need to wait unbonding period when rebalancing, redelegation
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
@@ -518,38 +519,38 @@ func (s *KeeperTestSuite) TestVotingPower() {
 	// recovered liquid staking voting power because of rebalancing the liquid validator except slashing amount
 	votingPower = s.keeper.GetVotingPower(s.ctx, delA)
 	s.Require().EqualValues(votingPower.StakingVotingPower, normalStakingAmount)
-	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdk.NewInt(49187500))
+	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdkmath.NewInt(49187500))
 
 	// double sign first liquid validator
 	s.doubleSign(valOpers[0], sdk.ConsAddress(pks[0].Address()))
 
 	// normal, liquid staking voting power is zero because of unbonded all validators by double signing
 	votingPower = s.keeper.GetVotingPower(s.ctx, delA)
-	s.Require().EqualValues(votingPower.StakingVotingPower, sdk.ZeroInt())
-	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdk.ZeroInt())
+	s.Require().EqualValues(votingPower.StakingVotingPower, sdkmath.ZeroInt())
+	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdkmath.ZeroInt())
 	utils.PP(s.keeper.GetNetAmountState(s.ctx))
 	utils.PP(s.keeper.GetAllLiquidValidatorStates(s.ctx))
 
 	// rebalancing not occurred because no active liquid validators, unbonding started all liquid tokens, no liquid staking voting power
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
 	votingPower = s.keeper.GetVotingPower(s.ctx, delA)
-	s.Require().EqualValues(votingPower.StakingVotingPower, sdk.ZeroInt())
-	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdk.ZeroInt())
+	s.Require().EqualValues(votingPower.StakingVotingPower, sdkmath.ZeroInt())
+	s.Require().EqualValues(votingPower.LiquidStakingVotingPower, sdkmath.ZeroInt())
 
 	cachedCtx, _ = s.ctx.CacheContext()
 	_, _, result = s.app.GovKeeper.Tally(cachedCtx, proposal)
-	s.Require().Equal(sdk.NewInt(0), result.Yes)
-	s.Require().Equal(sdk.NewInt(0), result.No)
-	s.Require().Equal(sdk.NewInt(0), result.NoWithVeto)
-	s.Require().Equal(sdk.NewInt(0), result.Abstain)
+	s.Require().Equal(sdkmath.NewInt(0), result.Yes)
+	s.Require().Equal(sdkmath.NewInt(0), result.No)
+	s.Require().Equal(sdkmath.NewInt(0), result.NoWithVeto)
+	s.Require().Equal(sdkmath.NewInt(0), result.Abstain)
 }
 
 func (s *KeeperTestSuite) TestCalcLiquidStakingVotingPower() {
 	params := types.DefaultParams()
 	_, valOpers, _ := s.CreateValidators([]int64{10_00000, 10_000000})
 	params.WhitelistedValidators = []types.WhitelistedValidator{
-		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdk.NewInt(10)},
-		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdk.NewInt(10)},
+		{ValidatorAddress: valOpers[0].String(), TargetWeight: sdkmath.NewInt(10)},
+		{ValidatorAddress: valOpers[1].String(), TargetWeight: sdkmath.NewInt(10)},
 	}
 	s.keeper.SetParams(s.ctx, params)
 	s.keeper.UpdateLiquidValidatorSet(s.ctx)
@@ -565,8 +566,8 @@ func (s *KeeperTestSuite) TestCalcLiquidStakingVotingPower() {
 		s.ctx, types.LiquidStakingProxyAcc, delB,
 		sdk.NewInt64Coin(sdk.DefaultBondDenom, 200_000000))
 	s.Require().NoError(err)
-	s.Require().Equal(sdk.NewInt(100_000000), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
-	s.Require().Equal(sdk.NewInt(200_000000), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
+	s.Require().Equal(sdkmath.NewInt(100_000000), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
+	s.Require().Equal(sdkmath.NewInt(200_000000), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
 
 	_, pool := s.createMarketAndPool(params.LiquidBondDenom, sdk.DefaultBondDenom, utils.ParseDec("1"))
 	position1, _, _ := s.addLiquidity(
@@ -581,20 +582,20 @@ func (s *KeeperTestSuite) TestCalcLiquidStakingVotingPower() {
 			sdk.NewInt64Coin(sdk.DefaultBondDenom, 10_000000)))
 
 	// There might be a small amount of error.
-	s.Require().Equal(sdk.NewInt(99_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
-	s.Require().Equal(sdk.NewInt(199_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
+	s.Require().Equal(sdkmath.NewInt(99_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
+	s.Require().Equal(sdkmath.NewInt(199_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
 
 	// There's no active farming plans, but it's still possible to farm.
 	s.farm(delA, sdk.NewInt64Coin(params.LiquidBondDenom, 2_000000))
 	s.farm(delB, sdk.NewInt64Coin(params.LiquidBondDenom, 3_000000))
-	s.Require().Equal(sdk.NewInt(99_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
-	s.Require().Equal(sdk.NewInt(199_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
+	s.Require().Equal(sdkmath.NewInt(99_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
+	s.Require().Equal(sdkmath.NewInt(199_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
 
 	publicPosition := s.createPublicPosition(
-		pool.Id, utils.ParseDec("1"), utils.ParseDec("1.2"), sdk.NewInt(10000), utils.ParseDec("0.003"))
+		pool.Id, utils.ParseDec("1"), utils.ParseDec("1.2"), sdkmath.NewInt(10000), utils.ParseDec("0.003"))
 	// Uninitialized public positions should be handled correctly.
-	s.Require().Equal(sdk.NewInt(99_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
-	s.Require().Equal(sdk.NewInt(199_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
+	s.Require().Equal(sdkmath.NewInt(99_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
+	s.Require().Equal(sdkmath.NewInt(199_999999), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
 
 	s.mintShare(
 		delA, publicPosition.Id,
@@ -607,12 +608,12 @@ func (s *KeeperTestSuite) TestCalcLiquidStakingVotingPower() {
 			sdk.NewInt64Coin(params.LiquidBondDenom, 20_000000),
 			sdk.NewInt64Coin(sdk.DefaultBondDenom, 20_000000)))
 	// There might be a small amount of error again.
-	s.Require().Equal(sdk.NewInt(99_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
-	s.Require().Equal(sdk.NewInt(199_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
+	s.Require().Equal(sdkmath.NewInt(99_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
+	s.Require().Equal(sdkmath.NewInt(199_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
 
 	// Remove all liquidity
 	s.removeLiquidity(delA, position1.Id, position1.Liquidity)
 
-	s.Require().Equal(sdk.NewInt(99_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
-	s.Require().Equal(sdk.NewInt(199_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
+	s.Require().Equal(sdkmath.NewInt(99_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delA))
+	s.Require().Equal(sdkmath.NewInt(199_999998), s.keeper.CalcLiquidStakingVotingPower(s.ctx, delB))
 }

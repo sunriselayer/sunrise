@@ -3,6 +3,7 @@ package keeper
 import (
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -21,7 +22,7 @@ func (k Keeper) LiquidBondDenom(ctx sdk.Context) (res string) {
 func (k Keeper) GetNetAmountState(ctx sdk.Context) (nas types.NetAmountState) {
 	totalRemainingRewards, totalDelShares, totalLiquidTokens := k.CheckDelegationStates(ctx, types.LiquidStakingProxyAcc)
 
-	totalUnbondingBalance := sdk.ZeroInt()
+	totalUnbondingBalance := sdkmath.ZeroInt()
 	ubds := k.stakingKeeper.GetAllUnbondingDelegations(ctx, types.LiquidStakingProxyAcc)
 	for _, ubd := range ubds {
 		for _, entry := range ubd.Entries {
@@ -46,18 +47,18 @@ func (k Keeper) GetNetAmountState(ctx sdk.Context) (nas types.NetAmountState) {
 
 // LiquidStake mints bToken worth of staking coin value according to NetAmount and performs LiquidDelegate.
 func (k Keeper) LiquidStake(
-	ctx sdk.Context, proxyAcc, liquidStaker sdk.AccAddress, stakingCoin sdk.Coin) (newShares sdk.Dec, bTokenMintAmount sdk.Int, err error) {
+	ctx sdk.Context, proxyAcc, liquidStaker sdk.AccAddress, stakingCoin sdk.Coin) (newShares sdkmath.LegacyDec, bTokenMintAmount sdkmath.Int, err error) {
 	params := k.GetParams(ctx)
 
 	// check minimum liquid staking amount
 	if stakingCoin.Amount.LT(params.MinLiquidStakingAmount) {
-		return sdk.ZeroDec(), sdk.ZeroInt(), types.ErrLessThanMinLiquidStakingAmount
+		return sdkmath.LegacyZeroDec(), sdkmath.ZeroInt(), types.ErrLessThanMinLiquidStakingAmount
 	}
 
 	// check bond denomination
 	bondDenom := k.stakingKeeper.BondDenom(ctx)
 	if stakingCoin.Denom != bondDenom {
-		return sdk.ZeroDec(), sdk.ZeroInt(), sdkerrors.Wrapf(
+		return sdkmath.LegacyZeroDec(), sdkmath.ZeroInt(), sdkerrors.Wrapf(
 			types.ErrInvalidBondDenom, "invalid coin denomination: got %s, expected %s", stakingCoin.Denom, bondDenom,
 		)
 	}
@@ -65,7 +66,7 @@ func (k Keeper) LiquidStake(
 	whitelistedValsMap := types.GetWhitelistedValsMap(params.WhitelistedValidators)
 	activeVals := k.GetActiveLiquidValidators(ctx, whitelistedValsMap)
 	if activeVals.Len() == 0 || !activeVals.TotalWeight(whitelistedValsMap).IsPositive() {
-		return sdk.ZeroDec(), sdk.ZeroInt(), types.ErrActiveLiquidValidatorsNotExists
+		return sdkmath.LegacyZeroDec(), sdkmath.ZeroInt(), types.ErrActiveLiquidValidatorsNotExists
 	}
 
 	// NetAmount must be calculated before send
@@ -74,7 +75,7 @@ func (k Keeper) LiquidStake(
 	// send staking coin to liquid staking proxy account to proxy delegation, need sufficient spendable balances
 	err = k.bankKeeper.SendCoins(ctx, liquidStaker, proxyAcc, sdk.NewCoins(stakingCoin))
 	if err != nil {
-		return sdk.ZeroDec(), sdk.ZeroInt(), err
+		return sdkmath.LegacyZeroDec(), sdkmath.ZeroInt(), err
 	}
 
 	// mint btoken, MintAmount = TotalSupply * StakeAmount/NetAmount
@@ -85,18 +86,18 @@ func (k Keeper) LiquidStake(
 	}
 
 	if !bTokenMintAmount.IsPositive() {
-		return sdk.ZeroDec(), sdk.ZeroInt(), types.ErrTooSmallLiquidStakingAmount
+		return sdkmath.LegacyZeroDec(), sdkmath.ZeroInt(), types.ErrTooSmallLiquidStakingAmount
 	}
 
 	// mint on module acc and send
 	mintCoin := sdk.NewCoins(sdk.NewCoin(liquidBondDenom, bTokenMintAmount))
 	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, mintCoin)
 	if err != nil {
-		return sdk.ZeroDec(), bTokenMintAmount, err
+		return sdkmath.LegacyZeroDec(), bTokenMintAmount, err
 	}
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, liquidStaker, mintCoin)
 	if err != nil {
-		return sdk.ZeroDec(), bTokenMintAmount, err
+		return sdkmath.LegacyZeroDec(), bTokenMintAmount, err
 	}
 
 	newShares, err = k.LiquidDelegate(ctx, proxyAcc, activeVals, stakingCoin.Amount, whitelistedValsMap)
@@ -104,12 +105,12 @@ func (k Keeper) LiquidStake(
 }
 
 // LiquidDelegate delegates staking amount to active validators by proxy account.
-func (k Keeper) LiquidDelegate(ctx sdk.Context, proxyAcc sdk.AccAddress, activeVals types.ActiveLiquidValidators, stakingAmt sdk.Int, whitelistedValsMap types.WhitelistedValsMap) (newShares sdk.Dec, err error) {
-	totalNewShares := sdk.ZeroDec()
+func (k Keeper) LiquidDelegate(ctx sdk.Context, proxyAcc sdk.AccAddress, activeVals types.ActiveLiquidValidators, stakingAmt sdkmath.Int, whitelistedValsMap types.WhitelistedValsMap) (newShares sdkmath.LegacyDec, err error) {
+	totalNewShares := sdkmath.LegacyZeroDec()
 	// crumb may occur due to a decimal point error in dividing the staking amount into the weight of liquid validators, It added on first active liquid validator
 	weightedAmt, crumb := types.DivideByWeight(activeVals, stakingAmt, whitelistedValsMap)
 	if len(weightedAmt) == 0 {
-		return sdk.ZeroDec(), types.ErrInvalidActiveLiquidValidators
+		return sdkmath.LegacyZeroDec(), types.ErrInvalidActiveLiquidValidators
 	}
 	weightedAmt[0] = weightedAmt[0].Add(crumb)
 	for i, val := range activeVals {
@@ -119,7 +120,7 @@ func (k Keeper) LiquidDelegate(ctx sdk.Context, proxyAcc sdk.AccAddress, activeV
 		validator, _ := k.stakingKeeper.GetValidator(ctx, val.GetOperator())
 		newShares, err = k.stakingKeeper.Delegate(ctx, proxyAcc, weightedAmt[i], stakingtypes.Unbonded, validator, true)
 		if err != nil {
-			return sdk.ZeroDec(), err
+			return sdkmath.LegacyZeroDec(), err
 		}
 		totalNewShares = totalNewShares.Add(newShares)
 	}
@@ -129,13 +130,13 @@ func (k Keeper) LiquidDelegate(ctx sdk.Context, proxyAcc sdk.AccAddress, activeV
 // LiquidUnstake burns unstakingBtoken and performs LiquidUnbond to active liquid validators with del shares worth of shares according to NetAmount with each validators current weight.
 func (k Keeper) LiquidUnstake(
 	ctx sdk.Context, proxyAcc, liquidStaker sdk.AccAddress, unstakingBtoken sdk.Coin,
-) (time.Time, sdk.Int, []stakingtypes.UnbondingDelegation, sdk.Int, error) {
+) (time.Time, sdkmath.Int, []stakingtypes.UnbondingDelegation, sdkmath.Int, error) {
 
 	// check bond denomination
 	params := k.GetParams(ctx)
 	liquidBondDenom := k.LiquidBondDenom(ctx)
 	if unstakingBtoken.Denom != liquidBondDenom {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), sdkerrors.Wrapf(
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), sdkerrors.Wrapf(
 			types.ErrInvalidLiquidBondDenom, "invalid coin denomination: got %s, expected %s", unstakingBtoken.Denom, liquidBondDenom,
 		)
 	}
@@ -144,7 +145,7 @@ func (k Keeper) LiquidUnstake(
 	nas := k.GetNetAmountState(ctx)
 
 	if unstakingBtoken.Amount.GT(nas.BtokenTotalSupply) {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), types.ErrInvalidBTokenSupply
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), types.ErrInvalidBTokenSupply
 	}
 
 	// UnstakeAmount = NetAmount * BTokenAmount/TotalSupply * (1-UnstakeFeeRate)
@@ -153,17 +154,17 @@ func (k Keeper) LiquidUnstake(
 	unbondingAmountInt := unbondingAmount.TruncateInt()
 
 	if !unbondingAmountInt.IsPositive() {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), types.ErrTooSmallLiquidUnstakingAmount
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), types.ErrTooSmallLiquidUnstakingAmount
 	}
 
 	// burn btoken
 	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, liquidStaker, types.ModuleName, sdk.NewCoins(unstakingBtoken))
 	if err != nil {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), err
 	}
 	err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewCoin(liquidBondDenom, unstakingBtoken.Amount)))
 	if err != nil {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), err
 	}
 
 	liquidVals := k.GetAllLiquidValidators(ctx)
@@ -175,26 +176,26 @@ func (k Keeper) LiquidUnstake(
 			err = k.bankKeeper.SendCoins(ctx, types.LiquidStakingProxyAcc, liquidStaker,
 				sdk.NewCoins(sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), unbondingAmountInt)))
 			if err != nil {
-				return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
+				return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), err
 			} else {
-				return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, unbondingAmountInt, nil
+				return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, unbondingAmountInt, nil
 			}
 		} else {
 			// error case where there is a quantity that are unbonding balance or remaining rewards that is not re-stake or withdrawn in netAmount.
-			return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), types.ErrInsufficientProxyAccBalance
+			return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), types.ErrInsufficientProxyAccBalance
 		}
 	}
 	// fail when no liquid validators to unbond
 	if liquidVals.Len() == 0 {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), types.ErrLiquidValidatorsNotExists
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), types.ErrLiquidValidatorsNotExists
 	}
 
 	// crumb may occur due to a decimal error in dividing the unstaking bToken into the weight of liquid validators, it will remain in the NetAmount
 	unbondingAmounts, crumb := types.DivideByCurrentWeight(liquidVals, unbondingAmount, totalLiquidTokens, liquidTokenMap)
 	if !unbondingAmount.Sub(crumb).IsPositive() {
-		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), types.ErrTooSmallLiquidUnstakingAmount
+		return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), types.ErrTooSmallLiquidUnstakingAmount
 	}
-	totalReturnAmount := sdk.ZeroInt()
+	totalReturnAmount := sdkmath.ZeroInt()
 	var ubdTime time.Time
 	var ubds []stakingtypes.UnbondingDelegation
 	for i, val := range liquidVals {
@@ -203,12 +204,12 @@ func (k Keeper) LiquidUnstake(
 			continue
 		}
 		var ubd stakingtypes.UnbondingDelegation
-		var returnAmount sdk.Int
-		var weightedShare sdk.Dec
+		var returnAmount sdkmath.Int
+		var weightedShare sdkmath.LegacyDec
 		// calculate delShares from tokens with validation
 		weightedShare, err = k.stakingKeeper.ValidateUnbondAmount(ctx, proxyAcc, val.GetOperator(), unbondingAmounts[i].TruncateInt())
 		if err != nil {
-			return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
+			return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), err
 		}
 		if !weightedShare.IsPositive() {
 			continue
@@ -216,32 +217,32 @@ func (k Keeper) LiquidUnstake(
 		// unbond with weightedShare
 		ubdTime, returnAmount, ubd, err = k.LiquidUnbond(ctx, proxyAcc, liquidStaker, val.GetOperator(), weightedShare, true)
 		if err != nil {
-			return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
+			return time.Time{}, sdkmath.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdkmath.ZeroInt(), err
 		}
 		ubds = append(ubds, ubd)
 		totalReturnAmount = totalReturnAmount.Add(returnAmount)
 	}
-	return ubdTime, totalReturnAmount, ubds, sdk.ZeroInt(), nil
+	return ubdTime, totalReturnAmount, ubds, sdkmath.ZeroInt(), nil
 }
 
 // LiquidUnbond unbond delegation shares to active validators by proxy account.
 func (k Keeper) LiquidUnbond(
-	ctx sdk.Context, proxyAcc, liquidStaker sdk.AccAddress, valAddr sdk.ValAddress, shares sdk.Dec, checkMaxEntries bool,
-) (time.Time, sdk.Int, stakingtypes.UnbondingDelegation, error) {
+	ctx sdk.Context, proxyAcc, liquidStaker sdk.AccAddress, valAddr sdk.ValAddress, shares sdkmath.LegacyDec, checkMaxEntries bool,
+) (time.Time, sdkmath.Int, stakingtypes.UnbondingDelegation, error) {
 	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr)
 	if !found {
-		return time.Time{}, sdk.ZeroInt(), stakingtypes.UnbondingDelegation{}, stakingtypes.ErrNoDelegatorForAddress
+		return time.Time{}, sdkmath.ZeroInt(), stakingtypes.UnbondingDelegation{}, stakingtypes.ErrNoDelegatorForAddress
 	}
 
 	// If checkMaxEntries is true, perform a maximum limit unbonding entries check.
 	if checkMaxEntries && k.stakingKeeper.HasMaxUnbondingDelegationEntries(ctx, liquidStaker, valAddr) {
-		return time.Time{}, sdk.ZeroInt(), stakingtypes.UnbondingDelegation{}, stakingtypes.ErrMaxUnbondingDelegationEntries
+		return time.Time{}, sdkmath.ZeroInt(), stakingtypes.UnbondingDelegation{}, stakingtypes.ErrMaxUnbondingDelegationEntries
 	}
 
 	// unbond from proxy account
 	returnAmount, err := k.stakingKeeper.Unbond(ctx, proxyAcc, valAddr, shares)
 	if err != nil {
-		return time.Time{}, sdk.ZeroInt(), stakingtypes.UnbondingDelegation{}, err
+		return time.Time{}, sdkmath.ZeroInt(), stakingtypes.UnbondingDelegation{}, err
 	}
 
 	// transfer the validator tokens to the not bonded pool
@@ -261,11 +262,11 @@ func (k Keeper) LiquidUnbond(
 }
 
 // CheckDelegationStates returns total remaining rewards, delshares, liquid tokens of delegations by proxy account
-func (k Keeper) CheckDelegationStates(ctx sdk.Context, proxyAcc sdk.AccAddress) (sdk.Dec, sdk.Dec, sdk.Int) {
+func (k Keeper) CheckDelegationStates(ctx sdk.Context, proxyAcc sdk.AccAddress) (sdkmath.LegacyDec, sdkmath.LegacyDec, sdkmath.Int) {
 	bondDenom := k.stakingKeeper.BondDenom(ctx)
-	totalRewards := sdk.ZeroDec()
-	totalDelShares := sdk.ZeroDec()
-	totalLiquidTokens := sdk.ZeroInt()
+	totalRewards := sdkmath.LegacyZeroDec()
+	totalDelShares := sdkmath.LegacyZeroDec()
+	totalLiquidTokens := sdkmath.ZeroInt()
 
 	// Cache ctx for calculate rewards
 	cachedCtx, _ := ctx.CacheContext()
@@ -290,8 +291,8 @@ func (k Keeper) CheckDelegationStates(ctx sdk.Context, proxyAcc sdk.AccAddress) 
 	return totalRewards, totalDelShares, totalLiquidTokens
 }
 
-func (k Keeper) WithdrawLiquidRewards(ctx sdk.Context, proxyAcc sdk.AccAddress) sdk.Int {
-	totalRewards := sdk.ZeroInt()
+func (k Keeper) WithdrawLiquidRewards(ctx sdk.Context, proxyAcc sdk.AccAddress) sdkmath.Int {
+	totalRewards := sdkmath.ZeroInt()
 	bondDenom := k.stakingKeeper.BondDenom(ctx)
 	k.stakingKeeper.IterateDelegations(
 		ctx, proxyAcc,
@@ -386,10 +387,10 @@ func (k Keeper) GetLiquidValidatorState(ctx sdk.Context, addr sdk.ValAddress) (l
 	if !found {
 		return types.LiquidValidatorState{
 			OperatorAddress: addr.String(),
-			Weight:          sdk.ZeroInt(),
-			Status:          types.ValidatorStatusUnspecified,
-			DelShares:       sdk.ZeroDec(),
-			LiquidTokens:    sdk.ZeroInt(),
+			Weight:          sdkmath.ZeroInt(),
+			Status:          types.ValidatorStatus_ValidatorStatusUnspecified,
+			DelShares:       sdkmath.LegacyZeroDec(),
+			LiquidTokens:    sdkmath.ZeroInt(),
 		}, false
 	}
 	whitelistedValsMap := k.GetParams(ctx).WhitelistedValsMap()
@@ -419,9 +420,9 @@ func (k Keeper) IsTombstoned(ctx sdk.Context, val stakingtypes.Validator) bool {
 	return k.slashingKeeper.IsTombstoned(ctx, sdk.ConsAddress(consPk.Address()))
 }
 
-func (k Keeper) GetWeightMap(ctx sdk.Context, liquidVals types.LiquidValidators, whitelistedValsMap types.WhitelistedValsMap) (map[string]sdk.Int, sdk.Int) {
-	weightMap := map[string]sdk.Int{}
-	totalWeight := sdk.ZeroInt()
+func (k Keeper) GetWeightMap(ctx sdk.Context, liquidVals types.LiquidValidators, whitelistedValsMap types.WhitelistedValsMap) (map[string]sdkmath.Int, sdkmath.Int) {
+	weightMap := map[string]sdkmath.Int{}
+	totalWeight := sdkmath.ZeroInt()
 	for _, val := range liquidVals {
 		weight := val.GetWeight(whitelistedValsMap, k.IsActiveLiquidValidator(ctx, val, whitelistedValsMap))
 		totalWeight = totalWeight.Add(weight)

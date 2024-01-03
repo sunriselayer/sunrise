@@ -47,7 +47,7 @@ func NetAmountInvariant(k Keeper) sdk.Invariant {
 		}
 		nas := k.GetNetAmountState(ctx)
 		balance := k.GetProxyAccBalance(ctx, types.LiquidStakingProxyAcc).Amount
-		NetAmountExceptBalance := nas.NetAmount.Sub(balance.ToDec())
+		NetAmountExceptBalance := nas.NetAmount.Sub(balance.ToLegacyDec())
 		liquidBondDenom := k.LiquidBondDenom(ctx)
 		bTokenTotalSupply := k.bankKeeper.GetSupply(ctx, liquidBondDenom)
 		if bTokenTotalSupply.IsPositive() && !NetAmountExceptBalance.IsPositive() {
@@ -97,7 +97,7 @@ func LiquidDelegationInvariant(k Keeper) sdk.Invariant {
 		k.stakingKeeper.IterateDelegations(
 			ctx, types.LiquidStakingProxyAcc,
 			func(_ int64, del stakingtypes.DelegationI) (stop bool) {
-				delAddr := del.GetValidatorAddr().String()
+				delAddr := del.GetValidatorAddr()
 				if _, ok := liquidValidatorMap[delAddr]; !ok {
 					msg += fmt.Sprintf("\t%s has delegation but not liquid validator\n", delAddr)
 					count++

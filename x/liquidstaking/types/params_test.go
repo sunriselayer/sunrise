@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkmath "cosmossdk.io/math"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"sunrise/x/liquidstaking/types"
@@ -26,7 +26,7 @@ min_liquid_staking_amount: "1000000"
 	params.WhitelistedValidators = []types.WhitelistedValidator{
 		{
 			ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
-			TargetWeight:     sdk.NewInt(10),
+			TargetWeight:     sdkmath.NewInt(10),
 		},
 	}
 	paramsStr = `liquid_bond_denom: bstake
@@ -90,11 +90,11 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
 						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
-						TargetWeight:     sdk.NewInt(10),
+						TargetWeight:     sdkmath.NewInt(10),
 					},
 					{
 						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
-						TargetWeight:     sdk.NewInt(10),
+						TargetWeight:     sdkmath.NewInt(10),
 					},
 				}
 			},
@@ -106,7 +106,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
 						ValidatorAddress: "invalidaddr",
-						TargetWeight:     sdk.NewInt(10),
+						TargetWeight:     sdkmath.NewInt(10),
 					},
 				}
 			},
@@ -118,7 +118,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
 						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
-						TargetWeight:     sdk.Int{},
+						TargetWeight:     sdkmath.Int{},
 					},
 				}
 			},
@@ -130,7 +130,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
 						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
-						TargetWeight:     sdk.NewInt(-1),
+						TargetWeight:     sdkmath.NewInt(-1),
 					},
 				}
 			},
@@ -142,7 +142,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
 						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
-						TargetWeight:     sdk.ZeroInt(),
+						TargetWeight:     sdkmath.ZeroInt(),
 					},
 				}
 			},
@@ -151,35 +151,35 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 		{
 			"nil unstake fee rate",
 			func(params *types.Params) {
-				params.UnstakeFeeRate = sdk.Dec{}
+				params.UnstakeFeeRate = sdkmath.LegacyDec{}
 			},
 			"unstake fee rate must not be nil",
 		},
 		{
 			"negative unstake fee rate",
 			func(params *types.Params) {
-				params.UnstakeFeeRate = sdk.NewDec(-1)
+				params.UnstakeFeeRate = sdkmath.LegacyNewDec(-1)
 			},
 			"unstake fee rate must not be negative: -1.000000000000000000",
 		},
 		{
 			"too large unstake fee rate",
 			func(params *types.Params) {
-				params.UnstakeFeeRate = sdk.MustNewDecFromStr("1.0000001")
+				params.UnstakeFeeRate = sdkmath.LegacyMustNewDecFromStr("1.0000001")
 			},
 			"unstake fee rate too large: 1.000000100000000000",
 		},
 		{
 			"nil min liquid staking amount",
 			func(params *types.Params) {
-				params.MinLiquidStakingAmount = sdk.Int{}
+				params.MinLiquidStakingAmount = sdkmath.Int{}
 			},
 			"min liquid staking amount must not be nil",
 		},
 		{
 			"negative min liquid staking amount",
 			func(params *types.Params) {
-				params.MinLiquidStakingAmount = sdk.NewInt(-1)
+				params.MinLiquidStakingAmount = sdkmath.NewInt(-1)
 			},
 			"min liquid staking amount must not be negative: -1",
 		},

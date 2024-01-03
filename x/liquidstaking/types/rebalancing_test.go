@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkmath "cosmossdk.io/math"
 
 	"sunrise/x/liquidstaking/types"
 )
@@ -30,80 +30,80 @@ var (
 func TestDivideByWeight(t *testing.T) {
 	testCases := []struct {
 		whitelistedVals  []types.WhitelistedValidator
-		addStakingAmt    sdk.Int
-		currentDelShares []sdk.Int
-		expectedOutputs  []sdk.Int
-		expectedCrumb    sdk.Int
+		addStakingAmt    sdkmath.Int
+		currentDelShares []sdkmath.Int
+		expectedOutputs  []sdkmath.Int
+		expectedCrumb    sdkmath.Int
 	}{
 		{
 			whitelistedVals: []types.WhitelistedValidator{
 				{
 					ValidatorAddress: liquidValidators[0].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 				{
 					ValidatorAddress: liquidValidators[1].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 				{
 					ValidatorAddress: liquidValidators[2].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 			},
-			addStakingAmt:    sdk.NewInt(10 * 1000000),
-			currentDelShares: []sdk.Int{sdk.NewInt(2000000), sdk.NewInt(2000000), sdk.NewInt(1000000)},
-			expectedOutputs:  []sdk.Int{sdk.NewInt(3333333), sdk.NewInt(3333333), sdk.NewInt(3333333)},
-			expectedCrumb:    sdk.NewInt(1),
+			addStakingAmt:    sdkmath.NewInt(10 * 1000000),
+			currentDelShares: []sdkmath.Int{sdkmath.NewInt(2000000), sdkmath.NewInt(2000000), sdkmath.NewInt(1000000)},
+			expectedOutputs:  []sdkmath.Int{sdkmath.NewInt(3333333), sdkmath.NewInt(3333333), sdkmath.NewInt(3333333)},
+			expectedCrumb:    sdkmath.NewInt(1),
 		},
 		{
 			whitelistedVals: []types.WhitelistedValidator{
 				{
 					ValidatorAddress: liquidValidators[0].OperatorAddress,
-					TargetWeight:     sdk.NewInt(2),
+					TargetWeight:     sdkmath.NewInt(2),
 				},
 				{
 					ValidatorAddress: liquidValidators[1].OperatorAddress,
-					TargetWeight:     sdk.NewInt(2),
+					TargetWeight:     sdkmath.NewInt(2),
 				},
 				{
 					ValidatorAddress: liquidValidators[2].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 			},
-			addStakingAmt:    sdk.NewInt(10 * 1000000),
-			currentDelShares: []sdk.Int{sdk.NewInt(1000000), sdk.NewInt(1000000), sdk.NewInt(1000000)},
-			expectedOutputs:  []sdk.Int{sdk.NewInt(4000000), sdk.NewInt(4000000), sdk.NewInt(2000000)},
-			expectedCrumb:    sdk.NewInt(0),
+			addStakingAmt:    sdkmath.NewInt(10 * 1000000),
+			currentDelShares: []sdkmath.Int{sdkmath.NewInt(1000000), sdkmath.NewInt(1000000), sdkmath.NewInt(1000000)},
+			expectedOutputs:  []sdkmath.Int{sdkmath.NewInt(4000000), sdkmath.NewInt(4000000), sdkmath.NewInt(2000000)},
+			expectedCrumb:    sdkmath.NewInt(0),
 		},
 		{
 			whitelistedVals: []types.WhitelistedValidator{
 				{
 					ValidatorAddress: liquidValidators[0].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 				{
 					ValidatorAddress: liquidValidators[1].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 				{
 					ValidatorAddress: liquidValidators[2].OperatorAddress,
-					TargetWeight:     sdk.NewInt(1),
+					TargetWeight:     sdkmath.NewInt(1),
 				},
 			},
-			addStakingAmt:    sdk.NewInt(10),
-			currentDelShares: []sdk.Int{sdk.NewInt(3), sdk.NewInt(2), sdk.NewInt(1)},
-			expectedOutputs:  []sdk.Int{sdk.NewInt(3), sdk.NewInt(3), sdk.NewInt(3)},
-			expectedCrumb:    sdk.NewInt(1),
+			addStakingAmt:    sdkmath.NewInt(10),
+			currentDelShares: []sdkmath.Int{sdkmath.NewInt(3), sdkmath.NewInt(2), sdkmath.NewInt(1)},
+			expectedOutputs:  []sdkmath.Int{sdkmath.NewInt(3), sdkmath.NewInt(3), sdkmath.NewInt(3)},
+			expectedCrumb:    sdkmath.NewInt(1),
 		},
 	}
 
 	for _, tc := range testCases {
 		require.IsType(t, []types.WhitelistedValidator{}, tc.whitelistedVals)
-		require.IsType(t, sdk.Int{}, tc.addStakingAmt)
-		require.IsType(t, sdk.Int{}, tc.expectedCrumb)
-		require.IsType(t, []sdk.Int{}, tc.expectedOutputs)
+		require.IsType(t, sdkmath.Int{}, tc.addStakingAmt)
+		require.IsType(t, sdkmath.Int{}, tc.expectedCrumb)
+		require.IsType(t, []sdkmath.Int{}, tc.expectedOutputs)
 
-		totalTargetAmt := sdk.ZeroInt()
+		totalTargetAmt := sdkmath.ZeroInt()
 		valsMap := types.GetWhitelistedValsMap(tc.whitelistedVals)
 		var activeVals types.ActiveLiquidValidators
 		for _, v := range tc.whitelistedVals {
@@ -125,171 +125,171 @@ func TestMinMaxGap(t *testing.T) {
 	testCases := []struct {
 		name                     string
 		liquidVals               types.LiquidValidators
-		targetMap                map[string]sdk.Int
-		liquidTokenMap           map[string]sdk.Int
+		targetMap                map[string]sdkmath.Int
+		liquidTokenMap           map[string]sdkmath.Int
 		expectedMinGapVal        types.LiquidValidator
 		expectedMaxGapVal        types.LiquidValidator
-		expectedAmountNeeded     sdk.Int
+		expectedAmountNeeded     sdkmath.Int
 		expectedLastRedelegation bool
 	}{
 		{
 			name:       "zero case",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.ZeroInt(),
-				liquidValidators[1].OperatorAddress: sdk.ZeroInt(),
-				liquidValidators[2].OperatorAddress: sdk.ZeroInt(),
-				liquidValidators[3].OperatorAddress: sdk.ZeroInt(),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.ZeroInt(),
+				liquidValidators[1].OperatorAddress: sdkmath.ZeroInt(),
+				liquidValidators[2].OperatorAddress: sdkmath.ZeroInt(),
+				liquidValidators[3].OperatorAddress: sdkmath.ZeroInt(),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.ZeroInt(),
-				liquidValidators[1].OperatorAddress: sdk.ZeroInt(),
-				liquidValidators[2].OperatorAddress: sdk.ZeroInt(),
-				liquidValidators[3].OperatorAddress: sdk.ZeroInt(),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.ZeroInt(),
+				liquidValidators[1].OperatorAddress: sdkmath.ZeroInt(),
+				liquidValidators[2].OperatorAddress: sdkmath.ZeroInt(),
+				liquidValidators[3].OperatorAddress: sdkmath.ZeroInt(),
 			},
 			expectedMinGapVal:        types.LiquidValidator{},
 			expectedMaxGapVal:        types.LiquidValidator{},
-			expectedAmountNeeded:     sdk.ZeroInt(),
+			expectedAmountNeeded:     sdkmath.ZeroInt(),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 1-1",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[3].OperatorAddress: sdk.ZeroInt(),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[3].OperatorAddress: sdkmath.ZeroInt(),
 			},
 			expectedMinGapVal:        liquidValidators[3],
 			expectedMaxGapVal:        liquidValidators[0],
-			expectedAmountNeeded:     sdk.NewInt(33333334),
+			expectedAmountNeeded:     sdkmath.NewInt(33333334),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 1-2",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334 - 33333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(0 + 33333334),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334 - 33333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(0 + 33333334),
 			},
 			expectedMinGapVal:        liquidValidators[3],
 			expectedMaxGapVal:        liquidValidators[1],
-			expectedAmountNeeded:     sdk.NewInt(33333333),
+			expectedAmountNeeded:     sdkmath.NewInt(33333333),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 1-3",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334 - 33333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333 - 33333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(33333334 + 33333333),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334 - 33333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333 - 33333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(33333334 + 33333333),
 			},
 			expectedMinGapVal:        liquidValidators[3],
 			expectedMaxGapVal:        liquidValidators[2],
-			expectedAmountNeeded:     sdk.NewInt(33333333),
+			expectedAmountNeeded:     sdkmath.NewInt(33333333),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 1-4",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334 - 33333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333 - 33333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333 - 33333333),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(33333334 + 33333333 + 33333333),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334 - 33333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333 - 33333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333 - 33333333),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(33333334 + 33333333 + 33333333),
 			},
 			expectedMinGapVal:        types.LiquidValidator{},
 			expectedMaxGapVal:        types.LiquidValidator{},
-			expectedAmountNeeded:     sdk.ZeroInt(),
+			expectedAmountNeeded:     sdkmath.ZeroInt(),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 2-1",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[3].OperatorAddress: sdk.ZeroInt(),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[3].OperatorAddress: sdkmath.ZeroInt(),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000),
 			},
 			expectedMinGapVal:        liquidValidators[0],
 			expectedMaxGapVal:        liquidValidators[3],
-			expectedAmountNeeded:     sdk.NewInt(33333334),
+			expectedAmountNeeded:     sdkmath.NewInt(33333334),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 2-2",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[3].OperatorAddress: sdk.ZeroInt(),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[3].OperatorAddress: sdkmath.ZeroInt(),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000 + 33333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000 - 33333334),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000 + 33333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000 - 33333334),
 			},
 			expectedMinGapVal:        liquidValidators[1],
 			expectedMaxGapVal:        liquidValidators[3],
-			expectedAmountNeeded:     sdk.NewInt(33333333),
+			expectedAmountNeeded:     sdkmath.NewInt(33333333),
 			expectedLastRedelegation: false,
 		},
 		{
 			name:       "rebalancing case 2-3, last redelegation",
 			liquidVals: liquidValidators,
-			targetMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(133333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(133333333),
-				liquidValidators[3].OperatorAddress: sdk.ZeroInt(),
+			targetMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(133333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(133333333),
+				liquidValidators[3].OperatorAddress: sdkmath.ZeroInt(),
 			},
-			liquidTokenMap: map[string]sdk.Int{
-				liquidValidators[0].OperatorAddress: sdk.NewInt(100000000 + 33333334),
-				liquidValidators[1].OperatorAddress: sdk.NewInt(100000000 + 33333333),
-				liquidValidators[2].OperatorAddress: sdk.NewInt(100000000),
-				liquidValidators[3].OperatorAddress: sdk.NewInt(100000000 - 33333334 - 33333333),
+			liquidTokenMap: map[string]sdkmath.Int{
+				liquidValidators[0].OperatorAddress: sdkmath.NewInt(100000000 + 33333334),
+				liquidValidators[1].OperatorAddress: sdkmath.NewInt(100000000 + 33333333),
+				liquidValidators[2].OperatorAddress: sdkmath.NewInt(100000000),
+				liquidValidators[3].OperatorAddress: sdkmath.NewInt(100000000 - 33333334 - 33333333),
 			},
 			expectedMinGapVal:        liquidValidators[2],
 			expectedMaxGapVal:        liquidValidators[3],
-			expectedAmountNeeded:     sdk.NewInt(33333333),
+			expectedAmountNeeded:     sdkmath.NewInt(33333333),
 			expectedLastRedelegation: true,
 		},
 	}
@@ -306,112 +306,112 @@ func TestMinMaxGap(t *testing.T) {
 func TestDivideByCurrentWeight(t *testing.T) {
 	testCases := []struct {
 		liquidValidators []types.LiquidValidatorState
-		addStakingAmt    sdk.Dec
-		expectedOutputs  []sdk.Dec
-		expectedCrumb    sdk.Dec
+		addStakingAmt    sdkmath.LegacyDec
+		expectedOutputs  []sdkmath.LegacyDec
+		expectedCrumb    sdkmath.LegacyDec
 	}{
 		{
 			liquidValidators: []types.LiquidValidatorState{
 				{
 					OperatorAddress: "a",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(2 * 1000000),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(2 * 1000000),
 				},
 				{
 					OperatorAddress: "b",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(2 * 1000000),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(2 * 1000000),
 				},
 				{
 					OperatorAddress: "c",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(1 * 1000000),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(1 * 1000000),
 				},
 			},
-			addStakingAmt:   sdk.NewDec(10 * 1000000),
-			expectedOutputs: []sdk.Dec{sdk.NewDec(4 * 1000000), sdk.NewDec(4 * 1000000), sdk.NewDec(2 * 1000000)},
-			expectedCrumb:   sdk.NewDec(0),
+			addStakingAmt:   sdkmath.LegacyNewDec(10 * 1000000),
+			expectedOutputs: []sdkmath.LegacyDec{sdkmath.LegacyNewDec(4 * 1000000), sdkmath.LegacyNewDec(4 * 1000000), sdkmath.LegacyNewDec(2 * 1000000)},
+			expectedCrumb:   sdkmath.LegacyNewDec(0),
 		},
 		{
 			liquidValidators: []types.LiquidValidatorState{
 				{
 					OperatorAddress: "a",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(1 * 1000000),
-					Weight:          sdk.NewInt(2),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(1 * 1000000),
+					Weight:          sdkmath.NewInt(2),
 				},
 				{
 					OperatorAddress: "b",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(1 * 1000000),
-					Weight:          sdk.NewInt(2),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(1 * 1000000),
+					Weight:          sdkmath.NewInt(2),
 				},
 				{
 					OperatorAddress: "c",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(1 * 1000000),
-					Weight:          sdk.NewInt(1),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(1 * 1000000),
+					Weight:          sdkmath.NewInt(1),
 				},
 			},
-			addStakingAmt:   sdk.NewDec(10 * 1000000),
-			expectedOutputs: []sdk.Dec{sdk.MustNewDecFromStr("3333333.000000000000000000"), sdk.MustNewDecFromStr("3333333.000000000000000000"), sdk.MustNewDecFromStr("3333333.000000000000000000")},
-			expectedCrumb:   sdk.MustNewDecFromStr("1.000000000000000000"),
+			addStakingAmt:   sdkmath.LegacyNewDec(10 * 1000000),
+			expectedOutputs: []sdkmath.LegacyDec{sdkmath.LegacyMustNewDecFromStr("3333333.000000000000000000"), sdkmath.LegacyMustNewDecFromStr("3333333.000000000000000000"), sdkmath.LegacyMustNewDecFromStr("3333333.000000000000000000")},
+			expectedCrumb:   sdkmath.LegacyMustNewDecFromStr("1.000000000000000000"),
 		},
 		{
 			liquidValidators: []types.LiquidValidatorState{
 				{
 					OperatorAddress: "a",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(3),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(3),
 				},
 				{
 					OperatorAddress: "b",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(2),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(2),
 				},
 				{
 					OperatorAddress: "c",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(1),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(1),
 				},
 			},
-			addStakingAmt:   sdk.NewDec(10),
-			expectedOutputs: []sdk.Dec{sdk.MustNewDecFromStr("4.000000000000000000"), sdk.MustNewDecFromStr("3.000000000000000000"), sdk.MustNewDecFromStr("1.000000000000000000")},
-			expectedCrumb:   sdk.MustNewDecFromStr("2.000000000000000000"),
+			addStakingAmt:   sdkmath.LegacyNewDec(10),
+			expectedOutputs: []sdkmath.LegacyDec{sdkmath.LegacyMustNewDecFromStr("4.000000000000000000"), sdkmath.LegacyMustNewDecFromStr("3.000000000000000000"), sdkmath.LegacyMustNewDecFromStr("1.000000000000000000")},
+			expectedCrumb:   sdkmath.LegacyMustNewDecFromStr("2.000000000000000000"),
 		},
 		{
 			liquidValidators: []types.LiquidValidatorState{
 				{
 					OperatorAddress: "a",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(10000000),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(10000000),
 				},
 				{
 					OperatorAddress: "b",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(2000000),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(2000000),
 				},
 				{
 					OperatorAddress: "c",
-					Status:          types.ValidatorStatusActive,
-					LiquidTokens:    sdk.NewIntFromUint64(3000001),
+					Status:          types.ValidatorStatus_ValidatorStatusActive,
+					LiquidTokens:    sdkmath.NewIntFromUint64(3000001),
 				},
 			},
-			addStakingAmt:   sdk.NewDec(10000000),
-			expectedOutputs: []sdk.Dec{sdk.MustNewDecFromStr("6666666.000000000000000000"), sdk.MustNewDecFromStr("1333333.000000000000000000"), sdk.MustNewDecFromStr("2000000.000000000000000000")},
-			expectedCrumb:   sdk.MustNewDecFromStr("1.000000000000000000"),
+			addStakingAmt:   sdkmath.LegacyNewDec(10000000),
+			expectedOutputs: []sdkmath.LegacyDec{sdkmath.LegacyMustNewDecFromStr("6666666.000000000000000000"), sdkmath.LegacyMustNewDecFromStr("1333333.000000000000000000"), sdkmath.LegacyMustNewDecFromStr("2000000.000000000000000000")},
+			expectedCrumb:   sdkmath.LegacyMustNewDecFromStr("1.000000000000000000"),
 		},
 	}
 
 	for _, tc := range testCases {
 		require.IsType(t, []types.LiquidValidatorState{}, tc.liquidValidators)
-		require.IsType(t, sdk.Dec{}, tc.addStakingAmt)
-		require.IsType(t, sdk.Dec{}, tc.expectedCrumb)
-		require.IsType(t, []sdk.Dec{}, tc.expectedOutputs)
+		require.IsType(t, sdkmath.LegacyDec{}, tc.addStakingAmt)
+		require.IsType(t, sdkmath.LegacyDec{}, tc.expectedCrumb)
+		require.IsType(t, []sdkmath.LegacyDec{}, tc.expectedOutputs)
 
-		totalTargetAmt := sdk.ZeroDec()
-		totalLiquidTokens := sdk.ZeroInt()
-		liquidTokenMap := map[string]sdk.Int{}
+		totalTargetAmt := sdkmath.LegacyZeroDec()
+		totalLiquidTokens := sdkmath.ZeroInt()
+		liquidTokenMap := map[string]sdkmath.Int{}
 		var lvs types.LiquidValidators
 		for _, v := range tc.liquidValidators {
 			totalLiquidTokens = totalLiquidTokens.Add(v.LiquidTokens)

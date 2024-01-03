@@ -1,6 +1,7 @@
 package types
 
 import (
+	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -44,39 +45,39 @@ func (v LiquidValidator) GetOperator() sdk.ValAddress {
 	return addr
 }
 
-func (v LiquidValidator) GetDelShares(ctx sdk.Context, sk StakingKeeper) sdk.Dec {
+func (v LiquidValidator) GetDelShares(ctx sdk.Context, sk StakingKeeper) sdkmath.LegacyDec {
 	del, found := sk.GetDelegation(ctx, LiquidStakingProxyAcc, v.GetOperator())
 	if !found {
-		return sdk.ZeroDec()
+		return sdkmath.LegacyZeroDec()
 	}
 	return del.GetShares()
 }
 
-func (v LiquidValidator) GetLiquidTokens(ctx sdk.Context, sk StakingKeeper, onlyBonded bool) sdk.Int {
+func (v LiquidValidator) GetLiquidTokens(ctx sdk.Context, sk StakingKeeper, onlyBonded bool) sdkmath.Int {
 	delShares := v.GetDelShares(ctx, sk)
 	if !delShares.IsPositive() {
-		return sdk.ZeroInt()
+		return sdkmath.ZeroInt()
 	}
 	val := sk.Validator(ctx, v.GetOperator())
 	if onlyBonded && !val.IsBonded() {
-		return sdk.ZeroInt()
+		return sdkmath.ZeroInt()
 	}
 	return val.TokensFromSharesTruncated(delShares).TruncateInt()
 }
 
-func (v LiquidValidator) GetWeight(whitelistedValsMap WhitelistedValsMap, active bool) sdk.Int {
+func (v LiquidValidator) GetWeight(whitelistedValsMap WhitelistedValsMap, active bool) sdkmath.Int {
 	if wv, ok := whitelistedValsMap[v.OperatorAddress]; ok && active {
 		return wv.TargetWeight
 	} else {
-		return sdk.ZeroInt()
+		return sdkmath.ZeroInt()
 	}
 }
 
 func (v LiquidValidator) GetStatus(activeCondition bool) ValidatorStatus {
 	if activeCondition {
-		return ValidatorStatusActive
+		return ValidatorStatus_ValidatorStatusActive
 	} else {
-		return ValidatorStatusInactive
+		return ValidatorStatus_ValidatorStatusInactive
 	}
 }
 
@@ -99,9 +100,9 @@ type LiquidValidators []LiquidValidator
 type ActiveLiquidValidators LiquidValidators
 
 // MinMaxGap Return the list of LiquidValidator with the maximum gap and minimum gap from the target weight of LiquidValidators, respectively.
-func (vs LiquidValidators) MinMaxGap(targetMap, liquidTokenMap map[string]sdk.Int) (minGapVal LiquidValidator, maxGapVal LiquidValidator, amountNeeded sdk.Int, lastRedelegation bool) {
-	maxGap := sdk.ZeroInt()
-	minGap := sdk.ZeroInt()
+func (vs LiquidValidators) MinMaxGap(targetMap, liquidTokenMap map[string]sdkmath.Int) (minGapVal LiquidValidator, maxGapVal LiquidValidator, amountNeeded sdkmath.Int, lastRedelegation bool) {
+	maxGap := sdkmath.ZeroInt()
+	minGap := sdkmath.ZeroInt()
 
 	for _, val := range vs {
 		gap := liquidTokenMap[val.OperatorAddress].Sub(targetMap[val.OperatorAddress])
@@ -114,7 +115,7 @@ func (vs LiquidValidators) MinMaxGap(targetMap, liquidTokenMap map[string]sdk.In
 			minGapVal = val
 		}
 	}
-	amountNeeded = sdk.MinInt(maxGap, minGap.Abs())
+	amountNeeded = sdkmath.MinInt(maxGap, minGap.Abs())
 	// lastRedelegation when maxGap validator's liquid token == amountNeeded for redelegation all delShares
 	lastRedelegation = amountNeeded.IsPositive() &&
 		!targetMap[maxGapVal.OperatorAddress].IsPositive() &&
@@ -127,9 +128,9 @@ func (vs LiquidValidators) Len() int {
 	return len(vs)
 }
 
-func (vs LiquidValidators) TotalLiquidTokens(ctx sdk.Context, sk StakingKeeper, onlyBonded bool) (sdk.Int, map[string]sdk.Int) {
-	totalLiquidTokens := sdk.ZeroInt()
-	liquidTokenMap := map[string]sdk.Int{}
+func (vs LiquidValidators) TotalLiquidTokens(ctx sdk.Context, sk StakingKeeper, onlyBonded bool) (sdkmath.Int, map[string]sdkmath.Int) {
+	totalLiquidTokens := sdkmath.ZeroInt()
+	liquidTokenMap := map[string]sdkmath.Int{}
 	for _, lv := range vs {
 		liquidTokens := lv.GetLiquidTokens(ctx, sk, onlyBonded)
 		liquidTokenMap[lv.OperatorAddress] = liquidTokens
@@ -150,13 +151,13 @@ func (avs ActiveLiquidValidators) Len() int {
 	return LiquidValidators(avs).Len()
 }
 
-func (avs ActiveLiquidValidators) TotalActiveLiquidTokens(ctx sdk.Context, sk StakingKeeper, onlyBonded bool) (sdk.Int, map[string]sdk.Int) {
+func (avs ActiveLiquidValidators) TotalActiveLiquidTokens(ctx sdk.Context, sk StakingKeeper, onlyBonded bool) (sdkmath.Int, map[string]sdkmath.Int) {
 	return LiquidValidators(avs).TotalLiquidTokens(ctx, sk, onlyBonded)
 }
 
 // TotalWeight for active liquid validator
-func (avs ActiveLiquidValidators) TotalWeight(whitelistedValsMap WhitelistedValsMap) sdk.Int {
-	totalWeight := sdk.ZeroInt()
+func (avs ActiveLiquidValidators) TotalWeight(whitelistedValsMap WhitelistedValsMap) sdkmath.Int {
+	totalWeight := sdkmath.ZeroInt()
 	for _, val := range avs {
 		totalWeight = totalWeight.Add(val.GetWeight(whitelistedValsMap, true))
 	}
@@ -164,29 +165,29 @@ func (avs ActiveLiquidValidators) TotalWeight(whitelistedValsMap WhitelistedVals
 }
 
 // NativeTokenToBToken returns bTokenTotalSupply * nativeTokenAmount / netAmount
-func NativeTokenToBToken(nativeTokenAmount, bTokenTotalSupplyAmount sdk.Int, netAmount sdk.Dec) (bTokenAmount sdk.Int) {
-	return bTokenTotalSupplyAmount.ToDec().MulTruncate(nativeTokenAmount.ToDec()).QuoTruncate(netAmount.TruncateDec()).TruncateInt()
+func NativeTokenToBToken(nativeTokenAmount, bTokenTotalSupplyAmount sdkmath.Int, netAmount sdkmath.LegacyDec) (bTokenAmount sdkmath.Int) {
+	return bTokenTotalSupplyAmount.ToLegacyDec().MulTruncate(nativeTokenAmount.ToLegacyDec()).QuoTruncate(netAmount.TruncateDec()).TruncateInt()
 }
 
 // BTokenToNativeToken returns bTokenAmount * netAmount / bTokenTotalSupply with truncations
-func BTokenToNativeToken(bTokenAmount, bTokenTotalSupplyAmount sdk.Int, netAmount sdk.Dec) (nativeTokenAmount sdk.Dec) {
-	return bTokenAmount.ToDec().MulTruncate(netAmount).Quo(bTokenTotalSupplyAmount.ToDec()).TruncateDec()
+func BTokenToNativeToken(bTokenAmount, bTokenTotalSupplyAmount sdkmath.Int, netAmount sdkmath.LegacyDec) (nativeTokenAmount sdkmath.LegacyDec) {
+	return bTokenAmount.ToLegacyDec().MulTruncate(netAmount).Quo(bTokenTotalSupplyAmount.ToLegacyDec()).TruncateDec()
 }
 
 // DeductFeeRate returns Input * (1-FeeRate) with truncations
-func DeductFeeRate(input sdk.Dec, feeRate sdk.Dec) (feeDeductedOutput sdk.Dec) {
-	return input.MulTruncate(sdk.OneDec().Sub(feeRate)).TruncateDec()
+func DeductFeeRate(input sdkmath.LegacyDec, feeRate sdkmath.LegacyDec) (feeDeductedOutput sdkmath.LegacyDec) {
+	return input.MulTruncate(sdkmath.LegacyOneDec().Sub(feeRate)).TruncateDec()
 }
 
-func (nas NetAmountState) CalcNetAmount() sdk.Dec {
-	return nas.ProxyAccBalance.Add(nas.TotalLiquidTokens).Add(nas.TotalUnbondingBalance).ToDec().Add(nas.TotalRemainingRewards)
+func (nas NetAmountState) CalcNetAmount() sdkmath.LegacyDec {
+	return nas.ProxyAccBalance.Add(nas.TotalLiquidTokens).Add(nas.TotalUnbondingBalance).ToLegacyDec().Add(nas.TotalRemainingRewards)
 }
 
-func (nas NetAmountState) CalcMintRate() sdk.Dec {
+func (nas NetAmountState) CalcMintRate() sdkmath.LegacyDec {
 	if nas.NetAmount.IsNil() || !nas.NetAmount.IsPositive() {
-		return sdk.ZeroDec()
+		return sdkmath.LegacyZeroDec()
 	}
-	return nas.BtokenTotalSupply.ToDec().QuoTruncate(nas.NetAmount)
+	return nas.BtokenTotalSupply.ToLegacyDec().QuoTruncate(nas.NetAmount)
 }
 
 type LiquidValidatorStates []LiquidValidatorState
