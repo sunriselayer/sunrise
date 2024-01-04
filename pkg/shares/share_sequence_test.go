@@ -7,7 +7,7 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

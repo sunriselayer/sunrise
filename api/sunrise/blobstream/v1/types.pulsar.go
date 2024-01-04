@@ -1799,7 +1799,7 @@ type Valset struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Universal nonce defined under:
-	// https://github.com/celestiaorg/celestia-app/pull/464
+	// https://github.com/sunrise-zone/sunrise-app/pull/464
 	Nonce uint64 `protobuf:"varint,1,opt,name=nonce,proto3" json:"nonce,omitempty"`
 	// List of BridgeValidator containing the current validator set.
 	Members []*BridgeValidator `protobuf:"bytes,2,rep,name=members,proto3" json:"members,omitempty"`
@@ -1869,7 +1869,7 @@ type DataCommitment struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Universal nonce defined under:
-	// https://github.com/celestiaorg/celestia-app/pull/464
+	// https://github.com/sunrise-zone/sunrise-app/pull/464
 	Nonce uint64 `protobuf:"varint,1,opt,name=nonce,proto3" json:"nonce,omitempty"`
 	// First block defining the ordered set of blocks used to create the
 	// commitment.

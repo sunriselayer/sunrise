@@ -6,7 +6,7 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
-	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/test/util"
 
 	"github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/cometbft/cometbft/types"
@@ -57,7 +57,7 @@ func ReadBlockHeights(ctx context.Context, rpcAddress string, fromHeight, toHeig
 }
 
 func DecodeBlockData(data types.Data) ([]sdk.Msg, error) {
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 	decoder := encCfg.TxConfig.TxDecoder()
 	msgs := make([]sdk.Msg, 0)
 	for _, txBytes := range data.Txs {
@@ -91,7 +91,7 @@ func CalculateMeanGasFromRecentBlocks(ctx context.Context, rpcAddress, msgType s
 
 func CalculateMeanGas(ctx context.Context, rpcAddress, msgType string, fromHeight int64, toHeight int64) (float64, int64, error) {
 	var (
-		encCfg   = encoding.MakeConfig(testutil.ModuleBasics)
+		encCfg   = encoding.MakeConfig(util.ModuleBasics)
 		decoder  = encCfg.TxConfig.TxDecoder()
 		totalGas int64
 		count    int64

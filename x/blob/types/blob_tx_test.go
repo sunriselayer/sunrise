@@ -10,9 +10,9 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
 	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	util "github.com/sunrise-zone/sunrise-app/test"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	sdkmath "cosmossdk.io/math"
@@ -37,7 +37,7 @@ func TestNewBlob(t *testing.T) {
 }
 
 func TestValidateBlobTx(t *testing.T) {
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 	signer, err := testnode.NewOfflineSigner()
 	require.NoError(t, err)
 	ns1 := namespace.MustNewV0(bytes.Repeat([]byte{0x01}, namespace.NamespaceVersionZeroIDSize))

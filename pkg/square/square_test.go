@@ -15,9 +15,9 @@ import (
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/square"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/test/util"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	"github.com/celestiaorg/rsmt2d"
@@ -130,7 +130,7 @@ func TestSquareTxShareRange(t *testing.T) {
 // prepare or process proposal, as the signatures will be invalid since this
 // does not query for relevant account numbers or sequences.
 func generateBlobTxsWithNamespaces(t *testing.T, namespaces []appns.Namespace, blobSizes [][]int) [][]byte {
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 	const acc = "signer"
 	kr, _ := testnode.NewKeyring(acc)
 	return blobfactory.ManyMultiBlobTx(
@@ -185,7 +185,7 @@ func TestSquareBlobShareRange(t *testing.T) {
 
 func TestSquareDeconstruct(t *testing.T) {
 	rand := tmrand.NewRand()
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 	t.Run("ConstructDeconstructParity", func(t *testing.T) {
 		// 8192 -> square size 128
 		for _, numTxs := range []int{2, 128, 1024, 8192} {
@@ -246,7 +246,7 @@ func TestSquareShareCommitments(t *testing.T) {
 	require.NoError(t, err)
 	dah, err := da.NewDataAvailabilityHeader(eds)
 	require.NoError(t, err)
-	decoder := encoding.MakeConfig(testutil.ModuleBasics).TxConfig.TxDecoder()
+	decoder := encoding.MakeConfig(util.ModuleBasics).TxConfig.TxDecoder()
 
 	for pfbIndex := 0; pfbIndex < numTxs; pfbIndex++ {
 		wpfb, err := builder.GetWrappedPFB(pfbIndex + numTxs)

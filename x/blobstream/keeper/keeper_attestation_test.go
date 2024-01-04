@@ -3,7 +3,7 @@ package keeper_test
 import (
 	"testing"
 
-	testutil "github.com/sunrise-zone/sunrise-app/testutil"
+	testutil "github.com/sunrise-zone/sunrise-app/test"
 	blobstream "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
 
 	"github.com/stretchr/testify/assert"

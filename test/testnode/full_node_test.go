@@ -9,8 +9,8 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/test/util/genesis"
 	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/genesis"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"

@@ -8,9 +8,9 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	util "github.com/sunrise-zone/sunrise-app/test"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/rand"
@@ -37,7 +37,7 @@ type SignerTestSuite struct {
 }
 
 func (s *SignerTestSuite) SetupSuite() {
-	s.encCfg = encoding.MakeConfig(testutil.ModuleBasics)
+	s.encCfg = encoding.MakeConfig(util.ModuleBasics)
 	s.ctx, _, _ = testnode.NewNetwork(s.T(), testnode.DefaultConfig().WithFundedAccounts("a"))
 	_, err := s.ctx.WaitForHeight(1)
 	s.Require().NoError(err)

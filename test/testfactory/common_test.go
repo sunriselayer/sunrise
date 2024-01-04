@@ -4,15 +4,15 @@ import (
 	"testing"
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	util "github.com/sunrise-zone/sunrise-app/test"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestTestAccount(t *testing.T) {
-	enc := encoding.MakeConfig(testutil.ModuleBasics)
+	enc := encoding.MakeConfig(util.ModuleBasics)
 	kr := testfactory.TestKeyring(enc.Codec)
 	record, err := kr.Key(testfactory.TestAccName)
 	require.NoError(t, err)

@@ -9,7 +9,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 
 	"github.com/celestiaorg/nmt"
 	nmtnamespace "github.com/celestiaorg/nmt/namespace"

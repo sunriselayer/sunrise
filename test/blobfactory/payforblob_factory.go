@@ -10,7 +10,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"

@@ -9,8 +9,8 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/square"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/test/util"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	"github.com/celestiaorg/rsmt2d"
@@ -38,7 +38,7 @@ func FuzzSquare(f *testing.F) {
 		if normalTxCount < 0 || pfbCount < 0 {
 			t.Skip()
 		}
-		encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+		encCfg := encoding.MakeConfig(util.ModuleBasics)
 		rand := tmrand.NewRand()
 		rand.Seed(seed)
 		signer, err := testnode.NewOfflineSigner()
@@ -64,7 +64,7 @@ func FuzzSquare(f *testing.F) {
 		dah, err := da.NewDataAvailabilityHeader(eds)
 		require.NoError(t, err)
 
-		decoder := encoding.MakeConfig(testutil.ModuleBasics).TxConfig.TxDecoder()
+		decoder := encoding.MakeConfig(util.ModuleBasics).TxConfig.TxDecoder()
 
 		builder, err := square.NewBuilder(appconsts.DefaultSquareSizeUpperBound, appconsts.LatestVersion, orderedTxs...)
 		require.NoError(t, err)

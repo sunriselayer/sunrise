@@ -5,10 +5,10 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	util "github.com/sunrise-zone/sunrise-app/test"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/stretchr/testify/assert"
@@ -18,7 +18,7 @@ import (
 // TestGenerateManyRandomRawSendTxsSameSigner_Deterministic tests whether with the same random seed the GenerateManyRandomRawSendTxsSameSigner function produces the same send transactions.
 func TestGenerateManyRandomRawSendTxsSameSigner_Deterministic(t *testing.T) {
 	normalTxCount := 10
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 	TxDecoder := encCfg.TxConfig.TxDecoder()
 
 	kr, addr := testnode.NewKeyring(testfactory.TestAccName)

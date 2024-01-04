@@ -9,8 +9,8 @@ import (
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
-	testutil "github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	testutil "github.com/sunrise-zone/sunrise-app/test"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"github.com/stretchr/testify/assert"

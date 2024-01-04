@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/cometbft/cometbft/types"

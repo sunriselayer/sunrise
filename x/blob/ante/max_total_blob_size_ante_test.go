@@ -5,7 +5,7 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
-	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/test/util"
 	ante "github.com/sunrise-zone/sunrise-app/x/blob/ante"
 	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
@@ -115,7 +115,7 @@ func TestMaxTotalBlobSizeAnteHandler(t *testing.T) {
 		},
 	}
 
-	txConfig := encoding.MakeConfig(testutil.ModuleBasics).TxConfig
+	txConfig := encoding.MakeConfig(util.ModuleBasics).TxConfig
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {

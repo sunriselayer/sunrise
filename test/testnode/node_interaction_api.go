@@ -13,8 +13,8 @@ import (
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -38,7 +38,7 @@ type Context struct {
 }
 
 func NewContext(goCtx context.Context, kr keyring.Keyring, tmCfg *tmconfig.Config, chainID string) Context {
-	ecfg := encoding.MakeConfig(testutil.ModuleBasics)
+	ecfg := encoding.MakeConfig(util.ModuleBasics)
 	cctx := client.Context{}.
 		WithKeyring(kr).
 		WithHomeDir(tmCfg.RootDir).

@@ -14,10 +14,10 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/square"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/testutil"
-	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/test/util"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	coretypes "github.com/cometbft/cometbft/types"
@@ -90,7 +90,7 @@ func GenerateOrderedRandomTxs(t *testing.T, signer *user.Signer, rand *tmrand.Ra
 func TestGenerateOrderedRandomTxs_Deterministic(t *testing.T) {
 	pfbCount := 10
 	noramlCount := 10
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 
 	kr := testfactory.TestKeyring(encCfg.Codec)
 	signer, err := user.NewSigner(kr, nil, testnode.TestAddress(), encCfg.TxConfig, testfactory.ChainID, 1, 0)
@@ -118,7 +118,7 @@ func GenerateMixedRandomTxs(t *testing.T, signer *user.Signer, rand *tmrand.Rand
 func TestGenerateMixedRandomTxs_Deterministic(t *testing.T) {
 	pfbCount := 10
 	noramlCount := 10
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(util.ModuleBasics)
 
 	kr := testfactory.TestKeyring(encCfg.Codec)
 	signer, err := user.NewSigner(kr, nil, testnode.TestAddress(), encCfg.TxConfig, testfactory.ChainID, 1, 0)

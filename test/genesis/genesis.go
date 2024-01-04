@@ -7,7 +7,7 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/test/util"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -48,7 +48,7 @@ type Genesis struct {
 
 // NewDefaultGenesis creates a new default genesis with no accounts or validators.
 func NewDefaultGenesis() *Genesis {
-	ecfg := encoding.MakeConfig(testutil.ModuleBasics)
+	ecfg := encoding.MakeConfig(util.ModuleBasics)
 	g := &Genesis{
 		ecfg:            ecfg,
 		ConsensusParams: app.DefaultConsensusParams(),

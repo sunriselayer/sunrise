@@ -16,7 +16,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	testutil "github.com/sunrise-zone/sunrise-app/testutil"
+	testutil "github.com/sunrise-zone/sunrise-app/test"
 	"github.com/sunrise-zone/sunrise-app/x/blob/keeper"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 

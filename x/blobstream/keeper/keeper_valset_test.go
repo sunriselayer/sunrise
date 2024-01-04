@@ -7,7 +7,7 @@ import (
 
 	blobstream "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
 
-	testutil "github.com/sunrise-zone/sunrise-app/testutil"
+	testutil "github.com/sunrise-zone/sunrise-app/test"
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"

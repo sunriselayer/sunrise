@@ -54,8 +54,8 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	shares "github.com/sunrise-zone/sunrise-app/pkg/shares"
-	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
-	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
