@@ -3,9 +3,9 @@ package testnode
 import (
 	"time"
 
-	"sunrise/cmd/sunrised/cmd"
-	"sunrise/pkg/appconsts"
-	"sunrise/testutil/genesis"
+	"github.com/sunrise-zone/sunrise-app/cmd/sunrised/cmd"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/testutil/genesis"
 
 	tmconfig "github.com/cometbft/cometbft/config"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"

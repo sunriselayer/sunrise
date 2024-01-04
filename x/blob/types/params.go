@@ -3,8 +3,8 @@ package types
 import (
 	fmt "fmt"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )

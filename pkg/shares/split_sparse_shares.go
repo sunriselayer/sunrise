@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 
 	"golang.org/x/exp/slices"
 )

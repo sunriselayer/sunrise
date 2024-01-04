@@ -33,7 +33,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v8/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
-	"sunrise/x/tokenfilter"
+	"github.com/sunrise-zone/sunrise-app/x/tokenfilter"
 	// this line is used by starport scaffolding # ibc/app/import
 )
 

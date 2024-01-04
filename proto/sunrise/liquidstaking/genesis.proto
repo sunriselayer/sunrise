@@ -7,7 +7,7 @@ import "sunrise/liquidstaking/params.proto";
 
 import "sunrise/liquidstaking/liquidstaking.proto";
 
-option go_package = "sunrise/x/liquidstaking/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/liquidstaking/types";
 
 // GenesisState defines the liquidstaking module's genesis state.
 message GenesisState {

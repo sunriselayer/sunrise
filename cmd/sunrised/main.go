@@ -6,8 +6,8 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"sunrise/app"
-	"sunrise/cmd/sunrised/cmd"
+	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/cmd/sunrised/cmd"
 )
 
 func main() {

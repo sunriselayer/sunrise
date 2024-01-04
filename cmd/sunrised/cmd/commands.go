@@ -25,7 +25,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"sunrise/app"
+	"github.com/sunrise-zone/sunrise-app/app"
 )
 
 func initRootCmd(

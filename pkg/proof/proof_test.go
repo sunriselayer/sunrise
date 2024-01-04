@@ -6,17 +6,17 @@ import (
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 
-	"sunrise/testutil/blobfactory"
-	"sunrise/testutil/testfactory"
-	"sunrise/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
 
-	"sunrise/pkg/da"
-	"sunrise/pkg/proof"
-	"sunrise/pkg/square"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/proof"
+	"github.com/sunrise-zone/sunrise-app/pkg/square"
 
-	"sunrise/pkg/appconsts"
-	appns "sunrise/pkg/namespace"
-	"sunrise/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

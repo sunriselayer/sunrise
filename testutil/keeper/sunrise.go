@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/sunrise/keeper"
-	"sunrise/x/sunrise/types"
+	"github.com/sunrise-zone/sunrise-app/x/sunrise/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/sunrise/types"
 )
 
 func SunriseKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {

@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/blob/keeper"
-	"sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/x/blob/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 func BlobKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {

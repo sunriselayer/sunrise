@@ -21,17 +21,17 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	chain "sunrise/app"
-	utils "sunrise/pkg/utils"
-	ammtypes "sunrise/x/amm/types"
-	exchangetypes "sunrise/x/exchange/types"
-	liquidammtypes "sunrise/x/liquidamm/types"
-	"sunrise/x/liquidstaking"
-	"sunrise/x/liquidstaking/keeper"
-	"sunrise/x/liquidstaking/types"
-	lpfarmtypes "sunrise/x/lpfarm/types"
-	"sunrise/x/mint"
-	minttypes "sunrise/x/mint/types"
+	chain "github.com/sunrise-zone/sunrise-app/app"
+	utils "github.com/sunrise-zone/sunrise-app/pkg/utils"
+	ammtypes "github.com/sunrise-zone/sunrise-app/x/amm/types"
+	exchangetypes "github.com/sunrise-zone/sunrise-app/x/exchange/types"
+	liquidammtypes "github.com/sunrise-zone/sunrise-app/x/liquidamm/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
+	lpfarmtypes "github.com/sunrise-zone/sunrise-app/x/lpfarm/types"
+	"github.com/sunrise-zone/sunrise-app/x/mint"
+	minttypes "github.com/sunrise-zone/sunrise-app/x/mint/types"
 )
 
 var (

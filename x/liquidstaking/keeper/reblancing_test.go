@@ -8,8 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	utils "sunrise/pkg/utils"
-	"sunrise/x/liquidstaking/types"
+	utils "github.com/sunrise-zone/sunrise-app/pkg/utils"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 func (s *KeeperTestSuite) TestRebalancingCase1() {

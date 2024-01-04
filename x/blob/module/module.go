@@ -20,9 +20,9 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "sunrise/api/sunrise/blob/module"
-	"sunrise/x/blob/keeper"
-	"sunrise/x/blob/types"
+	modulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/module"
+	"github.com/sunrise-zone/sunrise-app/x/blob/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 var (

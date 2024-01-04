@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"sunrise/x/blobstream/types"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 )
 
 func (k Keeper) DataCommitmentRangeForHeight(

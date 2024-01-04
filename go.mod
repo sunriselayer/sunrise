@@ -1,4 +1,4 @@
-module sunrise
+module github.com/sunrise-zone/sunrise-app
 
 go 1.21.1
 

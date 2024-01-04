@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/runtime"
 
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 // GetParams get all parameters as types.Params

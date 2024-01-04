@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"fmt"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
-	"sunrise/pkg/da"
-	"sunrise/pkg/namespace"
-	"sunrise/pkg/shares"
-	blobtypes "sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	core "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/types"

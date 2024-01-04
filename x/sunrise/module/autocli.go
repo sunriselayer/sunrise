@@ -3,7 +3,7 @@ package sunrise
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "sunrise/api/sunrise/sunrise"
+	modulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/sunrise"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

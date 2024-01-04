@@ -5,11 +5,11 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	farmingtypes "sunrise/x/farming/types"
+	// farmingtypes "github.com/sunrise-zone/sunrise-app/x/farming/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 type keysTestSuite struct {

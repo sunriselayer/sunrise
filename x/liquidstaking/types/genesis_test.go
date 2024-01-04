@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 // func TestGenesisState_Validate(t *testing.T) {

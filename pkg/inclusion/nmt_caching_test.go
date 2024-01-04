@@ -5,10 +5,10 @@ import (
 	"sort"
 	"testing"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/da"
-	appns "sunrise/pkg/namespace"
-	"sunrise/pkg/wrapper"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
 
 	"github.com/celestiaorg/nmt"
 	"github.com/celestiaorg/rsmt2d"

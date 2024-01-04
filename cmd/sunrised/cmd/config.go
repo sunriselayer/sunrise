@@ -5,7 +5,7 @@ import (
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/app"
+	"github.com/sunrise-zone/sunrise-app/app"
 )
 
 func initSDKConfig() {

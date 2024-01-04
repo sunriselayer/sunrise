@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"sunrise/app/encoding"
-	"sunrise/pkg/appconsts"
-	"sunrise/testutil"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 
 	sdkmath "cosmossdk.io/math"
 	coretypes "github.com/cometbft/cometbft/types"

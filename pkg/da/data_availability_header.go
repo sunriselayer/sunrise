@@ -11,10 +11,10 @@ import (
 	"github.com/cometbft/cometbft/types"
 	"golang.org/x/exp/constraints"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/shares"
-	"sunrise/pkg/wrapper"
-	daproto "sunrise/proto/sunrise/core/v1/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
+	daproto "github.com/sunrise-zone/sunrise-app/proto/sunrise/core/v1/da"
 )
 
 var (

@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "sunrise/x/blobstream/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/blobstream/types";
 
 // BridgeValidator represents a validator's ETH address and its power
 message BridgeValidator {

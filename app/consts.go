@@ -1,7 +1,7 @@
 package app
 
 import (
-	"sunrise/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 )
 
 const (

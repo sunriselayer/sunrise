@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	keepertest "sunrise/testutil/keeper"
-	"sunrise/x/liquidstaking/types"
+	keepertest "github.com/sunrise-zone/sunrise-app/testutil/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 func TestGetParams(t *testing.T) {

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"sunrise/app"
-	"sunrise/app/encoding"
-	"sunrise/testutil"
+	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"

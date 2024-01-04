@@ -3,7 +3,7 @@ package inclusion
 import (
 	"math"
 
-	"sunrise/pkg/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
 
 	"golang.org/x/exp/constraints"
 )

@@ -8,7 +8,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 func TestParams(t *testing.T) {

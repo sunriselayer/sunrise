@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"sunrise/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 )
 
 // NewReservedBytes returns a byte slice of length

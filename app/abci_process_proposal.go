@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"sunrise/app/ante"
-	"sunrise/pkg/blob"
-	"sunrise/pkg/da"
-	"sunrise/pkg/shares"
-	"sunrise/pkg/square"
-	blobtypes "sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/app/ante"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/square"
+	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	"cosmossdk.io/log"
 	abci "github.com/cometbft/cometbft/abci/types"

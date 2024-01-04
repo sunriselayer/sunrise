@@ -24,7 +24,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"sunrise/app"
+	"github.com/sunrise-zone/sunrise-app/app"
 )
 
 // NewRootCmd creates a new root command for sunrised. It is called once in the main function.

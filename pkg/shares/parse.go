@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 
 	coretypes "github.com/cometbft/cometbft/types"
 )

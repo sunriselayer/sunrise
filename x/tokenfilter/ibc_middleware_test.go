@@ -12,7 +12,7 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	"github.com/cosmos/ibc-go/v8/modules/core/exported"
 
-	"sunrise/x/tokenfilter"
+	"github.com/sunrise-zone/sunrise-app/x/tokenfilter"
 )
 
 func TestOnRecvPacket(t *testing.T) {

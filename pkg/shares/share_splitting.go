@@ -3,9 +3,9 @@ package shares
 import (
 	"errors"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
-	appns "sunrise/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 
 	coretypes "github.com/cometbft/cometbft/types"
 	"golang.org/x/exp/maps"

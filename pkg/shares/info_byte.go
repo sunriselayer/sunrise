@@ -3,7 +3,7 @@ package shares
 import (
 	"fmt"
 
-	"sunrise/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 )
 
 // InfoByte is a byte with the following structure: the first 7 bits are

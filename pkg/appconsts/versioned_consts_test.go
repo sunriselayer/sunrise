@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/appconsts/testground"
-	v1 "sunrise/pkg/appconsts/v1"
-	v2 "sunrise/pkg/appconsts/v2"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts/testground"
+	v1 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v1"
+	v2 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v2"
 )
 
 func TestSubtreeRootThreshold(t *testing.T) {

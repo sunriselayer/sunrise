@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/liquidstaking/keeper"
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 // BeginBlocker updates liquid validator set changes for the current block

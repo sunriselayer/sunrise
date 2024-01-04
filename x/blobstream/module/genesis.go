@@ -3,8 +3,8 @@ package blobstream
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/blobstream/keeper"
-	"sunrise/x/blobstream/types"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 )
 
 const (

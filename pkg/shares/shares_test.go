@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"sunrise/pkg/appconsts"
-	appns "sunrise/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

@@ -3,12 +3,12 @@ package ante_test
 import (
 	"testing"
 
-	"sunrise/app/encoding"
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/shares"
-	"sunrise/testutil"
-	ante "sunrise/x/blob/ante"
-	blob "sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/testutil"
+	ante "github.com/sunrise-zone/sunrise-app/x/blob/ante"
+	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"

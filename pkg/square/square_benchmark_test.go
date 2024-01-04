@@ -6,9 +6,9 @@ import (
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/square"
-	"sunrise/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/square"
+	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
 
 	"github.com/stretchr/testify/require"
 )

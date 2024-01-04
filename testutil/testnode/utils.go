@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/hex"
 
-	"sunrise/app/encoding"
-	"sunrise/pkg/appconsts"
-	"sunrise/testutil"
-	"sunrise/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
 
 	sdkmath "cosmossdk.io/math"
 	tmrand "github.com/cometbft/cometbft/libs/rand"

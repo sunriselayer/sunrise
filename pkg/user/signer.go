@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"sunrise/app/encoding"
-	"sunrise/pkg/blob"
-	blobtypes "sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/cmtservice"

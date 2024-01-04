@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
-	appns "sunrise/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/cometbft/cometbft/types"

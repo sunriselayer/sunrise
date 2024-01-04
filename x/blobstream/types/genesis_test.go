@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"sunrise/x/blobstream/types"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	"github.com/stretchr/testify/require"
 )

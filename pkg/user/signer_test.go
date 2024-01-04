@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"sunrise/app"
-	"sunrise/app/encoding"
-	"sunrise/pkg/user"
-	"sunrise/testutil"
-	"sunrise/testutil/blobfactory"
-	"sunrise/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/user"
+	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/rand"

@@ -1,8 +1,8 @@
 package blobfactory
 
 import (
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/user"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/user"
 
 	sdkmath "cosmossdk.io/math"
 

@@ -4,10 +4,10 @@ import (
 	"encoding/binary"
 	"time"
 
-	"sunrise/app/ante"
-	"sunrise/pkg/da"
-	"sunrise/pkg/shares"
-	"sunrise/pkg/square"
+	"github.com/sunrise-zone/sunrise-app/app/ante"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/square"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"

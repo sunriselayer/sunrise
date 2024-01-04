@@ -3,8 +3,8 @@ package blob
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/blob/keeper"
-	"sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/x/blob/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

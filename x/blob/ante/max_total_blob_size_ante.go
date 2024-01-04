@@ -1,9 +1,9 @@
 package ante
 
 import (
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/shares"
-	blobtypes "sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 func TestMsgUpdateParams(t *testing.T) {

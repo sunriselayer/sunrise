@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"sunrise/x/liquidstaking/keeper"
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 func SimulateMsgLiquidUnstake(

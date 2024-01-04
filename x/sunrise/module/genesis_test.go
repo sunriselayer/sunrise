@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	keepertest "sunrise/testutil/keeper"
-	"sunrise/testutil/nullify"
-	"sunrise/x/sunrise/module"
-	"sunrise/x/sunrise/types"
+	keepertest "github.com/sunrise-zone/sunrise-app/testutil/keeper"
+	"github.com/sunrise-zone/sunrise-app/testutil/nullify"
+	sunrise "github.com/sunrise-zone/sunrise-app/x/sunrise/module"
+	"github.com/sunrise-zone/sunrise-app/x/sunrise/types"
 )
 
 func TestGenesis(t *testing.T) {

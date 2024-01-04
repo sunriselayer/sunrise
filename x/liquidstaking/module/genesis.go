@@ -1,10 +1,12 @@
 package liquidstaking
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/liquidstaking/keeper"
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

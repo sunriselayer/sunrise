@@ -3,7 +3,7 @@ package liquidstaking
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "sunrise/api/sunrise/liquidstaking"
+	modulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/liquidstaking"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

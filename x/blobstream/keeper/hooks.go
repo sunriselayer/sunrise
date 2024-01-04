@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"sunrise/x/blobstream/types"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"sunrise/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 )
 
 // DelimLen calculates the length of the delimiter for a given unit size

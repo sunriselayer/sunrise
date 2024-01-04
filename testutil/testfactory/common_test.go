@@ -3,10 +3,10 @@ package testfactory_test
 import (
 	"testing"
 
-	"sunrise/app/encoding"
-	"sunrise/testutil"
-	"sunrise/testutil/testfactory"
-	"sunrise/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
 
 	"github.com/stretchr/testify/require"
 )

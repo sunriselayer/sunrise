@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
-	"sunrise/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
 
 	"github.com/celestiaorg/nmt/namespace"
 	"github.com/stretchr/testify/assert"

@@ -31,7 +31,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/app"
+	"github.com/sunrise-zone/sunrise-app/app"
 )
 
 const (

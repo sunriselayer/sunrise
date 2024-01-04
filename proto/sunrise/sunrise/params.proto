@@ -4,7 +4,7 @@ package sunrise.sunrise;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "sunrise/x/sunrise/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/sunrise/types";
 
 // Params defines the parameters for the module.
 message Params {

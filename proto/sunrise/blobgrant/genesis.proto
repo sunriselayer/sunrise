@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/blobgrant/params.proto";
 
-option go_package = "sunrise/x/blobgrant/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/blobgrant/types";
 
 // GenesisState defines the grant module's genesis state.
 message GenesisState {

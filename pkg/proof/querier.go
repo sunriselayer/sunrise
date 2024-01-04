@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/shares"
-	"sunrise/pkg/square"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/square"
 
-	appns "sunrise/pkg/namespace"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"

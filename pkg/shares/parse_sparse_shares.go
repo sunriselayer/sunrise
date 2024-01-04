@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"sunrise/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 )
 
 type sequence struct {

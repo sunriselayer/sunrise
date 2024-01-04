@@ -5,8 +5,8 @@ import (
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"sunrise/pkg/blob"
-	blobtypes "sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 // CheckTx implements the ABCI interface and executes a tx in CheckTx mode. This

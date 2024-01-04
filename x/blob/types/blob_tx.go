@@ -3,10 +3,10 @@ package types
 import (
 	"bytes"
 
-	"sunrise/pkg/blob"
-	"sunrise/pkg/inclusion"
-	appns "sunrise/pkg/namespace"
-	shares "sunrise/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	shares "github.com/sunrise-zone/sunrise-app/pkg/shares"
 
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/client"

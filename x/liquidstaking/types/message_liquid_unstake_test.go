@@ -5,7 +5,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
-	"sunrise/testutil/sample"
+	"github.com/sunrise-zone/sunrise-app/testutil/sample"
 )
 
 func TestMsgLiquidUnstake_ValidateBasic(t *testing.T) {

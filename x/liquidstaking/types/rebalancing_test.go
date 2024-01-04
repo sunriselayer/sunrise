@@ -7,7 +7,7 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 var (

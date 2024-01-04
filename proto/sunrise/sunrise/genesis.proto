@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/sunrise/params.proto";
 
-option go_package = "sunrise/x/sunrise/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/sunrise/types";
 
 // GenesisState defines the sunrise module's genesis state.
 message GenesisState {

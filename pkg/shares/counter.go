@@ -1,7 +1,7 @@
 package shares
 
 import (
-	"sunrise/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 )
 
 type CompactShareCounter struct {

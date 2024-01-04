@@ -3,10 +3,10 @@ package blobfactory_test
 import (
 	"testing"
 
-	"sunrise/app/encoding"
-	"sunrise/testutil"
-	"sunrise/testutil/blobfactory"
-	"sunrise/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/testutil/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/cometbft/cometbft/types"

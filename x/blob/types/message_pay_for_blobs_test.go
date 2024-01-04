@@ -5,7 +5,7 @@
 
 // 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 // 	"github.com/stretchr/testify/require"
-// 	"sunrise/testutil/sample"
+// 	"github.com/sunrise-zone/sunrise-app/testutil/sample"
 // )
 
 // func TestMsgPayForBlobs_ValidateBasic(t *testing.T) {
@@ -49,14 +49,14 @@ import (
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/blob"
-	"sunrise/pkg/inclusion"
-	appns "sunrise/pkg/namespace"
-	shares "sunrise/pkg/shares"
-	"sunrise/testutil/testfactory"
-	"sunrise/testutil/testnode"
-	"sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	shares "github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/testutil/testnode"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 func TestValidateBasic(t *testing.T) {

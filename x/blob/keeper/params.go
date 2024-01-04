@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/runtime"
 
-	"sunrise/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 // GetParams get all parameters as types.Params

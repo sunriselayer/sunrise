@@ -6,12 +6,12 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	chain "sunrise/app"
-	utils "sunrise/pkg/utils"
-	ammtypes "sunrise/x/amm/types"
-	liquidammtypes "sunrise/x/liquidamm/types"
-	"sunrise/x/liquidstaking/types"
-	lpfarmtypes "sunrise/x/lpfarm/types"
+	chain "github.com/sunrise-zone/sunrise-app/app"
+	utils "github.com/sunrise-zone/sunrise-app/pkg/utils"
+	ammtypes "github.com/sunrise-zone/sunrise-app/x/amm/types"
+	liquidammtypes "github.com/sunrise-zone/sunrise-app/x/liquidamm/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
+	lpfarmtypes "github.com/sunrise-zone/sunrise-app/x/lpfarm/types"
 )
 
 // test Liquid Staking gov power

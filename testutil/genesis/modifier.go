@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"time"
 
-	"sunrise/app"
-	blobtypes "sunrise/x/blob/types"
-	bstypes "sunrise/x/blobstream/types"
+	"github.com/sunrise-zone/sunrise-app/app"
+	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
+	bstypes "github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"

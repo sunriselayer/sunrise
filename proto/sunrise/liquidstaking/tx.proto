@@ -12,7 +12,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "google/protobuf/timestamp.proto";
 import "sunrise/liquidstaking/liquidstaking.proto";
 
-option go_package = "sunrise/x/liquidstaking/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/liquidstaking/types";
 
 // Msg defines the Msg service.
 service Msg {
@@ -27,7 +27,7 @@ service Msg {
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) =                               "authority";
-  option           (amino.name) = "sunrise/x/liquidstaking/MsgUpdateParams";
+  option           (amino.name) = "github.com/sunrise-zone/sunrise-app/x/liquidstaking/MsgUpdateParams";
   
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];

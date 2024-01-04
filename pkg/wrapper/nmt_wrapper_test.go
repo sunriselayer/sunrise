@@ -6,10 +6,10 @@ import (
 	"sort"
 	"testing"
 
-	"sunrise/pkg/appconsts"
-	appns "sunrise/pkg/namespace"
-	"sunrise/pkg/wrapper"
-	"sunrise/testutil/testfactory"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
+	"github.com/sunrise-zone/sunrise-app/testutil/testfactory"
 
 	"github.com/celestiaorg/nmt"
 	nmtnamespace "github.com/celestiaorg/nmt/namespace"

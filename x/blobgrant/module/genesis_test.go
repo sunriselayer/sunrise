@@ -3,10 +3,10 @@ package grant_test
 import (
 	"testing"
 
-	keepertest "sunrise/testutil/keeper"
-	"sunrise/testutil/nullify"
-	grant "sunrise/x/blobgrant/module"
-	"sunrise/x/blobgrant/types"
+	keepertest "github.com/sunrise-zone/sunrise-app/testutil/keeper"
+	"github.com/sunrise-zone/sunrise-app/testutil/nullify"
+	grant "github.com/sunrise-zone/sunrise-app/x/blobgrant/module"
+	"github.com/sunrise-zone/sunrise-app/x/blobgrant/types"
 
 	"github.com/stretchr/testify/require"
 )

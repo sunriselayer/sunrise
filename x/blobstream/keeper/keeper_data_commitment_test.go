@@ -3,10 +3,10 @@ package keeper_test
 import (
 	"testing"
 
-	blobstream "sunrise/x/blobstream/module"
+	blobstream "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
 
-	testutil "sunrise/testutil"
-	"sunrise/x/blobstream/types"
+	testutil "github.com/sunrise-zone/sunrise-app/testutil"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

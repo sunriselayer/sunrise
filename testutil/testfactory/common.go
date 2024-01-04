@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"sort"
 
-	"sunrise/pkg/appconsts"
-	"sunrise/pkg/namespace"
+	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/cosmos/cosmos-sdk/codec"

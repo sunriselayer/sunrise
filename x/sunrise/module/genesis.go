@@ -3,8 +3,8 @@ package sunrise
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/x/sunrise/keeper"
-	"sunrise/x/sunrise/types"
+	"github.com/sunrise-zone/sunrise-app/x/sunrise/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/sunrise/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

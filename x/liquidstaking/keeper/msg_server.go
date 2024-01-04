@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 type msgServer struct {

@@ -8,9 +8,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"sunrise/testutil/sample"
-	liquidstakingsimulation "sunrise/x/liquidstaking/simulation"
-	"sunrise/x/liquidstaking/types"
+	"github.com/sunrise-zone/sunrise-app/testutil/sample"
+	liquidstakingsimulation "github.com/sunrise-zone/sunrise-app/x/liquidstaking/simulation"
+	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 // avoid unused import issue

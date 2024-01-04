@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/blobstream/keeper"
-	"sunrise/x/blobstream/types"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
+	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 )
 
 func StreamKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
