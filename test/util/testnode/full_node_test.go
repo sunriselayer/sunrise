@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	"github.com/sunrise-zone/sunrise-app/test/util/genesis"
-	"github.com/sunrise-zone/sunrise-app/testutil"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -39,7 +39,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	t := s.T()
 	s.accounts = RandomAccounts(10)
 
-	ecfg := encoding.MakeConfig(testutil.ModuleBasics...)
+	ecfg := encoding.MakeConfig(app.ModuleBasics...)
 	blobGenState := blobtypes.DefaultGenesis()
 	blobGenState.Params.GovMaxSquareSize = uint64(appconsts.DefaultSquareSizeUpperBound)
 

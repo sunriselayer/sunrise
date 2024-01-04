@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/require"
-	testutil "github.com/sunrise-zone/sunrise-app/test"
+	testutil "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"

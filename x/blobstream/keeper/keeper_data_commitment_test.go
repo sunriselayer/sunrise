@@ -5,7 +5,7 @@ import (
 
 	blobstream "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
 
-	testutil "github.com/sunrise-zone/sunrise-app/test"
+	testutil "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 
 	"github.com/stretchr/testify/assert"

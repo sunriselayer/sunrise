@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	util "github.com/sunrise-zone/sunrise-app/test"
+	util "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 

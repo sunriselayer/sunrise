@@ -8,7 +8,6 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app/ante"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
-	"github.com/sunrise-zone/sunrise-app/testutil"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -19,7 +18,7 @@ func TestPanicHandlerDecorator(t *testing.T) {
 	decorator := ante.NewHandlePanicDecorator()
 	anteHandler := sdk.ChainAnteDecorators(decorator, mockPanicDecorator{})
 	ctx := sdk.Context{}
-	encCfg := encoding.MakeConfig(testutil.ModuleBasics)
+	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 	builder := encCfg.TxConfig.NewTxBuilder()
 	err := builder.SetMsgs(banktypes.NewMsgSend(testnode.RandomAddress().(sdk.AccAddress), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(app.BondDenom, 10))))
 	require.NoError(t, err)

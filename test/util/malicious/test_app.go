@@ -20,7 +20,7 @@ import (
 	"github.com/spf13/cast"
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	util "github.com/sunrise-zone/sunrise-app/test"
+	util "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 )
 

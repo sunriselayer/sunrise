@@ -50,7 +50,7 @@ import (
 
 var (
 	// ModuleBasics is a mock module basic manager for testing
-	ModuleBasics = sdkmodule.NewBasicManager()
+	ModuleBasics = app.ModuleBasics
 	// TestingStakeParams is a set of staking params for testing
 	TestingStakeParams = stakingtypes.Params{
 		UnbondingTime:     100,

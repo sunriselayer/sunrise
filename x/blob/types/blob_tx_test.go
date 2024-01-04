@@ -10,7 +10,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
 	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	util "github.com/sunrise-zone/sunrise-app/test"
+	util "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
