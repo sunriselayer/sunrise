@@ -1,6 +1,7 @@
 package ante_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
@@ -10,6 +11,7 @@ import (
 	ante "github.com/sunrise-zone/sunrise-app/x/blob/ante"
 	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -90,7 +92,7 @@ func TestPFBAnteHandler(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			anteHandler := ante.NewMinGasPFBDecorator(mockBlobKeeper{})
-			ctx := sdk.Context{}.WithGasMeter(sdk.NewGasMeter(tc.txGas)).WithIsCheckTx(true)
+			ctx := sdk.Context{}.WithGasMeter(storetypes.NewGasMeter(tc.txGas)).WithIsCheckTx(true)
 			ctx.GasMeter().ConsumeGas(tc.gasConsumed, "test")
 			txBuilder := txConfig.NewTxBuilder()
 			require.NoError(t, txBuilder.SetMsgs(tc.pfb))
@@ -107,10 +109,10 @@ func TestPFBAnteHandler(t *testing.T) {
 
 type mockBlobKeeper struct{}
 
-func (mockBlobKeeper) GasPerBlobByte(_ sdk.Context) uint32 {
+func (mockBlobKeeper) GasPerBlobByte(_ context.Context) uint32 {
 	return testGasPerBlobByte
 }
 
-func (mockBlobKeeper) GovMaxSquareSize(_ sdk.Context) uint64 {
+func (mockBlobKeeper) GovMaxSquareSize(_ context.Context) uint64 {
 	return testGovMaxSquareSize
 }

@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 
@@ -38,7 +38,7 @@ type Context struct {
 }
 
 func NewContext(goCtx context.Context, kr keyring.Keyring, tmCfg *tmconfig.Config, chainID string) Context {
-	ecfg := encoding.MakeConfig(util.ModuleBasics)
+	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 	cctx := client.Context{}.
 		WithKeyring(kr).
 		WithHomeDir(tmCfg.RootDir).

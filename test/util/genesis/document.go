@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/test/util"
 
 	sdkmath "cosmossdk.io/math"
 	coretypes "github.com/cometbft/cometbft/types"
@@ -58,7 +58,7 @@ func Document(
 		return nil, err
 	}
 
-	state := util.ModuleBasics.DefaultGenesis(ecfg.Codec)
+	state := app.ModuleBasics.DefaultGenesis(ecfg.Codec)
 	state[authtypes.ModuleName] = ecfg.Codec.MustMarshalJSON(authGenState)
 	state[banktypes.ModuleName] = ecfg.Codec.MustMarshalJSON(bankGenState)
 	state[genutiltypes.ModuleName] = ecfg.Codec.MustMarshalJSON(genutilGenState)

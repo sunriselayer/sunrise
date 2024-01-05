@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	"cosmossdk.io/simapp"
 	dbm "github.com/cometbft/cometbft-db"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -108,7 +109,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 		ValidatorsHash:     valSet.Hash(),
 		NextValidatorsHash: valSet.Hash(),
 		Version: tmversion.Consensus{
-			App: cparams.Version.AppVersion,
+			App: cparams.Version.App,
 		},
 	}})
 
@@ -123,8 +124,8 @@ func AddAccount(addr sdk.AccAddress, appState app.GenesisState, cdc codec.Codec)
 	var genAccount authtypes.GenesisAccount
 
 	coins := sdk.Coins{
-		sdk.NewCoin("token", sdk.NewInt(1000000)),
-		sdk.NewCoin(app.BondDenom, sdk.NewInt(1000000)),
+		sdk.NewCoin("token", sdkmath.NewInt(1000000)),
+		sdk.NewCoin(app.BondDenom, sdkmath.NewInt(1000000)),
 	}
 
 	balances := banktypes.Balance{Address: addr.String(), Coins: coins.Sort()}
@@ -199,7 +200,7 @@ func GenesisStateWithSingleValidator(testApp *app.App, genAccounts ...string) (a
 	balances := make([]banktypes.Balance, 0, len(genAccounts)+1)
 	balances = append(balances, banktypes.Balance{
 		Address: acc.GetAddress().String(),
-		Coins:   sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdk.NewInt(100000000000000))),
+		Coins:   sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(100000000000000))),
 	})
 
 	kr, fundedBankAccs, fundedAuthAccs := testnode.FundKeyringAccounts(genAccounts...)
@@ -243,15 +244,15 @@ func genesisStateWithValSet(
 			Jailed:            false,
 			Status:            stakingtypes.Bonded,
 			Tokens:            bondAmt,
-			DelegatorShares:   sdk.OneDec(),
+			DelegatorShares:   sdkmath.LegacyOneDec(),
 			Description:       stakingtypes.Description{},
 			UnbondingHeight:   int64(0),
 			UnbondingTime:     time.Unix(0, 0).UTC(),
-			Commission:        stakingtypes.NewCommission(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec()),
-			MinSelfDelegation: sdk.ZeroInt(),
+			Commission:        stakingtypes.NewCommission(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
+			MinSelfDelegation: sdkmath.ZeroInt(),
 		}
 		validators = append(validators, validator)
-		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress(), val.Address.Bytes(), sdk.OneDec()))
+		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].String(), val.Address.String(), sdkmath.LegacyOneDec()))
 
 	}
 	// set validators and delegations
@@ -278,7 +279,7 @@ func genesisStateWithValSet(
 	})
 
 	// update total supply
-	bankGenesis := banktypes.NewGenesisState(banktypes.DefaultGenesisState().Params, balances, totalSupply, []banktypes.Metadata{})
+	bankGenesis := banktypes.NewGenesisState(banktypes.DefaultGenesisState().Params, balances, totalSupply, []banktypes.Metadata{}, []banktypes.SendEnabled{})
 	genesisState[banktypes.ModuleName] = a.AppCodec().MustMarshalJSON(bankGenesis)
 
 	return genesisState

@@ -7,7 +7,6 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 
 	sdkmath "cosmossdk.io/math"

@@ -195,6 +195,7 @@ func (am *AccountManager) Submit(ctx context.Context, op Operation) error {
 
 	var address types.AccAddress
 	for _, msg := range op.Msgs {
+		msg = msg
 		if err := msg.ValidateBasic(); err != nil {
 			return fmt.Errorf("error validating message: %w", err)
 		}

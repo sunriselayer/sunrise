@@ -257,10 +257,10 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 	stakingKeeper.SetParams(ctx, TestingStakeParams)
 
 	distKeeper := distrkeeper.NewKeeper(marshaler, keyDistro, getSubspace(paramsKeeper, distrtypes.ModuleName), accountKeeper, bankKeeper, stakingKeeper, authtypes.FeeCollectorName)
-	distKeeper.SetParams(ctx, distrtypes.DefaultParams())
+	distKeeper.Params.Set(ctx, distrtypes.DefaultParams())
 
 	// set genesis items required for distribution
-	distKeeper.SetFeePool(ctx, distrtypes.InitialFeePool())
+	distKeeper.FeePool.Set(ctx, distrtypes.InitialFeePool())
 
 	// total supply to track this
 	totalSupply := sdk.NewCoins(sdk.NewInt64Coin("stake", 100000000))

@@ -6,7 +6,7 @@ import (
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	sdkmath "cosmossdk.io/math"
 	coretypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
@@ -74,7 +74,7 @@ func RandBlobTxsWithAccounts(
 }
 
 func DirectQueryAccount(app *app.App, addr sdk.AccAddress) authtypes.AccountI {
-	ctx := app.NewContext(true, tmproto.Header{})
+	ctx := app.NewContext(true)
 	return app.AccountKeeper.GetAccount(ctx, addr)
 }
 
@@ -208,7 +208,7 @@ func SendTxWithManualSequence(
 	signer, err := user.NewSigner(kr, nil, fromAddr, cfg, chainid, accountNum, sequence)
 	require.NoError(t, err)
 
-	msg := banktypes.NewMsgSend(fromAddr, toAddr, sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdk.NewIntFromUint64(amount))))
+	msg := banktypes.NewMsgSend(fromAddr, toAddr, sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewIntFromUint64(amount))))
 	stx, err := signer.CreateTx([]sdk.Msg{msg}, opts...)
 	require.NoError(t, err)
 	return stx

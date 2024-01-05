@@ -14,7 +14,7 @@ import (
 // used to create malicious block proposals that fraud proofs can be created
 // for. It will swap the order of two blobs in the square and then use the
 // modified nmt to create a commitment over the modified square.
-func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) abci.ResponsePrepareProposal {
+func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 	// create a context using a branch of the state and loaded using the
 	// proposal height and chain-id
 	sdkCtx := a.NewProposalContext(core.Header{ChainID: a.GetChainID(), Height: a.LastBlockHeight() + 1})
@@ -63,11 +63,11 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) abci.Re
 
 	// tendermint doesn't need to use any of the erasure data, as only the
 	// protobuf encoded version of the block data is gossiped.
-	return abci.ResponsePrepareProposal{
+	return &abci.ResponsePrepareProposal{
 		BlockData: &core.Data{
 			Txs:        txs,
 			SquareSize: uint64(dataSquare.Size()),
 			Hash:       dah.Hash(),
 		},
-	}
+	}, nil
 }

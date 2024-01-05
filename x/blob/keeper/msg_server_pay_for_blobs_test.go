@@ -5,10 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"cosmossdk.io/store"
-	storetypes "cosmossdk.io/store/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	proto "github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/assert"
@@ -16,19 +12,14 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	testutil "github.com/sunrise-zone/sunrise-app/test/util"
+	testkeeper "github.com/sunrise-zone/sunrise-app/testutil/keeper"
 	"github.com/sunrise-zone/sunrise-app/x/blob/keeper"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
-
-	tmdb "github.com/cometbft/cometbft-db"
-	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
 // TestPayForBlobs verifies the attributes on the emitted event.
 func TestPayForBlobs(t *testing.T) {
-	k, _, ctx := CreateKeeper(t)
+	k, ctx := testkeeper.BlobKeeper(t)
 	signer := "celestia15drmhzw5kwgenvemy30rqqqgq52axf5wwrruf7"
 	namespace := appns.MustNewV0(bytes.Repeat([]byte{1}, appns.NamespaceVersionZeroIDSize))
 	namespaces := [][]byte{namespace.Bytes()}
@@ -41,7 +32,8 @@ func TestPayForBlobs(t *testing.T) {
 
 	// emit an event by submitting a PayForBlob
 	msg := createMsgPayForBlob(t, signer, namespace, blobData)
-	_, err := k.PayForBlobs(ctx, msg)
+	server := keeper.NewMsgServerImpl(k)
+	_, err := server.PayForBlobs(ctx, msg)
 	require.NoError(t, err)
 
 	// verify that an event was emitted
@@ -70,38 +62,4 @@ func createMsgPayForBlob(t *testing.T, signer string, namespace appns.Namespace,
 	msg, err := types.NewMsgPayForBlobs(signer, blob)
 	require.NoError(t, err)
 	return msg
-}
-
-func CreateKeeper(t *testing.T) (*keeper.Keeper, store.CommitMultiStore, sdk.Context) {
-	storeKey := sdk.NewKVStoreKey(paramtypes.StoreKey)
-	tStoreKey := storetypes.NewTransientStoreKey(paramtypes.TStoreKey)
-
-	db := tmdb.NewMemDB()
-	stateStore := store.NewCommitMultiStore(db)
-	stateStore.MountStoreWithDB(storeKey, storetypes.StoreTypeIAVL, db)
-	stateStore.MountStoreWithDB(tStoreKey, storetypes.StoreTypeTransient, nil)
-	require.NoError(t, stateStore.LoadLatestVersion())
-
-	registry := codectypes.NewInterfaceRegistry()
-	cdc := codec.NewProtoCodec(registry)
-	ctx := sdk.NewContext(stateStore, tmproto.Header{
-		Version: tmversion.Consensus{
-			Block: 1,
-			App:   1,
-		},
-	}, false, nil)
-
-	paramsSubspace := paramtypes.NewSubspace(cdc,
-		testutil.MakeTestCodec(),
-		storeKey,
-		tStoreKey,
-		types.ModuleName,
-	)
-	k := keeper.NewKeeper(
-		cdc,
-		paramsSubspace,
-	)
-	k.SetParams(ctx, types.DefaultParams())
-
-	return k, stateStore, ctx
 }

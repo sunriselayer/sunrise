@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	"github.com/cometbft/cometbft/config"
 	"github.com/cometbft/cometbft/p2p"
 	"github.com/cometbft/cometbft/p2p/pex"
@@ -67,15 +68,15 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 				Moniker: node.Name,
 			},
 			Status:          staking.Bonded,
-			Tokens:          sdk.NewInt(node.SelfDelegation),
-			DelegatorShares: sdk.OneDec(),
+			Tokens:          sdkmath.NewInt(node.SelfDelegation),
+			DelegatorShares: sdkmath.LegacyOneDec(),
 			// 5% commission
-			Commission:        staking.NewCommission(sdk.NewDecWithPrec(5, 2), sdk.OneDec(), sdk.OneDec()),
-			MinSelfDelegation: sdk.ZeroInt(),
+			Commission:        staking.NewCommission(sdkmath.LegacyNewDecWithPrec(5, 2), sdkmath.LegacyOneDec(), sdkmath.LegacyOneDec()),
+			MinSelfDelegation: sdkmath.ZeroInt(),
 		})
 		totalBonded += node.SelfDelegation
 		consensusAddr := pk.Address()
-		delegations = append(delegations, staking.NewDelegation(sdk.AccAddress(addr), sdk.ValAddress(addr), sdk.OneDec()))
+		delegations = append(delegations, staking.NewDelegation(sdk.AccAddress(addr).String(), sdk.ValAddress(addr).String(), sdkmath.LegacyOneDec()))
 		valInfo = append(valInfo, slashing.SigningInfo{
 			Address:              sdk.ConsAddress(consensusAddr).String(),
 			ValidatorSigningInfo: slashing.NewValidatorSigningInfo(sdk.ConsAddress(consensusAddr), 1, 0, time.Unix(0, 0), false, 0),
@@ -95,14 +96,14 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 		balances = append(balances, bank.Balance{
 			Address: sdk.AccAddress(addr).String(),
 			Coins: sdk.NewCoins(
-				sdk.NewCoin(app.BondDenom, sdk.NewInt(account.InitialTokens)),
+				sdk.NewCoin(app.BondDenom, sdkmath.NewInt(account.InitialTokens)),
 			),
 		})
 	}
 	// add bonded amount to bonded pool module account
 	balances = append(balances, bank.Balance{
 		Address: auth.NewModuleAddress(staking.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(app.BondDenom, sdk.NewInt(totalBonded))},
+		Coins:   sdk.Coins{sdk.NewCoin(app.BondDenom, sdkmath.NewInt(totalBonded))},
 	})
 	bankGenesis.Balances = bank.SanitizeGenesisBalances(balances)
 	authGenesis := auth.NewGenesisState(auth.DefaultParams(), genAccs)

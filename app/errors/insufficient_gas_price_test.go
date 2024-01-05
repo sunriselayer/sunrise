@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"cosmossdk.io/errors"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
@@ -33,14 +33,14 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	testApp, kr := testutil.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), account)
 	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, app.BondDenom))
 	require.NoError(t, err)
-	ctx := testApp.NewContext(true, tmproto.Header{}).WithMinGasPrices(minGasPrice)
+	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)
 	addr := testfactory.GetAddress(kr, account)
 	enc := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 	acc := testutil.DirectQueryAccount(testApp, addr)
 	signer, err := user.NewSigner(kr, nil, addr, enc.TxConfig, testutil.ChainID, acc.GetAccountNumber(), acc.GetSequence())
 	require.NoError(t, err)
 
-	fee := sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdk.NewInt(feeAmount)))
+	fee := sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(feeAmount)))
 	b, err := blob.NewBlob(namespace.RandomNamespace(), []byte("hello world"), 0)
 	require.NoError(t, err)
 
