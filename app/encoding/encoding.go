@@ -9,7 +9,6 @@ import (
 )
 
 type ModuleRegister interface {
-	RegisterLegacyAminoCodec(*codec.LegacyAmino)
 	RegisterInterfaces(codectypes.InterfaceRegistry)
 }
 
@@ -35,7 +34,6 @@ func MakeConfig(regs ...ModuleRegister) Config {
 	// register specific modules
 	for _, reg := range regs {
 		reg.RegisterInterfaces(interfaceRegistry)
-		reg.RegisterLegacyAminoCodec(amino)
 	}
 
 	// create the final configuration

@@ -348,6 +348,7 @@ func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]b
 	}
 
 	bytesToSign, err := s.enc.SignModeHandler().GetSignBytes(
+		ctx,
 		signing.SignMode_SIGN_MODE_DIRECT,
 		signerData,
 		builder.GetTx(),
