@@ -8,6 +8,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/da"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
 
 	"github.com/celestiaorg/nmt"
@@ -192,7 +193,7 @@ func chunkSlice(slice [][]byte, chunkSize int) [][][]byte {
 func generateRandNamespacedRawData(count int) (result [][]byte) {
 	for i := 0; i < count; i++ {
 		rawData := tmrand.Bytes(appconsts.ShareSize)
-		namespace := appns.RandomBlobNamespace().Bytes()
+		namespace := apprand.RandomBlobNamespace().Bytes()
 		copy(rawData, namespace)
 		result = append(result, rawData)
 	}

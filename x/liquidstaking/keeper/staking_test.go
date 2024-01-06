@@ -9,7 +9,7 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
@@ -23,7 +23,7 @@ var (
 )
 
 func (suite *KeeperTestSuite) TestTransferDelegation_ValidatorStates() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(3)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(3)
 	valAccAddr, fromDelegator, toDelegator := addrs[0], addrs[1], addrs[2]
 	valAddr := sdk.ValAddress(valAccAddr)
 
@@ -118,7 +118,7 @@ func (suite *KeeperTestSuite) TestTransferDelegation_ValidatorStates() {
 }
 
 func (suite *KeeperTestSuite) TestTransferDelegation_Shares() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr, fromDelegator, toDelegator := addrs[0], addrs[1], addrs[2]
 	valAddr := sdk.ValAddress(valAccAddr)
 
@@ -257,8 +257,8 @@ func (suite *KeeperTestSuite) TestTransferDelegation_Shares() {
 
 			fromDelegationShares, toDelegationShares, err := tc.createDelegations()
 			suite.Require().NoError(err)
-			validator, found := suite.StakingKeeper.GetValidator(suite.Ctx, valAddr)
-			suite.Require().True(found)
+			validator, err := suite.StakingKeeper.GetValidator(suite.Ctx, valAddr)
+			suite.Require().NoError(err)
 
 			_, err = suite.Keeper.TransferDelegation(suite.Ctx, valAddr, fromDelegator, toDelegator, tc.shares)
 
@@ -271,8 +271,8 @@ func (suite *KeeperTestSuite) TestTransferDelegation_Shares() {
 			suite.DelegationSharesEqual(valAddr, fromDelegator, fromDelegationShares.Sub(tc.shares))
 			suite.DelegationSharesEqual(valAddr, toDelegator, toDelegationShares.Add(tc.expectReceived))
 
-			validatorAfter, found := suite.StakingKeeper.GetValidator(suite.Ctx, valAddr)
-			suite.Require().True(found)
+			validatorAfter, err := suite.StakingKeeper.GetValidator(suite.Ctx, valAddr)
+			suite.Require().NoError(err)
 			// total tokens should not change
 			suite.Equal(validator.GetTokens(), validatorAfter.GetTokens())
 			// but total shares can differ
@@ -285,7 +285,7 @@ func (suite *KeeperTestSuite) TestTransferDelegation_Shares() {
 }
 
 func (suite *KeeperTestSuite) TestTransferDelegation_RedelegationsForbidden() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(4)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(4)
 	val1AccAddr, val2AccAddr, fromDelegator, toDelegator := addrs[0], addrs[1], addrs[2], addrs[3]
 	val1Addr := sdk.ValAddress(val1AccAddr)
 	val2Addr := sdk.ValAddress(val2AccAddr)
@@ -313,7 +313,7 @@ func (suite *KeeperTestSuite) TestTransferDelegation_RedelegationsForbidden() {
 }
 
 func (suite *KeeperTestSuite) TestTransferDelegation_CompliesWithMinSelfDelegation() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(4)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(4)
 	valAccAddr, toDelegator := addrs[0], addrs[1]
 	valAddr := sdk.ValAddress(valAccAddr)
 
@@ -323,7 +323,7 @@ func (suite *KeeperTestSuite) TestTransferDelegation_CompliesWithMinSelfDelegati
 	minSelfDelegation := i(1e9)
 	delegation := suite.NewBondCoin(i(1e9))
 	msg, err := stakingtypes.NewMsgCreateValidator(
-		valAddr,
+		valAddr.String(),
 		ed25519.GenPrivKey().PubKey(),
 		delegation,
 		stakingtypes.Description{},
@@ -343,7 +343,7 @@ func (suite *KeeperTestSuite) TestTransferDelegation_CompliesWithMinSelfDelegati
 }
 
 func (suite *KeeperTestSuite) TestTransferDelegation_CanTransferVested() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(4)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(4)
 	valAccAddr, fromDelegator, toDelegator := addrs[0], addrs[1], addrs[2]
 	valAddr := sdk.ValAddress(valAccAddr)
 
@@ -362,7 +362,7 @@ func (suite *KeeperTestSuite) TestTransferDelegation_CanTransferVested() {
 }
 
 func (suite *KeeperTestSuite) TestTransferDelegation_CannotTransferVesting() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(4)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(4)
 	valAccAddr, fromDelegator, toDelegator := addrs[0], addrs[1], addrs[2]
 	valAddr := sdk.ValAddress(valAccAddr)
 

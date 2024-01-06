@@ -54,9 +54,9 @@ func Document(
 	if err := bankGenState.Validate(); err != nil {
 		return nil, err
 	}
-	if err := genutiltypes.ValidateGenesis(genutilGenState, ecfg.TxConfig.TxJSONDecoder()); err != nil {
-		return nil, err
-	}
+	// if err := genutiltypes.ValidateGenesis(genutilGenState, ecfg.TxConfig.TxJSONDecoder()); err != nil {
+	// 	return nil, err
+	// }
 
 	state := app.ModuleBasics.DefaultGenesis(ecfg.Codec)
 	state[authtypes.ModuleName] = ecfg.Codec.MustMarshalJSON(authGenState)

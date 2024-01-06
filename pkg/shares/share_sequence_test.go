@@ -7,6 +7,7 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 
 	"github.com/stretchr/testify/assert"
@@ -20,7 +21,7 @@ func TestShareSequenceRawData(t *testing.T) {
 		want          []byte
 		wantErr       bool
 	}
-	blobNamespace := appns.RandomBlobNamespace()
+	blobNamespace := apprand.RandomBlobNamespace()
 
 	testCases := []testCase{
 		{

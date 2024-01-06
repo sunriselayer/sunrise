@@ -11,7 +11,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	apperr "github.com/sunrise-zone/sunrise-app/app/errors"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
 	testutil "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
@@ -34,7 +34,7 @@ func TestNonceMismatchIntegration(t *testing.T) {
 	signer, err := user.NewSigner(kr, nil, addr, enc.TxConfig, testutil.ChainID, acc.GetAccountNumber(), 2)
 	require.NoError(t, err)
 
-	b, err := blob.NewBlob(namespace.RandomNamespace(), []byte("hello world"), 0)
+	b, err := blob.NewBlob(apprand.RandomNamespace(), []byte("hello world"), 0)
 	require.NoError(t, err)
 
 	msg, err := blob.NewMsgPayForBlobs(signer.Address().String(), b)

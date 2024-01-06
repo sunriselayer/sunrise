@@ -3,14 +3,14 @@ package keeper_test
 import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 )
 
 func (suite *KeeperTestSuite) TestCollectStakingRewards() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr1, delegator := addrs[0], addrs[1]
 	valAddr1 := sdk.ValAddress(valAccAddr1)
 

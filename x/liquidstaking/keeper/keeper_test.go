@@ -19,6 +19,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
 )
 
@@ -48,7 +49,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 // CreateAccount creates a new account (with a fixed address) from the provided balance.
 func (suite *KeeperTestSuite) CreateAccount(initialBalance sdk.Coins, index int) authtypes.AccountI {
-	_, addrs := app.GeneratePrivKeyAddressPairs(index + 1)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(index + 1)
 
 	return suite.CreateAccountWithAddress(addrs[index], initialBalance)
 }
@@ -80,7 +81,7 @@ func (suite *KeeperTestSuite) CreateVestingAccountWithAddress(addr sdk.AccAddres
 			Amount: vestingBalance,
 		},
 	}
-	vacc := vestingtypes.NewPeriodicVestingAccount(bacc, vestingBalance, suite.Ctx.BlockTime().Unix(), periods)
+	vacc, _ := vestingtypes.NewPeriodicVestingAccount(bacc, vestingBalance, suite.Ctx.BlockTime().Unix(), periods)
 	suite.App.GetAccountKeeper().SetAccount(suite.Ctx, vacc)
 	return vacc
 }
@@ -94,7 +95,7 @@ func (suite *KeeperTestSuite) AddCoinsToModule(module string, amount sdk.Coins) 
 // AccountBalanceEqual checks if an account has the specified coins.
 func (suite *KeeperTestSuite) AccountBalanceEqual(addr sdk.AccAddress, coins sdk.Coins) {
 	balance := suite.BankKeeper.GetAllBalances(suite.Ctx, addr)
-	suite.Truef(coins.IsEqual(balance), "expected account balance to equal coins %s, but got %s", coins, balance)
+	suite.Truef(coins.Equal(balance), "expected account balance to equal coins %s, but got %s", coins, balance)
 }
 
 func (suite *KeeperTestSuite) deliverMsgCreateValidator(ctx sdk.Context, address sdk.ValAddress, selfDelegation sdk.Coin) error {
@@ -205,12 +206,12 @@ func (suite *KeeperTestSuite) CreateUnbondingDelegation(delegator sdk.AccAddress
 // DelegationSharesEqual checks if a delegation has the specified shares.
 // It expects delegations with zero shares to not be stored in state.
 func (suite *KeeperTestSuite) DelegationSharesEqual(valAddr sdk.ValAddress, delegator sdk.AccAddress, shares sdkmath.LegacyDec) bool {
-	del, found := suite.StakingKeeper.GetDelegation(suite.Ctx, delegator, valAddr)
+	del, err := suite.StakingKeeper.GetDelegation(suite.Ctx, delegator, valAddr)
 
 	if shares.IsZero() {
-		return suite.Falsef(found, "expected delegator to not be found, got %s shares", del.Shares)
+		return suite.ErrorAsf(err, "expected delegator to not be found, got %s shares", del.Shares.String())
 	} else {
-		res := suite.True(found, "expected delegator to be found")
+		res := suite.Error(err, "expected delegator to be found")
 		return res && suite.Truef(shares.Equal(del.Shares), "expected %s delegator shares but got %s", shares, del.Shares)
 	}
 }

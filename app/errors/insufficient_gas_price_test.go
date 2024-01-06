@@ -14,7 +14,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	apperr "github.com/sunrise-zone/sunrise-app/app/errors"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
 	testutil "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
@@ -41,7 +41,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	require.NoError(t, err)
 
 	fee := sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(feeAmount)))
-	b, err := blob.NewBlob(namespace.RandomNamespace(), []byte("hello world"), 0)
+	b, err := blob.NewBlob(apprand.RandomNamespace(), []byte("hello world"), 0)
 	require.NoError(t, err)
 
 	msg, err := blob.NewMsgPayForBlobs(signer.Address().String(), b)

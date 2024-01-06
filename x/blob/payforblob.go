@@ -8,8 +8,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
 
-	"github.com/celestiaorg/celestia-app/x/blob/types"
-	coretypes "github.com/tendermint/tendermint/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	coretypes "github.com/cometbft/cometbft/types"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
 
 // SubmitPayForBlobs builds, signs, and synchronously submits a PayForBlob
@@ -19,7 +21,7 @@ func SubmitPayForBlob(
 	signer *types.KeyringSigner,
 	conn *grpc.ClientConn,
 	mode sdktx.BroadcastMode,
-	blobs []*types.Blob,
+	blobs []*blob.Blob,
 	opts ...types.TxBuilderOption,
 ) (*sdk.TxResponse, error) {
 	addr, err := signer.GetSignerInfo().GetAddress()
@@ -43,7 +45,7 @@ func SubmitPayForBlob(
 	if err != nil {
 		return nil, err
 	}
-	blobTx, err := coretypes.MarshalBlobTx(rawTx, blobs...)
+	blobTx, err := coretypes.MarshalBlobTx(rawTx, []*cmtproto.Blob(blobs)...)
 	if err != nil {
 		return nil, err
 	}

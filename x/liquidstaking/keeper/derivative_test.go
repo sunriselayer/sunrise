@@ -9,12 +9,12 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
 func (suite *KeeperTestSuite) TestBurnDerivative() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr, user := addrs[0], addrs[1]
 	valAddr := sdk.ValAddress(valAccAddr)
 
@@ -111,7 +111,7 @@ func (suite *KeeperTestSuite) TestBurnDerivative() {
 }
 
 func (suite *KeeperTestSuite) TestCalculateShares() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr, delegator := addrs[0], addrs[1]
 	valAddr := sdk.ValAddress(valAccAddr)
 
@@ -238,7 +238,7 @@ func (suite *KeeperTestSuite) TestCalculateShares() {
 }
 
 func (suite *KeeperTestSuite) TestMintDerivative() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr, delegator := addrs[0], addrs[1]
 	valAddr := sdk.ValAddress(valAccAddr)
 	moduleAccAddress := authtypes.NewModuleAddress(types.ModuleAccountName)
@@ -316,7 +316,7 @@ func (suite *KeeperTestSuite) TestMintDerivative() {
 }
 
 func (suite *KeeperTestSuite) TestIsDerivativeDenom() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr1, delegator, valAccAddr2 := addrs[0], addrs[1], addrs[2]
 	valAddr1 := sdk.ValAddress(valAccAddr1)
 
@@ -380,7 +380,7 @@ func (suite *KeeperTestSuite) TestIsDerivativeDenom() {
 }
 
 func (suite *KeeperTestSuite) TestGetStakedTokensForDerivatives() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr1, delegator, valAccAddr2, valAccAddr3 := addrs[0], addrs[1], addrs[2], addrs[3]
 	valAddr1 := sdk.ValAddress(valAccAddr1)
 
@@ -471,7 +471,7 @@ func (suite *KeeperTestSuite) TestGetStakedTokensForDerivatives() {
 }
 
 func (suite *KeeperTestSuite) TestGetDerivativeValue() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(5)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(5)
 	valAccAddr1, delegator, valAccAddr2 := addrs[0], addrs[1], addrs[2]
 	valAddr1 := sdk.ValAddress(valAccAddr1)
 
@@ -526,7 +526,7 @@ func (suite *KeeperTestSuite) TestGetDerivativeValue() {
 }
 
 func (suite *KeeperTestSuite) TestDerivativeFromTokens() {
-	_, addrs := app.GeneratePrivKeyAddressPairs(1)
+	_, addrs := testutil.GeneratePrivKeyAddressPairs(1)
 	valAccAddr := addrs[0]
 	valAddr := sdk.ValAddress(valAccAddr)
 	moduleAccAddress := authtypes.NewModuleAddress(types.ModuleAccountName)

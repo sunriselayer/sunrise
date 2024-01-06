@@ -347,6 +347,8 @@ func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]b
 		PubKey:        s.pk,
 	}
 
+	sdktypes.NewContext()
+
 	bytesToSign, err := s.enc.SignModeHandler().GetSignBytes(
 		ctx,
 		signing.SignMode_SIGN_MODE_DIRECT,
