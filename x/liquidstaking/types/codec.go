@@ -9,10 +9,10 @@ import (
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgLiquidStake{},
+		&MsgMintDerivative{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgLiquidUnstake{},
+		&MsgBurnDerivative{},
 	)
 	// this line is used by starport scaffolding # 3
 

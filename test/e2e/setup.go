@@ -61,7 +61,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 			return types.GenesisDoc{}, err
 		}
 
-		validators = append(validators, staking.Validator{
+		validators.Validators = append(validators.Validators, staking.Validator{
 			OperatorAddress: sdk.ValAddress(addr).String(),
 			ConsensusPubkey: pkAny,
 			Description: staking.Description{
@@ -83,7 +83,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 		})
 	}
 	stakingGenesis.Delegations = delegations
-	stakingGenesis.Validators = validators
+	stakingGenesis.Validators = validators.Validators
 	slashingGenesis.SigningInfos = valInfo
 
 	for idx, account := range accounts {
@@ -124,11 +124,14 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	}
 
 	// Validator set and app hash are set in InitChain
+	consensusParamsTmp := app.DefaultConsensusParams()
 	return types.GenesisDoc{
-		ChainID:         "testnet",
-		GenesisTime:     time.Now().UTC(),
-		ConsensusParams: app.DefaultConsensusParams(),
-		AppState:        appState,
+		ChainID:     "testnet",
+		GenesisTime: time.Now().UTC(),
+		ConsensusParams: &types.ConsensusParams{
+			Block: types.BlockParams(*consensusParamsTmp.Block),
+		},
+		AppState: appState,
 		// AppHash is not provided but computed after InitChain
 	}, nil
 }

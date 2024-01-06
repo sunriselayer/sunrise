@@ -20,9 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Query_Params_FullMethodName           = "/sunrise.liquidstaking.Query/Params"
-	Query_LiquidValidators_FullMethodName = "/sunrise.liquidstaking.Query/LiquidValidators"
-	Query_VotingPower_FullMethodName      = "/sunrise.liquidstaking.Query/VotingPower"
-	Query_States_FullMethodName           = "/sunrise.liquidstaking.Query/States"
+	Query_DelegatedBalance_FullMethodName = "/sunrise.liquidstaking.Query/DelegatedBalance"
+	Query_TotalSupply_FullMethodName      = "/sunrise.liquidstaking.Query/TotalSupply"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,12 +30,11 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// LiquidValidators returns liquid validators with states of the liquidstaking module.
-	LiquidValidators(ctx context.Context, in *QueryLiquidValidatorsRequest, opts ...grpc.CallOption) (*QueryLiquidValidatorsResponse, error)
-	// VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
-	VotingPower(ctx context.Context, in *QueryVotingPowerRequest, opts ...grpc.CallOption) (*QueryVotingPowerResponse, error)
-	// States returns states of the liquidstaking module.
-	States(ctx context.Context, in *QueryStatesRequest, opts ...grpc.CallOption) (*QueryStatesResponse, error)
+	// DelegatedBalance returns an account's vesting and vested coins currently delegated to validators.
+	// It ignores coins in unbonding delegations.
+	DelegatedBalance(ctx context.Context, in *QueryDelegatedBalanceRequest, opts ...grpc.CallOption) (*QueryDelegatedBalanceResponse, error)
+	// TotalSupply returns the total sum of all coins currently locked into the liquid module.
+	TotalSupply(ctx context.Context, in *QueryTotalSupplyRequest, opts ...grpc.CallOption) (*QueryTotalSupplyResponse, error)
 }
 
 type queryClient struct {
@@ -56,27 +54,18 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) LiquidValidators(ctx context.Context, in *QueryLiquidValidatorsRequest, opts ...grpc.CallOption) (*QueryLiquidValidatorsResponse, error) {
-	out := new(QueryLiquidValidatorsResponse)
-	err := c.cc.Invoke(ctx, Query_LiquidValidators_FullMethodName, in, out, opts...)
+func (c *queryClient) DelegatedBalance(ctx context.Context, in *QueryDelegatedBalanceRequest, opts ...grpc.CallOption) (*QueryDelegatedBalanceResponse, error) {
+	out := new(QueryDelegatedBalanceResponse)
+	err := c.cc.Invoke(ctx, Query_DelegatedBalance_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) VotingPower(ctx context.Context, in *QueryVotingPowerRequest, opts ...grpc.CallOption) (*QueryVotingPowerResponse, error) {
-	out := new(QueryVotingPowerResponse)
-	err := c.cc.Invoke(ctx, Query_VotingPower_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) States(ctx context.Context, in *QueryStatesRequest, opts ...grpc.CallOption) (*QueryStatesResponse, error) {
-	out := new(QueryStatesResponse)
-	err := c.cc.Invoke(ctx, Query_States_FullMethodName, in, out, opts...)
+func (c *queryClient) TotalSupply(ctx context.Context, in *QueryTotalSupplyRequest, opts ...grpc.CallOption) (*QueryTotalSupplyResponse, error) {
+	out := new(QueryTotalSupplyResponse)
+	err := c.cc.Invoke(ctx, Query_TotalSupply_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,12 +78,11 @@ func (c *queryClient) States(ctx context.Context, in *QueryStatesRequest, opts .
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// LiquidValidators returns liquid validators with states of the liquidstaking module.
-	LiquidValidators(context.Context, *QueryLiquidValidatorsRequest) (*QueryLiquidValidatorsResponse, error)
-	// VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
-	VotingPower(context.Context, *QueryVotingPowerRequest) (*QueryVotingPowerResponse, error)
-	// States returns states of the liquidstaking module.
-	States(context.Context, *QueryStatesRequest) (*QueryStatesResponse, error)
+	// DelegatedBalance returns an account's vesting and vested coins currently delegated to validators.
+	// It ignores coins in unbonding delegations.
+	DelegatedBalance(context.Context, *QueryDelegatedBalanceRequest) (*QueryDelegatedBalanceResponse, error)
+	// TotalSupply returns the total sum of all coins currently locked into the liquid module.
+	TotalSupply(context.Context, *QueryTotalSupplyRequest) (*QueryTotalSupplyResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -105,14 +93,11 @@ type UnimplementedQueryServer struct {
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (UnimplementedQueryServer) LiquidValidators(context.Context, *QueryLiquidValidatorsRequest) (*QueryLiquidValidatorsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidValidators not implemented")
+func (UnimplementedQueryServer) DelegatedBalance(context.Context, *QueryDelegatedBalanceRequest) (*QueryDelegatedBalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatedBalance not implemented")
 }
-func (UnimplementedQueryServer) VotingPower(context.Context, *QueryVotingPowerRequest) (*QueryVotingPowerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VotingPower not implemented")
-}
-func (UnimplementedQueryServer) States(context.Context, *QueryStatesRequest) (*QueryStatesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method States not implemented")
+func (UnimplementedQueryServer) TotalSupply(context.Context, *QueryTotalSupplyRequest) (*QueryTotalSupplyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TotalSupply not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -145,56 +130,38 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_LiquidValidators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryLiquidValidatorsRequest)
+func _Query_DelegatedBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatedBalanceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).LiquidValidators(ctx, in)
+		return srv.(QueryServer).DelegatedBalance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_LiquidValidators_FullMethodName,
+		FullMethod: Query_DelegatedBalance_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).LiquidValidators(ctx, req.(*QueryLiquidValidatorsRequest))
+		return srv.(QueryServer).DelegatedBalance(ctx, req.(*QueryDelegatedBalanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_VotingPower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryVotingPowerRequest)
+func _Query_TotalSupply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTotalSupplyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).VotingPower(ctx, in)
+		return srv.(QueryServer).TotalSupply(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_VotingPower_FullMethodName,
+		FullMethod: Query_TotalSupply_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).VotingPower(ctx, req.(*QueryVotingPowerRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_States_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryStatesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).States(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_States_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).States(ctx, req.(*QueryStatesRequest))
+		return srv.(QueryServer).TotalSupply(ctx, req.(*QueryTotalSupplyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -211,16 +178,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "LiquidValidators",
-			Handler:    _Query_LiquidValidators_Handler,
+			MethodName: "DelegatedBalance",
+			Handler:    _Query_DelegatedBalance_Handler,
 		},
 		{
-			MethodName: "VotingPower",
-			Handler:    _Query_VotingPower_Handler,
-		},
-		{
-			MethodName: "States",
-			Handler:    _Query_States_Handler,
+			MethodName: "TotalSupply",
+			Handler:    _Query_TotalSupply_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

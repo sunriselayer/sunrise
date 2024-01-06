@@ -15,72 +15,13 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_Params_2_list)(nil)
-
-type _Params_2_list struct {
-	list *[]*WhitelistedValidator
-}
-
-func (x *_Params_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Params_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_Params_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*WhitelistedValidator)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Params_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*WhitelistedValidator)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Params_2_list) AppendMutable() protoreflect.Value {
-	v := new(WhitelistedValidator)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_Params_2_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Params_2_list) NewElement() protoreflect.Value {
-	v := new(WhitelistedValidator)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_Params_2_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
-	md_Params                           protoreflect.MessageDescriptor
-	fd_Params_liquid_bond_denom         protoreflect.FieldDescriptor
-	fd_Params_whitelisted_validators    protoreflect.FieldDescriptor
-	fd_Params_unstake_fee_rate          protoreflect.FieldDescriptor
-	fd_Params_min_liquid_staking_amount protoreflect.FieldDescriptor
+	md_Params protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_sunrise_liquidstaking_params_proto_init()
 	md_Params = File_sunrise_liquidstaking_params_proto.Messages().ByName("Params")
-	fd_Params_liquid_bond_denom = md_Params.Fields().ByName("liquid_bond_denom")
-	fd_Params_whitelisted_validators = md_Params.Fields().ByName("whitelisted_validators")
-	fd_Params_unstake_fee_rate = md_Params.Fields().ByName("unstake_fee_rate")
-	fd_Params_min_liquid_staking_amount = md_Params.Fields().ByName("min_liquid_staking_amount")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -148,30 +89,6 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.LiquidBondDenom != "" {
-		value := protoreflect.ValueOfString(x.LiquidBondDenom)
-		if !f(fd_Params_liquid_bond_denom, value) {
-			return
-		}
-	}
-	if len(x.WhitelistedValidators) != 0 {
-		value := protoreflect.ValueOfList(&_Params_2_list{list: &x.WhitelistedValidators})
-		if !f(fd_Params_whitelisted_validators, value) {
-			return
-		}
-	}
-	if x.UnstakeFeeRate != "" {
-		value := protoreflect.ValueOfString(x.UnstakeFeeRate)
-		if !f(fd_Params_unstake_fee_rate, value) {
-			return
-		}
-	}
-	if x.MinLiquidStakingAmount != "" {
-		value := protoreflect.ValueOfString(x.MinLiquidStakingAmount)
-		if !f(fd_Params_min_liquid_staking_amount, value) {
-			return
-		}
-	}
 }
 
 // Has reports whether a field is populated.
@@ -187,14 +104,6 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquidstaking.Params.liquid_bond_denom":
-		return x.LiquidBondDenom != ""
-	case "sunrise.liquidstaking.Params.whitelisted_validators":
-		return len(x.WhitelistedValidators) != 0
-	case "sunrise.liquidstaking.Params.unstake_fee_rate":
-		return x.UnstakeFeeRate != ""
-	case "sunrise.liquidstaking.Params.min_liquid_staking_amount":
-		return x.MinLiquidStakingAmount != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidstaking.Params"))
@@ -211,14 +120,6 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquidstaking.Params.liquid_bond_denom":
-		x.LiquidBondDenom = ""
-	case "sunrise.liquidstaking.Params.whitelisted_validators":
-		x.WhitelistedValidators = nil
-	case "sunrise.liquidstaking.Params.unstake_fee_rate":
-		x.UnstakeFeeRate = ""
-	case "sunrise.liquidstaking.Params.min_liquid_staking_amount":
-		x.MinLiquidStakingAmount = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidstaking.Params"))
@@ -235,21 +136,6 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquidstaking.Params.liquid_bond_denom":
-		value := x.LiquidBondDenom
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquidstaking.Params.whitelisted_validators":
-		if len(x.WhitelistedValidators) == 0 {
-			return protoreflect.ValueOfList(&_Params_2_list{})
-		}
-		listValue := &_Params_2_list{list: &x.WhitelistedValidators}
-		return protoreflect.ValueOfList(listValue)
-	case "sunrise.liquidstaking.Params.unstake_fee_rate":
-		value := x.UnstakeFeeRate
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquidstaking.Params.min_liquid_staking_amount":
-		value := x.MinLiquidStakingAmount
-		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidstaking.Params"))
@@ -270,16 +156,6 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquidstaking.Params.liquid_bond_denom":
-		x.LiquidBondDenom = value.Interface().(string)
-	case "sunrise.liquidstaking.Params.whitelisted_validators":
-		lv := value.List()
-		clv := lv.(*_Params_2_list)
-		x.WhitelistedValidators = *clv.list
-	case "sunrise.liquidstaking.Params.unstake_fee_rate":
-		x.UnstakeFeeRate = value.Interface().(string)
-	case "sunrise.liquidstaking.Params.min_liquid_staking_amount":
-		x.MinLiquidStakingAmount = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidstaking.Params"))
@@ -300,18 +176,6 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquidstaking.Params.whitelisted_validators":
-		if x.WhitelistedValidators == nil {
-			x.WhitelistedValidators = []*WhitelistedValidator{}
-		}
-		value := &_Params_2_list{list: &x.WhitelistedValidators}
-		return protoreflect.ValueOfList(value)
-	case "sunrise.liquidstaking.Params.liquid_bond_denom":
-		panic(fmt.Errorf("field liquid_bond_denom of message sunrise.liquidstaking.Params is not mutable"))
-	case "sunrise.liquidstaking.Params.unstake_fee_rate":
-		panic(fmt.Errorf("field unstake_fee_rate of message sunrise.liquidstaking.Params is not mutable"))
-	case "sunrise.liquidstaking.Params.min_liquid_staking_amount":
-		panic(fmt.Errorf("field min_liquid_staking_amount of message sunrise.liquidstaking.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidstaking.Params"))
@@ -325,15 +189,6 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquidstaking.Params.liquid_bond_denom":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquidstaking.Params.whitelisted_validators":
-		list := []*WhitelistedValidator{}
-		return protoreflect.ValueOfList(&_Params_2_list{list: &list})
-	case "sunrise.liquidstaking.Params.unstake_fee_rate":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquidstaking.Params.min_liquid_staking_amount":
-		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidstaking.Params"))
@@ -403,24 +258,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.LiquidBondDenom)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if len(x.WhitelistedValidators) > 0 {
-			for _, e := range x.WhitelistedValidators {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		l = len(x.UnstakeFeeRate)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.MinLiquidStakingAmount)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -449,43 +286,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.MinLiquidStakingAmount) > 0 {
-			i -= len(x.MinLiquidStakingAmount)
-			copy(dAtA[i:], x.MinLiquidStakingAmount)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MinLiquidStakingAmount)))
-			i--
-			dAtA[i] = 0x2a
-		}
-		if len(x.UnstakeFeeRate) > 0 {
-			i -= len(x.UnstakeFeeRate)
-			copy(dAtA[i:], x.UnstakeFeeRate)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.UnstakeFeeRate)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if len(x.WhitelistedValidators) > 0 {
-			for iNdEx := len(x.WhitelistedValidators) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.WhitelistedValidators[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x12
-			}
-		}
-		if len(x.LiquidBondDenom) > 0 {
-			i -= len(x.LiquidBondDenom)
-			copy(dAtA[i:], x.LiquidBondDenom)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidBondDenom)))
-			i--
-			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -536,136 +336,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidBondDenom", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.LiquidBondDenom = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WhitelistedValidators", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.WhitelistedValidators = append(x.WhitelistedValidators, &WhitelistedValidator{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.WhitelistedValidators[len(x.WhitelistedValidators)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnstakeFeeRate", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.UnstakeFeeRate = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MinLiquidStakingAmount", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.MinLiquidStakingAmount = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -719,18 +389,6 @@ type Params struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	// LiquidBondDenom specifies the denomination of the token receiving after LiquidStaking, The value is calculated
-	// through NetAmount.
-	LiquidBondDenom string `protobuf:"bytes,1,opt,name=liquid_bond_denom,json=liquidBondDenom,proto3" json:"liquid_bond_denom,omitempty"`
-	// WhitelistedValidators specifies the validators elected to become Active Liquid Validators.
-	WhitelistedValidators []*WhitelistedValidator `protobuf:"bytes,2,rep,name=whitelisted_validators,json=whitelistedValidators,proto3" json:"whitelisted_validators,omitempty"`
-	// UnstakeFeeRate specifies the fee rate when liquid unstake is requested, unbonded by subtracting it from
-	// unbondingAmount
-	UnstakeFeeRate string `protobuf:"bytes,3,opt,name=unstake_fee_rate,json=unstakeFeeRate,proto3" json:"unstake_fee_rate,omitempty"`
-	// MinLiquidStakingAmount specifies the minimum number of coins to be staked to the active liquid validators on liquid
-	// staking to minimize decimal loss and consider gas efficiency.
-	MinLiquidStakingAmount string `protobuf:"bytes,5,opt,name=min_liquid_staking_amount,json=minLiquidStakingAmount,proto3" json:"min_liquid_staking_amount,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -753,34 +411,6 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquidstaking_params_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Params) GetLiquidBondDenom() string {
-	if x != nil {
-		return x.LiquidBondDenom
-	}
-	return ""
-}
-
-func (x *Params) GetWhitelistedValidators() []*WhitelistedValidator {
-	if x != nil {
-		return x.WhitelistedValidators
-	}
-	return nil
-}
-
-func (x *Params) GetUnstakeFeeRate() string {
-	if x != nil {
-		return x.UnstakeFeeRate
-	}
-	return ""
-}
-
-func (x *Params) GetMinLiquidStakingAmount() string {
-	if x != nil {
-		return x.MinLiquidStakingAmount
-	}
-	return ""
-}
-
 var File_sunrise_liquidstaking_params_proto protoreflect.FileDescriptor
 
 var file_sunrise_liquidstaking_params_proto_rawDesc = []byte{
@@ -791,56 +421,24 @@ var file_sunrise_liquidstaking_params_proto_rawDesc = []byte{
 	0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14,
 	0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
-	0x29, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x8c, 0x04, 0x0a, 0x06, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x48, 0x0a, 0x11, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x5f,
-	0x62, 0x6f, 0x6e, 0x64, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x42, 0x1c, 0xf2, 0xde, 0x1f, 0x18, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x5f, 0x62, 0x6f, 0x6e, 0x64, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52, 0x0f,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x42, 0x6f, 0x6e, 0x64, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x12,
-	0x89, 0x01, 0x0a, 0x16, 0x77, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x5f,
-	0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x2b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69,
-	0x73, 0x74, 0x65, 0x64, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x42, 0x25, 0xc8,
-	0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x1d, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x77, 0x68, 0x69,
-	0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x22, 0x52, 0x15, 0x77, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65,
-	0x64, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x76, 0x0a, 0x10, 0x75,
-	0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x4c, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68,
-	0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xf2, 0xde, 0x1f, 0x17, 0x79, 0x61,
-	0x6d, 0x6c, 0x3a, 0x22, 0x75, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x5f,
-	0x72, 0x61, 0x74, 0x65, 0x22, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
-	0x44, 0x65, 0x63, 0x52, 0x0e, 0x75, 0x6e, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x46, 0x65, 0x65, 0x52,
-	0x61, 0x74, 0x65, 0x12, 0x8a, 0x01, 0x0a, 0x19, 0x6d, 0x69, 0x6e, 0x5f, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x5f, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
-	0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x4f, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f,
-	0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61,
-	0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xf2, 0xde, 0x1f, 0x20, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22,
-	0x6d, 0x69, 0x6e, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x5f, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x16, 0x6d, 0x69, 0x6e, 0x4c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x53, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x3a, 0x27, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x1e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2f, 0x78, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0xc5, 0x01, 0x0a, 0x19, 0x63, 0x6f,
-	0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50,
-	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
-	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0xa2, 0x02,
-	0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x15, 0x53,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x21, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
+	0x31, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x27, 0xe8, 0xa0, 0x1f, 0x01, 0x8a,
+	0xe7, 0xb0, 0x2a, 0x1e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x42, 0xc5, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0xe2, 0x02, 0x21,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71,
+	0x75, 0x69, 0x64, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -857,16 +455,14 @@ func file_sunrise_liquidstaking_params_proto_rawDescGZIP() []byte {
 
 var file_sunrise_liquidstaking_params_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_liquidstaking_params_proto_goTypes = []interface{}{
-	(*Params)(nil),               // 0: sunrise.liquidstaking.Params
-	(*WhitelistedValidator)(nil), // 1: sunrise.liquidstaking.WhitelistedValidator
+	(*Params)(nil), // 0: sunrise.liquidstaking.Params
 }
 var file_sunrise_liquidstaking_params_proto_depIdxs = []int32{
-	1, // 0: sunrise.liquidstaking.Params.whitelisted_validators:type_name -> sunrise.liquidstaking.WhitelistedValidator
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquidstaking_params_proto_init() }
@@ -874,7 +470,6 @@ func file_sunrise_liquidstaking_params_proto_init() {
 	if File_sunrise_liquidstaking_params_proto != nil {
 		return
 	}
-	file_sunrise_liquidstaking_liquidstaking_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_liquidstaking_params_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Params); i {

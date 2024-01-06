@@ -1,42 +1,56 @@
 package types_test
 
 import (
+	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
-	// farmingtypes "github.com/sunrise-zone/sunrise-app/x/farming/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
+	"github.com/stretchr/testify/require"
+	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
-type keysTestSuite struct {
-	suite.Suite
-}
+func TestParseLiquidStakingTokenDenom(t *testing.T) {
+	config := sdk.GetConfig()
+	app.SetBech32AddressPrefixes(config)
 
-func TestKeysTestSuite(t *testing.T) {
-	suite.Run(t, new(keysTestSuite))
-}
-
-func (s *keysTestSuite) TestGetLiquidValidatorKey() {
-	// 20 bytes length addr
-	valOper1 := farmingtypes.DeriveAddress(farmingtypes.AddressType20Bytes, types.ModuleName, "valoper-tc1")
-	valAddr1 := sdk.ValAddress(valOper1.Bytes())
-	lv1 := types.LiquidValidator{
-		OperatorAddress: valAddr1.String(),
+	tests := []struct {
+		name        string
+		giveDenom   string
+		wantAddress sdk.ValAddress
+		wantErr     error
+	}{
+		{
+			name:        "valid denom",
+			giveDenom:   "bkava-kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a",
+			wantAddress: mustValAddressFromBech32("kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a"),
+			wantErr:     nil,
+		},
+		{
+			name:        "invalid prefix",
+			giveDenom:   "ukava-kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a",
+			wantAddress: mustValAddressFromBech32("kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a"),
+			wantErr:     fmt.Errorf("invalid denom prefix, expected %s, got %s", types.DefaultDerivativeDenom, "ukava"),
+		},
+		{
+			name:        "invalid validator address",
+			giveDenom:   "bkava-kavavaloper1ze7y9qw",
+			wantAddress: sdk.ValAddress{},
+			wantErr:     fmt.Errorf("invalid denom validator address: decoding bech32 failed: invalid checksum"),
+		},
 	}
 
-	// 32 bytes length addr
-	valOper2 := farmingtypes.DeriveAddress(farmingtypes.AddressType32Bytes, types.ModuleName, "valoper-tc2")
-	valAddr2 := sdk.ValAddress(valOper2.Bytes())
-	lv2 := types.LiquidValidator{
-		OperatorAddress: valAddr2.String(),
-	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			addr, err := types.ParseLiquidStakingTokenDenom(tt.giveDenom)
 
-	s.Require().Equal([]byte{0xc0, 0x14, 0xa5, 0x9a, 0x97, 0x60, 0x57, 0xe, 0xf1, 0x80, 0x8f, 0x36, 0xbf, 0xc4, 0x36, 0x5a, 0xe2, 0x71, 0x54, 0x5a, 0xbf, 0xf1}, types.GetLiquidValidatorKey(lv1.GetOperator()))
-	s.Require().Equal([]byte{0xc0, 0x14, 0xa5, 0x9a, 0x97, 0x60, 0x57, 0xe, 0xf1, 0x80, 0x8f, 0x36, 0xbf, 0xc4, 0x36, 0x5a, 0xe2, 0x71, 0x54, 0x5a, 0xbf, 0xf1}, types.GetLiquidValidatorKey(valAddr1))
-	s.Require().Equal([]byte{0xc0, 0x20, 0x37, 0xa2, 0x82, 0x32, 0xfe, 0xaf, 0x6f, 0x5, 0xd, 0x65, 0xc0, 0x6, 0x19, 0x5a, 0xd6, 0xf5, 0x67, 0x81, 0x39, 0x21, 0x9c, 0x2c, 0xc8, 0x8f, 0x2, 0xdc, 0x12, 0xfd, 0xeb, 0xb2, 0xa3, 0x6d}, types.GetLiquidValidatorKey(lv2.GetOperator()))
-	s.Require().Equal([]byte{0xc0, 0x20, 0x37, 0xa2, 0x82, 0x32, 0xfe, 0xaf, 0x6f, 0x5, 0xd, 0x65, 0xc0, 0x6, 0x19, 0x5a, 0xd6, 0xf5, 0x67, 0x81, 0x39, 0x21, 0x9c, 0x2c, 0xc8, 0x8f, 0x2, 0xdc, 0x12, 0xfd, 0xeb, 0xb2, 0xa3, 0x6d}, types.GetLiquidValidatorKey(valAddr2))
+			if tt.wantErr != nil {
+				require.Error(t, err)
+				require.Contains(t, err.Error(), tt.wantErr.Error())
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, tt.wantAddress, addr)
+			}
+		})
+	}
 }

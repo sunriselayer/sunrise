@@ -6,6 +6,9 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
@@ -114,22 +117,24 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
-// QueryLiquidValidatorsRequest is the request type for the Query/LiquidValidators RPC method.
-type QueryLiquidValidatorsRequest struct {
+// QueryDelegatedBalanceRequest defines the request type for Query/DelegatedBalance method.
+type QueryDelegatedBalanceRequest struct {
+	// delegator is the address of the account to query
+	Delegator string `protobuf:"bytes,1,opt,name=delegator,proto3" json:"delegator,omitempty"`
 }
 
-func (m *QueryLiquidValidatorsRequest) Reset()         { *m = QueryLiquidValidatorsRequest{} }
-func (m *QueryLiquidValidatorsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryLiquidValidatorsRequest) ProtoMessage()    {}
-func (*QueryLiquidValidatorsRequest) Descriptor() ([]byte, []int) {
+func (m *QueryDelegatedBalanceRequest) Reset()         { *m = QueryDelegatedBalanceRequest{} }
+func (m *QueryDelegatedBalanceRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryDelegatedBalanceRequest) ProtoMessage()    {}
+func (*QueryDelegatedBalanceRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a3513880e9a1b7cc, []int{2}
 }
-func (m *QueryLiquidValidatorsRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryDelegatedBalanceRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryLiquidValidatorsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryDelegatedBalanceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryLiquidValidatorsRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryDelegatedBalanceRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -139,207 +144,45 @@ func (m *QueryLiquidValidatorsRequest) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *QueryLiquidValidatorsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryLiquidValidatorsRequest.Merge(m, src)
+func (m *QueryDelegatedBalanceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDelegatedBalanceRequest.Merge(m, src)
 }
-func (m *QueryLiquidValidatorsRequest) XXX_Size() int {
+func (m *QueryDelegatedBalanceRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryLiquidValidatorsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryLiquidValidatorsRequest.DiscardUnknown(m)
+func (m *QueryDelegatedBalanceRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDelegatedBalanceRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryLiquidValidatorsRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryDelegatedBalanceRequest proto.InternalMessageInfo
 
-// QueryLiquidValidatorsResponse is the response type for the Query/LiquidValidators RPC method.
-type QueryLiquidValidatorsResponse struct {
-	LiquidValidators []LiquidValidatorState `protobuf:"bytes,1,rep,name=liquid_validators,json=liquidValidators,proto3" json:"liquid_validators"`
-}
-
-func (m *QueryLiquidValidatorsResponse) Reset()         { *m = QueryLiquidValidatorsResponse{} }
-func (m *QueryLiquidValidatorsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryLiquidValidatorsResponse) ProtoMessage()    {}
-func (*QueryLiquidValidatorsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a3513880e9a1b7cc, []int{3}
-}
-func (m *QueryLiquidValidatorsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryLiquidValidatorsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryLiquidValidatorsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryLiquidValidatorsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryLiquidValidatorsResponse.Merge(m, src)
-}
-func (m *QueryLiquidValidatorsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryLiquidValidatorsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryLiquidValidatorsResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryLiquidValidatorsResponse proto.InternalMessageInfo
-
-func (m *QueryLiquidValidatorsResponse) GetLiquidValidators() []LiquidValidatorState {
+func (m *QueryDelegatedBalanceRequest) GetDelegator() string {
 	if m != nil {
-		return m.LiquidValidators
-	}
-	return nil
-}
-
-// QueryStatesRequest is the request type for the Query/States RPC method.
-type QueryStatesRequest struct {
-}
-
-func (m *QueryStatesRequest) Reset()         { *m = QueryStatesRequest{} }
-func (m *QueryStatesRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryStatesRequest) ProtoMessage()    {}
-func (*QueryStatesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a3513880e9a1b7cc, []int{4}
-}
-func (m *QueryStatesRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryStatesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryStatesRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryStatesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryStatesRequest.Merge(m, src)
-}
-func (m *QueryStatesRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryStatesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryStatesRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryStatesRequest proto.InternalMessageInfo
-
-// QueryStatesResponse is the response type for the Query/States RPC method.
-type QueryStatesResponse struct {
-	NetAmountState NetAmountState `protobuf:"bytes,1,opt,name=net_amount_state,json=netAmountState,proto3" json:"net_amount_state"`
-}
-
-func (m *QueryStatesResponse) Reset()         { *m = QueryStatesResponse{} }
-func (m *QueryStatesResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryStatesResponse) ProtoMessage()    {}
-func (*QueryStatesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a3513880e9a1b7cc, []int{5}
-}
-func (m *QueryStatesResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryStatesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryStatesResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryStatesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryStatesResponse.Merge(m, src)
-}
-func (m *QueryStatesResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryStatesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryStatesResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryStatesResponse proto.InternalMessageInfo
-
-func (m *QueryStatesResponse) GetNetAmountState() NetAmountState {
-	if m != nil {
-		return m.NetAmountState
-	}
-	return NetAmountState{}
-}
-
-// QueryVotingPowerRequest is the request type for the Query/States RPC method.
-type QueryVotingPowerRequest struct {
-	Voter string `protobuf:"bytes,1,opt,name=voter,proto3" json:"voter,omitempty"`
-}
-
-func (m *QueryVotingPowerRequest) Reset()         { *m = QueryVotingPowerRequest{} }
-func (m *QueryVotingPowerRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryVotingPowerRequest) ProtoMessage()    {}
-func (*QueryVotingPowerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a3513880e9a1b7cc, []int{6}
-}
-func (m *QueryVotingPowerRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryVotingPowerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryVotingPowerRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryVotingPowerRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryVotingPowerRequest.Merge(m, src)
-}
-func (m *QueryVotingPowerRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryVotingPowerRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryVotingPowerRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryVotingPowerRequest proto.InternalMessageInfo
-
-func (m *QueryVotingPowerRequest) GetVoter() string {
-	if m != nil {
-		return m.Voter
+		return m.Delegator
 	}
 	return ""
 }
 
-// QueryVotingPowerResponse is the response type for the Query/States RPC method.
-type QueryVotingPowerResponse struct {
-	VotingPower VotingPower `protobuf:"bytes,1,opt,name=voting_power,json=votingPower,proto3" json:"voting_power"`
+// DelegatedBalanceResponse defines the response type for the Query/DelegatedBalance method.
+type QueryDelegatedBalanceResponse struct {
+	// vested is the amount of all delegated coins that have vested (ie not locked)
+	Vested types.Coin `protobuf:"bytes,1,opt,name=vested,proto3" json:"vested"`
+	// vesting is the amount of all delegated coins that are still vesting (ie locked)
+	Vesting types.Coin `protobuf:"bytes,2,opt,name=vesting,proto3" json:"vesting"`
 }
 
-func (m *QueryVotingPowerResponse) Reset()         { *m = QueryVotingPowerResponse{} }
-func (m *QueryVotingPowerResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryVotingPowerResponse) ProtoMessage()    {}
-func (*QueryVotingPowerResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a3513880e9a1b7cc, []int{7}
+func (m *QueryDelegatedBalanceResponse) Reset()         { *m = QueryDelegatedBalanceResponse{} }
+func (m *QueryDelegatedBalanceResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryDelegatedBalanceResponse) ProtoMessage()    {}
+func (*QueryDelegatedBalanceResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a3513880e9a1b7cc, []int{3}
 }
-func (m *QueryVotingPowerResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryDelegatedBalanceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryVotingPowerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryDelegatedBalanceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryVotingPowerResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryDelegatedBalanceResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -349,77 +192,176 @@ func (m *QueryVotingPowerResponse) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *QueryVotingPowerResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryVotingPowerResponse.Merge(m, src)
+func (m *QueryDelegatedBalanceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDelegatedBalanceResponse.Merge(m, src)
 }
-func (m *QueryVotingPowerResponse) XXX_Size() int {
+func (m *QueryDelegatedBalanceResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryVotingPowerResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryVotingPowerResponse.DiscardUnknown(m)
+func (m *QueryDelegatedBalanceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDelegatedBalanceResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryVotingPowerResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryDelegatedBalanceResponse proto.InternalMessageInfo
 
-func (m *QueryVotingPowerResponse) GetVotingPower() VotingPower {
+func (m *QueryDelegatedBalanceResponse) GetVested() types.Coin {
 	if m != nil {
-		return m.VotingPower
+		return m.Vested
 	}
-	return VotingPower{}
+	return types.Coin{}
+}
+
+func (m *QueryDelegatedBalanceResponse) GetVesting() types.Coin {
+	if m != nil {
+		return m.Vesting
+	}
+	return types.Coin{}
+}
+
+// QueryTotalSupplyRequest defines the request type for Query/TotalSupply method.
+type QueryTotalSupplyRequest struct {
+}
+
+func (m *QueryTotalSupplyRequest) Reset()         { *m = QueryTotalSupplyRequest{} }
+func (m *QueryTotalSupplyRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryTotalSupplyRequest) ProtoMessage()    {}
+func (*QueryTotalSupplyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a3513880e9a1b7cc, []int{4}
+}
+func (m *QueryTotalSupplyRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryTotalSupplyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryTotalSupplyRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryTotalSupplyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTotalSupplyRequest.Merge(m, src)
+}
+func (m *QueryTotalSupplyRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryTotalSupplyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryTotalSupplyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryTotalSupplyRequest proto.InternalMessageInfo
+
+// TotalSupplyResponse defines the response type for the Query/TotalSupply method.
+type QueryTotalSupplyResponse struct {
+	// Height is the block height at which these totals apply
+	Height int64 `protobuf:"varint,1,opt,name=height,proto3" json:"height,omitempty"`
+	// Result is a list of coins supplied to liquid
+	Result github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=result,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"result"`
+}
+
+func (m *QueryTotalSupplyResponse) Reset()         { *m = QueryTotalSupplyResponse{} }
+func (m *QueryTotalSupplyResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryTotalSupplyResponse) ProtoMessage()    {}
+func (*QueryTotalSupplyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a3513880e9a1b7cc, []int{5}
+}
+func (m *QueryTotalSupplyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryTotalSupplyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryTotalSupplyResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryTotalSupplyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTotalSupplyResponse.Merge(m, src)
+}
+func (m *QueryTotalSupplyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryTotalSupplyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryTotalSupplyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryTotalSupplyResponse proto.InternalMessageInfo
+
+func (m *QueryTotalSupplyResponse) GetHeight() int64 {
+	if m != nil {
+		return m.Height
+	}
+	return 0
+}
+
+func (m *QueryTotalSupplyResponse) GetResult() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.Result
+	}
+	return nil
 }
 
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "sunrise.liquidstaking.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "sunrise.liquidstaking.QueryParamsResponse")
-	proto.RegisterType((*QueryLiquidValidatorsRequest)(nil), "sunrise.liquidstaking.QueryLiquidValidatorsRequest")
-	proto.RegisterType((*QueryLiquidValidatorsResponse)(nil), "sunrise.liquidstaking.QueryLiquidValidatorsResponse")
-	proto.RegisterType((*QueryStatesRequest)(nil), "sunrise.liquidstaking.QueryStatesRequest")
-	proto.RegisterType((*QueryStatesResponse)(nil), "sunrise.liquidstaking.QueryStatesResponse")
-	proto.RegisterType((*QueryVotingPowerRequest)(nil), "sunrise.liquidstaking.QueryVotingPowerRequest")
-	proto.RegisterType((*QueryVotingPowerResponse)(nil), "sunrise.liquidstaking.QueryVotingPowerResponse")
+	proto.RegisterType((*QueryDelegatedBalanceRequest)(nil), "sunrise.liquidstaking.QueryDelegatedBalanceRequest")
+	proto.RegisterType((*QueryDelegatedBalanceResponse)(nil), "sunrise.liquidstaking.QueryDelegatedBalanceResponse")
+	proto.RegisterType((*QueryTotalSupplyRequest)(nil), "sunrise.liquidstaking.QueryTotalSupplyRequest")
+	proto.RegisterType((*QueryTotalSupplyResponse)(nil), "sunrise.liquidstaking.QueryTotalSupplyResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/liquidstaking/query.proto", fileDescriptor_a3513880e9a1b7cc) }
 
 var fileDescriptor_a3513880e9a1b7cc = []byte{
-	// 591 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0x41, 0x8b, 0x13, 0x31,
-	0x18, 0x86, 0x1b, 0xdd, 0x2d, 0x6c, 0x2a, 0xd2, 0x8d, 0x15, 0x4b, 0xd9, 0x1d, 0xeb, 0xa0, 0xd2,
-	0xad, 0x3a, 0xb1, 0x5d, 0x11, 0xbc, 0x69, 0xaf, 0x8a, 0xac, 0x5d, 0x5c, 0xc1, 0x83, 0x25, 0xdd,
-	0x0d, 0x63, 0xb0, 0x4d, 0xa6, 0x93, 0xcc, 0xe8, 0x2a, 0x22, 0x78, 0xf3, 0x26, 0xf8, 0x1f, 0x44,
-	0xf0, 0xe2, 0xcf, 0xd8, 0xe3, 0x82, 0x17, 0x4f, 0x22, 0xad, 0xe0, 0x3f, 0xf0, 0x2c, 0x4d, 0xd2,
-	0x6e, 0xa7, 0xed, 0x94, 0x7a, 0x29, 0x93, 0x2f, 0x6f, 0xbe, 0xf7, 0x21, 0xdf, 0x9b, 0xc2, 0x4b,
-	0x32, 0xe2, 0x21, 0x93, 0x14, 0x77, 0x58, 0x2f, 0x62, 0x07, 0x52, 0x91, 0x17, 0x8c, 0xfb, 0xb8,
-	0x17, 0xd1, 0xf0, 0xd0, 0x0b, 0x42, 0xa1, 0x04, 0x3a, 0x6f, 0x25, 0x5e, 0x42, 0x52, 0x5a, 0x27,
-	0x5d, 0xc6, 0x05, 0xd6, 0xbf, 0x46, 0x59, 0x2a, 0xf8, 0xc2, 0x17, 0xfa, 0x13, 0x0f, 0xbf, 0x6c,
-	0x75, 0xc3, 0x17, 0xc2, 0xef, 0x50, 0x4c, 0x02, 0x86, 0x09, 0xe7, 0x42, 0x11, 0xc5, 0x04, 0x97,
-	0x76, 0xb7, 0xba, 0x2f, 0x64, 0x57, 0x48, 0xdc, 0x26, 0x92, 0x1a, 0x5b, 0x1c, 0xd7, 0xda, 0x54,
-	0x91, 0x1a, 0x0e, 0x88, 0xcf, 0xb8, 0x16, 0x5b, 0xad, 0x3b, 0x1f, 0x36, 0x20, 0x21, 0xe9, 0x8e,
-	0xfa, 0x6d, 0xcd, 0xd7, 0x24, 0x56, 0x46, 0xea, 0x16, 0x20, 0x7a, 0x34, 0x34, 0xdc, 0xd1, 0xe7,
-	0x9b, 0xb4, 0x17, 0x51, 0xa9, 0xdc, 0x27, 0xf0, 0x5c, 0xa2, 0x2a, 0x03, 0xc1, 0x25, 0x45, 0x77,
-	0x61, 0xd6, 0xf8, 0x14, 0x41, 0x19, 0x54, 0x72, 0xf5, 0x4d, 0x6f, 0xee, 0xb5, 0x78, 0xe6, 0x58,
-	0x63, 0xed, 0xe8, 0xe7, 0xc5, 0xcc, 0x97, 0x3f, 0xdf, 0xaa, 0xa0, 0x69, 0xcf, 0xb9, 0x0e, 0xdc,
-	0xd0, 0x8d, 0x1f, 0x68, 0xfd, 0x1e, 0xe9, 0xb0, 0x03, 0xa2, 0x44, 0x38, 0x36, 0x7e, 0x07, 0x37,
-	0x53, 0xf6, 0x2d, 0xc2, 0x33, 0xb8, 0x6e, 0xbc, 0x5a, 0xf1, 0x78, 0xb3, 0x08, 0xca, 0xa7, 0x2b,
-	0xb9, 0xfa, 0xb5, 0x14, 0x9a, 0xa9, 0x5e, 0xbb, 0x8a, 0x28, 0xda, 0x58, 0x19, 0xb2, 0x35, 0xf3,
-	0x9d, 0x29, 0x9f, 0xf1, 0x7d, 0x68, 0xd5, 0x18, 0xab, 0x63, 0xef, 0x63, 0x54, 0xb5, 0x30, 0x8f,
-	0x61, 0x9e, 0x53, 0xd5, 0x22, 0x5d, 0x11, 0x71, 0xd5, 0x92, 0xc3, 0x4d, 0x7b, 0x33, 0x57, 0x52,
-	0x58, 0x1e, 0x52, 0x75, 0x4f, 0xab, 0x27, 0x29, 0xce, 0xf2, 0x44, 0xd5, 0xc5, 0xf0, 0x82, 0x76,
-	0xdb, 0x13, 0x8a, 0x71, 0x7f, 0x47, 0xbc, 0xa4, 0xa1, 0x05, 0x41, 0x05, 0xb8, 0x1a, 0x0b, 0x45,
-	0x43, 0x6d, 0xb3, 0xd6, 0x34, 0x0b, 0xd7, 0x87, 0xc5, 0xd9, 0x03, 0x96, 0xf1, 0x3e, 0x3c, 0x13,
-	0xeb, 0x72, 0x2b, 0x18, 0xd6, 0x2d, 0x9f, 0x9b, 0xc2, 0x37, 0xd1, 0xc1, 0xc2, 0xe5, 0xe2, 0x93,
-	0x52, 0xfd, 0xef, 0x0a, 0x5c, 0xd5, 0x4e, 0xe8, 0x03, 0x80, 0x59, 0x33, 0x66, 0xb4, 0x95, 0xd2,
-	0x6b, 0x36, 0x57, 0xa5, 0xea, 0x32, 0x52, 0x03, 0xee, 0x56, 0xde, 0x7f, 0xff, 0xfd, 0xe9, 0x94,
-	0x8b, 0xca, 0x78, 0x7e, 0x9a, 0xe3, 0x9a, 0x0d, 0x3d, 0xfa, 0x0a, 0x60, 0x7e, 0x3a, 0x30, 0x68,
-	0x7b, 0x91, 0x55, 0x4a, 0xfc, 0x4a, 0xb7, 0xfe, 0xef, 0x90, 0x25, 0xbd, 0xae, 0x49, 0xaf, 0xa2,
-	0xcb, 0xe9, 0xa4, 0x27, 0x61, 0x45, 0x9f, 0x01, 0xcc, 0x4d, 0x5c, 0x33, 0xf2, 0x16, 0x79, 0xce,
-	0x46, 0xa0, 0x84, 0x97, 0xd6, 0x5b, 0xbc, 0xdb, 0x1a, 0xef, 0x26, 0xf2, 0x16, 0xe0, 0x4d, 0x24,
-	0x04, 0xbf, 0xd1, 0xa1, 0x7a, 0xab, 0x47, 0x6c, 0x02, 0xbf, 0x78, 0xc4, 0x89, 0xa7, 0xb2, 0x78,
-	0xc4, 0xc9, 0xf7, 0xb3, 0xcc, 0x88, 0xf5, 0xa3, 0x92, 0x8d, 0xdd, 0xa3, 0xbe, 0x03, 0x8e, 0xfb,
-	0x0e, 0xf8, 0xd5, 0x77, 0xc0, 0xc7, 0x81, 0x93, 0x39, 0x1e, 0x38, 0x99, 0x1f, 0x03, 0x27, 0xf3,
-	0xf4, 0x8e, 0xcf, 0xd4, 0xf3, 0xa8, 0xed, 0xed, 0x8b, 0xee, 0xa8, 0xcb, 0x8d, 0xd7, 0x82, 0xd3,
-	0xf1, 0x82, 0x04, 0x01, 0x7e, 0x35, 0xd5, 0x58, 0x1d, 0x06, 0x54, 0xb6, 0xb3, 0xfa, 0x2f, 0x70,
-	0xfb, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x21, 0x44, 0xa7, 0x6d, 0x00, 0x06, 0x00, 0x00,
+	// 610 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0x3f, 0x6f, 0xd3, 0x40,
+	0x18, 0xc6, 0xe3, 0x16, 0x8c, 0x72, 0x5d, 0xe0, 0x08, 0x90, 0x44, 0xad, 0x1b, 0x3c, 0xa0, 0x10,
+	0x29, 0x3e, 0xd2, 0x22, 0xaa, 0x4c, 0x40, 0xe0, 0x03, 0x80, 0x83, 0x40, 0x62, 0x89, 0x2e, 0xf1,
+	0xc9, 0x39, 0xd5, 0xb9, 0x73, 0x7c, 0xe7, 0x88, 0x80, 0x58, 0xd8, 0xd8, 0x90, 0x3a, 0xb0, 0x31,
+	0x23, 0x26, 0x06, 0x66, 0xe6, 0x8e, 0x15, 0x2c, 0x4c, 0x80, 0x12, 0x24, 0x3e, 0x01, 0x3b, 0xf2,
+	0xf9, 0x52, 0xd2, 0xe6, 0x8f, 0xc2, 0x92, 0xdc, 0xf9, 0x9e, 0xf7, 0x79, 0x7f, 0xbe, 0xf7, 0x91,
+	0xc1, 0x55, 0x11, 0xb3, 0x88, 0x0a, 0x82, 0x02, 0xda, 0x8f, 0xa9, 0x27, 0x24, 0xde, 0xa7, 0xcc,
+	0x47, 0xfd, 0x98, 0x44, 0x43, 0x27, 0x8c, 0xb8, 0xe4, 0xf0, 0x92, 0x96, 0x38, 0x27, 0x24, 0xc5,
+	0x0b, 0xb8, 0x47, 0x19, 0x47, 0xea, 0x37, 0x55, 0x16, 0x73, 0x3e, 0xf7, 0xb9, 0x5a, 0xa2, 0x64,
+	0xa5, 0x9f, 0x6e, 0xfa, 0x9c, 0xfb, 0x01, 0x41, 0x38, 0xa4, 0x08, 0x33, 0xc6, 0x25, 0x96, 0x94,
+	0x33, 0xa1, 0x4f, 0x2b, 0x1d, 0x2e, 0x7a, 0x5c, 0xa0, 0x36, 0x16, 0x24, 0x6d, 0x8b, 0x06, 0xb5,
+	0x36, 0x91, 0xb8, 0x86, 0x42, 0xec, 0x53, 0xa6, 0xc4, 0x5a, 0x6b, 0xcf, 0x87, 0x0d, 0x71, 0x84,
+	0x7b, 0x13, 0xbf, 0x42, 0xea, 0xd7, 0x4a, 0x31, 0xd2, 0x8d, 0x3e, 0xb2, 0xa6, 0x5b, 0x4d, 0x9a,
+	0x74, 0x38, 0xd5, 0xf6, 0x76, 0x0e, 0xc0, 0x87, 0x09, 0xc0, 0x03, 0xe5, 0xe7, 0x92, 0x7e, 0x4c,
+	0x84, 0xb4, 0x9f, 0x80, 0x8b, 0x27, 0x9e, 0x8a, 0x90, 0x33, 0x41, 0xe0, 0x1d, 0x60, 0xa6, 0x7d,
+	0xf3, 0x46, 0xc9, 0x28, 0x6f, 0xec, 0x6c, 0x39, 0x73, 0xaf, 0xc9, 0x49, 0xcb, 0x1a, 0xd9, 0xc3,
+	0xef, 0xdb, 0x99, 0xf7, 0xbf, 0x3f, 0x56, 0x0c, 0x57, 0xd7, 0xd9, 0x8f, 0xc1, 0xa6, 0x32, 0xbe,
+	0x4f, 0x02, 0xe2, 0x63, 0x49, 0xbc, 0x06, 0x0e, 0x30, 0xeb, 0x10, 0xdd, 0x18, 0xde, 0x02, 0x59,
+	0x2f, 0x3d, 0xe2, 0x91, 0x6a, 0x92, 0x6d, 0xe4, 0xbf, 0x7c, 0xaa, 0xe6, 0xf4, 0x3b, 0xdd, 0xf5,
+	0xbc, 0x88, 0x08, 0xd1, 0x94, 0x11, 0x65, 0xbe, 0xfb, 0x4f, 0x6a, 0x1f, 0x18, 0x60, 0x6b, 0x81,
+	0xb1, 0x66, 0xdf, 0x03, 0xe6, 0x80, 0x08, 0x49, 0x3c, 0xcd, 0x5e, 0x70, 0xb4, 0x67, 0x72, 0x33,
+	0x8e, 0xbe, 0x19, 0xe7, 0x1e, 0xa7, 0xac, 0x71, 0x26, 0xe1, 0x76, 0xb5, 0x1c, 0xd6, 0xc1, 0xb9,
+	0x64, 0x45, 0x99, 0x9f, 0x5f, 0x5b, 0xad, 0x72, 0xa2, 0xb7, 0x0b, 0xe0, 0x8a, 0x82, 0x7a, 0xc4,
+	0x25, 0x0e, 0x9a, 0x71, 0x18, 0x06, 0xc3, 0xc9, 0x0d, 0xbf, 0x35, 0x40, 0x7e, 0xf6, 0x4c, 0xb3,
+	0x5e, 0x06, 0x66, 0x97, 0x50, 0xbf, 0x2b, 0x15, 0xeb, 0xba, 0xab, 0x77, 0xb0, 0x03, 0xcc, 0x88,
+	0x88, 0x38, 0x90, 0xf9, 0xb5, 0xd2, 0xfa, 0x72, 0x92, 0x1b, 0x09, 0xc9, 0x87, 0x1f, 0xdb, 0x65,
+	0x9f, 0xca, 0x6e, 0xdc, 0x76, 0x3a, 0xbc, 0xa7, 0x83, 0xa1, 0xff, 0xaa, 0xc2, 0xdb, 0x47, 0x72,
+	0x18, 0x12, 0xa1, 0x0a, 0x84, 0xab, 0xad, 0x77, 0xfe, 0xac, 0x83, 0xb3, 0x8a, 0x0c, 0xbe, 0x36,
+	0x80, 0x99, 0x8e, 0x12, 0x5e, 0x5f, 0x30, 0xe9, 0xd9, 0xec, 0x14, 0x2b, 0xab, 0x48, 0xd3, 0x17,
+	0xb5, 0xcb, 0xaf, 0xbe, 0xfe, 0x3a, 0x58, 0xb3, 0x61, 0x09, 0xcd, 0x4f, 0xf9, 0xa0, 0xa6, 0x83,
+	0x0e, 0x3f, 0x1b, 0xe0, 0xfc, 0xe9, 0xd9, 0xc2, 0xdd, 0x65, 0xad, 0x16, 0x44, 0xac, 0x78, 0xf3,
+	0xff, 0x8a, 0x34, 0xe9, 0x6d, 0x45, 0x5a, 0x87, 0x7b, 0x8b, 0x49, 0xbd, 0x49, 0x6d, 0xab, 0x9d,
+	0x16, 0xa3, 0x17, 0xc7, 0x01, 0x7d, 0x09, 0xdf, 0x19, 0x60, 0x63, 0x6a, 0xd6, 0xd0, 0x59, 0x86,
+	0x31, 0x1b, 0x98, 0x22, 0x5a, 0x59, 0xaf, 0x89, 0x1d, 0x45, 0x5c, 0x86, 0xd7, 0x16, 0x13, 0xcb,
+	0xa4, 0xac, 0x25, 0x54, 0x5d, 0xa3, 0x79, 0x38, 0xb2, 0x8c, 0xa3, 0x91, 0x65, 0xfc, 0x1c, 0x59,
+	0xc6, 0x9b, 0xb1, 0x95, 0x39, 0x1a, 0x5b, 0x99, 0x6f, 0x63, 0x2b, 0xf3, 0xb4, 0x3e, 0x95, 0x21,
+	0xed, 0x55, 0x7d, 0xce, 0x19, 0x39, 0xde, 0xe0, 0x30, 0x44, 0xcf, 0x4e, 0xd9, 0xab, 0x68, 0xb5,
+	0x4d, 0xf5, 0x95, 0xd9, 0xfd, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x00, 0xbb, 0xb4, 0x88, 0x73, 0x05,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -436,12 +378,11 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// LiquidValidators returns liquid validators with states of the liquidstaking module.
-	LiquidValidators(ctx context.Context, in *QueryLiquidValidatorsRequest, opts ...grpc.CallOption) (*QueryLiquidValidatorsResponse, error)
-	// VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
-	VotingPower(ctx context.Context, in *QueryVotingPowerRequest, opts ...grpc.CallOption) (*QueryVotingPowerResponse, error)
-	// States returns states of the liquidstaking module.
-	States(ctx context.Context, in *QueryStatesRequest, opts ...grpc.CallOption) (*QueryStatesResponse, error)
+	// DelegatedBalance returns an account's vesting and vested coins currently delegated to validators.
+	// It ignores coins in unbonding delegations.
+	DelegatedBalance(ctx context.Context, in *QueryDelegatedBalanceRequest, opts ...grpc.CallOption) (*QueryDelegatedBalanceResponse, error)
+	// TotalSupply returns the total sum of all coins currently locked into the liquid module.
+	TotalSupply(ctx context.Context, in *QueryTotalSupplyRequest, opts ...grpc.CallOption) (*QueryTotalSupplyResponse, error)
 }
 
 type queryClient struct {
@@ -461,27 +402,18 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) LiquidValidators(ctx context.Context, in *QueryLiquidValidatorsRequest, opts ...grpc.CallOption) (*QueryLiquidValidatorsResponse, error) {
-	out := new(QueryLiquidValidatorsResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Query/LiquidValidators", in, out, opts...)
+func (c *queryClient) DelegatedBalance(ctx context.Context, in *QueryDelegatedBalanceRequest, opts ...grpc.CallOption) (*QueryDelegatedBalanceResponse, error) {
+	out := new(QueryDelegatedBalanceResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Query/DelegatedBalance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) VotingPower(ctx context.Context, in *QueryVotingPowerRequest, opts ...grpc.CallOption) (*QueryVotingPowerResponse, error) {
-	out := new(QueryVotingPowerResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Query/VotingPower", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) States(ctx context.Context, in *QueryStatesRequest, opts ...grpc.CallOption) (*QueryStatesResponse, error) {
-	out := new(QueryStatesResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Query/States", in, out, opts...)
+func (c *queryClient) TotalSupply(ctx context.Context, in *QueryTotalSupplyRequest, opts ...grpc.CallOption) (*QueryTotalSupplyResponse, error) {
+	out := new(QueryTotalSupplyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Query/TotalSupply", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -492,12 +424,11 @@ func (c *queryClient) States(ctx context.Context, in *QueryStatesRequest, opts .
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// LiquidValidators returns liquid validators with states of the liquidstaking module.
-	LiquidValidators(context.Context, *QueryLiquidValidatorsRequest) (*QueryLiquidValidatorsResponse, error)
-	// VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
-	VotingPower(context.Context, *QueryVotingPowerRequest) (*QueryVotingPowerResponse, error)
-	// States returns states of the liquidstaking module.
-	States(context.Context, *QueryStatesRequest) (*QueryStatesResponse, error)
+	// DelegatedBalance returns an account's vesting and vested coins currently delegated to validators.
+	// It ignores coins in unbonding delegations.
+	DelegatedBalance(context.Context, *QueryDelegatedBalanceRequest) (*QueryDelegatedBalanceResponse, error)
+	// TotalSupply returns the total sum of all coins currently locked into the liquid module.
+	TotalSupply(context.Context, *QueryTotalSupplyRequest) (*QueryTotalSupplyResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -507,14 +438,11 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (*UnimplementedQueryServer) LiquidValidators(ctx context.Context, req *QueryLiquidValidatorsRequest) (*QueryLiquidValidatorsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidValidators not implemented")
+func (*UnimplementedQueryServer) DelegatedBalance(ctx context.Context, req *QueryDelegatedBalanceRequest) (*QueryDelegatedBalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatedBalance not implemented")
 }
-func (*UnimplementedQueryServer) VotingPower(ctx context.Context, req *QueryVotingPowerRequest) (*QueryVotingPowerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VotingPower not implemented")
-}
-func (*UnimplementedQueryServer) States(ctx context.Context, req *QueryStatesRequest) (*QueryStatesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method States not implemented")
+func (*UnimplementedQueryServer) TotalSupply(ctx context.Context, req *QueryTotalSupplyRequest) (*QueryTotalSupplyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TotalSupply not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -539,56 +467,38 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_LiquidValidators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryLiquidValidatorsRequest)
+func _Query_DelegatedBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatedBalanceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).LiquidValidators(ctx, in)
+		return srv.(QueryServer).DelegatedBalance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.liquidstaking.Query/LiquidValidators",
+		FullMethod: "/sunrise.liquidstaking.Query/DelegatedBalance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).LiquidValidators(ctx, req.(*QueryLiquidValidatorsRequest))
+		return srv.(QueryServer).DelegatedBalance(ctx, req.(*QueryDelegatedBalanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_VotingPower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryVotingPowerRequest)
+func _Query_TotalSupply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTotalSupplyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).VotingPower(ctx, in)
+		return srv.(QueryServer).TotalSupply(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.liquidstaking.Query/VotingPower",
+		FullMethod: "/sunrise.liquidstaking.Query/TotalSupply",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).VotingPower(ctx, req.(*QueryVotingPowerRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_States_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryStatesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).States(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.liquidstaking.Query/States",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).States(ctx, req.(*QueryStatesRequest))
+		return srv.(QueryServer).TotalSupply(ctx, req.(*QueryTotalSupplyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -602,16 +512,12 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "LiquidValidators",
-			Handler:    _Query_LiquidValidators_Handler,
+			MethodName: "DelegatedBalance",
+			Handler:    _Query_DelegatedBalance_Handler,
 		},
 		{
-			MethodName: "VotingPower",
-			Handler:    _Query_VotingPower_Handler,
-		},
-		{
-			MethodName: "States",
-			Handler:    _Query_States_Handler,
+			MethodName: "TotalSupply",
+			Handler:    _Query_TotalSupply_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -674,7 +580,7 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryLiquidValidatorsRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryDelegatedBalanceRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -684,12 +590,85 @@ func (m *QueryLiquidValidatorsRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryLiquidValidatorsRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryDelegatedBalanceRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryLiquidValidatorsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryDelegatedBalanceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Delegator) > 0 {
+		i -= len(m.Delegator)
+		copy(dAtA[i:], m.Delegator)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Delegator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDelegatedBalanceResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDelegatedBalanceResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDelegatedBalanceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Vesting.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.Vested.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryTotalSupplyRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryTotalSupplyRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryTotalSupplyRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -697,7 +676,7 @@ func (m *QueryLiquidValidatorsRequest) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryLiquidValidatorsResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryTotalSupplyResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -707,20 +686,20 @@ func (m *QueryLiquidValidatorsResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryLiquidValidatorsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryTotalSupplyResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryLiquidValidatorsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryTotalSupplyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.LiquidValidators) > 0 {
-		for iNdEx := len(m.LiquidValidators) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.Result) > 0 {
+		for iNdEx := len(m.Result) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.LiquidValidators[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.Result[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -728,128 +707,14 @@ func (m *QueryLiquidValidatorsResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 				i = encodeVarintQuery(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
 		}
 	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryStatesRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryStatesRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryStatesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryStatesResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryStatesResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryStatesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.NetAmountState.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryVotingPowerRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryVotingPowerRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryVotingPowerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Voter) > 0 {
-		i -= len(m.Voter)
-		copy(dAtA[i:], m.Voter)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Voter)))
+	if m.Height != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Height))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x8
 	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryVotingPowerResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryVotingPowerResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryVotingPowerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.VotingPower.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -884,71 +749,56 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryLiquidValidatorsRequest) Size() (n int) {
+func (m *QueryDelegatedBalanceRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	return n
-}
-
-func (m *QueryLiquidValidatorsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.LiquidValidators) > 0 {
-		for _, e := range m.LiquidValidators {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *QueryStatesRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *QueryStatesResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.NetAmountState.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
-
-func (m *QueryVotingPowerRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Voter)
+	l = len(m.Delegator)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
 
-func (m *QueryVotingPowerResponse) Size() (n int) {
+func (m *QueryDelegatedBalanceResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = m.VotingPower.Size()
+	l = m.Vested.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	l = m.Vesting.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryTotalSupplyRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryTotalSupplyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Height != 0 {
+		n += 1 + sovQuery(uint64(m.Height))
+	}
+	if len(m.Result) > 0 {
+		for _, e := range m.Result {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1091,7 +941,7 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryLiquidValidatorsRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryDelegatedBalanceRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1114,282 +964,15 @@ func (m *QueryLiquidValidatorsRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryLiquidValidatorsRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryDelegatedBalanceRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryLiquidValidatorsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryLiquidValidatorsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryLiquidValidatorsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryLiquidValidatorsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryDelegatedBalanceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LiquidValidators", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LiquidValidators = append(m.LiquidValidators, LiquidValidatorState{})
-			if err := m.LiquidValidators[len(m.LiquidValidators)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryStatesRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryStatesRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryStatesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryStatesResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryStatesResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryStatesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetAmountState", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.NetAmountState.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryVotingPowerRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryVotingPowerRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryVotingPowerRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Voter", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegator", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1417,7 +1000,7 @@ func (m *QueryVotingPowerRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Voter = string(dAtA[iNdEx:postIndex])
+			m.Delegator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1440,7 +1023,7 @@ func (m *QueryVotingPowerRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryVotingPowerResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryDelegatedBalanceResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1463,15 +1046,15 @@ func (m *QueryVotingPowerResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryVotingPowerResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryDelegatedBalanceResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryVotingPowerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryDelegatedBalanceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VotingPower", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Vested", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1498,7 +1081,193 @@ func (m *QueryVotingPowerResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.VotingPower.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Vested.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vesting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Vesting.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryTotalSupplyRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryTotalSupplyRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryTotalSupplyRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryTotalSupplyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryTotalSupplyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryTotalSupplyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
+			}
+			m.Height = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Height |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Result = append(m.Result, types.Coin{})
+			if err := m.Result[len(m.Result)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

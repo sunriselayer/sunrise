@@ -5,6 +5,7 @@ package types
 
 import (
 	context "context"
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	types "github.com/cosmos/cosmos-sdk/types"
@@ -13,7 +14,6 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
-	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,14 +21,12 @@ import (
 	io "io"
 	math "math"
 	math_bits "math/bits"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -129,23 +127,28 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
-type MsgLiquidStake struct {
-	DelegatorAddress string     `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty" yaml:"delegator_address"`
-	Amount           types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+// MsgMintDerivative defines the Msg/MintDerivative request type.
+type MsgMintDerivative struct {
+	// sender is the owner of the delegation to be converted
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	// validator is the validator of the delegation to be converted
+	Validator string `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
+	// amount is the quantity of staked assets to be converted
+	Amount types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
 }
 
-func (m *MsgLiquidStake) Reset()         { *m = MsgLiquidStake{} }
-func (m *MsgLiquidStake) String() string { return proto.CompactTextString(m) }
-func (*MsgLiquidStake) ProtoMessage()    {}
-func (*MsgLiquidStake) Descriptor() ([]byte, []int) {
+func (m *MsgMintDerivative) Reset()         { *m = MsgMintDerivative{} }
+func (m *MsgMintDerivative) String() string { return proto.CompactTextString(m) }
+func (*MsgMintDerivative) ProtoMessage()    {}
+func (*MsgMintDerivative) Descriptor() ([]byte, []int) {
 	return fileDescriptor_7aae18fe0b821bcc, []int{2}
 }
-func (m *MsgLiquidStake) XXX_Unmarshal(b []byte) error {
+func (m *MsgMintDerivative) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgLiquidStake) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgMintDerivative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgLiquidStake.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgMintDerivative.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -155,47 +158,57 @@ func (m *MsgLiquidStake) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *MsgLiquidStake) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgLiquidStake.Merge(m, src)
+func (m *MsgMintDerivative) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgMintDerivative.Merge(m, src)
 }
-func (m *MsgLiquidStake) XXX_Size() int {
+func (m *MsgMintDerivative) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgLiquidStake) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgLiquidStake.DiscardUnknown(m)
+func (m *MsgMintDerivative) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgMintDerivative.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgLiquidStake proto.InternalMessageInfo
+var xxx_messageInfo_MsgMintDerivative proto.InternalMessageInfo
 
-func (m *MsgLiquidStake) GetDelegatorAddress() string {
+func (m *MsgMintDerivative) GetSender() string {
 	if m != nil {
-		return m.DelegatorAddress
+		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgLiquidStake) GetAmount() types.Coin {
+func (m *MsgMintDerivative) GetValidator() string {
+	if m != nil {
+		return m.Validator
+	}
+	return ""
+}
+
+func (m *MsgMintDerivative) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
 	return types.Coin{}
 }
 
-type MsgLiquidStakeResponse struct {
+// MsgMintDerivativeResponse defines the Msg/MintDerivative response type.
+type MsgMintDerivativeResponse struct {
+	// received is the amount of staking derivative minted and sent to the sender
+	Received types.Coin `protobuf:"bytes,1,opt,name=received,proto3" json:"received"`
 }
 
-func (m *MsgLiquidStakeResponse) Reset()         { *m = MsgLiquidStakeResponse{} }
-func (m *MsgLiquidStakeResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgLiquidStakeResponse) ProtoMessage()    {}
-func (*MsgLiquidStakeResponse) Descriptor() ([]byte, []int) {
+func (m *MsgMintDerivativeResponse) Reset()         { *m = MsgMintDerivativeResponse{} }
+func (m *MsgMintDerivativeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgMintDerivativeResponse) ProtoMessage()    {}
+func (*MsgMintDerivativeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_7aae18fe0b821bcc, []int{3}
 }
-func (m *MsgLiquidStakeResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgMintDerivativeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgLiquidStakeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgMintDerivativeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgLiquidStakeResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgMintDerivativeResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -205,35 +218,47 @@ func (m *MsgLiquidStakeResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *MsgLiquidStakeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgLiquidStakeResponse.Merge(m, src)
+func (m *MsgMintDerivativeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgMintDerivativeResponse.Merge(m, src)
 }
-func (m *MsgLiquidStakeResponse) XXX_Size() int {
+func (m *MsgMintDerivativeResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgLiquidStakeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgLiquidStakeResponse.DiscardUnknown(m)
+func (m *MsgMintDerivativeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgMintDerivativeResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgLiquidStakeResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgMintDerivativeResponse proto.InternalMessageInfo
 
-type MsgLiquidUnstake struct {
-	DelegatorAddress string     `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty" yaml:"delegator_address"`
-	Amount           types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+func (m *MsgMintDerivativeResponse) GetReceived() types.Coin {
+	if m != nil {
+		return m.Received
+	}
+	return types.Coin{}
 }
 
-func (m *MsgLiquidUnstake) Reset()         { *m = MsgLiquidUnstake{} }
-func (m *MsgLiquidUnstake) String() string { return proto.CompactTextString(m) }
-func (*MsgLiquidUnstake) ProtoMessage()    {}
-func (*MsgLiquidUnstake) Descriptor() ([]byte, []int) {
+// MsgBurnDerivative defines the Msg/BurnDerivative request type.
+type MsgBurnDerivative struct {
+	// sender is the owner of the derivatives to be converted
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	// validator is the validator of the derivatives to be converted
+	Validator string `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
+	// amount is the quantity of derivatives to be converted
+	Amount types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
+}
+
+func (m *MsgBurnDerivative) Reset()         { *m = MsgBurnDerivative{} }
+func (m *MsgBurnDerivative) String() string { return proto.CompactTextString(m) }
+func (*MsgBurnDerivative) ProtoMessage()    {}
+func (*MsgBurnDerivative) Descriptor() ([]byte, []int) {
 	return fileDescriptor_7aae18fe0b821bcc, []int{4}
 }
-func (m *MsgLiquidUnstake) XXX_Unmarshal(b []byte) error {
+func (m *MsgBurnDerivative) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgLiquidUnstake) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgBurnDerivative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgLiquidUnstake.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgBurnDerivative.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -243,48 +268,57 @@ func (m *MsgLiquidUnstake) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *MsgLiquidUnstake) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgLiquidUnstake.Merge(m, src)
+func (m *MsgBurnDerivative) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBurnDerivative.Merge(m, src)
 }
-func (m *MsgLiquidUnstake) XXX_Size() int {
+func (m *MsgBurnDerivative) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgLiquidUnstake) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgLiquidUnstake.DiscardUnknown(m)
+func (m *MsgBurnDerivative) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBurnDerivative.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgLiquidUnstake proto.InternalMessageInfo
+var xxx_messageInfo_MsgBurnDerivative proto.InternalMessageInfo
 
-func (m *MsgLiquidUnstake) GetDelegatorAddress() string {
+func (m *MsgBurnDerivative) GetSender() string {
 	if m != nil {
-		return m.DelegatorAddress
+		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgLiquidUnstake) GetAmount() types.Coin {
+func (m *MsgBurnDerivative) GetValidator() string {
+	if m != nil {
+		return m.Validator
+	}
+	return ""
+}
+
+func (m *MsgBurnDerivative) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
 	return types.Coin{}
 }
 
-type MsgLiquidUnstakeResponse struct {
-	CompletionTime time.Time `protobuf:"bytes,1,opt,name=completion_time,json=completionTime,proto3,stdtime" json:"completion_time"`
+// MsgBurnDerivativeResponse defines the Msg/BurnDerivative response type.
+type MsgBurnDerivativeResponse struct {
+	// received is the number of delegation shares sent to the sender
+	Received cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=received,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"received"`
 }
 
-func (m *MsgLiquidUnstakeResponse) Reset()         { *m = MsgLiquidUnstakeResponse{} }
-func (m *MsgLiquidUnstakeResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgLiquidUnstakeResponse) ProtoMessage()    {}
-func (*MsgLiquidUnstakeResponse) Descriptor() ([]byte, []int) {
+func (m *MsgBurnDerivativeResponse) Reset()         { *m = MsgBurnDerivativeResponse{} }
+func (m *MsgBurnDerivativeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgBurnDerivativeResponse) ProtoMessage()    {}
+func (*MsgBurnDerivativeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_7aae18fe0b821bcc, []int{5}
 }
-func (m *MsgLiquidUnstakeResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgBurnDerivativeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgLiquidUnstakeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgBurnDerivativeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgLiquidUnstakeResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgBurnDerivativeResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -294,76 +328,68 @@ func (m *MsgLiquidUnstakeResponse) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *MsgLiquidUnstakeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgLiquidUnstakeResponse.Merge(m, src)
+func (m *MsgBurnDerivativeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBurnDerivativeResponse.Merge(m, src)
 }
-func (m *MsgLiquidUnstakeResponse) XXX_Size() int {
+func (m *MsgBurnDerivativeResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgLiquidUnstakeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgLiquidUnstakeResponse.DiscardUnknown(m)
+func (m *MsgBurnDerivativeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBurnDerivativeResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgLiquidUnstakeResponse proto.InternalMessageInfo
-
-func (m *MsgLiquidUnstakeResponse) GetCompletionTime() time.Time {
-	if m != nil {
-		return m.CompletionTime
-	}
-	return time.Time{}
-}
+var xxx_messageInfo_MsgBurnDerivativeResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.liquidstaking.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.liquidstaking.MsgUpdateParamsResponse")
-	proto.RegisterType((*MsgLiquidStake)(nil), "sunrise.liquidstaking.MsgLiquidStake")
-	proto.RegisterType((*MsgLiquidStakeResponse)(nil), "sunrise.liquidstaking.MsgLiquidStakeResponse")
-	proto.RegisterType((*MsgLiquidUnstake)(nil), "sunrise.liquidstaking.MsgLiquidUnstake")
-	proto.RegisterType((*MsgLiquidUnstakeResponse)(nil), "sunrise.liquidstaking.MsgLiquidUnstakeResponse")
+	proto.RegisterType((*MsgMintDerivative)(nil), "sunrise.liquidstaking.MsgMintDerivative")
+	proto.RegisterType((*MsgMintDerivativeResponse)(nil), "sunrise.liquidstaking.MsgMintDerivativeResponse")
+	proto.RegisterType((*MsgBurnDerivative)(nil), "sunrise.liquidstaking.MsgBurnDerivative")
+	proto.RegisterType((*MsgBurnDerivativeResponse)(nil), "sunrise.liquidstaking.MsgBurnDerivativeResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/liquidstaking/tx.proto", fileDescriptor_7aae18fe0b821bcc) }
 
 var fileDescriptor_7aae18fe0b821bcc = []byte{
-	// 598 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x53, 0xbf, 0x6f, 0xd3, 0x40,
-	0x14, 0x8e, 0x0b, 0x54, 0xf4, 0x02, 0xfd, 0x61, 0x95, 0xd6, 0xb1, 0xc0, 0xa9, 0x2c, 0x01, 0x25,
-	0x52, 0xee, 0x94, 0x20, 0x81, 0xc8, 0x04, 0xe9, 0x84, 0x44, 0x24, 0xe4, 0x50, 0x06, 0x96, 0xe8,
-	0x92, 0x5c, 0xaf, 0xa7, 0xc6, 0x3e, 0xe3, 0x3b, 0x57, 0x0d, 0x13, 0x62, 0x64, 0xea, 0x9f, 0xc1,
-	0x80, 0x50, 0x06, 0xfe, 0x04, 0x86, 0x8e, 0x15, 0x13, 0x53, 0x41, 0xc9, 0x90, 0x9d, 0xbf, 0x00,
-	0xd9, 0xbe, 0x38, 0x4d, 0x9a, 0x8a, 0x88, 0x89, 0x25, 0xf1, 0x7b, 0xdf, 0xf7, 0xfc, 0xde, 0xf7,
-	0xde, 0x67, 0x60, 0x89, 0xd0, 0x0b, 0x98, 0x20, 0xa8, 0xc3, 0xde, 0x86, 0xac, 0x2d, 0x24, 0x3e,
-	0x60, 0x1e, 0x45, 0xf2, 0x08, 0xfa, 0x01, 0x97, 0x5c, 0xbf, 0xa5, 0x70, 0x38, 0x81, 0x9b, 0x6b,
-	0xd8, 0x65, 0x1e, 0x47, 0xf1, 0x6f, 0xc2, 0x34, 0x37, 0x5b, 0x5c, 0xb8, 0x5c, 0x20, 0x57, 0x50,
-	0x74, 0x58, 0x8a, 0xfe, 0x14, 0x90, 0x4b, 0x80, 0x46, 0x1c, 0xa1, 0x24, 0x50, 0xd0, 0x3a, 0xe5,
-	0x94, 0x27, 0xf9, 0xe8, 0x49, 0x65, 0xed, 0xd9, 0x33, 0xf9, 0x38, 0xc0, 0xee, 0xa8, 0xd2, 0x52,
-	0xdd, 0x9a, 0x58, 0x10, 0x74, 0x58, 0x6a, 0x12, 0x89, 0x4b, 0xa8, 0xc5, 0x99, 0xa7, 0xf0, 0x3c,
-	0xe5, 0x9c, 0x76, 0x08, 0x8a, 0xa3, 0x66, 0xb8, 0x87, 0x24, 0x73, 0x89, 0x90, 0xd8, 0xf5, 0x15,
-	0xe1, 0xc1, 0xec, 0x26, 0x13, 0x51, 0x42, 0xb5, 0x07, 0x1a, 0x58, 0xa9, 0x09, 0xba, 0xeb, 0xb7,
-	0xb1, 0x24, 0x2f, 0xe3, 0x29, 0xf4, 0x47, 0x60, 0x09, 0x87, 0x72, 0x9f, 0x07, 0x4c, 0x76, 0x0d,
-	0x6d, 0x4b, 0xdb, 0x5e, 0xaa, 0x1a, 0xdf, 0xbf, 0x16, 0xd7, 0x95, 0xbc, 0x67, 0xed, 0x76, 0x40,
-	0x84, 0xa8, 0xcb, 0x80, 0x79, 0xd4, 0x19, 0x53, 0xf5, 0xa7, 0x60, 0x31, 0xd1, 0x61, 0x2c, 0x6c,
-	0x69, 0xdb, 0xd9, 0xf2, 0x1d, 0x38, 0x73, 0xc1, 0x30, 0x69, 0x53, 0x5d, 0x3a, 0x39, 0xcb, 0x67,
-	0x3e, 0x0d, 0x7b, 0x05, 0xcd, 0x51, 0x75, 0x95, 0xd7, 0x1f, 0x86, 0xbd, 0xc2, 0xf8, 0x8d, 0x1f,
-	0x87, 0xbd, 0xc2, 0x0e, 0x65, 0x72, 0x3f, 0x6c, 0xc2, 0x16, 0x77, 0x91, 0x7a, 0x5d, 0xf1, 0x1d,
-	0xf7, 0x48, 0x1a, 0x60, 0xdf, 0x47, 0x47, 0x53, 0x4a, 0xa7, 0x14, 0xd9, 0x39, 0xb0, 0x39, 0x95,
-	0x72, 0x88, 0xf0, 0xb9, 0x27, 0x88, 0xfd, 0x59, 0x03, 0xcb, 0x35, 0x41, 0x5f, 0xc4, 0xf5, 0x75,
-	0x89, 0x0f, 0x88, 0xfe, 0x1c, 0xac, 0xb5, 0x49, 0x87, 0x50, 0x2c, 0x79, 0xd0, 0xc0, 0x89, 0x5a,
-	0xb5, 0x87, 0xdb, 0xbf, 0xcf, 0xf2, 0x46, 0x17, 0xbb, 0x9d, 0x8a, 0x7d, 0x81, 0x62, 0x3b, 0xab,
-	0x69, 0x4e, 0xed, 0x48, 0x7f, 0x0c, 0x16, 0xb1, 0xcb, 0x43, 0x4f, 0xaa, 0x95, 0xe4, 0xa0, 0x5a,
-	0x62, 0x74, 0x5b, 0xa8, 0x6e, 0x0b, 0x77, 0x38, 0xf3, 0xaa, 0x57, 0xa3, 0x75, 0x38, 0x8a, 0x5e,
-	0xd9, 0x88, 0x36, 0x71, 0x71, 0x0c, 0xdb, 0x00, 0x1b, 0x93, 0xd3, 0xa6, 0x42, 0xbe, 0x68, 0x60,
-	0x35, 0x85, 0x76, 0x3d, 0xf1, 0xdf, 0x4b, 0x61, 0xc0, 0x98, 0x9e, 0x77, 0x24, 0x46, 0xaf, 0x81,
-	0x95, 0x16, 0x77, 0xfd, 0x0e, 0x91, 0x8c, 0x7b, 0x8d, 0xc8, 0xdf, 0xf1, 0xd4, 0xd9, 0xb2, 0x09,
-	0x13, 0xf3, 0xc3, 0x91, 0xf9, 0xe1, 0xab, 0x91, 0xf9, 0xab, 0xd7, 0xa3, 0xb6, 0xc7, 0x3f, 0xf3,
-	0x9a, 0xb3, 0x3c, 0x2e, 0x8e, 0xe0, 0xf2, 0xb7, 0x05, 0x70, 0xa5, 0x26, 0xa8, 0xbe, 0x07, 0x6e,
-	0x4c, 0x38, 0xfd, 0xde, 0x25, 0x0e, 0x9d, 0x32, 0x8b, 0x09, 0xe7, 0xe3, 0xa5, 0xe3, 0xb7, 0x40,
-	0xf6, 0xbc, 0xa1, 0xee, 0x5e, 0x5e, 0x7e, 0x8e, 0x66, 0x16, 0xe7, 0xa2, 0xa5, 0x4d, 0x18, 0xb8,
-	0x39, 0x79, 0xec, 0xfb, 0x7f, 0xab, 0x57, 0x44, 0x13, 0xcd, 0x49, 0x1c, 0xb5, 0x32, 0xaf, 0xbd,
-	0x8f, 0x3e, 0xd3, 0x6a, 0xfd, 0xa4, 0x6f, 0x69, 0xa7, 0x7d, 0x4b, 0xfb, 0xd5, 0xb7, 0xb4, 0xe3,
-	0x81, 0x95, 0x39, 0x1d, 0x58, 0x99, 0x1f, 0x03, 0x2b, 0xf3, 0xe6, 0xc9, 0xbf, 0x7c, 0xa5, 0xb2,
-	0xeb, 0x13, 0xd1, 0x5c, 0x8c, 0x2f, 0xf9, 0xf0, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xb0, 0xa1,
-	0xac, 0x27, 0xae, 0x05, 0x00, 0x00,
+	// 590 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x54, 0x31, 0x6f, 0xd3, 0x40,
+	0x14, 0x8e, 0x5b, 0x88, 0xf0, 0x81, 0x40, 0xb5, 0x8a, 0x9a, 0x04, 0x70, 0xaa, 0x0c, 0x28, 0x8a,
+	0x14, 0x5f, 0x53, 0x24, 0x10, 0xb0, 0x80, 0x9b, 0x91, 0x48, 0x28, 0x15, 0x08, 0xb1, 0xa0, 0x8b,
+	0x7d, 0xbd, 0x1c, 0x8d, 0xef, 0x8c, 0xef, 0x6c, 0x35, 0x4c, 0x88, 0x91, 0x89, 0x1f, 0xc0, 0x0f,
+	0x60, 0xcc, 0xd0, 0x1f, 0xd1, 0x31, 0xea, 0x84, 0x18, 0x2a, 0x94, 0x0c, 0xf9, 0x1b, 0xc8, 0xf6,
+	0x25, 0x21, 0x26, 0x2d, 0x11, 0x53, 0x17, 0xdb, 0xef, 0xbd, 0xef, 0xbd, 0xf7, 0x7d, 0xef, 0xdd,
+	0x19, 0x98, 0x22, 0x64, 0x01, 0x15, 0x18, 0xf6, 0xe8, 0x87, 0x90, 0xba, 0x42, 0xa2, 0x43, 0xca,
+	0x08, 0x94, 0x47, 0x96, 0x1f, 0x70, 0xc9, 0x8d, 0xdb, 0x2a, 0x6e, 0x2d, 0xc4, 0x4b, 0x1b, 0xc8,
+	0xa3, 0x8c, 0xc3, 0xe4, 0x99, 0x22, 0x4b, 0x5b, 0x0e, 0x17, 0x1e, 0x17, 0xd0, 0x13, 0x04, 0x46,
+	0x8d, 0xf8, 0xa5, 0x02, 0xc5, 0x34, 0xf0, 0x2e, 0xb1, 0x60, 0x6a, 0xa8, 0xd0, 0x26, 0xe1, 0x84,
+	0xa7, 0xfe, 0xf8, 0x4b, 0x79, 0x2b, 0xcb, 0x39, 0xf9, 0x28, 0x40, 0xde, 0x34, 0xd3, 0x54, 0xdd,
+	0x3a, 0x48, 0x60, 0x18, 0x35, 0x3a, 0x58, 0xa2, 0x06, 0x74, 0x38, 0x65, 0x2a, 0x5e, 0x26, 0x9c,
+	0x93, 0x1e, 0x86, 0x89, 0xd5, 0x09, 0x0f, 0xa0, 0xa4, 0x1e, 0x16, 0x12, 0x79, 0x7e, 0x0a, 0xa8,
+	0x8c, 0x35, 0x70, 0xab, 0x25, 0xc8, 0x2b, 0xdf, 0x45, 0x12, 0xbf, 0x4c, 0x4a, 0x1b, 0x0f, 0x81,
+	0x8e, 0x42, 0xd9, 0xe5, 0x01, 0x95, 0xfd, 0x82, 0xb6, 0xad, 0x55, 0x75, 0xbb, 0x70, 0x7a, 0x5c,
+	0xdf, 0x54, 0x9c, 0x9f, 0xbb, 0x6e, 0x80, 0x85, 0xd8, 0x97, 0x01, 0x65, 0xa4, 0x3d, 0x87, 0x1a,
+	0xcf, 0x40, 0x3e, 0x25, 0x57, 0x58, 0xdb, 0xd6, 0xaa, 0xd7, 0x77, 0xef, 0x59, 0x4b, 0xa7, 0x66,
+	0xa5, 0x6d, 0x6c, 0xfd, 0xe4, 0xac, 0x9c, 0xfb, 0x3e, 0x19, 0xd4, 0xb4, 0xb6, 0xca, 0x7b, 0xf2,
+	0xfa, 0xf3, 0x64, 0x50, 0x9b, 0x57, 0xfc, 0x32, 0x19, 0xd4, 0xf6, 0x08, 0x95, 0xdd, 0xb0, 0x63,
+	0x39, 0xdc, 0x83, 0xaa, 0x5c, 0xfd, 0x23, 0x67, 0x78, 0x66, 0x20, 0xdf, 0x87, 0x47, 0x99, 0x19,
+	0x65, 0x14, 0x55, 0x8a, 0x60, 0x2b, 0xe3, 0x6a, 0x63, 0xe1, 0x73, 0x26, 0x70, 0xe5, 0x9b, 0x06,
+	0x36, 0x5a, 0x82, 0xb4, 0x28, 0x93, 0x4d, 0x1c, 0xd0, 0x08, 0x49, 0x1a, 0x61, 0x63, 0x07, 0xe4,
+	0x05, 0x66, 0x2e, 0x0e, 0xfe, 0xa9, 0x5f, 0xe1, 0x8c, 0xbb, 0x40, 0x8f, 0x50, 0x8f, 0xba, 0x48,
+	0xf2, 0x20, 0xd1, 0xaf, 0xb7, 0xe7, 0x0e, 0xe3, 0x11, 0xc8, 0x23, 0x8f, 0x87, 0x4c, 0x16, 0xd6,
+	0x93, 0xd1, 0x14, 0x2d, 0x55, 0x2c, 0x5e, 0x9c, 0xa5, 0x16, 0x67, 0xed, 0x71, 0xca, 0xec, 0x2b,
+	0xf1, 0x58, 0xda, 0x0a, 0x5e, 0x79, 0x03, 0x8a, 0x7f, 0xb1, 0x9b, 0x72, 0x37, 0x9e, 0x82, 0x6b,
+	0x01, 0x76, 0x30, 0x8d, 0xb0, 0x9b, 0xf0, 0x5c, 0xa1, 0xee, 0x2c, 0x61, 0x2a, 0xdc, 0x0e, 0x03,
+	0x76, 0x19, 0x85, 0xbf, 0x4f, 0x84, 0x2f, 0xb2, 0x9b, 0x09, 0x6f, 0x65, 0x84, 0xeb, 0x76, 0x23,
+	0x4e, 0xfe, 0x79, 0x56, 0xbe, 0x93, 0x96, 0x17, 0xee, 0xa1, 0x45, 0x39, 0xf4, 0x90, 0xec, 0x5a,
+	0x2f, 0x30, 0x41, 0x4e, 0xbf, 0x89, 0x9d, 0xd3, 0xe3, 0x3a, 0x50, 0xdd, 0x9b, 0xd8, 0x99, 0x8f,
+	0x62, 0x77, 0xb8, 0x06, 0xd6, 0x5b, 0x82, 0x18, 0x07, 0xe0, 0xc6, 0xc2, 0x45, 0xb8, 0x7f, 0xce,
+	0x01, 0xce, 0x9c, 0xa5, 0x92, 0xb5, 0x1a, 0x6e, 0x46, 0xbf, 0x07, 0x6e, 0x66, 0xce, 0x5b, 0xf5,
+	0xfc, 0x0a, 0x8b, 0xc8, 0xd2, 0xce, 0xaa, 0xc8, 0x3f, 0xbb, 0x65, 0x96, 0x7c, 0x41, 0xb7, 0x45,
+	0xe4, 0x45, 0xdd, 0x96, 0xaf, 0xa6, 0x74, 0xf5, 0x53, 0x7c, 0xa3, 0xed, 0xfd, 0x93, 0x91, 0xa9,
+	0x0d, 0x47, 0xa6, 0xf6, 0x6b, 0x64, 0x6a, 0x5f, 0xc7, 0x66, 0x6e, 0x38, 0x36, 0x73, 0x3f, 0xc6,
+	0x66, 0xee, 0xed, 0xe3, 0xff, 0xb9, 0xd0, 0xb2, 0xef, 0x63, 0xd1, 0xc9, 0x27, 0xff, 0xac, 0x07,
+	0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0x21, 0x48, 0x2e, 0x90, 0xae, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -381,8 +407,10 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
-	LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error)
-	LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error)
+	// MintDerivative defines a method for converting a delegation into staking deriviatives.
+	MintDerivative(ctx context.Context, in *MsgMintDerivative, opts ...grpc.CallOption) (*MsgMintDerivativeResponse, error)
+	// BurnDerivative defines a method for converting staking deriviatives into a delegation.
+	BurnDerivative(ctx context.Context, in *MsgBurnDerivative, opts ...grpc.CallOption) (*MsgBurnDerivativeResponse, error)
 }
 
 type msgClient struct {
@@ -402,18 +430,18 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
-func (c *msgClient) LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error) {
-	out := new(MsgLiquidStakeResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Msg/LiquidStake", in, out, opts...)
+func (c *msgClient) MintDerivative(ctx context.Context, in *MsgMintDerivative, opts ...grpc.CallOption) (*MsgMintDerivativeResponse, error) {
+	out := new(MsgMintDerivativeResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Msg/MintDerivative", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error) {
-	out := new(MsgLiquidUnstakeResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Msg/LiquidUnstake", in, out, opts...)
+func (c *msgClient) BurnDerivative(ctx context.Context, in *MsgBurnDerivative, opts ...grpc.CallOption) (*MsgBurnDerivativeResponse, error) {
+	out := new(MsgBurnDerivativeResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.Msg/BurnDerivative", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -425,8 +453,10 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
-	LiquidStake(context.Context, *MsgLiquidStake) (*MsgLiquidStakeResponse, error)
-	LiquidUnstake(context.Context, *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error)
+	// MintDerivative defines a method for converting a delegation into staking deriviatives.
+	MintDerivative(context.Context, *MsgMintDerivative) (*MsgMintDerivativeResponse, error)
+	// BurnDerivative defines a method for converting staking deriviatives into a delegation.
+	BurnDerivative(context.Context, *MsgBurnDerivative) (*MsgBurnDerivativeResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -436,11 +466,11 @@ type UnimplementedMsgServer struct {
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
-func (*UnimplementedMsgServer) LiquidStake(ctx context.Context, req *MsgLiquidStake) (*MsgLiquidStakeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidStake not implemented")
+func (*UnimplementedMsgServer) MintDerivative(ctx context.Context, req *MsgMintDerivative) (*MsgMintDerivativeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MintDerivative not implemented")
 }
-func (*UnimplementedMsgServer) LiquidUnstake(ctx context.Context, req *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidUnstake not implemented")
+func (*UnimplementedMsgServer) BurnDerivative(ctx context.Context, req *MsgBurnDerivative) (*MsgBurnDerivativeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BurnDerivative not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -465,38 +495,38 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_LiquidStake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLiquidStake)
+func _Msg_MintDerivative_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgMintDerivative)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).LiquidStake(ctx, in)
+		return srv.(MsgServer).MintDerivative(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.liquidstaking.Msg/LiquidStake",
+		FullMethod: "/sunrise.liquidstaking.Msg/MintDerivative",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).LiquidStake(ctx, req.(*MsgLiquidStake))
+		return srv.(MsgServer).MintDerivative(ctx, req.(*MsgMintDerivative))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_LiquidUnstake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLiquidUnstake)
+func _Msg_BurnDerivative_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBurnDerivative)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).LiquidUnstake(ctx, in)
+		return srv.(MsgServer).BurnDerivative(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.liquidstaking.Msg/LiquidUnstake",
+		FullMethod: "/sunrise.liquidstaking.Msg/BurnDerivative",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).LiquidUnstake(ctx, req.(*MsgLiquidUnstake))
+		return srv.(MsgServer).BurnDerivative(ctx, req.(*MsgBurnDerivative))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -510,12 +540,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_UpdateParams_Handler,
 		},
 		{
-			MethodName: "LiquidStake",
-			Handler:    _Msg_LiquidStake_Handler,
+			MethodName: "MintDerivative",
+			Handler:    _Msg_MintDerivative_Handler,
 		},
 		{
-			MethodName: "LiquidUnstake",
-			Handler:    _Msg_LiquidUnstake_Handler,
+			MethodName: "BurnDerivative",
+			Handler:    _Msg_BurnDerivative_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -585,7 +615,7 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgLiquidStake) Marshal() (dAtA []byte, err error) {
+func (m *MsgMintDerivative) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -595,12 +625,12 @@ func (m *MsgLiquidStake) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgLiquidStake) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgMintDerivative) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgLiquidStake) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgMintDerivative) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -614,18 +644,25 @@ func (m *MsgLiquidStake) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x12
-	if len(m.DelegatorAddress) > 0 {
-		i -= len(m.DelegatorAddress)
-		copy(dAtA[i:], m.DelegatorAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.DelegatorAddress)))
+	dAtA[i] = 0x1a
+	if len(m.Validator) > 0 {
+		i -= len(m.Validator)
+		copy(dAtA[i:], m.Validator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgLiquidStakeResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgMintDerivativeResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -635,20 +672,30 @@ func (m *MsgLiquidStakeResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgLiquidStakeResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgMintDerivativeResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgLiquidStakeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgMintDerivativeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	{
+		size, err := m.Received.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgLiquidUnstake) Marshal() (dAtA []byte, err error) {
+func (m *MsgBurnDerivative) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -658,12 +705,12 @@ func (m *MsgLiquidUnstake) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgLiquidUnstake) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgBurnDerivative) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgLiquidUnstake) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgBurnDerivative) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -677,18 +724,25 @@ func (m *MsgLiquidUnstake) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x12
-	if len(m.DelegatorAddress) > 0 {
-		i -= len(m.DelegatorAddress)
-		copy(dAtA[i:], m.DelegatorAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.DelegatorAddress)))
+	dAtA[i] = 0x1a
+	if len(m.Validator) > 0 {
+		i -= len(m.Validator)
+		copy(dAtA[i:], m.Validator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgLiquidUnstakeResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgBurnDerivativeResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -698,22 +752,24 @@ func (m *MsgLiquidUnstakeResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgLiquidUnstakeResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgBurnDerivativeResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgLiquidUnstakeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgBurnDerivativeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	n4, err4 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.CompletionTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.CompletionTime):])
-	if err4 != nil {
-		return 0, err4
+	{
+		size := m.Received.Size()
+		i -= size
+		if _, err := m.Received.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
-	i -= n4
-	i = encodeVarintTx(dAtA, i, uint64(n4))
 	i--
 	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
@@ -754,13 +810,17 @@ func (m *MsgUpdateParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgLiquidStake) Size() (n int) {
+func (m *MsgMintDerivative) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.DelegatorAddress)
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Validator)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -769,22 +829,28 @@ func (m *MsgLiquidStake) Size() (n int) {
 	return n
 }
 
-func (m *MsgLiquidStakeResponse) Size() (n int) {
+func (m *MsgMintDerivativeResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	l = m.Received.Size()
+	n += 1 + l + sovTx(uint64(l))
 	return n
 }
 
-func (m *MsgLiquidUnstake) Size() (n int) {
+func (m *MsgBurnDerivative) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.DelegatorAddress)
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Validator)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -793,13 +859,13 @@ func (m *MsgLiquidUnstake) Size() (n int) {
 	return n
 }
 
-func (m *MsgLiquidUnstakeResponse) Size() (n int) {
+func (m *MsgBurnDerivativeResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.CompletionTime)
+	l = m.Received.Size()
 	n += 1 + l + sovTx(uint64(l))
 	return n
 }
@@ -975,7 +1041,7 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgLiquidStake) Unmarshal(dAtA []byte) error {
+func (m *MsgMintDerivative) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -998,15 +1064,15 @@ func (m *MsgLiquidStake) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgLiquidStake: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgMintDerivative: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgLiquidStake: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgMintDerivative: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1034,9 +1100,41 @@ func (m *MsgLiquidStake) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Validator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -1090,7 +1188,7 @@ func (m *MsgLiquidStake) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgLiquidStakeResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgMintDerivativeResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1113,12 +1211,45 @@ func (m *MsgLiquidStakeResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgLiquidStakeResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgMintDerivativeResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgLiquidStakeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgMintDerivativeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Received", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Received.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -1140,7 +1271,7 @@ func (m *MsgLiquidStakeResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgLiquidUnstake) Unmarshal(dAtA []byte) error {
+func (m *MsgBurnDerivative) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1163,15 +1294,15 @@ func (m *MsgLiquidUnstake) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgLiquidUnstake: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgBurnDerivative: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgLiquidUnstake: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgBurnDerivative: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1199,9 +1330,41 @@ func (m *MsgLiquidUnstake) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Validator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -1255,7 +1418,7 @@ func (m *MsgLiquidUnstake) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgLiquidUnstakeResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgBurnDerivativeResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1278,17 +1441,17 @@ func (m *MsgLiquidUnstakeResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgLiquidUnstakeResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgBurnDerivativeResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgLiquidUnstakeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgBurnDerivativeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CompletionTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Received", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1298,22 +1461,23 @@ func (m *MsgLiquidUnstakeResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthTx
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthTx
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.CompletionTime, dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Received.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

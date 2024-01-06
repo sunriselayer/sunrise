@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName  = "/sunrise.liquidstaking.Msg/UpdateParams"
-	Msg_LiquidStake_FullMethodName   = "/sunrise.liquidstaking.Msg/LiquidStake"
-	Msg_LiquidUnstake_FullMethodName = "/sunrise.liquidstaking.Msg/LiquidUnstake"
+	Msg_UpdateParams_FullMethodName   = "/sunrise.liquidstaking.Msg/UpdateParams"
+	Msg_MintDerivative_FullMethodName = "/sunrise.liquidstaking.Msg/MintDerivative"
+	Msg_BurnDerivative_FullMethodName = "/sunrise.liquidstaking.Msg/BurnDerivative"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,8 +31,10 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
-	LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error)
-	LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error)
+	// MintDerivative defines a method for converting a delegation into staking deriviatives.
+	MintDerivative(ctx context.Context, in *MsgMintDerivative, opts ...grpc.CallOption) (*MsgMintDerivativeResponse, error)
+	// BurnDerivative defines a method for converting staking deriviatives into a delegation.
+	BurnDerivative(ctx context.Context, in *MsgBurnDerivative, opts ...grpc.CallOption) (*MsgBurnDerivativeResponse, error)
 }
 
 type msgClient struct {
@@ -52,18 +54,18 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
-func (c *msgClient) LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error) {
-	out := new(MsgLiquidStakeResponse)
-	err := c.cc.Invoke(ctx, Msg_LiquidStake_FullMethodName, in, out, opts...)
+func (c *msgClient) MintDerivative(ctx context.Context, in *MsgMintDerivative, opts ...grpc.CallOption) (*MsgMintDerivativeResponse, error) {
+	out := new(MsgMintDerivativeResponse)
+	err := c.cc.Invoke(ctx, Msg_MintDerivative_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error) {
-	out := new(MsgLiquidUnstakeResponse)
-	err := c.cc.Invoke(ctx, Msg_LiquidUnstake_FullMethodName, in, out, opts...)
+func (c *msgClient) BurnDerivative(ctx context.Context, in *MsgBurnDerivative, opts ...grpc.CallOption) (*MsgBurnDerivativeResponse, error) {
+	out := new(MsgBurnDerivativeResponse)
+	err := c.cc.Invoke(ctx, Msg_BurnDerivative_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +79,10 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
-	LiquidStake(context.Context, *MsgLiquidStake) (*MsgLiquidStakeResponse, error)
-	LiquidUnstake(context.Context, *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error)
+	// MintDerivative defines a method for converting a delegation into staking deriviatives.
+	MintDerivative(context.Context, *MsgMintDerivative) (*MsgMintDerivativeResponse, error)
+	// BurnDerivative defines a method for converting staking deriviatives into a delegation.
+	BurnDerivative(context.Context, *MsgBurnDerivative) (*MsgBurnDerivativeResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -89,11 +93,11 @@ type UnimplementedMsgServer struct {
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
-func (UnimplementedMsgServer) LiquidStake(context.Context, *MsgLiquidStake) (*MsgLiquidStakeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidStake not implemented")
+func (UnimplementedMsgServer) MintDerivative(context.Context, *MsgMintDerivative) (*MsgMintDerivativeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MintDerivative not implemented")
 }
-func (UnimplementedMsgServer) LiquidUnstake(context.Context, *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidUnstake not implemented")
+func (UnimplementedMsgServer) BurnDerivative(context.Context, *MsgBurnDerivative) (*MsgBurnDerivativeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BurnDerivative not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -126,38 +130,38 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_LiquidStake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLiquidStake)
+func _Msg_MintDerivative_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgMintDerivative)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).LiquidStake(ctx, in)
+		return srv.(MsgServer).MintDerivative(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_LiquidStake_FullMethodName,
+		FullMethod: Msg_MintDerivative_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).LiquidStake(ctx, req.(*MsgLiquidStake))
+		return srv.(MsgServer).MintDerivative(ctx, req.(*MsgMintDerivative))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_LiquidUnstake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLiquidUnstake)
+func _Msg_BurnDerivative_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBurnDerivative)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).LiquidUnstake(ctx, in)
+		return srv.(MsgServer).BurnDerivative(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_LiquidUnstake_FullMethodName,
+		FullMethod: Msg_BurnDerivative_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).LiquidUnstake(ctx, req.(*MsgLiquidUnstake))
+		return srv.(MsgServer).BurnDerivative(ctx, req.(*MsgBurnDerivative))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -174,12 +178,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_UpdateParams_Handler,
 		},
 		{
-			MethodName: "LiquidStake",
-			Handler:    _Msg_LiquidStake_Handler,
+			MethodName: "MintDerivative",
+			Handler:    _Msg_MintDerivative_Handler,
 		},
 		{
-			MethodName: "LiquidUnstake",
-			Handler:    _Msg_LiquidUnstake_Handler,
+			MethodName: "BurnDerivative",
+			Handler:    _Msg_BurnDerivative_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

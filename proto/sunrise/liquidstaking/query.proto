@@ -7,7 +7,8 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/liquidstaking/params.proto";
 
-import "sunrise/liquidstaking/liquidstaking.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sunrise-zone/sunrise-app/x/liquidstaking/types";
 
@@ -18,19 +19,15 @@ service Query {
     option (google.api.http).get = "/sunrise/liquidstaking/v1/params";
   }
 
-  // LiquidValidators returns liquid validators with states of the liquidstaking module.
-  rpc LiquidValidators(QueryLiquidValidatorsRequest) returns (QueryLiquidValidatorsResponse) {
-    option (google.api.http).get = "/sunrise/liquidstaking/v1/validators";
+  // DelegatedBalance returns an account's vesting and vested coins currently delegated to validators.
+  // It ignores coins in unbonding delegations.
+  rpc DelegatedBalance(QueryDelegatedBalanceRequest) returns (QueryDelegatedBalanceResponse) {
+    option (google.api.http).get = "/sunrise/liquidstaking/v1/delegated_balance/{delegator}";
   }
 
-  // VotingPower returns voting power of staking and liquid staking module's of the voter that can be exercised.
-  rpc VotingPower(QueryVotingPowerRequest) returns (QueryVotingPowerResponse) {
-    option (google.api.http).get = "/sunrise/liquidstaking/v1/voting_power/{voter}";
-  }
-
-  // States returns states of the liquidstaking module.
-  rpc States(QueryStatesRequest) returns (QueryStatesResponse) {
-    option (google.api.http).get = "/sunrise/liquidstaking/v1/states";
+  // TotalSupply returns the total sum of all coins currently locked into the liquid module.
+  rpc TotalSupply(QueryTotalSupplyRequest) returns (QueryTotalSupplyResponse) {
+    option (google.api.http).get = "/sunrise/liquidstaking/v1/total_supply";
   }
 }
 
@@ -46,28 +43,30 @@ message QueryParamsResponse {
   ];
 }
 
-// QueryLiquidValidatorsRequest is the request type for the Query/LiquidValidators RPC method.
-message QueryLiquidValidatorsRequest {}
-
-// QueryLiquidValidatorsResponse is the response type for the Query/LiquidValidators RPC method.
-message QueryLiquidValidatorsResponse {
-  repeated LiquidValidatorState liquid_validators = 1 [(gogoproto.nullable) = false];
+// QueryDelegatedBalanceRequest defines the request type for Query/DelegatedBalance method.
+message QueryDelegatedBalanceRequest {
+  // delegator is the address of the account to query
+  string delegator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
-// QueryStatesRequest is the request type for the Query/States RPC method.
-message QueryStatesRequest {}
-
-// QueryStatesResponse is the response type for the Query/States RPC method.
-message QueryStatesResponse {
-  NetAmountState net_amount_state = 1 [(gogoproto.nullable) = false];
+// DelegatedBalanceResponse defines the response type for the Query/DelegatedBalance method.
+message QueryDelegatedBalanceResponse {
+  // vested is the amount of all delegated coins that have vested (ie not locked)
+  cosmos.base.v1beta1.Coin vested = 1 [(gogoproto.nullable) = false];
+  // vesting is the amount of all delegated coins that are still vesting (ie locked)
+  cosmos.base.v1beta1.Coin vesting = 2 [(gogoproto.nullable) = false];
 }
 
-// QueryVotingPowerRequest is the request type for the Query/States RPC method.
-message QueryVotingPowerRequest {
-  string voter = 1;
-}
+// QueryTotalSupplyRequest defines the request type for Query/TotalSupply method.
+message QueryTotalSupplyRequest {}
 
-// QueryVotingPowerResponse is the response type for the Query/States RPC method.
-message QueryVotingPowerResponse {
-  VotingPower voting_power = 1 [(gogoproto.nullable) = false];
+// TotalSupplyResponse defines the response type for the Query/TotalSupply method.
+message QueryTotalSupplyResponse {
+  // Height is the block height at which these totals apply
+  int64 height = 1;
+  // Result is a list of coins supplied to liquid
+  repeated cosmos.base.v1beta1.Coin result = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
