@@ -25,8 +25,6 @@ type (
 		bankKeeper         types.BankKeeper
 		stakingKeeper      types.StakingKeeper
 		distributionKeeper types.DistributionKeeper
-
-		derivativeDenom string
 	}
 )
 
@@ -40,7 +38,6 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	distributionKeeper types.DistributionKeeper,
-	derivativeDenom string,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
@@ -56,8 +53,6 @@ func NewKeeper(
 		bankKeeper:         bankKeeper,
 		stakingKeeper:      stakingKeeper,
 		distributionKeeper: distributionKeeper,
-
-		derivativeDenom: derivativeDenom,
 	}
 }
 

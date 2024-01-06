@@ -23,13 +23,13 @@ var (
 )
 
 const (
-	opWeightMsgLiquidStake = "op_weight_msg_liquid_stake"
+	opWeightMsgMintDerivative = "op_weight_msg_mint_derivative"
 	// TODO: Determine the simulation weight value
-	defaultWeightMsgLiquidStake int = 100
+	defaultWeightMsgMintDerivative int = 100
 
-	opWeightMsgLiquidUnstake = "op_weight_msg_liquid_unstake"
+	opWeightMsgBurnDerivative = "op_weight_msg_burn_derivative"
 	// TODO: Determine the simulation weight value
-	defaultWeightMsgLiquidUnstake int = 100
+	defaultWeightMsgBurnDerivative int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const
 )
@@ -59,26 +59,26 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
 
-	var weightMsgLiquidStake int
-	simState.AppParams.GetOrGenerate(opWeightMsgLiquidStake, &weightMsgLiquidStake, nil,
+	var weightMsgMintDerivative int
+	simState.AppParams.GetOrGenerate(opWeightMsgMintDerivative, &weightMsgMintDerivative, nil,
 		func(_ *rand.Rand) {
-			weightMsgLiquidStake = defaultWeightMsgLiquidStake
+			weightMsgMintDerivative = defaultWeightMsgMintDerivative
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgLiquidStake,
-		liquidstakingsimulation.SimulateMsgLiquidStake(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgMintDerivative,
+		liquidstakingsimulation.SimulateMsgMintDerivative(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgLiquidUnstake int
-	simState.AppParams.GetOrGenerate(opWeightMsgLiquidUnstake, &weightMsgLiquidUnstake, nil,
+	var weightMsgBurnDerivative int
+	simState.AppParams.GetOrGenerate(opWeightMsgBurnDerivative, &weightMsgBurnDerivative, nil,
 		func(_ *rand.Rand) {
-			weightMsgLiquidUnstake = defaultWeightMsgLiquidUnstake
+			weightMsgBurnDerivative = defaultWeightMsgBurnDerivative
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgLiquidUnstake,
-		liquidstakingsimulation.SimulateMsgLiquidUnstake(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgBurnDerivative,
+		liquidstakingsimulation.SimulateMsgBurnDerivative(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
@@ -90,18 +90,18 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgLiquidStake,
-			defaultWeightMsgLiquidStake,
+			opWeightMsgMintDerivative,
+			defaultWeightMsgMintDerivative,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquidstakingsimulation.SimulateMsgLiquidStake(am.accountKeeper, am.bankKeeper, am.keeper)
+				liquidstakingsimulation.SimulateMsgMintDerivative(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgLiquidUnstake,
-			defaultWeightMsgLiquidUnstake,
+			opWeightMsgBurnDerivative,
+			defaultWeightMsgBurnDerivative,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquidstakingsimulation.SimulateMsgLiquidUnstake(am.accountKeeper, am.bankKeeper, am.keeper)
+				liquidstakingsimulation.SimulateMsgBurnDerivative(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

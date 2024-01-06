@@ -10,7 +10,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 )
 
-func SimulateMsgLiquidStake(
+func SimulateMsgMintDerivative(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -18,12 +18,12 @@ func SimulateMsgLiquidStake(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-		msg := &types.MsgLiquidStake{
-			Creator: simAccount.Address.String(),
+		msg := &types.MsgMintDerivative{
+			Sender: simAccount.Address.String(),
 		}
 
-		// TODO: Handling the LiquidStake simulation
+		// TODO: Handling the MintDerivative simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "LiquidStake simulation not implemented"), nil, nil
+		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "MintDerivative simulation not implemented"), nil, nil
 	}
 }

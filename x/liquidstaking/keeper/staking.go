@@ -35,7 +35,7 @@ func (k Keeper) TransferDelegation(ctx sdk.Context, valAddr sdk.ValAddress, from
 	if !found {
 		return sdkmath.LegacyDec{}, types.ErrNoDelegatorForAddress
 	}
-	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr)
+	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
 	if !found {
 		return sdkmath.LegacyDec{}, types.ErrNoValidatorFound
 	}
@@ -71,7 +71,7 @@ func isBelowMinSelfDelegation(validator stakingtypes.ValidatorI, shares sdkmath.
 
 // fastUndelegate undelegates shares from a validator skipping the unbonding period and not creating any unbonding delegations.
 func (k Keeper) fastUndelegate(ctx sdk.Context, valAddr sdk.ValAddress, delegator sdk.AccAddress, shares sdkmath.LegacyDec) (sdkmath.Int, error) {
-	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr)
+	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
 	if !found {
 		return sdkmath.Int{}, types.ErrNoDelegatorForAddress
 	}
@@ -97,7 +97,7 @@ func (k Keeper) fastUndelegate(ctx sdk.Context, valAddr sdk.ValAddress, delegato
 
 // delegateFromAccount delegates to a validator from an account (vs redelegating from an existing delegation)
 func (k Keeper) delegateFromAccount(ctx sdk.Context, valAddr sdk.ValAddress, delegator sdk.AccAddress, amount sdkmath.Int) (sdkmath.LegacyDec, error) {
-	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr)
+	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
 	if !found {
 		return sdkmath.LegacyDec{}, types.ErrNoValidatorFound
 	}

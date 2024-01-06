@@ -99,25 +99,25 @@ func (suite *KeeperTestSuite) AccountBalanceEqual(addr sdk.AccAddress, coins sdk
 
 func (suite *KeeperTestSuite) deliverMsgCreateValidator(ctx sdk.Context, address sdk.ValAddress, selfDelegation sdk.Coin) error {
 	msg, err := stakingtypes.NewMsgCreateValidator(
-		address,
+		address.String(),
 		ed25519.GenPrivKey().PubKey(),
 		selfDelegation,
 		stakingtypes.Description{},
-		stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec()),
+		stakingtypes.NewCommissionRates(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
 		sdkmath.NewInt(1e6),
 	)
 	if err != nil {
 		return err
 	}
 
-	msgServer := stakingkeeper.NewMsgServerImpl(suite.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&suite.StakingKeeper)
 	_, err = msgServer.CreateValidator(sdk.WrapSDKContext(suite.Ctx), msg)
 	return err
 }
 
 // NewBondCoin creates a Coin with the current staking denom.
 func (suite *KeeperTestSuite) NewBondCoin(amount sdkmath.Int) sdk.Coin {
-	stakingDenom := suite.StakingKeeper.BondDenom(suite.Ctx)
+	stakingDenom, _ := suite.StakingKeeper.BondDenom(suite.Ctx)
 	return sdk.NewCoin(stakingDenom, amount)
 }
 
@@ -135,15 +135,15 @@ func (suite *KeeperTestSuite) CreateNewUnbondedValidator(addr sdk.ValAddress, se
 
 	// New validators are created in an unbonded state. Note if the end blocker is run later this validator could become bonded.
 
-	validator, found := suite.StakingKeeper.GetValidator(suite.Ctx, addr)
-	suite.Require().True(found)
+	validator, err := suite.StakingKeeper.GetValidator(suite.Ctx, addr)
+	suite.Require().NoError(err)
 	return validator
 }
 
 // SlashValidator burns tokens staked in a validator. new_tokens = old_tokens * (1-slashFraction)
-func (suite *KeeperTestSuite) SlashValidator(addr sdk.ValAddress, slashFraction sdk.Dec) {
-	validator, found := suite.StakingKeeper.GetValidator(suite.Ctx, addr)
-	suite.Require().True(found)
+func (suite *KeeperTestSuite) SlashValidator(addr sdk.ValAddress, slashFraction sdkmath.LegacyDec) {
+	validator, err := suite.StakingKeeper.GetValidator(suite.Ctx, addr)
+	suite.Require().NoError(err)
 	consAddr, err := validator.GetConsAddr()
 	suite.Require().NoError(err)
 
@@ -157,54 +157,54 @@ func (suite *KeeperTestSuite) SlashValidator(addr sdk.ValAddress, slashFraction 
 }
 
 // CreateDelegation delegates tokens to a validator.
-func (suite *KeeperTestSuite) CreateDelegation(valAddr sdk.ValAddress, delegator sdk.AccAddress, amount sdkmath.Int) sdk.Dec {
-	stakingDenom := suite.StakingKeeper.BondDenom(suite.Ctx)
+func (suite *KeeperTestSuite) CreateDelegation(valAddr sdk.ValAddress, delegator sdk.AccAddress, amount sdkmath.Int) sdkmath.LegacyDec {
+	stakingDenom, _ := suite.StakingKeeper.BondDenom(suite.Ctx)
 	msg := stakingtypes.NewMsgDelegate(
-		delegator,
-		valAddr,
+		delegator.String(),
+		valAddr.String(),
 		sdk.NewCoin(stakingDenom, amount),
 	)
 
-	msgServer := stakingkeeper.NewMsgServerImpl(suite.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&suite.StakingKeeper)
 	_, err := msgServer.Delegate(sdk.WrapSDKContext(suite.Ctx), msg)
 	suite.Require().NoError(err)
 
-	del, found := suite.StakingKeeper.GetDelegation(suite.Ctx, delegator, valAddr)
-	suite.Require().True(found)
+	del, err := suite.StakingKeeper.GetDelegation(suite.Ctx, delegator, valAddr)
+	suite.Require().NoError(err)
 	return del.Shares
 }
 
 // CreateRedelegation undelegates tokens from one validator and delegates to another.
 func (suite *KeeperTestSuite) CreateRedelegation(delegator sdk.AccAddress, fromValidator, toValidator sdk.ValAddress, amount sdkmath.Int) {
-	stakingDenom := suite.StakingKeeper.BondDenom(suite.Ctx)
+	stakingDenom, _ := suite.StakingKeeper.BondDenom(suite.Ctx)
 	msg := stakingtypes.NewMsgBeginRedelegate(
-		delegator,
-		fromValidator,
-		toValidator,
+		delegator.String(),
+		fromValidator.String(),
+		toValidator.String(),
 		sdk.NewCoin(stakingDenom, amount),
 	)
 
-	msgServer := stakingkeeper.NewMsgServerImpl(suite.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&suite.StakingKeeper)
 	_, err := msgServer.BeginRedelegate(sdk.WrapSDKContext(suite.Ctx), msg)
 	suite.Require().NoError(err)
 }
 
 // CreateUnbondingDelegation undelegates tokens from a validator.
 func (suite *KeeperTestSuite) CreateUnbondingDelegation(delegator sdk.AccAddress, validator sdk.ValAddress, amount sdkmath.Int) {
-	stakingDenom := suite.StakingKeeper.BondDenom(suite.Ctx)
+	stakingDenom, _ := suite.StakingKeeper.BondDenom(suite.Ctx)
 	msg := stakingtypes.NewMsgUndelegate(
-		delegator,
-		validator,
+		delegator.String(),
+		validator.String(),
 		sdk.NewCoin(stakingDenom, amount),
 	)
-	msgServer := stakingkeeper.NewMsgServerImpl(suite.StakingKeeper)
+	msgServer := stakingkeeper.NewMsgServerImpl(&suite.StakingKeeper)
 	_, err := msgServer.Undelegate(sdk.WrapSDKContext(suite.Ctx), msg)
 	suite.Require().NoError(err)
 }
 
 // DelegationSharesEqual checks if a delegation has the specified shares.
 // It expects delegations with zero shares to not be stored in state.
-func (suite *KeeperTestSuite) DelegationSharesEqual(valAddr sdk.ValAddress, delegator sdk.AccAddress, shares sdk.Dec) bool {
+func (suite *KeeperTestSuite) DelegationSharesEqual(valAddr sdk.ValAddress, delegator sdk.AccAddress, shares sdkmath.LegacyDec) bool {
 	del, found := suite.StakingKeeper.GetDelegation(suite.Ctx, delegator, valAddr)
 
 	if shares.IsZero() {

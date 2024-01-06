@@ -3,7 +3,6 @@ package keeper_test
 import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/staking"
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 
@@ -22,7 +21,7 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 		suite.Ctx,
 		distrtypes.ModuleName,
 		sdk.NewCoins(
-			sdk.NewCoin("ukava", initialBalance),
+			sdk.NewCoin("usr", initialBalance),
 		),
 	))
 
@@ -31,14 +30,14 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 
 	suite.CreateNewUnbondedValidator(valAddr1, initialBalance)
 	suite.CreateDelegation(valAddr1, delegator, delegateAmount)
-	staking.EndBlocker(suite.Ctx, suite.StakingKeeper)
+	suite.StakingKeeper.EndBlocker(suite.Ctx)
 
 	// Transfers delegation to module account
 	_, err := suite.Keeper.MintDerivative(suite.Ctx, delegator, valAddr1, suite.NewBondCoin(delegateAmount))
 	suite.Require().NoError(err)
 
-	validator, found := suite.StakingKeeper.GetValidator(suite.Ctx, valAddr1)
-	suite.Require().True(found)
+	validator, err := suite.StakingKeeper.GetValidator(suite.Ctx, valAddr1)
+	suite.Require().NoError(err)
 
 	suite.Ctx = suite.Ctx.WithBlockHeight(2)
 
