@@ -1,5 +1,8 @@
 # `x/blob`
 
+Originally from <https://github.com/celestiaorg/celestia-app/tree/main/x/blob>.
+Great respect goes to Celestia team.
+
 ## Abstract
 
 The `x/blob` module enables users to pay for arbitrary data to be published to
