@@ -53,6 +53,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	shares "github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
@@ -394,7 +395,7 @@ func TestValidateBlobs(t *testing.T) {
 			name: "valid blob",
 			blob: &blob.Blob{
 				Data:             []byte{1},
-				NamespaceId:      appns.RandomBlobNamespace().ID,
+				NamespaceId:      apprand.RandomBlobNamespace().ID,
 				ShareVersion:     uint32(appconsts.DefaultShareVersion),
 				NamespaceVersion: uint32(appns.NamespaceVersionZero),
 			},
@@ -404,7 +405,7 @@ func TestValidateBlobs(t *testing.T) {
 			name: "invalid share version",
 			blob: &blob.Blob{
 				Data:             []byte{1},
-				NamespaceId:      appns.RandomBlobNamespace().ID,
+				NamespaceId:      apprand.RandomBlobNamespace().ID,
 				ShareVersion:     uint32(10000),
 				NamespaceVersion: uint32(appns.NamespaceVersionZero),
 			},
@@ -414,7 +415,7 @@ func TestValidateBlobs(t *testing.T) {
 			name: "empty blob",
 			blob: &blob.Blob{
 				Data:             []byte{},
-				NamespaceId:      appns.RandomBlobNamespace().ID,
+				NamespaceId:      apprand.RandomBlobNamespace().ID,
 				ShareVersion:     uint32(appconsts.DefaultShareVersion),
 				NamespaceVersion: uint32(appns.NamespaceVersionZero),
 			},

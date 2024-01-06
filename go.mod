@@ -6,7 +6,7 @@ toolchain go1.21.5
 
 replace (
 	// sunrise-core
-	github.com/cometbft/cometbft => github.com/sunrise-zone/sunrise-core v0.38.3-0.20231231025910-32991fef438b
+	github.com/cometbft/cometbft => github.com/sunrise-zone/sunrise-core v0.38.3-0.20240106114736-30ccacf8cfa9
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
 )
@@ -59,6 +59,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
+	github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240106110541-17a39acb5414
+	github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240106114425-fcbe9cdfd972
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
 	google.golang.org/grpc v1.59.0

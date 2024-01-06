@@ -10,6 +10,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
 	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	util "github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
@@ -25,14 +26,14 @@ import (
 
 func TestNewBlob(t *testing.T) {
 	rawBlob := []byte{1}
-	validBlob, err := types.NewBlob(namespace.RandomBlobNamespace(), rawBlob, appconsts.ShareVersionZero)
+	validBlob, err := types.NewBlob(apprand.RandomBlobNamespace(), rawBlob, appconsts.ShareVersionZero)
 	require.NoError(t, err)
 	require.Equal(t, validBlob.Data, rawBlob)
 
 	_, err = types.NewBlob(namespace.TxNamespace, rawBlob, appconsts.ShareVersionZero)
 	require.Error(t, err)
 
-	_, err = types.NewBlob(namespace.RandomBlobNamespace(), []byte{}, appconsts.ShareVersionZero)
+	_, err = types.NewBlob(apprand.RandomBlobNamespace(), []byte{}, appconsts.ShareVersionZero)
 	require.Error(t, err)
 }
 
@@ -73,7 +74,7 @@ func TestValidateBlobTx(t *testing.T) {
 			getTx: func() blob.BlobTx {
 				rawBtx := validRawBtx()
 				btx, _ := blob.UnmarshalBlobTx(rawBtx)
-				btx.Blobs[0].NamespaceId = namespace.RandomBlobNamespace().ID
+				btx.Blobs[0].NamespaceId = apprand.RandomBlobNamespace().ID
 				return btx
 			},
 			expectedErr: types.ErrNamespaceMismatch,
@@ -82,7 +83,7 @@ func TestValidateBlobTx(t *testing.T) {
 			name: "invalid transaction, no pfb",
 			getTx: func() blob.BlobTx {
 				sendTx := blobfactory.GenerateManyRawSendTxs(signer, 1)
-				b, err := types.NewBlob(namespace.RandomBlobNamespace(), tmrand.Bytes(100), appconsts.ShareVersionZero)
+				b, err := types.NewBlob(apprand.RandomBlobNamespace(), tmrand.Bytes(100), appconsts.ShareVersionZero)
 				require.NoError(t, err)
 				return blob.BlobTx{
 					Tx:    sendTx[0],
@@ -96,7 +97,7 @@ func TestValidateBlobTx(t *testing.T) {
 			getTx: func() blob.BlobTx {
 				rawBtx := validRawBtx()
 				btx, _ := blob.UnmarshalBlobTx(rawBtx)
-				blob, err := types.NewBlob(namespace.RandomBlobNamespace(), tmrand.Bytes(100), appconsts.ShareVersionZero)
+				blob, err := types.NewBlob(apprand.RandomBlobNamespace(), tmrand.Bytes(100), appconsts.ShareVersionZero)
 				require.NoError(t, err)
 				btx.Blobs = append(btx.Blobs, blob)
 				return btx
@@ -106,7 +107,7 @@ func TestValidateBlobTx(t *testing.T) {
 		{
 			name: "invalid share commitment",
 			getTx: func() blob.BlobTx {
-				b, err := types.NewBlob(namespace.RandomBlobNamespace(), tmrand.Bytes(100), appconsts.ShareVersionZero)
+				b, err := types.NewBlob(apprand.RandomBlobNamespace(), tmrand.Bytes(100), appconsts.ShareVersionZero)
 				require.NoError(t, err)
 				msg, err := types.NewMsgPayForBlobs(
 					addr.String(),
@@ -116,8 +117,8 @@ func TestValidateBlobTx(t *testing.T) {
 
 				badCommit, err := inclusion.CreateCommitment(
 					&blob.Blob{
-						NamespaceVersion: uint32(namespace.RandomBlobNamespace().Version),
-						NamespaceId:      namespace.RandomBlobNamespace().ID,
+						NamespaceVersion: uint32(apprand.RandomBlobNamespace().Version),
+						NamespaceId:      apprand.RandomBlobNamespace().ID,
 						Data:             tmrand.Bytes(99),
 						ShareVersion:     uint32(appconsts.ShareVersionZero),
 					})
@@ -169,7 +170,7 @@ func TestValidateBlobTx(t *testing.T) {
 			getTx: func() blob.BlobTx {
 				rawBtx, err := signer.CreatePayForBlob(
 					blobfactory.RandBlobsWithNamespace(
-						[]namespace.Namespace{namespace.RandomBlobNamespace(), namespace.RandomBlobNamespace()},
+						[]namespace.Namespace{apprand.RandomBlobNamespace(), apprand.RandomBlobNamespace()},
 						[]int{100, 100}),
 				)
 				require.NoError(t, err)
@@ -184,7 +185,7 @@ func TestValidateBlobTx(t *testing.T) {
 			getTx: func() blob.BlobTx {
 				rawBtx, err := signer.CreatePayForBlob(
 					blobfactory.RandBlobsWithNamespace(
-						[]namespace.Namespace{namespace.RandomBlobNamespace(), namespace.RandomBlobNamespace()},
+						[]namespace.Namespace{apprand.RandomBlobNamespace(), apprand.RandomBlobNamespace()},
 						[]int{100000, 1000000}),
 				)
 				require.NoError(t, err)
@@ -197,7 +198,7 @@ func TestValidateBlobTx(t *testing.T) {
 		{
 			name: "normal transaction with two blobs w/ same namespace",
 			getTx: func() blob.BlobTx {
-				ns := namespace.RandomBlobNamespace()
+				ns := apprand.RandomBlobNamespace()
 				rawBtx, err := signer.CreatePayForBlob(
 					blobfactory.RandBlobsWithNamespace(
 						[]namespace.Namespace{ns, ns},
@@ -214,7 +215,7 @@ func TestValidateBlobTx(t *testing.T) {
 			name: "normal transaction with one hundred blobs of the same namespace",
 			getTx: func() blob.BlobTx {
 				count := 100
-				ns := namespace.RandomBlobNamespace()
+				ns := apprand.RandomBlobNamespace()
 				sizes := make([]int, count)
 				namespaces := make([]namespace.Namespace, count)
 				for i := 0; i < count; i++ {

@@ -8,7 +8,6 @@ import (
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
 	shares "github.com/sunrise-zone/sunrise-app/pkg/shares"
 
-	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/client"
 )
 
@@ -103,7 +102,7 @@ func ValidateBlobTx(txcfg client.TxEncodingConfig, bTx blob.BlobTx) error {
 	return nil
 }
 
-func BlobTxSharesUsed(btx cmtproto.BlobTx) int {
+func BlobTxSharesUsed(btx blob.BlobTx) int {
 	sharesUsed := 0
 	for _, blob := range btx.Blobs {
 		sharesUsed += shares.SparseSharesNeeded(uint32(len(blob.Data)))

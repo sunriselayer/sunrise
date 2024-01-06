@@ -8,8 +8,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
 
-	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	coretypes "github.com/cometbft/cometbft/types"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	"github.com/sunrise-zone/sunrise-app/x/blob/types"
 )
@@ -45,7 +43,7 @@ func SubmitPayForBlob(
 	if err != nil {
 		return nil, err
 	}
-	blobTx, err := coretypes.MarshalBlobTx(rawTx, []*cmtproto.Blob(blobs)...)
+	blobTx, err := blob.MarshalBlobTx(rawTx, blobs...)
 	if err != nil {
 		return nil, err
 	}
