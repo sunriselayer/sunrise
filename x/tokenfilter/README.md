@@ -32,7 +32,7 @@ The transfer module already includes a `ReceiverChainIsSource` method. The basic
 
 ```go
 if transfertypes.ReceiverChainIsSource(packet.GetSourcePort(), packet.GetSourceChannel(), data.Denom) {
-	return m.IBCModule.OnRecvPacket(ctx, packet, relayer)
+  return m.IBCModule.OnRecvPacket(ctx, packet, relayer)
 }
 return channeltypes.NewErrorAcknowledgement("denomination not accepted by this chain")
 ```
