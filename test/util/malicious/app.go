@@ -79,17 +79,17 @@ func (a *App) SetMaliciousBehavior(mcfg BehaviorConfig) {
 
 // PrepareProposal overwrites the default app's method to use the configured
 // malicious behavior after a given height.
-func (a *App) PrepareProposal(req abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
+func (a *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 	if a.LastBlockHeight()+1 >= a.maliciousStartHeight {
-		return a.malPrepareProposalHandler(req)
+		return a.malPrepareProposalHandler(*req)
 	}
-	return a.App.PrepareProposal(&req)
+	return a.App.PrepareProposal(req)
 }
 
 // ProcessProposal overwrites the default app's method to auto accept any
 // proposal.
-func (a *App) ProcessProposal(_ abci.RequestProcessProposal) (resp abci.ResponseProcessProposal) {
-	return abci.ResponseProcessProposal{
+func (a *App) ProcessProposal(_ *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
+	return &abci.ResponseProcessProposal{
 		Status: abci.ResponseProcessProposal_ACCEPT,
-	}
+	}, nil
 }

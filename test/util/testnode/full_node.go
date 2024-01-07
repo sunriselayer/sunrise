@@ -5,11 +5,12 @@ import (
 	"path/filepath"
 
 	"cosmossdk.io/log"
-	dbm "github.com/cometbft/cometbft-db"
+	tmlog "github.com/cometbft/cometbft/libs/log"
 	"github.com/cometbft/cometbft/node"
 	"github.com/cometbft/cometbft/p2p"
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cometbft/cometbft/proxy"
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	srvtypes "github.com/cosmos/cosmos-sdk/server/types"
 )
@@ -18,9 +19,9 @@ import (
 // validator celestia-app network. It expects that all configuration files are
 // already initialized and saved to the baseDir.
 func NewCometNode(baseDir string, cfg *UniversalTestingConfig) (*node.Node, srvtypes.Application, error) {
-	logger := newLogger(cfg)
+	logger := newTMLogger(cfg)
 	dbPath := filepath.Join(cfg.TmConfig.RootDir, "data")
-	db, err := dbm.NewGoLevelDB("application", dbPath)
+	db, err := dbm.NewGoLevelDB("application", dbPath, dbm.OptionsMap{})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -52,6 +53,16 @@ func newLogger(cfg *UniversalTestingConfig) log.Logger {
 	if cfg.SuppressLogs {
 		return log.NewNopLogger()
 	}
-	logger := log.NewLogger(log.NewFilterWriter(os.Stdout, log.AllowError()))
+	logger := log.NewLogger(tmlog.NewSyncWriter(os.Stdout))
+	logger = log.NewLogger(log.NewFilterWriter(tmlog.NewSyncWriter(os.Stdout), tmlog.AllowError))
+	return logger
+}
+
+func newTMLogger(cfg *UniversalTestingConfig) tmlog.Logger {
+	if cfg.SuppressLogs {
+		return tmlog.NewNopLogger()
+	}
+	logger := tmlog.NewTMLogger(tmlog.NewSyncWriter(os.Stdout))
+	logger = tmlog.NewFilter(logger, tmlog.AllowError())
 	return logger
 }
