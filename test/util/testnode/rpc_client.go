@@ -5,6 +5,7 @@ import (
 	"path"
 	"strings"
 
+	"cosmossdk.io/log"
 	"github.com/cometbft/cometbft/node"
 	"github.com/cometbft/cometbft/rpc/client/local"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
@@ -59,7 +60,8 @@ func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Co
 	// Add the tendermint queries service in the gRPC router.
 	app.RegisterTendermintService(cctx.Context)
 
-	err := srvgrpc.StartGRPCServer(cctx.Context, app, appCfg.GRPC)
+	server, err := srvgrpc.NewGRPCServer(cctx.Context, app, appCfg.GRPC)
+	err = srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger(), appCfg.GRPC, server)
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}

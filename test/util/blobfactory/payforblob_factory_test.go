@@ -5,11 +5,11 @@ import (
 
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
-	"github.com/cometbft/cometbft/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -33,12 +33,12 @@ func TestRandMultiBlobTxsSameSigner_Deterministic(t *testing.T) {
 
 	// additional checks for the sake of future debugging
 	for index := 0; index < pfbCount; index++ {
-		blobTx1, isBlob := types.UnmarshalBlobTx(marshalledBlobTxs1[index])
+		blobTx1, isBlob := blob.UnmarshalBlobTx(marshalledBlobTxs1[index])
 		assert.True(t, isBlob)
 		pfbMsgs1, err := decoder(blobTx1.Tx)
 		assert.NoError(t, err)
 
-		blobTx2, isBlob := types.UnmarshalBlobTx(marshalledBlobTxs2[index])
+		blobTx2, isBlob := blob.UnmarshalBlobTx(marshalledBlobTxs2[index])
 		assert.True(t, isBlob)
 		pfbMsgs2, err := decoder(blobTx2.Tx)
 		assert.NoError(t, err)

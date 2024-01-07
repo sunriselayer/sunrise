@@ -10,6 +10,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 
 	sdkmath "cosmossdk.io/math"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	coretypes "github.com/cometbft/cometbft/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -21,7 +22,7 @@ import (
 // Document will create a valid genesis doc with funded addresses.
 func Document(
 	ecfg encoding.Config,
-	params *coretypes.ConsensusParams,
+	params *cmtproto.ConsensusParams,
 	chainID string,
 	gentxs []json.RawMessage,
 	addrs []string,

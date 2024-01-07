@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"cosmossdk.io/log"
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 
@@ -125,8 +126,10 @@ func (g *Genesis) AddValidator(val Validator) error {
 		return err
 	}
 
+	ctx := sdk.NewContext(nil, tmproto.Header{ChainID: g.ChainID}, false, log.NewNopLogger())
+
 	// Add the validator's genesis transaction
-	gentx, err := val.GenTx(g.ecfg, g.kr, g.ChainID)
+	gentx, err := val.GenTx(ctx, g.ecfg, g.kr, g.ChainID)
 	if err != nil {
 		return err
 	}

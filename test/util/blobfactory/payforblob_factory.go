@@ -9,6 +9,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
@@ -32,7 +33,7 @@ var (
 func RandMsgPayForBlobsWithSigner(rand *tmrand.Rand, signer string, size, blobCount int) (*blobtypes.MsgPayForBlobs, []*blob.Blob) {
 	blobs := make([]*blob.Blob, blobCount)
 	for i := 0; i < blobCount; i++ {
-		blob, err := blobtypes.NewBlob(appns.RandomBlobNamespaceWithPRG(rand), tmrand.Bytes(size), appconsts.ShareVersionZero)
+		blob, err := blobtypes.NewBlob(apprand.RandomBlobNamespaceWithPRG(rand), tmrand.Bytes(size), appconsts.ShareVersionZero)
 		if err != nil {
 			panic(err)
 		}
@@ -70,7 +71,7 @@ func RandMsgPayForBlobsWithNamespaceAndSigner(signer string, ns appns.Namespace,
 }
 
 func RandMsgPayForBlobs(rand *tmrand.Rand, size int) (*blobtypes.MsgPayForBlobs, *blob.Blob) {
-	blob := blob.New(appns.RandomBlobNamespaceWithPRG(rand), tmrand.Bytes(size), appconsts.ShareVersionZero)
+	blob := blob.New(apprand.RandomBlobNamespaceWithPRG(rand), tmrand.Bytes(size), appconsts.ShareVersionZero)
 	msg, err := blobtypes.NewMsgPayForBlobs(
 		testfactory.TestAccAddr,
 		blob,
@@ -180,7 +181,7 @@ func RandBlobTxs(signer *user.Signer, rand *tmrand.Rand, count, blobsPerTx, size
 }
 
 func ManyRandBlobs(rand *tmrand.Rand, sizes ...int) []*blob.Blob {
-	return ManyBlobs(rand, appns.RandomBlobNamespaces(rand, len(sizes)), sizes)
+	return ManyBlobs(rand, apprand.RandomBlobNamespaces(rand, len(sizes)), sizes)
 }
 
 func Repeat[T any](s T, count int) []T {

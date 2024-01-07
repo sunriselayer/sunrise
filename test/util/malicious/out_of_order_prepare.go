@@ -17,7 +17,7 @@ import (
 func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 	// create a context using a branch of the state and loaded using the
 	// proposal height and chain-id
-	sdkCtx := a.NewProposalContext(core.Header{ChainID: a.GetChainID(), Height: a.LastBlockHeight() + 1})
+	sdkCtx := a.NewProposalContext(core.Header{ChainID: a.ChainID(), Height: a.LastBlockHeight() + 1})
 	// filter out invalid transactions.
 	// TODO: we can remove all state independent checks from the ante handler here such as signature verification
 	// and only check the state dependent checks like fees and nonces as all these transactions have already
@@ -27,16 +27,16 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 		a.BankKeeper,
 		a.BlobKeeper,
 		a.FeeGrantKeeper,
-		a.GetTxConfig().SignModeHandler(),
+		a.TxConfig().SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		a.IBCKeeper,
 	)
 
-	txs := app.FilterTxs(a.Logger(), sdkCtx, handler, a.GetTxConfig(), req.BlockData.Txs)
+	txs := app.FilterTxs(a.Logger(), sdkCtx, handler, a.GetTxConfig(), req.Txs)
 
 	// build the square from the set of valid and prioritised transactions.
 	// The txs returned are the ones used in the square and block
-	dataSquare, txs, err := Build(txs, a.GetBaseApp().AppVersion(sdkCtx), a.GovSquareSizeUpperBound(sdkCtx), OutOfOrderExport)
+	dataSquare, txs, err := Build(txs, a.BaseApp.AppVersion(), a.GovSquareSizeUpperBound(sdkCtx), OutOfOrderExport)
 	if err != nil {
 		panic(err)
 	}
@@ -64,10 +64,8 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 	// tendermint doesn't need to use any of the erasure data, as only the
 	// protobuf encoded version of the block data is gossiped.
 	return &abci.ResponsePrepareProposal{
-		BlockData: &core.Data{
-			Txs:        txs,
-			SquareSize: uint64(dataSquare.Size()),
-			Hash:       dah.Hash(),
-		},
+		Txs:        txs,
+		SquareSize: uint64(dataSquare.Size()),
+		Hash:       dah.Hash(),
 	}, nil
 }

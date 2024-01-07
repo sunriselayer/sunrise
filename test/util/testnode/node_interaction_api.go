@@ -12,6 +12,7 @@ import (
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
 	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/user"
 	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
@@ -289,7 +290,7 @@ func (c *Context) FillBlock(squareSize int, account string, broadcastMode string
 
 	// we use a formula to guarantee that the tx is the exact size needed to force a specific square size.
 	blobSize := shares.AvailableBytesFromSparseShares(shareCount)
-	return c.PostData(account, broadcastMode, appns.RandomBlobNamespace(), tmrand.Bytes(blobSize))
+	return c.PostData(account, broadcastMode, apprand.RandomBlobNamespace(), tmrand.Bytes(blobSize))
 }
 
 // HeightForTimestamp returns the block height for the first block after a
