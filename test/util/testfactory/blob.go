@@ -4,18 +4,17 @@ import (
 	"bytes"
 	"encoding/binary"
 
+	tmrand "github.com/cometbft/cometbft/libs/rand"
+	"github.com/cometbft/cometbft/types"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-
-	tmrand "github.com/cometbft/cometbft/libs/rand"
-	"github.com/cometbft/cometbft/types"
 )
 
 func GenerateRandomlySizedBlobs(count, maxBlobSize int) []*blob.Blob {
 	blobs := make([]*blob.Blob, count)
 	for i := 0; i < count; i++ {
-		blobs[i] = GenerateRandomBlob(tmrand.NewRand().Intn(maxBlobSize))
+		blobs[i] = GenerateRandomBlob(tmrand.Intn(maxBlobSize))
 		if len(blobs[i].Data) == 0 {
 			i--
 		}
