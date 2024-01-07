@@ -109,15 +109,20 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		panic(err)
 	}
 
-	txs = append(txs, dah.Hash())
-	squareSize := uint64(dataSquare.Size())
-	squareSizeBigEndican := make([]byte, 8)
-	binary.BigEndian.PutUint64(squareSizeBigEndican, squareSize)
-	txs = append(txs, squareSizeBigEndican)
+	txs = AppendInfoInTxs(txs, dah.Hash(), uint64(dataSquare.Size()))
 
 	// tendermint doesn't need to use any of the erasure data, as only the
 	// protobuf encoded version of the block data is gossiped.
 	return &abci.ResponsePrepareProposal{
 		Txs: txs,
 	}, nil
+}
+
+func AppendInfoInTxs(txs [][]byte, dataHash []byte, squareSize uint64) [][]byte {
+	txs = append(txs, dataHash)
+	squareSizeBigEndican := make([]byte, 8)
+	binary.BigEndian.PutUint64(squareSizeBigEndican, squareSize)
+	txs = append(txs, squareSizeBigEndican)
+
+	return txs
 }

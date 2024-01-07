@@ -127,16 +127,11 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		return reject(err)
 	}
 
-	// TODO: check len
-	length := len(req.Txs)
-	if length < 2 {
-		err := fmt.Errorf("txs must contain the data hash and the square size at the end, and its length must not be lower than 2")
+	_, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
+	if err != nil {
 		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
 		return reject(err)
 	}
-	dataHash := req.Txs[length-2]
-	squareSizeBigEndian := req.Txs[length-1]
-	squareSize := binary.BigEndian.Uint64(squareSizeBigEndian)
 
 	// Assert that the square size stated by the proposer is correct
 	if uint64(dataSquare.Size()) != squareSize {
@@ -209,4 +204,19 @@ func accept() (*abci.ResponseProcessProposal, error) {
 	return &abci.ResponseProcessProposal{
 		Status: abci.ResponseProcessProposal_ACCEPT,
 	}, nil
+}
+
+func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
+	length := len(txsWithInfo)
+	if length < 2 {
+		err = fmt.Errorf("txs must contain the data hash and the square size at the end, and its length must not be lower than 2")
+		return
+	}
+
+	txs = txsWithInfo[:length-2]
+	dataHash = txsWithInfo[length-2]
+	squareSizeBigEndian := txsWithInfo[length-1]
+	squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
+
+	return
 }

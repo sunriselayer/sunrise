@@ -27,7 +27,7 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 		a.BankKeeper,
 		a.BlobKeeper,
 		a.FeeGrantKeeper,
-		a.TxConfig().SignModeHandler(),
+		a.GetTxConfig().SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		a.IBCKeeper,
 	)
@@ -61,11 +61,11 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 		panic(err)
 	}
 
+	txs = app.AppendInfoInTxs(txs, dah.Hash(), uint64(dataSquare.Size()))
+
 	// tendermint doesn't need to use any of the erasure data, as only the
 	// protobuf encoded version of the block data is gossiped.
 	return &abci.ResponsePrepareProposal{
-		Txs:        txs,
-		SquareSize: uint64(dataSquare.Size()),
-		Hash:       dah.Hash(),
+		Txs: txs,
 	}, nil
 }

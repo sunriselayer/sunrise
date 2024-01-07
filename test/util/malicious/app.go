@@ -3,9 +3,9 @@ package malicious
 import (
 	"io"
 
-	dbm "github.com/cometbft/cometbft-db"
+	"cosmossdk.io/log"
 	abci "github.com/cometbft/cometbft/abci/types"
-	"github.com/cometbft/cometbft/libs/log"
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/sunrise-zone/sunrise-app/app"
@@ -57,7 +57,7 @@ func New(
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) *App {
-	goodApp, _ := app.New(logger, db, traceStore, loadLatest, invCheckPeriod, encodingConfig, 0, appOpts, baseAppOptions...)
+	goodApp, _ := app.New(logger, db, traceStore, loadLatest, appOpts, baseAppOptions...)
 	badApp := &App{App: goodApp}
 
 	// set the malicious prepare proposal handler if it is set in the app options
