@@ -57,9 +57,15 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		Time:    req.Time,
 	})
 
+	txs, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
+	if err != nil {
+		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
+		return reject(err)
+	}
+
 	// iterate over all txs and ensure that all blobTxs are valid, PFBs are correctly signed and non
 	// blobTxs have no PFBs present
-	for idx, rawTx := range req.Txs {
+	for idx, rawTx := range txs {
 		tx := rawTx
 		blobTx, isBlobTx := blob.UnmarshalBlobTx(rawTx)
 		if isBlobTx {
@@ -124,12 +130,6 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 	dataSquare, err := square.Construct(req.Txs, app.BaseApp.AppVersion(), app.GovSquareSizeUpperBound(sdkCtx))
 	if err != nil {
 		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to compute data square from transactions:", err)
-		return reject(err)
-	}
-
-	_, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
-	if err != nil {
-		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
 		return reject(err)
 	}
 
