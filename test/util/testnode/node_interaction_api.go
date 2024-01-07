@@ -37,7 +37,7 @@ const (
 type Context struct {
 	rootCtx context.Context
 	client.Context
-	rpcClient rpcclient.Client
+	RpcClient rpcclient.Client
 }
 
 func NewContext(goCtx context.Context, kr keyring.Keyring, tmCfg *tmconfig.Config, chainID string) Context {
