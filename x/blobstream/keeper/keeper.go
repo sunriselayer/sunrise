@@ -10,8 +10,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
-
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 )
 
 type (
@@ -24,7 +22,7 @@ type (
 		// should be the x/gov module account.
 		authority string
 
-		StakingKeeper stakingkeeper.Keeper
+		StakingKeeper types.StakingKeeper
 	}
 )
 
@@ -34,7 +32,7 @@ func NewKeeper(
 	logger log.Logger,
 	authority string,
 
-	StakingKeeper stakingkeeper.Keeper,
+	StakingKeeper types.StakingKeeper,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
