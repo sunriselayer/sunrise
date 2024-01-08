@@ -75,10 +75,16 @@ func Document(
 
 	// Create the genesis doc
 	genesisDoc := &coretypes.GenesisDoc{
-		ChainID:         chainID,
-		GenesisTime:     time.Now(),
-		ConsensusParams: params,
-		AppState:        stateBz,
+		ChainID:     chainID,
+		GenesisTime: time.Now(),
+		ConsensusParams: &coretypes.ConsensusParams{
+			Block:     coretypes.BlockParams(*params.Block),
+			Evidence:  coretypes.EvidenceParams(*params.Evidence),
+			Validator: coretypes.ValidatorParams(*params.Validator),
+			Version:   coretypes.VersionParams(*params.Version),
+			ABCI:      coretypes.ABCIParams(*params.Abci),
+		},
+		AppState: stateBz,
 	}
 
 	return genesisDoc, nil

@@ -86,7 +86,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 
 	// init chain will set the validator set and initialize the genesis accounts
 	testApp.InitChain(
-		abci.RequestInitChain{
+		&abci.RequestInitChain{
 			Time:            genesisTime,
 			Validators:      []abci.ValidatorUpdate{},
 			ConsensusParams: abciParams,
