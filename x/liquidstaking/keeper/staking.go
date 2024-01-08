@@ -19,7 +19,11 @@ func (k Keeper) TransferDelegation(ctx sdk.Context, valAddr sdk.ValAddress, from
 	// Redelegations link a delegation to it's previous validator so slashes are propagated to the new validator.
 	// If the delegation is transferred to a new owner, the redelegation object must be updated.
 	// For expediency all transfers with redelegations are blocked.
-	if k.stakingKeeper.HasReceivingRedelegation(ctx, fromDelegator, valAddr) {
+	has, err := k.stakingKeeper.HasReceivingRedelegation(ctx, fromDelegator, valAddr)
+	if err != nil {
+		return sdkmath.LegacyDec{}, err
+	}
+	if has {
 		return sdkmath.LegacyDec{}, types.ErrRedelegationsNotCompleted
 	}
 
@@ -31,12 +35,12 @@ func (k Keeper) TransferDelegation(ctx sdk.Context, valAddr sdk.ValAddress, from
 		return sdkmath.LegacyDec{}, errorsmod.Wrap(types.ErrUntransferableShares, "zero shares")
 	}
 
-	fromDelegation, found := k.stakingKeeper.GetDelegation(ctx, fromDelegator, valAddr)
-	if !found {
+	fromDelegation, err := k.stakingKeeper.GetDelegation(ctx, fromDelegator, valAddr)
+	if err != nil {
 		return sdkmath.LegacyDec{}, types.ErrNoDelegatorForAddress
 	}
-	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
-	if !found {
+	validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+	if err != nil {
 		return sdkmath.LegacyDec{}, types.ErrNoValidatorFound
 	}
 	// Prevent validators from reducing their self delegation below the min.
@@ -51,7 +55,11 @@ func (k Keeper) TransferDelegation(ctx sdk.Context, valAddr sdk.ValAddress, from
 	if err != nil {
 		return sdkmath.LegacyDec{}, err
 	}
-	returnCoins := sdk.NewCoins(sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), returnAmount))
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return sdkmath.LegacyDec{}, err
+	}
+	returnCoins := sdk.NewCoins(sdk.NewCoin(bondDenom, returnAmount))
 
 	if err := k.bankKeeper.SendCoins(ctx, fromDelegator, toDelegator, returnCoins); err != nil {
 		return sdkmath.LegacyDec{}, err
@@ -71,8 +79,8 @@ func isBelowMinSelfDelegation(validator stakingtypes.ValidatorI, shares sdkmath.
 
 // fastUndelegate undelegates shares from a validator skipping the unbonding period and not creating any unbonding delegations.
 func (k Keeper) fastUndelegate(ctx sdk.Context, valAddr sdk.ValAddress, delegator sdk.AccAddress, shares sdkmath.LegacyDec) (sdkmath.Int, error) {
-	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
-	if !found {
+	validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+	if err != nil {
 		return sdkmath.Int{}, types.ErrNoDelegatorForAddress
 	}
 
@@ -80,7 +88,11 @@ func (k Keeper) fastUndelegate(ctx sdk.Context, valAddr sdk.ValAddress, delegato
 	if err != nil {
 		return sdkmath.Int{}, err
 	}
-	returnCoins := sdk.NewCoins(sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), returnAmount))
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return sdkmath.Int{}, err
+	}
+	returnCoins := sdk.NewCoins(sdk.NewCoin(bondDenom, returnAmount))
 
 	// transfer the validator tokens to the not bonded pool
 	if validator.IsBonded() {
@@ -97,8 +109,8 @@ func (k Keeper) fastUndelegate(ctx sdk.Context, valAddr sdk.ValAddress, delegato
 
 // delegateFromAccount delegates to a validator from an account (vs redelegating from an existing delegation)
 func (k Keeper) delegateFromAccount(ctx sdk.Context, valAddr sdk.ValAddress, delegator sdk.AccAddress, amount sdkmath.Int) (sdkmath.LegacyDec, error) {
-	validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
-	if !found {
+	validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+	if err != nil {
 		return sdkmath.LegacyDec{}, types.ErrNoValidatorFound
 	}
 	// source tokens are from an account, so subtractAccount true and tokenSrc unbonded

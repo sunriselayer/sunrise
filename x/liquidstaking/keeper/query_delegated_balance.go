@@ -28,7 +28,10 @@ func (k Keeper) DelegatedBalance(goCtx context.Context, req *types.QueryDelegate
 
 	delegated := k.getDelegatedBalance(ctx, delegator)
 
-	bondDenom := k.stakingKeeper.BondDenom(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return nil, err
+	}
 	vesting := k.getVesting(ctx, delegator).AmountOf(bondDenom)
 
 	vestingDelegated := sdkmath.MinInt(vesting, delegated)
@@ -45,8 +48,9 @@ func (k Keeper) getDelegatedBalance(ctx sdk.Context, delegator sdk.AccAddress) s
 	balance := sdkmath.LegacyZeroDec()
 
 	k.stakingKeeper.IterateDelegatorDelegations(ctx, delegator, func(delegation stakingtypes.Delegation) bool {
-		validator, found := k.stakingKeeper.GetValidator(ctx, delegation.GetValidatorAddr())
-		if !found {
+		valAddr, _ := sdk.ValAddressFromBech32(delegation.GetValidatorAddr())
+		validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+		if err != nil {
 			panic(fmt.Sprintf("validator %s for delegation not found", delegation.GetValidatorAddr()))
 		}
 		tokens := validator.TokensFromSharesTruncated(delegation.GetShares())

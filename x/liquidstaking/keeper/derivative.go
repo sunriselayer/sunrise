@@ -15,7 +15,10 @@ import (
 // The input staking token amount is used to calculate shares in the user's delegation, which are transferred to a delegation owned by the module.
 // Derivative coins are them minted and transferred to the user.
 func (k Keeper) MintDerivative(ctx sdk.Context, delegatorAddr sdk.AccAddress, valAddr sdk.ValAddress, amount sdk.Coin) (sdk.Coin, error) {
-	bondDenom := k.stakingKeeper.BondDenom(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return sdk.Coin{}, err
+	}
 	if amount.Denom != bondDenom {
 		return sdk.Coin{}, errorsmod.Wrapf(types.ErrInvalidDenom, "expected %s", bondDenom)
 	}
@@ -108,8 +111,8 @@ func (k Keeper) IsDerivativeDenom(ctx sdk.Context, denom string) bool {
 		return false
 	}
 
-	_, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
-	return found
+	_, err = k.stakingKeeper.GetValidator(ctx, valAddr)
+	return err != nil
 }
 
 // GetStakedTokensForDerivatives returns the total value of the provided derivatives
@@ -123,8 +126,8 @@ func (k Keeper) GetStakedTokensForDerivatives(ctx sdk.Context, coins sdk.Coins) 
 			return sdk.Coin{}, fmt.Errorf("invalid derivative denom: %w", err)
 		}
 
-		validator, found := k.stakingKeeper.GetValidator(ctx, valAddr.String())
-		if !found {
+		validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+		if err != nil {
 			return sdk.Coin{}, fmt.Errorf("invalid derivative denom %s: validator not found", coin.Denom)
 		}
 
@@ -132,8 +135,12 @@ func (k Keeper) GetStakedTokensForDerivatives(ctx sdk.Context, coins sdk.Coins) 
 		valTokens := validator.TokensFromSharesTruncated(sdkmath.LegacyNewDecFromInt(coin.Amount))
 		total = total.Add(valTokens.TruncateInt())
 	}
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return sdk.Coin{}, err
+	}
 
-	totalCoin := sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), total)
+	totalCoin := sdk.NewCoin(bondDenom, total)
 	return totalCoin, nil
 }
 
@@ -181,7 +188,10 @@ func (k Keeper) burnCoins(ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coi
 
 // DerivativeFromTokens calculates the approximate amount of derivative coins that would be minted for a given amount of staking tokens.
 func (k Keeper) DerivativeFromTokens(ctx sdk.Context, valAddr sdk.ValAddress, tokens sdk.Coin) (sdk.Coin, error) {
-	bondDenom := k.stakingKeeper.BondDenom(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return sdk.Coin{}, err
+	}
 	if tokens.Denom != bondDenom {
 		return sdk.Coin{}, errorsmod.Wrapf(types.ErrInvalidDenom, "'%s' does not match staking denom '%s'", tokens.Denom, bondDenom)
 	}
