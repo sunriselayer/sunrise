@@ -4,6 +4,8 @@ import (
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+
+	"github.com/cosmos/cosmos-sdk/client"
 )
 
 const (
@@ -36,4 +38,9 @@ func extractRegisters(m sdkmodule.BasicManager, soloRegisters ...encoding.Module
 		s[i+len(m)] = v
 	}
 	return s
+}
+
+// GetTxConfig implements the TestingApp interface.
+func (app *App) GetTxConfig() client.TxConfig {
+	return app.txConfig
 }

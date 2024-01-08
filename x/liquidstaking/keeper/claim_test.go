@@ -17,7 +17,7 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 	initialBalance := i(1e9)
 	delegateAmount := i(100e6)
 
-	suite.NoError(suite.App.FundModuleAccount(
+	suite.NoError(suite.FundModuleAccount(
 		suite.Ctx,
 		distrtypes.ModuleName,
 		sdk.NewCoins(

@@ -14,6 +14,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/suite"
@@ -71,6 +72,22 @@ func (suite *KeeperTestSuite) CreateAccount(initialBalance sdk.Coins, index int)
 	return suite.CreateAccountWithAddress(addrs[index], initialBalance)
 }
 
+func (suite *KeeperTestSuite) FundAccount(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
+	if err := suite.App.BankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
+		return err
+	}
+
+	return suite.App.BankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, addr, amounts)
+}
+
+func (suite *KeeperTestSuite) FundModuleAccount(ctx sdk.Context, recipientMod string, amounts sdk.Coins) error {
+	if err := suite.App.BankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
+		return err
+	}
+
+	return suite.App.BankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, recipientMod, amounts)
+}
+
 // CreateAccount creates a new account from the provided balance and address
 func (suite *KeeperTestSuite) CreateAccountWithAddress(addr sdk.AccAddress, initialBalance sdk.Coins) authtypes.AccountI {
 	ak := suite.App.AccountKeeper
@@ -78,7 +95,7 @@ func (suite *KeeperTestSuite) CreateAccountWithAddress(addr sdk.AccAddress, init
 	acc := ak.NewAccountWithAddress(suite.Ctx, addr)
 	ak.SetAccount(suite.Ctx, acc)
 
-	err := suite.App.FundAccount(suite.Ctx, acc.GetAddress(), initialBalance)
+	err := suite.FundAccount(suite.Ctx, acc.GetAddress(), initialBalance)
 	suite.Require().NoError(err)
 
 	return acc
@@ -105,7 +122,7 @@ func (suite *KeeperTestSuite) CreateVestingAccountWithAddress(addr sdk.AccAddres
 
 // AddCoinsToModule adds coins to the a module account, creating it if it doesn't exist.
 func (suite *KeeperTestSuite) AddCoinsToModule(module string, amount sdk.Coins) {
-	err := suite.App.AccountKeeper.FundModuleAccount(suite.Ctx, module, amount)
+	err := suite.FundModuleAccount(suite.Ctx, module, amount)
 	suite.Require().NoError(err)
 }
 
