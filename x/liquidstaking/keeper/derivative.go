@@ -100,7 +100,7 @@ func (k Keeper) BurnDerivative(ctx sdk.Context, delegatorAddr sdk.AccAddress, va
 }
 
 func (k Keeper) GetLiquidStakingTokenDenom(valAddr sdk.ValAddress) string {
-	return types.GetLiquidStakingTokenDenom(types.DefaultDerivativeDenom, valAddr)
+	return types.GetLiquidStakingTokenDenom(k.derivativeDenom, valAddr)
 }
 
 // IsDerivativeDenom returns true if the denom is a valid derivative denom and

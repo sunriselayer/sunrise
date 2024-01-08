@@ -25,6 +25,8 @@ type (
 		bankKeeper         types.BankKeeper
 		stakingKeeper      types.StakingKeeper
 		distributionKeeper types.DistributionKeeper
+
+		derivativeDenom string
 	}
 )
 
@@ -53,6 +55,8 @@ func NewKeeper(
 		bankKeeper:         bankKeeper,
 		stakingKeeper:      stakingKeeper,
 		distributionKeeper: distributionKeeper,
+
+		derivativeDenom: types.DefaultDerivativeDenom,
 	}
 }
 
