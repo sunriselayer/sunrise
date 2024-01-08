@@ -41,21 +41,21 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 
 	suite.Ctx = suite.Ctx.WithBlockHeight(2)
 
-	distrKeeper := suite.App.GetDistrKeeper()
-	stakingKeeper := suite.App.GetStakingKeeper()
-	accKeeper := suite.App.GetAccountKeeper()
+	distrKeeper := suite.App.DistrKeeper
+	stakingKeeper := suite.App.StakingKeeper
+	accKeeper := suite.App.AccountKeeper
 	liquidMacc := accKeeper.GetModuleAccount(suite.Ctx, types.ModuleAccountName)
 
 	// Add rewards
 	rewardCoins := sdk.NewDecCoins(sdk.NewDecCoin("ukava", sdkmath.NewInt(500e6)))
 	distrKeeper.AllocateTokensToValidator(suite.Ctx, validator, rewardCoins)
 
-	delegation, found := stakingKeeper.GetDelegation(suite.Ctx, liquidMacc.GetAddress(), valAddr1)
-	suite.Require().True(found)
+	delegation, err := stakingKeeper.GetDelegation(suite.Ctx, liquidMacc.GetAddress(), valAddr1)
+	suite.Require().NoError(err)
 
 	// Get amount of rewards
-	endingPeriod := distrKeeper.IncrementValidatorPeriod(suite.Ctx, validator)
-	delegationRewards := distrKeeper.CalculateDelegationRewards(suite.Ctx, validator, delegation, endingPeriod)
+	endingPeriod, _ := distrKeeper.IncrementValidatorPeriod(suite.Ctx, validator)
+	delegationRewards, _ := distrKeeper.CalculateDelegationRewards(suite.Ctx, validator, delegation, endingPeriod)
 	truncatedRewards, _ := delegationRewards.TruncateDecimal()
 
 	suite.Run("collect staking rewards", func() {

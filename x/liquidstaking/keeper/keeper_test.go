@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"testing"
 
+	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	tmtime "github.com/cometbft/cometbft/types/time"
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -26,25 +26,42 @@ import (
 // Test suite used for all keeper tests
 type KeeperTestSuite struct {
 	suite.Suite
-	App           app.TestApp
+	App           app.App
 	Ctx           sdk.Context
 	Keeper        keeper.Keeper
 	BankKeeper    bankkeeper.Keeper
 	StakingKeeper stakingkeeper.Keeper
 }
 
+type EmptyAppOptions struct{}
+
+// Get implements AppOptions
+func (ao EmptyAppOptions) Get(_ string) interface{} {
+	return nil
+}
+
 // The default state used by each test
 func (suite *KeeperTestSuite) SetupTest() {
-	tApp := app.NewTestApp()
-	ctx := tApp.NewContext(true, tmproto.Header{Height: 1, Time: tmtime.Now()})
 
-	tApp.InitializeFromGenesisStates()
+	// var cache sdk.MultiStorePersistentCache
+	// EmptyAppOptions is a stub implementing AppOptions
+	emptyOpts := EmptyAppOptions{}
+	// var anteOpt = func(bapp *baseapp.BaseApp) { bapp.SetAnteHandler(nil) }
+	db := dbm.NewMemDB()
 
-	suite.App = tApp
-	suite.Ctx = ctx
-	suite.Keeper = tApp.GetLiquidKeeper()
-	suite.StakingKeeper = tApp.GetStakingKeeper()
-	suite.BankKeeper = tApp.GetBankKeeper()
+	// encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+
+	testApp, _ := app.New(
+		log.NewNopLogger(), db, nil, true,
+		emptyOpts,
+	)
+
+	suite.App = *testApp
+	suite.Ctx = testApp.NewContext(false)
+
+	suite.Keeper = testApp.LiquidstakingKeeper
+	suite.StakingKeeper = *testApp.StakingKeeper
+	suite.BankKeeper = testApp.BankKeeper
 }
 
 // CreateAccount creates a new account (with a fixed address) from the provided balance.
@@ -56,7 +73,7 @@ func (suite *KeeperTestSuite) CreateAccount(initialBalance sdk.Coins, index int)
 
 // CreateAccount creates a new account from the provided balance and address
 func (suite *KeeperTestSuite) CreateAccountWithAddress(addr sdk.AccAddress, initialBalance sdk.Coins) authtypes.AccountI {
-	ak := suite.App.GetAccountKeeper()
+	ak := suite.App.AccountKeeper
 
 	acc := ak.NewAccountWithAddress(suite.Ctx, addr)
 	ak.SetAccount(suite.Ctx, acc)
@@ -82,13 +99,13 @@ func (suite *KeeperTestSuite) CreateVestingAccountWithAddress(addr sdk.AccAddres
 		},
 	}
 	vacc, _ := vestingtypes.NewPeriodicVestingAccount(bacc, vestingBalance, suite.Ctx.BlockTime().Unix(), periods)
-	suite.App.GetAccountKeeper().SetAccount(suite.Ctx, vacc)
+	suite.App.AccountKeeper.SetAccount(suite.Ctx, vacc)
 	return vacc
 }
 
 // AddCoinsToModule adds coins to the a module account, creating it if it doesn't exist.
 func (suite *KeeperTestSuite) AddCoinsToModule(module string, amount sdk.Coins) {
-	err := suite.App.FundModuleAccount(suite.Ctx, module, amount)
+	err := suite.App.AccountKeeper.FundModuleAccount(suite.Ctx, module, amount)
 	suite.Require().NoError(err)
 }
 

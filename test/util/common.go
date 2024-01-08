@@ -493,7 +493,7 @@ func SetupTestChain(t *testing.T, weights []uint64) (TestInput, sdk.Context) {
 
 	// some inputs can cause the validator creation not to work, this checks that
 	// everything was successful
-	validators := input.StakingKeeper.GetBondedValidatorsByPower(input.Context)
+	validators, _ := input.StakingKeeper.GetBondedValidatorsByPower(input.Context)
 	require.Equal(t, len(weights), len(validators))
 
 	// Return the test input
