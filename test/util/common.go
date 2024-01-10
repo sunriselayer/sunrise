@@ -166,7 +166,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 
 	// Initialize memory database and mount stores on it
 	db := dbm.NewMemDB()
-	ms := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NoOpMetrics{})
+	ms := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NewNoOpMetrics())
 	ms.MountStoreWithDB(bsKey, storetypes.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyAcc, storetypes.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyParams, storetypes.StoreTypeIAVL, db)

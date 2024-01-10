@@ -195,12 +195,11 @@ func (am *AccountManager) Submit(ctx context.Context, op Operation) error {
 
 	var address types.AccAddress
 	for _, msg := range op.Msgs {
-		msg = msg
-		if err := msg.ValidateBasic(); err != nil {
-			return fmt.Errorf("error validating message: %w", err)
+		signers, _, err := am.encCfg.Codec.GetMsgV1Signers(msg)
+		if err != nil {
+			return err
 		}
 
-		signers := msg.GetSigners()
 		if len(signers) != 1 {
 			return fmt.Errorf("only a single signer is supported got: %d", len(signers))
 		}

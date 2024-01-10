@@ -4,9 +4,7 @@ import (
 	"context"
 	"sync"
 
-	signingv1beta1 "cosmossdk.io/api/cosmos/tx/signing/v1beta1"
 	"cosmossdk.io/log"
-	txsigning "cosmossdk.io/x/tx/signing"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -160,15 +158,7 @@ func (k *KeyringSigner) BuildSignedTx(builder sdkclient.TxBuilder, msg ...sdktyp
 
 	ctx := sdktypes.NewContext(nil, cmtproto.Header{ChainID: k.chainID}, false, log.NewNopLogger())
 
-	// Generate the bytes to be signed.
-	bytesToSign, err := k.encCfg.TxConfig.SignModeHandler().GetSignBytes(
-		ctx,
-		signingv1beta1.SignMode_SIGN_MODE_DIRECT,
-		signerData,
-		txsigning.TxData{
-			Body: panic(),
-		},
-	)
+	bytesToSign, err := authsigning.GetSignBytesAdapter(ctx, k.encCfg.TxConfig.SignModeHandler(), signing.SignMode_SIGN_MODE_DIRECT, signerData, builder.GetTx())
 
 	if err != nil {
 		return nil, err
@@ -242,7 +232,7 @@ func (k *KeyringSigner) GetSignerInfo() *keyring.Record {
 	return info
 }
 
-func (k *KeyringSigner) GetSignerData() (txsigning.SignerData, error) {
+func (k *KeyringSigner) GetSignerData() (authsigning.SignerData, error) {
 	k.RLock()
 	accountNumber := k.accountNumber
 	sequence := k.sequence
@@ -250,17 +240,17 @@ func (k *KeyringSigner) GetSignerData() (txsigning.SignerData, error) {
 
 	record, err := k.Key(k.keyringAccName)
 	if err != nil {
-		return txsigning.SignerData{}, err
+		return authsigning.SignerData{}, err
 	}
 
 	pubKey, err := record.GetPubKey()
 	if err != nil {
-		return txsigning.SignerData{}, err
+		return authsigning.SignerData{}, err
 	}
 
 	address := pubKey.Address()
 
-	return txsigning.SignerData{
+	return authsigning.SignerData{
 		Address:       address.String(),
 		ChainID:       k.chainID,
 		AccountNumber: accountNumber,

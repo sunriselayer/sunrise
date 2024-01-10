@@ -8,10 +8,12 @@ import (
 	"sync"
 	"time"
 
+	"cosmossdk.io/log"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/cmtservice"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
@@ -347,14 +349,10 @@ func (s *Signer) createSignature(builder client.TxBuilder, sequence uint64) ([]b
 		PubKey:        s.pk,
 	}
 
-	sdktypes.NewContext()
+	ctx := sdktypes.NewContext(nil, cmtproto.Header{ChainID: s.chainID}, false, log.NewNopLogger())
 
-	bytesToSign, err := s.enc.SignModeHandler().GetSignBytes(
-		ctx,
-		signing.SignMode_SIGN_MODE_DIRECT,
-		signerData,
-		builder.GetTx(),
-	)
+	bytesToSign, err := authsigning.GetSignBytesAdapter(ctx, s.enc.SignModeHandler(), signing.SignMode_SIGN_MODE_DIRECT, signerData, builder.GetTx())
+
 	if err != nil {
 		return nil, fmt.Errorf("error getting sign bytes: %w", err)
 	}

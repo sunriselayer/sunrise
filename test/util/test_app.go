@@ -9,7 +9,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
+	// tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -24,8 +24,6 @@ import (
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/sunrise-zone/sunrise-app/app"
 
-	// "github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 
@@ -71,18 +69,6 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 		panic(err)
 	}
 
-	abciParams := &abci.ConsensusParams{
-		Block: &abci.BlockParams{
-			// choose some value large enough to not bottleneck the max square
-			// size
-			MaxBytes: int64(appconsts.DefaultSquareSizeUpperBound*appconsts.DefaultSquareSizeUpperBound) * appconsts.ContinuationSparseShareContentSize,
-			MaxGas:   cparams.Block.MaxGas,
-		},
-		Evidence:  &cparams.Evidence,
-		Validator: &cparams.Validator,
-		Version:   &cparams.Version,
-	}
-
 	genesisTime := time.Date(2023, 1, 1, 1, 1, 1, 1, time.UTC).UTC()
 
 	// init chain will set the validator set and initialize the genesis accounts
@@ -90,7 +76,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 		&abci.RequestInitChain{
 			Time:            genesisTime,
 			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: abciParams,
+			ConsensusParams: cparams,
 			AppStateBytes:   stateBytes,
 			ChainId:         ChainID,
 		},
@@ -98,16 +84,17 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 
 	// commit genesis changes
 	testApp.Commit()
-	testApp.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{
-		ChainID:            ChainID,
-		Height:             testApp.LastBlockHeight() + 1,
-		AppHash:            testApp.LastCommitID().Hash,
-		ValidatorsHash:     valSet.Hash(),
-		NextValidatorsHash: valSet.Hash(),
-		Version: tmversion.Consensus{
-			App: cparams.Version.App,
-		},
-	}})
+	_ = valSet
+	// testApp.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{
+	// 	ChainID:            ChainID,
+	// 	Height:             testApp.LastBlockHeight() + 1,
+	// 	AppHash:            testApp.LastCommitID().Hash,
+	// 	ValidatorsHash:     valSet.Hash(),
+	// 	NextValidatorsHash: valSet.Hash(),
+	// 	Version: tmversion.Consensus{
+	// 		App: cparams.Version.App,
+	// 	},
+	// }})
 
 	return testApp, kr
 }
