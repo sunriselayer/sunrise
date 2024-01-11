@@ -13,11 +13,6 @@ import (
 
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
-	"cosmossdk.io/store"
-	"cosmossdk.io/store/metrics"
-	storetypes "cosmossdk.io/store/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -32,15 +27,12 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/distribution"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -144,7 +136,7 @@ type TestInput struct {
 	StakingKeeper    stakingkeeper.Keeper
 	SlashingKeeper   slashingkeeper.Keeper
 	DistKeeper       distrkeeper.Keeper
-	BankKeeper       bankkeeper.BaseKeeper
+	BankKeeper       bankkeeper.Keeper
 	Context          sdk.Context
 	Marshaler        codec.Codec
 	LegacyAmino      *codec.LegacyAmino
@@ -154,168 +146,25 @@ type TestInput struct {
 func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 	t.Helper()
 
-	// Initialize store keys
-	bsKey := storetypes.NewKVStoreKey(bstypes.StoreKey)
-	keyAcc := storetypes.NewKVStoreKey(authtypes.StoreKey)
-	keyStaking := storetypes.NewKVStoreKey(stakingtypes.StoreKey)
-	keyBank := storetypes.NewKVStoreKey(banktypes.StoreKey)
-	keyDistro := storetypes.NewKVStoreKey(distrtypes.StoreKey)
-	keyParams := storetypes.NewKVStoreKey(paramstypes.StoreKey)
-	tkeyParams := storetypes.NewTransientStoreKey(paramstypes.TStoreKey)
-	keySlashing := storetypes.NewKVStoreKey(slashingtypes.StoreKey)
-
-	// Initialize memory database and mount stores on it
 	db := dbm.NewMemDB()
-	ms := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NewNoOpMetrics())
-	ms.MountStoreWithDB(bsKey, storetypes.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyAcc, storetypes.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyParams, storetypes.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyStaking, storetypes.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyBank, storetypes.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyDistro, storetypes.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(tkeyParams, storetypes.StoreTypeTransient, db)
-	ms.MountStoreWithDB(keySlashing, storetypes.StoreTypeIAVL, db)
-	err := ms.LoadLatestVersion()
-	require.Nil(t, err)
+	emptyOpts := EmptyAppOptions{}
+	// encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 
-	// Create sdk.Context
-	ctx := sdk.NewContext(ms, tmproto.Header{
-		Version: tmversion.Consensus{
-			Block: 0,
-			App:   0,
-		},
-		ChainID: "",
-		Height:  1234567,
-		Time:    time.Date(2020, time.April, 22, 12, 0, 0, 0, time.UTC),
-		LastBlockId: tmproto.BlockID{
-			Hash: []byte{},
-			PartSetHeader: tmproto.PartSetHeader{
-				Total: 0,
-				Hash:  []byte{},
-			},
-		},
-		LastCommitHash:     []byte{},
-		DataHash:           []byte{},
-		ValidatorsHash:     []byte{},
-		NextValidatorsHash: []byte{},
-		ConsensusHash:      []byte{},
-		AppHash:            []byte{},
-		LastResultsHash:    []byte{},
-		EvidenceHash:       []byte{},
-		ProposerAddress:    []byte{},
-	}, false, log.NewTestLogger(t))
-
-	cdc := MakeTestCodec()
-	marshaler := MakeTestMarshaler()
-
-	paramsKeeper := paramskeeper.NewKeeper(marshaler, cdc, keyParams, tkeyParams)
-	paramsKeeper.Subspace(authtypes.ModuleName)
-	paramsKeeper.Subspace(banktypes.ModuleName)
-	paramsKeeper.Subspace(stakingtypes.ModuleName)
-	paramsKeeper.Subspace(distrtypes.ModuleName)
-	paramsKeeper.Subspace(bstypes.DefaultParamspace)
-	paramsKeeper.Subspace(slashingtypes.ModuleName)
-
-	// this is also used to initialize module accounts for all the map keys
-	maccPerms := map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
-		bstypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
-	}
-
-	accountKeeper := authkeeper.NewAccountKeeper(
-		marshaler,
-		keyAcc, // target store
-		getSubspace(paramsKeeper, authtypes.ModuleName),
-		authtypes.ProtoBaseAccount, // prototype
-		maccPerms,
-		app.AccountAddressPrefix,
+	testApp, _ := app.New(
+		log.NewNopLogger(), db, nil, true,
+		emptyOpts,
 	)
 
-	blockedAddr := make(map[string]bool, len(maccPerms))
-	for acc := range maccPerms {
-		blockedAddr[authtypes.NewModuleAddress(acc).String()] = true
-	}
-	bankKeeper := bankkeeper.NewBaseKeeper(
-		marshaler,
-		keyBank,
-		accountKeeper,
-		getSubspace(paramsKeeper, banktypes.ModuleName),
-		blockedAddr,
-	)
-	bankKeeper.SetParams(
-		ctx,
-		banktypes.Params{
-			SendEnabled:        []*banktypes.SendEnabled{},
-			DefaultSendEnabled: true,
-		},
-	)
-
-	stakingKeeper := stakingkeeper.NewKeeper(marshaler, keyStaking, accountKeeper, bankKeeper, getSubspace(paramsKeeper, stakingtypes.ModuleName))
-	stakingKeeper.SetParams(ctx, TestingStakeParams)
-
-	distKeeper := distrkeeper.NewKeeper(marshaler, keyDistro, getSubspace(paramsKeeper, distrtypes.ModuleName), accountKeeper, bankKeeper, stakingKeeper, authtypes.FeeCollectorName)
-	distKeeper.Params.Set(ctx, distrtypes.DefaultParams())
-
-	// set genesis items required for distribution
-	distKeeper.FeePool.Set(ctx, distrtypes.InitialFeePool())
-
-	// total supply to track this
-	totalSupply := sdk.NewCoins(sdk.NewInt64Coin("stake", 100000000))
-
-	// set up initial accounts
-	for name, perms := range maccPerms {
-		mod := authtypes.NewEmptyModuleAccount(name, perms...)
-		if name == stakingtypes.NotBondedPoolName {
-			err = bankKeeper.MintCoins(ctx, bstypes.ModuleName, totalSupply)
-			require.NoError(t, err)
-			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, mod.Name, totalSupply)
-			require.NoError(t, err)
-		} else if name == distrtypes.ModuleName {
-			// some big pot to pay out
-			amt := sdk.NewCoins(sdk.NewInt64Coin("stake", 500000))
-			err = bankKeeper.MintCoins(ctx, bstypes.ModuleName, amt)
-			require.NoError(t, err)
-			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, mod.Name, amt)
-			require.NoError(t, err)
-		}
-		accountKeeper.SetModuleAccount(ctx, mod)
-	}
-
-	stakeAddr := authtypes.NewModuleAddress(stakingtypes.BondedPoolName)
-	moduleAcct := accountKeeper.GetAccount(ctx, stakeAddr)
-	require.NotNil(t, moduleAcct)
-
-	slashingKeeper := slashingkeeper.NewKeeper(
-		marshaler,
-		keySlashing,
-		&stakingKeeper,
-		getSubspace(paramsKeeper, slashingtypes.ModuleName).WithKeyTable(slashingtypes.ParamKeyTable()),
-	)
-
-	k := keeper.NewKeeper(marshaler, bsKey, getSubspace(paramsKeeper, bstypes.DefaultParamspace), &stakingKeeper)
-	testBlobstreamParams := bstypes.DefaultGenesis().Params
-	k.SetParams(ctx, testBlobstreamParams)
-
-	stakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(
-			distKeeper.Hooks(),
-			slashingKeeper.Hooks(),
-			k.Hooks(),
-		),
-	)
 	return TestInput{
-		BlobstreamKeeper: k,
-		AccountKeeper:    accountKeeper,
-		BankKeeper:       bankKeeper,
-		StakingKeeper:    *stakingKeeper,
-		SlashingKeeper:   slashingKeeper,
-		DistKeeper:       distKeeper,
-		Context:          ctx,
-		Marshaler:        marshaler,
-		LegacyAmino:      cdc,
+		BlobstreamKeeper: testApp.StreamKeeper,
+		AccountKeeper:    testApp.AccountKeeper,
+		BankKeeper:       testApp.BankKeeper,
+		StakingKeeper:    *testApp.StakingKeeper,
+		SlashingKeeper:   testApp.SlashingKeeper,
+		DistKeeper:       testApp.DistrKeeper,
+		Context:          testApp.NewContext(false),
+		Marshaler:        testApp.AppCodec(),
+		LegacyAmino:      testApp.LegacyAmino(),
 	}
 }
 
