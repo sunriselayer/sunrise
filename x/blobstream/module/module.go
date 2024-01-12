@@ -23,8 +23,6 @@ import (
 	modulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/module"
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
 	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
-
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 )
 
 var (
@@ -184,7 +182,7 @@ type ModuleInputs struct {
 
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
-	StakingKeeper stakingkeeper.Keeper
+	StakingKeeper types.StakingKeeper
 }
 
 type ModuleOutputs struct {

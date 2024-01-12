@@ -131,7 +131,7 @@ func (k Keeper) GetStakedTokensForDerivatives(ctx sdk.Context, coins sdk.Coins) 
 			return sdk.Coin{}, fmt.Errorf("invalid derivative denom %s: validator not found", coin.Denom)
 		}
 
-		// bstake is 1:1 to delegation shares
+		// bkava is 1:1 to delegation shares
 		valTokens := validator.TokensFromSharesTruncated(sdkmath.LegacyNewDecFromInt(coin.Amount))
 		total = total.Add(valTokens.TruncateInt())
 	}
@@ -147,17 +147,17 @@ func (k Keeper) GetStakedTokensForDerivatives(ctx sdk.Context, coins sdk.Coins) 
 // GetTotalDerivativeValue returns the total sum value of all derivative coins
 // for all validators denominated by the bond token (ukava).
 func (k Keeper) GetTotalDerivativeValue(ctx sdk.Context) (sdk.Coin, error) {
-	bstakeCoins := sdk.NewCoins()
+	bkavaCoins := sdk.NewCoins()
 
 	k.bankKeeper.IterateTotalSupply(ctx, func(c sdk.Coin) bool {
 		if k.IsDerivativeDenom(ctx, c.Denom) {
-			bstakeCoins = bstakeCoins.Add(c)
+			bkavaCoins = bkavaCoins.Add(c)
 		}
 
 		return false
 	})
 
-	return k.GetStakedTokensForDerivatives(ctx, bstakeCoins)
+	return k.GetStakedTokensForDerivatives(ctx, bkavaCoins)
 }
 
 // GetDerivativeValue returns the total underlying value of the provided

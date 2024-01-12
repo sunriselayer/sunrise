@@ -22,7 +22,7 @@ package types_test
 // 	}{
 // 		{
 // 			name:        "valid denom",
-// 			giveDenom:   "bstake-kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a",
+// 			giveDenom:   "bkava-kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a",
 // 			wantAddress: mustValAddressFromBech32("kavavaloper1ze7y9qwdddejmy7jlw4cymqqlt2wh05y6cpt5a"),
 // 			wantErr:     nil,
 // 		},
@@ -34,7 +34,7 @@ package types_test
 // 		},
 // 		{
 // 			name:        "invalid validator address",
-// 			giveDenom:   "bstake-kavavaloper1ze7y9qw",
+// 			giveDenom:   "bkava-kavavaloper1ze7y9qw",
 // 			wantAddress: sdk.ValAddress{},
 // 			wantErr:     fmt.Errorf("invalid denom validator address: decoding bech32 failed: invalid checksum"),
 // 		},

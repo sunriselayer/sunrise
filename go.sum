@@ -1150,10 +1150,6 @@ github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcU
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
-github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240106110541-17a39acb5414 h1:9L0sdWJKKNBW5HuIlGV7kn6cVklR7fQujUjl4qPBfWA=
-github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240106110541-17a39acb5414/go.mod h1:lKWVDRG4sv50z+TJycD8+Vf8b3AmWVwiNoLWxJlbte8=
-github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240106114425-fcbe9cdfd972 h1:G/7AApJQ6KU+DEqQ0y1BQDcLySj21RoSg/sRqtodaB8=
-github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240106114425-fcbe9cdfd972/go.mod h1:u36JI/3vny+qvLQqKS2wTZeK9xQ55ijkmlcp6YodBtA=
 github.com/sunrise-zone/sunrise-core v0.38.3-0.20240106114736-30ccacf8cfa9 h1:/DjwunJ9eVlsMq2EHTLDHSVOI3bZp674zllc9bPY3M4=
 github.com/sunrise-zone/sunrise-core v0.38.3-0.20240106114736-30ccacf8cfa9/go.mod h1:y+21SZ2TVD1qS7lvEXfDKI15hEryT9sNvJ+t3LyAFi0=
 github.com/supranational/blst v0.3.11 h1:LyU6FolezeWAhvQk0k6O/d49jqgO52MSDDfYgbeoEm4=

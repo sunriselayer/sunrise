@@ -6,6 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sunrise-zone/sunrise-app/app"
 )
 
 // GeneratePrivKeyAddressPairsFromRand generates (deterministically) a total of n private keys and addresses.
@@ -23,4 +24,20 @@ func GeneratePrivKeyAddressPairs(n int) (keys []cryptotypes.PrivKey, addrs []sdk
 		addrs[i] = sdk.AccAddress(keys[i].PubKey().Address())
 	}
 	return
+}
+
+func InitSDKConfig() {
+	// Set prefixes
+	accountPubKeyPrefix := app.AccountAddressPrefix + "pub"
+	validatorAddressPrefix := app.AccountAddressPrefix + "valoper"
+	validatorPubKeyPrefix := app.AccountAddressPrefix + "valoperpub"
+	consNodeAddressPrefix := app.AccountAddressPrefix + "valcons"
+	consNodePubKeyPrefix := app.AccountAddressPrefix + "valconspub"
+
+	// Set and seal config
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount(app.AccountAddressPrefix, accountPubKeyPrefix)
+	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
+	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
+	config.Seal()
 }

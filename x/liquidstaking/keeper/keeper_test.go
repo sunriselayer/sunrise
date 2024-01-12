@@ -43,7 +43,7 @@ func (ao EmptyAppOptions) Get(_ string) interface{} {
 
 // The default state used by each test
 func (suite *KeeperTestSuite) SetupTest() {
-
+	testutil.InitSDKConfig()
 	// var cache sdk.MultiStorePersistentCache
 	// EmptyAppOptions is a stub implementing AppOptions
 	emptyOpts := EmptyAppOptions{}

@@ -7,7 +7,7 @@ import (
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/math"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
@@ -15,8 +15,12 @@ import (
 type AccountKeeper interface {
 	GetAccount(context.Context, sdk.AccAddress) sdk.AccountI // only used for simulation
 	// Methods imported from account should be defined here
-	GetModuleAddress(name string) sdk.AccAddress
-	GetModuleAccount(ctx sdk.Context, moduleName string) authtypes.ModuleAccountI
+
+	GetModuleAddress(moduleName string) sdk.AccAddress
+	GetModuleAddressAndPermissions(moduleName string) (addr sdk.AccAddress, permissions []string)
+	GetModuleAccountAndPermissions(ctx context.Context, moduleName string) (sdk.ModuleAccountI, []string)
+	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
+	SetModuleAccount(ctx context.Context, macc sdk.ModuleAccountI)
 }
 
 // BankKeeper defines the expected interface for the Bank module.
@@ -24,23 +28,28 @@ type BankKeeper interface {
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
 	// Methods imported from bank should be defined here
 
-	SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 
-	GetSupply(ctx sdk.Context, denom string) sdk.Coin
-	SendCoinsFromModuleToModule(ctx sdk.Context, senderPool, recipientPool string, amt sdk.Coins) error
-	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
-	SendCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
-	BurnCoins(ctx sdk.Context, name string, amt sdk.Coins) error
-	MintCoins(ctx sdk.Context, name string, amt sdk.Coins) error
+	GetSupply(ctx context.Context, denom string) sdk.Coin
+	HasSupply(ctx context.Context, denom string) bool
+	// GetPaginatedTotalSupply(ctx context.Context, pagination *query.PageRequest) (sdk.Coins, *query.PageResponse, error)
+	IterateTotalSupply(ctx context.Context, cb func(sdk.Coin) bool)
+	GetDenomMetaData(ctx context.Context, denom string) (banktypes.Metadata, bool)
+	HasDenomMetaData(ctx context.Context, denom string) bool
+	SetDenomMetaData(ctx context.Context, denomMetaData banktypes.Metadata)
+	GetAllDenomMetaData(ctx context.Context) []banktypes.Metadata
+	IterateAllDenomMetaData(ctx context.Context, cb func(banktypes.Metadata) bool)
 
-	IterateTotalSupply(ctx sdk.Context, cb func(sdk.Coin) bool)
-	UndelegateCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
-}
+	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromModuleToModule(ctx context.Context, senderModule, recipientModule string, amt sdk.Coins) error
+	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	DelegateCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	UndelegateCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
+	BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
 
-// ParamSubspace defines the expected Subspace interface for parameters.
-type ParamSubspace interface {
-	Get(context.Context, []byte, interface{})
-	Set(context.Context, []byte, interface{})
+	DelegateCoins(ctx context.Context, delegatorAddr, moduleAccAddr sdk.AccAddress, amt sdk.Coins) error
+	UndelegateCoins(ctx context.Context, moduleAccAddr, delegatorAddr sdk.AccAddress, amt sdk.Coins) error
 }
 
 // StakingKeeper expected staking keeper
@@ -89,6 +98,6 @@ type StakingKeeper interface {
 }
 
 type DistributionKeeper interface {
-	GetDelegatorWithdrawAddr(ctx sdk.Context, delAddr sdk.AccAddress) sdk.AccAddress
-	WithdrawDelegationRewards(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (sdk.Coins, error)
+	GetDelegatorWithdrawAddr(ctx context.Context, delAddr sdk.AccAddress) (sdk.AccAddress, error)
+	WithdrawDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (sdk.Coins, error)
 }
