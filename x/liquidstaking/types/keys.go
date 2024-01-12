@@ -20,7 +20,7 @@ const (
 	// ModuleAccountName is the module account's name
 	ModuleAccountName = ModuleName
 
-	DefaultDerivativeDenom = "bsr"
+	DefaultDerivativeDenom = "bstake"
 
 	DenomSeparator = "-"
 )
