@@ -5,7 +5,10 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
 
+	"cosmossdk.io/depinject"
 	"github.com/cosmos/cosmos-sdk/client"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -18,11 +21,33 @@ const (
 )
 
 var (
-	ModuleBasics = sdkmodule.NewBasicManager()
 	// ModuleEncodingRegisters keeps track of all the module methods needed to
 	// register interfaces and specific type to encoding config
-	ModuleEncodingRegisters = extractRegisters(ModuleBasics)
+	ModuleEncodingRegisters = extractRegisters(ModuleBasics())
 )
+
+func ModuleBasics() sdkmodule.BasicManager {
+	// Set prefixes
+	accountPubKeyPrefix := AccountAddressPrefix + "pub"
+	validatorAddressPrefix := AccountAddressPrefix + "valoper"
+	validatorPubKeyPrefix := AccountAddressPrefix + "valoperpub"
+	consNodeAddressPrefix := AccountAddressPrefix + "valcons"
+	consNodePubKeyPrefix := AccountAddressPrefix + "valconspub"
+
+	// Set and seal config
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount(AccountAddressPrefix, accountPubKeyPrefix)
+	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
+	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
+
+	moduleBasics := sdkmodule.BasicManager{}
+	depinject.Inject(
+		depinject.Configs(AppConfig()),
+		&moduleBasics,
+	)
+
+	return moduleBasics
+}
 
 // extractRegisters isolates the encoding module registers from the module
 // manager, and appends any solo registers.

@@ -5,10 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
-	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -20,6 +18,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/test/util"
 	"github.com/sunrise-zone/sunrise-app/testutil"
 	"github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
 )
@@ -43,19 +42,9 @@ func (ao EmptyAppOptions) Get(_ string) interface{} {
 
 // The default state used by each test
 func (suite *KeeperTestSuite) SetupTest() {
-	testutil.InitSDKConfig()
 	// var cache sdk.MultiStorePersistentCache
-	// EmptyAppOptions is a stub implementing AppOptions
-	emptyOpts := EmptyAppOptions{}
-	// var anteOpt = func(bapp *baseapp.BaseApp) { bapp.SetAnteHandler(nil) }
-	db := dbm.NewMemDB()
 
-	// encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
-
-	testApp, _ := app.New(
-		log.NewNopLogger(), db, nil, true,
-		emptyOpts,
-	)
+	testApp, _ := util.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), "alice", "bob")
 
 	suite.App = *testApp
 	suite.Ctx = testApp.NewContext(false)

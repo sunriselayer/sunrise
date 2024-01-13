@@ -9,9 +9,11 @@ import (
 	sdkmath "cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+
 	// tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
@@ -23,6 +25,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/testutil"
 
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
@@ -49,18 +52,24 @@ func (ao EmptyAppOptions) Get(_ string) interface{} {
 // is bonded with a delegation of one consensus engine unit in the default token
 // of the app from first genesis account. A no-op logger is set in app.
 func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts ...string) (*app.App, keyring.Keyring) {
+	testutil.InitSDKConfig()
 	// var cache storetypes.MultiStorePersistentCache
 	// EmptyAppOptions is a stub implementing AppOptions
 	emptyOpts := EmptyAppOptions{}
 	// var anteOpt = func(bapp *baseapp.BaseApp) { bapp.SetAnteHandler(nil) }
 	db := dbm.NewMemDB()
 
-	// encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
-
-	testApp, _ := app.New(
+	testApp, err := app.New(
 		log.NewNopLogger(), db, nil, true,
 		emptyOpts,
+		func(bApp *baseapp.BaseApp) {
+			bApp.FinalizeBlock(&abci.RequestFinalizeBlock{})
+		},
 	)
+
+	if err != nil {
+		panic(err)
+	}
 
 	genesisState, valSet, kr := GenesisStateWithSingleValidator(testApp, genAccounts...)
 
@@ -72,7 +81,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 	genesisTime := time.Date(2023, 1, 1, 1, 1, 1, 1, time.UTC).UTC()
 
 	// init chain will set the validator set and initialize the genesis accounts
-	testApp.InitChain(
+	_, err = testApp.InitChain(
 		&abci.RequestInitChain{
 			Time:            genesisTime,
 			Validators:      []abci.ValidatorUpdate{},
@@ -81,6 +90,9 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 			ChainId:         ChainID,
 		},
 	)
+	if err != nil {
+		panic(err)
+	}
 
 	// commit genesis changes
 	testApp.Commit()
@@ -270,5 +282,5 @@ func genesisStateWithValSet(
 
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.JSONCodec) app.GenesisState {
-	return app.ModuleBasics.DefaultGenesis(cdc)
+	return app.ModuleBasics().DefaultGenesis(cdc)
 }

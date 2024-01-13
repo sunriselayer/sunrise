@@ -59,7 +59,7 @@ func Document(
 	// 	return nil, err
 	// }
 
-	state := app.ModuleBasics.DefaultGenesis(ecfg.Codec)
+	state := app.ModuleBasics().DefaultGenesis(ecfg.Codec)
 	state[authtypes.ModuleName] = ecfg.Codec.MustMarshalJSON(authGenState)
 	state[banktypes.ModuleName] = ecfg.Codec.MustMarshalJSON(bankGenState)
 	state[genutiltypes.ModuleName] = ecfg.Codec.MustMarshalJSON(genutilGenState)

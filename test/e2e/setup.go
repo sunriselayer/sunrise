@@ -31,7 +31,7 @@ type Account struct {
 
 func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	encCdc := encoding.MakeConfig(app.ModuleEncodingRegisters...)
-	appGenState := app.ModuleBasics.DefaultGenesis(encCdc.Codec)
+	appGenState := app.ModuleBasics().DefaultGenesis(encCdc.Codec)
 	bankGenesis := bank.DefaultGenesisState()
 	stakingGenesis := staking.DefaultGenesisState()
 	slashingGenesis := slashing.DefaultGenesisState()
@@ -114,7 +114,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	appGenState[staking.ModuleName] = encCdc.Codec.MustMarshalJSON(stakingGenesis)
 	appGenState[slashing.ModuleName] = encCdc.Codec.MustMarshalJSON(slashingGenesis)
 
-	if err := app.ModuleBasics.ValidateGenesis(encCdc.Codec, encCdc.TxConfig, appGenState); err != nil {
+	if err := app.ModuleBasics().ValidateGenesis(encCdc.Codec, encCdc.TxConfig, appGenState); err != nil {
 		return types.GenesisDoc{}, fmt.Errorf("validating genesis: %w", err)
 	}
 

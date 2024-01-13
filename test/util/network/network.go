@@ -81,7 +81,7 @@ func DefaultConfig() network.Config {
 			)
 			return a
 		},
-		GenesisState:    app.ModuleBasics.DefaultGenesis(encCfg.Codec),
+		GenesisState:    app.ModuleBasics().DefaultGenesis(encCfg.Codec),
 		TimeoutCommit:   2 * time.Second,
 		ChainID:         "chain-" + tmrand.Str(6),
 		NumValidators:   1,
