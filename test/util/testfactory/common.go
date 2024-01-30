@@ -17,7 +17,7 @@ import (
 const (
 	// nolint:lll
 	TestAccName  = "test-account"
-	TestAccAddr  = "celestia1g39egf59z8tud3lcyjg5a83m20df4kccx32qkp"
+	TestAccAddr  = "sunrise1g39egf59z8tud3lcyjg5a83m20df4kcc9kspal"
 	TestAccMnemo = `ramp soldier connect gadget domain mutual staff unusual first midnight iron good deputy wage vehicle mutual spike unlock rocket delay hundred script tumble choose`
 	ChainID      = "test-app"
 )
