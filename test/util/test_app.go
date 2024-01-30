@@ -80,6 +80,10 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 
 	genesisTime := time.Date(2023, 1, 1, 1, 1, 1, 1, time.UTC).UTC()
 
+	// set chain id
+	fn := baseapp.SetChainID(ChainID)
+	fn(testApp.BaseApp)
+
 	// init chain will set the validator set and initialize the genesis accounts
 	_, err = testApp.InitChain(
 		&abci.RequestInitChain{
