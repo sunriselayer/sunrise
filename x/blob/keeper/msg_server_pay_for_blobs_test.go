@@ -20,7 +20,7 @@ import (
 // TestPayForBlobs verifies the attributes on the emitted event.
 func TestPayForBlobs(t *testing.T) {
 	k, ctx := testkeeper.BlobKeeper(t)
-	signer := "celestia15drmhzw5kwgenvemy30rqqqgq52axf5wwrruf7"
+	signer := "cosmos155u042u8wk3al32h3vzxu989jj76k4zc2hx7qq"
 	namespace := appns.MustNewV0(bytes.Repeat([]byte{1}, appns.NamespaceVersionZeroIDSize))
 	namespaces := [][]byte{namespace.Bytes()}
 	blobData := []byte("blob")
