@@ -10,11 +10,11 @@ import (
 
 func initSDKConfig() {
 	// Set prefixes
-	accountPubKeyPrefix := app.AccountAddressPrefix + "pub"
-	validatorAddressPrefix := app.AccountAddressPrefix + "valoper"
-	validatorPubKeyPrefix := app.AccountAddressPrefix + "valoperpub"
-	consNodeAddressPrefix := app.AccountAddressPrefix + "valcons"
-	consNodePubKeyPrefix := app.AccountAddressPrefix + "valconspub"
+	accountPubKeyPrefix := app.Bech32PrefixAccPub
+	validatorAddressPrefix := app.Bech32PrefixValAddr
+	validatorPubKeyPrefix := app.Bech32PrefixValPub
+	consNodeAddressPrefix := app.Bech32PrefixConsAddr
+	consNodePubKeyPrefix := app.Bech32PrefixConsPub
 
 	// Set and seal config
 	config := sdk.GetConfig()

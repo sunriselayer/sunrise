@@ -28,11 +28,11 @@ var (
 
 func ModuleBasics() sdkmodule.BasicManager {
 	// Set prefixes
-	accountPubKeyPrefix := AccountAddressPrefix + "pub"
-	validatorAddressPrefix := AccountAddressPrefix + "valoper"
-	validatorPubKeyPrefix := AccountAddressPrefix + "valoperpub"
-	consNodeAddressPrefix := AccountAddressPrefix + "valcons"
-	consNodePubKeyPrefix := AccountAddressPrefix + "valconspub"
+	accountPubKeyPrefix := Bech32PrefixAccPub
+	validatorAddressPrefix := Bech32PrefixValAddr
+	validatorPubKeyPrefix := Bech32PrefixValPub
+	consNodeAddressPrefix := Bech32PrefixConsAddr
+	consNodePubKeyPrefix := Bech32PrefixConsPub
 
 	// Set and seal config
 	config := sdk.GetConfig()
