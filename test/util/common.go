@@ -238,7 +238,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 		runtime.NewKVStoreService(keyAcc), // target store
 		authtypes.ProtoBaseAccount,        // prototype
 		maccPerms,
-		authcodec.NewBech32Codec(sdk.Bech32PrefixAccAddr),
+		authcodec.NewBech32Codec(app.Bech32PrefixAccAddr),
 		app.Bech32PrefixAccAddr,
 		authrity,
 	)
@@ -263,7 +263,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 		},
 	)
 
-	stakingKeeper := stakingkeeper.NewKeeper(marshaler, runtime.NewKVStoreService(keyStaking), accountKeeper, bankKeeper, authrity, authcodec.NewBech32Codec(sdk.Bech32PrefixValAddr), authcodec.NewBech32Codec(sdk.Bech32PrefixConsAddr))
+	stakingKeeper := stakingkeeper.NewKeeper(marshaler, runtime.NewKVStoreService(keyStaking), accountKeeper, bankKeeper, authrity, authcodec.NewBech32Codec(app.Bech32PrefixValAddr), authcodec.NewBech32Codec(app.Bech32PrefixConsAddr))
 	stakingKeeper.SetParams(ctx, TestingStakeParams)
 
 	distKeeper := distrkeeper.NewKeeper(marshaler, runtime.NewKVStoreService(keyDistro), accountKeeper, bankKeeper, stakingKeeper, authtypes.FeeCollectorName, authrity)
@@ -381,8 +381,8 @@ func MakeTestMarshaler() codec.Codec {
 	interfaceRegistry, _ := codectypes.NewInterfaceRegistryWithOptions(codectypes.InterfaceRegistryOptions{
 		ProtoFiles: proto.HybridResolver,
 		SigningOptions: signing.Options{
-			AddressCodec:          address.NewBech32Codec(app.AccountAddressPrefix),
-			ValidatorAddressCodec: address.NewBech32Codec(app.AccountAddressPrefix + "valoper"),
+			AddressCodec:          address.NewBech32Codec(app.Bech32PrefixAccAddr),
+			ValidatorAddressCodec: address.NewBech32Codec(app.Bech32PrefixValAddr),
 		},
 	})
 	std.RegisterInterfaces(interfaceRegistry)
