@@ -277,21 +277,22 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 
 	// set up initial accounts
 	for name, perms := range maccPerms {
-		mod := authtypes.NewEmptyModuleAccount(name, perms...)
+		macc := authtypes.NewEmptyModuleAccount(name, perms...)
+		maccI := accountKeeper.NewAccount(ctx, macc).(sdk.ModuleAccountI)
 		if name == stakingtypes.NotBondedPoolName {
 			err = bankKeeper.MintCoins(ctx, bstypes.ModuleName, totalSupply)
 			require.NoError(t, err)
-			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, mod.Name, totalSupply)
+			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, maccI.GetName(), totalSupply)
 			require.NoError(t, err)
 		} else if name == distrtypes.ModuleName {
 			// some big pot to pay out
 			amt := sdk.NewCoins(sdk.NewInt64Coin("stake", 500000))
 			err = bankKeeper.MintCoins(ctx, bstypes.ModuleName, amt)
 			require.NoError(t, err)
-			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, mod.Name, amt)
+			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, maccI.GetName(), amt)
 			require.NoError(t, err)
 		}
-		accountKeeper.SetModuleAccount(ctx, mod)
+		accountKeeper.SetModuleAccount(ctx, maccI)
 	}
 
 	stakeAddr := authtypes.NewModuleAddress(stakingtypes.BondedPoolName)
