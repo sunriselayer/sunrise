@@ -316,6 +316,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 		stakingtypes.NewMultiStakingHooks(
 			distKeeper.Hooks(),
 			slashingKeeper.Hooks(),
+			k.Hooks(),
 		),
 	)
 	// emptyOpts := EmptyAppOptions{}
@@ -525,7 +526,8 @@ func SetupTestChain(t *testing.T, weights []uint64) (TestInput, sdk.Context) {
 		require.NoError(t, err)
 
 		// Run the staking endblocker to ensure valset is correct in state
-		input.StakingKeeper.EndBlocker(input.Context)
+		_, err = input.StakingKeeper.EndBlocker(input.Context)
+		require.NoError(t, err)
 	}
 
 	// some inputs can cause the validator creation not to work, this checks that
