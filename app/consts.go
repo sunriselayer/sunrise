@@ -1,14 +1,30 @@
 package app
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
+
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	blobmodule "github.com/sunrise-zone/sunrise-app/x/blob/module"
+	bsmodule "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
 
-	"cosmossdk.io/depinject"
+	// "cosmossdk.io/depinject"
+	"cosmossdk.io/x/evidence"
+	feegrantmodule "cosmossdk.io/x/feegrant/module"
+	"cosmossdk.io/x/upgrade"
+
 	"github.com/cosmos/cosmos-sdk/client"
+	auth "github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
+	mint "github.com/cosmos/cosmos-sdk/x/mint"
+	"github.com/cosmos/cosmos-sdk/x/params"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	capability "github.com/cosmos/ibc-go/modules/capability"
+	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
+	ibc "github.com/cosmos/ibc-go/v8/modules/core"
 )
 
 const (
@@ -40,11 +56,32 @@ func ModuleBasics() sdkmodule.BasicManager {
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 
-	moduleBasics := sdkmodule.BasicManager{}
-	depinject.Inject(
-		depinject.Configs(AppConfig()),
-		&moduleBasics,
+	moduleBasics := sdkmodule.NewBasicManager(
+		auth.AppModuleBasic{},
+		genutil.AppModuleBasic{},
+		bankModule{},
+		capability.AppModuleBasic{},
+		stakingModule{},
+		mint.AppModuleBasic{},
+		distributionModule{},
+		govModule{},
+		params.AppModuleBasic{},
+		crisisModule{},
+		slashingModule{},
+		authzmodule.AppModuleBasic{},
+		feegrantmodule.AppModuleBasic{},
+		ibc.AppModuleBasic{},
+		evidence.AppModuleBasic{},
+		transfer.AppModuleBasic{},
+		vesting.AppModuleBasic{},
+		blobmodule.AppModuleBasic{},
+		bsmodule.AppModuleBasic{},
+		upgrade.AppModuleBasic{},
 	)
+	// depinject.Inject(
+	// 	depinject.Configs(AppConfig()),
+	// 	&moduleBasics,
+	// )
 
 	return moduleBasics
 }
