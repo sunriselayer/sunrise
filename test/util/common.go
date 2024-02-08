@@ -465,11 +465,11 @@ func NewTestMsgCreateValidator(
 	out, err := stakingtypes.NewMsgCreateValidator(
 		address.String(), pubKey, sdk.NewCoin("stake", amt),
 		stakingtypes.Description{
-			Moniker:         "",
-			Identity:        "",
-			Website:         "",
-			SecurityContact: "",
-			Details:         "",
+			Moniker:         "test-moniker",
+			Identity:        "test-identity",
+			Website:         "https://www.google.com/",
+			SecurityContact: "sunrise17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs06edvm",
+			Details:         "test-details",
 		}, commission, sdkmath.OneInt(),
 	)
 	if err != nil {
