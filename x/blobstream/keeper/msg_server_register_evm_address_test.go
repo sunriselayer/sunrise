@@ -25,7 +25,7 @@ func TestRegisterEVMAddress(t *testing.T) {
 	require.True(t, exists)
 
 	// test again with an address that is not the validator
-	valAddr, err := sdk.ValAddressFromBech32("celestiavaloper1xcy3els9ua75kdm783c3qu0rfa2eplestc6sqc")
+	valAddr, err := sdk.ValAddressFromBech32("sunrisevaloper1xcy3els9ua75kdm783c3qu0rfa2eplesdp9sg9")
 	require.NoError(t, err)
 	msg := types.NewMsgRegisterEvmAddress(valAddr, evmAddr)
 
