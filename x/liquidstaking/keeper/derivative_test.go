@@ -55,7 +55,7 @@ func (suite *KeeperTestSuite) TestBurnDerivative() {
 		},
 		{
 			name:             "error when user doesn't have enough funds",
-			balance:          c("ukava", 10),
+			balance:          c("usr", 10),
 			moduleDelegation: i(1e9),
 			burnAmount:       c(liquidDenom, 1e9),
 			expectedErr:      sdkerrors.ErrInsufficientFunds,
@@ -297,7 +297,7 @@ func (suite *KeeperTestSuite) TestMintDerivative() {
 				return
 			}
 
-			derivative := sdk.NewCoins(sdk.NewCoin(fmt.Sprintf("bkava-%s", valAddr), tc.expectedDerivatives))
+			derivative := sdk.NewCoins(sdk.NewCoin(fmt.Sprintf("bstake-%s", valAddr), tc.expectedDerivatives))
 			suite.AccountBalanceEqual(delegator, derivative)
 
 			suite.DelegationSharesEqual(valAddr, delegator, tc.expectedSharesRemaining)
@@ -350,22 +350,22 @@ func (suite *KeeperTestSuite) TestIsDerivativeDenom() {
 		},
 		{
 			name:        "invalid - invalid val addr",
-			denom:       "bkava-asdfasdf",
+			denom:       "bstake-asdfasdf",
 			wantIsDenom: false,
 		},
 		{
-			name:        "invalid - ukava",
-			denom:       "ukava",
+			name:        "invalid - usr",
+			denom:       "usr",
 			wantIsDenom: false,
 		},
 		{
-			name:        "invalid - plain bkava",
-			denom:       "bkava",
+			name:        "invalid - plain bstake",
+			denom:       "bstake",
 			wantIsDenom: false,
 		},
 		{
-			name:        "invalid - bkava prefix",
-			denom:       "bkava-",
+			name:        "invalid - bstake prefix",
+			denom:       "bstake-",
 			wantIsDenom: false,
 		},
 	}
@@ -545,6 +545,6 @@ func (suite *KeeperTestSuite) TestDerivativeFromTokens() {
 
 	derivatives, err := suite.Keeper.DerivativeFromTokens(suite.Ctx, valAddr, suite.NewBondCoin(initialBalance))
 	suite.NoError(err)
-	expected := sdk.NewCoin(fmt.Sprintf("bkava-%s", valAddr), initialBalance)
+	expected := sdk.NewCoin(fmt.Sprintf("bstake-%s", valAddr), initialBalance)
 	suite.Equal(expected, derivatives)
 }
