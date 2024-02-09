@@ -49,11 +49,17 @@ func (suite *KeeperTestSuite) SetupTest() {
 	testApp, _ := util.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), "alice", "bob")
 
 	suite.App = *testApp
+	// suite.Ctx = testApp.NewContext(false)
 	suite.Ctx = testApp.NewUncachedContext(true, tmproto.Header{Height: 1, Time: tmtime.Now()})
 
 	suite.Keeper = testApp.LiquidstakingKeeper
 	suite.StakingKeeper = *testApp.StakingKeeper
 	suite.BankKeeper = testApp.BankKeeper
+
+	// temp: staking keeper is not being set in the test app
+	params := stakingtypes.DefaultParams()
+	params.BondDenom = app.BondDenom
+	suite.StakingKeeper.SetParams(suite.Ctx, params)
 }
 
 // CreateAccount creates a new account (with a fixed address) from the provided balance.
@@ -128,7 +134,13 @@ func (suite *KeeperTestSuite) deliverMsgCreateValidator(ctx sdk.Context, address
 		address.String(),
 		ed25519.GenPrivKey().PubKey(),
 		selfDelegation,
-		stakingtypes.Description{},
+		stakingtypes.Description{
+			Moniker:         "test-moniker",
+			Identity:        "test-identity",
+			Website:         "https://www.google.com/",
+			SecurityContact: "sunrise17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs06edvm",
+			Details:         "test-details",
+		},
 		stakingtypes.NewCommissionRates(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
 		sdkmath.NewInt(1e6),
 	)
