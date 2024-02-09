@@ -7,6 +7,8 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	tmtime "github.com/cometbft/cometbft/types/time"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -47,7 +49,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	testApp, _ := util.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), "alice", "bob")
 
 	suite.App = *testApp
-	suite.Ctx = testApp.NewContext(false)
+	suite.Ctx = testApp.NewUncachedContext(true, tmproto.Header{Height: 1, Time: tmtime.Now()})
 
 	suite.Keeper = testApp.LiquidstakingKeeper
 	suite.StakingKeeper = *testApp.StakingKeeper
