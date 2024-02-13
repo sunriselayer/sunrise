@@ -200,6 +200,11 @@ var (
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
+		{Account: sunrisemoduletypes.ModuleName},
+		{Account: blobmoduletypes.ModuleName},
+		{Account: grantmoduletypes.ModuleName},
+		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: liquidstakingmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
@@ -210,7 +215,16 @@ var (
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
 		// We allow the following module accounts to receive funds:
-		// govtypes.ModuleName
+		govtypes.ModuleName,
+		ibctransfertypes.ModuleName,
+		ibcfeetypes.ModuleName,
+		icatypes.ModuleName,
+		// sunrise module accounts
+		sunrisemoduletypes.ModuleName,
+		blobmoduletypes.ModuleName,
+		grantmoduletypes.ModuleName,
+		streammoduletypes.ModuleName,
+		liquidstakingmoduletypes.ModuleName,
 	}
 
 	// appConfig application configuration (used by depinject)
