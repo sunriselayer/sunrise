@@ -76,7 +76,7 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 		derivativeDenom := suite.Keeper.GetLiquidStakingTokenDenom(sdk.ValAddress(addrs[2]))
 		_, err := suite.Keeper.CollectStakingRewardsByDenom(suite.Ctx, derivativeDenom, types.ModuleName)
 		suite.Require().Error(err)
-		suite.Require().Equal("no validator distribution info", err.Error())
+		suite.Require().Equal("validator does not exist", err.Error())
 	})
 
 	suite.Run("collect staking rewards with invalid denom", func() {
