@@ -246,9 +246,9 @@ func (suite *KeeperTestSuite) DelegationSharesEqual(valAddr sdk.ValAddress, dele
 	del, err := suite.StakingKeeper.GetDelegation(suite.Ctx, delegator, valAddr)
 
 	if shares.IsZero() {
-		return suite.ErrorAsf(err, "expected delegator to not be found, got %s shares", del.Shares.String())
+		return suite.ErrorIs(err, stakingtypes.ErrNoDelegation)
 	} else {
-		res := suite.Error(err, "expected delegator to be found")
+		res := suite.NoError(err)
 		return res && suite.Truef(shares.Equal(del.Shares), "expected %s delegator shares but got %s", shares, del.Shares)
 	}
 }
