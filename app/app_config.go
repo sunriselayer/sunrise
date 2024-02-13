@@ -215,16 +215,15 @@ var (
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
 		// We allow the following module accounts to receive funds:
-		govtypes.ModuleName,
-		ibctransfertypes.ModuleName,
-		ibcfeetypes.ModuleName,
-		icatypes.ModuleName,
-		// sunrise module accounts
-		sunrisemoduletypes.ModuleName,
-		blobmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
-		streammoduletypes.ModuleName,
-		liquidstakingmoduletypes.ModuleName,
+		// govtypes.ModuleName,
+		// ibctransfertypes.ModuleName,
+		// ibcfeetypes.ModuleName,
+		// icatypes.ModuleName,
+		// sunrisemoduletypes.ModuleName,
+		// blobmoduletypes.ModuleName,
+		// grantmoduletypes.ModuleName,
+		// streammoduletypes.ModuleName,
+		// liquidstakingmoduletypes.ModuleName,
 	}
 
 	// appConfig application configuration (used by depinject)
