@@ -112,7 +112,7 @@ func (k Keeper) IsDerivativeDenom(ctx sdk.Context, denom string) bool {
 	}
 
 	_, err = k.stakingKeeper.GetValidator(ctx, valAddr)
-	return err != nil
+	return err == nil
 }
 
 // GetStakedTokensForDerivatives returns the total value of the provided derivatives
