@@ -99,6 +99,10 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 	}
 
 	// commit genesis changes
+	testApp.FinalizeBlock(&abci.RequestFinalizeBlock{
+		Height:             testApp.LastBlockHeight() + 1,
+		NextValidatorsHash: valSet.Hash(),
+	})
 	testApp.Commit()
 	_ = valSet
 	// testApp.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{
