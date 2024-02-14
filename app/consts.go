@@ -1,14 +1,30 @@
 package app
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
+
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	blobmodule "github.com/sunrise-zone/sunrise-app/x/blob/module"
+	bsmodule "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
 
-	"cosmossdk.io/depinject"
+	// "cosmossdk.io/depinject"
+	"cosmossdk.io/x/evidence"
+	feegrantmodule "cosmossdk.io/x/feegrant/module"
+	"cosmossdk.io/x/upgrade"
+
 	"github.com/cosmos/cosmos-sdk/client"
+	auth "github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
+	mint "github.com/cosmos/cosmos-sdk/x/mint"
+	"github.com/cosmos/cosmos-sdk/x/params"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	capability "github.com/cosmos/ibc-go/modules/capability"
+	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
+	ibc "github.com/cosmos/ibc-go/v8/modules/core"
 )
 
 const (
@@ -26,13 +42,31 @@ var (
 	ModuleEncodingRegisters = extractRegisters(ModuleBasics())
 )
 
+// These constants are derived from the above variables.
+// These are the ones we will want to use in the code, based on
+// any overrides above.
+var (
+	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address.
+	Bech32PrefixAccAddr = AccountAddressPrefix
+	// Bech32PrefixAccPub defines the Bech32 prefix of an account's public key.
+	Bech32PrefixAccPub = AccountAddressPrefix + sdk.PrefixPublic
+	// Bech32PrefixValAddr defines the Bech32 prefix of a validator's operator address.
+	Bech32PrefixValAddr = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixOperator
+	// Bech32PrefixValPub defines the Bech32 prefix of a validator's operator public key.
+	Bech32PrefixValPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixOperator + sdk.PrefixPublic
+	// Bech32PrefixConsAddr defines the Bech32 prefix of a consensus node address.
+	Bech32PrefixConsAddr = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus
+	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key.
+	Bech32PrefixConsPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
+)
+
 func ModuleBasics() sdkmodule.BasicManager {
 	// Set prefixes
-	accountPubKeyPrefix := AccountAddressPrefix + "pub"
-	validatorAddressPrefix := AccountAddressPrefix + "valoper"
-	validatorPubKeyPrefix := AccountAddressPrefix + "valoperpub"
-	consNodeAddressPrefix := AccountAddressPrefix + "valcons"
-	consNodePubKeyPrefix := AccountAddressPrefix + "valconspub"
+	accountPubKeyPrefix := Bech32PrefixAccPub
+	validatorAddressPrefix := Bech32PrefixValAddr
+	validatorPubKeyPrefix := Bech32PrefixValPub
+	consNodeAddressPrefix := Bech32PrefixConsAddr
+	consNodePubKeyPrefix := Bech32PrefixConsPub
 
 	// Set and seal config
 	config := sdk.GetConfig()
@@ -40,11 +74,33 @@ func ModuleBasics() sdkmodule.BasicManager {
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 
-	moduleBasics := sdkmodule.BasicManager{}
-	depinject.Inject(
-		depinject.Configs(AppConfig()),
-		&moduleBasics,
+	moduleBasics := sdkmodule.NewBasicManager(
+		auth.AppModuleBasic{},
+		genutil.AppModuleBasic{},
+		bankModule{},
+		capability.AppModuleBasic{},
+		stakingModule{},
+		mint.AppModuleBasic{},
+		distributionModule{},
+		govModule{},
+		params.AppModuleBasic{},
+		crisisModule{},
+		slashingModule{},
+		authzmodule.AppModuleBasic{},
+		feegrantmodule.AppModuleBasic{},
+		ibc.AppModuleBasic{},
+		evidence.AppModuleBasic{},
+		transfer.AppModuleBasic{},
+		vesting.AppModuleBasic{},
+		blobmodule.AppModuleBasic{},
+		bsmodule.AppModuleBasic{},
+		upgrade.AppModuleBasic{},
 	)
+	// moduleBasics := sdkmodule.BasicManager{}
+	// depinject.Inject(
+	// 	depinject.Configs(AppConfig()),
+	// 	&moduleBasics,
+	// )
 
 	return moduleBasics
 }

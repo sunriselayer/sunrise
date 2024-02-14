@@ -30,7 +30,7 @@ func (k Keeper) SetAttestationRequest(ctx sdk.Context, at types.AttestationReque
 func (k Keeper) StoreAttestation(ctx sdk.Context, at types.AttestationRequestI) {
 	nonce := at.GetNonce()
 	key := []byte(types.GetAttestationKey(nonce))
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 
 	if store.Has(key) {
 		panic("trying to overwrite existing attestation request")
@@ -54,14 +54,14 @@ func (k Keeper) SetLatestAttestationNonce(ctx sdk.Context, nonce uint64) {
 		panic("not incrementing latest attestation nonce correctly")
 	}
 
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store.Set([]byte(types.LatestAttestationNonce), types.UInt64Bytes(nonce))
 }
 
 // CheckLatestAttestationNonce returns true if the latest attestation request
 // nonce is declared in the store and false if it has not been initialized.
 func (k Keeper) CheckLatestAttestationNonce(ctx sdk.Context) bool {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	has := store.Has([]byte(types.LatestAttestationNonce))
 	return has
 }
@@ -72,7 +72,7 @@ func (k Keeper) CheckLatestAttestationNonce(ctx sdk.Context) bool {
 // To check if this value exists in store, use the `CheckLatestAttestationNonce`
 // method.
 func (k Keeper) GetLatestAttestationNonce(ctx sdk.Context) uint64 {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	bytes := store.Get([]byte(types.LatestAttestationNonce))
 	if bytes == nil {
 		panic("nil LatestAttestationNonce")
@@ -83,7 +83,7 @@ func (k Keeper) GetLatestAttestationNonce(ctx sdk.Context) uint64 {
 // CheckEarliestAvailableAttestationNonce returns true if the earliest available
 // attestation nonce has been initialized in store, and false if not.
 func (k Keeper) CheckEarliestAvailableAttestationNonce(ctx sdk.Context) bool {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	has := store.Has([]byte(types.EarliestAvailableAttestationNonce))
 	return has
 }
@@ -95,7 +95,7 @@ func (k Keeper) CheckEarliestAvailableAttestationNonce(ctx sdk.Context) bool {
 // won't be written to store until height = 1. To check if this value exists in
 // store, use the `CheckEarliestAvailableAttestationNonce` method.
 func (k Keeper) GetEarliestAvailableAttestationNonce(ctx sdk.Context) uint64 {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	bytes := store.Get([]byte(types.EarliestAvailableAttestationNonce))
 	if bytes == nil {
 		panic("nil earliest available attestation nonce")
@@ -107,14 +107,14 @@ func (k Keeper) GetEarliestAvailableAttestationNonce(ctx sdk.Context) uint64 {
 // nonce. The nonce is of the earliest available attestation in store that can
 // be retrieved.
 func (k Keeper) SetEarliestAvailableAttestationNonce(ctx sdk.Context, nonce uint64) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store.Set([]byte(types.EarliestAvailableAttestationNonce), types.UInt64Bytes(nonce))
 }
 
 // GetAttestationByNonce returns an attestation request by nonce. Returns (nil,
 // false, nil) if the attestation is not found.
 func (k Keeper) GetAttestationByNonce(ctx sdk.Context, nonce uint64) (types.AttestationRequestI, bool, error) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	bz := store.Get([]byte(types.GetAttestationKey(nonce)))
 	if bz == nil {
 		return nil, false, nil
@@ -131,7 +131,7 @@ func (k Keeper) GetAttestationByNonce(ctx sdk.Context, nonce uint64) (types.Atte
 // attestation doesn't exist in store.
 func (k Keeper) DeleteAttestation(ctx sdk.Context, nonce uint64) {
 	key := []byte(types.GetAttestationKey(nonce))
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	if !store.Has(key) {
 		// if the store doesn't have the needed attestation, then no need to do
 		// anything.

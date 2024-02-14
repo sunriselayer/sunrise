@@ -62,7 +62,7 @@ func (k Keeper) GetLatestValset(ctx sdk.Context) (*types.Valset, error) {
 // this value is not saved to state or loaded at genesis. This value is reset to
 // zero on chain upgrade.
 func (k Keeper) SetLatestUnBondingBlockHeight(ctx sdk.Context, unbondingBlockHeight uint64) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store.Set([]byte(types.LatestUnBondingBlockHeight), types.UInt64Bytes(unbondingBlockHeight))
 }
 
@@ -70,7 +70,7 @@ func (k Keeper) SetLatestUnBondingBlockHeight(ctx sdk.Context, unbondingBlockHei
 // zero if not set. This value is not saved or loaded at genesis. This value is
 // reset to zero on chain upgrade.
 func (k Keeper) GetLatestUnBondingBlockHeight(ctx sdk.Context) uint64 {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	bytes := store.Get([]byte(types.LatestUnBondingBlockHeight))
 
 	if len(bytes) == 0 {
@@ -217,12 +217,12 @@ func (k Keeper) GetLatestValsetBeforeNonce(ctx sdk.Context, nonce uint64) (*type
 }
 
 func (k Keeper) SetEVMAddress(ctx sdk.Context, valAddress sdk.ValAddress, evmAddress gethcommon.Address) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store.Set(types.GetEVMKey(valAddress), evmAddress.Bytes())
 }
 
 func (k Keeper) GetEVMAddress(ctx sdk.Context, valAddress sdk.ValAddress) (gethcommon.Address, bool) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	if !store.Has(types.GetEVMKey(valAddress)) {
 		return gethcommon.Address{}, false
 	}
@@ -234,7 +234,7 @@ func (k Keeper) GetEVMAddress(ctx sdk.Context, valAddress sdk.ValAddress) (gethc
 // includes the defaults we set validators when they initially create a validator
 // before registering
 func (k Keeper) IsEVMAddressUnique(ctx sdk.Context, evmAddress gethcommon.Address) bool {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx.Context()))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	addrBytes := evmAddress.Bytes()
 	iterator := storetypes.KVStorePrefixIterator(store, []byte(types.EvmAddress))
 	defer iterator.Close()

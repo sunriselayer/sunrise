@@ -9,7 +9,6 @@ import (
 	"github.com/sunrise-zone/sunrise-app/app"
 	"github.com/sunrise-zone/sunrise-app/app/encoding"
 
-	tmrand "github.com/cometbft/cometbft/libs/rand"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	coretypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
@@ -52,7 +51,7 @@ func NewDefaultGenesis() *Genesis {
 	g := &Genesis{
 		ecfg:            ecfg,
 		ConsensusParams: app.DefaultConsensusParams(),
-		ChainID:         tmrand.Str(6),
+		ChainID:         "test-app", // tmrand.Str(6), (for err check in v0.50)
 		GenesisTime:     time.Now(),
 		kr:              keyring.NewInMemory(ecfg.Codec),
 		genOps:          []Modifier{},

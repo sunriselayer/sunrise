@@ -326,7 +326,13 @@ func (suite *KeeperTestSuite) TestTransferDelegation_CompliesWithMinSelfDelegati
 		valAddr.String(),
 		ed25519.GenPrivKey().PubKey(),
 		delegation,
-		stakingtypes.Description{},
+		stakingtypes.Description{
+			Moniker:         "test-moniker",
+			Identity:        "test-identity",
+			Website:         "https://www.google.com/",
+			SecurityContact: "sunrise17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs06edvm",
+			Details:         "test-details",
+		},
 		stakingtypes.NewCommissionRates(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
 		minSelfDelegation,
 	)

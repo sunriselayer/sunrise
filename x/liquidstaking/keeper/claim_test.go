@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 	liquidMacc := accKeeper.GetModuleAccount(suite.Ctx, types.ModuleAccountName)
 
 	// Add rewards
-	rewardCoins := sdk.NewDecCoins(sdk.NewDecCoin("ukava", sdkmath.NewInt(500e6)))
+	rewardCoins := sdk.NewDecCoins(sdk.NewDecCoin("usr", sdkmath.NewInt(500e6)))
 	distrKeeper.AllocateTokensToValidator(suite.Ctx, validator, rewardCoins)
 
 	delegation, err := stakingKeeper.GetDelegation(suite.Ctx, liquidMacc.GetAddress(), valAddr1)
@@ -65,7 +65,7 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 		suite.Require().NoError(err)
 		suite.Require().Equal(truncatedRewards, rewards)
 
-		suite.True(rewards.AmountOf("ukava").IsPositive())
+		suite.True(rewards.AmountOf("usr").IsPositive())
 
 		// Check balances
 		suite.AccountBalanceEqual(liquidMacc.GetAddress(), rewards)
@@ -76,13 +76,13 @@ func (suite *KeeperTestSuite) TestCollectStakingRewards() {
 		derivativeDenom := suite.Keeper.GetLiquidStakingTokenDenom(sdk.ValAddress(addrs[2]))
 		_, err := suite.Keeper.CollectStakingRewardsByDenom(suite.Ctx, derivativeDenom, types.ModuleName)
 		suite.Require().Error(err)
-		suite.Require().Equal("no validator distribution info", err.Error())
+		suite.Require().Equal("validator does not exist", err.Error())
 	})
 
 	suite.Run("collect staking rewards with invalid denom", func() {
-		derivativeDenom := "bkava"
+		derivativeDenom := "bstake"
 		_, err := suite.Keeper.CollectStakingRewardsByDenom(suite.Ctx, derivativeDenom, types.ModuleName)
 		suite.Require().Error(err)
-		suite.Require().Equal("cannot parse denom bkava", err.Error())
+		suite.Require().Equal("cannot parse denom bstake", err.Error())
 	})
 }

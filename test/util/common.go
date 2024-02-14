@@ -13,31 +13,46 @@ import (
 
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/store"
+	"cosmossdk.io/store/metrics"
+	storetypes "cosmossdk.io/store/types"
+	"cosmossdk.io/x/tx/signing"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	ccodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	ccrypto "github.com/cosmos/cosmos-sdk/crypto/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/std"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/distribution"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/cosmos/gogoproto/proto"
 	gethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/require"
+
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
 )
 
 var (
@@ -146,25 +161,193 @@ type TestInput struct {
 func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 	t.Helper()
 
-	db := dbm.NewMemDB()
-	emptyOpts := EmptyAppOptions{}
-	// encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	// Initialize store keys
+	bsKey := storetypes.NewKVStoreKey(bstypes.StoreKey)
+	keyAcc := storetypes.NewKVStoreKey(authtypes.StoreKey)
+	keyStaking := storetypes.NewKVStoreKey(stakingtypes.StoreKey)
+	keyBank := storetypes.NewKVStoreKey(banktypes.StoreKey)
+	keyDistro := storetypes.NewKVStoreKey(distrtypes.StoreKey)
+	keyParams := storetypes.NewKVStoreKey(paramstypes.StoreKey)
+	tkeyParams := storetypes.NewTransientStoreKey(paramstypes.TStoreKey)
+	keySlashing := storetypes.NewKVStoreKey(slashingtypes.StoreKey)
 
-	testApp, _ := app.New(
-		log.NewNopLogger(), db, nil, true,
-		emptyOpts,
+	// Initialize memory database and mount stores on it
+	db := dbm.NewMemDB()
+	ms := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NewNoOpMetrics())
+	ms.MountStoreWithDB(bsKey, storetypes.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(keyAcc, storetypes.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(keyParams, storetypes.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(keyStaking, storetypes.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(keyBank, storetypes.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(keyDistro, storetypes.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(tkeyParams, storetypes.StoreTypeTransient, db)
+	ms.MountStoreWithDB(keySlashing, storetypes.StoreTypeIAVL, db)
+	err := ms.LoadLatestVersion()
+	require.Nil(t, err)
+
+	// Create sdk.Context
+	ctx := sdk.NewContext(ms, tmproto.Header{
+		Version: tmversion.Consensus{
+			Block: 0,
+			App:   0,
+		},
+		ChainID: "test-app",
+		Height:  1234567,
+		Time:    time.Date(2020, time.April, 22, 12, 0, 0, 0, time.UTC),
+		LastBlockId: tmproto.BlockID{
+			Hash: []byte{},
+			PartSetHeader: tmproto.PartSetHeader{
+				Total: 0,
+				Hash:  []byte{},
+			},
+		},
+		LastCommitHash:     []byte{},
+		DataHash:           []byte{},
+		ValidatorsHash:     []byte{},
+		NextValidatorsHash: []byte{},
+		ConsensusHash:      []byte{},
+		AppHash:            []byte{},
+		LastResultsHash:    []byte{},
+		EvidenceHash:       []byte{},
+		ProposerAddress:    []byte{},
+	}, false, log.NewNopLogger())
+
+	cdc := MakeTestCodec()
+	marshaler := MakeTestMarshaler()
+
+	paramsKeeper := paramskeeper.NewKeeper(marshaler, cdc, keyParams, tkeyParams)
+	paramsKeeper.Subspace(authtypes.ModuleName)
+	paramsKeeper.Subspace(banktypes.ModuleName)
+	paramsKeeper.Subspace(stakingtypes.ModuleName)
+	paramsKeeper.Subspace(distrtypes.ModuleName)
+	paramsKeeper.Subspace(bstypes.DefaultParamspace)
+	paramsKeeper.Subspace(slashingtypes.ModuleName)
+
+	// this is also used to initialize module accounts for all the map keys
+	maccPerms := map[string][]string{
+		authtypes.FeeCollectorName:     nil,
+		distrtypes.ModuleName:          nil,
+		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
+		bstypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
+	}
+
+	authrity := authtypes.NewModuleAddress(govtypes.ModuleName).String()
+	accountKeeper := authkeeper.NewAccountKeeper(
+		marshaler,
+		runtime.NewKVStoreService(keyAcc), // target store
+		authtypes.ProtoBaseAccount,        // prototype
+		maccPerms,
+		authcodec.NewBech32Codec(app.Bech32PrefixAccAddr),
+		app.Bech32PrefixAccAddr,
+		authrity,
 	)
 
+	blockedAddr := make(map[string]bool, len(maccPerms))
+	for acc := range maccPerms {
+		blockedAddr[authtypes.NewModuleAddress(acc).String()] = true
+	}
+	bankKeeper := bankkeeper.NewBaseKeeper(
+		marshaler,
+		runtime.NewKVStoreService(keyBank),
+		accountKeeper,
+		blockedAddr,
+		authrity,
+		log.NewNopLogger(),
+	)
+	bankKeeper.SetParams(
+		ctx,
+		banktypes.Params{
+			SendEnabled:        []*banktypes.SendEnabled{},
+			DefaultSendEnabled: true,
+		},
+	)
+
+	stakingKeeper := stakingkeeper.NewKeeper(marshaler, runtime.NewKVStoreService(keyStaking), accountKeeper, bankKeeper, authrity, authcodec.NewBech32Codec(app.Bech32PrefixValAddr), authcodec.NewBech32Codec(app.Bech32PrefixConsAddr))
+	stakingKeeper.SetParams(ctx, TestingStakeParams)
+
+	distKeeper := distrkeeper.NewKeeper(marshaler, runtime.NewKVStoreService(keyDistro), accountKeeper, bankKeeper, stakingKeeper, authtypes.FeeCollectorName, authrity)
+	distKeeper.Params.Set(ctx, distrtypes.DefaultParams())
+
+	// set genesis items required for distribution
+	distKeeper.FeePool.Set(ctx, distrtypes.InitialFeePool())
+
+	// total supply to track this
+	totalSupply := sdk.NewCoins(sdk.NewInt64Coin("stake", 100000000))
+
+	// set up initial accounts
+	for name, perms := range maccPerms {
+		macc := authtypes.NewEmptyModuleAccount(name, perms...)
+		maccI := accountKeeper.NewAccount(ctx, macc).(sdk.ModuleAccountI)
+		if name == stakingtypes.NotBondedPoolName {
+			err = bankKeeper.MintCoins(ctx, bstypes.ModuleName, totalSupply)
+			require.NoError(t, err)
+			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, maccI.GetName(), totalSupply)
+			require.NoError(t, err)
+		} else if name == distrtypes.ModuleName {
+			// some big pot to pay out
+			amt := sdk.NewCoins(sdk.NewInt64Coin("stake", 500000))
+			err = bankKeeper.MintCoins(ctx, bstypes.ModuleName, amt)
+			require.NoError(t, err)
+			err = bankKeeper.SendCoinsFromModuleToModule(ctx, bstypes.ModuleName, maccI.GetName(), amt)
+			require.NoError(t, err)
+		}
+		accountKeeper.SetModuleAccount(ctx, maccI)
+	}
+
+	stakeAddr := authtypes.NewModuleAddress(stakingtypes.BondedPoolName)
+	moduleAcct := accountKeeper.GetAccount(ctx, stakeAddr)
+	require.NotNil(t, moduleAcct)
+
+	legacyAmino := codec.NewLegacyAmino()
+	slashingKeeper := slashingkeeper.NewKeeper(
+		marshaler,
+		legacyAmino,
+		runtime.NewKVStoreService(keySlashing),
+		stakingKeeper,
+		authrity,
+	)
+
+	k := keeper.NewKeeper(marshaler, runtime.NewKVStoreService(bsKey), log.NewNopLogger(), authrity, stakingKeeper)
+	testBlobstreamParams := bstypes.DefaultGenesis().Params
+	k.SetParams(ctx, testBlobstreamParams)
+
+	stakingKeeper.SetHooks(
+		stakingtypes.NewMultiStakingHooks(
+			distKeeper.Hooks(),
+			slashingKeeper.Hooks(),
+			k.Hooks(),
+		),
+	)
+	// emptyOpts := EmptyAppOptions{}
+	// // encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+
+	// testApp, _ := app.New(
+	// 	log.NewNopLogger(), db, nil, true,
+	// 	emptyOpts,
+	// )
+
+	// return TestInput{
+	// 	BlobstreamKeeper: testApp.StreamKeeper,
+	// 	AccountKeeper:    testApp.AccountKeeper,
+	// 	BankKeeper:       testApp.BankKeeper,
+	// 	StakingKeeper:    *testApp.StakingKeeper,
+	// 	SlashingKeeper:   testApp.SlashingKeeper,
+	// 	DistKeeper:       testApp.DistrKeeper,
+	// 	Context:          testApp.NewContext(false),
+	// 	Marshaler:        testApp.AppCodec(),
+	// 	LegacyAmino:      testApp.LegacyAmino(),
+	// }
 	return TestInput{
-		BlobstreamKeeper: testApp.StreamKeeper,
-		AccountKeeper:    testApp.AccountKeeper,
-		BankKeeper:       testApp.BankKeeper,
-		StakingKeeper:    *testApp.StakingKeeper,
-		SlashingKeeper:   testApp.SlashingKeeper,
-		DistKeeper:       testApp.DistrKeeper,
-		Context:          testApp.NewContext(false),
-		Marshaler:        testApp.AppCodec(),
-		LegacyAmino:      testApp.LegacyAmino(),
+		BlobstreamKeeper: k,
+		AccountKeeper:    accountKeeper,
+		BankKeeper:       bankKeeper,
+		StakingKeeper:    *stakingKeeper,
+		SlashingKeeper:   slashingKeeper,
+		DistKeeper:       distKeeper,
+		Context:          ctx,
+		Marshaler:        marshaler,
+		LegacyAmino:      cdc,
 	}
 }
 
@@ -197,7 +380,13 @@ func getSubspace(k paramskeeper.Keeper, moduleName string) paramstypes.Subspace 
 
 // MakeTestMarshaler creates a proto codec for use in testing
 func MakeTestMarshaler() codec.Codec {
-	interfaceRegistry := codectypes.NewInterfaceRegistry()
+	interfaceRegistry, _ := codectypes.NewInterfaceRegistryWithOptions(codectypes.InterfaceRegistryOptions{
+		ProtoFiles: proto.HybridResolver,
+		SigningOptions: signing.Options{
+			AddressCodec:          address.NewBech32Codec(app.Bech32PrefixAccAddr),
+			ValidatorAddressCodec: address.NewBech32Codec(app.Bech32PrefixValAddr),
+		},
+	})
 	std.RegisterInterfaces(interfaceRegistry)
 	ModuleBasics.RegisterInterfaces(interfaceRegistry)
 	bstypes.RegisterInterfaces(interfaceRegistry)
@@ -277,11 +466,11 @@ func NewTestMsgCreateValidator(
 	out, err := stakingtypes.NewMsgCreateValidator(
 		address.String(), pubKey, sdk.NewCoin("stake", amt),
 		stakingtypes.Description{
-			Moniker:         "",
-			Identity:        "",
-			Website:         "",
-			SecurityContact: "",
-			Details:         "",
+			Moniker:         "test-moniker",
+			Identity:        "test-identity",
+			Website:         "https://www.google.com/",
+			SecurityContact: "sunrise17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs06edvm",
+			Details:         "test-details",
 		}, commission, sdkmath.OneInt(),
 	)
 	if err != nil {
@@ -337,7 +526,8 @@ func SetupTestChain(t *testing.T, weights []uint64) (TestInput, sdk.Context) {
 		require.NoError(t, err)
 
 		// Run the staking endblocker to ensure valset is correct in state
-		input.StakingKeeper.EndBlocker(input.Context)
+		_, err = input.StakingKeeper.EndBlocker(input.Context)
+		require.NoError(t, err)
 	}
 
 	// some inputs can cause the validator creation not to work, this checks that

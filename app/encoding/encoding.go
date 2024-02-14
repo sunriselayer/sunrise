@@ -1,11 +1,14 @@
 package encoding
 
 import (
+	"cosmossdk.io/x/tx/signing"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/std"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
+	"github.com/cosmos/gogoproto/proto"
 )
 
 type ModuleRegister interface {
@@ -25,7 +28,13 @@ type Config struct {
 func MakeConfig(regs ...ModuleRegister) Config {
 	// create the codec
 	amino := codec.NewLegacyAmino()
-	interfaceRegistry := codectypes.NewInterfaceRegistry()
+	interfaceRegistry, _ := codectypes.NewInterfaceRegistryWithOptions(codectypes.InterfaceRegistryOptions{
+		ProtoFiles: proto.HybridResolver,
+		SigningOptions: signing.Options{
+			AddressCodec:          address.NewBech32Codec("sunrise"),
+			ValidatorAddressCodec: address.NewBech32Codec("sunrise" + "valoper"),
+		},
+	})
 
 	// register the standard types from the sdk
 	std.RegisterLegacyAminoCodec(amino)

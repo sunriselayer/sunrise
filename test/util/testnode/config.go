@@ -9,6 +9,7 @@ import (
 
 	tmconfig "github.com/cometbft/cometbft/config"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	tmtypes "github.com/cometbft/cometbft/types"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	srvtypes "github.com/cosmos/cosmos-sdk/server/types"
 )
@@ -129,7 +130,7 @@ func DefaultConfig() *Config {
 }
 
 func DefaultConsensusParams() *tmproto.ConsensusParams {
-	var cparams tmproto.ConsensusParams
+	cparams := tmtypes.DefaultConsensusParams().ToProto()
 	cparams.Block.MaxBytes = appconsts.DefaultMaxBytes
 	cparams.Version.App = appconsts.LatestVersion
 	return &cparams

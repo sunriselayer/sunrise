@@ -21,7 +21,7 @@ import (
 )
 
 func TestAddress() sdk.AccAddress {
-	bz, err := sdk.GetFromBech32(testfactory.TestAccAddr, "celestia")
+	bz, err := sdk.GetFromBech32(testfactory.TestAccAddr, "sunrise")
 	if err != nil {
 		panic(err)
 	}

@@ -80,6 +80,10 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 
 	genesisTime := time.Date(2023, 1, 1, 1, 1, 1, 1, time.UTC).UTC()
 
+	// set chain id
+	fn := baseapp.SetChainID(ChainID)
+	fn(testApp.BaseApp)
+
 	// init chain will set the validator set and initialize the genesis accounts
 	_, err = testApp.InitChain(
 		&abci.RequestInitChain{
@@ -95,6 +99,10 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 	}
 
 	// commit genesis changes
+	testApp.FinalizeBlock(&abci.RequestFinalizeBlock{
+		Height:             testApp.LastBlockHeight() + 1,
+		NextValidatorsHash: valSet.Hash(),
+	})
 	testApp.Commit()
 	_ = valSet
 	// testApp.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{
@@ -234,20 +242,26 @@ func genesisStateWithValSet(
 			panic(err)
 		}
 		validator := stakingtypes.Validator{
-			OperatorAddress:   sdk.ValAddress(val.Address).String(),
-			ConsensusPubkey:   pkAny,
-			Jailed:            false,
-			Status:            stakingtypes.Bonded,
-			Tokens:            bondAmt,
-			DelegatorShares:   sdkmath.LegacyOneDec(),
-			Description:       stakingtypes.Description{},
+			OperatorAddress: sdk.ValAddress(val.Address).String(),
+			ConsensusPubkey: pkAny,
+			Jailed:          false,
+			Status:          stakingtypes.Bonded,
+			Tokens:          bondAmt,
+			DelegatorShares: sdkmath.LegacyOneDec(),
+			Description: stakingtypes.Description{
+				Moniker:         "test-moniker",
+				Identity:        "test-identity",
+				Website:         "https://www.google.com/",
+				SecurityContact: "sunrise17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs06edvm",
+				Details:         "test-details",
+			},
 			UnbondingHeight:   int64(0),
 			UnbondingTime:     time.Unix(0, 0).UTC(),
 			Commission:        stakingtypes.NewCommission(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
 			MinSelfDelegation: sdkmath.ZeroInt(),
 		}
 		validators = append(validators, validator)
-		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].String(), val.Address.String(), sdkmath.LegacyOneDec()))
+		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress().String(), sdk.ValAddress(val.Address).String(), sdkmath.LegacyOneDec()))
 
 	}
 	// set validators and delegations
