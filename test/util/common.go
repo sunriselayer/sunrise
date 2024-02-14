@@ -191,7 +191,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 			Block: 0,
 			App:   0,
 		},
-		ChainID: "",
+		ChainID: "test-app",
 		Height:  1234567,
 		Time:    time.Date(2020, time.April, 22, 12, 0, 0, 0, time.UTC),
 		LastBlockId: tmproto.BlockID{
