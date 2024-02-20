@@ -1,4 +1,5 @@
-# sunrise
+# Sunrise
+
 **sunrise** is a blockchain built using Cosmos SDK and CometBFT and created with [Ignite CLI](https://ignite.com/cli).
 
 ## Get started
@@ -25,6 +26,7 @@ These commands can be run within your scaffolded blockchain project.
 For more information see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
 
 ## Release
+
 To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
 
 ```
