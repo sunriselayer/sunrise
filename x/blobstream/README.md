@@ -243,14 +243,14 @@ After creating a new attestation, and adding it to the Blobstream store, an even
 
 ### Query attestation command
 
-The Blobstream query attestation command is part of the `celestia-appd` binary. It allows the user to query specific attestations by their corresponding nonce.
+The Blobstream query attestation command is part of the `sunrised` binary. It allows the user to query specific attestations by their corresponding nonce.
 
 ```shell
-$ celestia-appd query blobstream attestation --help
+$ sunrised query blobstream attestation --help
 query an attestation by nonce
 
 Usage:
-  celestia-appd query blobstream attestation <nonce> [flags]
+  sunrised query blobstream attestation <nonce> [flags]
 
 Aliases:
   attestation, att
@@ -258,15 +258,15 @@ Aliases:
 
 ### Verification command
 
-The Blobstream verification command is part of the `celestia-appd` binary. It allows the user to verify that a set of shares has been posted to a specific Blobstream contract.
+The Blobstream verification command is part of the `sunrised` binary. It allows the user to verify that a set of shares has been posted to a specific Blobstream contract.
 
 ```shell
-$ celestia-appd verify --help
+$ sunrised verify --help
 
 Verifies that a transaction hash, a range of shares, or a blob referenced by its transaction hash were committed to by the Blobstream contract
 
 Usage:
-  celestia-appd verify [command]
+  sunrised verify [command]
 
 Available Commands:
   blob        Verifies that a blob, referenced by its transaction hash, in hex format, has been committed to by the Blobstream contract.
@@ -276,7 +276,7 @@ Available Commands:
 Flags:
   -h, --help   help for verify
 
-Use "celestia-appd verify [command] --help" for more information about a command.
+Use "sunrised verify [command] --help" for more information about a command.
 ```
 
 It currently supports three sub-commands:
