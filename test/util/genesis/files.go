@@ -25,7 +25,7 @@ func InitFiles(
 		return "", fmt.Errorf("validator %d not found", validatorIndex)
 	}
 
-	basePath := filepath.Join(dir, ".celestia-app")
+	basePath := filepath.Join(dir, ".sunrise-app")
 	tmCfg.SetRoot(basePath)
 
 	// save the genesis file
