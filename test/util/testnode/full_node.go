@@ -13,7 +13,6 @@ import (
 	"github.com/cometbft/cometbft/proxy"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/server"
 	srvtypes "github.com/cosmos/cosmos-sdk/server/types"
 )
 
@@ -37,13 +36,13 @@ func NewCometNode(baseDir string, cfg *UniversalTestingConfig) (*node.Node, srvt
 	if err != nil {
 		return nil, nil, err
 	}
-	abciWrapper := server.NewCometABCIWrapper(app)
+	// abciWrapper := server.NewCometABCIWrapper(app)
 
 	tmNode, err := node.NewNode(
 		cfg.TmConfig,
 		privval.LoadOrGenFilePV(cfg.TmConfig.PrivValidatorKeyFile(), cfg.TmConfig.PrivValidatorStateFile()),
 		nodeKey,
-		proxy.NewLocalClientCreator(abciWrapper),
+		proxy.DefaultClientCreator(cfg.TmConfig.ProxyApp, cfg.TmConfig.ABCI, cfg.TmConfig.DBDir()),
 		node.DefaultGenesisDocProviderFunc(cfg.TmConfig),
 		cmtcfg.DefaultDBProvider,
 		node.DefaultMetricsProvider(cfg.TmConfig.Instrumentation),
