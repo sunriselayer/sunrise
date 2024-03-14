@@ -8,7 +8,6 @@ import (
 	"cosmossdk.io/log"
 	"github.com/cometbft/cometbft/node"
 	"github.com/cometbft/cometbft/rpc/client/local"
-	"github.com/cosmos/cosmos-sdk/codec"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	srvgrpc "github.com/cosmos/cosmos-sdk/server/grpc"
 	srvtypes "github.com/cosmos/cosmos-sdk/server/types"
@@ -59,33 +58,6 @@ func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Co
 	app.RegisterTxService(cctx.Context)
 	// Add the tendermint queries service in the gRPC router.
 	app.RegisterTendermintService(cctx.Context)
-	// Add the node queries service in the gRPC router.
-	app.RegisterNodeService(cctx.Context, *appCfg)
-
-	maxSendMsgSize := appCfg.GRPC.MaxSendMsgSize
-	if maxSendMsgSize == 0 {
-		maxSendMsgSize = srvconfig.DefaultGRPCMaxSendMsgSize
-	}
-
-	maxRecvMsgSize := appCfg.GRPC.MaxRecvMsgSize
-	if maxRecvMsgSize == 0 {
-		maxRecvMsgSize = srvconfig.DefaultGRPCMaxRecvMsgSize
-	}
-
-	nodeGRPCAddr := strings.Replace(appCfg.GRPC.Address, "0.0.0.0", "localhost", 1)
-	conn, err := grpc.Dial(
-		nodeGRPCAddr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithDefaultCallOptions(
-			grpc.ForceCodec(codec.NewProtoCodec(cctx.InterfaceRegistry).GRPCCodec()),
-			grpc.MaxCallRecvMsgSize(maxRecvMsgSize),
-			grpc.MaxCallSendMsgSize(maxSendMsgSize),
-		))
-	if err != nil {
-		return Context{}, emptycleanup, err
-	}
-
-	cctx.Context = cctx.WithGRPCClient(conn)
 
 	// Run maxSendMsgSize := cfg.MaxSendMsgSize to gogoreflection.Register(grpcSrv)
 	grpcSrv, err := srvgrpc.NewGRPCServer(cctx.Context, app, appCfg.GRPC)
@@ -93,13 +65,17 @@ func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Co
 		return Context{}, emptycleanup, err
 	}
 
-	go func() {
-		err = srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger().With("module", "grpc-server"), appCfg.GRPC, grpcSrv)
+	go func() error {
+		return srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger().With("module", "grpc-server"), appCfg.GRPC, grpcSrv)
 	}()
 
+	nodeGRPCAddr := strings.Replace(appCfg.GRPC.Address, "0.0.0.0", "localhost", 1)
+	conn, err := grpc.Dial(nodeGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}
+
+	cctx.Context = cctx.WithGRPCClient(conn)
 
 	return cctx, func() error {
 		// grpcSrv.Stop()
