@@ -65,6 +65,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 		func(bApp *baseapp.BaseApp) {
 			bApp.FinalizeBlock(&abci.RequestFinalizeBlock{})
 		},
+		// baseapp.SetChainID(ChainID),
 	)
 
 	if err != nil {
