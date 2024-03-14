@@ -42,7 +42,9 @@ func NewNetwork(t testing.TB, cfg *Config) (cctx Context, rpcAddr, grpcAddr stri
 	appCfg.GRPC.Address = fmt.Sprintf("127.0.0.1:%d", mustGetFreePort())
 	appCfg.API.Address = fmt.Sprintf("tcp://127.0.0.1:%d", mustGetFreePort())
 
+	fmt.Println("before startgrpc")
 	cctx, cleanupGRPC, err := StartGRPCServer(app, appCfg, cctx)
+	fmt.Println("after startgrpc", err)
 	require.NoError(t, err)
 
 	t.Cleanup(func() {

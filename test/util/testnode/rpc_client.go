@@ -1,6 +1,7 @@
 package testnode
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -55,24 +56,37 @@ func StartNode(tmNode *node.Node, cctx Context) (Context, func() error, error) {
 func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Context) (Context, func() error, error) {
 	emptycleanup := func() error { return nil }
 	// Add the tx service in the gRPC router.
+	fmt.Println("before RegisterTxService")
 	app.RegisterTxService(cctx.Context)
 
 	// Add the tendermint queries service in the gRPC router.
+	fmt.Println("before RegisterTendermintService")
 	app.RegisterTendermintService(cctx.Context)
 
-	server, err := srvgrpc.NewGRPCServer(cctx.Context, app, appCfg.GRPC)
-	err = srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger(), appCfg.GRPC, server)
-	if err != nil {
-		return Context{}, emptycleanup, err
-	}
-
 	nodeGRPCAddr := strings.Replace(appCfg.GRPC.Address, "0.0.0.0", "localhost", 1)
+	fmt.Println("before grpc.Dial")
 	conn, err := grpc.Dial(nodeGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}
 
+	fmt.Println("after grpc.Dial")
 	cctx.Context = cctx.WithGRPCClient(conn)
+	fmt.Println("after WithGRPCClient")
+
+	fmt.Println("before NewGRPCServer")
+	// Run maxSendMsgSize := cfg.MaxSendMsgSize to gogoreflection.Register(grpcSrv)
+	grpcSrv, err := srvgrpc.NewGRPCServer(cctx.Context, app, appCfg.GRPC)
+	if err != nil {
+		return Context{}, emptycleanup, err
+	}
+	fmt.Println("before StartGRPCServer")
+
+	err = srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger().With("module", "grpc-server"), appCfg.GRPC, grpcSrv)
+	fmt.Println("after StartGRPCServer")
+	if err != nil {
+		return Context{}, emptycleanup, err
+	}
 
 	return cctx, func() error {
 		// grpcSrv.Stop()
