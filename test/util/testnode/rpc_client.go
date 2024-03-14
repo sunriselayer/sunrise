@@ -1,7 +1,6 @@
 package testnode
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -9,6 +8,7 @@ import (
 	"cosmossdk.io/log"
 	"github.com/cometbft/cometbft/node"
 	"github.com/cometbft/cometbft/rpc/client/local"
+	"github.com/cosmos/cosmos-sdk/codec"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	srvgrpc "github.com/cosmos/cosmos-sdk/server/grpc"
 	srvtypes "github.com/cosmos/cosmos-sdk/server/types"
@@ -56,34 +56,47 @@ func StartNode(tmNode *node.Node, cctx Context) (Context, func() error, error) {
 func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Context) (Context, func() error, error) {
 	emptycleanup := func() error { return nil }
 	// Add the tx service in the gRPC router.
-	fmt.Println("before RegisterTxService")
 	app.RegisterTxService(cctx.Context)
-
 	// Add the tendermint queries service in the gRPC router.
-	fmt.Println("before RegisterTendermintService")
 	app.RegisterTendermintService(cctx.Context)
+	// Add the node queries service in the gRPC router.
+	app.RegisterNodeService(cctx.Context, *appCfg)
+
+	maxSendMsgSize := appCfg.GRPC.MaxSendMsgSize
+	if maxSendMsgSize == 0 {
+		maxSendMsgSize = srvconfig.DefaultGRPCMaxSendMsgSize
+	}
+
+	maxRecvMsgSize := appCfg.GRPC.MaxRecvMsgSize
+	if maxRecvMsgSize == 0 {
+		maxRecvMsgSize = srvconfig.DefaultGRPCMaxRecvMsgSize
+	}
 
 	nodeGRPCAddr := strings.Replace(appCfg.GRPC.Address, "0.0.0.0", "localhost", 1)
-	fmt.Println("before grpc.Dial")
-	conn, err := grpc.Dial(nodeGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(
+		nodeGRPCAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(
+			grpc.ForceCodec(codec.NewProtoCodec(cctx.InterfaceRegistry).GRPCCodec()),
+			grpc.MaxCallRecvMsgSize(maxRecvMsgSize),
+			grpc.MaxCallSendMsgSize(maxSendMsgSize),
+		))
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}
 
-	fmt.Println("after grpc.Dial")
 	cctx.Context = cctx.WithGRPCClient(conn)
-	fmt.Println("after WithGRPCClient")
 
-	fmt.Println("before NewGRPCServer")
 	// Run maxSendMsgSize := cfg.MaxSendMsgSize to gogoreflection.Register(grpcSrv)
 	grpcSrv, err := srvgrpc.NewGRPCServer(cctx.Context, app, appCfg.GRPC)
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}
-	fmt.Println("before StartGRPCServer")
 
-	err = srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger().With("module", "grpc-server"), appCfg.GRPC, grpcSrv)
-	fmt.Println("after StartGRPCServer")
+	go func() {
+		err = srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger().With("module", "grpc-server"), appCfg.GRPC, grpcSrv)
+	}()
+
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}
