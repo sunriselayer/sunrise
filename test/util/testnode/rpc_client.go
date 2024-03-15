@@ -78,7 +78,7 @@ func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Co
 	cctx.Context = cctx.WithGRPCClient(conn)
 
 	return cctx, func() error {
-		grpcSrv.Stop()
+		grpcSrv.GracefulStop()
 		return nil
 	}, nil
 }
