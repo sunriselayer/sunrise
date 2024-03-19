@@ -11,6 +11,7 @@ import (
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	srvgrpc "github.com/cosmos/cosmos-sdk/server/grpc"
 	srvtypes "github.com/cosmos/cosmos-sdk/server/types"
+	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -54,6 +55,9 @@ func StartNode(tmNode *node.Node, cctx Context) (Context, func() error, error) {
 // context. The returned function should be used to shutdown the server.
 func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Context) (Context, func() error, error) {
 	emptycleanup := func() error { return nil }
+
+	cctx.Context = cctx.Context.WithClient(cctx.RpcClient)
+
 	// Add the tx service in the gRPC router.
 	app.RegisterTxService(cctx.Context)
 
@@ -63,17 +67,20 @@ func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Co
 	// Add the node service queries to the grpc router.
 	app.RegisterNodeService(cctx.Context, *appCfg)
 
+	ctx := cctx.rootCtx
+	errGroup, _ := errgroup.WithContext(ctx)
+
+	grpcCfg := appCfg.GRPC
+
 	// Run maxSendMsgSize := cfg.MaxSendMsgSize to gogoreflection.Register(grpcSrv)
-	grpcSrv, err := srvgrpc.NewGRPCServer(cctx.Context, app, appCfg.GRPC)
+	grpcSrv, err := srvgrpc.NewGRPCServer(cctx.Context, app, grpcCfg)
 	if err != nil {
 		return Context{}, emptycleanup, err
 	}
 
-	// Start the gRPC server in a goroutine. Note, the provided ctx will ensure
-	// that the server is gracefully shut down.
-	go func() error {
-		return srvgrpc.StartGRPCServer(cctx.rootCtx, log.NewNopLogger().With("module", "grpc-server"), appCfg.GRPC, grpcSrv)
-	}()
+	errGroup.Go(func() error {
+		return srvgrpc.StartGRPCServer(ctx, log.NewNopLogger().With("module", "grpc-server"), grpcCfg, grpcSrv)
+	})
 
 	nodeGRPCAddr := strings.Replace(appCfg.GRPC.Address, "0.0.0.0", "localhost", 1)
 	conn, err := grpc.Dial(nodeGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -84,7 +91,7 @@ func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Co
 	cctx.Context = cctx.WithGRPCClient(conn)
 
 	return cctx, func() error {
-		grpcSrv.GracefulStop()
+		grpcSrv.Stop()
 		return nil
 	}, nil
 }
