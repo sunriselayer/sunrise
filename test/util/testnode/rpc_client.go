@@ -1,6 +1,7 @@
 package testnode
 
 import (
+	"context"
 	"os"
 	"path"
 	"strings"
@@ -32,7 +33,10 @@ func StartNode(tmNode *node.Node, cctx Context) (Context, func() error, error) {
 	coreClient := local.New(tmNode)
 
 	cctx.Context = cctx.WithClient(coreClient)
+	goCtx, cancel := context.WithCancel(context.Background())
+	cctx.rootCtx = goCtx
 	cleanup := func() error {
+		cancel()
 		err := tmNode.Stop()
 		if err != nil {
 			return err
@@ -55,8 +59,6 @@ func StartNode(tmNode *node.Node, cctx Context) (Context, func() error, error) {
 // context. The returned function should be used to shutdown the server.
 func StartGRPCServer(app srvtypes.Application, appCfg *srvconfig.Config, cctx Context) (Context, func() error, error) {
 	emptycleanup := func() error { return nil }
-
-	cctx.Context = cctx.Context.WithClient(cctx.RpcClient)
 
 	// Add the tx service in the gRPC router.
 	app.RegisterTxService(cctx.Context)
