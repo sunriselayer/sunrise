@@ -4,6 +4,7 @@ release/
 .idea/
 .vscode/
 build/
+data/
 .DS_Store
 *.dot
 *.log
