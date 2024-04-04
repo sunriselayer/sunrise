@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "davidanson.vscode-markdownlint",
+    "docsmsft.docs-markdown",
+    "docsmsft.docs-yaml",
+    "ms-vsliveshare.vsliveshare",
+    "golang.go",
+    "zxh404.vscode-proto3",
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
