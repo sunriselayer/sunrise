@@ -1,12 +1,15 @@
 package app
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"time"
 
 	"github.com/sunrise-zone/sunrise-app/app/ante"
 	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	"github.com/sunrise-zone/sunrise-app/pkg/shares"
 	"github.com/sunrise-zone/sunrise-app/pkg/square"
 	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 
@@ -54,7 +57,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		Time:    req.Time,
 	})
 
-	txs, _, squareSize, err := ExtractInfoFromTxs(req.Txs)
+	txs, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
 	if err != nil {
 		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
 		return reject(err)
@@ -137,26 +140,25 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		return reject(err)
 	}
 
-	// Sunrise: No need for verification because the RequestProcessProposal does not contain a DataHash.
-	// eds, err := da.ExtendShares(shares.ToBytes(dataSquare))
-	// if err != nil {
-	// 	logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to erasure the data square", err)
-	// 	return reject(err)
-	// }
+	eds, err := da.ExtendShares(shares.ToBytes(dataSquare))
+	if err != nil {
+		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to erasure the data square", err)
+		return reject(err)
+	}
 
-	// dah, err := da.NewDataAvailabilityHeader(eds)
-	// if err != nil {
-	// 	logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to create new data availability header", err)
-	// 	return reject(err)
-	// }
-	// // by comparing the hashes we know the computed IndexWrappers (with the share indexes of the PFB's blobs)
-	// // are identical and that square layout is consistent. This also means that the share commitment rules
-	// // have been followed and thus each blobs share commitment should be valid
-	// if !bytes.Equal(dah.Hash(), dataHash) {
-	// 	err := fmt.Errorf("proposed data root %X differs from calculated data root %X", dataHash, dah.Hash())
-	// 	logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
-	// 	return reject(err)
-	// }
+	dah, err := da.NewDataAvailabilityHeader(eds)
+	if err != nil {
+		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to create new data availability header", err)
+		return reject(err)
+	}
+	// by comparing the hashes we know the computed IndexWrappers (with the share indexes of the PFB's blobs)
+	// are identical and that square layout is consistent. This also means that the share commitment rules
+	// have been followed and thus each blobs share commitment should be valid
+	if !bytes.Equal(dah.Hash(), dataHash) {
+		err := fmt.Errorf("proposed data root %X differs from calculated data root %X", dataHash, dah.Hash())
+		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
+		return reject(err)
+	}
 
 	return accept()
 }
