@@ -127,7 +127,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 	}
 
 	// Construct the data square from the block's transactions
-	dataSquare, err := square.Construct(req.Txs, app.BaseApp.AppVersion(), app.GovSquareSizeUpperBound(sdkCtx))
+	dataSquare, err := square.Construct(txs, app.BaseApp.AppVersion(), app.GovSquareSizeUpperBound(sdkCtx))
 	if err != nil {
 		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to compute data square from transactions:", err)
 		return reject(err)
