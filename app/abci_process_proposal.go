@@ -57,6 +57,10 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		Time:    req.Time,
 	})
 
+	if len(req.Txs) == 0 {
+		return accept()
+	}
+
 	txs, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
 	if err != nil {
 		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
@@ -135,7 +139,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 
 	// Assert that the square size stated by the proposer is correct
 	if uint64(dataSquare.Size()) != squareSize {
-		err := fmt.Errorf("proposed square size differs from calculated square size")
+		err := fmt.Errorf("proposed square size differs from calculated square size, expected %d, got %d", squareSize, dataSquare.Size())
 		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
 		return reject(err)
 	}
@@ -208,6 +212,13 @@ func accept() (*abci.ResponseProcessProposal, error) {
 
 func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
 	length := len(txsWithInfo)
+	if length == 0 {
+		txs = txsWithInfo
+		dataHash = nil
+		squareSize = 0
+		return
+	}
+
 	if length < 2 {
 		err = fmt.Errorf("txs must contain the data hash and the square size at the end, and its length must not be lower than 2")
 		return
