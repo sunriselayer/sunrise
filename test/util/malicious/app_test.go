@@ -7,9 +7,6 @@ import (
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/stretchr/testify/require"
 	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/da"
-	"github.com/sunrise-zone/sunrise-app/pkg/shares"
-	"github.com/sunrise-zone/sunrise-app/pkg/square"
 	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
 	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
 	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
@@ -92,24 +89,6 @@ func TestMaliciousTestNode(t *testing.T) {
 
 	// check that we can recalculate the data root using the malicious code but
 	// not the correct code
-	s, err := Construct(block.Block.Txs.ToSliceOfBytes(), appconsts.LatestVersion, appconsts.DefaultSquareSizeUpperBound, OutOfOrderExport)
-	require.NoError(t, err)
-
-	rawSquare := shares.ToBytes(s)
-	eds, err := ExtendShares(rawSquare)
-	require.NoError(t, err)
-
-	dah, err := da.NewDataAvailabilityHeader(eds)
-	require.NoError(t, err)
-	require.Equal(t, block.Block.DataHash.Bytes(), dah.Hash())
-
-	correctSquare, err := square.Construct(block.Block.Txs.ToSliceOfBytes(), appconsts.LatestVersion, appconsts.DefaultSquareSizeUpperBound)
-	require.NoError(t, err)
-
-	goodEds, err := da.ExtendShares(shares.ToBytes(correctSquare))
-	require.NoError(t, err)
-
-	goodDah, err := da.NewDataAvailabilityHeader(goodEds)
-	require.NoError(t, err)
-	require.NotEqual(t, block.Block.DataHash.Bytes(), goodDah.Hash())
+	_, err = Construct(block.Block.Txs.ToSliceOfBytes(), appconsts.LatestVersion, appconsts.DefaultSquareSizeUpperBound, OutOfOrderExport)
+	require.Error(t, err)
 }

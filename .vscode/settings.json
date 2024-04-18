@@ -6,6 +6,7 @@
   "go.lintTool": "golangci-lint",
   "go.formatTool": "goimports",
   "go.useLanguageServer": true,
+  "go.testTimeout": "300s",
   "[go.mod]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

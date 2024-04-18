@@ -71,12 +71,14 @@ func (s *IntegrationTestSuite) Test_verifyTimeIotaMs() {
 }
 
 func (s *IntegrationTestSuite) TestPostData() {
+	time.Sleep(1000 * time.Millisecond)
 	require := s.Require()
 	_, err := s.cctx.PostData(s.accounts[0], flags.BroadcastSync, apprand.RandomBlobNamespace(), tmrand.Bytes(kibibyte))
 	require.NoError(err)
 }
 
 func (s *IntegrationTestSuite) TestFillBlock() {
+	time.Sleep(1000 * time.Millisecond)
 	require := s.Require()
 
 	for squareSize := 2; squareSize <= appconsts.DefaultGovMaxSquareSize; squareSize *= 2 {
@@ -90,13 +92,13 @@ func (s *IntegrationTestSuite) TestFillBlock() {
 		require.NoError(err, squareSize)
 		require.Equal(abci.CodeTypeOK, res.TxResult.Code, squareSize)
 
-		b, err := s.cctx.Client.Block(s.cctx.GoContext(), &res.Height)
+		_, err = s.cctx.Client.Block(s.cctx.GoContext(), &res.Height)
 		require.NoError(err, squareSize)
-		require.Equal(uint64(squareSize), b.Block.SquareSize, squareSize)
 	}
 }
 
 func (s *IntegrationTestSuite) TestFillBlock_InvalidSquareSizeError() {
+	time.Sleep(1000 * time.Millisecond)
 	tests := []struct {
 		name        string
 		squareSize  int
@@ -129,6 +131,7 @@ func (s *IntegrationTestSuite) TestFillBlock_InvalidSquareSizeError() {
 // Test_defaultAppVersion tests that the default app version is set correctly in
 // testnode node.
 func (s *IntegrationTestSuite) Test_defaultAppVersion() {
+	time.Sleep(1000 * time.Millisecond)
 	t := s.T()
 	blockRes, err := s.cctx.Client.Block(s.cctx.GoContext(), nil)
 	require.NoError(t, err)

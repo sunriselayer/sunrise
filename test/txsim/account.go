@@ -104,6 +104,11 @@ func (am *AccountManager) findWealthiestAccount(ctx context.Context) (string, er
 			return "", fmt.Errorf("error getting address for account %s: %w", record.Name, err)
 		}
 
+		if wealthiestAddress == "" {
+			wealthiestAddress = record.Name
+			highestBalance = 0
+		}
+
 		// search for the account on chain
 		balance, err := am.getBalance(ctx, address)
 		if err != nil {
@@ -111,7 +116,7 @@ func (am *AccountManager) findWealthiestAccount(ctx context.Context) (string, er
 			continue
 		}
 
-		if wealthiestAddress == "" || balance > highestBalance {
+		if balance > highestBalance {
 			wealthiestAddress = record.Name
 			highestBalance = balance
 		}
