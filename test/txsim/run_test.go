@@ -10,17 +10,18 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sunrise-zone/sunrise-app/api/sunrise/blob"
+	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/test/txsim"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distribution "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
-	"github.com/sunrise-zone/sunrise-app/api/sunrise/blob"
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/test/txsim"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 )
 
 func TestTxSimulator(t *testing.T) {

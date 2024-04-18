@@ -5,6 +5,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/pkg/user"
+	util "github.com/sunrise-zone/sunrise-app/test/util"
+	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
+
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/rand"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,12 +19,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	util "github.com/sunrise-zone/sunrise-app/test/util"
-	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 )
 
 func TestSignerTestSuite(t *testing.T) {
