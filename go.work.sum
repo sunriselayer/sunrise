@@ -991,6 +991,8 @@ github.com/streadway/amqp v1.0.0/go.mod h1:AZpEONHx3DKn8O/DFsRAY58/XVQiIPMTMB1Sd
 github.com/streadway/handy v0.0.0-20200128134331-0f66f006fb2e h1:mOtuXaRAbVZsxAHVdPR3IjfmN8T1h2iczJLynhLybf8=
 github.com/streadway/handy v0.0.0-20200128134331-0f66f006fb2e/go.mod h1:qNTQ5P5JnDBl6z3cMAg/SywNDC5ABu5ApDIw6lUbRmI=
 github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
+github.com/sunrise-zone/sunrise-core v0.0.2-cmt-v0.38.2 h1:uK0i3UJJeAriLo6KoeBLDjrbdguY8W6j0WJnmcJr7AM=
+github.com/sunrise-zone/sunrise-core v0.0.2-cmt-v0.38.2/go.mod h1:y+21SZ2TVD1qS7lvEXfDKI15hEryT9sNvJ+t3LyAFi0=
 github.com/sunrise-zone/sunrise-core v0.38.3-0.20240418164630-bac1c330887b h1:CJffEY8VCI8WhfIXhIkJ6TdcN8/xWocJM5iryq3VSIY=
 github.com/sunrise-zone/sunrise-core v0.38.3-0.20240418164630-bac1c330887b/go.mod h1:y+21SZ2TVD1qS7lvEXfDKI15hEryT9sNvJ+t3LyAFi0=
 github.com/sunrise-zone/sunrise-core v1.0.0-alpha.1 h1:9F3638Gz+e9natkL0iGV2w21uPVsTI+btDCEE0CHN6M=
