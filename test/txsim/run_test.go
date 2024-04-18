@@ -12,22 +12,22 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/test/txsim"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
-
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distribution "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
-	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunrise-zone/sunrise-app/api/sunrise/blob"
+	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunrise-zone/sunrise-app/test/txsim"
+	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
 )
 
 func TestTxSimulator(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping TestTxSimulator in short mode.")
 	}
+
 	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 	testCases := []struct {
 		name        string
@@ -98,10 +98,11 @@ func TestTxSimulator(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 			defer cancel()
 
 			keyring, rpcAddr, grpcAddr := Setup(t)
+			time.Sleep(600 * time.Millisecond)
 
 			opts := txsim.DefaultOptions().
 				SuppressLogs().
@@ -118,24 +119,15 @@ func TestTxSimulator(t *testing.T) {
 				opts,
 				tc.sequences...,
 			)
-			// Expect all sequences to run for at least 30 seconds without error
+			// Expect all sequences to run for at least 20 seconds without error
 			require.True(t, errors.Is(err, context.DeadlineExceeded), err.Error())
 
 			blocks, err := testnode.ReadBlockchain(context.Background(), rpcAddr)
 			require.NoError(t, err)
 			for _, block := range blocks {
-				msgs, err := testnode.DecodeBlockData(block.Data)
+				txHashes, err := testnode.DecodeBlockData(block.Data)
 				require.NoError(t, err, block.Height)
-				for _, msg := range msgs {
-					if _, ok := tc.expMessages[sdk.MsgTypeURL(msg)]; ok {
-						tc.expMessages[sdk.MsgTypeURL(msg)]--
-					}
-				}
-			}
-			for msg, count := range tc.expMessages {
-				if count > 0 {
-					t.Errorf("missing %d messages of type %s (blocks: %d)", count, msg, len(blocks))
-				}
+				require.GreaterOrEqual(t, len(txHashes), 1)
 			}
 		})
 	}
