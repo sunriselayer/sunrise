@@ -59,8 +59,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
-	github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.1
-	github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.1
+	github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240418170053-30d0f121cf39
+	github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240418170053-30d0f121cf39
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
 	golang.org/x/sync v0.5.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
