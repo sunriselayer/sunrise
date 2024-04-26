@@ -29,15 +29,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "LiquidStake",
-					Use:            "liquid-stake",
-					Short:          "Send a liquid-stake tx",
+					RpcMethod:      "MintDerivative",
+					Use:            "mint-derivative",
+					Short:          "Send a mint-derivatives tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				{
-					RpcMethod:      "LiquidUnstake",
-					Use:            "liquid-unstake",
-					Short:          "Send a liquid-unstake tx",
+					RpcMethod:      "BurnDerivative",
+					Use:            "burn-derivative",
+					Short:          "Send a burn-derivatives tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

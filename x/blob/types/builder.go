@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/log"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
@@ -20,8 +21,24 @@ import (
 
 type localEncoder struct{}
 
+func (localEncoder) RegisterLegacyAminoCodec(c *codec.LegacyAmino) {
+	RegisterLegacyAminoCodec(c)
+}
+
 func (localEncoder) RegisterInterfaces(r codectypes.InterfaceRegistry) {
 	RegisterInterfaces(r)
+}
+
+type authEncoder struct{}
+
+// RegisterLegacyAminoCodec registers the auth module's types for the given codec.
+func (authEncoder) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	authtypes.RegisterLegacyAminoCodec(cdc)
+}
+
+// RegisterInterfaces registers interfaces and implementations of the auth module.
+func (authEncoder) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+	authtypes.RegisterInterfaces(registry)
 }
 
 // makeBlobEncodingConfig uses the blob modules RegisterInterfaces
@@ -29,7 +46,8 @@ func (localEncoder) RegisterInterfaces(r codectypes.InterfaceRegistry) {
 // so that we don't have to import the app package.
 func makeBlobEncodingConfig() encoding.Config {
 	e := localEncoder{}
-	return encoding.MakeConfig(e)
+	a := authEncoder{}
+	return encoding.MakeConfig(a, e)
 }
 
 // KeyringSigner uses a keyring to sign and build celestia-app transactions

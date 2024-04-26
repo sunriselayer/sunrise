@@ -19153,9 +19153,9 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /sunrise.liquidstaking.Msg/LiquidStake:
+  /sunrise.liquidstaking.Msg/MintDerivative:
     post:
-      operationId: SunriseLiquidstakingMsg_LiquidStake
+      operationId: SunriseLiquidstakingMsg_MintDerivative
       responses:
         '200':
           description: A successful response.
@@ -19190,9 +19190,9 @@ paths:
                 type: string
       tags:
         - Msg
-  /sunrise.liquidstaking.Msg/LiquidUnstake:
+  /sunrise.liquidstaking.Msg/BurnDerivative:
     post:
-      operationId: SunriseLiquidstakingMsg_LiquidUnstake
+      operationId: SunriseLiquidstakingMsg_BurnDerivative
       responses:
         '200':
           description: A successful response.
@@ -27092,19 +27092,19 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  sunrise.liquidstaking.MsgLiquidStake:
+  sunrise.liquidstaking.MsgMintDerivative:
     type: object
     properties:
       creator:
         type: string
-  sunrise.liquidstaking.MsgLiquidStakeResponse:
+  sunrise.liquidstaking.MsgMintDerivativeResponse:
     type: object
-  sunrise.liquidstaking.MsgLiquidUnstake:
+  sunrise.liquidstaking.MsgBurnDerivative:
     type: object
     properties:
       creator:
         type: string
-  sunrise.liquidstaking.MsgLiquidUnstakeResponse:
+  sunrise.liquidstaking.MsgBurnDerivativeResponse:
     type: object
   sunrise.liquidstaking.MsgUpdateParams:
     type: object
