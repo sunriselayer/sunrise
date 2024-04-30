@@ -74,15 +74,15 @@ import (
 	blobmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/module"
 	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/module"
 	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/module"
-	sunrisemodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/sunrise/module"
+	liquiditypoolmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/liquiditypool/module"
 	_ "github.com/sunrise-zone/sunrise-app/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/blobgrant/module" // import for side-effects
 	grantmoduletypes "github.com/sunrise-zone/sunrise-app/x/blobgrant/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunrise-zone/sunrise-app/x/blobstream/types"
-	_ "github.com/sunrise-zone/sunrise-app/x/sunrise/module" // import for side-effects
-	sunrisemoduletypes "github.com/sunrise-zone/sunrise-app/x/sunrise/types"
+	_ "github.com/sunrise-zone/sunrise-app/x/liquiditypool/module" // import for side-effects
+	liquiditypoolmoduletypes "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -120,7 +120,7 @@ var (
 		consensusparamtypes.ModuleName,
 		circuittypes.ModuleName,
 		// chain modules
-		sunrisemoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
@@ -148,7 +148,7 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
-		sunrisemoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
@@ -170,7 +170,7 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
-		sunrisemoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
@@ -194,7 +194,7 @@ var (
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
-		{Account: sunrisemoduletypes.ModuleName},
+		{Account: liquiditypoolmoduletypes.ModuleName},
 		{Account: blobmoduletypes.ModuleName},
 		{Account: grantmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
@@ -335,8 +335,8 @@ var (
 				Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
 			},
 			{
-				Name:   sunrisemoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&sunrisemodulev1.Module{}),
+				Name:   liquiditypoolmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
 			},
 			{
 				Name:   blobmoduletypes.ModuleName,

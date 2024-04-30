@@ -19280,7 +19280,7 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise.sunrise.Msg/UpdateParams:
+  /sunrise.liquiditypool.Msg/UpdateParams:
     post:
       summary: |-
         UpdateParams defines a (governance) operation for updating the module
@@ -27123,7 +27123,7 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.sunrise.MsgUpdateParams:
+  sunrise.liquiditypool.MsgUpdateParams:
     type: object
     properties:
       authority:
@@ -27138,11 +27138,11 @@ definitions:
           NOTE: All parameters must be supplied.
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.sunrise.MsgUpdateParamsResponse:
+  sunrise.liquiditypool.MsgUpdateParamsResponse:
     type: object
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.sunrise.Params:
+  sunrise.liquiditypool.Params:
     type: object
     description: Params defines the parameters for the module.

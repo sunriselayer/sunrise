@@ -56,7 +56,7 @@ import (
 	blobmodulekeeper "github.com/sunrise-zone/sunrise-app/x/blob/keeper"
 	grantmodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobgrant/keeper"
 	streammodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
-	sunrisemodulekeeper "github.com/sunrise-zone/sunrise-app/x/sunrise/keeper"
+	sunrisemodulekeeper "github.com/sunrise-zone/sunrise-app/x/liquiditypool/keeper"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
