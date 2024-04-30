@@ -74,7 +74,6 @@ import (
 	blobmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/module"
 	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/module"
 	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/module"
-	liquidstakingmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/liquidstaking/module"
 	sunrisemodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/sunrise/module"
 	_ "github.com/sunrise-zone/sunrise-app/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
@@ -82,8 +81,6 @@ import (
 	grantmoduletypes "github.com/sunrise-zone/sunrise-app/x/blobgrant/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunrise-zone/sunrise-app/x/blobstream/types"
-	_ "github.com/sunrise-zone/sunrise-app/x/liquidstaking/module" // import for side-effects
-	liquidstakingmoduletypes "github.com/sunrise-zone/sunrise-app/x/liquidstaking/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/sunrise/module" // import for side-effects
 	sunrisemoduletypes "github.com/sunrise-zone/sunrise-app/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -127,7 +124,6 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
-		liquidstakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -156,7 +152,6 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
-		liquidstakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -179,7 +174,6 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
-		liquidstakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -204,7 +198,6 @@ var (
 		{Account: blobmoduletypes.ModuleName},
 		{Account: grantmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquidstakingmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
@@ -223,7 +216,6 @@ var (
 		// blobmoduletypes.ModuleName,
 		// grantmoduletypes.ModuleName,
 		// streammoduletypes.ModuleName,
-		// liquidstakingmoduletypes.ModuleName,
 	}
 
 	// appConfig application configuration (used by depinject)
@@ -357,10 +349,6 @@ var (
 			{
 				Name:   streammoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&streammodulev1.Module{}),
-			},
-			{
-				Name:   liquidstakingmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&liquidstakingmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
