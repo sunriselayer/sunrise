@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
 )
 
 type msgServer struct {

@@ -6,11 +6,11 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/stretchr/testify/require"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
-	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/wrapper"
+	"github.com/sunriselayer/sunrise-app/test/util/blobfactory"
+	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise-app/test/util/testnode"
 )
 
 // TestOutOfOrderNMT tests that the malicious NMT implementation is able to

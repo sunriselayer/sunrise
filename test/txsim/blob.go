@@ -7,9 +7,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/grpc"
-	ns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
-	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
+	ns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/test/util/blobfactory"
+	blob "github.com/sunriselayer/sunrise-app/x/blob/types"
 )
 
 var _ Sequence = &BlobSequence{}

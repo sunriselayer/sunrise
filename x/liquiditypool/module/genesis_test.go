@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunrise-zone/sunrise-app/testutil/keeper"
-	"github.com/sunrise-zone/sunrise-app/testutil/nullify"
-	liquiditypool "github.com/sunrise-zone/sunrise-app/x/liquiditypool/module"
-	"github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
+	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
+	"github.com/sunriselayer/sunrise-app/testutil/nullify"
+	liquiditypool "github.com/sunriselayer/sunrise-app/x/liquiditypool/module"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
 func TestGenesis(t *testing.T) {

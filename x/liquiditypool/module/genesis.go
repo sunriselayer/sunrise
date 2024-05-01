@@ -3,8 +3,8 @@ package liquiditypool
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sunrise-zone/sunrise-app/x/liquiditypool/keeper"
-	"github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

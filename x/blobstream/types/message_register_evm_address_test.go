@@ -5,7 +5,7 @@ package types
 
 // 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 // 	"github.com/stretchr/testify/require"
-// 	"github.com/sunrise-zone/sunrise-app/testutil/sample"
+// 	"github.com/sunriselayer/sunrise-app/testutil/sample"
 // )
 
 // func TestMsgRegisterEvmAddress_ValidateBasic(t *testing.T) {

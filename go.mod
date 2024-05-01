@@ -1,4 +1,4 @@
-module github.com/sunrise-zone/sunrise-app
+module github.com/sunriselayer/sunrise-app
 
 go 1.21.1
 
@@ -6,11 +6,11 @@ toolchain go1.21.5
 
 replace (
 	// sunrise-core
-	github.com/cometbft/cometbft => github.com/sunrise-zone/sunrise-core v0.0.2-cmt-v0.38.2
+	github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.2-cmt-v0.38.2
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
-	github.com/sunrise-zone/sunrise-app/pkg/blob => ./pkg/blob
-	github.com/sunrise-zone/sunrise-app/pkg/namespace => ./pkg/namespace
+	github.com/sunriselayer/sunrise-app/pkg/blob => ./pkg/blob
+	github.com/sunriselayer/sunrise-app/pkg/namespace => ./pkg/namespace
 )
 
 replace (
@@ -59,8 +59,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.9.0
-	github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240418170053-30d0f121cf39
-	github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240418170053-30d0f121cf39
+	github.com/sunriselayer/sunrise-app/pkg/blob v0.0.0-20240418170053-30d0f121cf39
+	github.com/sunriselayer/sunrise-app/pkg/namespace v0.0.0-20240418170053-30d0f121cf39
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
 	golang.org/x/sync v0.7.0
 	golang.org/x/tools v0.20.0
@@ -260,6 +260,8 @@ require (
 	github.com/spf13/afero v1.10.0 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
+	github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240106110541-17a39acb5414 // indirect
+	github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240106114425-fcbe9cdfd972 // indirect
 	github.com/supranational/blst v0.3.11 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d // indirect
 	github.com/tendermint/go-amino v0.16.0 // indirect

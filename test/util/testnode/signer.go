@@ -1,10 +1,10 @@
 package testnode
 
 import (
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise-app/pkg/user"
+	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
 )
 
 func NewOfflineSigner() (*user.Signer, error) {

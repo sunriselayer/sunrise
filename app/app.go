@@ -53,13 +53,14 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	blobmodulekeeper "github.com/sunrise-zone/sunrise-app/x/blob/keeper"
-	grantmodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobgrant/keeper"
-	streammodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
-	liquiditypoolmodulekeeper "github.com/sunrise-zone/sunrise-app/x/liquiditypool/keeper"
+	blobmodulekeeper "github.com/sunriselayer/sunrise-app/x/blob/keeper"
+	grantmodulekeeper "github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
+	streammodulekeeper "github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
+	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	"github.com/sunrise-zone/sunrise-app/docs"
+	"github.com/sunriselayer/sunrise-app/docs"
 )
 
 const (

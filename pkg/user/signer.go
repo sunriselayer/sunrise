@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"cosmossdk.io/log"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
-	blobtypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
+	blobtypes "github.com/sunriselayer/sunrise-app/x/blob/types"
 
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/client"

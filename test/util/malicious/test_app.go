@@ -17,10 +17,10 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 
 	"github.com/spf13/cast"
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	util "github.com/sunrise-zone/sunrise-app/test/util"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
+	"github.com/sunriselayer/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	util "github.com/sunriselayer/sunrise-app/test/util"
+	"github.com/sunriselayer/sunrise-app/test/util/testnode"
 )
 
 // OutOfOrderNamesapceConfig returns a testnode config that will start producing

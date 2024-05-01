@@ -4,7 +4,7 @@ import (
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"golang.org/x/exp/slices"
 
-	ns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	ns "github.com/sunriselayer/sunrise-app/pkg/namespace"
 )
 
 func RandomBlobNamespaceID() []byte {

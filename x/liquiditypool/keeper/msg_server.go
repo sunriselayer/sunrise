@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
 type msgServer struct {

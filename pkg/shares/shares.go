@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
 )
 
 // Share contains the raw share data (including namespace ID).

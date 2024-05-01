@@ -7,7 +7,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/grpc"
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
 )
 
 // Sequence is the basic unit for programmatic transaction generation.

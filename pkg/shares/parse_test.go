@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
-	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
+	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/cometbft/cometbft/types"

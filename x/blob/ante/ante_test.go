@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/shares"
-	"github.com/sunrise-zone/sunrise-app/test/util"
-	ante "github.com/sunrise-zone/sunrise-app/x/blob/ante"
-	blob "github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise-app/test/util"
+	ante "github.com/sunriselayer/sunrise-app/x/blob/ante"
+	blob "github.com/sunriselayer/sunrise-app/x/blob/types"
 
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"

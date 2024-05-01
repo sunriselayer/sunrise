@@ -1,9 +1,9 @@
 package appconsts
 
 import (
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts/testground"
-	v1 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v1"
-	v2 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v2"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts/testground"
+	v1 "github.com/sunriselayer/sunrise-app/pkg/appconsts/v1"
+	v2 "github.com/sunriselayer/sunrise-app/pkg/appconsts/v2"
 )
 
 const (

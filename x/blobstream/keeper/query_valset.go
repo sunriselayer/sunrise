@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
 )
 
 // TODO add unit tests for all of these requests

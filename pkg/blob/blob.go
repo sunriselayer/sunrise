@@ -7,7 +7,7 @@ import (
 	math "math"
 	"sort"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/pkg/namespace"
 )
 
 // ProtoBlobTxTypeID is included in each encoded BlobTx to help prevent

@@ -71653,7 +71653,7 @@ paths:
                   This was decided as part of the universal nonce approach
                   under:
 
-                  https://github.com/sunrise-zone/sunrise-app/issues/468#issuecomment-1156887715
+                  https://github.com/sunriselayer/sunrise-app/issues/468#issuecomment-1156887715
                 type: object
                 properties:
                   '@type':
@@ -72046,7 +72046,7 @@ paths:
                     format: uint64
                     title: |-
                       Universal nonce defined under:
-                      https://github.com/sunrise-zone/sunrise-app/pull/464
+                      https://github.com/sunriselayer/sunrise-app/pull/464
                   begin_block:
                     type: string
                     format: uint64
@@ -72297,7 +72297,7 @@ paths:
                     format: uint64
                     title: |-
                       Universal nonce defined under:
-                      https://github.com/sunrise-zone/sunrise-app/pull/464
+                      https://github.com/sunriselayer/sunrise-app/pull/464
                   begin_block:
                     type: string
                     format: uint64
@@ -73195,7 +73195,7 @@ paths:
                     format: uint64
                     title: |-
                       Universal nonce defined under:
-                      https://github.com/sunrise-zone/sunrise-app/pull/464
+                      https://github.com/sunriselayer/sunrise-app/pull/464
                   members:
                     type: array
                     items:
@@ -73628,7 +73628,7 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise-zone/sunrise-app/liquiditypool/params:
+  /sunriselayer/sunrise-app/liquiditypool/params:
     get:
       summary: Parameters queries the parameters of the module.
       operationId: SunriseappLiquiditypoolQuery_Params
@@ -109906,7 +109906,7 @@ definitions:
         format: uint64
         title: |-
           Universal nonce defined under:
-          https://github.com/sunrise-zone/sunrise-app/pull/464
+          https://github.com/sunriselayer/sunrise-app/pull/464
       begin_block:
         type: string
         format: uint64
@@ -109954,7 +109954,7 @@ definitions:
 
           This was decided as part of the universal nonce approach under:
 
-          https://github.com/sunrise-zone/sunrise-app/issues/468#issuecomment-1156887715
+          https://github.com/sunriselayer/sunrise-app/issues/468#issuecomment-1156887715
         type: object
         properties:
           '@type':
@@ -110129,7 +110129,7 @@ definitions:
             format: uint64
             title: |-
               Universal nonce defined under:
-              https://github.com/sunrise-zone/sunrise-app/pull/464
+              https://github.com/sunriselayer/sunrise-app/pull/464
           begin_block:
             type: string
             format: uint64
@@ -110195,7 +110195,7 @@ definitions:
             format: uint64
             title: |-
               Universal nonce defined under:
-              https://github.com/sunrise-zone/sunrise-app/pull/464
+              https://github.com/sunriselayer/sunrise-app/pull/464
           begin_block:
             type: string
             format: uint64
@@ -110248,7 +110248,7 @@ definitions:
             format: uint64
             title: |-
               Universal nonce defined under:
-              https://github.com/sunrise-zone/sunrise-app/pull/464
+              https://github.com/sunriselayer/sunrise-app/pull/464
           members:
             type: array
             items:
@@ -110304,7 +110304,7 @@ definitions:
         format: uint64
         title: |-
           Universal nonce defined under:
-          https://github.com/sunrise-zone/sunrise-app/pull/464
+          https://github.com/sunriselayer/sunrise-app/pull/464
       members:
         type: array
         items:
