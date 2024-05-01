@@ -8,7 +8,7 @@ option go_package = "github.com/sunriselayer/sunrise-app/x/blob/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/blob/Params";
+  option (amino.name) = "sunrise/x/blob/v1/Params";
   option (gogoproto.equal) = true;
 
   uint32 gas_per_blob_byte = 1 [
