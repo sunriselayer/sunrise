@@ -15,16 +15,11 @@ go version
 ignite version
 # v28.3.0
 
-# install buf
-buf --version
-# 1.27.2
-
 apt install -y protobuf-compiler
 protoc --version
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 go install github.com/cosmos/cosmos-proto/cmd/protoc-gen-go-pulsar
 ```
-
 
 ## Diagram
 
