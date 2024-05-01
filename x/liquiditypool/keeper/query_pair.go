@@ -18,7 +18,7 @@ func (k Keeper) PairAll(ctx context.Context, req *types.QueryAllPairRequest) (*t
 
 	var pairs []types.Pair
 
-    store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	pairStore := prefix.NewStore(store, types.KeyPrefix(types.PairKeyPrefix))
 
 	pageRes, err := query.Paginate(pairStore, req.Pagination, func(key []byte, value []byte) error {
@@ -44,11 +44,12 @@ func (k Keeper) Pair(ctx context.Context, req *types.QueryGetPairRequest) (*type
 	}
 
 	val, found := k.GetPair(
-	    ctx,
-	    req.Index,
-        )
+		ctx,
+		req.BaseDenom,
+		req.QuoteDenom,
+	)
 	if !found {
-	    return nil, status.Error(codes.NotFound, "not found")
+		return nil, status.Error(codes.NotFound, "not found")
 	}
 
 	return &types.QueryGetPairResponse{Pair: val}, nil

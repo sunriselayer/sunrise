@@ -18,7 +18,7 @@ func (k Keeper) TwapAll(ctx context.Context, req *types.QueryAllTwapRequest) (*t
 
 	var twaps []types.Twap
 
-    store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	twapStore := prefix.NewStore(store, types.KeyPrefix(types.TwapKeyPrefix))
 
 	pageRes, err := query.Paginate(twapStore, req.Pagination, func(key []byte, value []byte) error {
@@ -44,11 +44,12 @@ func (k Keeper) Twap(ctx context.Context, req *types.QueryGetTwapRequest) (*type
 	}
 
 	val, found := k.GetTwap(
-	    ctx,
-	    req.Index,
-        )
+		ctx,
+		req.BaseDenom,
+		req.QuoteDenom,
+	)
 	if !found {
-	    return nil, status.Error(codes.NotFound, "not found")
+		return nil, status.Error(codes.NotFound, "not found")
 	}
 
 	return &types.QueryGetTwapResponse{Twap: val}, nil

@@ -11,29 +11,31 @@ import (
 
 // SetTwap set a specific twap in the store from its index
 func (k Keeper) SetTwap(ctx context.Context, twap types.Twap) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store :=  prefix.NewStore(storeAdapter, types.KeyPrefix(types.TwapKeyPrefix))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TwapKeyPrefix))
 	b := k.cdc.MustMarshal(&twap)
 	store.Set(types.TwapKey(
-        twap.Index,
-    ), b)
+		twap.BaseDenom,
+		twap.QuoteDenom,
+	), b)
 }
 
 // GetTwap returns a twap from its index
 func (k Keeper) GetTwap(
-    ctx context.Context,
-    index string,
-    
+	ctx context.Context,
+	baseDenom string,
+	quoteDenom string,
 ) (val types.Twap, found bool) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TwapKeyPrefix))
 
 	b := store.Get(types.TwapKey(
-        index,
-    ))
-    if b == nil {
-        return val, false
-    }
+		baseDenom,
+		quoteDenom,
+	))
+	if b == nil {
+		return val, false
+	}
 
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
@@ -41,21 +43,22 @@ func (k Keeper) GetTwap(
 
 // RemoveTwap removes a twap from the store
 func (k Keeper) RemoveTwap(
-    ctx context.Context,
-    index string,
-    
+	ctx context.Context,
+	baseDenom string,
+	quoteDenom string,
 ) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TwapKeyPrefix))
 	store.Delete(types.TwapKey(
-	    index,
-    ))
+		baseDenom,
+		quoteDenom,
+	))
 }
 
 // GetAllTwap returns all twap
 func (k Keeper) GetAllTwap(ctx context.Context) (list []types.Twap) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-    store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TwapKeyPrefix))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TwapKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
@@ -63,8 +66,8 @@ func (k Keeper) GetAllTwap(ctx context.Context) (list []types.Twap) {
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Twap
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
-        list = append(list, val)
+		list = append(list, val)
 	}
 
-    return
+	return
 }

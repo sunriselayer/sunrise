@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-    "strconv"
+	"strconv"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
-	"github.com/sunriselayer/sunrise-app/testutil/nullify"
 	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
+	"github.com/sunriselayer/sunrise-app/testutil/nullify"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
 // Prevent strconv unused error
@@ -27,28 +27,28 @@ func TestPairQuerySingle(t *testing.T) {
 		err      error
 	}{
 		{
-			desc:     "First",
-			request:  &types.QueryGetPairRequest{
-			    Index: msgs[0].Index,
-                
+			desc: "First",
+			request: &types.QueryGetPairRequest{
+				BaseDenom:  msgs[0].BaseDenom,
+				QuoteDenom: msgs[0].QuoteDenom,
 			},
 			response: &types.QueryGetPairResponse{Pair: msgs[0]},
 		},
 		{
-			desc:     "Second",
-			request:  &types.QueryGetPairRequest{
-			    Index: msgs[1].Index,
-                
+			desc: "Second",
+			request: &types.QueryGetPairRequest{
+				BaseDenom:  msgs[1].BaseDenom,
+				QuoteDenom: msgs[1].QuoteDenom,
 			},
 			response: &types.QueryGetPairResponse{Pair: msgs[1]},
 		},
 		{
-			desc:    "KeyNotFound",
+			desc: "KeyNotFound",
 			request: &types.QueryGetPairRequest{
-			    Index:strconv.Itoa(100000),
-                
+				BaseDenom:  "base" + strconv.Itoa(100000),
+				QuoteDenom: "base" + strconv.Itoa(100000),
 			},
-			err:     status.Error(codes.NotFound, "not found"),
+			err: status.Error(codes.NotFound, "not found"),
 		},
 		{
 			desc: "InvalidRequest",
@@ -92,9 +92,9 @@ func TestPairQueryPaginated(t *testing.T) {
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Pair), step)
 			require.Subset(t,
-            	nullify.Fill(msgs),
-            	nullify.Fill(resp.Pair),
-            )
+				nullify.Fill(msgs),
+				nullify.Fill(resp.Pair),
+			)
 		}
 	})
 	t.Run("ByKey", func(t *testing.T) {
@@ -105,9 +105,9 @@ func TestPairQueryPaginated(t *testing.T) {
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Pair), step)
 			require.Subset(t,
-            	nullify.Fill(msgs),
-            	nullify.Fill(resp.Pair),
-            )
+				nullify.Fill(msgs),
+				nullify.Fill(resp.Pair),
+			)
 			next = resp.Pagination.NextKey
 		}
 	})

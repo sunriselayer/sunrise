@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sunriseapp.blobgrant;
+package sunrise.blobgrant.v1;
 
 option go_package = "github.com/sunriselayer/sunrise-app/x/blobgrant/types";
 

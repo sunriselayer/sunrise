@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
 	"github.com/sunriselayer/sunrise-app/testutil/nullify"
-	"github.com/stretchr/testify/require"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
 )
 
 // Prevent strconv unused error
@@ -19,19 +19,18 @@ func createNRegistration(keeper keeper.Keeper, ctx context.Context, n int) []typ
 	items := make([]types.Registration, n)
 	for i := range items {
 		items[i].Address = strconv.Itoa(i)
-        
+
 		keeper.SetRegistration(ctx, items[i])
 	}
 	return items
 }
 
 func TestRegistrationGet(t *testing.T) {
-	keeper, ctx := keepertest.BlobgrantKeeper(t)
+	keeper, ctx := keepertest.GrantKeeper(t)
 	items := createNRegistration(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetRegistration(ctx,
-		    item.Address,
-            
+			item.Address,
 		)
 		require.True(t, found)
 		require.Equal(t,
@@ -41,23 +40,21 @@ func TestRegistrationGet(t *testing.T) {
 	}
 }
 func TestRegistrationRemove(t *testing.T) {
-	keeper, ctx := keepertest.BlobgrantKeeper(t)
+	keeper, ctx := keepertest.GrantKeeper(t)
 	items := createNRegistration(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveRegistration(ctx,
-		    item.Address,
-            
+			item.Address,
 		)
 		_, found := keeper.GetRegistration(ctx,
-		    item.Address,
-            
+			item.Address,
 		)
 		require.False(t, found)
 	}
 }
 
 func TestRegistrationGetAll(t *testing.T) {
-	keeper, ctx := keepertest.BlobgrantKeeper(t)
+	keeper, ctx := keepertest.GrantKeeper(t)
 	items := createNRegistration(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),

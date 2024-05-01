@@ -9,53 +9,36 @@ import (
 var _ sdk.Msg = &MsgCreatePool{}
 
 func NewMsgCreatePool(creator string, baseDenom string, quoteDenom string) *MsgCreatePool {
-  return &MsgCreatePool{
-		Creator: creator,
-    BaseDenom: baseDenom,
-    QuoteDenom: quoteDenom,
+	return &MsgCreatePool{
+		Creator:    creator,
+		BaseDenom:  baseDenom,
+		QuoteDenom: quoteDenom,
 	}
 }
 
 func (msg *MsgCreatePool) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Creator)
-  	if err != nil {
-  		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  	}
-  return nil
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+	return nil
 }
 
 var _ sdk.Msg = &MsgUpdatePool{}
 
 func NewMsgUpdatePool(creator string, id uint64, baseDenom string, quoteDenom string) *MsgUpdatePool {
-  return &MsgUpdatePool{
-        Id: id,
-		Creator: creator,
-    BaseDenom: baseDenom,
-    QuoteDenom: quoteDenom,
+	return &MsgUpdatePool{
+		Id:         id,
+		Creator:    creator,
+		BaseDenom:  baseDenom,
+		QuoteDenom: quoteDenom,
 	}
 }
 
 func (msg *MsgUpdatePool) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  }
-   return nil
-}
-
-var _ sdk.Msg = &MsgDeletePool{}
-
-func NewMsgDeletePool(creator string, id uint64) *MsgDeletePool {
-  return &MsgDeletePool{
-        Id: id,
-		Creator: creator,
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-} 
-
-func (msg *MsgDeletePool) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Creator)
-  if err != nil {
-    return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  }
-  return nil
+	return nil
 }

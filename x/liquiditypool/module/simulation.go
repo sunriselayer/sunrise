@@ -23,7 +23,7 @@ var (
 )
 
 const (
-opWeightMsgCreatePool = "op_weight_msg_pool"
+	opWeightMsgCreatePool = "op_weight_msg_pool"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgCreatePool int = 100
 
@@ -58,30 +58,28 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	}
 	liquiditypoolGenesis := types.GenesisState{
 		Params: types.DefaultParams(),
-			PoolList: []types.Pool{
-		{
-			Id: 0,
-			Creator: sample.AccAddress(),
-
+		PoolList: []types.Pool{
+			{
+				Id:      0,
+				Creator: sample.AccAddress(),
+			},
+			{
+				Id:      1,
+				Creator: sample.AccAddress(),
+			},
 		},
-		{
-			Id: 1,
-			Creator: sample.AccAddress(),
-
+		PoolCount: 2,
+		TwapList: []types.Twap{
+			{
+				BaseDenom:  "base0",
+				QuoteDenom: "quote0",
+			},
+			{
+				BaseDenom:  "base1",
+				QuoteDenom: "quote1",
+			},
 		},
-	},
-	PoolCount: 2,
-	TwapList: []types.Twap{
-		{
-			Creator: sample.AccAddress(),
-Index: "0",
-},
-		{
-			Creator: sample.AccAddress(),
-Index: "1",
-},
-	},
-	// this line is used by starport scaffolding # simapp/module/genesisState
+		// this line is used by starport scaffolding # simapp/module/genesisState
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&liquiditypoolGenesis)
 }
@@ -115,50 +113,6 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquiditypoolsimulation.SimulateMsgUpdatePool(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgDeletePool int
-	simState.AppParams.GetOrGenerate(opWeightMsgDeletePool, &weightMsgDeletePool, nil,
-		func(_ *rand.Rand) {
-			weightMsgDeletePool = defaultWeightMsgDeletePool
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgDeletePool,
-		liquiditypoolsimulation.SimulateMsgDeletePool(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	var weightMsgCreateTwap int
-	simState.AppParams.GetOrGenerate(opWeightMsgCreateTwap, &weightMsgCreateTwap, nil,
-		func(_ *rand.Rand) {
-			weightMsgCreateTwap = defaultWeightMsgCreateTwap
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgCreateTwap,
-		liquiditypoolsimulation.SimulateMsgCreateTwap(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	var weightMsgUpdateTwap int
-	simState.AppParams.GetOrGenerate(opWeightMsgUpdateTwap, &weightMsgUpdateTwap, nil,
-		func(_ *rand.Rand) {
-			weightMsgUpdateTwap = defaultWeightMsgUpdateTwap
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgUpdateTwap,
-		liquiditypoolsimulation.SimulateMsgUpdateTwap(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	var weightMsgDeleteTwap int
-	simState.AppParams.GetOrGenerate(opWeightMsgDeleteTwap, &weightMsgDeleteTwap, nil,
-		func(_ *rand.Rand) {
-			weightMsgDeleteTwap = defaultWeightMsgDeleteTwap
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgDeleteTwap,
-		liquiditypoolsimulation.SimulateMsgDeleteTwap(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -168,53 +122,21 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
 		simulation.NewWeightedProposalMsg(
-	opWeightMsgCreatePool,
-	defaultWeightMsgCreatePool,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		liquiditypoolsimulation.SimulateMsgCreatePool(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgUpdatePool,
-	defaultWeightMsgUpdatePool,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		liquiditypoolsimulation.SimulateMsgUpdatePool(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgDeletePool,
-	defaultWeightMsgDeletePool,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		liquiditypoolsimulation.SimulateMsgDeletePool(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgCreateTwap,
-	defaultWeightMsgCreateTwap,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		liquiditypoolsimulation.SimulateMsgCreateTwap(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgUpdateTwap,
-	defaultWeightMsgUpdateTwap,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		liquiditypoolsimulation.SimulateMsgUpdateTwap(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgDeleteTwap,
-	defaultWeightMsgDeleteTwap,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		liquiditypoolsimulation.SimulateMsgDeleteTwap(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-// this line is used by starport scaffolding # simapp/module/OpMsg
+			opWeightMsgCreatePool,
+			defaultWeightMsgCreatePool,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				liquiditypoolsimulation.SimulateMsgCreatePool(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgUpdatePool,
+			defaultWeightMsgUpdatePool,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				liquiditypoolsimulation.SimulateMsgUpdatePool(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }

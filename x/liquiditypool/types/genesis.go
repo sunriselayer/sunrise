@@ -1,7 +1,7 @@
 package types
 
 import (
-"fmt"
+	"fmt"
 )
 
 // DefaultIndex is the default global index
@@ -11,9 +11,9 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		PairList: []Pair{},
-PoolList: []Pool{},
-TwapList: []Twap{},
-// this line is used by starport scaffolding # genesis/types/default
+		PoolList: []Pool{},
+		TwapList: []Twap{},
+		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
 }
@@ -22,38 +22,38 @@ TwapList: []Twap{},
 // failure.
 func (gs GenesisState) Validate() error {
 	// Check for duplicated index in pair
-pairIndexMap := make(map[string]struct{})
+	pairIndexMap := make(map[string]struct{})
 
-for _, elem := range gs.PairList {
-	index := string(PairKey(elem.Index))
-	if _, ok := pairIndexMap[index]; ok {
-		return fmt.Errorf("duplicated index for pair")
+	for _, elem := range gs.PairList {
+		index := string(PairKey(elem.BaseDenom, elem.QuoteDenom))
+		if _, ok := pairIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for pair")
+		}
+		pairIndexMap[index] = struct{}{}
 	}
-	pairIndexMap[index] = struct{}{}
-}
-// Check for duplicated ID in pool
-poolIdMap := make(map[uint64]bool)
-poolCount := gs.GetPoolCount()
-for _, elem := range gs.PoolList {
-	if _, ok := poolIdMap[elem.Id]; ok {
-		return fmt.Errorf("duplicated id for pool")
+	// Check for duplicated ID in pool
+	poolIdMap := make(map[uint64]bool)
+	poolCount := gs.GetPoolCount()
+	for _, elem := range gs.PoolList {
+		if _, ok := poolIdMap[elem.Id]; ok {
+			return fmt.Errorf("duplicated id for pool")
+		}
+		if elem.Id >= poolCount {
+			return fmt.Errorf("pool id should be lower or equal than the last id")
+		}
+		poolIdMap[elem.Id] = true
 	}
-	if elem.Id >= poolCount {
-		return fmt.Errorf("pool id should be lower or equal than the last id")
-	}
-	poolIdMap[elem.Id] = true
-}
-// Check for duplicated index in twap
-twapIndexMap := make(map[string]struct{})
+	// Check for duplicated index in twap
+	twapIndexMap := make(map[string]struct{})
 
-for _, elem := range gs.TwapList {
-	index := string(TwapKey(elem.Index))
-	if _, ok := twapIndexMap[index]; ok {
-		return fmt.Errorf("duplicated index for twap")
+	for _, elem := range gs.TwapList {
+		index := string(TwapKey(elem.BaseDenom, elem.QuoteDenom))
+		if _, ok := twapIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for twap")
+		}
+		twapIndexMap[index] = struct{}{}
 	}
-	twapIndexMap[index] = struct{}{}
-}
-// this line is used by starport scaffolding # genesis/types/validate
+	// this line is used by starport scaffolding # genesis/types/validate
 
 	return gs.Params.Validate()
 }

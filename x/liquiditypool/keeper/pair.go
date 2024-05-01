@@ -11,29 +11,32 @@ import (
 
 // SetPair set a specific pair in the store from its index
 func (k Keeper) SetPair(ctx context.Context, pair types.Pair) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store :=  prefix.NewStore(storeAdapter, types.KeyPrefix(types.PairKeyPrefix))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PairKeyPrefix))
 	b := k.cdc.MustMarshal(&pair)
 	store.Set(types.PairKey(
-        pair.Index,
-    ), b)
+		pair.BaseDenom,
+		pair.QuoteDenom,
+	), b)
 }
 
 // GetPair returns a pair from its index
 func (k Keeper) GetPair(
-    ctx context.Context,
-    index string,
-    
+	ctx context.Context,
+	baseDenom string,
+	quoteDenom string,
+
 ) (val types.Pair, found bool) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PairKeyPrefix))
 
 	b := store.Get(types.PairKey(
-        index,
-    ))
-    if b == nil {
-        return val, false
-    }
+		baseDenom,
+		quoteDenom,
+	))
+	if b == nil {
+		return val, false
+	}
 
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
@@ -41,21 +44,22 @@ func (k Keeper) GetPair(
 
 // RemovePair removes a pair from the store
 func (k Keeper) RemovePair(
-    ctx context.Context,
-    index string,
-    
+	ctx context.Context,
+	baseDenom string,
+	quoteDenom string,
 ) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PairKeyPrefix))
 	store.Delete(types.PairKey(
-	    index,
-    ))
+		baseDenom,
+		quoteDenom,
+	))
 }
 
 // GetAllPair returns all pair
 func (k Keeper) GetAllPair(ctx context.Context) (list []types.Pair) {
-    storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-    store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PairKeyPrefix))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PairKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
@@ -63,8 +67,8 @@ func (k Keeper) GetAllPair(ctx context.Context) (list []types.Pair) {
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Pair
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
-        list = append(list, val)
+		list = append(list, val)
 	}
 
-    return
+	return
 }

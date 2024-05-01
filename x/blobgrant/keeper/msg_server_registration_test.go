@@ -1,34 +1,32 @@
 package keeper_test
 
 import (
-    "strconv"
+	"strconv"
 	"testing"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
-    keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
-    "github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
-    "github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
 )
 
 // Prevent strconv unused error
 var _ = strconv.IntSize
 
 func TestRegistrationMsgServerCreate(t *testing.T) {
-	k, ctx := keepertest.BlobgrantKeeper(t)
+	k, ctx := keepertest.GrantKeeper(t)
 	srv := keeper.NewMsgServerImpl(k)
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		expected := &types.MsgCreateRegistration{Creator: creator,
-		    Address: strconv.Itoa(i),
-            
+			Address: strconv.Itoa(i),
 		}
 		_, err := srv.CreateRegistration(ctx, expected)
 		require.NoError(t, err)
 		rst, found := k.GetRegistration(ctx,
-		    expected.Address,
-            
+			expected.Address,
 		)
 		require.True(t, found)
 		require.Equal(t, expected.Creator, rst.Creator)
@@ -44,36 +42,32 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 		err     error
 	}{
 		{
-			desc:    "Completed",
+			desc: "Completed",
 			request: &types.MsgUpdateRegistration{Creator: creator,
-			    Address: strconv.Itoa(0),
-                
+				Address: strconv.Itoa(0),
 			},
 		},
 		{
-			desc:    "Unauthorized",
+			desc: "Unauthorized",
 			request: &types.MsgUpdateRegistration{Creator: "B",
-			    Address: strconv.Itoa(0),
-                
+				Address: strconv.Itoa(0),
 			},
-			err:     sdkerrors.ErrUnauthorized,
+			err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc:    "KeyNotFound",
+			desc: "KeyNotFound",
 			request: &types.MsgUpdateRegistration{Creator: creator,
-			    Address: strconv.Itoa(100000),
-                
+				Address: strconv.Itoa(100000),
 			},
-			err:     sdkerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, ctx := keepertest.BlobgrantKeeper(t)
+			k, ctx := keepertest.GrantKeeper(t)
 			srv := keeper.NewMsgServerImpl(k)
 			expected := &types.MsgCreateRegistration{Creator: creator,
-			    Address: strconv.Itoa(0),
-                
+				Address: strconv.Itoa(0),
 			}
 			_, err := srv.CreateRegistration(ctx, expected)
 			require.NoError(t, err)
@@ -84,8 +78,7 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				rst, found := k.GetRegistration(ctx,
-				    expected.Address,
-                    
+					expected.Address,
 				)
 				require.True(t, found)
 				require.Equal(t, expected.Creator, rst.Creator)
@@ -103,37 +96,33 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 		err     error
 	}{
 		{
-			desc:    "Completed",
+			desc: "Completed",
 			request: &types.MsgDeleteRegistration{Creator: creator,
-			    Address: strconv.Itoa(0),
-                
+				Address: strconv.Itoa(0),
 			},
 		},
 		{
-			desc:    "Unauthorized",
+			desc: "Unauthorized",
 			request: &types.MsgDeleteRegistration{Creator: "B",
-			    Address: strconv.Itoa(0),
-                
+				Address: strconv.Itoa(0),
 			},
-			err:     sdkerrors.ErrUnauthorized,
+			err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc:    "KeyNotFound",
+			desc: "KeyNotFound",
 			request: &types.MsgDeleteRegistration{Creator: creator,
-			    Address: strconv.Itoa(100000),
-                
+				Address: strconv.Itoa(100000),
 			},
-			err:     sdkerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, ctx := keepertest.BlobgrantKeeper(t)
+			k, ctx := keepertest.GrantKeeper(t)
 			srv := keeper.NewMsgServerImpl(k)
 
 			_, err := srv.CreateRegistration(ctx, &types.MsgCreateRegistration{Creator: creator,
-			    Address: strconv.Itoa(0),
-                
+				Address: strconv.Itoa(0),
 			})
 			require.NoError(t, err)
 			_, err = srv.DeleteRegistration(ctx, tc.request)
@@ -142,8 +131,7 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				_, found := k.GetRegistration(ctx,
-				    tc.request.Address,
-                    
+					tc.request.Address,
 				)
 				require.False(t, found)
 			}

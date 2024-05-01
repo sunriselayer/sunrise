@@ -6,10 +6,10 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "sunriseapp/liquiditypool/params.proto";
-import "sunriseapp/liquiditypool/pair.proto";
-import "sunriseapp/liquiditypool/pool.proto";
-import "sunriseapp/liquiditypool/twap.proto";
+import "sunrise/liquiditypool/v1/params.proto";
+import "sunrise/liquiditypool/v1/pair.proto";
+import "sunrise/liquiditypool/v1/pool.proto";
+import "sunrise/liquiditypool/v1/twap.proto";
 
 option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
 
@@ -63,7 +63,8 @@ message QueryParamsResponse {
 }
 
 message QueryGetPairRequest {
-  string index = 1;
+  string base_denom = 1;
+  string quote_denom = 2;
 }
 
 message QueryGetPairResponse {
@@ -97,7 +98,8 @@ message QueryAllPoolResponse {
 }
 
 message QueryGetTwapRequest {
-  string index = 1;
+  string base_denom = 1;
+  string quote_denom = 2;
 }
 
 message QueryGetTwapResponse {

@@ -23,7 +23,7 @@ var (
 )
 
 const (
-opWeightMsgCreateRegistration = "op_weight_msg_registration"
+	opWeightMsgCreateRegistration = "op_weight_msg_registration"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgCreateRegistration int = 100
 
@@ -47,16 +47,16 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	grantGenesis := types.GenesisState{
 		Params: types.DefaultParams(),
 		RegistrationList: []types.Registration{
-		{
-			Creator: sample.AccAddress(),
-Address: "0",
-},
-		{
-			Creator: sample.AccAddress(),
-Address: "1",
-},
-	},
-	// this line is used by starport scaffolding # simapp/module/genesisState
+			{
+				Creator: sample.AccAddress(),
+				Address: "0",
+			},
+			{
+				Creator: sample.AccAddress(),
+				Address: "1",
+			},
+		},
+		// this line is used by starport scaffolding # simapp/module/genesisState
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&grantGenesis)
 }
@@ -81,7 +81,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgCreateRegistration,
-		blobgrantsimulation.SimulateMsgCreateRegistration(am.accountKeeper, am.bankKeeper, am.keeper),
+		grantsimulation.SimulateMsgCreateRegistration(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	var weightMsgUpdateRegistration int
@@ -92,7 +92,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgUpdateRegistration,
-		blobgrantsimulation.SimulateMsgUpdateRegistration(am.accountKeeper, am.bankKeeper, am.keeper),
+		grantsimulation.SimulateMsgUpdateRegistration(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	var weightMsgDeleteRegistration int
@@ -103,7 +103,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgDeleteRegistration,
-		blobgrantsimulation.SimulateMsgDeleteRegistration(am.accountKeeper, am.bankKeeper, am.keeper),
+		grantsimulation.SimulateMsgDeleteRegistration(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
@@ -115,29 +115,29 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
 		simulation.NewWeightedProposalMsg(
-	opWeightMsgCreateRegistration,
-	defaultWeightMsgCreateRegistration,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		blobgrantsimulation.SimulateMsgCreateRegistration(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgUpdateRegistration,
-	defaultWeightMsgUpdateRegistration,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		blobgrantsimulation.SimulateMsgUpdateRegistration(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-simulation.NewWeightedProposalMsg(
-	opWeightMsgDeleteRegistration,
-	defaultWeightMsgDeleteRegistration,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		blobgrantsimulation.SimulateMsgDeleteRegistration(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-// this line is used by starport scaffolding # simapp/module/OpMsg
+			opWeightMsgCreateRegistration,
+			defaultWeightMsgCreateRegistration,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				grantsimulation.SimulateMsgCreateRegistration(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgUpdateRegistration,
+			defaultWeightMsgUpdateRegistration,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				grantsimulation.SimulateMsgUpdateRegistration(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgDeleteRegistration,
+			defaultWeightMsgDeleteRegistration,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				grantsimulation.SimulateMsgDeleteRegistration(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }

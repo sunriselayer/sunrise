@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sunriseapp.liquiditypool;
+package sunrise.liquiditypool.v1;
 
 option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
 

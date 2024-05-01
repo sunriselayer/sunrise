@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-    "strconv"
+	"strconv"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -9,16 +9,16 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
-	"github.com/sunriselayer/sunrise-app/testutil/nullify"
 	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
+	"github.com/sunriselayer/sunrise-app/testutil/nullify"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
 )
 
 // Prevent strconv unused error
 var _ = strconv.IntSize
 
 func TestRegistrationQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.BlobgrantKeeper(t)
+	keeper, ctx := keepertest.GrantKeeper(t)
 	msgs := createNRegistration(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
@@ -27,28 +27,25 @@ func TestRegistrationQuerySingle(t *testing.T) {
 		err      error
 	}{
 		{
-			desc:     "First",
-			request:  &types.QueryGetRegistrationRequest{
-			    Address: msgs[0].Address,
-                
+			desc: "First",
+			request: &types.QueryGetRegistrationRequest{
+				Address: msgs[0].Address,
 			},
 			response: &types.QueryGetRegistrationResponse{Registration: msgs[0]},
 		},
 		{
-			desc:     "Second",
-			request:  &types.QueryGetRegistrationRequest{
-			    Address: msgs[1].Address,
-                
+			desc: "Second",
+			request: &types.QueryGetRegistrationRequest{
+				Address: msgs[1].Address,
 			},
 			response: &types.QueryGetRegistrationResponse{Registration: msgs[1]},
 		},
 		{
-			desc:    "KeyNotFound",
+			desc: "KeyNotFound",
 			request: &types.QueryGetRegistrationRequest{
-			    Address:strconv.Itoa(100000),
-                
+				Address: strconv.Itoa(100000),
 			},
-			err:     status.Error(codes.NotFound, "not found"),
+			err: status.Error(codes.NotFound, "not found"),
 		},
 		{
 			desc: "InvalidRequest",
@@ -72,7 +69,7 @@ func TestRegistrationQuerySingle(t *testing.T) {
 }
 
 func TestRegistrationQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.BlobgrantKeeper(t)
+	keeper, ctx := keepertest.GrantKeeper(t)
 	msgs := createNRegistration(keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllRegistrationRequest {
@@ -92,9 +89,9 @@ func TestRegistrationQueryPaginated(t *testing.T) {
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Registration), step)
 			require.Subset(t,
-            	nullify.Fill(msgs),
-            	nullify.Fill(resp.Registration),
-            )
+				nullify.Fill(msgs),
+				nullify.Fill(resp.Registration),
+			)
 		}
 	})
 	t.Run("ByKey", func(t *testing.T) {
@@ -105,9 +102,9 @@ func TestRegistrationQueryPaginated(t *testing.T) {
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Registration), step)
 			require.Subset(t,
-            	nullify.Fill(msgs),
-            	nullify.Fill(resp.Registration),
-            )
+				nullify.Fill(msgs),
+				nullify.Fill(resp.Registration),
+			)
 			next = resp.Pagination.NextKey
 		}
 	})

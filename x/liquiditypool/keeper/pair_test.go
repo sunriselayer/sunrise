@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
 	"github.com/sunriselayer/sunrise-app/testutil/nullify"
-	"github.com/stretchr/testify/require"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
 // Prevent strconv unused error
@@ -18,8 +18,10 @@ var _ = strconv.IntSize
 func createNPair(keeper keeper.Keeper, ctx context.Context, n int) []types.Pair {
 	items := make([]types.Pair, n)
 	for i := range items {
-		items[i].Index = strconv.Itoa(i)
-        
+		index := strconv.Itoa(i)
+		items[i].BaseDenom = "base" + index
+		items[i].QuoteDenom = "quote" + index
+
 		keeper.SetPair(ctx, items[i])
 	}
 	return items
@@ -30,8 +32,8 @@ func TestPairGet(t *testing.T) {
 	items := createNPair(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetPair(ctx,
-		    item.Index,
-            
+			item.BaseDenom,
+			item.QuoteDenom,
 		)
 		require.True(t, found)
 		require.Equal(t,
@@ -45,12 +47,12 @@ func TestPairRemove(t *testing.T) {
 	items := createNPair(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemovePair(ctx,
-		    item.Index,
-            
+			item.BaseDenom,
+			item.QuoteDenom,
 		)
 		_, found := keeper.GetPair(ctx,
-		    item.Index,
-            
+			item.BaseDenom,
+			item.QuoteDenom,
 		)
 		require.False(t, found)
 	}
