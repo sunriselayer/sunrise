@@ -32,16 +32,16 @@ func TestPoolMsgServerUpdate(t *testing.T) {
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgUpdatePool{Creator: creator},
+			request: &types.MsgUpdatePool{Admin: creator},
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgUpdatePool{Creator: "B"},
+			request: &types.MsgUpdatePool{Admin: "B"},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgUpdatePool{Creator: creator, Id: 10},
+			request: &types.MsgUpdatePool{Admin: creator, Id: 10},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 	}

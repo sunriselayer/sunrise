@@ -48,13 +48,13 @@ func TestMsgUpdatePool_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgUpdatePool{
-				Creator: "invalid_address",
+				Admin: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgUpdatePool{
-				Creator: sample.AccAddress(),
+				Admin: sample.AccAddress(),
 			},
 		},
 	}

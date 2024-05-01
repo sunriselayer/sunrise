@@ -26,19 +26,19 @@ func (msg *MsgCreatePool) ValidateBasic() error {
 
 var _ sdk.Msg = &MsgUpdatePool{}
 
-func NewMsgUpdatePool(creator string, id uint64, baseDenom string, quoteDenom string) *MsgUpdatePool {
+func NewMsgUpdatePool(admin string, id uint64, baseDenom string, quoteDenom string) *MsgUpdatePool {
 	return &MsgUpdatePool{
+		Admin:      admin,
 		Id:         id,
-		Creator:    creator,
 		BaseDenom:  baseDenom,
 		QuoteDenom: quoteDenom,
 	}
 }
 
 func (msg *MsgUpdatePool) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.Admin)
 	if err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid admin address (%s)", err)
 	}
 	return nil
 }

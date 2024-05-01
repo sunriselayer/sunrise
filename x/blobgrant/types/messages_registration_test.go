@@ -17,13 +17,13 @@ func TestMsgCreateRegistration_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgCreateRegistration{
-				Creator: "invalid_address",
+				Address: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgCreateRegistration{
-				Creator: sample.AccAddress(),
+				Address: sample.AccAddress(),
 			},
 		},
 	}
@@ -48,13 +48,13 @@ func TestMsgUpdateRegistration_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgUpdateRegistration{
-				Creator: "invalid_address",
+				Address: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgUpdateRegistration{
-				Creator: sample.AccAddress(),
+				Address: sample.AccAddress(),
 			},
 		},
 	}
@@ -79,13 +79,13 @@ func TestMsgDeleteRegistration_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgDeleteRegistration{
-				Creator: "invalid_address",
+				Address: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgDeleteRegistration{
-				Creator: sample.AccAddress(),
+				Address: sample.AccAddress(),
 			},
 		},
 	}

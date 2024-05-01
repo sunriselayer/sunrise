@@ -871,19 +871,74 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 	}
 }
 
+var _ protoreflect.List = (*_MsgCreatePool_5_list)(nil)
+
+type _MsgCreatePool_5_list struct {
+	list *[]*Tick
+}
+
+func (x *_MsgCreatePool_5_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgCreatePool_5_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_MsgCreatePool_5_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Tick)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgCreatePool_5_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Tick)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgCreatePool_5_list) AppendMutable() protoreflect.Value {
+	v := new(Tick)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgCreatePool_5_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgCreatePool_5_list) NewElement() protoreflect.Value {
+	v := new(Tick)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgCreatePool_5_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgCreatePool            protoreflect.MessageDescriptor
-	fd_MsgCreatePool_creator    protoreflect.FieldDescriptor
-	fd_MsgCreatePool_baseDenom  protoreflect.FieldDescriptor
-	fd_MsgCreatePool_quoteDenom protoreflect.FieldDescriptor
+	md_MsgCreatePool             protoreflect.MessageDescriptor
+	fd_MsgCreatePool_creator     protoreflect.FieldDescriptor
+	fd_MsgCreatePool_base_denom  protoreflect.FieldDescriptor
+	fd_MsgCreatePool_quote_denom protoreflect.FieldDescriptor
+	fd_MsgCreatePool_fee_rate    protoreflect.FieldDescriptor
+	fd_MsgCreatePool_ticks       protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_v1_tx_proto_init()
 	md_MsgCreatePool = File_sunrise_liquiditypool_v1_tx_proto.Messages().ByName("MsgCreatePool")
 	fd_MsgCreatePool_creator = md_MsgCreatePool.Fields().ByName("creator")
-	fd_MsgCreatePool_baseDenom = md_MsgCreatePool.Fields().ByName("baseDenom")
-	fd_MsgCreatePool_quoteDenom = md_MsgCreatePool.Fields().ByName("quoteDenom")
+	fd_MsgCreatePool_base_denom = md_MsgCreatePool.Fields().ByName("base_denom")
+	fd_MsgCreatePool_quote_denom = md_MsgCreatePool.Fields().ByName("quote_denom")
+	fd_MsgCreatePool_fee_rate = md_MsgCreatePool.Fields().ByName("fee_rate")
+	fd_MsgCreatePool_ticks = md_MsgCreatePool.Fields().ByName("ticks")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCreatePool)(nil)
@@ -959,13 +1014,25 @@ func (x *fastReflection_MsgCreatePool) Range(f func(protoreflect.FieldDescriptor
 	}
 	if x.BaseDenom != "" {
 		value := protoreflect.ValueOfString(x.BaseDenom)
-		if !f(fd_MsgCreatePool_baseDenom, value) {
+		if !f(fd_MsgCreatePool_base_denom, value) {
 			return
 		}
 	}
 	if x.QuoteDenom != "" {
 		value := protoreflect.ValueOfString(x.QuoteDenom)
-		if !f(fd_MsgCreatePool_quoteDenom, value) {
+		if !f(fd_MsgCreatePool_quote_denom, value) {
+			return
+		}
+	}
+	if x.FeeRate != "" {
+		value := protoreflect.ValueOfString(x.FeeRate)
+		if !f(fd_MsgCreatePool_fee_rate, value) {
+			return
+		}
+	}
+	if len(x.Ticks) != 0 {
+		value := protoreflect.ValueOfList(&_MsgCreatePool_5_list{list: &x.Ticks})
+		if !f(fd_MsgCreatePool_ticks, value) {
 			return
 		}
 	}
@@ -986,10 +1053,14 @@ func (x *fastReflection_MsgCreatePool) Has(fd protoreflect.FieldDescriptor) bool
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.v1.MsgCreatePool.creator":
 		return x.Creator != ""
-	case "sunrise.liquiditypool.v1.MsgCreatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.base_denom":
 		return x.BaseDenom != ""
-	case "sunrise.liquiditypool.v1.MsgCreatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.quote_denom":
 		return x.QuoteDenom != ""
+	case "sunrise.liquiditypool.v1.MsgCreatePool.fee_rate":
+		return x.FeeRate != ""
+	case "sunrise.liquiditypool.v1.MsgCreatePool.ticks":
+		return len(x.Ticks) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgCreatePool"))
@@ -1008,10 +1079,14 @@ func (x *fastReflection_MsgCreatePool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.v1.MsgCreatePool.creator":
 		x.Creator = ""
-	case "sunrise.liquiditypool.v1.MsgCreatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.base_denom":
 		x.BaseDenom = ""
-	case "sunrise.liquiditypool.v1.MsgCreatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.quote_denom":
 		x.QuoteDenom = ""
+	case "sunrise.liquiditypool.v1.MsgCreatePool.fee_rate":
+		x.FeeRate = ""
+	case "sunrise.liquiditypool.v1.MsgCreatePool.ticks":
+		x.Ticks = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgCreatePool"))
@@ -1031,12 +1106,21 @@ func (x *fastReflection_MsgCreatePool) Get(descriptor protoreflect.FieldDescript
 	case "sunrise.liquiditypool.v1.MsgCreatePool.creator":
 		value := x.Creator
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.v1.MsgCreatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.base_denom":
 		value := x.BaseDenom
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.v1.MsgCreatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.quote_denom":
 		value := x.QuoteDenom
 		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.v1.MsgCreatePool.fee_rate":
+		value := x.FeeRate
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.v1.MsgCreatePool.ticks":
+		if len(x.Ticks) == 0 {
+			return protoreflect.ValueOfList(&_MsgCreatePool_5_list{})
+		}
+		listValue := &_MsgCreatePool_5_list{list: &x.Ticks}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgCreatePool"))
@@ -1059,10 +1143,16 @@ func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, valu
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.v1.MsgCreatePool.creator":
 		x.Creator = value.Interface().(string)
-	case "sunrise.liquiditypool.v1.MsgCreatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.base_denom":
 		x.BaseDenom = value.Interface().(string)
-	case "sunrise.liquiditypool.v1.MsgCreatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.quote_denom":
 		x.QuoteDenom = value.Interface().(string)
+	case "sunrise.liquiditypool.v1.MsgCreatePool.fee_rate":
+		x.FeeRate = value.Interface().(string)
+	case "sunrise.liquiditypool.v1.MsgCreatePool.ticks":
+		lv := value.List()
+		clv := lv.(*_MsgCreatePool_5_list)
+		x.Ticks = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgCreatePool"))
@@ -1083,12 +1173,20 @@ func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, valu
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCreatePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.v1.MsgCreatePool.ticks":
+		if x.Ticks == nil {
+			x.Ticks = []*Tick{}
+		}
+		value := &_MsgCreatePool_5_list{list: &x.Ticks}
+		return protoreflect.ValueOfList(value)
 	case "sunrise.liquiditypool.v1.MsgCreatePool.creator":
 		panic(fmt.Errorf("field creator of message sunrise.liquiditypool.v1.MsgCreatePool is not mutable"))
-	case "sunrise.liquiditypool.v1.MsgCreatePool.baseDenom":
-		panic(fmt.Errorf("field baseDenom of message sunrise.liquiditypool.v1.MsgCreatePool is not mutable"))
-	case "sunrise.liquiditypool.v1.MsgCreatePool.quoteDenom":
-		panic(fmt.Errorf("field quoteDenom of message sunrise.liquiditypool.v1.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgCreatePool.base_denom":
+		panic(fmt.Errorf("field base_denom of message sunrise.liquiditypool.v1.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgCreatePool.quote_denom":
+		panic(fmt.Errorf("field quote_denom of message sunrise.liquiditypool.v1.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgCreatePool.fee_rate":
+		panic(fmt.Errorf("field fee_rate of message sunrise.liquiditypool.v1.MsgCreatePool is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgCreatePool"))
@@ -1104,10 +1202,15 @@ func (x *fastReflection_MsgCreatePool) NewField(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.v1.MsgCreatePool.creator":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.v1.MsgCreatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.base_denom":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.v1.MsgCreatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgCreatePool.quote_denom":
 		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.v1.MsgCreatePool.fee_rate":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.v1.MsgCreatePool.ticks":
+		list := []*Tick{}
+		return protoreflect.ValueOfList(&_MsgCreatePool_5_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgCreatePool"))
@@ -1189,6 +1292,16 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		l = len(x.FeeRate)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.Ticks) > 0 {
+			for _, e := range x.Ticks {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1217,6 +1330,29 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Ticks) > 0 {
+			for iNdEx := len(x.Ticks) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Ticks[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x2a
+			}
+		}
+		if len(x.FeeRate) > 0 {
+			i -= len(x.FeeRate)
+			copy(dAtA[i:], x.FeeRate)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeRate)))
+			i--
+			dAtA[i] = 0x22
 		}
 		if len(x.QuoteDenom) > 0 {
 			i -= len(x.QuoteDenom)
@@ -1383,6 +1519,72 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.QuoteDenom = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeRate", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.FeeRate = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ticks", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Ticks = append(x.Ticks, &Tick{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Ticks[len(x.Ticks)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -1823,21 +2025,78 @@ func (x *fastReflection_MsgCreatePoolResponse) ProtoMethods() *protoiface.Method
 	}
 }
 
+var _ protoreflect.List = (*_MsgUpdatePool_7_list)(nil)
+
+type _MsgUpdatePool_7_list struct {
+	list *[]*Tick
+}
+
+func (x *_MsgUpdatePool_7_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgUpdatePool_7_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_MsgUpdatePool_7_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Tick)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgUpdatePool_7_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Tick)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgUpdatePool_7_list) AppendMutable() protoreflect.Value {
+	v := new(Tick)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgUpdatePool_7_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgUpdatePool_7_list) NewElement() protoreflect.Value {
+	v := new(Tick)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgUpdatePool_7_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgUpdatePool            protoreflect.MessageDescriptor
-	fd_MsgUpdatePool_creator    protoreflect.FieldDescriptor
-	fd_MsgUpdatePool_id         protoreflect.FieldDescriptor
-	fd_MsgUpdatePool_baseDenom  protoreflect.FieldDescriptor
-	fd_MsgUpdatePool_quoteDenom protoreflect.FieldDescriptor
+	md_MsgUpdatePool             protoreflect.MessageDescriptor
+	fd_MsgUpdatePool_admin       protoreflect.FieldDescriptor
+	fd_MsgUpdatePool_id          protoreflect.FieldDescriptor
+	fd_MsgUpdatePool_base_denom  protoreflect.FieldDescriptor
+	fd_MsgUpdatePool_quote_denom protoreflect.FieldDescriptor
+	fd_MsgUpdatePool_new_admin   protoreflect.FieldDescriptor
+	fd_MsgUpdatePool_fee_rate    protoreflect.FieldDescriptor
+	fd_MsgUpdatePool_ticks       protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_v1_tx_proto_init()
 	md_MsgUpdatePool = File_sunrise_liquiditypool_v1_tx_proto.Messages().ByName("MsgUpdatePool")
-	fd_MsgUpdatePool_creator = md_MsgUpdatePool.Fields().ByName("creator")
+	fd_MsgUpdatePool_admin = md_MsgUpdatePool.Fields().ByName("admin")
 	fd_MsgUpdatePool_id = md_MsgUpdatePool.Fields().ByName("id")
-	fd_MsgUpdatePool_baseDenom = md_MsgUpdatePool.Fields().ByName("baseDenom")
-	fd_MsgUpdatePool_quoteDenom = md_MsgUpdatePool.Fields().ByName("quoteDenom")
+	fd_MsgUpdatePool_base_denom = md_MsgUpdatePool.Fields().ByName("base_denom")
+	fd_MsgUpdatePool_quote_denom = md_MsgUpdatePool.Fields().ByName("quote_denom")
+	fd_MsgUpdatePool_new_admin = md_MsgUpdatePool.Fields().ByName("new_admin")
+	fd_MsgUpdatePool_fee_rate = md_MsgUpdatePool.Fields().ByName("fee_rate")
+	fd_MsgUpdatePool_ticks = md_MsgUpdatePool.Fields().ByName("ticks")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgUpdatePool)(nil)
@@ -1905,9 +2164,9 @@ func (x *fastReflection_MsgUpdatePool) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_MsgUpdatePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Creator != "" {
-		value := protoreflect.ValueOfString(x.Creator)
-		if !f(fd_MsgUpdatePool_creator, value) {
+	if x.Admin != "" {
+		value := protoreflect.ValueOfString(x.Admin)
+		if !f(fd_MsgUpdatePool_admin, value) {
 			return
 		}
 	}
@@ -1919,13 +2178,31 @@ func (x *fastReflection_MsgUpdatePool) Range(f func(protoreflect.FieldDescriptor
 	}
 	if x.BaseDenom != "" {
 		value := protoreflect.ValueOfString(x.BaseDenom)
-		if !f(fd_MsgUpdatePool_baseDenom, value) {
+		if !f(fd_MsgUpdatePool_base_denom, value) {
 			return
 		}
 	}
 	if x.QuoteDenom != "" {
 		value := protoreflect.ValueOfString(x.QuoteDenom)
-		if !f(fd_MsgUpdatePool_quoteDenom, value) {
+		if !f(fd_MsgUpdatePool_quote_denom, value) {
+			return
+		}
+	}
+	if x.NewAdmin != "" {
+		value := protoreflect.ValueOfString(x.NewAdmin)
+		if !f(fd_MsgUpdatePool_new_admin, value) {
+			return
+		}
+	}
+	if x.FeeRate != "" {
+		value := protoreflect.ValueOfString(x.FeeRate)
+		if !f(fd_MsgUpdatePool_fee_rate, value) {
+			return
+		}
+	}
+	if len(x.Ticks) != 0 {
+		value := protoreflect.ValueOfList(&_MsgUpdatePool_7_list{list: &x.Ticks})
+		if !f(fd_MsgUpdatePool_ticks, value) {
 			return
 		}
 	}
@@ -1944,14 +2221,20 @@ func (x *fastReflection_MsgUpdatePool) Range(f func(protoreflect.FieldDescriptor
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_MsgUpdatePool) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.creator":
-		return x.Creator != ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.admin":
+		return x.Admin != ""
 	case "sunrise.liquiditypool.v1.MsgUpdatePool.id":
 		return x.Id != uint64(0)
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.base_denom":
 		return x.BaseDenom != ""
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.quote_denom":
 		return x.QuoteDenom != ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.new_admin":
+		return x.NewAdmin != ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.fee_rate":
+		return x.FeeRate != ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.ticks":
+		return len(x.Ticks) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgUpdatePool"))
@@ -1968,14 +2251,20 @@ func (x *fastReflection_MsgUpdatePool) Has(fd protoreflect.FieldDescriptor) bool
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgUpdatePool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.creator":
-		x.Creator = ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.admin":
+		x.Admin = ""
 	case "sunrise.liquiditypool.v1.MsgUpdatePool.id":
 		x.Id = uint64(0)
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.base_denom":
 		x.BaseDenom = ""
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.quote_denom":
 		x.QuoteDenom = ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.new_admin":
+		x.NewAdmin = ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.fee_rate":
+		x.FeeRate = ""
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.ticks":
+		x.Ticks = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgUpdatePool"))
@@ -1992,18 +2281,30 @@ func (x *fastReflection_MsgUpdatePool) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_MsgUpdatePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.creator":
-		value := x.Creator
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.admin":
+		value := x.Admin
 		return protoreflect.ValueOfString(value)
 	case "sunrise.liquiditypool.v1.MsgUpdatePool.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.base_denom":
 		value := x.BaseDenom
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.quote_denom":
 		value := x.QuoteDenom
 		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.new_admin":
+		value := x.NewAdmin
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.fee_rate":
+		value := x.FeeRate
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.ticks":
+		if len(x.Ticks) == 0 {
+			return protoreflect.ValueOfList(&_MsgUpdatePool_7_list{})
+		}
+		listValue := &_MsgUpdatePool_7_list{list: &x.Ticks}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgUpdatePool"))
@@ -2024,14 +2325,22 @@ func (x *fastReflection_MsgUpdatePool) Get(descriptor protoreflect.FieldDescript
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgUpdatePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.creator":
-		x.Creator = value.Interface().(string)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.admin":
+		x.Admin = value.Interface().(string)
 	case "sunrise.liquiditypool.v1.MsgUpdatePool.id":
 		x.Id = value.Uint()
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.base_denom":
 		x.BaseDenom = value.Interface().(string)
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.quote_denom":
 		x.QuoteDenom = value.Interface().(string)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.new_admin":
+		x.NewAdmin = value.Interface().(string)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.fee_rate":
+		x.FeeRate = value.Interface().(string)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.ticks":
+		lv := value.List()
+		clv := lv.(*_MsgUpdatePool_7_list)
+		x.Ticks = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgUpdatePool"))
@@ -2052,14 +2361,24 @@ func (x *fastReflection_MsgUpdatePool) Set(fd protoreflect.FieldDescriptor, valu
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgUpdatePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.creator":
-		panic(fmt.Errorf("field creator of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.ticks":
+		if x.Ticks == nil {
+			x.Ticks = []*Tick{}
+		}
+		value := &_MsgUpdatePool_7_list{list: &x.Ticks}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.admin":
+		panic(fmt.Errorf("field admin of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
 	case "sunrise.liquiditypool.v1.MsgUpdatePool.id":
 		panic(fmt.Errorf("field id of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.baseDenom":
-		panic(fmt.Errorf("field baseDenom of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.quoteDenom":
-		panic(fmt.Errorf("field quoteDenom of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.base_denom":
+		panic(fmt.Errorf("field base_denom of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.quote_denom":
+		panic(fmt.Errorf("field quote_denom of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.new_admin":
+		panic(fmt.Errorf("field new_admin of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.fee_rate":
+		panic(fmt.Errorf("field fee_rate of message sunrise.liquiditypool.v1.MsgUpdatePool is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgUpdatePool"))
@@ -2073,14 +2392,21 @@ func (x *fastReflection_MsgUpdatePool) Mutable(fd protoreflect.FieldDescriptor) 
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_MsgUpdatePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.creator":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.admin":
 		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.v1.MsgUpdatePool.id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.baseDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.base_denom":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.v1.MsgUpdatePool.quoteDenom":
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.quote_denom":
 		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.new_admin":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.fee_rate":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.v1.MsgUpdatePool.ticks":
+		list := []*Tick{}
+		return protoreflect.ValueOfList(&_MsgUpdatePool_7_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.MsgUpdatePool"))
@@ -2150,7 +2476,7 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.Creator)
+		l = len(x.Admin)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -2164,6 +2490,20 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 		l = len(x.QuoteDenom)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.NewAdmin)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.FeeRate)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.Ticks) > 0 {
+			for _, e := range x.Ticks {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2194,6 +2534,36 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.Ticks) > 0 {
+			for iNdEx := len(x.Ticks) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Ticks[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x3a
+			}
+		}
+		if len(x.FeeRate) > 0 {
+			i -= len(x.FeeRate)
+			copy(dAtA[i:], x.FeeRate)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeRate)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.NewAdmin) > 0 {
+			i -= len(x.NewAdmin)
+			copy(dAtA[i:], x.NewAdmin)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.NewAdmin)))
+			i--
+			dAtA[i] = 0x2a
+		}
 		if len(x.QuoteDenom) > 0 {
 			i -= len(x.QuoteDenom)
 			copy(dAtA[i:], x.QuoteDenom)
@@ -2213,10 +2583,10 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x10
 		}
-		if len(x.Creator) > 0 {
-			i -= len(x.Creator)
-			copy(dAtA[i:], x.Creator)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Creator)))
+		if len(x.Admin) > 0 {
+			i -= len(x.Admin)
+			copy(dAtA[i:], x.Admin)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Admin)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -2271,7 +2641,7 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -2299,7 +2669,7 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Creator = string(dAtA[iNdEx:postIndex])
+				x.Admin = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 0 {
@@ -2383,6 +2753,104 @@ func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.QuoteDenom = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NewAdmin", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.NewAdmin = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeRate", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.FeeRate = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ticks", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Ticks = append(x.Ticks, &Tick{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Ticks[len(x.Ticks)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -2867,9 +3335,11 @@ type MsgCreatePool struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	BaseDenom  string `protobuf:"bytes,2,opt,name=baseDenom,proto3" json:"baseDenom,omitempty"`
-	QuoteDenom string `protobuf:"bytes,3,opt,name=quoteDenom,proto3" json:"quoteDenom,omitempty"`
+	Creator    string  `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	BaseDenom  string  `protobuf:"bytes,2,opt,name=base_denom,json=baseDenom,proto3" json:"base_denom,omitempty"`
+	QuoteDenom string  `protobuf:"bytes,3,opt,name=quote_denom,json=quoteDenom,proto3" json:"quote_denom,omitempty"`
+	FeeRate    string  `protobuf:"bytes,4,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
+	Ticks      []*Tick `protobuf:"bytes,5,rep,name=ticks,proto3" json:"ticks,omitempty"`
 }
 
 func (x *MsgCreatePool) Reset() {
@@ -2913,6 +3383,20 @@ func (x *MsgCreatePool) GetQuoteDenom() string {
 	return ""
 }
 
+func (x *MsgCreatePool) GetFeeRate() string {
+	if x != nil {
+		return x.FeeRate
+	}
+	return ""
+}
+
+func (x *MsgCreatePool) GetTicks() []*Tick {
+	if x != nil {
+		return x.Ticks
+	}
+	return nil
+}
+
 type MsgCreatePoolResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2953,10 +3437,13 @@ type MsgUpdatePool struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id         uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	BaseDenom  string `protobuf:"bytes,3,opt,name=baseDenom,proto3" json:"baseDenom,omitempty"`
-	QuoteDenom string `protobuf:"bytes,4,opt,name=quoteDenom,proto3" json:"quoteDenom,omitempty"`
+	Admin      string  `protobuf:"bytes,1,opt,name=admin,proto3" json:"admin,omitempty"`
+	Id         uint64  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	BaseDenom  string  `protobuf:"bytes,3,opt,name=base_denom,json=baseDenom,proto3" json:"base_denom,omitempty"`
+	QuoteDenom string  `protobuf:"bytes,4,opt,name=quote_denom,json=quoteDenom,proto3" json:"quote_denom,omitempty"`
+	NewAdmin   string  `protobuf:"bytes,5,opt,name=new_admin,json=newAdmin,proto3" json:"new_admin,omitempty"`
+	FeeRate    string  `protobuf:"bytes,6,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
+	Ticks      []*Tick `protobuf:"bytes,7,rep,name=ticks,proto3" json:"ticks,omitempty"`
 }
 
 func (x *MsgUpdatePool) Reset() {
@@ -2979,9 +3466,9 @@ func (*MsgUpdatePool) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_v1_tx_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *MsgUpdatePool) GetCreator() string {
+func (x *MsgUpdatePool) GetAdmin() string {
 	if x != nil {
-		return x.Creator
+		return x.Admin
 	}
 	return ""
 }
@@ -3005,6 +3492,27 @@ func (x *MsgUpdatePool) GetQuoteDenom() string {
 		return x.QuoteDenom
 	}
 	return ""
+}
+
+func (x *MsgUpdatePool) GetNewAdmin() string {
+	if x != nil {
+		return x.NewAdmin
+	}
+	return ""
+}
+
+func (x *MsgUpdatePool) GetFeeRate() string {
+	if x != nil {
+		return x.FeeRate
+	}
+	return ""
+}
+
+func (x *MsgUpdatePool) GetTicks() []*Tick {
+	if x != nil {
+		return x.Ticks
+	}
+	return nil
 }
 
 type MsgUpdatePoolResponse struct {
@@ -3067,63 +3575,82 @@ var file_sunrise_liquiditypool_v1_tx_proto_rawDesc = []byte{
 	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x76, 0x31, 0x2f, 0x4d, 0x73, 0x67, 0x55,
 	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d,
 	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x75, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74,
-	0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f,
-	0x72, 0x12, 0x1c, 0x0a, 0x09, 0x62, 0x61, 0x73, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x73, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x12,
-	0x1e, 0x0a, 0x0a, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0a, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x3a,
-	0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x27, 0x0a,
-	0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x85, 0x01, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x86, 0x02, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61,
 	0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74,
-	0x6f, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
-	0x69, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x62, 0x61, 0x73, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x73, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d,
-	0x12, 0x1e, 0x0a, 0x0a, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d,
-	0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x17,
-	0x0a, 0x15, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xca, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12,
-	0x6c, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
-	0x29, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x31, 0x2e, 0x73, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
-	0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a,
-	0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x27, 0x2e, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
+	0x6f, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x73, 0x65, 0x44, 0x65, 0x6e, 0x6f,
+	0x6d, 0x12, 0x1f, 0x0a, 0x0b, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x44, 0x65, 0x6e,
+	0x6f, 0x6d, 0x12, 0x51, 0x0a, 0x08, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e,
+	0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x66, 0x65,
+	0x65, 0x52, 0x61, 0x74, 0x65, 0x12, 0x3a, 0x0a, 0x05, 0x74, 0x69, 0x63, 0x6b, 0x73, 0x18, 0x05,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
 	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e,
-	0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x6f, 0x6f, 0x6c, 0x12, 0x27, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
-	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2f, 0x2e, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80,
-	0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xe4, 0x01, 0x0a, 0x1c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
-	0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x39, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x53, 0x4c,
-	0x58, 0xaa, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x18, 0x53,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x24, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c,
-	0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
-	0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x54, 0x69, 0x63, 0x6b, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x74, 0x69, 0x63, 0x6b,
+	0x73, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22,
+	0x27, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0xad, 0x02, 0x0a, 0x0d, 0x4d, 0x73, 0x67,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x14, 0x0a, 0x05, 0x61, 0x64,
+	0x6d, 0x69, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x61, 0x64, 0x6d, 0x69, 0x6e,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64,
+	0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x73, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x12,
+	0x1f, 0x0a, 0x0b, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x44, 0x65, 0x6e, 0x6f, 0x6d,
+	0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x65, 0x77, 0x5f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x65, 0x77, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x12, 0x51, 0x0a,
+	0x08, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63,
+	0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44,
+	0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x66, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65,
+	0x12, 0x3a, 0x0a, 0x05, 0x74, 0x69, 0x63, 0x6b, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x1e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x69, 0x63, 0x6b, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x74, 0x69, 0x63, 0x6b, 0x73, 0x3a, 0x0a, 0x82, 0xe7,
+	0xb0, 0x2a, 0x05, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x22, 0x17, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x32, 0xca, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x6c, 0x0a, 0x0c, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x29, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
+	0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x1a, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x27, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2f,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x66, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x27, 0x2e,
+	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76,
+	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xe4,
+	0x01, 0x0a, 0x1c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x76, 0x31, 0x42,
+	0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x39, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
+	0x6f, 0x6c, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
+	0x6f, 0x6f, 0x6c, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x18, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
+	0x6f, 0x6f, 0x6c, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x56,
+	0x31, 0xe2, 0x02, 0x24, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42,
+	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
+	0x6c, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3147,20 +3674,23 @@ var file_sunrise_liquiditypool_v1_tx_proto_goTypes = []interface{}{
 	(*MsgUpdatePool)(nil),           // 4: sunrise.liquiditypool.v1.MsgUpdatePool
 	(*MsgUpdatePoolResponse)(nil),   // 5: sunrise.liquiditypool.v1.MsgUpdatePoolResponse
 	(*Params)(nil),                  // 6: sunrise.liquiditypool.v1.Params
+	(*Tick)(nil),                    // 7: sunrise.liquiditypool.v1.Tick
 }
 var file_sunrise_liquiditypool_v1_tx_proto_depIdxs = []int32{
 	6, // 0: sunrise.liquiditypool.v1.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.v1.Params
-	0, // 1: sunrise.liquiditypool.v1.Msg.UpdateParams:input_type -> sunrise.liquiditypool.v1.MsgUpdateParams
-	2, // 2: sunrise.liquiditypool.v1.Msg.CreatePool:input_type -> sunrise.liquiditypool.v1.MsgCreatePool
-	4, // 3: sunrise.liquiditypool.v1.Msg.UpdatePool:input_type -> sunrise.liquiditypool.v1.MsgUpdatePool
-	1, // 4: sunrise.liquiditypool.v1.Msg.UpdateParams:output_type -> sunrise.liquiditypool.v1.MsgUpdateParamsResponse
-	3, // 5: sunrise.liquiditypool.v1.Msg.CreatePool:output_type -> sunrise.liquiditypool.v1.MsgCreatePoolResponse
-	5, // 6: sunrise.liquiditypool.v1.Msg.UpdatePool:output_type -> sunrise.liquiditypool.v1.MsgUpdatePoolResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	7, // 1: sunrise.liquiditypool.v1.MsgCreatePool.ticks:type_name -> sunrise.liquiditypool.v1.Tick
+	7, // 2: sunrise.liquiditypool.v1.MsgUpdatePool.ticks:type_name -> sunrise.liquiditypool.v1.Tick
+	0, // 3: sunrise.liquiditypool.v1.Msg.UpdateParams:input_type -> sunrise.liquiditypool.v1.MsgUpdateParams
+	2, // 4: sunrise.liquiditypool.v1.Msg.CreatePool:input_type -> sunrise.liquiditypool.v1.MsgCreatePool
+	4, // 5: sunrise.liquiditypool.v1.Msg.UpdatePool:input_type -> sunrise.liquiditypool.v1.MsgUpdatePool
+	1, // 6: sunrise.liquiditypool.v1.Msg.UpdateParams:output_type -> sunrise.liquiditypool.v1.MsgUpdateParamsResponse
+	3, // 7: sunrise.liquiditypool.v1.Msg.CreatePool:output_type -> sunrise.liquiditypool.v1.MsgCreatePoolResponse
+	5, // 8: sunrise.liquiditypool.v1.Msg.UpdatePool:output_type -> sunrise.liquiditypool.v1.MsgUpdatePoolResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquiditypool_v1_tx_proto_init() }

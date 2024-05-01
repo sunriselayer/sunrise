@@ -20,8 +20,9 @@ func TestRegistrationMsgServerCreate(t *testing.T) {
 	srv := keeper.NewMsgServerImpl(k)
 	creator := "A"
 	for i := 0; i < 5; i++ {
-		expected := &types.MsgCreateRegistration{Creator: creator,
-			Address: strconv.Itoa(i),
+		expected := &types.MsgCreateRegistration{
+			Address:      creator,
+			ProxyAddress: strconv.Itoa(i),
 		}
 		_, err := srv.CreateRegistration(ctx, expected)
 		require.NoError(t, err)
@@ -29,7 +30,7 @@ func TestRegistrationMsgServerCreate(t *testing.T) {
 			expected.Address,
 		)
 		require.True(t, found)
-		require.Equal(t, expected.Creator, rst.Creator)
+		require.Equal(t, expected.Address, rst.Address)
 	}
 }
 
@@ -43,21 +44,24 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 	}{
 		{
 			desc: "Completed",
-			request: &types.MsgUpdateRegistration{Creator: creator,
-				Address: strconv.Itoa(0),
+			request: &types.MsgUpdateRegistration{
+				Address:      creator,
+				ProxyAddress: strconv.Itoa(0),
 			},
 		},
 		{
 			desc: "Unauthorized",
-			request: &types.MsgUpdateRegistration{Creator: "B",
-				Address: strconv.Itoa(0),
+			request: &types.MsgUpdateRegistration{
+				Address:      "B",
+				ProxyAddress: strconv.Itoa(0),
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.MsgUpdateRegistration{Creator: creator,
-				Address: strconv.Itoa(100000),
+			request: &types.MsgUpdateRegistration{
+				Address:      creator,
+				ProxyAddress: strconv.Itoa(100000),
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},
@@ -66,8 +70,9 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			k, ctx := keepertest.GrantKeeper(t)
 			srv := keeper.NewMsgServerImpl(k)
-			expected := &types.MsgCreateRegistration{Creator: creator,
-				Address: strconv.Itoa(0),
+			expected := &types.MsgCreateRegistration{
+				Address:      creator,
+				ProxyAddress: strconv.Itoa(0),
 			}
 			_, err := srv.CreateRegistration(ctx, expected)
 			require.NoError(t, err)
@@ -81,7 +86,7 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 					expected.Address,
 				)
 				require.True(t, found)
-				require.Equal(t, expected.Creator, rst.Creator)
+				require.Equal(t, expected.Address, rst.Address)
 			}
 		})
 	}
@@ -97,21 +102,21 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 	}{
 		{
 			desc: "Completed",
-			request: &types.MsgDeleteRegistration{Creator: creator,
-				Address: strconv.Itoa(0),
+			request: &types.MsgDeleteRegistration{
+				Address: creator,
 			},
 		},
 		{
 			desc: "Unauthorized",
-			request: &types.MsgDeleteRegistration{Creator: "B",
-				Address: strconv.Itoa(0),
+			request: &types.MsgDeleteRegistration{
+				Address: "B",
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.MsgDeleteRegistration{Creator: creator,
-				Address: strconv.Itoa(100000),
+			request: &types.MsgDeleteRegistration{
+				Address: creator,
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},
@@ -121,8 +126,8 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 			k, ctx := keepertest.GrantKeeper(t)
 			srv := keeper.NewMsgServerImpl(k)
 
-			_, err := srv.CreateRegistration(ctx, &types.MsgCreateRegistration{Creator: creator,
-				Address: strconv.Itoa(0),
+			_, err := srv.CreateRegistration(ctx, &types.MsgCreateRegistration{
+				Address: creator,
 			})
 			require.NoError(t, err)
 			_, err = srv.DeleteRegistration(ctx, tc.request)

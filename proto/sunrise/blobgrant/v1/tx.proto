@@ -41,27 +41,24 @@ message MsgUpdateParams {
 message MsgUpdateParamsResponse {}
 
 message MsgCreateRegistration {
-  option (cosmos.msg.v1.signer) = "creator";
-  string creator      = 1;
-  string address      = 2;
-  string proxyAddress = 3;
+  option (cosmos.msg.v1.signer) = "address";
+  string address      = 1;
+  string proxy_address = 2;
 }
 
 message MsgCreateRegistrationResponse {}
 
 message MsgUpdateRegistration {
-  option (cosmos.msg.v1.signer) = "creator";
-  string creator      = 1;
-  string address      = 2;
-  string proxyAddress = 3;
+  option (cosmos.msg.v1.signer) = "address";
+  string address      = 1;
+  string proxy_address = 2;
 }
 
 message MsgUpdateRegistrationResponse {}
 
 message MsgDeleteRegistration {
-  option (cosmos.msg.v1.signer) = "creator";
-  string creator = 1;
-  string address = 2;
+  option (cosmos.msg.v1.signer) = "address";
+  string address = 1;
 }
 
 message MsgDeleteRegistrationResponse {}

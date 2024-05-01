@@ -60,12 +60,12 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 		Params: types.DefaultParams(),
 		PoolList: []types.Pool{
 			{
-				Id:      0,
-				Creator: sample.AccAddress(),
+				Id:    0,
+				Admin: sample.AccAddress(),
 			},
 			{
-				Id:      1,
-				Creator: sample.AccAddress(),
+				Id:    1,
+				Admin: sample.AccAddress(),
 			},
 		},
 		PoolCount: 2,

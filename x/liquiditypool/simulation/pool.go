@@ -57,16 +57,16 @@ func SimulateMsgUpdatePool(
 			found      = false
 		)
 		for _, obj := range allPool {
-			simAccount, found = FindAccount(accs, obj.Creator)
+			simAccount, found = FindAccount(accs, obj.Admin)
 			if found {
 				pool = obj
 				break
 			}
 		}
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "pool creator not found"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "pool admin not found"), nil, nil
 		}
-		msg.Creator = simAccount.Address.String()
+		msg.Admin = simAccount.Address.String()
 		msg.Id = pool.Id
 
 		txCtx := simulation.OperationInput{

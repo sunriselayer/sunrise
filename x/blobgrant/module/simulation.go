@@ -48,12 +48,12 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 		Params: types.DefaultParams(),
 		RegistrationList: []types.Registration{
 			{
-				Creator: sample.AccAddress(),
-				Address: "0",
+				Address:      sample.AccAddress(),
+				ProxyAddress: "0",
 			},
 			{
-				Creator: sample.AccAddress(),
-				Address: "1",
+				Address:      sample.AccAddress(),
+				ProxyAddress: "1",
 			},
 		},
 		// this line is used by starport scaffolding # simapp/module/genesisState

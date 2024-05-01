@@ -4,13 +4,13 @@ import (
 	"math/rand"
 	"strconv"
 
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
+	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
 )
 
 // Prevent strconv unused error
@@ -27,11 +27,11 @@ func SimulateMsgCreateRegistration(
 
 		i := r.Int()
 		msg := &types.MsgCreateRegistration{
-			Creator: simAccount.Address.String(),
-			Address: strconv.Itoa(i),
+			Address:      simAccount.Address.String(),
+			ProxyAddress: strconv.Itoa(i),
 		}
 
-		_, found := k.GetRegistration(ctx , msg.Address)
+		_, found := k.GetRegistration(ctx, msg.Address)
 		if found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "Registration already exist"), nil, nil
 		}
@@ -61,14 +61,14 @@ func SimulateMsgUpdateRegistration(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		var (
-			simAccount = simtypes.Account{}
-			registration = types.Registration{}
-			msg = &types.MsgUpdateRegistration{}
+			simAccount      = simtypes.Account{}
+			registration    = types.Registration{}
+			msg             = &types.MsgUpdateRegistration{}
 			allRegistration = k.GetAllRegistration(ctx)
-			found = false
+			found           = false
 		)
 		for _, obj := range allRegistration {
-			simAccount, found = FindAccount(accs, obj.Creator)
+			simAccount, found = FindAccount(accs, obj.Address)
 			if found {
 				registration = obj
 				break
@@ -77,8 +77,8 @@ func SimulateMsgUpdateRegistration(
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "registration creator not found"), nil, nil
 		}
-		msg.Creator = simAccount.Address.String()
-		
+		msg.Address = simAccount.Address.String()
+
 		msg.Address = registration.Address
 
 		txCtx := simulation.OperationInput{
@@ -106,14 +106,14 @@ func SimulateMsgDeleteRegistration(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		var (
-			simAccount = simtypes.Account{}
-			registration = types.Registration{}
-			msg = &types.MsgUpdateRegistration{}
+			simAccount      = simtypes.Account{}
+			registration    = types.Registration{}
+			msg             = &types.MsgUpdateRegistration{}
 			allRegistration = k.GetAllRegistration(ctx)
-			found = false
+			found           = false
 		)
 		for _, obj := range allRegistration {
-			simAccount, found = FindAccount(accs, obj.Creator)
+			simAccount, found = FindAccount(accs, obj.Address)
 			if found {
 				registration = obj
 				break
@@ -122,8 +122,8 @@ func SimulateMsgDeleteRegistration(
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "registration creator not found"), nil, nil
 		}
-		msg.Creator = simAccount.Address.String()
-		
+		msg.Address = simAccount.Address.String()
+
 		msg.Address = registration.Address
 
 		txCtx := simulation.OperationInput{

@@ -14,7 +14,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var pool = types.Pool{
-		Creator:    msg.Creator,
+		Admin:      msg.Creator,
 		BaseDenom:  msg.BaseDenom,
 		QuoteDenom: msg.QuoteDenom,
 	}
@@ -33,7 +33,7 @@ func (k msgServer) UpdatePool(goCtx context.Context, msg *types.MsgUpdatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var pool = types.Pool{
-		Creator:    msg.Creator,
+		Admin:      msg.Admin,
 		Id:         msg.Id,
 		BaseDenom:  msg.BaseDenom,
 		QuoteDenom: msg.QuoteDenom,
@@ -45,9 +45,13 @@ func (k msgServer) UpdatePool(goCtx context.Context, msg *types.MsgUpdatePool) (
 		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
 
-	// Checks if the msg creator is the same as the current owner
-	if msg.Creator != val.Creator {
-		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	// Checks if the msg creator is the same as the current admin
+	if msg.Admin != val.Admin {
+		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect admin")
+	}
+
+	if msg.NewAdmin != "" {
+		pool.Admin = msg.NewAdmin
 	}
 
 	k.SetPool(ctx, pool)

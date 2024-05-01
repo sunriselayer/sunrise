@@ -5,7 +5,6 @@ option go_package = "github.com/sunriselayer/sunrise-app/x/blobgrant/types";
 
 message Registration {
   string address = 1; 
-  string proxyAddress = 2; 
-  string creator = 3;
+  string proxy_address = 2;
 }
 

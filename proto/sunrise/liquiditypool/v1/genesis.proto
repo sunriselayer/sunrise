@@ -19,6 +19,6 @@ message GenesisState {
   repeated Pair   pair_list  = 2 [(gogoproto.nullable) = false] ;
   repeated Pool   pool_list  = 3 [(gogoproto.nullable) = false] ;
            uint64 pool_count = 4;
-  repeated Twap   twapList   = 5 [(gogoproto.nullable) = false] ;
+  repeated Twap   twap_list   = 5 [(gogoproto.nullable) = false] ;
 }
 

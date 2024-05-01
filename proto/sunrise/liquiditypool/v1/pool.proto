@@ -1,11 +1,32 @@
 syntax = "proto3";
 package sunrise.liquiditypool.v1;
 
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
 
 message Pool {
   uint64 id = 1;
-  string creator = 2;
+  string admin = 2;
   string base_denom = 3;
   string quote_denom = 4;
+  string fee_rate = 5 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated Tick ticks = 6 [(gogoproto.nullable) = false];
+}
+
+message Tick {
+  sint64 index = 1;
+  string weight = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
 }

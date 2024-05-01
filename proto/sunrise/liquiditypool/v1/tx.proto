@@ -43,8 +43,15 @@ message MsgUpdateParamsResponse {}
 message MsgCreatePool {
   option (cosmos.msg.v1.signer) = "creator";
   string creator    = 1;
-  string baseDenom  = 2;
-  string quoteDenom = 3;
+  string base_denom  = 2;
+  string quote_denom = 3;
+  string fee_rate = 4 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated Tick ticks = 5 [(gogoproto.nullable) = false];
 }
 
 message MsgCreatePoolResponse {
@@ -52,11 +59,19 @@ message MsgCreatePoolResponse {
 }
 
 message MsgUpdatePool {
-  option (cosmos.msg.v1.signer) = "creator";
-  string creator    = 1;
+  option (cosmos.msg.v1.signer) = "admin";
+  string admin    = 1;
   uint64 id         = 2;
-  string baseDenom  = 3;
-  string quoteDenom = 4;
+  string base_denom  = 3;
+  string quote_denom = 4;
+  string new_admin = 5;
+  string fee_rate = 6 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated Tick ticks = 7 [(gogoproto.nullable) = false];
 }
 
 message MsgUpdatePoolResponse {}
