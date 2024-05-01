@@ -1,14 +1,14 @@
 syntax = "proto3";
-package sunrise.blobgrant;
+package sunrise.liquiditypool.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/sunrise-zone/sunrise-app/x/blobgrant/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/blobgrant/Params";
+  option (amino.name) = "sunrise/x/liquiditypool/v1/Params";
   option (gogoproto.equal) = true;
 
   

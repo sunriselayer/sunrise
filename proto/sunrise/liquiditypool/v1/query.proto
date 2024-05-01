@@ -1,19 +1,19 @@
 syntax = "proto3";
-package sunrise.blobgrant;
+package sunrise.liquiditypool.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "sunrise/blobgrant/params.proto";
+import "sunrise/liquiditypool/params.proto";
 
-option go_package = "github.com/sunrise-zone/sunrise-app/x/blobgrant/types";
+option go_package = "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types";
 
 // Query defines the gRPC querier service.
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunrise/blobgrant/params";
+    option (google.api.http).get = "/sunrise-zone/sunrise-app/liquiditypool/v1/params";
   }
 }
 
