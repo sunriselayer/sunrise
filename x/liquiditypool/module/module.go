@@ -20,7 +20,7 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/sunrise-zone/sunrise-app/api/sunriseapp/liquiditypool/module"
+	modulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/liquiditypool/v1/module"
 	"github.com/sunrise-zone/sunrise-app/x/liquiditypool/keeper"
 	"github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
 )

@@ -72,9 +72,9 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	blobmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/v1/module"
-	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/module"
+	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/v1/module"
 	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/v1/module"
-	liquiditypoolmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunriseapp/liquiditypool/module"
+	liquiditypoolmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/liquiditypool/v1/module"
 	_ "github.com/sunrise-zone/sunrise-app/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/blobgrant/module" // import for side-effects
