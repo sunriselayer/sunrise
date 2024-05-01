@@ -75,12 +75,15 @@ import (
 	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/module"
 	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/module"
 	sunrisemodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/sunrise/module"
+	liquiditypoolmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunriseapp/liquiditypool/module"
 	_ "github.com/sunrise-zone/sunrise-app/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/blobgrant/module" // import for side-effects
 	grantmoduletypes "github.com/sunrise-zone/sunrise-app/x/blobgrant/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunrise-zone/sunrise-app/x/blobstream/types"
+	_ "github.com/sunrise-zone/sunrise-app/x/liquiditypool/module" // import for side-effects
+	liquiditypoolmoduletypes "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/sunrise/module" // import for side-effects
 	sunrisemoduletypes "github.com/sunrise-zone/sunrise-app/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -124,6 +127,7 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -152,6 +156,7 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -174,6 +179,7 @@ var (
 		blobmoduletypes.ModuleName,
 		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -349,6 +355,10 @@ var (
 			{
 				Name:   streammoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&streammodulev1.Module{}),
+			},
+			{
+				Name:   liquiditypoolmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

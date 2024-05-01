@@ -58,6 +58,7 @@ import (
 	streammodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
 	sunrisemodulekeeper "github.com/sunrise-zone/sunrise-app/x/sunrise/keeper"
 
+	liquiditypoolmodulekeeper "github.com/sunrise-zone/sunrise-app/x/liquiditypool/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunrise-zone/sunrise-app/docs"
@@ -120,10 +121,11 @@ type App struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
-	SunriseKeeper sunrisemodulekeeper.Keeper
-	BlobKeeper    blobmodulekeeper.Keeper
-	GrantKeeper   grantmodulekeeper.Keeper
-	StreamKeeper  streammodulekeeper.Keeper
+	SunriseKeeper       sunrisemodulekeeper.Keeper
+	BlobKeeper          blobmodulekeeper.Keeper
+	GrantKeeper         grantmodulekeeper.Keeper
+	StreamKeeper        streammodulekeeper.Keeper
+	LiquiditypoolKeeper liquiditypoolmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -265,6 +267,7 @@ func New(
 		&app.BlobKeeper,
 		&app.GrantKeeper,
 		&app.StreamKeeper,
+		&app.LiquiditypoolKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
