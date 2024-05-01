@@ -24,9 +24,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Pair",
-					Use:            "show-pair [id]",
+					Use:            "show-pair [base_denom] [quote_denom]",
 					Short:          "Shows a pair",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
 				},
 				{
 					RpcMethod: "PoolAll",
@@ -46,9 +46,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Twap",
-					Use:            "show-twap [id]",
+					Use:            "show-twap [base_denom] [quote_denom]",
 					Short:          "Shows a twap",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
