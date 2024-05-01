@@ -9,7 +9,7 @@ import (
 
 // AttestationRequestI is either a DataCommitment or a Valset. This was decided
 // as part of the universal nonce approach under:
-// https://github.com/sunrise-zone/sunrise-app/issues/468#issuecomment-1156887715
+// https://github.com/sunriselayer/sunrise-app/issues/468#issuecomment-1156887715
 type AttestationRequestI interface {
 	proto.Message
 	codec.ProtoMarshaler

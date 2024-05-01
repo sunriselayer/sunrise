@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/blobstream/v1/params.proto";
 
-option go_package = "github.com/sunrise-zone/sunrise-app/x/blobstream/types";
+option go_package = "github.com/sunriselayer/sunrise-app/x/blobstream/types";
 
 // GenesisState defines the stream module's genesis state.
 message GenesisState {

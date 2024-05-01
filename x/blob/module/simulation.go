@@ -8,9 +8,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/sunrise-zone/sunrise-app/testutil/sample"
-	blobsimulation "github.com/sunrise-zone/sunrise-app/x/blob/simulation"
-	"github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise-app/testutil/sample"
+	blobsimulation "github.com/sunriselayer/sunrise-app/x/blob/simulation"
+	"github.com/sunriselayer/sunrise-app/x/blob/types"
 )
 
 // avoid unused import issue

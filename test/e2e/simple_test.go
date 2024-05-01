@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	v1 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v1"
-	"github.com/sunrise-zone/sunrise-app/test/txsim"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
+	"github.com/sunriselayer/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	v1 "github.com/sunriselayer/sunrise-app/pkg/appconsts/v1"
+	"github.com/sunriselayer/sunrise-app/test/txsim"
+	"github.com/sunriselayer/sunrise-app/test/util/testnode"
 )
 
 const seed = 42

@@ -1,8 +1,8 @@
 package ante
 
 import (
-	blobante "github.com/sunrise-zone/sunrise-app/x/blob/ante"
-	blob "github.com/sunrise-zone/sunrise-app/x/blob/keeper"
+	blobante "github.com/sunriselayer/sunrise-app/x/blob/ante"
+	blob "github.com/sunriselayer/sunrise-app/x/blob/keeper"
 
 	"cosmossdk.io/x/tx/signing"
 	sdk "github.com/cosmos/cosmos-sdk/types"

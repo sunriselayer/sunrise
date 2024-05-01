@@ -5,7 +5,7 @@
 
 // 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 // 	"github.com/stretchr/testify/require"
-// 	"github.com/sunrise-zone/sunrise-app/testutil/sample"
+// 	"github.com/sunriselayer/sunrise-app/testutil/sample"
 // )
 
 // func TestMsgPayForBlobs_ValidateBasic(t *testing.T) {
@@ -49,15 +49,15 @@ import (
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
-	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
-	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
-	shares "github.com/sunrise-zone/sunrise-app/pkg/shares"
-	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
-	"github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
+	"github.com/sunriselayer/sunrise-app/pkg/inclusion"
+	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	apprand "github.com/sunriselayer/sunrise-app/pkg/random"
+	shares "github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise-app/test/util/testnode"
+	"github.com/sunriselayer/sunrise-app/x/blob/types"
 )
 
 func TestValidateBasic(t *testing.T) {

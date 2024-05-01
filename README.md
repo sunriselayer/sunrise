@@ -1,15 +1,25 @@
 # sunrise-app
 
-[![Go Reference](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/SunriseLayer/sunrise-app)
-[![mdBook Specs](https://img.shields.io/badge/mdBook-specs-blue)](https://SunriseLayer.github.io/sunrise-app/)
-[![GitHub Release](https://img.shields.io/github/v/release/SunriseLayer/sunrise-app)](https://github.com/SunriseLayer/sunrise-app/releases/latest)
-[![Go Report Card](https://goreportcard.com/badge/github.com/SunriseLayer/sunrise-app)](https://goreportcard.com/report/github.com/SunriseLayer/sunrise-app)
-[![GitPOAP Badge](https://public-api.gitpoap.io/v1/repo/SunriseLayer/sunrise-app/badge)](https://www.gitpoap.io/gh/SunriseLayer/sunrise-app)
-
 **sunrise** is a blockchain built using Cosmos SDK and CometBFT and created with [Ignite CLI](https://ignite.com/cli).
 
 - [cosmos/cosmos-sdk](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.50.2)
 - [SunriseLayer/sunrise-core](https://github.com/SunriseLayer/sunrise-core) a fork of [cometbft/cometbft](https://github.com/cometbft/cometbft)
+
+## Toolchain
+
+```shell
+# install go
+go version
+
+# install ignite
+ignite version
+# v28.3.0
+
+apt install -y protobuf-compiler
+protoc --version
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+go install github.com/cosmos/cosmos-proto/cmd/protoc-gen-go-pulsar
+```
 
 ## Diagram
 

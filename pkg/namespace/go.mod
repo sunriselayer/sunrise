@@ -1,4 +1,4 @@
-module github.com/sunrise-zone/sunrise-app/pkg/namespace
+module github.com/sunriselayer/sunrise-app/pkg/namespace
 
 go 1.21.1
 

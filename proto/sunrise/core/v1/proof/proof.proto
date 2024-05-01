@@ -3,7 +3,7 @@ package sunrise.core.v1.proof;
 
 import "tendermint/crypto/proof.proto";
 
-option go_package = "github.com/sunrise-zone/sunrise-app/pkg/proof";
+option go_package = "github.com/sunriselayer/sunrise-app/pkg/proof";
 
 // ShareProof is an NMT proof that a set of shares exist in a set of rows and a
 // Merkle proof that those rows exist in a Merkle tree with a given data root.

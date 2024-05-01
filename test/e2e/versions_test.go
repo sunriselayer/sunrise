@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/sunrise-zone/sunrise-app/test/e2e"
+	"github.com/sunriselayer/sunrise-app/test/e2e"
 )
 
 func TestVersionParsing(t *testing.T) {

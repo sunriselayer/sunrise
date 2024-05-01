@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
 
 	"github.com/stretchr/testify/assert"
 )
