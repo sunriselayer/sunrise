@@ -6,8 +6,8 @@ DOCKER_BUF := $(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace bu
 IMAGE := ghcr.io/tendermint/docker-build-proto:latest
 DOCKER_PROTO_BUILDER := docker run -v $(shell pwd):/workspace --workdir /workspace $(IMAGE)
 PROJECTNAME=$(shell basename "$(PWD)")
-HTTPS_GIT := https://github.com/surise-zone/sunrise-app.git
-PACKAGE_NAME          := github.com/surise-zone/sunrise-app
+HTTPS_GIT := https://github.com/sunriselayer/sunrise-app.git
+PACKAGE_NAME          := github.com/sunriselayer/sunrise-app
 GOLANG_CROSS_VERSION  ?= v1.21.4
 
 # process linker flags
@@ -76,7 +76,7 @@ proto-format:
 ## build-docker: Build the sunrised docker image. Requires docker.
 build-docker:
 	@echo "--> Building Docker image"
-	$(DOCKER) build -t surise-zone/surise-app -f Dockerfile .
+	$(DOCKER) build -t sunriselayer/surise-app -f Dockerfile .
 .PHONY: build-docker
 
 ## lint: Run all linters; golangci-lint, markdownlint, hadolint, yamllint.
@@ -165,13 +165,13 @@ txsim-build:
 
 ## txsim-build-docker: Build the tx simulator Docker image. Requires Docker.
 txsim-build-docker:
-	docker build -t ghcr.io/surise-zone/txsim -f docker/Dockerfile_txsim  .
+	docker build -t ghcr.io/sunriselayer/txsim -f docker/Dockerfile_txsim  .
 .PHONY: txsim-build-docker
 
 ## adr-gen: Download the ADR template from the celestiaorg/.github repo. Ex. `make adr-gen`
 adr-gen:
 	@echo "--> Downloading ADR template"
-	@curl -sSL https://raw.githubusercontent.com/surise-zone/.github/main/adr-template.md > docs/architecture/adr-template.md
+	@curl -sSL https://raw.githubusercontent.com/sunriselayer/.github/main/adr-template.md > docs/architecture/adr-template.md
 .PHONY: adr-gen
 
 ## prebuilt-binary: Create prebuilt binaries and attach them to GitHub release. Requires Docker.
