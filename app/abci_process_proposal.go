@@ -214,12 +214,13 @@ func accept() (*abci.ResponseProcessProposal, error) {
 func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
 	length := len(txsWithInfo)
 	txs = txsWithInfo
-	if reflect.DeepEqual(txsWithInfo[length-3], []byte{}) {
-		txs = txsWithInfo[:length-3]
-		dataHash = txsWithInfo[length-2]
-		squareSizeBigEndian := txsWithInfo[length-1]
-		squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
+	if length >= 3 {
+		if reflect.DeepEqual(txsWithInfo[length-3], []byte{}) {
+			txs = txsWithInfo[:length-3]
+			dataHash = txsWithInfo[length-2]
+			squareSizeBigEndian := txsWithInfo[length-1]
+			squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
+		}
 	}
-
 	return
 }
