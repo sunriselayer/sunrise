@@ -3,7 +3,7 @@ package sunrise.liquiditypool.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/liquiditypool/v1/params.proto";
+import "sunriseapp/liquiditypool/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
 
