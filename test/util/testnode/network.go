@@ -6,7 +6,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/test/util/genesis"
+	"github.com/sunriselayer/sunrise-app/test/util/genesis"
 
 	"github.com/stretchr/testify/require"
 )

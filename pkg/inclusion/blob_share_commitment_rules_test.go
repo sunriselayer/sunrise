@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/da"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/da"
 
 	"github.com/stretchr/testify/assert"
 )

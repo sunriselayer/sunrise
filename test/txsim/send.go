@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/gogo/protobuf/grpc"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
 )
 
 var _ Sequence = &SendSequence{}

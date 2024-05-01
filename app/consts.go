@@ -4,10 +4,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	blobmodule "github.com/sunrise-zone/sunrise-app/x/blob/module"
-	bsmodule "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	blobmodule "github.com/sunriselayer/sunrise-app/x/blob/module"
+	bsmodule "github.com/sunriselayer/sunrise-app/x/blobstream/module"
 
 	// "cosmossdk.io/depinject"
 	"cosmossdk.io/x/evidence"

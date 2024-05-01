@@ -5,10 +5,10 @@ import (
 	"encoding/binary"
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
-	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	apprand "github.com/sunriselayer/sunrise-app/pkg/random"
+	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

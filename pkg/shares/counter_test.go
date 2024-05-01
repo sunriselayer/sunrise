@@ -8,9 +8,9 @@ import (
 	coretypes "github.com/cometbft/cometbft/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/pkg/shares"
 )
 
 func TestCounterMatchesCompactShareSplitter(t *testing.T) {

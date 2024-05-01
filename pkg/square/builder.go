@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
-	"github.com/sunrise-zone/sunrise-app/pkg/inclusion"
-	"github.com/sunrise-zone/sunrise-app/pkg/namespace"
-	"github.com/sunrise-zone/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
+	"github.com/sunriselayer/sunrise-app/pkg/inclusion"
+	"github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/pkg/shares"
 
 	"github.com/cometbft/cometbft/pkg/consts"
 	coretypes "github.com/cometbft/cometbft/proto/tendermint/types"

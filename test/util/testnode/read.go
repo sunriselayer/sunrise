@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
 
 	"github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/cometbft/cometbft/types"

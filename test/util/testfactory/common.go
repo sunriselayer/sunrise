@@ -10,8 +10,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gethcommon "github.com/ethereum/go-ethereum/common"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	apprand "github.com/sunrise-zone/sunrise-app/pkg/random"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	apprand "github.com/sunriselayer/sunrise-app/pkg/random"
 )
 
 const (

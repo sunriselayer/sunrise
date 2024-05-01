@@ -12,11 +12,11 @@ import (
 	"github.com/celestiaorg/knuu/pkg/knuu"
 	"github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/stretchr/testify/require"
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	v1 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v1"
-	v2 "github.com/sunrise-zone/sunrise-app/pkg/appconsts/v2"
-	"github.com/sunrise-zone/sunrise-app/test/txsim"
+	"github.com/sunriselayer/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	v1 "github.com/sunriselayer/sunrise-app/pkg/appconsts/v1"
+	v2 "github.com/sunriselayer/sunrise-app/pkg/appconsts/v2"
+	"github.com/sunriselayer/sunrise-app/test/txsim"
 )
 
 // This will only run tests within the v1 major release cycle

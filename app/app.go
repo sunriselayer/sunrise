@@ -53,15 +53,14 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	blobmodulekeeper "github.com/sunrise-zone/sunrise-app/x/blob/keeper"
-	grantmodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobgrant/keeper"
-	streammodulekeeper "github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
-	liquidstakingmodulekeeper "github.com/sunrise-zone/sunrise-app/x/liquidstaking/keeper"
-	sunrisemodulekeeper "github.com/sunrise-zone/sunrise-app/x/sunrise/keeper"
+	blobmodulekeeper "github.com/sunriselayer/sunrise-app/x/blob/keeper"
+	grantmodulekeeper "github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
+	streammodulekeeper "github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
+	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	"github.com/sunrise-zone/sunrise-app/docs"
+	"github.com/sunriselayer/sunrise-app/docs"
 )
 
 const (
@@ -121,11 +120,10 @@ type App struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
-	SunriseKeeper       sunrisemodulekeeper.Keeper
 	BlobKeeper          blobmodulekeeper.Keeper
-	GrantKeeper         grantmodulekeeper.Keeper
 	StreamKeeper        streammodulekeeper.Keeper
-	LiquidstakingKeeper liquidstakingmodulekeeper.Keeper
+	LiquiditypoolKeeper liquiditypoolmodulekeeper.Keeper
+	GrantKeeper         grantmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -263,11 +261,11 @@ func New(
 		&app.GroupKeeper,
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
-		&app.SunriseKeeper,
+
 		&app.BlobKeeper,
-		&app.GrantKeeper,
 		&app.StreamKeeper,
-		&app.LiquidstakingKeeper,
+		&app.LiquiditypoolKeeper,
+		&app.GrantKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

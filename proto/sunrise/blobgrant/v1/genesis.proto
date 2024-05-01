@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.blobgrant.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/blobgrant/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise-app/x/blobgrant/types";
+
+// GenesisState defines the grant module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

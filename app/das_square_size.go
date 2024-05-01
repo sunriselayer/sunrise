@@ -2,7 +2,7 @@ package app
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
 )
 
 // GovSquareSizeUpperBound returns the maximum square size that can be used for a block

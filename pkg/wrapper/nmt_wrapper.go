@@ -3,8 +3,8 @@ package wrapper
 import (
 	"fmt"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
-	appns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
 
 	"github.com/celestiaorg/nmt"
 	"github.com/celestiaorg/nmt/namespace"

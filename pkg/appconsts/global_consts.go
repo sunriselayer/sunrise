@@ -3,7 +3,7 @@ package appconsts
 import (
 	"math"
 
-	ns "github.com/sunrise-zone/sunrise-app/pkg/namespace"
+	ns "github.com/sunriselayer/sunrise-app/pkg/namespace"
 
 	"github.com/celestiaorg/rsmt2d"
 	"github.com/cometbft/cometbft/pkg/consts"

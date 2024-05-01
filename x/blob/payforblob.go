@@ -8,8 +8,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
-	"github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
+	"github.com/sunriselayer/sunrise-app/x/blob/types"
 )
 
 // SubmitPayForBlobs builds, signs, and synchronously submits a PayForBlob

@@ -6,10 +6,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/require"
-	testutil "github.com/sunrise-zone/sunrise-app/test/util"
-	"github.com/sunrise-zone/sunrise-app/x/blobstream/types"
+	testutil "github.com/sunriselayer/sunrise-app/test/util"
+	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
 
-	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
+	"github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
 )
 
 func TestRegisterEVMAddress(t *testing.T) {

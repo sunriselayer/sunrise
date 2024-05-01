@@ -3,12 +3,12 @@ package blobfactory_test
 import (
 	"testing"
 
-	"github.com/sunrise-zone/sunrise-app/app/encoding"
-	"github.com/sunrise-zone/sunrise-app/pkg/user"
-	util "github.com/sunrise-zone/sunrise-app/test/util"
-	"github.com/sunrise-zone/sunrise-app/test/util/blobfactory"
-	"github.com/sunrise-zone/sunrise-app/test/util/testfactory"
-	"github.com/sunrise-zone/sunrise-app/test/util/testnode"
+	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise-app/pkg/user"
+	util "github.com/sunriselayer/sunrise-app/test/util"
+	"github.com/sunriselayer/sunrise-app/test/util/blobfactory"
+	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise-app/test/util/testnode"
 
 	tmrand "github.com/cometbft/cometbft/libs/rand"
 	"github.com/stretchr/testify/assert"

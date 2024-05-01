@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/sunrise-zone/sunrise-app/pkg/da"
-	"github.com/sunrise-zone/sunrise-app/pkg/wrapper"
+	"github.com/sunriselayer/sunrise-app/pkg/da"
+	"github.com/sunriselayer/sunrise-app/pkg/wrapper"
 
 	"github.com/celestiaorg/nmt"
 	"github.com/celestiaorg/rsmt2d"

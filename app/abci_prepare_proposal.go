@@ -4,10 +4,10 @@ import (
 	"encoding/binary"
 	"time"
 
-	"github.com/sunrise-zone/sunrise-app/app/ante"
-	"github.com/sunrise-zone/sunrise-app/pkg/da"
-	"github.com/sunrise-zone/sunrise-app/pkg/shares"
-	"github.com/sunrise-zone/sunrise-app/pkg/square"
+	"github.com/sunriselayer/sunrise-app/app/ante"
+	"github.com/sunriselayer/sunrise-app/pkg/da"
+	"github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise-app/pkg/square"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -64,7 +64,7 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 	// an empty set of transactions. However, even without this validation,
 	// the initial block is anticipated to be devoid of transactions, as
 	// established by the findings presented in
-	// https://github.com/sunrise-zone/sunrise-app/issues/1899;
+	// https://github.com/sunriselayer/sunrise-app/issues/1899;
 	// The inclusion of this check is out of an abundance of caution.
 	// The rationale behind having an empty first block revolves around the fact
 	// that no transactions can enter the mempool since no committed state exists

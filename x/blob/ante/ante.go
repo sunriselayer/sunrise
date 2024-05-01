@@ -3,7 +3,7 @@ package ante
 import (
 	"context"
 
-	"github.com/sunrise-zone/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise-app/x/blob/types"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

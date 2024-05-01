@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	blobstream "github.com/sunrise-zone/sunrise-app/x/blobstream/module"
+	blobstream "github.com/sunriselayer/sunrise-app/x/blobstream/module"
 
-	"github.com/sunrise-zone/sunrise-app/app"
-	"github.com/sunrise-zone/sunrise-app/x/blobstream/keeper"
-	bstypes "github.com/sunrise-zone/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
+	bstypes "github.com/sunriselayer/sunrise-app/x/blobstream/types"
 
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"

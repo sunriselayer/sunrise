@@ -14,7 +14,7 @@ import (
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/stretchr/testify/require"
 
-	"github.com/sunrise-zone/sunrise-app/app"
+	"github.com/sunriselayer/sunrise-app/app"
 )
 
 // Profile with:

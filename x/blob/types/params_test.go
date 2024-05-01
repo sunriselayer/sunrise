@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/sunrise-zone/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
 )
 
 func Test_validateGovMaxSquareSize(t *testing.T) {

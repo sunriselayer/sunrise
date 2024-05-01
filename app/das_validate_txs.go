@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunrise-zone/sunrise-app/pkg/blob"
+	"github.com/sunriselayer/sunrise-app/pkg/blob"
 )
 
 // separateTxs decodes raw tendermint txs into normal and blob txs.
