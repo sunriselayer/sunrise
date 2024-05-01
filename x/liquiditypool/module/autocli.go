@@ -17,6 +17,39 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "PairAll",
+					Use:       "list-pair",
+					Short:     "List all pair",
+				},
+				{
+					RpcMethod:      "Pair",
+					Use:            "show-pair [id]",
+					Short:          "Shows a pair",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+				},
+				{
+					RpcMethod: "PoolAll",
+					Use:       "list-pool",
+					Short:     "List all pool",
+				},
+				{
+					RpcMethod:      "Pool",
+					Use:            "show-pool [id]",
+					Short:          "Shows a pool by id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod: "TwapAll",
+					Use:       "list-twap",
+					Short:     "List all twap",
+				},
+				{
+					RpcMethod:      "Twap",
+					Use:            "show-twap [id]",
+					Short:          "Shows a twap",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -27,6 +60,24 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod:      "CreatePool",
+					Use:            "create-pool [baseDenom] [quoteDenom]",
+					Short:          "Create pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "baseDenom"}, {ProtoField: "quoteDenom"}},
+				},
+				{
+					RpcMethod:      "UpdatePool",
+					Use:            "update-pool [id] [baseDenom] [quoteDenom]",
+					Short:          "Update pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "baseDenom"}, {ProtoField: "quoteDenom"}},
+				},
+				{
+					RpcMethod:      "DeletePool",
+					Use:            "delete-pool [id]",
+					Short:          "Delete pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

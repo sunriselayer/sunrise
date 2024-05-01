@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sunriseapp.liquiditypool;
+
+option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
+
+message Twap {
+  string index = 1; 
+  string creator = 2;
+}
+

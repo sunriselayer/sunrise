@@ -17,7 +17,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
-				// this line is used by ignite scaffolding # autocli/query
+				{
+			RpcMethod: "RegistrationAll",
+			Use: "list-registration",
+			Short: "List all registration",
+		},
+		{
+			RpcMethod: "Registration",
+			Use: "show-registration [id]",
+			Short: "Shows a registration",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"},},
+		},
+		// this line is used by ignite scaffolding # autocli/query
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
@@ -28,7 +39,25 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
-				// this line is used by ignite scaffolding # autocli/tx
+				{
+			RpcMethod: "CreateRegistration",
+			Use: "create-registration [address] [proxyAddress]",
+			Short: "Create a new registration",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}, {ProtoField: "proxyAddress"},},
+		},
+		{
+			RpcMethod: "UpdateRegistration",
+			Use: "update-registration [address] [proxyAddress]",
+			Short: "Update registration",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}, {ProtoField: "proxyAddress"},},
+		},
+		{
+			RpcMethod: "DeleteRegistration",
+			Use: "delete-registration [address]",
+			Short: "Delete registration",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"},},
+		},
+		// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
 	}

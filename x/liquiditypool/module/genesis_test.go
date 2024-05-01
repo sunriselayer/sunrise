@@ -14,7 +14,32 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
-		// this line is used by starport scaffolding # genesis/test/state
+		PairList: []types.Pair{
+		{
+			Index: "0",
+},
+		{
+			Index: "1",
+},
+	},
+	PoolList: []types.Pool{
+		{
+			Id: 0,
+		},
+		{
+			Id: 1,
+		},
+	},
+	PoolCount: 2,
+	TwapList: []types.Twap{
+		{
+			Index: "0",
+},
+		{
+			Index: "1",
+},
+	},
+	// this line is used by starport scaffolding # genesis/test/state
 	}
 
 	k, ctx := keepertest.LiquiditypoolKeeper(t)
@@ -25,5 +50,9 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
-	// this line is used by starport scaffolding # genesis/test/assert
+	require.ElementsMatch(t, genesisState.PairList, got.PairList)
+require.ElementsMatch(t, genesisState.PoolList, got.PoolList)
+require.Equal(t, genesisState.PoolCount, got.PoolCount)
+require.ElementsMatch(t, genesisState.TwapList, got.TwapList)
+// this line is used by starport scaffolding # genesis/test/assert
 }

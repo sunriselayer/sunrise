@@ -22,11 +22,90 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc:     "valid genesis state",
 			genState: &types.GenesisState{
 
-				// this line is used by starport scaffolding # types/genesis/validField
+				PairList: []types.Pair{
+	{
+		Index: "0",
+},
+	{
+		Index: "1",
+},
+},
+PoolList: []types.Pool{
+	{
+		Id: 0,
+	},
+	{
+		Id: 1,
+	},
+},
+PoolCount: 2,
+TwapList: []types.Twap{
+	{
+		Index: "0",
+},
+	{
+		Index: "1",
+},
+},
+// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
 		},
-		// this line is used by starport scaffolding # types/genesis/testcase
+		{
+	desc:     "duplicated pair",
+	genState: &types.GenesisState{
+		PairList: []types.Pair{
+			{
+				Index: "0",
+},
+			{
+				Index: "0",
+},
+		},
+	},
+	valid:    false,
+},
+{
+	desc:     "duplicated pool",
+	genState: &types.GenesisState{
+		PoolList: []types.Pool{
+			{
+				Id: 0,
+			},
+			{
+				Id: 0,
+			},
+		},
+	},
+	valid:    false,
+},
+{
+	desc:     "invalid pool count",
+	genState: &types.GenesisState{
+		PoolList: []types.Pool{
+			{
+				Id: 1,
+			},
+		},
+		PoolCount: 0,
+	},
+	valid:    false,
+},
+{
+	desc:     "duplicated twap",
+	genState: &types.GenesisState{
+		TwapList: []types.Twap{
+			{
+				Index: "0",
+},
+			{
+				Index: "0",
+},
+		},
+	},
+	valid:    false,
+},
+// this line is used by starport scaffolding # types/genesis/testcase
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
