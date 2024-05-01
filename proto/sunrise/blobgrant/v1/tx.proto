@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/blobgrant/params.proto";
+import "sunrise/blobgrant/v1/params.proto";
 
 option go_package = "github.com/sunrise-zone/sunrise-app/x/blobgrant/types";
 

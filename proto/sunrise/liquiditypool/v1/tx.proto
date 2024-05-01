@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/liquiditypool/params.proto";
+import "sunrise/liquiditypool/v1/params.proto";
 
 option go_package = "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types";
 

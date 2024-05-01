@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "sunrise/liquiditypool/params.proto";
+import "sunrise/liquiditypool/v1/params.proto";
 
 option go_package = "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types";
 

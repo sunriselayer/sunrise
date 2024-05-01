@@ -71,9 +71,9 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	blobmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/module"
+	blobmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/v1/module"
 	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/module"
-	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/module"
+	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/v1/module"
 	liquiditypoolmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunriseapp/liquiditypool/module"
 	_ "github.com/sunrise-zone/sunrise-app/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
