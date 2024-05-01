@@ -17,6 +17,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod:      "DataCommitmentRangeForHeight",
+					Use:            "data-commitment-range-for-height [height]",
+					Short:          "Shows the data commitment range for a given height",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "height"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

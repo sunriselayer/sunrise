@@ -60,7 +60,7 @@ service Query {
   // that includes the provided height
   rpc DataCommitmentRangeForHeight(QueryDataCommitmentRangeForHeightRequest)
       returns (QueryDataCommitmentRangeForHeightResponse) {
-    option (google.api.http).get = "/sunrise/blobstream/v1/data_commitment/range/height";
+    option (google.api.http).get = "/sunrise/blobstream/v1/data_commitment/range/{height}";
   }
 
   // LatestDataCommitment returns the latest data commitment in store
