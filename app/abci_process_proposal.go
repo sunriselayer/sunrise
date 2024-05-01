@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/sunriselayer/sunrise-app/app/ante"
@@ -215,7 +214,7 @@ func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, sq
 	length := len(txsWithInfo)
 	txs = txsWithInfo
 	if length >= 3 {
-		if reflect.DeepEqual(txsWithInfo[length-3], []byte{}) {
+		if len(txsWithInfo[length-3]) == 0 {
 			txs = txsWithInfo[:length-3]
 			dataHash = txsWithInfo[length-2]
 			squareSizeBigEndian := txsWithInfo[length-1]
