@@ -74,7 +74,6 @@ import (
 	blobmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blob/module"
 	grantmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobgrant/module"
 	streammodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/blobstream/module"
-	sunrisemodulev1 "github.com/sunrise-zone/sunrise-app/api/sunrise/sunrise/module"
 	liquiditypoolmodulev1 "github.com/sunrise-zone/sunrise-app/api/sunriseapp/liquiditypool/module"
 	_ "github.com/sunrise-zone/sunrise-app/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunrise-zone/sunrise-app/x/blob/types"
@@ -84,8 +83,6 @@ import (
 	streammoduletypes "github.com/sunrise-zone/sunrise-app/x/blobstream/types"
 	_ "github.com/sunrise-zone/sunrise-app/x/liquiditypool/module" // import for side-effects
 	liquiditypoolmoduletypes "github.com/sunrise-zone/sunrise-app/x/liquiditypool/types"
-	_ "github.com/sunrise-zone/sunrise-app/x/sunrise/module" // import for side-effects
-	sunrisemoduletypes "github.com/sunrise-zone/sunrise-app/x/sunrise/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -123,11 +120,10 @@ var (
 		consensusparamtypes.ModuleName,
 		circuittypes.ModuleName,
 		// chain modules
-		sunrisemoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
+		grantmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -152,11 +148,10 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
-		sunrisemoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
+		grantmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -175,11 +170,10 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
-		sunrisemoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
+		grantmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -200,10 +194,10 @@ var (
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
-		{Account: sunrisemoduletypes.ModuleName},
 		{Account: blobmoduletypes.ModuleName},
-		{Account: grantmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: grantmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
@@ -218,10 +212,10 @@ var (
 		// ibctransfertypes.ModuleName,
 		// ibcfeetypes.ModuleName,
 		// icatypes.ModuleName,
-		// sunrisemoduletypes.ModuleName,
 		// blobmoduletypes.ModuleName,
-		// grantmoduletypes.ModuleName,
 		// streammoduletypes.ModuleName,
+		// grantmoduletypes.ModuleName,
+		// liquiditypoolmoduletypes.ModuleName,
 	}
 
 	// appConfig application configuration (used by depinject)
@@ -341,16 +335,8 @@ var (
 				Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
 			},
 			{
-				Name:   sunrisemoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&sunrisemodulev1.Module{}),
-			},
-			{
 				Name:   blobmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&blobmodulev1.Module{}),
-			},
-			{
-				Name:   grantmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&grantmodulev1.Module{}),
 			},
 			{
 				Name:   streammoduletypes.ModuleName,
@@ -359,6 +345,10 @@ var (
 			{
 				Name:   liquiditypoolmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
+			},
+			{
+				Name:   grantmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&grantmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
