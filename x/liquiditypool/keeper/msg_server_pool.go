@@ -24,6 +24,8 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		pool,
 	)
 
+	k.CheckSetInitialPairAndTwap(ctx, pool.BaseDenom, pool.QuoteDenom)
+
 	return &types.MsgCreatePoolResponse{
 		Id: id,
 	}, nil

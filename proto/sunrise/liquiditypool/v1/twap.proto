@@ -14,11 +14,12 @@ message Twap {
   string value = 3 [
     (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable)   = true,
     (amino.dont_omitempty) = true
   ];
   google.protobuf.Timestamp latest_timestamp = 4 [
-    (gogoproto.stdtime) = true
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable)= true
   ];
 }
 
@@ -30,6 +31,7 @@ message PriceFootprint {
     (amino.dont_omitempty) = true
   ];
   google.protobuf.Timestamp timestamp = 2 [
-    (gogoproto.stdtime) = true
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable)   = false
   ];
 }

@@ -72,3 +72,23 @@ func (k Keeper) GetAllPair(ctx context.Context) (list []types.Pair) {
 
 	return
 }
+
+func (k Keeper) CheckSetInitialPairAndTwap(ctx context.Context, baseDenom string, quoteDenom string) {
+	_, found := k.GetPair(ctx, baseDenom, quoteDenom)
+	if found {
+		return
+	}
+
+	k.SetPair(ctx, types.Pair{
+		BaseDenom:  baseDenom,
+		QuoteDenom: quoteDenom,
+	})
+
+	twap := types.Twap{
+		BaseDenom:       baseDenom,
+		QuoteDenom:      quoteDenom,
+		Value:           nil,
+		LatestTimestamp: nil,
+	}
+	k.SetTwap(ctx, twap)
+}

@@ -18,15 +18,7 @@ message Pool {
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  repeated Tick ticks = 6 [(gogoproto.nullable) = false];
-}
-
-message Tick {
-  sint64 index = 1;
-  string weight = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
+  string f_x = 6;
+  string f_y = 7;
+  string f_k = 8;
 }

@@ -19,9 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName = "/sunrise.liquiditypool.v1.Msg/UpdateParams"
-	Msg_CreatePool_FullMethodName   = "/sunrise.liquiditypool.v1.Msg/CreatePool"
-	Msg_UpdatePool_FullMethodName   = "/sunrise.liquiditypool.v1.Msg/UpdatePool"
+	Msg_UpdateParams_FullMethodName       = "/sunrise.liquiditypool.v1.Msg/UpdateParams"
+	Msg_CreatePool_FullMethodName         = "/sunrise.liquiditypool.v1.Msg/CreatePool"
+	Msg_UpdatePool_FullMethodName         = "/sunrise.liquiditypool.v1.Msg/UpdatePool"
+	Msg_SwapExactAmountIn_FullMethodName  = "/sunrise.liquiditypool.v1.Msg/SwapExactAmountIn"
+	Msg_SwapExactAmountOut_FullMethodName = "/sunrise.liquiditypool.v1.Msg/SwapExactAmountOut"
+	Msg_JoinPool_FullMethodName           = "/sunrise.liquiditypool.v1.Msg/JoinPool"
+	Msg_ExitPool_FullMethodName           = "/sunrise.liquiditypool.v1.Msg/ExitPool"
 )
 
 // MsgClient is the client API for Msg service.
@@ -33,6 +37,10 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
 	UpdatePool(ctx context.Context, in *MsgUpdatePool, opts ...grpc.CallOption) (*MsgUpdatePoolResponse, error)
+	SwapExactAmountIn(ctx context.Context, in *MsgSwapExactAmountIn, opts ...grpc.CallOption) (*MsgSwapExactAmountInResponse, error)
+	SwapExactAmountOut(ctx context.Context, in *MsgSwapExactAmountOut, opts ...grpc.CallOption) (*MsgSwapExactAmountOutResponse, error)
+	JoinPool(ctx context.Context, in *MsgJoinPool, opts ...grpc.CallOption) (*MsgJoinPoolResponse, error)
+	ExitPool(ctx context.Context, in *MsgExitPool, opts ...grpc.CallOption) (*MsgExitPoolResponse, error)
 }
 
 type msgClient struct {
@@ -70,6 +78,42 @@ func (c *msgClient) UpdatePool(ctx context.Context, in *MsgUpdatePool, opts ...g
 	return out, nil
 }
 
+func (c *msgClient) SwapExactAmountIn(ctx context.Context, in *MsgSwapExactAmountIn, opts ...grpc.CallOption) (*MsgSwapExactAmountInResponse, error) {
+	out := new(MsgSwapExactAmountInResponse)
+	err := c.cc.Invoke(ctx, Msg_SwapExactAmountIn_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SwapExactAmountOut(ctx context.Context, in *MsgSwapExactAmountOut, opts ...grpc.CallOption) (*MsgSwapExactAmountOutResponse, error) {
+	out := new(MsgSwapExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, Msg_SwapExactAmountOut_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) JoinPool(ctx context.Context, in *MsgJoinPool, opts ...grpc.CallOption) (*MsgJoinPoolResponse, error) {
+	out := new(MsgJoinPoolResponse)
+	err := c.cc.Invoke(ctx, Msg_JoinPool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ExitPool(ctx context.Context, in *MsgExitPool, opts ...grpc.CallOption) (*MsgExitPoolResponse, error) {
+	out := new(MsgExitPoolResponse)
+	err := c.cc.Invoke(ctx, Msg_ExitPool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -79,6 +123,10 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
 	UpdatePool(context.Context, *MsgUpdatePool) (*MsgUpdatePoolResponse, error)
+	SwapExactAmountIn(context.Context, *MsgSwapExactAmountIn) (*MsgSwapExactAmountInResponse, error)
+	SwapExactAmountOut(context.Context, *MsgSwapExactAmountOut) (*MsgSwapExactAmountOutResponse, error)
+	JoinPool(context.Context, *MsgJoinPool) (*MsgJoinPoolResponse, error)
+	ExitPool(context.Context, *MsgExitPool) (*MsgExitPoolResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -94,6 +142,18 @@ func (UnimplementedMsgServer) CreatePool(context.Context, *MsgCreatePool) (*MsgC
 }
 func (UnimplementedMsgServer) UpdatePool(context.Context, *MsgUpdatePool) (*MsgUpdatePoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePool not implemented")
+}
+func (UnimplementedMsgServer) SwapExactAmountIn(context.Context, *MsgSwapExactAmountIn) (*MsgSwapExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwapExactAmountIn not implemented")
+}
+func (UnimplementedMsgServer) SwapExactAmountOut(context.Context, *MsgSwapExactAmountOut) (*MsgSwapExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwapExactAmountOut not implemented")
+}
+func (UnimplementedMsgServer) JoinPool(context.Context, *MsgJoinPool) (*MsgJoinPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinPool not implemented")
+}
+func (UnimplementedMsgServer) ExitPool(context.Context, *MsgExitPool) (*MsgExitPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExitPool not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -162,6 +222,78 @@ func _Msg_UpdatePool_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSwapExactAmountIn)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SwapExactAmountIn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SwapExactAmountIn_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SwapExactAmountIn(ctx, req.(*MsgSwapExactAmountIn))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSwapExactAmountOut)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SwapExactAmountOut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SwapExactAmountOut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SwapExactAmountOut(ctx, req.(*MsgSwapExactAmountOut))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_JoinPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgJoinPool)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).JoinPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_JoinPool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).JoinPool(ctx, req.(*MsgJoinPool))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ExitPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgExitPool)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ExitPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ExitPool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ExitPool(ctx, req.(*MsgExitPool))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +312,22 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePool",
 			Handler:    _Msg_UpdatePool_Handler,
+		},
+		{
+			MethodName: "SwapExactAmountIn",
+			Handler:    _Msg_SwapExactAmountIn_Handler,
+		},
+		{
+			MethodName: "SwapExactAmountOut",
+			Handler:    _Msg_SwapExactAmountOut_Handler,
+		},
+		{
+			MethodName: "JoinPool",
+			Handler:    _Msg_JoinPool_Handler,
+		},
+		{
+			MethodName: "ExitPool",
+			Handler:    _Msg_ExitPool_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

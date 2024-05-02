@@ -42,8 +42,7 @@ message MsgRegisterEvmAddress {
   option (cosmos.msg.v1.signer) = "address";
 
   // The acc address of the validator.
-  string address = 1
-  [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // The matching HEX encoded EVM address.
   string evm_address = 2;
