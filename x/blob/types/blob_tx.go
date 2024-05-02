@@ -3,10 +3,10 @@ package types
 import (
 	"bytes"
 
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	"github.com/sunriselayer/sunrise-app/pkg/inclusion"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
-	shares "github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/inclusion"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
+	shares "github.com/sunriselayer/sunrise/pkg/shares"
 
 	"github.com/cosmos/cosmos-sdk/client"
 )

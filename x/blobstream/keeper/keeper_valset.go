@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 
 	"cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"

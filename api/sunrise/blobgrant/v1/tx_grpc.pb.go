@@ -19,7 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName = "/sunrise.blobgrant.v1.Msg/UpdateParams"
+	Msg_UpdateParams_FullMethodName       = "/sunrise.blobgrant.v1.Msg/UpdateParams"
+	Msg_CreateRegistration_FullMethodName = "/sunrise.blobgrant.v1.Msg/CreateRegistration"
+	Msg_UpdateRegistration_FullMethodName = "/sunrise.blobgrant.v1.Msg/UpdateRegistration"
+	Msg_DeleteRegistration_FullMethodName = "/sunrise.blobgrant.v1.Msg/DeleteRegistration"
 )
 
 // MsgClient is the client API for Msg service.
@@ -29,6 +32,9 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	CreateRegistration(ctx context.Context, in *MsgCreateRegistration, opts ...grpc.CallOption) (*MsgCreateRegistrationResponse, error)
+	UpdateRegistration(ctx context.Context, in *MsgUpdateRegistration, opts ...grpc.CallOption) (*MsgUpdateRegistrationResponse, error)
+	DeleteRegistration(ctx context.Context, in *MsgDeleteRegistration, opts ...grpc.CallOption) (*MsgDeleteRegistrationResponse, error)
 }
 
 type msgClient struct {
@@ -48,6 +54,33 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) CreateRegistration(ctx context.Context, in *MsgCreateRegistration, opts ...grpc.CallOption) (*MsgCreateRegistrationResponse, error) {
+	out := new(MsgCreateRegistrationResponse)
+	err := c.cc.Invoke(ctx, Msg_CreateRegistration_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateRegistration(ctx context.Context, in *MsgUpdateRegistration, opts ...grpc.CallOption) (*MsgUpdateRegistrationResponse, error) {
+	out := new(MsgUpdateRegistrationResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdateRegistration_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeleteRegistration(ctx context.Context, in *MsgDeleteRegistration, opts ...grpc.CallOption) (*MsgDeleteRegistrationResponse, error) {
+	out := new(MsgDeleteRegistrationResponse)
+	err := c.cc.Invoke(ctx, Msg_DeleteRegistration_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -55,6 +88,9 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	CreateRegistration(context.Context, *MsgCreateRegistration) (*MsgCreateRegistrationResponse, error)
+	UpdateRegistration(context.Context, *MsgUpdateRegistration) (*MsgUpdateRegistrationResponse, error)
+	DeleteRegistration(context.Context, *MsgDeleteRegistration) (*MsgDeleteRegistrationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -64,6 +100,15 @@ type UnimplementedMsgServer struct {
 
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (UnimplementedMsgServer) CreateRegistration(context.Context, *MsgCreateRegistration) (*MsgCreateRegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRegistration not implemented")
+}
+func (UnimplementedMsgServer) UpdateRegistration(context.Context, *MsgUpdateRegistration) (*MsgUpdateRegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRegistration not implemented")
+}
+func (UnimplementedMsgServer) DeleteRegistration(context.Context, *MsgDeleteRegistration) (*MsgDeleteRegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRegistration not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -96,6 +141,60 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreateRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateRegistration)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateRegistration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreateRegistration_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateRegistration(ctx, req.(*MsgCreateRegistration))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateRegistration)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateRegistration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdateRegistration_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateRegistration(ctx, req.(*MsgUpdateRegistration))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeleteRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeleteRegistration)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeleteRegistration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DeleteRegistration_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeleteRegistration(ctx, req.(*MsgDeleteRegistration))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -106,6 +205,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "CreateRegistration",
+			Handler:    _Msg_CreateRegistration_Handler,
+		},
+		{
+			MethodName: "UpdateRegistration",
+			Handler:    _Msg_UpdateRegistration_Handler,
+		},
+		{
+			MethodName: "DeleteRegistration",
+			Handler:    _Msg_DeleteRegistration_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,10 +3,10 @@ package grant_test
 import (
 	"testing"
 
-	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
-	"github.com/sunriselayer/sunrise-app/testutil/nullify"
-	grant "github.com/sunriselayer/sunrise-app/x/blobgrant/module"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/testutil/nullify"
+	grant "github.com/sunriselayer/sunrise/x/blobgrant/module"
+	"github.com/sunriselayer/sunrise/x/blobgrant/types"
 
 	"github.com/stretchr/testify/require"
 )
@@ -15,6 +15,14 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
+		RegistrationList: []types.Registration{
+			{
+				Address: "0",
+			},
+			{
+				Address: "1",
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -26,5 +34,6 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
+	require.ElementsMatch(t, genesisState.RegistrationList, got.RegistrationList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

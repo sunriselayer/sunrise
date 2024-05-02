@@ -3,10 +3,10 @@ package malicious
 import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	core "github.com/cometbft/cometbft/proto/tendermint/types"
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/app/ante"
-	"github.com/sunriselayer/sunrise-app/pkg/da"
-	"github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/ante"
+	"github.com/sunriselayer/sunrise/pkg/da"
+	"github.com/sunriselayer/sunrise/pkg/shares"
 )
 
 // OutOfOrderPrepareProposal fulfills the celestia-core version of the ABCI

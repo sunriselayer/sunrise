@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package sunrise.liquiditypool.v1;
 
 import "amino/amino.proto";
@@ -6,25 +7,111 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/liquiditypool/v1/params.proto";
+import "sunrise/liquiditypool/v1/pair.proto";
+import "sunrise/liquiditypool/v1/pool.proto";
+import "sunrise/liquiditypool/v1/twap.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise-app/liquiditypool/v1/params";
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/params";
+  
+  }
+  
+  // Queries a list of Pair items.
+  rpc Pair    (QueryGetPairRequest) returns (QueryGetPairResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/pair/base/{base_denom}/quote/{quote_denom}";
+  
+  }
+  rpc PairAll (QueryAllPairRequest) returns (QueryAllPairResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/pair";
+  
+  }
+  
+  // Queries a list of Pool items.
+  rpc Pool    (QueryGetPoolRequest) returns (QueryGetPoolResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/pool/{id}";
+  
+  }
+  rpc PoolAll (QueryAllPoolRequest) returns (QueryAllPoolResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/pool";
+  
+  }
+  
+  // Queries a list of Twap items.
+  rpc Twap    (QueryGetTwapRequest) returns (QueryGetTwapResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/twap/base/{base_denom}/quote/{quote_denom}";
+  
+  }
+  rpc TwapAll (QueryAllTwapRequest) returns (QueryAllTwapResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/twap";
+  
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
+
+message QueryGetPairRequest {
+  string base_denom = 1;
+  string quote_denom = 2;
+}
+
+message QueryGetPairResponse {
+  Pair pair = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPairRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPairResponse {
+  repeated Pair                                   pair       = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPoolRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolResponse {
+  Pool Pool = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPoolRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPoolResponse {
+  repeated Pool                                   Pool       = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetTwapRequest {
+  string base_denom = 1;
+  string quote_denom = 2;
+}
+
+message QueryGetTwapResponse {
+  Twap twap = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllTwapRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllTwapResponse {
+  repeated Twap                                   twap       = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+

@@ -11,7 +11,7 @@ import "google/protobuf/any.proto";
 import "cosmos_proto/cosmos.proto";
 import "sunrise/blobstream/v1/types.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/blobstream/types";
+option go_package = "github.com/sunriselayer/sunrise/x/blobstream/types";
 
 // Query defines the gRPC querier service.
 service Query {
@@ -60,7 +60,7 @@ service Query {
   // that includes the provided height
   rpc DataCommitmentRangeForHeight(QueryDataCommitmentRangeForHeightRequest)
       returns (QueryDataCommitmentRangeForHeightResponse) {
-    option (google.api.http).get = "/sunrise/blobstream/v1/data_commitment/range/height";
+    option (google.api.http).get = "/sunrise/blobstream/v1/data_commitment/range/{height}";
   }
 
   // LatestDataCommitment returns the latest data commitment in store
@@ -95,7 +95,7 @@ message QueryAttestationRequestByNonceRequest { uint64 nonce = 1; }
 message QueryAttestationRequestByNonceResponse {
   // AttestationRequestI is either a Data Commitment or a Valset.
   // This was decided as part of the universal nonce approach under:
-  // https://github.com/sunriselayer/sunrise-app/issues/468#issuecomment-1156887715
+  // https://github.com/sunriselayer/sunrise/issues/468#issuecomment-1156887715
   google.protobuf.Any attestation = 1
       [ (cosmos_proto.accepts_interface) = "AttestationRequestI" ];
 }

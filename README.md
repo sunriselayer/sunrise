@@ -1,4 +1,4 @@
-# sunrise-app
+# Sunrise
 
 **sunrise** is a blockchain built using Cosmos SDK and CometBFT and created with [Ignite CLI](https://ignite.com/cli).
 
@@ -27,7 +27,7 @@ go install github.com/cosmos/cosmos-proto/cmd/protoc-gen-go-pulsar
                 ^  +-------------------------------+  ^
                 |  |                               |  |
                 |  |  State-machine = Application  |  |
-                |  |                               |  |   sunrise-app (built with Cosmos SDK)
+                |  |                               |  |   sunrise (built with Cosmos SDK)
                 |  |            ^      +           |  |
                 |  +----------- | ABCI | ----------+  v
 Sunrise         |  |            +      v           |  ^
@@ -47,7 +47,7 @@ node            |  |                               |  |
 
 1. [Install Go](https://go.dev/doc/install) 1.22.2
 1. Clone this repo
-1. Install the sunrise-app CLI
+1. Install the sunrise CLI
 
     ```shell
     make install
@@ -55,14 +55,14 @@ node            |  |                               |  |
 
 ### Prebuilt binary
 
-If you'd rather not install from source, you can download a prebuilt binary from the [releases](https://github.com/SunriseLayer/sunrise-app/releases) page.
+If you'd rather not install from source, you can download a prebuilt binary from the [releases](https://github.com/SunriseLayer/sunrise/releases) page.
 
-1. Navigate to the latest release on <https://github.com/SunriseLayer/sunrise-app/releases>.
-1. Download the binary for your platform (e.g. `sunrise-app_Linux_x86_64.tar.gz`) from the **Assets** section. Tip: if you're not sure what platform you're on, you can run `uname -a` and look for the operating system (e.g. `Linux`, `Darwin`) and architecture (e.g. `x86_64`, `arm64`).
+1. Navigate to the latest release on <https://github.com/SunriseLayer/sunrise/releases>.
+1. Download the binary for your platform (e.g. `sunrise_Linux_x86_64.tar.gz`) from the **Assets** section. Tip: if you're not sure what platform you're on, you can run `uname -a` and look for the operating system (e.g. `Linux`, `Darwin`) and architecture (e.g. `x86_64`, `arm64`).
 1. Extract the archive
 
     ```shell
-    tar -xvf sunrise-app_Linux_x86_64.tar.gz
+    tar -xvf sunrise_Linux_x86_64.tar.gz
     ```
 
 1. Verify the extracted binary works
@@ -80,7 +80,7 @@ If you'd rather not install from source, you can download a prebuilt binary from
     You should see output like this:
 
     ```shell
-    sunrise-app_Linux_x86_64.tar.gz: OK
+    sunrise_Linux_x86_64.tar.gz: OK
     ```
 
 See <https://docs.sunriselayer.io/node/build-node> for more information.

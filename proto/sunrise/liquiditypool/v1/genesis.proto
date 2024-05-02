@@ -1,17 +1,24 @@
 syntax = "proto3";
+
 package sunrise.liquiditypool.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/liquiditypool/v1/params.proto";
+import "sunrise/liquiditypool/v1/pair.proto";
+import "sunrise/liquiditypool/v1/pool.proto";
+import "sunrise/liquiditypool/v1/twap.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // GenesisState defines the liquiditypool module's genesis state.
 message GenesisState {
+  
   // params defines all the parameters of the module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+           Params params     = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  repeated Pair   pair_list  = 2 [(gogoproto.nullable) = false] ;
+  repeated Pool   pool_list  = 3 [(gogoproto.nullable) = false] ;
+           uint64 pool_count = 4;
+  repeated Twap   twap_list   = 5 [(gogoproto.nullable) = false] ;
 }
+

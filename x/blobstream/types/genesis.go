@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 
 	"cosmossdk.io/errors"
 )
