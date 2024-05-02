@@ -1,0 +1,37 @@
+syntax = "proto3";
+package sunrise.liquiditypool.v1;
+
+import "amino/amino.proto";
+import "google/protobuf/timestamp.proto";
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
+
+message Twap {
+  string base_denom = 1;
+  string quote_denom = 2;
+  string value = 3 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = true,
+    (amino.dont_omitempty) = true
+  ];
+  google.protobuf.Timestamp latest_timestamp = 4 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable)= true
+  ];
+}
+
+message PriceFootprint {
+  string price = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  google.protobuf.Timestamp timestamp = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable)   = false
+  ];
+}

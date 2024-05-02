@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sunrise.blobgrant.v1;
+
+option go_package = "github.com/sunriselayer/sunrise-app/x/blobgrant/types";
+
+message Registration {
+  string address = 1; 
+  string proxy_address = 2;
+}
+

@@ -9,7 +9,22 @@ import (
 
 // InitGenesis initializes the module's state from a provided genesis state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
-	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the pair
+for _, elem := range genState.PairList {
+	k.SetPair(ctx, elem)
+}
+// Set all the pool
+for _, elem := range genState.PoolList {
+	k.SetPool(ctx, elem)
+}
+
+// Set pool count
+k.SetPoolCount(ctx, genState.PoolCount)
+// Set all the twap
+for _, elem := range genState.TwapList {
+	k.SetTwap(ctx, elem)
+}
+// this line is used by starport scaffolding # genesis/module/init
 	if err := k.SetParams(ctx, genState.Params); err != nil {
 		panic(err)
 	}
@@ -20,7 +35,11 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 	genesis.Params = k.GetParams(ctx)
 
-	// this line is used by starport scaffolding # genesis/module/export
+	genesis.PairList = k.GetAllPair(ctx)
+genesis.PoolList = k.GetAllPool(ctx)
+genesis.PoolCount = k.GetPoolCount(ctx)
+genesis.TwapList = k.GetAllTwap(ctx)
+// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis
 }

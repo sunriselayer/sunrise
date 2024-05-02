@@ -19,12 +19,99 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
+				PairList: []types.Pair{
+					{
+						BaseDenom:  "base0",
+						QuoteDenom: "quote0",
+					},
+					{
+						BaseDenom:  "base1",
+						QuoteDenom: "quote1",
+					},
+				},
+				PoolList: []types.Pool{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				PoolCount: 2,
+				TwapList: []types.Twap{
+					{
+						BaseDenom:  "base0",
+						QuoteDenom: "quote0",
+					},
+					{
+						BaseDenom:  "base1",
+						QuoteDenom: "quote1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "duplicated pair",
+			genState: &types.GenesisState{
+				PairList: []types.Pair{
+					{
+						BaseDenom:  "base0",
+						QuoteDenom: "quote0",
+					},
+					{
+						BaseDenom:  "base0",
+						QuoteDenom: "quote0",
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated pool",
+			genState: &types.GenesisState{
+				PoolList: []types.Pool{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid pool count",
+			genState: &types.GenesisState{
+				PoolList: []types.Pool{
+					{
+						Id: 1,
+					},
+				},
+				PoolCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated twap",
+			genState: &types.GenesisState{
+				TwapList: []types.Twap{
+					{
+						BaseDenom:  "base0",
+						QuoteDenom: "quote0",
+					},
+					{
+						BaseDenom:  "base0",
+						QuoteDenom: "quote0",
+					},
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}
