@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/binary"
 
+	"cosmossdk.io/math"
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -108,4 +109,19 @@ func GetPoolIDBytes(id uint64) []byte {
 	bz = append(bz, []byte("/")...)
 	bz = binary.BigEndian.AppendUint64(bz, id)
 	return bz
+}
+
+func (k Keeper) GetPoolBalance(ctx context.Context, pool types.Pool) (x math.Int, y math.Int) {
+	addr := k.accountKeeper.GetModuleAddress(types.PoolModuleName(pool.Id))
+	balances := k.bankKeeper.SpendableCoins(ctx, addr)
+
+	for _, balance := range balances {
+		if balance.Denom == pool.BaseDenom {
+			x = balance.Amount
+		} else if balance.Denom == pool.QuoteDenom {
+			y = balance.Amount
+		}
+	}
+
+	return
 }

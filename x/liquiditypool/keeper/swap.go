@@ -10,26 +10,46 @@ import (
 	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
-func (k Keeper) TransferFromAccountToPoolModuleAccount(ctx context.Context, token sdk.Coin, address sdk.AccAddress, poolId uint64) error {
+func (k Keeper) TransferFromAccountToPoolModule(ctx context.Context, token sdk.Coin, address sdk.AccAddress, poolId uint64) error {
+	if token.Amount.IsZero() {
+		return nil
+	}
+
 	moduleName := types.PoolModuleName(poolId)
 	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, moduleName, sdk.NewCoins(token))
 
 	return err
 }
 
-func (k Keeper) TransferFromPoolModuleAccountToAccount(ctx context.Context, token sdk.Coin, address sdk.AccAddress, poolId uint64) error {
+func (k Keeper) TransferFromPoolModuleToAccount(ctx context.Context, token sdk.Coin, address sdk.AccAddress, poolId uint64) error {
+	if token.Amount.IsZero() {
+		return nil
+	}
+
 	moduleName := types.PoolModuleName(poolId)
 	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, moduleName, address, sdk.NewCoins(token))
 
 	return err
 }
 
-func (k Keeper) TransferFromPoolModuleAccountToPoolTreasuryModuleAccount(ctx context.Context, token sdk.Coin, poolId uint64) error {
+func (k Keeper) TransferFromPoolModuleToPoolTreasuryModule(ctx context.Context, token sdk.Coin, poolId uint64) error {
+	if token.Amount.IsZero() {
+		return nil
+	}
+
 	moduleName := types.PoolModuleName(poolId)
 	treasuryModuleName := types.PoolTreasuryModuleName(poolId)
 	err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, moduleName, treasuryModuleName, sdk.NewCoins(token))
 
 	return err
+}
+
+func (k Keeper) EmitEventPoolFee(ctx context.Context, poolId uint64, poolFee sdk.Coin) {
+	if poolFee.Amount.IsZero() {
+		return
+	}
+
+	// TODO: emit event of pool fee
 }
 
 func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, tokenIn sdk.Coin, denomOutConfirmation string, address sdk.AccAddress) (*math.Int, error) {
@@ -69,17 +89,22 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 	}
 
 	// transfer tokenIn from address to module
-	if err := k.TransferFromAccountToPoolModuleAccount(ctx, tokenIn, address, poolId); err != nil {
+	if err := k.TransferFromAccountToPoolModule(ctx, tokenIn, address, poolId); err != nil {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, "error transferring tokenIn: %s", err.Error())
 	}
 
 	// calculate amount
+	x, y := k.GetPoolBalance(ctx, pool)
+	kValue, err := types.CalculateK(x, y, pool.FK)
+	if err != nil {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error calculating k: %s", err.Error())
+	}
+
 	var amountOutNeg *math.Int
-	var err error
 	if tokenIn.Denom == pool.BaseDenom {
-		amountOutNeg, err = types.CalculateDy(nil, tokenIn.Amount, nil, "")
+		amountOutNeg, err = types.CalculateDy(x, tokenIn.Amount, *kValue, pool.FY)
 	} else {
-		amountOutNeg, err = types.CalculateDx(nil, tokenIn.Amount, nil, "")
+		amountOutNeg, err = types.CalculateDx(y, tokenIn.Amount, *kValue, pool.FX)
 	}
 
 	if err != nil {
@@ -98,24 +123,20 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 	amountOut = amountOut.Sub(treasuryTaxAmount).Sub(poolFeeAmount)
 
 	// transfer tokenOut from module to address
-	if amountOut.GT(math.ZeroInt()) {
-		tokenOut := sdk.NewCoin(denomOut, amountOut)
-		if err := k.TransferFromPoolModuleAccountToAccount(ctx, tokenOut, address, poolId); err != nil {
-			return nil, err
-		}
+	tokenOut := sdk.NewCoin(denomOut, amountOut)
+	if err := k.TransferFromPoolModuleToAccount(ctx, tokenOut, address, poolId); err != nil {
+		return nil, err
 	}
 
 	// transfer treasury tax to treasury
-	if treasuryTaxAmount.GT(math.ZeroInt()) {
-		treasuryTax := sdk.NewCoin(denomOut, treasuryTaxAmount)
-		if err := k.TransferFromPoolModuleAccountToPoolTreasuryModuleAccount(ctx, treasuryTax, poolId); err != nil {
-			return nil, err
-		}
+	treasuryTax := sdk.NewCoin(denomOut, treasuryTaxAmount)
+	if err := k.TransferFromPoolModuleToPoolTreasuryModule(ctx, treasuryTax, poolId); err != nil {
+		return nil, err
 	}
 
-	if poolFeeAmount.GT(math.ZeroInt()) {
-		// TODO: emit event of pool fee
-	}
+	// emit event of pool fee
+	poolFee := sdk.NewCoin(tokenOut.Denom, poolFeeAmount)
+	k.EmitEventPoolFee(ctx, poolId, poolFee)
 
 	return &amountOut, nil
 }
@@ -153,14 +174,22 @@ func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64,
 	// calculate amount
 	treasuryTaxRate := k.GetParams(ctx).TreasuryTaxRate
 	tokenOutBeforeFee := math.LegacyOneDec().Quo(math.LegacyOneDec().Sub(treasuryTaxRate).Sub(pool.FeeRate)).MulInt(tokenOut.Amount).RoundInt()
+	if tokenOutBeforeFee.LTE(math.ZeroInt()) {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tokenOutBeforeFee is negative")
+	}
 	tokenOutBeforeFeeNeg := tokenOutBeforeFee.Neg()
 
+	x, y := k.GetPoolBalance(ctx, pool)
+	kValue, err := types.CalculateK(x, y, pool.FK)
+	if err != nil {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error calculating k: %s", err.Error())
+	}
+
 	var amountIn *math.Int
-	var err error
 	if tokenOut.Denom == pool.BaseDenom {
-		amountIn, err = types.CalculateDy(nil, tokenOutBeforeFeeNeg, nil, "")
+		amountIn, err = types.CalculateDy(x, tokenOutBeforeFeeNeg, *kValue, pool.FY)
 	} else {
-		amountIn, err = types.CalculateDx(nil, tokenOutBeforeFeeNeg, nil, "")
+		amountIn, err = types.CalculateDx(y, tokenOutBeforeFeeNeg, *kValue, pool.FX)
 	}
 
 	if err != nil {
@@ -178,21 +207,19 @@ func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64,
 
 	// transfer tokenOut from module to address
 	// no need to check zero case
-	if err := k.TransferFromPoolModuleAccountToAccount(ctx, tokenOut, address, poolId); err != nil {
+	if err := k.TransferFromPoolModuleToAccount(ctx, tokenOut, address, poolId); err != nil {
 		return nil, err
 	}
 
 	// transfer treasury tax to treasury
-	if treasuryTaxAmount.GT(math.ZeroInt()) {
-		treasuryTax := sdk.NewCoin(tokenOut.Denom, treasuryTaxAmount)
-		if err := k.TransferFromPoolModuleAccountToPoolTreasuryModuleAccount(ctx, treasuryTax, poolId); err != nil {
-			return nil, err
-		}
+	treasuryTax := sdk.NewCoin(tokenOut.Denom, treasuryTaxAmount)
+	if err := k.TransferFromPoolModuleToPoolTreasuryModule(ctx, treasuryTax, poolId); err != nil {
+		return nil, err
 	}
 
-	if poolFeeAmount.GT(math.ZeroInt()) {
-		// TODO: emit event of pool fee
-	}
+	// emit event of pool fee
+	poolFee := sdk.NewCoin(tokenOut.Denom, poolFeeAmount)
+	k.EmitEventPoolFee(ctx, poolId, poolFee)
 
 	return amountIn, nil
 }
