@@ -63,21 +63,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "CreatePool",
-					Use:            "create-pool [baseDenom] [quoteDenom]",
+					Use:            "create-pool [base_denom] [quote_denom]",
 					Short:          "Create pool",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "baseDenom"}, {ProtoField: "quoteDenom"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
 				},
 				{
 					RpcMethod:      "UpdatePool",
-					Use:            "update-pool [id] [baseDenom] [quoteDenom]",
+					Use:            "update-pool [id] [base_denom] [quote_denom]",
 					Short:          "Update pool",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "baseDenom"}, {ProtoField: "quoteDenom"}},
-				},
-				{
-					RpcMethod:      "DeletePool",
-					Use:            "delete-pool [id]",
-					Short:          "Delete pool",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

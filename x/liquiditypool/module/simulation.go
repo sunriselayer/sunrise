@@ -31,22 +31,6 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgUpdatePool int = 100
 
-	opWeightMsgDeletePool = "op_weight_msg_pool"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgDeletePool int = 100
-
-	opWeightMsgCreateTwap = "op_weight_msg_twap"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgCreateTwap int = 100
-
-	opWeightMsgUpdateTwap = "op_weight_msg_twap"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgUpdateTwap int = 100
-
-	opWeightMsgDeleteTwap = "op_weight_msg_twap"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgDeleteTwap int = 100
-
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
