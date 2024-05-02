@@ -212,22 +212,14 @@ func accept() (*abci.ResponseProcessProposal, error) {
 
 func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
 	length := len(txsWithInfo)
-	if length == 0 {
-		txs = txsWithInfo
-		dataHash = nil
-		squareSize = 0
-		return
+	txs = txsWithInfo
+	if length >= 3 {
+		if len(txsWithInfo[length-3]) == 0 {
+			txs = txsWithInfo[:length-3]
+			dataHash = txsWithInfo[length-2]
+			squareSizeBigEndian := txsWithInfo[length-1]
+			squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
+		}
 	}
-
-	if length < 2 {
-		err = fmt.Errorf("txs must contain the data hash and the square size at the end, and its length must not be lower than 2")
-		return
-	}
-
-	txs = txsWithInfo[:length-2]
-	dataHash = txsWithInfo[length-2]
-	squareSizeBigEndian := txsWithInfo[length-1]
-	squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
-
 	return
 }

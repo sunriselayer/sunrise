@@ -119,6 +119,8 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 }
 
 func AppendInfoInTxs(txs [][]byte, dataHash []byte, squareSize uint64) [][]byte {
+	// add empty byte slice
+	txs = append(txs, []byte{})
 	txs = append(txs, dataHash)
 	squareSizeBigEndican := make([]byte, 8)
 	binary.BigEndian.PutUint64(squareSizeBigEndican, squareSize)

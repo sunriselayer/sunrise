@@ -6,7 +6,7 @@ toolchain go1.21.5
 
 replace (
 	// sunrise-core
-	github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.2-cmt-v0.38.2
+	github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.3-cmt-v0.38.2
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
 	github.com/sunriselayer/sunrise/pkg/blob => ./pkg/blob
