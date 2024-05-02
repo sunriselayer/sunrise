@@ -6,8 +6,8 @@ import (
 	mrand "math/rand"
 	"time"
 
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/encoding"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/cometbft/cometbft/crypto"

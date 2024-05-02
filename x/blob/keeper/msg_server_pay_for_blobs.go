@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise/x/blob/types"
 )
 
 func (k msgServer) PayForBlobs(goCtx context.Context, msg *types.MsgPayForBlobs) (*types.MsgPayForBlobsResponse, error) {

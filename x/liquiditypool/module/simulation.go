@@ -8,9 +8,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/sunriselayer/sunrise-app/testutil/sample"
-	liquiditypoolsimulation "github.com/sunriselayer/sunrise-app/x/liquiditypool/simulation"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/testutil/sample"
+	liquiditypoolsimulation "github.com/sunriselayer/sunrise/x/liquiditypool/simulation"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // avoid unused import issue

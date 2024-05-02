@@ -1,4 +1,4 @@
-module github.com/sunriselayer/sunrise-app
+module github.com/sunriselayer/sunrise
 
 go 1.21.1
 
@@ -9,8 +9,8 @@ replace (
 	github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.3-cmt-v0.38.2
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
-	github.com/sunriselayer/sunrise-app/pkg/blob => ./pkg/blob
-	github.com/sunriselayer/sunrise-app/pkg/namespace => ./pkg/namespace
+	github.com/sunriselayer/sunrise/pkg/blob => ./pkg/blob
+	github.com/sunriselayer/sunrise/pkg/namespace => ./pkg/namespace
 )
 
 replace (
@@ -59,8 +59,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.9.0
-	github.com/sunriselayer/sunrise-app/pkg/blob v0.0.0-20240418170053-30d0f121cf39
-	github.com/sunriselayer/sunrise-app/pkg/namespace v0.0.0-20240418170053-30d0f121cf39
+	github.com/sunriselayer/sunrise/pkg/blob v0.0.0-20240418170053-30d0f121cf39
+	github.com/sunriselayer/sunrise/pkg/namespace v0.0.0-20240418170053-30d0f121cf39
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
 	golang.org/x/sync v0.7.0
 	golang.org/x/tools v0.20.0

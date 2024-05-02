@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"

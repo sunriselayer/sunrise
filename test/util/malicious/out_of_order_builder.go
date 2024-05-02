@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	"github.com/sunriselayer/sunrise-app/pkg/inclusion"
-	"github.com/sunriselayer/sunrise-app/pkg/namespace"
-	"github.com/sunriselayer/sunrise-app/pkg/shares"
-	"github.com/sunriselayer/sunrise-app/pkg/square"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/inclusion"
+	"github.com/sunriselayer/sunrise/pkg/namespace"
+	"github.com/sunriselayer/sunrise/pkg/shares"
+	"github.com/sunriselayer/sunrise/pkg/square"
 )
 
 type ExportFn func(builder *square.Builder) (square.Square, error)

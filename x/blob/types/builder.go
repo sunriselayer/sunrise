@@ -15,7 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise/app/encoding"
 	"google.golang.org/grpc"
 )
 

@@ -3,7 +3,7 @@ package shares
 import (
 	"fmt"
 
-	"github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise/pkg/namespace"
 )
 
 // GetShareRangeForNamespace returns all shares that belong to a given

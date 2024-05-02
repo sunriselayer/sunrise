@@ -7,8 +7,8 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 
-	"github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

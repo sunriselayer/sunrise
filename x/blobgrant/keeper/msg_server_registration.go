@@ -6,7 +6,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	"github.com/sunriselayer/sunrise/x/blobgrant/types"
 )
 
 func (k msgServer) CreateRegistration(goCtx context.Context, msg *types.MsgCreateRegistration) (*types.MsgCreateRegistrationResponse, error) {

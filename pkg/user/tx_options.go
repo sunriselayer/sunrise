@@ -3,7 +3,7 @@ package user
 import (
 	"math"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 
 	sdkmath "cosmossdk.io/math"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"

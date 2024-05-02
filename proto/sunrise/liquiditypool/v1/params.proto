@@ -7,7 +7,7 @@ import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Params defines the parameters for the module.
 message Params {

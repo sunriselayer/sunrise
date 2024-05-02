@@ -9,8 +9,8 @@ import (
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	"github.com/sunriselayer/sunrise/x/blobgrant/keeper"
+	"github.com/sunriselayer/sunrise/x/blobgrant/types"
 )
 
 // Prevent strconv unused error

@@ -6,8 +6,8 @@ DOCKER_BUF := $(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace bu
 IMAGE := ghcr.io/tendermint/docker-build-proto:latest
 DOCKER_PROTO_BUILDER := docker run -v $(shell pwd):/workspace --workdir /workspace $(IMAGE)
 PROJECTNAME=$(shell basename "$(PWD)")
-HTTPS_GIT := https://github.com/sunriselayer/sunrise-app.git
-PACKAGE_NAME          := github.com/sunriselayer/sunrise-app
+HTTPS_GIT := https://github.com/sunriselayer/sunrise.git
+PACKAGE_NAME          := github.com/sunriselayer/sunrise
 GOLANG_CROSS_VERSION  ?= v1.21.4
 
 # process linker flags

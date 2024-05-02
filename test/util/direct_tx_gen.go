@@ -15,11 +15,11 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	"github.com/sunriselayer/sunrise-app/pkg/user"
-	"github.com/sunriselayer/sunrise-app/test/util/blobfactory"
-	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/user"
+	"github.com/sunriselayer/sunrise/test/util/blobfactory"
+	"github.com/sunriselayer/sunrise/test/util/testfactory"
 )
 
 // RandBlobTxsWithAccounts will create random blob transactions using the

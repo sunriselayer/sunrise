@@ -1,10 +1,10 @@
 package app
 
 import (
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	"github.com/sunriselayer/sunrise-app/pkg/da"
-	"github.com/sunriselayer/sunrise-app/pkg/shares"
-	"github.com/sunriselayer/sunrise-app/pkg/square"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/da"
+	"github.com/sunriselayer/sunrise/pkg/shares"
+	"github.com/sunriselayer/sunrise/pkg/square"
 
 	"github.com/celestiaorg/rsmt2d"
 	coretypes "github.com/cometbft/cometbft/types"

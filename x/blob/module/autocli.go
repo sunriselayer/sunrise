@@ -3,7 +3,7 @@ package blob
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/sunriselayer/sunrise-app/api/sunrise/blob/v1"
+	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

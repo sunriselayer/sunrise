@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

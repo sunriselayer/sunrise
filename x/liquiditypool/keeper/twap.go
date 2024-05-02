@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // SetTwap set a specific twap in the store from its index

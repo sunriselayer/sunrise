@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

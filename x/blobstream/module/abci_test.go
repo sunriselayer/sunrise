@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	blobstream "github.com/sunriselayer/sunrise-app/x/blobstream/module"
+	blobstream "github.com/sunriselayer/sunrise/x/blobstream/module"
 
-	"github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 
-	testutil "github.com/sunriselayer/sunrise-app/test/util"
-	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
+	testutil "github.com/sunriselayer/sunrise/test/util"
+	"github.com/sunriselayer/sunrise/test/util/testfactory"
 
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"github.com/stretchr/testify/assert"

@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/rs/zerolog/log"
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/encoding"
 )
 
 type Testnet struct {

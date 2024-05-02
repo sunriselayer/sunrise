@@ -3,7 +3,7 @@ package inclusion
 import (
 	"errors"
 
-	"github.com/sunriselayer/sunrise-app/pkg/da"
+	"github.com/sunriselayer/sunrise/pkg/da"
 
 	"github.com/cometbft/cometbft/crypto/merkle"
 )

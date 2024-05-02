@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	apprand "github.com/sunriselayer/sunrise-app/pkg/random"
-	"github.com/sunriselayer/sunrise-app/test/util/genesis"
-	blobtypes "github.com/sunriselayer/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	apprand "github.com/sunriselayer/sunrise/pkg/random"
+	"github.com/sunriselayer/sunrise/test/util/genesis"
+	blobtypes "github.com/sunriselayer/sunrise/x/blob/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmrand "github.com/cometbft/cometbft/libs/rand"

@@ -8,8 +8,8 @@ import (
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func SimulateMsgCreatePool(

@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
-	"github.com/sunriselayer/sunrise-app/test/util/testfactory"
-	"github.com/sunriselayer/sunrise-app/test/util/testnode"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/test/util/testfactory"
+	"github.com/sunriselayer/sunrise/test/util/testnode"
 )
 
 func TestTestAccount(t *testing.T) {
