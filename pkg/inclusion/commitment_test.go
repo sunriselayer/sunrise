@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	"github.com/sunriselayer/sunrise-app/pkg/inclusion"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/inclusion"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

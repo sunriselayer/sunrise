@@ -3,11 +3,11 @@ package ante_test
 import (
 	"testing"
 
-	"github.com/sunriselayer/sunrise-app/app/encoding"
-	"github.com/sunriselayer/sunrise-app/pkg/shares"
-	"github.com/sunriselayer/sunrise-app/test/util"
-	ante "github.com/sunriselayer/sunrise-app/x/blob/ante"
-	blob "github.com/sunriselayer/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/pkg/shares"
+	"github.com/sunriselayer/sunrise/test/util"
+	ante "github.com/sunriselayer/sunrise/x/blob/ante"
+	blob "github.com/sunriselayer/sunrise/x/blob/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"

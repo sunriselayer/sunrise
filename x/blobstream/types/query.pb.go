@@ -165,7 +165,7 @@ func (m *QueryAttestationRequestByNonceRequest) GetNonce() uint64 {
 type QueryAttestationRequestByNonceResponse struct {
 	// AttestationRequestI is either a Data Commitment or a Valset.
 	// This was decided as part of the universal nonce approach under:
-	// https://github.com/sunriselayer/sunrise-app/issues/468#issuecomment-1156887715
+	// https://github.com/sunriselayer/sunrise/issues/468#issuecomment-1156887715
 	Attestation *types.Any `protobuf:"bytes,1,opt,name=attestation,proto3" json:"attestation,omitempty"`
 }
 

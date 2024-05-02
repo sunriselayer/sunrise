@@ -9,12 +9,12 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
-	testkeeper "github.com/sunriselayer/sunrise-app/testutil/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blob/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
+	testkeeper "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/x/blob/keeper"
+	"github.com/sunriselayer/sunrise/x/blob/types"
 )
 
 // TestPayForBlobs verifies the attributes on the emitted event.

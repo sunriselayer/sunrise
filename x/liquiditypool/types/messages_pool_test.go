@@ -5,7 +5,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise-app/testutil/sample"
+	"github.com/sunriselayer/sunrise/testutil/sample"
 )
 
 func TestMsgCreatePool_ValidateBasic(t *testing.T) {

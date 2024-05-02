@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
-	"github.com/sunriselayer/sunrise-app/testutil/nullify"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/blobgrant/types"
 )
 
 // Prevent strconv unused error

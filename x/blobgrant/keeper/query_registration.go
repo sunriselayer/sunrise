@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise-app/x/blobgrant/types"
+	"github.com/sunriselayer/sunrise/x/blobgrant/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -18,7 +18,7 @@ func (k Keeper) RegistrationAll(ctx context.Context, req *types.QueryAllRegistra
 
 	var registrations []types.Registration
 
-    store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	registrationStore := prefix.NewStore(store, types.KeyPrefix(types.RegistrationKeyPrefix))
 
 	pageRes, err := query.Paginate(registrationStore, req.Pagination, func(key []byte, value []byte) error {
@@ -44,11 +44,11 @@ func (k Keeper) Registration(ctx context.Context, req *types.QueryGetRegistratio
 	}
 
 	val, found := k.GetRegistration(
-	    ctx,
-	    req.Address,
-        )
+		ctx,
+		req.Address,
+	)
 	if !found {
-	    return nil, status.Error(codes.NotFound, "not found")
+		return nil, status.Error(codes.NotFound, "not found")
 	}
 
 	return &types.QueryGetRegistrationResponse{Registration: val}, nil

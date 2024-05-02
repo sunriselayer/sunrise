@@ -5,10 +5,10 @@ import (
 	"errors"
 	"testing"
 
-	blobstream "github.com/sunriselayer/sunrise-app/x/blobstream/module"
+	blobstream "github.com/sunriselayer/sunrise/x/blobstream/module"
 
-	testutil "github.com/sunriselayer/sunrise-app/test/util"
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	testutil "github.com/sunriselayer/sunrise/test/util"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	gethcommon "github.com/ethereum/go-ethereum/common"

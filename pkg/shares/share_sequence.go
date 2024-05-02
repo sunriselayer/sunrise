@@ -3,8 +3,8 @@ package shares
 import (
 	"fmt"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
 )
 
 // ShareSequence represents a contiguous sequence of shares that are part of the

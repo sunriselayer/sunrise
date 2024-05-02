@@ -6,7 +6,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/stretchr/testify/assert"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
+	"github.com/sunriselayer/sunrise/app/encoding"
 )
 
 // TestDefaultGenesis verifies that the distribution module's genesis state has

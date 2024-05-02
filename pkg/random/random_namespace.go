@@ -2,7 +2,7 @@ package namespace
 
 import (
 	tmrand "github.com/cometbft/cometbft/libs/rand"
-	ns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	ns "github.com/sunriselayer/sunrise/pkg/namespace"
 )
 
 func RandomNamespace() ns.Namespace {
