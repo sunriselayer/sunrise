@@ -34,6 +34,7 @@ func (k msgServer) SwapExactAmountIn(goCtx context.Context, msg *types.MsgSwapEx
 				sdk.NewCoin(tokenIn.Denom, amounts[i]),
 				tokenOut.Denom,
 				address,
+				false,
 			)
 
 			if err != nil {
@@ -47,6 +48,7 @@ func (k msgServer) SwapExactAmountIn(goCtx context.Context, msg *types.MsgSwapEx
 	}
 	tokenOut := tokenIn
 
+	// check slippage can be done only for final token
 	if tokenOut.Amount.LT(msg.MinAmountOut) {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slippage exceeded")
 	}
@@ -81,6 +83,7 @@ func (k msgServer) SwapExactAmountOut(goCtx context.Context, msg *types.MsgSwapE
 			sdk.NewCoin(tokenOut.Denom, amounts[i]),
 			tokenIn.Denom,
 			address,
+			false,
 		)
 
 		if err != nil {
@@ -88,10 +91,10 @@ func (k msgServer) SwapExactAmountOut(goCtx context.Context, msg *types.MsgSwapE
 		}
 
 		tokenIn.Amount = tokenIn.Amount.Add(*amountIn)
-	}
 
-	if tokenIn.Amount.GT(msg.MaxAmountIn) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slippage exceeded")
+		if tokenIn.Amount.GT(msg.MaxAmountIn) {
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slippage exceeded")
+		}
 	}
 
 	// TODO: set PriceFootprint

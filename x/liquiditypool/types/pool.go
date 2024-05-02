@@ -11,7 +11,7 @@ func LpTokenDenom(poolId uint64) string {
 }
 
 func LpTokenValueInQuoteUnit(baseAmount math.Int, quoteAmount math.Int, price math.LegacyDec) math.LegacyDec {
-	baseAmountQuotedValue := baseAmount.ToLegacyDec().Mul(price)
+	baseAmountQuotedValue := price.MulInt(baseAmount)
 	quoteAmountQuotedValue := quoteAmount.ToLegacyDec()
 
 	return baseAmountQuotedValue.Add(quoteAmountQuotedValue)
@@ -67,4 +67,20 @@ func CalculateDy(x math.Int, dx math.Int, k math.LegacyDec, f_y string) (*math.I
 
 func CalculateK(x math.Int, y math.Int, f_k string) (*math.LegacyDec, error) {
 	return nil, nil
+}
+
+func CalculatePrice(x math.Int, y math.Int, pool Pool) (*math.LegacyDec, error) {
+	kValue, err := CalculateK(x, y, pool.FK)
+	if err != nil {
+		return nil, err
+	}
+	dx := math.NewInt(1000)
+	dy, err := CalculateDy(x, dx, *kValue, pool.FY)
+	if err != nil {
+		return nil, err
+	}
+
+	price := dy.ToLegacyDec().Quo(dx.ToLegacyDec())
+
+	return &price, nil
 }

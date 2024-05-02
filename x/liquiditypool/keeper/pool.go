@@ -8,6 +8,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
 )
 
@@ -124,4 +125,8 @@ func (k Keeper) GetPoolBalance(ctx context.Context, pool types.Pool) (x math.Int
 	}
 
 	return
+}
+
+func (k Keeper) GetLpTokenSupply(ctx context.Context, poolId uint64) sdk.Coin {
+	return k.bankKeeper.GetSupply(ctx, types.LpTokenDenom(poolId))
 }
