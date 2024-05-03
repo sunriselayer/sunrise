@@ -49,10 +49,13 @@ func (k Keeper) EmitEventPoolFee(ctx context.Context, poolId uint64, poolFee sdk
 		return
 	}
 
-	// TODO: emit event of pool fee
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitTypedEvent(nil)
 }
 
-func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, tokenIn sdk.Coin, denomOutConfirmation string, address sdk.AccAddress, dryRun bool) (*math.Int, error) {
+// ExactAmountIn
+
+func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, tokenIn sdk.Coin, denomOutConfirmation string, dryRun bool, address *sdk.AccAddress) (*math.Int, error) {
 	// equal to zero is not caught here
 	if tokenIn.Amount.LT(math.ZeroInt()) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid tokenIn amount %s", tokenIn.Amount.String())
@@ -119,13 +122,13 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 
 	if !dryRun {
 		// transfer tokenIn from address to module
-		if err := k.TransferFromAccountToPoolModule(ctx, tokenIn, address, poolId); err != nil {
+		if err := k.TransferFromAccountToPoolModule(ctx, tokenIn, *address, poolId); err != nil {
 			return nil, errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, "error transferring tokenIn: %s", err.Error())
 		}
 
 		// transfer tokenOut from module to address
 		tokenOut := sdk.NewCoin(denomOut, amountOut)
-		if err := k.TransferFromPoolModuleToAccount(ctx, tokenOut, address, poolId); err != nil {
+		if err := k.TransferFromPoolModuleToAccount(ctx, tokenOut, *address, poolId); err != nil {
 			return nil, err
 		}
 
@@ -143,7 +146,55 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 	return &amountOut, nil
 }
 
-func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64, tokenOut sdk.Coin, denomIntConfirmation string, address sdk.AccAddress, dryRun bool) (*math.Int, error) {
+func (k Keeper) SwapExactAmountInMultiPool(ctx context.Context, route types.SwapRoute, tokenIn sdk.Coin, dryRun bool, address *sdk.AccAddress) (*sdk.Coin, error) {
+	amounts := types.AmountsFromWeights(route.PoolWeights, tokenIn.Amount)
+
+	var tokenOut sdk.Coin
+	if tokenIn.Denom == route.BaseDenom {
+		tokenOut = sdk.NewCoin(route.QuoteDenom, math.ZeroInt())
+	} else {
+		tokenOut = sdk.NewCoin(route.BaseDenom, math.ZeroInt())
+	}
+
+	for i := range route.PoolWeights {
+		amountOut, err := k.SwapExactAmountInSinglePool(
+			ctx,
+			route.PoolWeights[i].PoolId,
+			sdk.NewCoin(tokenIn.Denom, amounts[i]),
+			tokenOut.Denom,
+			dryRun,
+			address,
+		)
+
+		if err != nil {
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping in pool: %s", err.Error())
+		}
+
+		tokenOut.Amount = tokenOut.Amount.Add(*amountOut)
+	}
+
+	return &tokenOut, nil
+}
+
+func (k Keeper) SwapExactAmountInMultiRoute(ctx context.Context, routes []types.SwapRoute, tokenIn sdk.Coin, dryRun bool, address *sdk.AccAddress) ([]sdk.Coin, error) {
+	tokensOut := []sdk.Coin{}
+	for _, route := range routes {
+		tokenOut, err := k.SwapExactAmountInMultiPool(ctx, route, tokenIn, dryRun, address)
+		if err != nil {
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping: %s", err.Error())
+		}
+
+		tokensOut = append(tokensOut, *tokenOut)
+
+		tokenIn = *tokenOut
+	}
+
+	return tokensOut, nil
+}
+
+// ExactAmountOut
+
+func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64, tokenOut sdk.Coin, denomIntConfirmation string, dryRun bool, address *sdk.AccAddress) (*math.Int, error) {
 	// equal to zero is caught here
 	if tokenOut.Amount.LTE(math.ZeroInt()) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid tokenOut amount %s", tokenOut.Amount.String())
@@ -210,13 +261,13 @@ func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64,
 	if !dryRun {
 		// transfer tokenIn from address to module
 		tokenIn := sdk.NewCoin(denomIn, *amountIn)
-		if err := k.TransferFromAccountToPoolModule(ctx, tokenIn, address, poolId); err != nil {
+		if err := k.TransferFromAccountToPoolModule(ctx, tokenIn, *address, poolId); err != nil {
 			return nil, err
 		}
 
 		// transfer tokenOut from module to address
 		// no need to check zero case
-		if err := k.TransferFromPoolModuleToAccount(ctx, tokenOut, address, poolId); err != nil {
+		if err := k.TransferFromPoolModuleToAccount(ctx, tokenOut, *address, poolId); err != nil {
 			return nil, err
 		}
 
@@ -232,4 +283,40 @@ func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64,
 	}
 
 	return amountIn, nil
+}
+
+func (k Keeper) SwapExactAmountOutMultiPool(ctx context.Context, route types.SwapRoute, tokenOut sdk.Coin, dryRun bool, address *sdk.AccAddress, maxAmountIn *math.Int) (*sdk.Coin, error) {
+	amounts := types.AmountsFromWeights(route.PoolWeights, tokenOut.Amount)
+
+	var tokenIn sdk.Coin
+	if tokenOut.Denom == route.BaseDenom {
+		tokenIn = sdk.NewCoin(route.QuoteDenom, math.ZeroInt())
+	} else {
+		tokenIn = sdk.NewCoin(route.BaseDenom, math.ZeroInt())
+	}
+
+	for i := range route.PoolWeights {
+		amountIn, err := k.SwapExactAmountOutSinglePool(
+			ctx,
+			route.PoolWeights[i].PoolId,
+			sdk.NewCoin(tokenOut.Denom, amounts[i]),
+			tokenIn.Denom,
+			dryRun,
+			address,
+		)
+
+		if err != nil {
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping in pool: %s", err.Error())
+		}
+
+		tokenIn.Amount = tokenIn.Amount.Add(*amountIn)
+
+		if !dryRun {
+			if tokenIn.Amount.GT(*maxAmountIn) {
+				return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slippage exceeded")
+			}
+		}
+	}
+
+	return &tokenIn, nil
 }

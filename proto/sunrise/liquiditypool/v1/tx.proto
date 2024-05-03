@@ -124,9 +124,11 @@ message MsgSwapExactAmountIn {
 }
 
 message MsgSwapExactAmountInResponse {
-  string amount_out = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+  repeated cosmos.base.v1beta1.Coin tokens_via = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  cosmos.base.v1beta1.Coin token_out = 2 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
@@ -152,9 +154,7 @@ message MsgSwapExactAmountOut {
 }
 
 message MsgSwapExactAmountOutResponse {
-  string amount_in = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+  cosmos.base.v1beta1.Coin token_in = 1 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
@@ -214,15 +214,7 @@ message MsgExitPool {
 }
 
 message MsgExitPoolResponse {
-  string amount_base = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-  string amount_quote = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+  repeated cosmos.base.v1beta1.Coin tokens_out = 1 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
