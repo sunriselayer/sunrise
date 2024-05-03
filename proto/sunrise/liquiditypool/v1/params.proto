@@ -14,18 +14,24 @@ message Params {
   option (amino.name) = "sunrise/x/liquiditypool/v1/Params";
   option (gogoproto.equal) = true;
 
-  string treasury_tax_rate = 1 [
+  string swap_treasury_tax_rate = 1 [
     (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  google.protobuf.Duration twap_duration = 2 [
+  string pool_exit_fee_rate = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  google.protobuf.Duration twap_duration = 3 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  google.protobuf.Duration twap_span = 3 [
+  google.protobuf.Duration twap_span = 4 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true

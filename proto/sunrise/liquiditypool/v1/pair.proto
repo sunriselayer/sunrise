@@ -7,4 +7,3 @@ message Pair {
   string base_denom = 1; 
   string quote_denom = 2;
 }
-

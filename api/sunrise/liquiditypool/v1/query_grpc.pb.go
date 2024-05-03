@@ -19,13 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName  = "/sunrise.liquiditypool.v1.Query/Params"
-	Query_Pair_FullMethodName    = "/sunrise.liquiditypool.v1.Query/Pair"
-	Query_PairAll_FullMethodName = "/sunrise.liquiditypool.v1.Query/PairAll"
-	Query_Pool_FullMethodName    = "/sunrise.liquiditypool.v1.Query/Pool"
-	Query_PoolAll_FullMethodName = "/sunrise.liquiditypool.v1.Query/PoolAll"
-	Query_Twap_FullMethodName    = "/sunrise.liquiditypool.v1.Query/Twap"
-	Query_TwapAll_FullMethodName = "/sunrise.liquiditypool.v1.Query/TwapAll"
+	Query_Params_FullMethodName                     = "/sunrise.liquiditypool.v1.Query/Params"
+	Query_Pair_FullMethodName                       = "/sunrise.liquiditypool.v1.Query/Pair"
+	Query_PairAll_FullMethodName                    = "/sunrise.liquiditypool.v1.Query/PairAll"
+	Query_Pool_FullMethodName                       = "/sunrise.liquiditypool.v1.Query/Pool"
+	Query_PoolAll_FullMethodName                    = "/sunrise.liquiditypool.v1.Query/PoolAll"
+	Query_Twap_FullMethodName                       = "/sunrise.liquiditypool.v1.Query/Twap"
+	Query_TwapAll_FullMethodName                    = "/sunrise.liquiditypool.v1.Query/TwapAll"
+	Query_SimulateSwapExactAmountIn_FullMethodName  = "/sunrise.liquiditypool.v1.Query/SimulateSwapExactAmountIn"
+	Query_SimulateSwapExactAmountOut_FullMethodName = "/sunrise.liquiditypool.v1.Query/SimulateSwapExactAmountOut"
+	Query_SimulateJoinPool_FullMethodName           = "/sunrise.liquiditypool.v1.Query/SimulateJoinPool"
+	Query_SimulateExitPool_FullMethodName           = "/sunrise.liquiditypool.v1.Query/SimulateExitPool"
+	Query_OptimizeSwapExactAmountIn_FullMethodName  = "/sunrise.liquiditypool.v1.Query/OptimizeSwapExactAmountIn"
+	Query_OptimizeSwapExactAmountOut_FullMethodName = "/sunrise.liquiditypool.v1.Query/OptimizeSwapExactAmountOut"
 )
 
 // QueryClient is the client API for Query service.
@@ -43,6 +49,12 @@ type QueryClient interface {
 	// Queries a list of Twap items.
 	Twap(ctx context.Context, in *QueryGetTwapRequest, opts ...grpc.CallOption) (*QueryGetTwapResponse, error)
 	TwapAll(ctx context.Context, in *QueryAllTwapRequest, opts ...grpc.CallOption) (*QueryAllTwapResponse, error)
+	SimulateSwapExactAmountIn(ctx context.Context, in *QuerySimulateSwapExactAmountInRequest, opts ...grpc.CallOption) (*QuerySimulateSwapExactAmountInResponse, error)
+	SimulateSwapExactAmountOut(ctx context.Context, in *QuerySimulateSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QuerySimulateSwapExactAmountOutResponse, error)
+	SimulateJoinPool(ctx context.Context, in *QuerySimulateJoinPoolRequest, opts ...grpc.CallOption) (*QuerySimulateJoinPoolResponse, error)
+	SimulateExitPool(ctx context.Context, in *QuerySimulateExitPoolRequest, opts ...grpc.CallOption) (*QuerySimulateExitPoolResponse, error)
+	OptimizeSwapExactAmountIn(ctx context.Context, in *QueryOptimizeSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryOptimizeSwapExactAmountInResponse, error)
+	OptimizeSwapExactAmountOut(ctx context.Context, in *QueryOptimizeSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryOptimizeSwapExactAmountOutResponse, error)
 }
 
 type queryClient struct {
@@ -116,6 +128,60 @@ func (c *queryClient) TwapAll(ctx context.Context, in *QueryAllTwapRequest, opts
 	return out, nil
 }
 
+func (c *queryClient) SimulateSwapExactAmountIn(ctx context.Context, in *QuerySimulateSwapExactAmountInRequest, opts ...grpc.CallOption) (*QuerySimulateSwapExactAmountInResponse, error) {
+	out := new(QuerySimulateSwapExactAmountInResponse)
+	err := c.cc.Invoke(ctx, Query_SimulateSwapExactAmountIn_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) SimulateSwapExactAmountOut(ctx context.Context, in *QuerySimulateSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QuerySimulateSwapExactAmountOutResponse, error) {
+	out := new(QuerySimulateSwapExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, Query_SimulateSwapExactAmountOut_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) SimulateJoinPool(ctx context.Context, in *QuerySimulateJoinPoolRequest, opts ...grpc.CallOption) (*QuerySimulateJoinPoolResponse, error) {
+	out := new(QuerySimulateJoinPoolResponse)
+	err := c.cc.Invoke(ctx, Query_SimulateJoinPool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) SimulateExitPool(ctx context.Context, in *QuerySimulateExitPoolRequest, opts ...grpc.CallOption) (*QuerySimulateExitPoolResponse, error) {
+	out := new(QuerySimulateExitPoolResponse)
+	err := c.cc.Invoke(ctx, Query_SimulateExitPool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OptimizeSwapExactAmountIn(ctx context.Context, in *QueryOptimizeSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryOptimizeSwapExactAmountInResponse, error) {
+	out := new(QueryOptimizeSwapExactAmountInResponse)
+	err := c.cc.Invoke(ctx, Query_OptimizeSwapExactAmountIn_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OptimizeSwapExactAmountOut(ctx context.Context, in *QueryOptimizeSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryOptimizeSwapExactAmountOutResponse, error) {
+	out := new(QueryOptimizeSwapExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, Query_OptimizeSwapExactAmountOut_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -131,6 +197,12 @@ type QueryServer interface {
 	// Queries a list of Twap items.
 	Twap(context.Context, *QueryGetTwapRequest) (*QueryGetTwapResponse, error)
 	TwapAll(context.Context, *QueryAllTwapRequest) (*QueryAllTwapResponse, error)
+	SimulateSwapExactAmountIn(context.Context, *QuerySimulateSwapExactAmountInRequest) (*QuerySimulateSwapExactAmountInResponse, error)
+	SimulateSwapExactAmountOut(context.Context, *QuerySimulateSwapExactAmountOutRequest) (*QuerySimulateSwapExactAmountOutResponse, error)
+	SimulateJoinPool(context.Context, *QuerySimulateJoinPoolRequest) (*QuerySimulateJoinPoolResponse, error)
+	SimulateExitPool(context.Context, *QuerySimulateExitPoolRequest) (*QuerySimulateExitPoolResponse, error)
+	OptimizeSwapExactAmountIn(context.Context, *QueryOptimizeSwapExactAmountInRequest) (*QueryOptimizeSwapExactAmountInResponse, error)
+	OptimizeSwapExactAmountOut(context.Context, *QueryOptimizeSwapExactAmountOutRequest) (*QueryOptimizeSwapExactAmountOutResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -158,6 +230,24 @@ func (UnimplementedQueryServer) Twap(context.Context, *QueryGetTwapRequest) (*Qu
 }
 func (UnimplementedQueryServer) TwapAll(context.Context, *QueryAllTwapRequest) (*QueryAllTwapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TwapAll not implemented")
+}
+func (UnimplementedQueryServer) SimulateSwapExactAmountIn(context.Context, *QuerySimulateSwapExactAmountInRequest) (*QuerySimulateSwapExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SimulateSwapExactAmountIn not implemented")
+}
+func (UnimplementedQueryServer) SimulateSwapExactAmountOut(context.Context, *QuerySimulateSwapExactAmountOutRequest) (*QuerySimulateSwapExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SimulateSwapExactAmountOut not implemented")
+}
+func (UnimplementedQueryServer) SimulateJoinPool(context.Context, *QuerySimulateJoinPoolRequest) (*QuerySimulateJoinPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SimulateJoinPool not implemented")
+}
+func (UnimplementedQueryServer) SimulateExitPool(context.Context, *QuerySimulateExitPoolRequest) (*QuerySimulateExitPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SimulateExitPool not implemented")
+}
+func (UnimplementedQueryServer) OptimizeSwapExactAmountIn(context.Context, *QueryOptimizeSwapExactAmountInRequest) (*QueryOptimizeSwapExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OptimizeSwapExactAmountIn not implemented")
+}
+func (UnimplementedQueryServer) OptimizeSwapExactAmountOut(context.Context, *QueryOptimizeSwapExactAmountOutRequest) (*QueryOptimizeSwapExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OptimizeSwapExactAmountOut not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -298,6 +388,114 @@ func _Query_TwapAll_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_SimulateSwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySimulateSwapExactAmountInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SimulateSwapExactAmountIn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_SimulateSwapExactAmountIn_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SimulateSwapExactAmountIn(ctx, req.(*QuerySimulateSwapExactAmountInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_SimulateSwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySimulateSwapExactAmountOutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SimulateSwapExactAmountOut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_SimulateSwapExactAmountOut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SimulateSwapExactAmountOut(ctx, req.(*QuerySimulateSwapExactAmountOutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_SimulateJoinPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySimulateJoinPoolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SimulateJoinPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_SimulateJoinPool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SimulateJoinPool(ctx, req.(*QuerySimulateJoinPoolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_SimulateExitPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySimulateExitPoolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SimulateExitPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_SimulateExitPool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SimulateExitPool(ctx, req.(*QuerySimulateExitPoolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OptimizeSwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOptimizeSwapExactAmountInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OptimizeSwapExactAmountIn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_OptimizeSwapExactAmountIn_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OptimizeSwapExactAmountIn(ctx, req.(*QueryOptimizeSwapExactAmountInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OptimizeSwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOptimizeSwapExactAmountOutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OptimizeSwapExactAmountOut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_OptimizeSwapExactAmountOut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OptimizeSwapExactAmountOut(ctx, req.(*QueryOptimizeSwapExactAmountOutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -332,6 +530,30 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TwapAll",
 			Handler:    _Query_TwapAll_Handler,
+		},
+		{
+			MethodName: "SimulateSwapExactAmountIn",
+			Handler:    _Query_SimulateSwapExactAmountIn_Handler,
+		},
+		{
+			MethodName: "SimulateSwapExactAmountOut",
+			Handler:    _Query_SimulateSwapExactAmountOut_Handler,
+		},
+		{
+			MethodName: "SimulateJoinPool",
+			Handler:    _Query_SimulateJoinPool_Handler,
+		},
+		{
+			MethodName: "SimulateExitPool",
+			Handler:    _Query_SimulateExitPool_Handler,
+		},
+		{
+			MethodName: "OptimizeSwapExactAmountIn",
+			Handler:    _Query_OptimizeSwapExactAmountIn_Handler,
+		},
+		{
+			MethodName: "OptimizeSwapExactAmountOut",
+			Handler:    _Query_OptimizeSwapExactAmountOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

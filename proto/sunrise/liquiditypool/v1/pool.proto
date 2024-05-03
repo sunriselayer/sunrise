@@ -22,3 +22,22 @@ message Pool {
   string f_y = 7;
   string f_k = 8;
 }
+
+message SwapRoute {
+  string base_denom = 1;
+  string quote_denom = 2;
+  repeated PoolWeight pool_weights = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message PoolWeight {
+  uint64 pool_id = 1;
+  string weight = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}

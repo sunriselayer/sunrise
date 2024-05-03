@@ -44,13 +44,17 @@ func (k Keeper) TransferFromPoolModuleToPoolTreasuryModule(ctx context.Context, 
 	return err
 }
 
-func (k Keeper) EmitEventPoolFee(ctx context.Context, poolId uint64, poolFee sdk.Coin) {
+func (k Keeper) EmitEventPoolFee(ctx context.Context, poolId uint64, poolFee sdk.Coin) error {
 	if poolFee.Amount.IsZero() {
-		return
+		return nil
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sdkCtx.EventManager().EmitTypedEvent(nil)
+	return sdkCtx.EventManager().EmitTypedEvent(&types.EventPoolFeeAccrued{
+		PoolId: poolId,
+		Denom:  poolFee.Denom,
+		Amount: poolFee.Amount,
+	})
 }
 
 // ExactAmountIn
@@ -116,7 +120,7 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 	}
 
 	// calculate fees
-	treasuryTaxAmount := k.GetParams(ctx).TreasuryTaxRate.MulInt(amountOut).RoundInt()
+	treasuryTaxAmount := k.GetParams(ctx).SwapTreasuryTaxRate.MulInt(amountOut).RoundInt()
 	poolFeeAmount := pool.FeeRate.MulInt(amountOut).RoundInt()
 	amountOut = amountOut.Sub(treasuryTaxAmount).Sub(poolFeeAmount)
 
@@ -140,7 +144,9 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 
 		// emit event of pool fee
 		poolFee := sdk.NewCoin(tokenOut.Denom, poolFeeAmount)
-		k.EmitEventPoolFee(ctx, poolId, poolFee)
+		if err := k.EmitEventPoolFee(ctx, poolId, poolFee); err != nil {
+			return nil, err
+		}
 	}
 
 	return &amountOut, nil
@@ -225,7 +231,7 @@ func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64,
 	}
 
 	// calculate amount
-	treasuryTaxRate := k.GetParams(ctx).TreasuryTaxRate
+	treasuryTaxRate := k.GetParams(ctx).SwapTreasuryTaxRate
 	tokenOutBeforeFee := math.LegacyOneDec().Quo(math.LegacyOneDec().Sub(treasuryTaxRate).Sub(pool.FeeRate)).MulInt(tokenOut.Amount).RoundInt()
 	if tokenOutBeforeFee.LTE(math.ZeroInt()) {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "tokenOutBeforeFee is negative")
@@ -279,7 +285,9 @@ func (k Keeper) SwapExactAmountOutSinglePool(ctx context.Context, poolId uint64,
 
 		// emit event of pool fee
 		poolFee := sdk.NewCoin(tokenOut.Denom, poolFeeAmount)
-		k.EmitEventPoolFee(ctx, poolId, poolFee)
+		if err := k.EmitEventPoolFee(ctx, poolId, poolFee); err != nil {
+			return nil, err
+		}
 	}
 
 	return amountIn, nil

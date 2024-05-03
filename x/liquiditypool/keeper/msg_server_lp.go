@@ -4,7 +4,6 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -24,7 +23,7 @@ func (k msgServer) JoinPool(goCtx context.Context, msg *types.MsgJoinPool) (*typ
 func (k msgServer) ExitPool(goCtx context.Context, msg *types.MsgExitPool) (*types.MsgExitPoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	tokensOut, err := k.exitPool(ctx, msg.PoolId, false, &msg.Sender)
+	tokensOut, err := k.exitPool(ctx, msg.PoolId, msg.ShareAmount, false, &msg.Sender, &msg.MinAmountBase, &msg.MinAmountQuote)
 	if err != nil {
 		return nil, err
 	}

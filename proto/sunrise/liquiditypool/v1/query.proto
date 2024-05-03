@@ -10,6 +10,8 @@ import "sunrise/liquiditypool/v1/params.proto";
 import "sunrise/liquiditypool/v1/pair.proto";
 import "sunrise/liquiditypool/v1/pool.proto";
 import "sunrise/liquiditypool/v1/twap.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
@@ -50,6 +52,30 @@ service Query {
   rpc TwapAll (QueryAllTwapRequest) returns (QueryAllTwapResponse) {
     option (google.api.http).get = "/sunrise/liquiditypool/v1/twap";
   
+  }
+
+  rpc SimulateSwapExactAmountIn (QuerySimulateSwapExactAmountInRequest) returns (QuerySimulateSwapExactAmountInResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/simulate/swap-exact-amount-in";
+  }
+
+  rpc SimulateSwapExactAmountOut (QuerySimulateSwapExactAmountOutRequest) returns (QuerySimulateSwapExactAmountOutResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/simulate/swap-exact-amount-out";
+  }
+
+  rpc SimulateJoinPool (QuerySimulateJoinPoolRequest) returns (QuerySimulateJoinPoolResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/simulate/join-pool";
+  }
+
+  rpc SimulateExitPool (QuerySimulateExitPoolRequest) returns (QuerySimulateExitPoolResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/simulate/exit-pool";
+  }
+
+  rpc OptimizeSwapExactAmountIn (QueryOptimizeSwapExactAmountInRequest) returns (QueryOptimizeSwapExactAmountInResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/optimize/swap-exact-amount-in";
+  }
+
+  rpc OptimizeSwapExactAmountOut (QueryOptimizeSwapExactAmountOutRequest) returns (QueryOptimizeSwapExactAmountOutResponse) {
+    option (google.api.http).get = "/sunrise/liquiditypool/v1/optimize/swap-exact-amount-out";
   }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -115,3 +141,92 @@ message QueryAllTwapResponse {
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+message QuerySimulateSwapExactAmountInRequest {
+  cosmos.base.v1beta1.Coin token_in = 1  [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated SwapRoute routes = 2 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateSwapExactAmountInResponse {
+  repeated cosmos.base.v1beta1.Coin tokens_via = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  cosmos.base.v1beta1.Coin token_out = 2 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateSwapExactAmountOutRequest {
+  cosmos.base.v1beta1.Coin token_out = 1  [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  SwapRoute route = 2 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateSwapExactAmountOutResponse {
+  cosmos.base.v1beta1.Coin token_in = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateJoinPoolRequest {
+  uint64 pool_id = 1;
+  cosmos.base.v1beta1.Coin base_token = 2 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  cosmos.base.v1beta1.Coin quote_token = 3 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateJoinPoolResponse {
+  string share_amount = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateExitPoolRequest {
+  uint64 pool_id = 1;
+  string share_amount = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QuerySimulateExitPoolResponse {
+  repeated cosmos.base.v1beta1.Coin tokens_out = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QueryOptimizeSwapExactAmountInRequest {
+}
+
+message QueryOptimizeSwapExactAmountInResponse {
+}
+
+message QueryOptimizeSwapExactAmountOutRequest {
+}
+
+message QueryOptimizeSwapExactAmountOutResponse {
+}

@@ -73,7 +73,7 @@ func (k Keeper) joinPool(ctx context.Context, poolId uint64, baseToken sdk.Coin,
 	return &additionalSupply.Amount, nil
 }
 
-func (k Keeper) exitPool(ctx context.Context, poolId uint64, dryRun bool, sender *string) ([]sdk.Coin, error) {
+func (k Keeper) exitPool(ctx context.Context, poolId uint64, shareAmount math.Int, dryRun bool, sender *string, minAmountBase *math.Int, minAmountQuote *math.Int) ([]sdk.Coin, error) {
 
 	pool, found := k.GetPool(ctx, poolId)
 	if !found {
