@@ -1,16 +1,13 @@
 package app
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 	"time"
 
 	"github.com/sunriselayer/sunrise/app/ante"
 	"github.com/sunriselayer/sunrise/pkg/blob"
-	"github.com/sunriselayer/sunrise/pkg/da"
-	"github.com/sunriselayer/sunrise/pkg/shares"
-	"github.com/sunriselayer/sunrise/pkg/square"
+
 	blobtypes "github.com/sunriselayer/sunrise/x/blob/types"
 
 	"cosmossdk.io/log"
@@ -61,11 +58,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		return accept()
 	}
 
-	txs, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
-	if err != nil {
-		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
-		return reject(err)
-	}
+	txs := req.Txs
 
 	// iterate over all txs and ensure that all blobTxs are valid, PFBs are correctly signed and non
 	// blobTxs have no PFBs present
@@ -127,41 +120,6 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 			logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "invalid PFB signature", err)
 			return reject(err)
 		}
-
-	}
-
-	// Construct the data square from the block's transactions
-	dataSquare, err := square.Construct(txs, app.BaseApp.AppVersion(), app.GovSquareSizeUpperBound(sdkCtx))
-	if err != nil {
-		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to compute data square from transactions:", err)
-		return reject(err)
-	}
-
-	// Assert that the square size stated by the proposer is correct
-	if uint64(dataSquare.Size()) != squareSize {
-		err := fmt.Errorf("proposed square size differs from calculated square size, expected %d, got %d", squareSize, dataSquare.Size())
-		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
-		return reject(err)
-	}
-
-	eds, err := da.ExtendShares(shares.ToBytes(dataSquare))
-	if err != nil {
-		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to erasure the data square", err)
-		return reject(err)
-	}
-
-	dah, err := da.NewDataAvailabilityHeader(eds)
-	if err != nil {
-		logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "failure to create new data availability header", err)
-		return reject(err)
-	}
-	// by comparing the hashes we know the computed IndexWrappers (with the share indexes of the PFB's blobs)
-	// are identical and that square layout is consistent. This also means that the share commitment rules
-	// have been followed and thus each blobs share commitment should be valid
-	if !bytes.Equal(dah.Hash(), dataHash) {
-		err := fmt.Errorf("proposed data root %X differs from calculated data root %X", dataHash, dah.Hash())
-		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
-		return reject(err)
 	}
 
 	return accept()
