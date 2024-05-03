@@ -9,7 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	types "github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	types "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func (k Keeper) joinPool(ctx context.Context, poolId uint64, baseToken sdk.Coin, quoteToken sdk.Coin, dryRun bool, sender *string, minShareAmount *math.Int) (*math.Int, error) {

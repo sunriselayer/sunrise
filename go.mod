@@ -59,7 +59,6 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.9.0
-	github.com/sunriselayer/sunrise-app v0.0.5
 	github.com/sunriselayer/sunrise/pkg/blob v0.0.0-20240418170053-30d0f121cf39
 	github.com/sunriselayer/sunrise/pkg/namespace v0.0.0-20240418170053-30d0f121cf39
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
@@ -278,6 +277,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.47.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0 // indirect
 	go.opentelemetry.io/otel v1.26.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.26.0 // indirect
 	go.opentelemetry.io/otel/metric v1.26.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.26.0 // indirect
 	go.opentelemetry.io/otel/trace v1.26.0 // indirect
