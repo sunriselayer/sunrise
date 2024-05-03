@@ -20,7 +20,7 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobgrant/v1/module"
+	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobgrant/module/v1"
 	"github.com/sunriselayer/sunrise/x/blobgrant/keeper"
 	"github.com/sunriselayer/sunrise/x/blobgrant/types"
 )
