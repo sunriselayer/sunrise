@@ -3,10 +3,10 @@ package inclusion
 import (
 	"crypto/sha256"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
-	appshares "github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
+	appshares "github.com/sunriselayer/sunrise/pkg/shares"
 
 	"github.com/celestiaorg/nmt"
 	"github.com/cometbft/cometbft/crypto/merkle"

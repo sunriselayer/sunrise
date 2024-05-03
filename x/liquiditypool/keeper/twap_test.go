@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
-	"github.com/sunriselayer/sunrise-app/testutil/nullify"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // Prevent strconv unused error

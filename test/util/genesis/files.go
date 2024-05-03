@@ -25,7 +25,7 @@ func InitFiles(
 		return "", fmt.Errorf("validator %d not found", validatorIndex)
 	}
 
-	basePath := filepath.Join(dir, ".sunrise-app")
+	basePath := filepath.Join(dir, ".sunrise")
 	tmCfg.SetRoot(basePath)
 
 	// save the genesis file

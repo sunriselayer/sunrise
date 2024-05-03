@@ -1185,8 +1185,10 @@ github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240106110541-17a39acb5414 
 github.com/sunrise-zone/sunrise-app/pkg/blob v0.0.0-20240106110541-17a39acb5414/go.mod h1:lKWVDRG4sv50z+TJycD8+Vf8b3AmWVwiNoLWxJlbte8=
 github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240106114425-fcbe9cdfd972 h1:G/7AApJQ6KU+DEqQ0y1BQDcLySj21RoSg/sRqtodaB8=
 github.com/sunrise-zone/sunrise-app/pkg/namespace v0.0.0-20240106114425-fcbe9cdfd972/go.mod h1:u36JI/3vny+qvLQqKS2wTZeK9xQ55ijkmlcp6YodBtA=
-github.com/sunriselayer/sunrise-core v0.0.2-cmt-v0.38.2 h1:8LnGInUBOx/2WcFwf6uiCprUzKYBeSsLBNYHvSMSF18=
-github.com/sunriselayer/sunrise-core v0.0.2-cmt-v0.38.2/go.mod h1:y+21SZ2TVD1qS7lvEXfDKI15hEryT9sNvJ+t3LyAFi0=
+github.com/sunriselayer/sunrise-app v0.0.5 h1:hRjNEaMwCyrZaA1gy032nyVmAMnEdYEJwSsqOuLisxM=
+github.com/sunriselayer/sunrise-app v0.0.5/go.mod h1:4YhjAMLWL8goiB+YQzOFJOadY3OaZtOPuJjCZDDn6XU=
+github.com/sunriselayer/sunrise-core v0.0.3-cmt-v0.38.2 h1:VZfy+CILNSkMzVwiryECeQBWx0c5xh/nrPT1cFYcWdw=
+github.com/sunriselayer/sunrise-core v0.0.3-cmt-v0.38.2/go.mod h1:y+21SZ2TVD1qS7lvEXfDKI15hEryT9sNvJ+t3LyAFi0=
 github.com/supranational/blst v0.3.11 h1:LyU6FolezeWAhvQk0k6O/d49jqgO52MSDDfYgbeoEm4=
 github.com/supranational/blst v0.3.11/go.mod h1:jZJtfjgudtNl4en1tzwPIV3KjUnQUvG3/j+w+fVonLw=
 github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 h1:epCh84lMvA70Z7CTTCmYQn2CKbY8j86K7/FAIr141uY=

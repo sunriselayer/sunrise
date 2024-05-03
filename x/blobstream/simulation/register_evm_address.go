@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/sunriselayer/sunrise-app/x/blobstream/keeper"
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 )
 
 func SimulateMsgRegisterEvmAddress(

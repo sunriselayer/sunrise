@@ -2,7 +2,7 @@ package app
 
 import (
 	abci "github.com/cometbft/cometbft/abci/types"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/blob"
 )
 
 // FinalizeBlock will execute the block proposal provided by RequestFinalizeBlock.

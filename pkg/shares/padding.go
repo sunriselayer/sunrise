@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
 )
 
 // NamespacePaddingShare returns a share that acts as padding. Namespace padding

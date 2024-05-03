@@ -5,11 +5,11 @@ import (
 	"slices"
 
 	auth "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/sunriselayer/sunrise-app/pkg/appconsts"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	"github.com/sunriselayer/sunrise-app/pkg/inclusion"
-	appns "github.com/sunriselayer/sunrise-app/pkg/namespace"
-	appshares "github.com/sunriselayer/sunrise-app/pkg/shares"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/inclusion"
+	appns "github.com/sunriselayer/sunrise/pkg/namespace"
+	appshares "github.com/sunriselayer/sunrise/pkg/shares"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

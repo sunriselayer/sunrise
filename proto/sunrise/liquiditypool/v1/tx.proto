@@ -11,7 +11,7 @@ import "sunrise/liquiditypool/v1/pool.proto";
 import "sunrise/liquiditypool/v1/twap.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/liquiditypool/types";
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Msg defines the Msg service.
 service Msg {

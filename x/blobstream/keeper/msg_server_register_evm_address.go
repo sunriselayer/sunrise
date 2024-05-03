@@ -8,7 +8,7 @@ import (
 	gethcommon "github.com/ethereum/go-ethereum/common"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise-app/x/blobstream/types"
+	"github.com/sunriselayer/sunrise/x/blobstream/types"
 )
 
 func (k msgServer) RegisterEvmAddress(goCtx context.Context, msg *types.MsgRegisterEvmAddress) (*types.MsgRegisterEvmAddressResponse, error) {

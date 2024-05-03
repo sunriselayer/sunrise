@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/blob/v1/params.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/blob/types";
+option go_package = "github.com/sunriselayer/sunrise/x/blob/types";
 
 // GenesisState defines the blob module's genesis state.
 message GenesisState {

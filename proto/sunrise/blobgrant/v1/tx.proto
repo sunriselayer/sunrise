@@ -9,7 +9,7 @@ import "gogoproto/gogo.proto";
 import "sunrise/blobgrant/v1/params.proto";
 import "sunrise/blobgrant/v1/registration.proto";
 
-option go_package = "github.com/sunriselayer/sunrise-app/x/blobgrant/types";
+option go_package = "github.com/sunriselayer/sunrise/x/blobgrant/types";
 
 // Msg defines the Msg service.
 service Msg {

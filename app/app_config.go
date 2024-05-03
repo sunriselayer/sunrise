@@ -71,18 +71,18 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	blobmodulev1 "github.com/sunriselayer/sunrise-app/api/sunrise/blob/v1/module"
-	grantmodulev1 "github.com/sunriselayer/sunrise-app/api/sunrise/blobgrant/v1/module"
-	streammodulev1 "github.com/sunriselayer/sunrise-app/api/sunrise/blobstream/v1/module"
-	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise-app/api/sunrise/liquiditypool/v1/module"
-	_ "github.com/sunriselayer/sunrise-app/x/blob/module" // import for side-effects
-	blobmoduletypes "github.com/sunriselayer/sunrise-app/x/blob/types"
-	_ "github.com/sunriselayer/sunrise-app/x/blobgrant/module" // import for side-effects
-	grantmoduletypes "github.com/sunriselayer/sunrise-app/x/blobgrant/types"
-	_ "github.com/sunriselayer/sunrise-app/x/blobstream/module" // import for side-effects
-	streammoduletypes "github.com/sunriselayer/sunrise-app/x/blobstream/types"
-	_ "github.com/sunriselayer/sunrise-app/x/liquiditypool/module" // import for side-effects
-	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/v1/module"
+	grantmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobgrant/v1/module"
+	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/v1/module"
+	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/v1/module"
+	_ "github.com/sunriselayer/sunrise/x/blob/module" // import for side-effects
+	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
+	_ "github.com/sunriselayer/sunrise/x/blobgrant/module" // import for side-effects
+	grantmoduletypes "github.com/sunriselayer/sunrise/x/blobgrant/types"
+	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
+	streammoduletypes "github.com/sunriselayer/sunrise/x/blobstream/types"
+	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module" // import for side-effects
+	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 

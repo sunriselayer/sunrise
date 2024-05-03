@@ -17,8 +17,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/keeper"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {

@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	blob "github.com/sunriselayer/sunrise-app/api/sunrise/blob/v1"
-	"github.com/sunriselayer/sunrise-app/app"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
-	"github.com/sunriselayer/sunrise-app/test/txsim"
-	"github.com/sunriselayer/sunrise-app/test/util/testnode"
+	blob "github.com/sunriselayer/sunrise/api/sunrise/blob/v1"
+	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/test/txsim"
+	"github.com/sunriselayer/sunrise/test/util/testnode"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"

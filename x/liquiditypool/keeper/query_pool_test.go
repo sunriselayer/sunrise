@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
-	"github.com/sunriselayer/sunrise-app/testutil/nullify"
-	keepertest "github.com/sunriselayer/sunrise-app/testutil/keeper"
+	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestPoolQuerySingle(t *testing.T) {
@@ -49,7 +49,7 @@ func TestPoolQuerySingle(t *testing.T) {
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
-			    require.NoError(t, err)
+				require.NoError(t, err)
 				require.Equal(t,
 					nullify.Fill(tc.response),
 					nullify.Fill(response),
@@ -81,8 +81,8 @@ func TestPoolQueryPaginated(t *testing.T) {
 			require.LessOrEqual(t, len(resp.Pool), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-            	nullify.Fill(resp.Pool),
-            )
+				nullify.Fill(resp.Pool),
+			)
 		}
 	})
 	t.Run("ByKey", func(t *testing.T) {
@@ -94,8 +94,8 @@ func TestPoolQueryPaginated(t *testing.T) {
 			require.LessOrEqual(t, len(resp.Pool), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-            	nullify.Fill(resp.Pool),
-            )
+				nullify.Fill(resp.Pool),
+			)
 			next = resp.Pagination.NextKey
 		}
 	})

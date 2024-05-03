@@ -7,7 +7,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/sunriselayer/sunrise-app/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func (k Keeper) TransferFromAccountToPoolModule(ctx context.Context, token sdk.Coin, address sdk.AccAddress, poolId uint64) error {

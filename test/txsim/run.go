@@ -10,8 +10,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/sunriselayer/sunrise-app/app/encoding"
-	"github.com/sunriselayer/sunrise-app/pkg/user"
+	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/pkg/user"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

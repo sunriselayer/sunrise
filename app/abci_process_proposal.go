@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sunriselayer/sunrise-app/app/ante"
-	"github.com/sunriselayer/sunrise-app/pkg/blob"
-	"github.com/sunriselayer/sunrise-app/pkg/da"
-	"github.com/sunriselayer/sunrise-app/pkg/shares"
-	"github.com/sunriselayer/sunrise-app/pkg/square"
-	blobtypes "github.com/sunriselayer/sunrise-app/x/blob/types"
+	"github.com/sunriselayer/sunrise/app/ante"
+	"github.com/sunriselayer/sunrise/pkg/blob"
+	"github.com/sunriselayer/sunrise/pkg/da"
+	"github.com/sunriselayer/sunrise/pkg/shares"
+	"github.com/sunriselayer/sunrise/pkg/square"
+	blobtypes "github.com/sunriselayer/sunrise/x/blob/types"
 
 	"cosmossdk.io/log"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -212,22 +212,14 @@ func accept() (*abci.ResponseProcessProposal, error) {
 
 func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
 	length := len(txsWithInfo)
-	if length == 0 {
-		txs = txsWithInfo
-		dataHash = nil
-		squareSize = 0
-		return
+	txs = txsWithInfo
+	if length >= 3 {
+		if len(txsWithInfo[length-3]) == 0 {
+			txs = txsWithInfo[:length-3]
+			dataHash = txsWithInfo[length-2]
+			squareSizeBigEndian := txsWithInfo[length-1]
+			squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
+		}
 	}
-
-	if length < 2 {
-		err = fmt.Errorf("txs must contain the data hash and the square size at the end, and its length must not be lower than 2")
-		return
-	}
-
-	txs = txsWithInfo[:length-2]
-	dataHash = txsWithInfo[length-2]
-	squareSizeBigEndian := txsWithInfo[length-1]
-	squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
-
 	return
 }
