@@ -2,7 +2,6 @@ package app
 
 import (
 	"bytes"
-	"encoding/binary"
 	"fmt"
 	"time"
 
@@ -204,18 +203,4 @@ func accept() (*abci.ResponseProcessProposal, error) {
 	return &abci.ResponseProcessProposal{
 		Status: abci.ResponseProcessProposal_ACCEPT,
 	}, nil
-}
-
-func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
-	length := len(txsWithInfo)
-	txs = txsWithInfo
-	if length >= 3 {
-		if len(txsWithInfo[length-3]) == 0 {
-			txs = txsWithInfo[:length-3]
-			dataHash = txsWithInfo[length-2]
-			squareSizeBigEndian := txsWithInfo[length-1]
-			squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
-		}
-	}
-	return
 }
