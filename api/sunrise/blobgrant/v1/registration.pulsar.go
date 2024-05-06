@@ -13,16 +13,16 @@ import (
 )
 
 var (
-	md_Registration               protoreflect.MessageDescriptor
-	fd_Registration_address       protoreflect.FieldDescriptor
-	fd_Registration_proxy_address protoreflect.FieldDescriptor
+	md_Registration                    protoreflect.MessageDescriptor
+	fd_Registration_liquidity_provider protoreflect.FieldDescriptor
+	fd_Registration_grantee            protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_blobgrant_v1_registration_proto_init()
 	md_Registration = File_sunrise_blobgrant_v1_registration_proto.Messages().ByName("Registration")
-	fd_Registration_address = md_Registration.Fields().ByName("address")
-	fd_Registration_proxy_address = md_Registration.Fields().ByName("proxy_address")
+	fd_Registration_liquidity_provider = md_Registration.Fields().ByName("liquidity_provider")
+	fd_Registration_grantee = md_Registration.Fields().ByName("grantee")
 }
 
 var _ protoreflect.Message = (*fastReflection_Registration)(nil)
@@ -90,15 +90,15 @@ func (x *fastReflection_Registration) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Registration) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Address != "" {
-		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_Registration_address, value) {
+	if x.LiquidityProvider != "" {
+		value := protoreflect.ValueOfString(x.LiquidityProvider)
+		if !f(fd_Registration_liquidity_provider, value) {
 			return
 		}
 	}
-	if x.ProxyAddress != "" {
-		value := protoreflect.ValueOfString(x.ProxyAddress)
-		if !f(fd_Registration_proxy_address, value) {
+	if x.Grantee != "" {
+		value := protoreflect.ValueOfString(x.Grantee)
+		if !f(fd_Registration_grantee, value) {
 			return
 		}
 	}
@@ -117,10 +117,10 @@ func (x *fastReflection_Registration) Range(f func(protoreflect.FieldDescriptor,
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Registration) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.blobgrant.v1.Registration.address":
-		return x.Address != ""
-	case "sunrise.blobgrant.v1.Registration.proxy_address":
-		return x.ProxyAddress != ""
+	case "sunrise.blobgrant.v1.Registration.liquidity_provider":
+		return x.LiquidityProvider != ""
+	case "sunrise.blobgrant.v1.Registration.grantee":
+		return x.Grantee != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Registration"))
@@ -137,10 +137,10 @@ func (x *fastReflection_Registration) Has(fd protoreflect.FieldDescriptor) bool 
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Registration) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.blobgrant.v1.Registration.address":
-		x.Address = ""
-	case "sunrise.blobgrant.v1.Registration.proxy_address":
-		x.ProxyAddress = ""
+	case "sunrise.blobgrant.v1.Registration.liquidity_provider":
+		x.LiquidityProvider = ""
+	case "sunrise.blobgrant.v1.Registration.grantee":
+		x.Grantee = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Registration"))
@@ -157,11 +157,11 @@ func (x *fastReflection_Registration) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Registration) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.blobgrant.v1.Registration.address":
-		value := x.Address
+	case "sunrise.blobgrant.v1.Registration.liquidity_provider":
+		value := x.LiquidityProvider
 		return protoreflect.ValueOfString(value)
-	case "sunrise.blobgrant.v1.Registration.proxy_address":
-		value := x.ProxyAddress
+	case "sunrise.blobgrant.v1.Registration.grantee":
+		value := x.Grantee
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -183,10 +183,10 @@ func (x *fastReflection_Registration) Get(descriptor protoreflect.FieldDescripto
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Registration) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.blobgrant.v1.Registration.address":
-		x.Address = value.Interface().(string)
-	case "sunrise.blobgrant.v1.Registration.proxy_address":
-		x.ProxyAddress = value.Interface().(string)
+	case "sunrise.blobgrant.v1.Registration.liquidity_provider":
+		x.LiquidityProvider = value.Interface().(string)
+	case "sunrise.blobgrant.v1.Registration.grantee":
+		x.Grantee = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Registration"))
@@ -207,10 +207,10 @@ func (x *fastReflection_Registration) Set(fd protoreflect.FieldDescriptor, value
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Registration) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.blobgrant.v1.Registration.address":
-		panic(fmt.Errorf("field address of message sunrise.blobgrant.v1.Registration is not mutable"))
-	case "sunrise.blobgrant.v1.Registration.proxy_address":
-		panic(fmt.Errorf("field proxy_address of message sunrise.blobgrant.v1.Registration is not mutable"))
+	case "sunrise.blobgrant.v1.Registration.liquidity_provider":
+		panic(fmt.Errorf("field liquidity_provider of message sunrise.blobgrant.v1.Registration is not mutable"))
+	case "sunrise.blobgrant.v1.Registration.grantee":
+		panic(fmt.Errorf("field grantee of message sunrise.blobgrant.v1.Registration is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Registration"))
@@ -224,9 +224,9 @@ func (x *fastReflection_Registration) Mutable(fd protoreflect.FieldDescriptor) p
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Registration) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.blobgrant.v1.Registration.address":
+	case "sunrise.blobgrant.v1.Registration.liquidity_provider":
 		return protoreflect.ValueOfString("")
-	case "sunrise.blobgrant.v1.Registration.proxy_address":
+	case "sunrise.blobgrant.v1.Registration.grantee":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -297,11 +297,11 @@ func (x *fastReflection_Registration) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.Address)
+		l = len(x.LiquidityProvider)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.ProxyAddress)
+		l = len(x.Grantee)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -334,17 +334,17 @@ func (x *fastReflection_Registration) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.ProxyAddress) > 0 {
-			i -= len(x.ProxyAddress)
-			copy(dAtA[i:], x.ProxyAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ProxyAddress)))
+		if len(x.Grantee) > 0 {
+			i -= len(x.Grantee)
+			copy(dAtA[i:], x.Grantee)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Grantee)))
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.Address) > 0 {
-			i -= len(x.Address)
-			copy(dAtA[i:], x.Address)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
+		if len(x.LiquidityProvider) > 0 {
+			i -= len(x.LiquidityProvider)
+			copy(dAtA[i:], x.LiquidityProvider)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidityProvider)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -399,7 +399,7 @@ func (x *fastReflection_Registration) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidityProvider", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -427,11 +427,11 @@ func (x *fastReflection_Registration) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Address = string(dAtA[iNdEx:postIndex])
+				x.LiquidityProvider = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProxyAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Grantee", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -459,7 +459,7 @@ func (x *fastReflection_Registration) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ProxyAddress = string(dAtA[iNdEx:postIndex])
+				x.Grantee = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -514,8 +514,8 @@ type Registration struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Address      string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	ProxyAddress string `protobuf:"bytes,2,opt,name=proxy_address,json=proxyAddress,proto3" json:"proxy_address,omitempty"`
+	LiquidityProvider string `protobuf:"bytes,1,opt,name=liquidity_provider,json=liquidityProvider,proto3" json:"liquidity_provider,omitempty"`
+	Grantee           string `protobuf:"bytes,2,opt,name=grantee,proto3" json:"grantee,omitempty"`
 }
 
 func (x *Registration) Reset() {
@@ -538,16 +538,16 @@ func (*Registration) Descriptor() ([]byte, []int) {
 	return file_sunrise_blobgrant_v1_registration_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Registration) GetAddress() string {
+func (x *Registration) GetLiquidityProvider() string {
 	if x != nil {
-		return x.Address
+		return x.LiquidityProvider
 	}
 	return ""
 }
 
-func (x *Registration) GetProxyAddress() string {
+func (x *Registration) GetGrantee() string {
 	if x != nil {
-		return x.ProxyAddress
+		return x.Grantee
 	}
 	return ""
 }
@@ -559,25 +559,26 @@ var file_sunrise_blobgrant_v1_registration_proto_rawDesc = []byte{
 	0x61, 0x6e, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x14, 0x73, 0x75, 0x6e, 0x72, 0x69,
 	0x73, 0x65, 0x2e, 0x62, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x22,
-	0x4d, 0x0a, 0x0c, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x70, 0x72, 0x6f,
-	0x78, 0x79, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x0c, 0x70, 0x72, 0x6f, 0x78, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x42, 0xd2,
-	0x01, 0x0a, 0x18, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x62,
-	0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x11, 0x52, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x31, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x62, 0x6c, 0x6f, 0x62, 0x67,
-	0x72, 0x61, 0x6e, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x62, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e,
-	0x74, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x53, 0x42, 0x58, 0xaa, 0x02, 0x14, 0x53, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x42, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2e, 0x56, 0x31,
-	0xca, 0x02, 0x14, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x42, 0x6c, 0x6f, 0x62, 0x67,
-	0x72, 0x61, 0x6e, 0x74, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x20, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x5c, 0x42, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x5c, 0x56, 0x31, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x42, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x3a,
-	0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x57, 0x0a, 0x0c, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x2d, 0x0a, 0x12, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x72, 0x6f,
+	0x76, 0x69, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x11, 0x6c, 0x69, 0x71,
+	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x12, 0x18,
+	0x0a, 0x07, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x65, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x07, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x65, 0x65, 0x42, 0xd2, 0x01, 0x0a, 0x18, 0x63, 0x6f, 0x6d,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x62, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61,
+	0x6e, 0x74, 0x2e, 0x76, 0x31, 0x42, 0x11, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x31, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2f, 0x62, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2f, 0x76,
+	0x31, 0x3b, 0x62, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x76, 0x31, 0xa2, 0x02, 0x03,
+	0x53, 0x42, 0x58, 0xaa, 0x02, 0x14, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x42, 0x6c,
+	0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x14, 0x53, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x5c, 0x42, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x5c, 0x56,
+	0x31, 0xe2, 0x02, 0x20, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x42, 0x6c, 0x6f, 0x62,
+	0x67, 0x72, 0x61, 0x6e, 0x74, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a,
+	0x42, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

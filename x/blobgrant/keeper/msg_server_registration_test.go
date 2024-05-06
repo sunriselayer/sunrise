@@ -21,16 +21,16 @@ func TestRegistrationMsgServerCreate(t *testing.T) {
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		expected := &types.MsgCreateRegistration{
-			Address:      creator,
-			ProxyAddress: strconv.Itoa(i),
+			LiquidityProvider: creator,
+			Grantee:           strconv.Itoa(i),
 		}
 		_, err := srv.CreateRegistration(ctx, expected)
 		require.NoError(t, err)
 		rst, found := k.GetRegistration(ctx,
-			expected.Address,
+			expected.LiquidityProvider,
 		)
 		require.True(t, found)
-		require.Equal(t, expected.Address, rst.Address)
+		require.Equal(t, expected.LiquidityProvider, rst.LiquidityProvider)
 	}
 }
 
@@ -45,23 +45,23 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 		{
 			desc: "Completed",
 			request: &types.MsgUpdateRegistration{
-				Address:      creator,
-				ProxyAddress: strconv.Itoa(0),
+				LiquidityProvider: creator,
+				Grantee:           strconv.Itoa(0),
 			},
 		},
 		{
 			desc: "Unauthorized",
 			request: &types.MsgUpdateRegistration{
-				Address:      "B",
-				ProxyAddress: strconv.Itoa(0),
+				LiquidityProvider: "B",
+				Grantee:           strconv.Itoa(0),
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc: "KeyNotFound",
 			request: &types.MsgUpdateRegistration{
-				Address:      creator,
-				ProxyAddress: strconv.Itoa(100000),
+				LiquidityProvider: creator,
+				Grantee:           strconv.Itoa(100000),
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},
@@ -71,8 +71,8 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 			k, ctx := keepertest.GrantKeeper(t)
 			srv := keeper.NewMsgServerImpl(k)
 			expected := &types.MsgCreateRegistration{
-				Address:      creator,
-				ProxyAddress: strconv.Itoa(0),
+				LiquidityProvider: creator,
+				Grantee:           strconv.Itoa(0),
 			}
 			_, err := srv.CreateRegistration(ctx, expected)
 			require.NoError(t, err)
@@ -83,10 +83,10 @@ func TestRegistrationMsgServerUpdate(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				rst, found := k.GetRegistration(ctx,
-					expected.Address,
+					expected.LiquidityProvider,
 				)
 				require.True(t, found)
-				require.Equal(t, expected.Address, rst.Address)
+				require.Equal(t, expected.LiquidityProvider, rst.LiquidityProvider)
 			}
 		})
 	}
@@ -103,20 +103,20 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 		{
 			desc: "Completed",
 			request: &types.MsgDeleteRegistration{
-				Address: creator,
+				LiquidityProvider: creator,
 			},
 		},
 		{
 			desc: "Unauthorized",
 			request: &types.MsgDeleteRegistration{
-				Address: "B",
+				LiquidityProvider: "B",
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc: "KeyNotFound",
 			request: &types.MsgDeleteRegistration{
-				Address: creator,
+				LiquidityProvider: creator,
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},
@@ -127,7 +127,7 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 			srv := keeper.NewMsgServerImpl(k)
 
 			_, err := srv.CreateRegistration(ctx, &types.MsgCreateRegistration{
-				Address: creator,
+				LiquidityProvider: creator,
 			})
 			require.NoError(t, err)
 			_, err = srv.DeleteRegistration(ctx, tc.request)
@@ -136,7 +136,7 @@ func TestRegistrationMsgServerDelete(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				_, found := k.GetRegistration(ctx,
-					tc.request.Address,
+					tc.request.LiquidityProvider,
 				)
 				require.False(t, found)
 			}

@@ -3,6 +3,8 @@ package sunrise.blobgrant.v1;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/blobgrant/types";
 
@@ -11,5 +13,22 @@ message Params {
   option (amino.name) = "sunrise/x/blobgrant/v1/Params";
   option (gogoproto.equal) = true;
 
-  
+  string gas_per_liquidity = 1 [
+    (cosmos_proto.scalar)  = "cosmos.LegacyDec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  google.protobuf.Duration expiry_duration = 2 [
+    (gogoproto.stdduration) = true,
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  string grant_token_refill_threshold = 3 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  uint64 block_height_duration = 4;
 }

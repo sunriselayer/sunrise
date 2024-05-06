@@ -28,5 +28,9 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	if p.BlockHeightDuration == 0 {
+		return ErrInvalidBlockHeightDuration
+	}
+
 	return nil
 }

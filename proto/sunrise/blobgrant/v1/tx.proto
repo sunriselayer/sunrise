@@ -41,24 +41,24 @@ message MsgUpdateParams {
 message MsgUpdateParamsResponse {}
 
 message MsgCreateRegistration {
-  option (cosmos.msg.v1.signer) = "address";
-  string address      = 1;
-  string proxy_address = 2;
+  option (cosmos.msg.v1.signer) = "liquidity_provider";
+  string liquidity_provider      = 1;
+  string grantee = 2;
 }
 
 message MsgCreateRegistrationResponse {}
 
 message MsgUpdateRegistration {
-  option (cosmos.msg.v1.signer) = "address";
-  string address      = 1;
-  string proxy_address = 2;
+  option (cosmos.msg.v1.signer) = "liquidity_provider";
+  string liquidity_provider      = 1;
+  string grantee = 2;
 }
 
 message MsgUpdateRegistrationResponse {}
 
 message MsgDeleteRegistration {
-  option (cosmos.msg.v1.signer) = "address";
-  string address = 1;
+  option (cosmos.msg.v1.signer) = "liquidity_provider";
+  string liquidity_provider = 1;
 }
 
 message MsgDeleteRegistrationResponse {}

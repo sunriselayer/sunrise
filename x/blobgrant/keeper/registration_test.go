@@ -18,7 +18,7 @@ var _ = strconv.IntSize
 func createNRegistration(keeper keeper.Keeper, ctx context.Context, n int) []types.Registration {
 	items := make([]types.Registration, n)
 	for i := range items {
-		items[i].Address = strconv.Itoa(i)
+		items[i].LiquidityProvider = strconv.Itoa(i)
 
 		keeper.SetRegistration(ctx, items[i])
 	}
@@ -30,7 +30,7 @@ func TestRegistrationGet(t *testing.T) {
 	items := createNRegistration(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetRegistration(ctx,
-			item.Address,
+			item.LiquidityProvider,
 		)
 		require.True(t, found)
 		require.Equal(t,
@@ -44,10 +44,10 @@ func TestRegistrationRemove(t *testing.T) {
 	items := createNRegistration(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveRegistration(ctx,
-			item.Address,
+			item.LiquidityProvider,
 		)
 		_, found := keeper.GetRegistration(ctx,
-			item.Address,
+			item.LiquidityProvider,
 		)
 		require.False(t, found)
 	}

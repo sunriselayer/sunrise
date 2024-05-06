@@ -5,6 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"cosmossdk.io/x/feegrant"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
@@ -49,4 +50,15 @@ type BankKeeper interface {
 type ParamSubspace interface {
 	Get(context.Context, []byte, interface{})
 	Set(context.Context, []byte, interface{})
+}
+
+type FeeGrantKeeper interface {
+	// Methods imported from feegrant should be defined here
+	GrantAllowance(ctx context.Context, granter, grantee sdk.AccAddress, feeAllowance feegrant.FeeAllowanceI) error
+	UpdateAllowance(ctx context.Context, granter, grantee sdk.AccAddress, feeAllowance feegrant.FeeAllowanceI) error
+	GetAllowance(ctx context.Context, granter, grantee sdk.AccAddress) (feegrant.FeeAllowanceI, error)
+	IterateAllFeeAllowances(ctx context.Context, cb func(grant feegrant.Grant) bool) error
+}
+
+type LiquidityPoolKeeper interface {
 }

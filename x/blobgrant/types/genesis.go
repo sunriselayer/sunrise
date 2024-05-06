@@ -1,7 +1,7 @@
 package types
 
 import (
-"fmt"
+	"fmt"
 )
 
 // DefaultIndex is the default global index
@@ -11,7 +11,7 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		RegistrationList: []Registration{},
-// this line is used by starport scaffolding # genesis/types/default
+		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
 }
@@ -20,16 +20,16 @@ func DefaultGenesis() *GenesisState {
 // failure.
 func (gs GenesisState) Validate() error {
 	// Check for duplicated index in registration
-registrationIndexMap := make(map[string]struct{})
+	registrationIndexMap := make(map[string]struct{})
 
-for _, elem := range gs.RegistrationList {
-	index := string(RegistrationKey(elem.Address))
-	if _, ok := registrationIndexMap[index]; ok {
-		return fmt.Errorf("duplicated index for registration")
+	for _, elem := range gs.RegistrationList {
+		index := string(RegistrationKey(elem.LiquidityProvider))
+		if _, ok := registrationIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for registration")
+		}
+		registrationIndexMap[index] = struct{}{}
 	}
-	registrationIndexMap[index] = struct{}{}
-}
-// this line is used by starport scaffolding # genesis/types/validate
+	// this line is used by starport scaffolding # genesis/types/validate
 
 	return gs.Params.Validate()
 }

@@ -25,10 +25,10 @@ func TestGenesisState_Validate(t *testing.T) {
 
 				RegistrationList: []types.Registration{
 					{
-						Address: "0",
+						LiquidityProvider: "0",
 					},
 					{
-						Address: "1",
+						LiquidityProvider: "1",
 					},
 				},
 				// this line is used by starport scaffolding # types/genesis/validField
@@ -40,10 +40,10 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				RegistrationList: []types.Registration{
 					{
-						Address: "0",
+						LiquidityProvider: "0",
 					},
 					{
-						Address: "0",
+						LiquidityProvider: "0",
 					},
 				},
 			},

@@ -29,14 +29,14 @@ func TestRegistrationQuerySingle(t *testing.T) {
 		{
 			desc: "First",
 			request: &types.QueryGetRegistrationRequest{
-				Address: msgs[0].Address,
+				Address: msgs[0].LiquidityProvider,
 			},
 			response: &types.QueryGetRegistrationResponse{Registration: msgs[0]},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetRegistrationRequest{
-				Address: msgs[1].Address,
+				Address: msgs[1].LiquidityProvider,
 			},
 			response: &types.QueryGetRegistrationResponse{Registration: msgs[1]},
 		},

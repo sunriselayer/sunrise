@@ -15,7 +15,7 @@ func (k Keeper) SetRegistration(ctx context.Context, registration types.Registra
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.RegistrationKeyPrefix))
 	b := k.cdc.MustMarshal(&registration)
 	store.Set(types.RegistrationKey(
-		registration.Address,
+		registration.LiquidityProvider,
 	), b)
 }
 

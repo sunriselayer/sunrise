@@ -4,23 +4,33 @@ package blobgrantv1
 import (
 	_ "cosmossdk.io/api/amino"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
 )
 
 var (
-	md_Params protoreflect.MessageDescriptor
+	md_Params                              protoreflect.MessageDescriptor
+	fd_Params_gas_per_liquidity            protoreflect.FieldDescriptor
+	fd_Params_expiry_duration              protoreflect.FieldDescriptor
+	fd_Params_grant_token_refill_threshold protoreflect.FieldDescriptor
+	fd_Params_block_height_duration        protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_blobgrant_v1_params_proto_init()
 	md_Params = File_sunrise_blobgrant_v1_params_proto.Messages().ByName("Params")
+	fd_Params_gas_per_liquidity = md_Params.Fields().ByName("gas_per_liquidity")
+	fd_Params_expiry_duration = md_Params.Fields().ByName("expiry_duration")
+	fd_Params_grant_token_refill_threshold = md_Params.Fields().ByName("grant_token_refill_threshold")
+	fd_Params_block_height_duration = md_Params.Fields().ByName("block_height_duration")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -88,6 +98,30 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.GasPerLiquidity != "" {
+		value := protoreflect.ValueOfString(x.GasPerLiquidity)
+		if !f(fd_Params_gas_per_liquidity, value) {
+			return
+		}
+	}
+	if x.ExpiryDuration != nil {
+		value := protoreflect.ValueOfMessage(x.ExpiryDuration.ProtoReflect())
+		if !f(fd_Params_expiry_duration, value) {
+			return
+		}
+	}
+	if x.GrantTokenRefillThreshold != "" {
+		value := protoreflect.ValueOfString(x.GrantTokenRefillThreshold)
+		if !f(fd_Params_grant_token_refill_threshold, value) {
+			return
+		}
+	}
+	if x.BlockHeightDuration != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.BlockHeightDuration)
+		if !f(fd_Params_block_height_duration, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -103,6 +137,14 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.blobgrant.v1.Params.gas_per_liquidity":
+		return x.GasPerLiquidity != ""
+	case "sunrise.blobgrant.v1.Params.expiry_duration":
+		return x.ExpiryDuration != nil
+	case "sunrise.blobgrant.v1.Params.grant_token_refill_threshold":
+		return x.GrantTokenRefillThreshold != ""
+	case "sunrise.blobgrant.v1.Params.block_height_duration":
+		return x.BlockHeightDuration != uint64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Params"))
@@ -119,6 +161,14 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.blobgrant.v1.Params.gas_per_liquidity":
+		x.GasPerLiquidity = ""
+	case "sunrise.blobgrant.v1.Params.expiry_duration":
+		x.ExpiryDuration = nil
+	case "sunrise.blobgrant.v1.Params.grant_token_refill_threshold":
+		x.GrantTokenRefillThreshold = ""
+	case "sunrise.blobgrant.v1.Params.block_height_duration":
+		x.BlockHeightDuration = uint64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Params"))
@@ -135,6 +185,18 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.blobgrant.v1.Params.gas_per_liquidity":
+		value := x.GasPerLiquidity
+		return protoreflect.ValueOfString(value)
+	case "sunrise.blobgrant.v1.Params.expiry_duration":
+		value := x.ExpiryDuration
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.blobgrant.v1.Params.grant_token_refill_threshold":
+		value := x.GrantTokenRefillThreshold
+		return protoreflect.ValueOfString(value)
+	case "sunrise.blobgrant.v1.Params.block_height_duration":
+		value := x.BlockHeightDuration
+		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Params"))
@@ -155,6 +217,14 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.blobgrant.v1.Params.gas_per_liquidity":
+		x.GasPerLiquidity = value.Interface().(string)
+	case "sunrise.blobgrant.v1.Params.expiry_duration":
+		x.ExpiryDuration = value.Message().Interface().(*durationpb.Duration)
+	case "sunrise.blobgrant.v1.Params.grant_token_refill_threshold":
+		x.GrantTokenRefillThreshold = value.Interface().(string)
+	case "sunrise.blobgrant.v1.Params.block_height_duration":
+		x.BlockHeightDuration = value.Uint()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Params"))
@@ -175,6 +245,17 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.blobgrant.v1.Params.expiry_duration":
+		if x.ExpiryDuration == nil {
+			x.ExpiryDuration = new(durationpb.Duration)
+		}
+		return protoreflect.ValueOfMessage(x.ExpiryDuration.ProtoReflect())
+	case "sunrise.blobgrant.v1.Params.gas_per_liquidity":
+		panic(fmt.Errorf("field gas_per_liquidity of message sunrise.blobgrant.v1.Params is not mutable"))
+	case "sunrise.blobgrant.v1.Params.grant_token_refill_threshold":
+		panic(fmt.Errorf("field grant_token_refill_threshold of message sunrise.blobgrant.v1.Params is not mutable"))
+	case "sunrise.blobgrant.v1.Params.block_height_duration":
+		panic(fmt.Errorf("field block_height_duration of message sunrise.blobgrant.v1.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Params"))
@@ -188,6 +269,15 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.blobgrant.v1.Params.gas_per_liquidity":
+		return protoreflect.ValueOfString("")
+	case "sunrise.blobgrant.v1.Params.expiry_duration":
+		m := new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.blobgrant.v1.Params.grant_token_refill_threshold":
+		return protoreflect.ValueOfString("")
+	case "sunrise.blobgrant.v1.Params.block_height_duration":
+		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.blobgrant.v1.Params"))
@@ -257,6 +347,21 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		l = len(x.GasPerLiquidity)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.ExpiryDuration != nil {
+			l = options.Size(x.ExpiryDuration)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.GrantTokenRefillThreshold)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.BlockHeightDuration != 0 {
+			n += 1 + runtime.Sov(uint64(x.BlockHeightDuration))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -285,6 +390,39 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.BlockHeightDuration != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.BlockHeightDuration))
+			i--
+			dAtA[i] = 0x20
+		}
+		if len(x.GrantTokenRefillThreshold) > 0 {
+			i -= len(x.GrantTokenRefillThreshold)
+			copy(dAtA[i:], x.GrantTokenRefillThreshold)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.GrantTokenRefillThreshold)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.ExpiryDuration != nil {
+			encoded, err := options.Marshal(x.ExpiryDuration)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.GasPerLiquidity) > 0 {
+			i -= len(x.GasPerLiquidity)
+			copy(dAtA[i:], x.GasPerLiquidity)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.GasPerLiquidity)))
+			i--
+			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -335,6 +473,125 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GasPerLiquidity", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.GasPerLiquidity = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExpiryDuration", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.ExpiryDuration == nil {
+					x.ExpiryDuration = &durationpb.Duration{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ExpiryDuration); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GrantTokenRefillThreshold", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.GrantTokenRefillThreshold = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BlockHeightDuration", wireType)
+				}
+				x.BlockHeightDuration = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.BlockHeightDuration |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -388,6 +645,11 @@ type Params struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	GasPerLiquidity           string               `protobuf:"bytes,1,opt,name=gas_per_liquidity,json=gasPerLiquidity,proto3" json:"gas_per_liquidity,omitempty"`
+	ExpiryDuration            *durationpb.Duration `protobuf:"bytes,2,opt,name=expiry_duration,json=expiryDuration,proto3" json:"expiry_duration,omitempty"`
+	GrantTokenRefillThreshold string               `protobuf:"bytes,3,opt,name=grant_token_refill_threshold,json=grantTokenRefillThreshold,proto3" json:"grant_token_refill_threshold,omitempty"`
+	BlockHeightDuration       uint64               `protobuf:"varint,4,opt,name=block_height_duration,json=blockHeightDuration,proto3" json:"block_height_duration,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -410,6 +672,34 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_sunrise_blobgrant_v1_params_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Params) GetGasPerLiquidity() string {
+	if x != nil {
+		return x.GasPerLiquidity
+	}
+	return ""
+}
+
+func (x *Params) GetExpiryDuration() *durationpb.Duration {
+	if x != nil {
+		return x.ExpiryDuration
+	}
+	return nil
+}
+
+func (x *Params) GetGrantTokenRefillThreshold() string {
+	if x != nil {
+		return x.GrantTokenRefillThreshold
+	}
+	return ""
+}
+
+func (x *Params) GetBlockHeightDuration() uint64 {
+	if x != nil {
+		return x.BlockHeightDuration
+	}
+	return 0
+}
+
 var File_sunrise_blobgrant_v1_params_proto protoreflect.FileDescriptor
 
 var file_sunrise_blobgrant_v1_params_proto_rawDesc = []byte{
@@ -419,7 +709,33 @@ var file_sunrise_blobgrant_v1_params_proto_rawDesc = []byte{
 	0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f,
 	0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f,
 	0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x22, 0x30, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x26, 0xe8, 0xa0,
+	0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64,
+	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x94, 0x03,
+	0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x68, 0x0a, 0x11, 0x67, 0x61, 0x73, 0x5f,
+	0x70, 0x65, 0x72, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x3c, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c,
+	0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x10, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x0f, 0x67, 0x61, 0x73, 0x50, 0x65, 0x72, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x12, 0x51, 0x0a, 0x0f, 0x65, 0x78, 0x70, 0x69, 0x72, 0x79, 0x5f, 0x64, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0e, 0x65, 0x78, 0x70, 0x69, 0x72, 0x79, 0x44, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x71, 0x0a, 0x1c, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x5f, 0x74,
+	0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x72, 0x65, 0x66, 0x69, 0x6c, 0x6c, 0x5f, 0x74, 0x68, 0x72, 0x65,
+	0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f,
+	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x19, 0x67,
+	0x72, 0x61, 0x6e, 0x74, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x65, 0x66, 0x69, 0x6c, 0x6c, 0x54,
+	0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x32, 0x0a, 0x15, 0x62, 0x6c, 0x6f, 0x63,
+	0x6b, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x13, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x48, 0x65,
+	0x69, 0x67, 0x68, 0x74, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x3a, 0x26, 0xe8, 0xa0,
 	0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x1d, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78,
 	0x2f, 0x62, 0x6c, 0x6f, 0x62, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x2f, 0x76, 0x31, 0x2f, 0x50, 0x61,
 	0x72, 0x61, 0x6d, 0x73, 0x42, 0xcc, 0x01, 0x0a, 0x18, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e,
@@ -452,14 +768,16 @@ func file_sunrise_blobgrant_v1_params_proto_rawDescGZIP() []byte {
 
 var file_sunrise_blobgrant_v1_params_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_blobgrant_v1_params_proto_goTypes = []interface{}{
-	(*Params)(nil), // 0: sunrise.blobgrant.v1.Params
+	(*Params)(nil),              // 0: sunrise.blobgrant.v1.Params
+	(*durationpb.Duration)(nil), // 1: google.protobuf.Duration
 }
 var file_sunrise_blobgrant_v1_params_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: sunrise.blobgrant.v1.Params.expiry_duration:type_name -> google.protobuf.Duration
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_blobgrant_v1_params_proto_init() }

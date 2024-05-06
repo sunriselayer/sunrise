@@ -9,18 +9,18 @@ import (
 var _ sdk.Msg = &MsgCreateRegistration{}
 
 func NewMsgCreateRegistration(
-	address string,
-	proxyAddress string,
+	liquidityProvider string,
+	grantee string,
 
 ) *MsgCreateRegistration {
 	return &MsgCreateRegistration{
-		Address:      address,
-		ProxyAddress: proxyAddress,
+		LiquidityProvider: liquidityProvider,
+		Grantee:           grantee,
 	}
 }
 
 func (msg *MsgCreateRegistration) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Address)
+	_, err := sdk.AccAddressFromBech32(msg.LiquidityProvider)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address (%s)", err)
 	}
@@ -31,17 +31,17 @@ var _ sdk.Msg = &MsgUpdateRegistration{}
 
 func NewMsgUpdateRegistration(
 	address string,
-	proxyAddress string,
+	grantee string,
 
 ) *MsgUpdateRegistration {
 	return &MsgUpdateRegistration{
-		Address:      address,
-		ProxyAddress: proxyAddress,
+		LiquidityProvider: address,
+		Grantee:           grantee,
 	}
 }
 
 func (msg *MsgUpdateRegistration) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Address)
+	_, err := sdk.AccAddressFromBech32(msg.LiquidityProvider)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address (%s)", err)
 	}
@@ -51,16 +51,16 @@ func (msg *MsgUpdateRegistration) ValidateBasic() error {
 var _ sdk.Msg = &MsgDeleteRegistration{}
 
 func NewMsgDeleteRegistration(
-	address string,
+	liquidityProvider string,
 
 ) *MsgDeleteRegistration {
 	return &MsgDeleteRegistration{
-		Address: address,
+		LiquidityProvider: liquidityProvider,
 	}
 }
 
 func (msg *MsgDeleteRegistration) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Address)
+	_, err := sdk.AccAddressFromBech32(msg.LiquidityProvider)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address (%s)", err)
 	}

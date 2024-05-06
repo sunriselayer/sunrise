@@ -27,11 +27,11 @@ func SimulateMsgCreateRegistration(
 
 		i := r.Int()
 		msg := &types.MsgCreateRegistration{
-			Address:      simAccount.Address.String(),
-			ProxyAddress: strconv.Itoa(i),
+			LiquidityProvider: simAccount.Address.String(),
+			Grantee:           strconv.Itoa(i),
 		}
 
-		_, found := k.GetRegistration(ctx, msg.Address)
+		_, found := k.GetRegistration(ctx, msg.LiquidityProvider)
 		if found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "Registration already exist"), nil, nil
 		}
@@ -68,7 +68,7 @@ func SimulateMsgUpdateRegistration(
 			found           = false
 		)
 		for _, obj := range allRegistration {
-			simAccount, found = FindAccount(accs, obj.Address)
+			simAccount, found = FindAccount(accs, obj.LiquidityProvider)
 			if found {
 				registration = obj
 				break
@@ -77,9 +77,9 @@ func SimulateMsgUpdateRegistration(
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "registration creator not found"), nil, nil
 		}
-		msg.Address = simAccount.Address.String()
+		msg.LiquidityProvider = simAccount.Address.String()
 
-		msg.Address = registration.Address
+		msg.LiquidityProvider = registration.LiquidityProvider
 
 		txCtx := simulation.OperationInput{
 			R:               r,
@@ -113,7 +113,7 @@ func SimulateMsgDeleteRegistration(
 			found           = false
 		)
 		for _, obj := range allRegistration {
-			simAccount, found = FindAccount(accs, obj.Address)
+			simAccount, found = FindAccount(accs, obj.LiquidityProvider)
 			if found {
 				registration = obj
 				break
@@ -122,9 +122,9 @@ func SimulateMsgDeleteRegistration(
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "registration creator not found"), nil, nil
 		}
-		msg.Address = simAccount.Address.String()
+		msg.LiquidityProvider = simAccount.Address.String()
 
-		msg.Address = registration.Address
+		msg.LiquidityProvider = registration.LiquidityProvider
 
 		txCtx := simulation.OperationInput{
 			R:               r,

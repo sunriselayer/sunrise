@@ -15,15 +15,15 @@ func (k msgServer) CreateRegistration(goCtx context.Context, msg *types.MsgCreat
 	// Check if the value already exists
 	_, isFound := k.GetRegistration(
 		ctx,
-		msg.Address,
+		msg.LiquidityProvider,
 	)
 	if isFound {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "index already set")
 	}
 
 	var registration = types.Registration{
-		Address:      msg.Address,
-		ProxyAddress: msg.ProxyAddress,
+		LiquidityProvider: msg.LiquidityProvider,
+		Grantee:           msg.Grantee,
 	}
 
 	k.SetRegistration(
@@ -39,20 +39,20 @@ func (k msgServer) UpdateRegistration(goCtx context.Context, msg *types.MsgUpdat
 	// Check if the value exists
 	valFound, isFound := k.GetRegistration(
 		ctx,
-		msg.Address,
+		msg.LiquidityProvider,
 	)
 	if !isFound {
 		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, "index not set")
 	}
 
 	// Checks if the msg creator is the same as the current owner
-	if msg.Address != valFound.Address {
+	if msg.LiquidityProvider != valFound.LiquidityProvider {
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
 	var registration = types.Registration{
-		Address:      msg.Address,
-		ProxyAddress: msg.ProxyAddress,
+		LiquidityProvider: msg.LiquidityProvider,
+		Grantee:           msg.Grantee,
 	}
 
 	k.SetRegistration(ctx, registration)
@@ -66,20 +66,20 @@ func (k msgServer) DeleteRegistration(goCtx context.Context, msg *types.MsgDelet
 	// Check if the value exists
 	valFound, isFound := k.GetRegistration(
 		ctx,
-		msg.Address,
+		msg.LiquidityProvider,
 	)
 	if !isFound {
 		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, "index not set")
 	}
 
 	// Checks if the msg creator is the same as the current owner
-	if msg.Address != valFound.Address {
+	if msg.LiquidityProvider != valFound.LiquidityProvider {
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
 	k.RemoveRegistration(
 		ctx,
-		msg.Address,
+		msg.LiquidityProvider,
 	)
 
 	return &types.MsgDeleteRegistrationResponse{}, nil

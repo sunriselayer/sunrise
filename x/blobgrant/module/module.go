@@ -95,9 +95,11 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 type AppModule struct {
 	AppModuleBasic
 
-	keeper        keeper.Keeper
-	accountKeeper types.AccountKeeper
-	bankKeeper    types.BankKeeper
+	keeper              keeper.Keeper
+	accountKeeper       types.AccountKeeper
+	bankKeeper          types.BankKeeper
+	feeGrantKeeper      types.FeeGrantKeeper
+	liquidityPoolKeeper types.LiquidityPoolKeeper
 }
 
 func NewAppModule(
@@ -105,12 +107,16 @@ func NewAppModule(
 	keeper keeper.Keeper,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	feeGrantKeeper types.FeeGrantKeeper,
+	liquidityPoolKeeper types.LiquidityPoolKeeper,
 ) AppModule {
 	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
-		keeper:         keeper,
-		accountKeeper:  accountKeeper,
-		bankKeeper:     bankKeeper,
+		AppModuleBasic:      NewAppModuleBasic(cdc),
+		keeper:              keeper,
+		accountKeeper:       accountKeeper,
+		bankKeeper:          bankKeeper,
+		feeGrantKeeper:      feeGrantKeeper,
+		liquidityPoolKeeper: liquidityPoolKeeper,
 	}
 }
 
@@ -181,8 +187,10 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper types.AccountKeeper
-	BankKeeper    types.BankKeeper
+	AccountKeeper       types.AccountKeeper
+	BankKeeper          types.BankKeeper
+	FeeGrantKeeper      types.FeeGrantKeeper
+	LiquidityPoolKeeper types.LiquidityPoolKeeper
 }
 
 type ModuleOutputs struct {
@@ -203,13 +211,18 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
+		in.AccountKeeper,
 		in.BankKeeper,
+		in.FeeGrantKeeper,
+		in.LiquidityPoolKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,
 		k,
 		in.AccountKeeper,
 		in.BankKeeper,
+		in.FeeGrantKeeper,
+		in.LiquidityPoolKeeper,
 	)
 
 	return ModuleOutputs{GrantKeeper: k, Module: m}
