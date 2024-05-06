@@ -14,22 +14,14 @@ func (k msgServer) SwapExactAmountIn(goCtx context.Context, msg *types.MsgSwapEx
 
 	address := sdk.MustAccAddressFromBech32(msg.Sender)
 
-	tokensOut, err := k.SwapExactAmountInMultiRoute(ctx, msg.Routes, msg.TokenIn, false, &address)
+	tokensVia, tokenOut, err := k.SwapExactAmountInMultiRoute(ctx, msg.Routes, msg.TokenIn, false, &address, &msg.MinAmountOut)
 	if err != nil {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping: %s", err.Error())
 	}
 
-	tokenOut := tokensOut[len(tokensOut)-1]
-	// check slippage can be done only for final token
-	if tokenOut.Amount.LT(msg.MinAmountOut) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slippage exceeded")
-	}
-
-	// TODO: set PriceFootprint
-
 	return &types.MsgSwapExactAmountInResponse{
-		TokensVia: tokensOut[:len(tokensOut)-1],
-		TokenOut:  tokenOut,
+		TokensVia: tokensVia,
+		TokenOut:  *tokenOut,
 	}, nil
 }
 
@@ -42,8 +34,6 @@ func (k msgServer) SwapExactAmountOut(goCtx context.Context, msg *types.MsgSwapE
 	if err != nil {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping: %s", err.Error())
 	}
-
-	// TODO: set PriceFootprint
 
 	return &types.MsgSwapExactAmountOutResponse{
 		TokenIn: *tokenIn,

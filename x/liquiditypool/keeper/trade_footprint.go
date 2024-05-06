@@ -10,29 +10,29 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-// SetPriceFootprint set a specific PriceFootprint in the store from its index
-func (k Keeper) SetPriceFootprint(ctx context.Context, baseDenom string, quoteDenom string, priceFootprint types.PriceFootprint) {
+// SetTradeFootprint set a specific TradeFootprint in the store from its index
+func (k Keeper) SetTradeFootprint(ctx context.Context, baseDenom string, quoteDenom string, tradeFootprint types.TradeFootprint) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PriceFootprintKeyPrefix))
-	b := k.cdc.MustMarshal(&priceFootprint)
-	store.Set(types.PriceFootprintKey(
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TradeFootprintKeyPrefix))
+	b := k.cdc.MustMarshal(&tradeFootprint)
+	store.Set(types.TradeFootprintKey(
 		baseDenom,
 		quoteDenom,
-		priceFootprint.Timestamp,
+		tradeFootprint.Timestamp,
 	), b)
 }
 
-// GetPriceFootprint returns a PriceFootprint from its index
-func (k Keeper) GetPriceFootprint(
+// GetTradeFootprint returns a TradeFootprint from its index
+func (k Keeper) GetTradeFootprint(
 	ctx context.Context,
 	baseDenom string,
 	quoteDenom string,
 	timestamp time.Time,
-) (val types.PriceFootprint, found bool) {
+) (val types.TradeFootprint, found bool) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PriceFootprintKeyPrefix))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TradeFootprintKeyPrefix))
 
-	b := store.Get(types.PriceFootprintKey(
+	b := store.Get(types.TradeFootprintKey(
 		baseDenom,
 		quoteDenom,
 		timestamp,
@@ -45,36 +45,36 @@ func (k Keeper) GetPriceFootprint(
 	return val, true
 }
 
-// RemovePriceFootprint removes a PriceFootprint from the store
-func (k Keeper) RemovePriceFootprint(
+// RemoveTradeFootprint removes a TradeFootprint from the store
+func (k Keeper) RemoveTradeFootprint(
 	ctx context.Context,
 	baseDenom string,
 	quoteDenom string,
 	timestamp time.Time,
 ) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PriceFootprintKeyPrefix))
-	store.Delete(types.PriceFootprintKey(
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TradeFootprintKeyPrefix))
+	store.Delete(types.TradeFootprintKey(
 		baseDenom,
 		quoteDenom,
 		timestamp,
 	))
 }
 
-// GetAllPriceFootprint returns all PriceFootprint
-func (k Keeper) GetAllPriceFootprint(
+// GetAllTradeFootprint returns all TradeFootprint
+func (k Keeper) GetAllTradeFootprint(
 	ctx context.Context,
 	baseDenom string,
 	quoteDenom string,
-) (list []types.PriceFootprint) {
+) (list []types.TradeFootprint) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PriceFootprintKeyPrefix))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TradeFootprintKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, types.PriceFootprintIterationPrefix(baseDenom, quoteDenom))
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.PriceFootprint
+		var val types.TradeFootprint
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}

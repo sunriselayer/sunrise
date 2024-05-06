@@ -26,12 +26,12 @@ message Params {
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  google.protobuf.Duration twap_duration = 3 [
+  google.protobuf.Duration twap_window = 3 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  google.protobuf.Duration twap_span = 4 [
+  google.protobuf.Duration twap_expiry = 4 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true

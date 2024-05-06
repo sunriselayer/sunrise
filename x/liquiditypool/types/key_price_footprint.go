@@ -8,12 +8,12 @@ import (
 var _ binary.ByteOrder
 
 const (
-	// PriceFootprintKeyPrefix is the prefix to retrieve all PriceFootprint
-	PriceFootprintKeyPrefix = "PriceFootprint/value/"
+	// TradeFootprintKeyPrefix is the prefix to retrieve all PriceFootprint
+	TradeFootprintKeyPrefix = "TradeFootprint/value/"
 )
 
-// PriceFootprintKey returns the store key to retrieve a PriceFootprint from the index fields
-func PriceFootprintKey(
+// TradeFootprintKey returns the store key to retrieve a PriceFootprint from the index fields
+func TradeFootprintKey(
 	baseDenom string,
 	quoteDenom string,
 	timestamp time.Time,
