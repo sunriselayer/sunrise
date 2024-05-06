@@ -13,15 +13,15 @@ func (k Keeper) SimulateSwapExactAmountIn(ctx context.Context, req *types.QueryS
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	tokensOut, err := k.SwapExactAmountInMultiRoute(ctx, req.Routes, req.TokenIn, true, nil)
+	tokensVia, tokenOut, err := k.SwapExactAmountInMultiRoute(ctx, req.Routes, req.TokenIn, true, nil, nil)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &types.QuerySimulateSwapExactAmountInResponse{
-		TokensVia: tokensOut[:len(tokensOut)-1],
-		TokenOut:  tokensOut[len(tokensOut)-1],
+		TokensVia: tokensVia,
+		TokenOut:  *tokenOut,
 	}, nil
 }
 

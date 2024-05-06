@@ -90,7 +90,7 @@ func (k Keeper) SwapExactAmountInSinglePool(ctx context.Context, poolId uint64, 
 	}
 
 	// pass zero input
-	if tokenIn.Amount.Equal(math.ZeroInt()) {
+	if tokenIn.Amount.IsZero() {
 		amountOut := math.ZeroInt()
 		return &amountOut, nil
 	}
@@ -179,23 +179,46 @@ func (k Keeper) SwapExactAmountInMultiPool(ctx context.Context, route types.Swap
 		tokenOut.Amount = tokenOut.Amount.Add(*amountOut)
 	}
 
+	if !dryRun {
+		// record trade for twap
+		var price math.LegacyDec
+		var volume math.Int
+		if tokenIn.Denom == route.BaseDenom {
+			price = math.LegacyNewDecFromInt(tokenOut.Amount).Quo(math.LegacyNewDecFromInt(tokenIn.Amount))
+			volume = tokenIn.Amount
+		} else {
+			price = math.LegacyNewDecFromInt(tokenIn.Amount).Quo(math.LegacyNewDecFromInt(tokenOut.Amount))
+			volume = tokenOut.Amount
+		}
+		k.RecordTrade(ctx, route.BaseDenom, route.QuoteDenom, price, volume)
+	}
+
 	return &tokenOut, nil
 }
 
-func (k Keeper) SwapExactAmountInMultiRoute(ctx context.Context, routes []types.SwapRoute, tokenIn sdk.Coin, dryRun bool, address *sdk.AccAddress) ([]sdk.Coin, error) {
+func (k Keeper) SwapExactAmountInMultiRoute(ctx context.Context, routes []types.SwapRoute, tokenIn sdk.Coin, dryRun bool, address *sdk.AccAddress, minAmountOut *math.Int) ([]sdk.Coin, *sdk.Coin, error) {
 	tokensOut := []sdk.Coin{}
 	for _, route := range routes {
 		tokenOut, err := k.SwapExactAmountInMultiPool(ctx, route, tokenIn, dryRun, address)
 		if err != nil {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping: %s", err.Error())
+			return nil, nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error swapping: %s", err.Error())
 		}
 
 		tokensOut = append(tokensOut, *tokenOut)
 
 		tokenIn = *tokenOut
 	}
+	length := len(tokensOut)
+	tokensVia := tokensOut[:length-1]
+	tokenOut := tokensOut[length-1]
 
-	return tokensOut, nil
+	if !dryRun {
+		if tokenOut.Amount.LT(*minAmountOut) {
+			return nil, nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "slippage exceeded. amountOut: %s", tokenOut.Amount.String())
+		}
+	}
+
+	return tokensVia, &tokenOut, nil
 }
 
 // ExactAmountOut
@@ -318,12 +341,24 @@ func (k Keeper) SwapExactAmountOutMultiPool(ctx context.Context, route types.Swa
 		}
 
 		tokenIn.Amount = tokenIn.Amount.Add(*amountIn)
+	}
 
-		if !dryRun {
-			if tokenIn.Amount.GT(*maxAmountIn) {
-				return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slippage exceeded")
-			}
+	if !dryRun {
+		if tokenIn.Amount.GT(*maxAmountIn) {
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "slippage exceeded. amountIn: %s", tokenIn.Amount.String())
 		}
+
+		// record trade for twap
+		var price math.LegacyDec
+		var volume math.Int
+		if tokenOut.Denom == route.BaseDenom {
+			price = math.LegacyNewDecFromInt(tokenOut.Amount).Quo(math.LegacyNewDecFromInt(tokenIn.Amount))
+			volume = tokenOut.Amount
+		} else {
+			price = math.LegacyNewDecFromInt(tokenIn.Amount).Quo(math.LegacyNewDecFromInt(tokenOut.Amount))
+			volume = tokenIn.Amount
+		}
+		k.RecordTrade(ctx, route.BaseDenom, route.QuoteDenom, price, volume)
 	}
 
 	return &tokenIn, nil

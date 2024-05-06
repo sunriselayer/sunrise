@@ -7,6 +7,11 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
+
+	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // SetTwap set a specific twap in the store from its index
@@ -70,4 +75,72 @@ func (k Keeper) GetAllTwap(ctx context.Context) (list []types.Twap) {
 	}
 
 	return
+}
+
+func (k Keeper) RecordTrade(ctx context.Context, baseDenom string, quoteDenom string, price math.LegacyDec, volume math.Int) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	if volume.IsZero() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "volume cannot be zero")
+	}
+
+	footprint := types.TradeFootprint{
+		Price:     price,
+		Volume:    volume,
+		Timestamp: sdkCtx.BlockTime(),
+	}
+	k.SetTradeFootprint(ctx, baseDenom, quoteDenom, footprint)
+
+	footprints := k.GetAllTradeFootprint(ctx, baseDenom, quoteDenom)
+	filteredFootprints := []types.TradeFootprint{}
+
+	for _, footprint := range footprints {
+		if footprint.Timestamp.After(sdkCtx.BlockTime().Add(-k.GetParams(ctx).TwapWindow)) {
+			filteredFootprints = append(filteredFootprints, footprint)
+		} else {
+			k.RemoveTradeFootprint(ctx, baseDenom, quoteDenom, footprint.Timestamp)
+		}
+	}
+
+	twap, err := types.CalculateTwap(filteredFootprints)
+	if err != nil {
+		return err
+	}
+
+	timestamp := sdkCtx.BlockTime()
+	k.SetTwap(ctx, types.Twap{
+		BaseDenom:  baseDenom,
+		QuoteDenom: quoteDenom,
+		Value:      twap,
+		Timestamp:  &timestamp,
+	})
+
+	return nil
+}
+
+func (k Keeper) GetValidTwapByPoolId(ctx context.Context, poolId uint64) *math.LegacyDec {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return nil
+	}
+
+	return k.GetValidTwap(ctx, pool.BaseDenom, pool.QuoteDenom)
+}
+
+func (k Keeper) GetValidTwap(ctx context.Context, baseDenom string, quoteDenom string) *math.LegacyDec {
+	twap, found := k.GetTwap(ctx, baseDenom, quoteDenom)
+	if !found {
+		return nil
+	}
+
+	if twap.Value == nil || twap.Timestamp == nil {
+		return nil
+
+	}
+
+	if twap.Timestamp.Before(sdk.UnwrapSDKContext(ctx).BlockTime().Add(-k.GetParams(ctx).TwapExpiry)) {
+		return nil
+	}
+
+	return twap.Value
 }

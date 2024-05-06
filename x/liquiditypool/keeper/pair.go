@@ -85,10 +85,10 @@ func (k Keeper) CheckSetInitialPairAndTwap(ctx context.Context, baseDenom string
 	})
 
 	twap := types.Twap{
-		BaseDenom:       baseDenom,
-		QuoteDenom:      quoteDenom,
-		Value:           nil,
-		LatestTimestamp: nil,
+		BaseDenom:  baseDenom,
+		QuoteDenom: quoteDenom,
+		Value:      nil,
+		Timestamp:  nil,
 	}
 	k.SetTwap(ctx, twap)
 }

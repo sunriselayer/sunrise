@@ -20,8 +20,8 @@ var (
 	md_Params                        protoreflect.MessageDescriptor
 	fd_Params_swap_treasury_tax_rate protoreflect.FieldDescriptor
 	fd_Params_pool_exit_fee_rate     protoreflect.FieldDescriptor
-	fd_Params_twap_duration          protoreflect.FieldDescriptor
-	fd_Params_twap_span              protoreflect.FieldDescriptor
+	fd_Params_twap_window            protoreflect.FieldDescriptor
+	fd_Params_twap_expiry            protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -29,8 +29,8 @@ func init() {
 	md_Params = File_sunrise_liquiditypool_v1_params_proto.Messages().ByName("Params")
 	fd_Params_swap_treasury_tax_rate = md_Params.Fields().ByName("swap_treasury_tax_rate")
 	fd_Params_pool_exit_fee_rate = md_Params.Fields().ByName("pool_exit_fee_rate")
-	fd_Params_twap_duration = md_Params.Fields().ByName("twap_duration")
-	fd_Params_twap_span = md_Params.Fields().ByName("twap_span")
+	fd_Params_twap_window = md_Params.Fields().ByName("twap_window")
+	fd_Params_twap_expiry = md_Params.Fields().ByName("twap_expiry")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -110,15 +110,15 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.TwapDuration != nil {
-		value := protoreflect.ValueOfMessage(x.TwapDuration.ProtoReflect())
-		if !f(fd_Params_twap_duration, value) {
+	if x.TwapWindow != nil {
+		value := protoreflect.ValueOfMessage(x.TwapWindow.ProtoReflect())
+		if !f(fd_Params_twap_window, value) {
 			return
 		}
 	}
-	if x.TwapSpan != nil {
-		value := protoreflect.ValueOfMessage(x.TwapSpan.ProtoReflect())
-		if !f(fd_Params_twap_span, value) {
+	if x.TwapExpiry != nil {
+		value := protoreflect.ValueOfMessage(x.TwapExpiry.ProtoReflect())
+		if !f(fd_Params_twap_expiry, value) {
 			return
 		}
 	}
@@ -141,10 +141,10 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.SwapTreasuryTaxRate != ""
 	case "sunrise.liquiditypool.v1.Params.pool_exit_fee_rate":
 		return x.PoolExitFeeRate != ""
-	case "sunrise.liquiditypool.v1.Params.twap_duration":
-		return x.TwapDuration != nil
-	case "sunrise.liquiditypool.v1.Params.twap_span":
-		return x.TwapSpan != nil
+	case "sunrise.liquiditypool.v1.Params.twap_window":
+		return x.TwapWindow != nil
+	case "sunrise.liquiditypool.v1.Params.twap_expiry":
+		return x.TwapExpiry != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.Params"))
@@ -165,10 +165,10 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.SwapTreasuryTaxRate = ""
 	case "sunrise.liquiditypool.v1.Params.pool_exit_fee_rate":
 		x.PoolExitFeeRate = ""
-	case "sunrise.liquiditypool.v1.Params.twap_duration":
-		x.TwapDuration = nil
-	case "sunrise.liquiditypool.v1.Params.twap_span":
-		x.TwapSpan = nil
+	case "sunrise.liquiditypool.v1.Params.twap_window":
+		x.TwapWindow = nil
+	case "sunrise.liquiditypool.v1.Params.twap_expiry":
+		x.TwapExpiry = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.Params"))
@@ -191,11 +191,11 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "sunrise.liquiditypool.v1.Params.pool_exit_fee_rate":
 		value := x.PoolExitFeeRate
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.v1.Params.twap_duration":
-		value := x.TwapDuration
+	case "sunrise.liquiditypool.v1.Params.twap_window":
+		value := x.TwapWindow
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.liquiditypool.v1.Params.twap_span":
-		value := x.TwapSpan
+	case "sunrise.liquiditypool.v1.Params.twap_expiry":
+		value := x.TwapExpiry
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -221,10 +221,10 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.SwapTreasuryTaxRate = value.Interface().(string)
 	case "sunrise.liquiditypool.v1.Params.pool_exit_fee_rate":
 		x.PoolExitFeeRate = value.Interface().(string)
-	case "sunrise.liquiditypool.v1.Params.twap_duration":
-		x.TwapDuration = value.Message().Interface().(*durationpb.Duration)
-	case "sunrise.liquiditypool.v1.Params.twap_span":
-		x.TwapSpan = value.Message().Interface().(*durationpb.Duration)
+	case "sunrise.liquiditypool.v1.Params.twap_window":
+		x.TwapWindow = value.Message().Interface().(*durationpb.Duration)
+	case "sunrise.liquiditypool.v1.Params.twap_expiry":
+		x.TwapExpiry = value.Message().Interface().(*durationpb.Duration)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.v1.Params"))
@@ -245,16 +245,16 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.v1.Params.twap_duration":
-		if x.TwapDuration == nil {
-			x.TwapDuration = new(durationpb.Duration)
+	case "sunrise.liquiditypool.v1.Params.twap_window":
+		if x.TwapWindow == nil {
+			x.TwapWindow = new(durationpb.Duration)
 		}
-		return protoreflect.ValueOfMessage(x.TwapDuration.ProtoReflect())
-	case "sunrise.liquiditypool.v1.Params.twap_span":
-		if x.TwapSpan == nil {
-			x.TwapSpan = new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(x.TwapWindow.ProtoReflect())
+	case "sunrise.liquiditypool.v1.Params.twap_expiry":
+		if x.TwapExpiry == nil {
+			x.TwapExpiry = new(durationpb.Duration)
 		}
-		return protoreflect.ValueOfMessage(x.TwapSpan.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.TwapExpiry.ProtoReflect())
 	case "sunrise.liquiditypool.v1.Params.swap_treasury_tax_rate":
 		panic(fmt.Errorf("field swap_treasury_tax_rate of message sunrise.liquiditypool.v1.Params is not mutable"))
 	case "sunrise.liquiditypool.v1.Params.pool_exit_fee_rate":
@@ -276,10 +276,10 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.v1.Params.pool_exit_fee_rate":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.v1.Params.twap_duration":
+	case "sunrise.liquiditypool.v1.Params.twap_window":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.liquiditypool.v1.Params.twap_span":
+	case "sunrise.liquiditypool.v1.Params.twap_expiry":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
@@ -359,12 +359,12 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.TwapDuration != nil {
-			l = options.Size(x.TwapDuration)
+		if x.TwapWindow != nil {
+			l = options.Size(x.TwapWindow)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.TwapSpan != nil {
-			l = options.Size(x.TwapSpan)
+		if x.TwapExpiry != nil {
+			l = options.Size(x.TwapExpiry)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -396,8 +396,8 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.TwapSpan != nil {
-			encoded, err := options.Marshal(x.TwapSpan)
+		if x.TwapExpiry != nil {
+			encoded, err := options.Marshal(x.TwapExpiry)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -410,8 +410,8 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x22
 		}
-		if x.TwapDuration != nil {
-			encoded, err := options.Marshal(x.TwapDuration)
+		if x.TwapWindow != nil {
+			encoded, err := options.Marshal(x.TwapWindow)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -553,7 +553,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TwapDuration", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TwapWindow", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -580,16 +580,16 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.TwapDuration == nil {
-					x.TwapDuration = &durationpb.Duration{}
+				if x.TwapWindow == nil {
+					x.TwapWindow = &durationpb.Duration{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TwapDuration); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TwapWindow); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TwapSpan", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TwapExpiry", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -616,10 +616,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.TwapSpan == nil {
-					x.TwapSpan = &durationpb.Duration{}
+				if x.TwapExpiry == nil {
+					x.TwapExpiry = &durationpb.Duration{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TwapSpan); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TwapExpiry); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -679,8 +679,8 @@ type Params struct {
 
 	SwapTreasuryTaxRate string               `protobuf:"bytes,1,opt,name=swap_treasury_tax_rate,json=swapTreasuryTaxRate,proto3" json:"swap_treasury_tax_rate,omitempty"`
 	PoolExitFeeRate     string               `protobuf:"bytes,2,opt,name=pool_exit_fee_rate,json=poolExitFeeRate,proto3" json:"pool_exit_fee_rate,omitempty"`
-	TwapDuration        *durationpb.Duration `protobuf:"bytes,3,opt,name=twap_duration,json=twapDuration,proto3" json:"twap_duration,omitempty"`
-	TwapSpan            *durationpb.Duration `protobuf:"bytes,4,opt,name=twap_span,json=twapSpan,proto3" json:"twap_span,omitempty"`
+	TwapWindow          *durationpb.Duration `protobuf:"bytes,3,opt,name=twap_window,json=twapWindow,proto3" json:"twap_window,omitempty"`
+	TwapExpiry          *durationpb.Duration `protobuf:"bytes,4,opt,name=twap_expiry,json=twapExpiry,proto3" json:"twap_expiry,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -717,16 +717,16 @@ func (x *Params) GetPoolExitFeeRate() string {
 	return ""
 }
 
-func (x *Params) GetTwapDuration() *durationpb.Duration {
+func (x *Params) GetTwapWindow() *durationpb.Duration {
 	if x != nil {
-		return x.TwapDuration
+		return x.TwapWindow
 	}
 	return nil
 }
 
-func (x *Params) GetTwapSpan() *durationpb.Duration {
+func (x *Params) GetTwapExpiry() *durationpb.Duration {
 	if x != nil {
-		return x.TwapSpan
+		return x.TwapExpiry
 	}
 	return nil
 }
@@ -758,16 +758,16 @@ var file_sunrise_liquiditypool_v1_params_proto_rawDesc = []byte{
 	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4,
 	0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a,
 	0x01, 0x52, 0x0f, 0x70, 0x6f, 0x6f, 0x6c, 0x45, 0x78, 0x69, 0x74, 0x46, 0x65, 0x65, 0x52, 0x61,
-	0x74, 0x65, 0x12, 0x4d, 0x0a, 0x0d, 0x74, 0x77, 0x61, 0x70, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
-	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7,
-	0xb0, 0x2a, 0x01, 0x52, 0x0c, 0x74, 0x77, 0x61, 0x70, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x45, 0x0a, 0x09, 0x74, 0x77, 0x61, 0x70, 0x5f, 0x73, 0x70, 0x61, 0x6e, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
-	0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x08,
-	0x74, 0x77, 0x61, 0x70, 0x53, 0x70, 0x61, 0x6e, 0x3a, 0x2a, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7,
+	0x74, 0x65, 0x12, 0x49, 0x0a, 0x0b, 0x74, 0x77, 0x61, 0x70, 0x5f, 0x77, 0x69, 0x6e, 0x64, 0x6f,
+	0x77, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x0a, 0x74, 0x77, 0x61, 0x70, 0x57, 0x69, 0x6e, 0x64, 0x6f, 0x77, 0x12, 0x49, 0x0a,
+	0x0b, 0x74, 0x77, 0x61, 0x70, 0x5f, 0x65, 0x78, 0x70, 0x69, 0x72, 0x79, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0d, 0xc8,
+	0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x74, 0x77,
+	0x61, 0x70, 0x45, 0x78, 0x70, 0x69, 0x72, 0x79, 0x3a, 0x2a, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7,
 	0xb0, 0x2a, 0x21, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x6c, 0x69, 0x71,
 	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x76, 0x31, 0x2f, 0x50, 0x61,
 	0x72, 0x61, 0x6d, 0x73, 0x42, 0xe8, 0x01, 0x0a, 0x1c, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e,
@@ -806,8 +806,8 @@ var file_sunrise_liquiditypool_v1_params_proto_goTypes = []interface{}{
 	(*durationpb.Duration)(nil), // 1: google.protobuf.Duration
 }
 var file_sunrise_liquiditypool_v1_params_proto_depIdxs = []int32{
-	1, // 0: sunrise.liquiditypool.v1.Params.twap_duration:type_name -> google.protobuf.Duration
-	1, // 1: sunrise.liquiditypool.v1.Params.twap_span:type_name -> google.protobuf.Duration
+	1, // 0: sunrise.liquiditypool.v1.Params.twap_window:type_name -> google.protobuf.Duration
+	1, // 1: sunrise.liquiditypool.v1.Params.twap_expiry:type_name -> google.protobuf.Duration
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
