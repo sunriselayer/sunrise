@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/binary"
 	"time"
 
 	"github.com/sunriselayer/sunrise/app/ante"
@@ -109,22 +108,11 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		panic(err)
 	}
 
-	txs = AppendInfoInTxs(txs, dah.Hash(), uint64(dataSquare.Size()))
-
 	// tendermint doesn't need to use any of the erasure data, as only the
 	// protobuf encoded version of the block data is gossiped.
 	return &abci.ResponsePrepareProposal{
-		Txs: txs,
+		Txs:        txs,
+		DataHash:   dah.Hash(),
+		SquareSize: uint64(dataSquare.Size()),
 	}, nil
-}
-
-func AppendInfoInTxs(txs [][]byte, dataHash []byte, squareSize uint64) [][]byte {
-	// add empty byte slice
-	txs = append(txs, []byte{})
-	txs = append(txs, dataHash)
-	squareSizeBigEndican := make([]byte, 8)
-	binary.BigEndian.PutUint64(squareSizeBigEndican, squareSize)
-	txs = append(txs, squareSizeBigEndican)
-
-	return txs
 }
