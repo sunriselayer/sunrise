@@ -118,15 +118,6 @@ func (k Keeper) RecordTrade(ctx context.Context, baseDenom string, quoteDenom st
 	return nil
 }
 
-func (k Keeper) GetValidTwapByPoolId(ctx context.Context, poolId uint64) *math.LegacyDec {
-	pool, found := k.GetPool(ctx, poolId)
-	if !found {
-		return nil
-	}
-
-	return k.GetValidTwap(ctx, pool.BaseDenom, pool.QuoteDenom)
-}
-
 func (k Keeper) GetValidTwap(ctx context.Context, baseDenom string, quoteDenom string) *math.LegacyDec {
 	twap, found := k.GetTwap(ctx, baseDenom, quoteDenom)
 	if !found {
@@ -143,4 +134,29 @@ func (k Keeper) GetValidTwap(ctx context.Context, baseDenom string, quoteDenom s
 	}
 
 	return twap.Value
+}
+
+func (k Keeper) GetValidTwapByPoolId(ctx context.Context, poolId uint64) (*types.Pool, *math.LegacyDec) {
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return nil, nil
+	}
+
+	return &pool, k.GetValidTwap(ctx, pool.BaseDenom, pool.QuoteDenom)
+}
+
+func (k Keeper) GetValidSrValueByPoolId(ctx context.Context, poolId uint64, srDenom string) *math.LegacyDec {
+	pool, twap := k.GetValidTwapByPoolId(ctx, poolId)
+	if pool == nil || twap == nil {
+		return nil
+	}
+
+	twap2 := k.GetValidTwap(ctx, pool.QuoteDenom, srDenom)
+	if twap2 == nil {
+		return nil
+	}
+
+	result := twap.Mul(*twap2)
+
+	return &result
 }
