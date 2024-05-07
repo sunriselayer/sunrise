@@ -78,14 +78,13 @@ func InflationCalculationFn(ctx context.Context, minter minttypes.Minter, params
 // the current block height in context. The inflation rate is expected to
 // decrease every year according to the schedule specified in the README.
 func CalculateInflationRate(ctx sdk.Context, genesis time.Time, bondedRatio sdkmath.LegacyDec) sdkmath.LegacyDec {
-	years := yearsSinceGenesis(genesis, ctx.BlockTime())
-
 	// initialRate = initialMax - (initialMax-initialMin)*bondedRatio
 	initialRate := initialInflationRateMaxAsDec.Sub(
 		initialInflationRateMaxAsDec.Sub(initialInflationRateMinAsDec).Mul(bondedRatio),
 	)
 
 	// disinflatedRate = initialRate * (1 - disinflationRate)^((now - genesis).convertToYears())
+	years := yearsSinceGenesis(genesis, ctx.BlockTime())
 	disinflatedRate := initialRate.Mul(
 		sdkmath.LegacyOneDec().Sub(disinflationRateAsDec).Power(uint64(years)),
 	)
