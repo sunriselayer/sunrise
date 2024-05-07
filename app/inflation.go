@@ -25,48 +25,42 @@ const (
 
 	// genesis time - Tuesday, May 7, 2024 2:42:49 AM UTC
 	genesisTime = int64(1715049769)
-
-	// initialInflationRate is the inflation rate that the network starts at.
-	initialInflationRate = 0.08
-	// initialInflationRate is the max inflation rate at the first year based on bondedRatio
-	initialInflationRateMax = 0.1
-	// initialInflationRate is the min inflation rate at the first year based on bondedRatio
-	initialInflationRateMin = 0.06
-
-	// disinflationRate is the rate at which the inflation rate decreases each year.
-	disinflationRate = 0.08
-	// targetInflationRate is the inflation rate that the network aims to
-	// stabilize at. In practice, targetInflationRate acts as a minimum so that
-	// the inflation rate doesn't decrease after reaching it.
-	targetInflationRate = 0.02
 )
 
 var (
-	initialInflationRateAsDec    = sdkmath.LegacyNewDecWithPrec(initialInflationRate*1000, 3)
-	initialInflationRateMaxAsDec = sdkmath.LegacyNewDecWithPrec(initialInflationRateMax*1000, 3)
-	initialInflationRateMinAsDec = sdkmath.LegacyNewDecWithPrec(initialInflationRateMin*1000, 3)
-	disinflationRateAsDec        = sdkmath.LegacyNewDecWithPrec(disinflationRate*1000, 3)
-	targetInflationRateAsDec     = sdkmath.LegacyNewDecWithPrec(targetInflationRate*1000, 3)
+	// initialInflationRate is the inflation rate that the network starts at.
+	initialInflationRate = sdkmath.LegacyMustNewDecFromStr("0.08")
+	// initialInflationRate is the max inflation rate at the first year based on bondedRatio
+	initialInflationRateMax = sdkmath.LegacyMustNewDecFromStr("0.10")
+	// initialInflationRate is the min inflation rate at the first year based on bondedRatio
+	initialInflationRateMin = sdkmath.LegacyMustNewDecFromStr("0.06")
+
+	// disinflationRate is the rate at which the inflation rate decreases each year.
+	disinflationRate = sdkmath.LegacyMustNewDecFromStr("0.08")
+	// targetInflationRate is the inflation rate that the network aims to
+	// stabilize at. In practice, targetInflationRate acts as a minimum so that
+	// the inflation rate doesn't decrease after reaching it.
+	targetInflationRate = sdkmath.LegacyMustNewDecFromStr("0.02")
 )
 
-func InitialInflationRateAsDec() sdkmath.LegacyDec {
-	return initialInflationRateAsDec
+func InitialInflationRate() sdkmath.LegacyDec {
+	return initialInflationRate
 }
 
-func InitialInflationRateMaxAsDec() sdkmath.LegacyDec {
-	return initialInflationRateMaxAsDec
+func InitialInflationRateMax() sdkmath.LegacyDec {
+	return initialInflationRateMax
 }
 
-func InitialInflationRateMinAsDec() sdkmath.LegacyDec {
-	return initialInflationRateMinAsDec
+func InitialInflationRateMin() sdkmath.LegacyDec {
+	return initialInflationRateMin
 }
 
-func DisinflationRateAsDec() sdkmath.LegacyDec {
-	return disinflationRateAsDec
+func DisinflationRate() sdkmath.LegacyDec {
+	return disinflationRate
 }
 
-func TargetInflationRateAsDec() sdkmath.LegacyDec {
-	return targetInflationRateAsDec
+func TargetInflationRate() sdkmath.LegacyDec {
+	return targetInflationRate
 }
 
 func InflationCalculationFn(ctx context.Context, minter minttypes.Minter, params minttypes.Params, bondedRatio sdkmath.LegacyDec) sdkmath.LegacyDec {
@@ -79,18 +73,18 @@ func InflationCalculationFn(ctx context.Context, minter minttypes.Minter, params
 // decrease every year according to the schedule specified in the README.
 func CalculateInflationRate(ctx sdk.Context, genesis time.Time, bondedRatio sdkmath.LegacyDec) sdkmath.LegacyDec {
 	// initialRate = initialMax - (initialMax-initialMin)*bondedRatio
-	initialRate := initialInflationRateMaxAsDec.Sub(
-		initialInflationRateMaxAsDec.Sub(initialInflationRateMinAsDec).Mul(bondedRatio),
+	initialRate := initialInflationRateMax.Sub(
+		initialInflationRateMax.Sub(initialInflationRateMin).Mul(bondedRatio),
 	)
 
 	// disinflatedRate = initialRate * (1 - disinflationRate)^((now - genesis).convertToYears())
 	years := yearsSinceGenesis(genesis, ctx.BlockTime())
 	disinflatedRate := initialRate.Mul(
-		sdkmath.LegacyOneDec().Sub(disinflationRateAsDec).Power(uint64(years)),
+		sdkmath.LegacyOneDec().Sub(disinflationRate).Power(uint64(years)),
 	)
 
 	// finalRate = max(disinflatedRate, convergenceRate)
-	return sdkmath.LegacyMaxDec(disinflatedRate, TargetInflationRateAsDec())
+	return sdkmath.LegacyMaxDec(disinflatedRate, TargetInflationRate())
 }
 
 // yearsSinceGenesis returns the number of years that have passed between
