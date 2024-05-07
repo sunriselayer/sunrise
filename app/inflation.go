@@ -79,7 +79,6 @@ func InflationCalculationFn(ctx context.Context, minter minttypes.Minter, params
 // decrease every year according to the schedule specified in the README.
 func CalculateInflationRate(ctx sdk.Context, genesis time.Time, bondedRatio sdkmath.LegacyDec) sdkmath.LegacyDec {
 	years := yearsSinceGenesis(genesis, ctx.BlockTime())
-	initialInflationRateMaxAsDec = sdkmath.LegacyNewDecWithPrec(initialInflationRateMax*1000, 3)
 
 	// initialRate = initialMax - (initialMax-initialMin)*bondedRatio
 	initialRate := initialInflationRateMaxAsDec.Sub(
