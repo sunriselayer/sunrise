@@ -68,6 +68,10 @@ func InflationCalculationFn(ctx context.Context, minter minttypes.Minter, params
 	return CalculateInflationRate(sdkCtx, time.Unix(genesisTime, 0), bondedRatio)
 }
 
+func ProvideInflationCalculatorFn() minttypes.InflationCalculationFn {
+	return InflationCalculationFn
+}
+
 // CalculateInflationRate returns the inflation rate for the current year depending on
 // the current block height in context. The inflation rate is expected to
 // decrease every year according to the schedule specified in the README.
