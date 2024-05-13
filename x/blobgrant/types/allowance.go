@@ -23,7 +23,10 @@ func NewFeeAllowance(gas math.Int, expiry time.Time) FeeAllowance {
 }
 
 func (allowance FeeAllowance) Accept(ctx context.Context, fee sdk.Coins, msgs []sdk.Msg) (remove bool, err error) {
-	if len(fee) != 0 {
+	if len(fee) == 0 {
+		return false, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot accept txs with empty fee")
+	}
+	if len(fee) > 1 {
 		return false, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot accept txs with multiple fee tokens")
 	}
 	if fee[0].Denom != GrantTokenDenom {
@@ -41,7 +44,10 @@ func (allowance FeeAllowance) Accept(ctx context.Context, fee sdk.Coins, msgs []
 }
 
 func (allowance FeeAllowance) ValidateBasic() error {
-	if allowance.Gas.LTE(math.ZeroInt()) {
+	if allowance.Gas.IsNil() {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "gas must be positive: nil")
+	}
+	if !allowance.Gas.IsPositive() {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "gas must be positive: %s", allowance.Gas)
 	}
 

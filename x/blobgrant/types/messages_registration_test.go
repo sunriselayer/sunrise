@@ -15,15 +15,26 @@ func TestMsgCreateRegistration_ValidateBasic(t *testing.T) {
 		err  error
 	}{
 		{
-			name: "invalid address",
+			name: "invalid liquidity provider address",
 			msg: MsgCreateRegistration{
 				LiquidityProvider: "invalid_address",
+				Grantee:           sample.AccAddress(),
 			},
 			err: sdkerrors.ErrInvalidAddress,
-		}, {
-			name: "valid address",
+		},
+		{
+			name: "invalid grantee address",
 			msg: MsgCreateRegistration{
 				LiquidityProvider: sample.AccAddress(),
+				Grantee:           "invalid_address",
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		},
+		{
+			name: "valid liquidity provider address",
+			msg: MsgCreateRegistration{
+				LiquidityProvider: sample.AccAddress(),
+				Grantee:           sample.AccAddress(),
 			},
 		},
 	}
@@ -46,15 +57,26 @@ func TestMsgUpdateRegistration_ValidateBasic(t *testing.T) {
 		err  error
 	}{
 		{
-			name: "invalid address",
+			name: "invalid liquidity provider address",
 			msg: MsgUpdateRegistration{
 				LiquidityProvider: "invalid_address",
+				Grantee:           sample.AccAddress(),
 			},
 			err: sdkerrors.ErrInvalidAddress,
-		}, {
-			name: "valid address",
+		},
+		{
+			name: "invalid grantee address",
 			msg: MsgUpdateRegistration{
 				LiquidityProvider: sample.AccAddress(),
+				Grantee:           "invalid_address",
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		},
+		{
+			name: "valid liquidity provider address",
+			msg: MsgUpdateRegistration{
+				LiquidityProvider: sample.AccAddress(),
+				Grantee:           sample.AccAddress(),
 			},
 		},
 	}

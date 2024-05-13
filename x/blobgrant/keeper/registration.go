@@ -20,17 +20,11 @@ func (k Keeper) SetRegistration(ctx context.Context, registration types.Registra
 }
 
 // GetRegistration returns a registration from its index
-func (k Keeper) GetRegistration(
-	ctx context.Context,
-	address string,
-
-) (val types.Registration, found bool) {
+func (k Keeper) GetRegistration(ctx context.Context, address string) (val types.Registration, found bool) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.RegistrationKeyPrefix))
 
-	b := store.Get(types.RegistrationKey(
-		address,
-	))
+	b := store.Get(types.RegistrationKey(address))
 	if b == nil {
 		return val, false
 	}
@@ -40,16 +34,10 @@ func (k Keeper) GetRegistration(
 }
 
 // RemoveRegistration removes a registration from the store
-func (k Keeper) RemoveRegistration(
-	ctx context.Context,
-	address string,
-
-) {
+func (k Keeper) RemoveRegistration(ctx context.Context, address string) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.RegistrationKeyPrefix))
-	store.Delete(types.RegistrationKey(
-		address,
-	))
+	store.Delete(types.RegistrationKey(address))
 }
 
 // GetAllRegistration returns all registration

@@ -22,7 +22,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
-
+				Params: types.DefaultParams(),
 				RegistrationList: []types.Registration{
 					{
 						LiquidityProvider: "0",
@@ -38,6 +38,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "duplicated registration",
 			genState: &types.GenesisState{
+				Params: types.DefaultParams(),
 				RegistrationList: []types.Registration{
 					{
 						LiquidityProvider: "0",
