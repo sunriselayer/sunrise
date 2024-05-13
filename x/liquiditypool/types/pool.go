@@ -4,6 +4,10 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
+	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sunriselayer/sunrise/x/liquiditypool/cfmm"
 )
 
 func LpTokenDenom(poolId uint64) string {
@@ -25,17 +29,24 @@ func PoolTreasuryModuleName(poolId uint64) string {
 	return fmt.Sprintf("%s/%d/treasury", ModuleName, poolId)
 }
 
-func CalculateX(y math.Int, k math.LegacyDec, f_x string) (*math.Int, error) {
+func UnpackCfmm(ctx sdk.Context, pool Pool) (cfmm.ConstantFunctionMarketMaker, error) {
+	var cfmm cfmm.ConstantFunctionMarketMaker
+	err := ctx.UnpackAny(&pool.Cfmm, cfmm)
+
+	return cfmm, err
+}
+
+func CalculateX(y math.Int, k math.LegacyDec, cfmm cfmm.ConstantFunctionMarketMaker) (*math.Int, error) {
 	return nil, nil
 }
 
-func CalculateDx(y math.Int, dy math.Int, k math.LegacyDec, f_x string) (*math.Int, error) {
-	left, err := CalculateX(y.Add(dy), k, f_x)
+func CalculateDx(y math.Int, dy math.Int, k math.LegacyDec, cfmm cfmm.ConstantFunctionMarketMaker) (*math.Int, error) {
+	left, err := CalculateX(y.Add(dy), k, cfmm)
 	if err != nil {
 		return nil, err
 	}
 
-	right, err := CalculateX(y, k, f_x)
+	right, err := CalculateX(y, k, cfmm)
 	if err != nil {
 		return nil, err
 	}
@@ -45,17 +56,17 @@ func CalculateDx(y math.Int, dy math.Int, k math.LegacyDec, f_x string) (*math.I
 	return &diff, nil
 }
 
-func CalculateY(x math.Int, k math.LegacyDec, f_y string) (*math.Int, error) {
+func CalculateY(x math.Int, k math.LegacyDec, cfmm cfmm.ConstantFunctionMarketMaker) (*math.Int, error) {
 	return nil, nil
 }
 
-func CalculateDy(x math.Int, dx math.Int, k math.LegacyDec, f_y string) (*math.Int, error) {
-	left, err := CalculateY(x.Add(dx), k, f_y)
+func CalculateDy(x math.Int, dx math.Int, k math.LegacyDec, cfmm cfmm.ConstantFunctionMarketMaker) (*math.Int, error) {
+	left, err := CalculateY(x.Add(dx), k, cfmm)
 	if err != nil {
 		return nil, err
 	}
 
-	right, err := CalculateY(x, k, f_y)
+	right, err := CalculateY(x, k, cfmm)
 	if err != nil {
 		return nil, err
 	}
@@ -65,17 +76,17 @@ func CalculateDy(x math.Int, dx math.Int, k math.LegacyDec, f_y string) (*math.I
 	return &diff, nil
 }
 
-func CalculateK(x math.Int, y math.Int, f_k string) (*math.LegacyDec, error) {
+func CalculateK(x math.Int, y math.Int, cfmm cfmm.ConstantFunctionMarketMaker) (*math.LegacyDec, error) {
 	return nil, nil
 }
 
-func CalculatePrice(x math.Int, y math.Int, pool Pool) (*math.LegacyDec, error) {
-	kValue, err := CalculateK(x, y, pool.FK)
+func CalculatePrice(x math.Int, y math.Int, cfmm cfmm.ConstantFunctionMarketMaker) (*math.LegacyDec, error) {
+	kValue, err := CalculateK(x, y, cfmm)
 	if err != nil {
 		return nil, err
 	}
 	dx := math.NewInt(1000)
-	dy, err := CalculateDy(x, dx, *kValue, pool.FY)
+	dy, err := CalculateDy(x, dx, *kValue, cfmm)
 	if err != nil {
 		return nil, err
 	}

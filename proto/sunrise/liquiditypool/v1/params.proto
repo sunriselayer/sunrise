@@ -20,18 +20,24 @@ message Params {
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  string pool_exit_fee_rate = 2 [
+  string swap_interface_fee_rate = 2 [
     (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  google.protobuf.Duration twap_window = 3 [
+  string pool_exit_fee_rate = 3 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  google.protobuf.Duration twap_window = 4 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  google.protobuf.Duration twap_expiry = 4 [
+  google.protobuf.Duration twap_expiry = 5 [
     (gogoproto.stdduration) = true,
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
