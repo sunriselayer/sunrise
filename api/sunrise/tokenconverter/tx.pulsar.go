@@ -2,19 +2,18 @@
 package tokenconverter
 
 import (
-	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	_ "cosmossdk.io/api/amino"
 	_ "cosmossdk.io/api/cosmos/msg/v1"
+	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (
@@ -873,14 +872,18 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgConvertExactAmountIn        protoreflect.MessageDescriptor
-	fd_MsgConvertExactAmountIn_sender protoreflect.FieldDescriptor
+	md_MsgConvertExactAmountIn                protoreflect.MessageDescriptor
+	fd_MsgConvertExactAmountIn_sender         protoreflect.FieldDescriptor
+	fd_MsgConvertExactAmountIn_amount_in      protoreflect.FieldDescriptor
+	fd_MsgConvertExactAmountIn_min_amount_out protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_tokenconverter_tx_proto_init()
 	md_MsgConvertExactAmountIn = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertExactAmountIn")
 	fd_MsgConvertExactAmountIn_sender = md_MsgConvertExactAmountIn.Fields().ByName("sender")
+	fd_MsgConvertExactAmountIn_amount_in = md_MsgConvertExactAmountIn.Fields().ByName("amount_in")
+	fd_MsgConvertExactAmountIn_min_amount_out = md_MsgConvertExactAmountIn.Fields().ByName("min_amount_out")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgConvertExactAmountIn)(nil)
@@ -954,6 +957,18 @@ func (x *fastReflection_MsgConvertExactAmountIn) Range(f func(protoreflect.Field
 			return
 		}
 	}
+	if x.AmountIn != "" {
+		value := protoreflect.ValueOfString(x.AmountIn)
+		if !f(fd_MsgConvertExactAmountIn_amount_in, value) {
+			return
+		}
+	}
+	if x.MinAmountOut != "" {
+		value := protoreflect.ValueOfString(x.MinAmountOut)
+		if !f(fd_MsgConvertExactAmountIn_min_amount_out, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -971,6 +986,10 @@ func (x *fastReflection_MsgConvertExactAmountIn) Has(fd protoreflect.FieldDescri
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
 		return x.Sender != ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+		return x.AmountIn != ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
+		return x.MinAmountOut != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
@@ -989,6 +1008,10 @@ func (x *fastReflection_MsgConvertExactAmountIn) Clear(fd protoreflect.FieldDesc
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
 		x.Sender = ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+		x.AmountIn = ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
+		x.MinAmountOut = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
@@ -1007,6 +1030,12 @@ func (x *fastReflection_MsgConvertExactAmountIn) Get(descriptor protoreflect.Fie
 	switch descriptor.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
 		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+		value := x.AmountIn
+		return protoreflect.ValueOfString(value)
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
+		value := x.MinAmountOut
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -1030,6 +1059,10 @@ func (x *fastReflection_MsgConvertExactAmountIn) Set(fd protoreflect.FieldDescri
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+		x.AmountIn = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
+		x.MinAmountOut = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
@@ -1052,6 +1085,10 @@ func (x *fastReflection_MsgConvertExactAmountIn) Mutable(fd protoreflect.FieldDe
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
 		panic(fmt.Errorf("field sender of message sunrise.tokenconverter.MsgConvertExactAmountIn is not mutable"))
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+		panic(fmt.Errorf("field amount_in of message sunrise.tokenconverter.MsgConvertExactAmountIn is not mutable"))
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
+		panic(fmt.Errorf("field min_amount_out of message sunrise.tokenconverter.MsgConvertExactAmountIn is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
@@ -1066,6 +1103,10 @@ func (x *fastReflection_MsgConvertExactAmountIn) Mutable(fd protoreflect.FieldDe
 func (x *fastReflection_MsgConvertExactAmountIn) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
+		return protoreflect.ValueOfString("")
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+		return protoreflect.ValueOfString("")
+	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -1140,6 +1181,14 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		l = len(x.AmountIn)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.MinAmountOut)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1168,6 +1217,20 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.MinAmountOut) > 0 {
+			i -= len(x.MinAmountOut)
+			copy(dAtA[i:], x.MinAmountOut)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MinAmountOut)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.AmountIn) > 0 {
+			i -= len(x.AmountIn)
+			copy(dAtA[i:], x.AmountIn)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountIn)))
+			i--
+			dAtA[i] = 0x12
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -1256,6 +1319,70 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountIn", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountIn = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MinAmountOut", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.MinAmountOut = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -1649,14 +1776,18 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 }
 
 var (
-	md_MsgConvertExactAmountOut        protoreflect.MessageDescriptor
-	fd_MsgConvertExactAmountOut_sender protoreflect.FieldDescriptor
+	md_MsgConvertExactAmountOut               protoreflect.MessageDescriptor
+	fd_MsgConvertExactAmountOut_sender        protoreflect.FieldDescriptor
+	fd_MsgConvertExactAmountOut_amount_out    protoreflect.FieldDescriptor
+	fd_MsgConvertExactAmountOut_max_amount_in protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_tokenconverter_tx_proto_init()
 	md_MsgConvertExactAmountOut = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertExactAmountOut")
 	fd_MsgConvertExactAmountOut_sender = md_MsgConvertExactAmountOut.Fields().ByName("sender")
+	fd_MsgConvertExactAmountOut_amount_out = md_MsgConvertExactAmountOut.Fields().ByName("amount_out")
+	fd_MsgConvertExactAmountOut_max_amount_in = md_MsgConvertExactAmountOut.Fields().ByName("max_amount_in")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgConvertExactAmountOut)(nil)
@@ -1730,6 +1861,18 @@ func (x *fastReflection_MsgConvertExactAmountOut) Range(f func(protoreflect.Fiel
 			return
 		}
 	}
+	if x.AmountOut != "" {
+		value := protoreflect.ValueOfString(x.AmountOut)
+		if !f(fd_MsgConvertExactAmountOut_amount_out, value) {
+			return
+		}
+	}
+	if x.MaxAmountIn != "" {
+		value := protoreflect.ValueOfString(x.MaxAmountIn)
+		if !f(fd_MsgConvertExactAmountOut_max_amount_in, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -1747,6 +1890,10 @@ func (x *fastReflection_MsgConvertExactAmountOut) Has(fd protoreflect.FieldDescr
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
 		return x.Sender != ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
+		return x.AmountOut != ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
+		return x.MaxAmountIn != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
@@ -1765,6 +1912,10 @@ func (x *fastReflection_MsgConvertExactAmountOut) Clear(fd protoreflect.FieldDes
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
 		x.Sender = ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
+		x.AmountOut = ""
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
+		x.MaxAmountIn = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
@@ -1783,6 +1934,12 @@ func (x *fastReflection_MsgConvertExactAmountOut) Get(descriptor protoreflect.Fi
 	switch descriptor.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
 		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
+		value := x.AmountOut
+		return protoreflect.ValueOfString(value)
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
+		value := x.MaxAmountIn
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -1806,6 +1963,10 @@ func (x *fastReflection_MsgConvertExactAmountOut) Set(fd protoreflect.FieldDescr
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
+		x.AmountOut = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
+		x.MaxAmountIn = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
@@ -1828,6 +1989,10 @@ func (x *fastReflection_MsgConvertExactAmountOut) Mutable(fd protoreflect.FieldD
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
 		panic(fmt.Errorf("field sender of message sunrise.tokenconverter.MsgConvertExactAmountOut is not mutable"))
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
+		panic(fmt.Errorf("field amount_out of message sunrise.tokenconverter.MsgConvertExactAmountOut is not mutable"))
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
+		panic(fmt.Errorf("field max_amount_in of message sunrise.tokenconverter.MsgConvertExactAmountOut is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
@@ -1842,6 +2007,10 @@ func (x *fastReflection_MsgConvertExactAmountOut) Mutable(fd protoreflect.FieldD
 func (x *fastReflection_MsgConvertExactAmountOut) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
+		return protoreflect.ValueOfString("")
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
+		return protoreflect.ValueOfString("")
+	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -1916,6 +2085,14 @@ func (x *fastReflection_MsgConvertExactAmountOut) ProtoMethods() *protoiface.Met
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		l = len(x.AmountOut)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.MaxAmountIn)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1944,6 +2121,20 @@ func (x *fastReflection_MsgConvertExactAmountOut) ProtoMethods() *protoiface.Met
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.MaxAmountIn) > 0 {
+			i -= len(x.MaxAmountIn)
+			copy(dAtA[i:], x.MaxAmountIn)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MaxAmountIn)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.AmountOut) > 0 {
+			i -= len(x.AmountOut)
+			copy(dAtA[i:], x.AmountOut)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
+			i--
+			dAtA[i] = 0x12
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -2032,6 +2223,70 @@ func (x *fastReflection_MsgConvertExactAmountOut) ProtoMethods() *protoiface.Met
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountOut = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxAmountIn", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.MaxAmountIn = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -2516,7 +2771,9 @@ type MsgConvertExactAmountIn struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender       string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	AmountIn     string `protobuf:"bytes,2,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
+	MinAmountOut string `protobuf:"bytes,3,opt,name=min_amount_out,json=minAmountOut,proto3" json:"min_amount_out,omitempty"`
 }
 
 func (x *MsgConvertExactAmountIn) Reset() {
@@ -2542,6 +2799,20 @@ func (*MsgConvertExactAmountIn) Descriptor() ([]byte, []int) {
 func (x *MsgConvertExactAmountIn) GetSender() string {
 	if x != nil {
 		return x.Sender
+	}
+	return ""
+}
+
+func (x *MsgConvertExactAmountIn) GetAmountIn() string {
+	if x != nil {
+		return x.AmountIn
+	}
+	return ""
+}
+
+func (x *MsgConvertExactAmountIn) GetMinAmountOut() string {
+	if x != nil {
+		return x.MinAmountOut
 	}
 	return ""
 }
@@ -2577,7 +2848,9 @@ type MsgConvertExactAmountOut struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender      string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	AmountOut   string `protobuf:"bytes,2,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
+	MaxAmountIn string `protobuf:"bytes,3,opt,name=max_amount_in,json=maxAmountIn,proto3" json:"max_amount_in,omitempty"`
 }
 
 func (x *MsgConvertExactAmountOut) Reset() {
@@ -2603,6 +2876,20 @@ func (*MsgConvertExactAmountOut) Descriptor() ([]byte, []int) {
 func (x *MsgConvertExactAmountOut) GetSender() string {
 	if x != nil {
 		return x.Sender
+	}
+	return ""
+}
+
+func (x *MsgConvertExactAmountOut) GetAmountOut() string {
+	if x != nil {
+		return x.AmountOut
+	}
+	return ""
+}
+
+func (x *MsgConvertExactAmountOut) GetMaxAmountIn() string {
+	if x != nil {
+		return x.MaxAmountIn
 	}
 	return ""
 }
@@ -2662,16 +2949,37 @@ var file_sunrise_tokenconverter_tx_proto_rawDesc = []byte{
 	0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
 	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x3e, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74,
-	0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x16, 0x0a,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64,
-	0x65, 0x72, 0x22, 0x21, 0x0a, 0x1f, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74,
-	0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3f, 0x0a, 0x18, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76,
-	0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75,
-	0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06,
+	0x73, 0x65, 0x22, 0xe5, 0x01, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72,
+	0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x16,
+	0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x4d, 0x0a, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x5f, 0x69, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda,
+	0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
+	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x08, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x56, 0x0a, 0x0e, 0x6d, 0x69, 0x6e, 0x5f, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
+	0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
+	0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
+	0x0c, 0x6d, 0x69, 0x6e, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x3a, 0x0b, 0x82,
+	0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x21, 0x0a, 0x1f, 0x4d, 0x73,
+	0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xe6, 0x01,
+	0x0a, 0x18, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63,
+	0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65,
+	0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x12, 0x4f, 0x0a, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
+	0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x4f, 0x75, 0x74, 0x12, 0x54, 0x0a, 0x0d, 0x6d, 0x61, 0x78, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
+	0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
+	0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x6d, 0x61,
+	0x78, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06,
 	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x22, 0x0a, 0x20, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e,
 	0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f,
 	0x75, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xff, 0x02, 0x0a, 0x03, 0x4d,
