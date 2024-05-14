@@ -23,7 +23,15 @@ var (
 )
 
 const (
-// this line is used by starport scaffolding # simapp/module/const
+	opWeightMsgConvertExactAmountIn = "op_weight_msg_convert_exact_amount_in"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgConvertExactAmountIn int = 100
+
+	opWeightMsgConvertExactAmountOut = "op_weight_msg_convert_exact_amount_out"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgConvertExactAmountOut int = 100
+
+	// this line is used by starport scaffolding # simapp/module/const
 )
 
 // GenerateGenesisState creates a randomized GenState of the module.
@@ -46,6 +54,28 @@ func (am AppModule) RegisterStoreDecoder(_ simtypes.StoreDecoderRegistry) {}
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
 
+	var weightMsgConvertExactAmountIn int
+	simState.AppParams.GetOrGenerate(opWeightMsgConvertExactAmountIn, &weightMsgConvertExactAmountIn, nil,
+		func(_ *rand.Rand) {
+			weightMsgConvertExactAmountIn = defaultWeightMsgConvertExactAmountIn
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgConvertExactAmountIn,
+		tokenconvertersimulation.SimulateMsgConvertExactAmountIn(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgConvertExactAmountOut int
+	simState.AppParams.GetOrGenerate(opWeightMsgConvertExactAmountOut, &weightMsgConvertExactAmountOut, nil,
+		func(_ *rand.Rand) {
+			weightMsgConvertExactAmountOut = defaultWeightMsgConvertExactAmountOut
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgConvertExactAmountOut,
+		tokenconvertersimulation.SimulateMsgConvertExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -54,6 +84,22 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 // ProposalMsgs returns msgs used for governance proposals for simulations.
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgConvertExactAmountIn,
+			defaultWeightMsgConvertExactAmountIn,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				tokenconvertersimulation.SimulateMsgConvertExactAmountIn(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgConvertExactAmountOut,
+			defaultWeightMsgConvertExactAmountOut,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				tokenconvertersimulation.SimulateMsgConvertExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
 		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }

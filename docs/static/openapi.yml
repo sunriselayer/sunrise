@@ -19061,184 +19061,6 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise.blobgrant.v1.Msg/CreateRegistration:
-    post:
-      operationId: SunriseBlobgrantV1Msg_CreateRegistration
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              liquidity_provider:
-                type: string
-              grantee:
-                type: string
-      tags:
-        - Msg
-  /sunrise.blobgrant.v1.Msg/DeleteRegistration:
-    post:
-      operationId: SunriseBlobgrantV1Msg_DeleteRegistration
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              liquidity_provider:
-                type: string
-      tags:
-        - Msg
-  /sunrise.blobgrant.v1.Msg/UpdateParams:
-    post:
-      summary: |-
-        UpdateParams defines a (governance) operation for updating the module
-        parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseBlobgrantV1Msg_UpdateParams
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            description: >-
-              MsgUpdateParamsResponse defines the response structure for
-              executing a
-
-              MsgUpdateParams message.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          description: MsgUpdateParams is the Msg/UpdateParams request type.
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              authority:
-                type: string
-                description: >-
-                  authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
-              params:
-                description: 'NOTE: All parameters must be supplied.'
-                type: object
-                properties:
-                  gas_per_liquidity:
-                    type: string
-                  expiry_duration:
-                    type: string
-                  grant_token_refill_threshold:
-                    type: string
-                  block_height_duration:
-                    type: string
-                    format: uint64
-            description: MsgUpdateParams is the Msg/UpdateParams request type.
-      tags:
-        - Msg
-  /sunrise.blobgrant.v1.Msg/UpdateRegistration:
-    post:
-      operationId: SunriseBlobgrantV1Msg_UpdateRegistration
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              liquidity_provider:
-                type: string
-              grantee:
-                type: string
-      tags:
-        - Msg
   /sunrise.feeconverter.Msg/UpdateParams:
     post:
       summary: |-
@@ -19796,42 +19618,6 @@ paths:
                 type: string
       tags:
         - Msg
-  /sunriselayer/sunrise/liquiditystaking/params:
-    get:
-      summary: Parameters queries the parameters of the module.
-      operationId: SunriseLiquiditystakingQuery_Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
   /sunrise.liquiditystaking.Msg/UpdateParams:
     post:
       summary: |-
@@ -19888,6 +19674,80 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunrise.tokenconverter.Msg/ConvertExactAmountIn:
+    post:
+      operationId: SunriseTokenconverterMsg_ConvertExactAmountIn
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
+  /sunrise.tokenconverter.Msg/ConvertExactAmountOut:
+    post:
+      operationId: SunriseTokenconverterMsg_ConvertExactAmountOut
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
   /sunrise.tokenconverter.Msg/UpdateParams:
     post:
       summary: |-
@@ -19936,14 +19796,47 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunriselayer/sunrise/tokenconverter/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseTokenconverterQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
 definitions:
   cosmos.auth.v1beta1.MsgUpdateParams:
     type: object
@@ -27667,71 +27560,6 @@ definitions:
         type: string
         format: uint64
     description: Params defines the parameters for the module.
-  sunrise.blobgrant.v1.MsgCreateRegistration:
-    type: object
-    properties:
-      liquidity_provider:
-        type: string
-      grantee:
-        type: string
-  sunrise.blobgrant.v1.MsgCreateRegistrationResponse:
-    type: object
-  sunrise.blobgrant.v1.MsgDeleteRegistration:
-    type: object
-    properties:
-      liquidity_provider:
-        type: string
-  sunrise.blobgrant.v1.MsgDeleteRegistrationResponse:
-    type: object
-  sunrise.blobgrant.v1.MsgUpdateParams:
-    type: object
-    properties:
-      authority:
-        type: string
-        description: >-
-          authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
-      params:
-        description: 'NOTE: All parameters must be supplied.'
-        type: object
-        properties:
-          gas_per_liquidity:
-            type: string
-          expiry_duration:
-            type: string
-          grant_token_refill_threshold:
-            type: string
-          block_height_duration:
-            type: string
-            format: uint64
-    description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.blobgrant.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  sunrise.blobgrant.v1.MsgUpdateRegistration:
-    type: object
-    properties:
-      liquidity_provider:
-        type: string
-      grantee:
-        type: string
-  sunrise.blobgrant.v1.MsgUpdateRegistrationResponse:
-    type: object
-  sunrise.blobgrant.v1.Params:
-    type: object
-    properties:
-      gas_per_liquidity:
-        type: string
-      expiry_duration:
-        type: string
-      grant_token_refill_threshold:
-        type: string
-      block_height_duration:
-        type: string
-        format: uint64
-    description: Params defines the parameters for the module.
   sunrise.feeconverter.MsgUpdateParams:
     type: object
     properties:
@@ -28053,16 +27881,6 @@ definitions:
               format: uint64
             weight:
               type: string
-  sunrise.liquiditystaking.Params:
-    type: object
-    description: Params defines the parameters for the module.
-  sunrise.liquiditystaking.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        description: params holds all the parameters of this module.
-        type: object
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
   sunrise.liquiditystaking.MsgUpdateParams:
     type: object
     properties:
@@ -28083,6 +27901,23 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
+  sunrise.liquiditystaking.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  sunrise.tokenconverter.MsgConvertExactAmountIn:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.tokenconverter.MsgConvertExactAmountInResponse:
+    type: object
+  sunrise.tokenconverter.MsgConvertExactAmountOut:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.tokenconverter.MsgConvertExactAmountOutResponse:
+    type: object
   sunrise.tokenconverter.MsgUpdateParams:
     type: object
     properties:
@@ -28092,10 +27927,7 @@ definitions:
           authority is the address that controls the module (defaults to x/gov
           unless overwritten).
       params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
+        description: 'NOTE: All parameters must be supplied.'
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.tokenconverter.MsgUpdateParamsResponse:
@@ -28106,3 +27938,10 @@ definitions:
   sunrise.tokenconverter.Params:
     type: object
     description: Params defines the parameters for the module.
+  sunrise.tokenconverter.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.

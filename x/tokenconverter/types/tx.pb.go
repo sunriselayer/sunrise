@@ -36,8 +36,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type MsgUpdateParams struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// params defines the module parameters to update.
-	//
 	// NOTE: All parameters must be supplied.
 	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
 }
@@ -127,15 +125,179 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+type MsgConvertExactAmountIn struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+}
+
+func (m *MsgConvertExactAmountIn) Reset()         { *m = MsgConvertExactAmountIn{} }
+func (m *MsgConvertExactAmountIn) String() string { return proto.CompactTextString(m) }
+func (*MsgConvertExactAmountIn) ProtoMessage()    {}
+func (*MsgConvertExactAmountIn) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dee83c3c6ced95e6, []int{2}
+}
+func (m *MsgConvertExactAmountIn) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgConvertExactAmountIn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgConvertExactAmountIn.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgConvertExactAmountIn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgConvertExactAmountIn.Merge(m, src)
+}
+func (m *MsgConvertExactAmountIn) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgConvertExactAmountIn) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgConvertExactAmountIn.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgConvertExactAmountIn proto.InternalMessageInfo
+
+func (m *MsgConvertExactAmountIn) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+type MsgConvertExactAmountInResponse struct {
+}
+
+func (m *MsgConvertExactAmountInResponse) Reset()         { *m = MsgConvertExactAmountInResponse{} }
+func (m *MsgConvertExactAmountInResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgConvertExactAmountInResponse) ProtoMessage()    {}
+func (*MsgConvertExactAmountInResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dee83c3c6ced95e6, []int{3}
+}
+func (m *MsgConvertExactAmountInResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgConvertExactAmountInResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgConvertExactAmountInResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgConvertExactAmountInResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgConvertExactAmountInResponse.Merge(m, src)
+}
+func (m *MsgConvertExactAmountInResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgConvertExactAmountInResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgConvertExactAmountInResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgConvertExactAmountInResponse proto.InternalMessageInfo
+
+type MsgConvertExactAmountOut struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+}
+
+func (m *MsgConvertExactAmountOut) Reset()         { *m = MsgConvertExactAmountOut{} }
+func (m *MsgConvertExactAmountOut) String() string { return proto.CompactTextString(m) }
+func (*MsgConvertExactAmountOut) ProtoMessage()    {}
+func (*MsgConvertExactAmountOut) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dee83c3c6ced95e6, []int{4}
+}
+func (m *MsgConvertExactAmountOut) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgConvertExactAmountOut) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgConvertExactAmountOut.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgConvertExactAmountOut) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgConvertExactAmountOut.Merge(m, src)
+}
+func (m *MsgConvertExactAmountOut) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgConvertExactAmountOut) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgConvertExactAmountOut.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgConvertExactAmountOut proto.InternalMessageInfo
+
+func (m *MsgConvertExactAmountOut) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+type MsgConvertExactAmountOutResponse struct {
+}
+
+func (m *MsgConvertExactAmountOutResponse) Reset()         { *m = MsgConvertExactAmountOutResponse{} }
+func (m *MsgConvertExactAmountOutResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgConvertExactAmountOutResponse) ProtoMessage()    {}
+func (*MsgConvertExactAmountOutResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dee83c3c6ced95e6, []int{5}
+}
+func (m *MsgConvertExactAmountOutResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgConvertExactAmountOutResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgConvertExactAmountOutResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgConvertExactAmountOutResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgConvertExactAmountOutResponse.Merge(m, src)
+}
+func (m *MsgConvertExactAmountOutResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgConvertExactAmountOutResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgConvertExactAmountOutResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgConvertExactAmountOutResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.tokenconverter.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.tokenconverter.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgConvertExactAmountIn)(nil), "sunrise.tokenconverter.MsgConvertExactAmountIn")
+	proto.RegisterType((*MsgConvertExactAmountInResponse)(nil), "sunrise.tokenconverter.MsgConvertExactAmountInResponse")
+	proto.RegisterType((*MsgConvertExactAmountOut)(nil), "sunrise.tokenconverter.MsgConvertExactAmountOut")
+	proto.RegisterType((*MsgConvertExactAmountOutResponse)(nil), "sunrise.tokenconverter.MsgConvertExactAmountOutResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/tokenconverter/tx.proto", fileDescriptor_dee83c3c6ced95e6) }
 
 var fileDescriptor_dee83c3c6ced95e6 = []byte{
-	// 349 bytes of a gzipped FileDescriptorProto
+	// 458 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2f, 0x2e, 0xcd, 0x2b,
 	0xca, 0x2c, 0x4e, 0xd5, 0x2f, 0xc9, 0xcf, 0x4e, 0xcd, 0x4b, 0xce, 0xcf, 0x2b, 0x4b, 0x2d, 0x2a,
 	0x49, 0x2d, 0xd2, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x83, 0x2a, 0xd0,
@@ -151,13 +313,20 @@ var fileDescriptor_dee83c3c6ced95e6 = []byte{
 	0x3d, 0x4e, 0x9c, 0x27, 0xee, 0xc9, 0x33, 0xac, 0x78, 0xbe, 0x41, 0x8b, 0x31, 0x08, 0xaa, 0xd1,
 	0xca, 0xba, 0xe9, 0xf9, 0x06, 0x2d, 0x84, 0x91, 0x5d, 0xcf, 0x37, 0x68, 0x69, 0xc0, 0xbc, 0x51,
 	0x81, 0xee, 0x11, 0x34, 0x77, 0x2b, 0x49, 0x72, 0x89, 0xa3, 0x09, 0x05, 0xa5, 0x16, 0x17, 0xe4,
-	0xe7, 0x15, 0xa7, 0x1a, 0x95, 0x71, 0x31, 0xfb, 0x16, 0xa7, 0x0b, 0x65, 0x70, 0xf1, 0xa0, 0xf8,
-	0x54, 0x1d, 0x97, 0x0b, 0xd1, 0xcc, 0x91, 0xd2, 0x27, 0x52, 0x21, 0xcc, 0x42, 0x29, 0xd6, 0x06,
-	0x90, 0xbf, 0x9c, 0x02, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39,
-	0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0xca, 0x2c,
-	0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49, 0x2f, 0x39, 0x3f, 0x57, 0x1f, 0x6a, 0x76, 0x4e, 0x62, 0x65,
-	0x6a, 0x91, 0x3e, 0x4e, 0xef, 0x96, 0x54, 0x16, 0xa4, 0x16, 0x27, 0xb1, 0x81, 0xe3, 0xcd, 0x18,
-	0x10, 0x00, 0x00, 0xff, 0xff, 0x56, 0xb3, 0x15, 0x3a, 0x74, 0x02, 0x00, 0x00,
+	0xe7, 0x15, 0xa7, 0x2a, 0xd9, 0x81, 0xa5, 0x9c, 0x21, 0x5a, 0x5d, 0x2b, 0x12, 0x93, 0x4b, 0x1c,
+	0x73, 0xf3, 0x4b, 0xf3, 0x4a, 0x3c, 0xf3, 0x84, 0xc4, 0xb8, 0xd8, 0x8a, 0x53, 0xf3, 0x52, 0x52,
+	0x8b, 0x20, 0x5e, 0x0d, 0x82, 0xf2, 0xac, 0xb8, 0x41, 0x4e, 0x81, 0x72, 0x94, 0x14, 0xb9, 0xe4,
+	0x71, 0xe8, 0x87, 0x5b, 0x61, 0xcf, 0x25, 0x81, 0x55, 0x89, 0x7f, 0x69, 0x09, 0x71, 0x76, 0x28,
+	0x71, 0x29, 0xe0, 0x32, 0x00, 0x66, 0x89, 0xd1, 0x7f, 0x26, 0x2e, 0x66, 0xdf, 0xe2, 0x74, 0xa1,
+	0x0c, 0x2e, 0x1e, 0x94, 0x28, 0x53, 0xc7, 0x15, 0xd4, 0x68, 0x01, 0x22, 0xa5, 0x4f, 0xa4, 0x42,
+	0x98, 0x8d, 0x42, 0x0d, 0x8c, 0x5c, 0x22, 0x58, 0xc3, 0x0d, 0x9f, 0x49, 0xd8, 0x34, 0x48, 0x99,
+	0x93, 0xa8, 0x01, 0xee, 0x84, 0x66, 0x46, 0x2e, 0x51, 0xec, 0xe1, 0x6a, 0x40, 0x92, 0x91, 0xfe,
+	0xa5, 0x25, 0x52, 0x16, 0xa4, 0xea, 0x80, 0xb9, 0x42, 0x8a, 0xb5, 0x01, 0x94, 0x52, 0x9d, 0x02,
+	0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5,
+	0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0xca, 0x2c, 0x3d, 0xb3, 0x24, 0xa3,
+	0x34, 0x49, 0x2f, 0x39, 0x3f, 0x57, 0x1f, 0x6a, 0x49, 0x4e, 0x62, 0x65, 0x6a, 0x91, 0x3e, 0xce,
+	0x04, 0x5c, 0x52, 0x59, 0x90, 0x5a, 0x9c, 0xc4, 0x06, 0xce, 0x89, 0xc6, 0x80, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x75, 0x67, 0x20, 0xc0, 0x46, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -175,6 +344,8 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	ConvertExactAmountIn(ctx context.Context, in *MsgConvertExactAmountIn, opts ...grpc.CallOption) (*MsgConvertExactAmountInResponse, error)
+	ConvertExactAmountOut(ctx context.Context, in *MsgConvertExactAmountOut, opts ...grpc.CallOption) (*MsgConvertExactAmountOutResponse, error)
 }
 
 type msgClient struct {
@@ -194,11 +365,31 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) ConvertExactAmountIn(ctx context.Context, in *MsgConvertExactAmountIn, opts ...grpc.CallOption) (*MsgConvertExactAmountInResponse, error) {
+	out := new(MsgConvertExactAmountInResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.Msg/ConvertExactAmountIn", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ConvertExactAmountOut(ctx context.Context, in *MsgConvertExactAmountOut, opts ...grpc.CallOption) (*MsgConvertExactAmountOutResponse, error) {
+	out := new(MsgConvertExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.Msg/ConvertExactAmountOut", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	ConvertExactAmountIn(context.Context, *MsgConvertExactAmountIn) (*MsgConvertExactAmountInResponse, error)
+	ConvertExactAmountOut(context.Context, *MsgConvertExactAmountOut) (*MsgConvertExactAmountOutResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -207,6 +398,12 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) ConvertExactAmountIn(ctx context.Context, req *MsgConvertExactAmountIn) (*MsgConvertExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConvertExactAmountIn not implemented")
+}
+func (*UnimplementedMsgServer) ConvertExactAmountOut(ctx context.Context, req *MsgConvertExactAmountOut) (*MsgConvertExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConvertExactAmountOut not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -231,6 +428,42 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ConvertExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgConvertExactAmountIn)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ConvertExactAmountIn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.tokenconverter.Msg/ConvertExactAmountIn",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ConvertExactAmountIn(ctx, req.(*MsgConvertExactAmountIn))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ConvertExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgConvertExactAmountOut)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ConvertExactAmountOut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.tokenconverter.Msg/ConvertExactAmountOut",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ConvertExactAmountOut(ctx, req.(*MsgConvertExactAmountOut))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.tokenconverter.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -238,6 +471,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "ConvertExactAmountIn",
+			Handler:    _Msg_ConvertExactAmountIn_Handler,
+		},
+		{
+			MethodName: "ConvertExactAmountOut",
+			Handler:    _Msg_ConvertExactAmountOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -307,6 +548,112 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgConvertExactAmountIn) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgConvertExactAmountIn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgConvertExactAmountIn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgConvertExactAmountInResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgConvertExactAmountInResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgConvertExactAmountInResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgConvertExactAmountOut) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgConvertExactAmountOut) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgConvertExactAmountOut) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgConvertExactAmountOutResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgConvertExactAmountOutResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgConvertExactAmountOutResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -334,6 +681,50 @@ func (m *MsgUpdateParams) Size() (n int) {
 }
 
 func (m *MsgUpdateParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgConvertExactAmountIn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgConvertExactAmountInResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgConvertExactAmountOut) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgConvertExactAmountOutResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -490,6 +881,270 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgConvertExactAmountIn) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgConvertExactAmountIn: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgConvertExactAmountIn: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgConvertExactAmountInResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgConvertExactAmountInResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgConvertExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgConvertExactAmountOut) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgConvertExactAmountOut: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgConvertExactAmountOut: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgConvertExactAmountOutResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgConvertExactAmountOutResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgConvertExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
