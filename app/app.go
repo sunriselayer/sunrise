@@ -61,6 +61,7 @@ import (
 	feeconvertermodulekeeper "github.com/sunriselayer/sunrise/x/feeconverter/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
+	liquiditystakingmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditystaking/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunriselayer/sunrise/docs"
@@ -123,12 +124,13 @@ type App struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
-	BlobKeeper           blobmodulekeeper.Keeper
-	StreamKeeper         streammodulekeeper.Keeper
-	LiquiditypoolKeeper  liquiditypoolmodulekeeper.Keeper
-	GrantKeeper          grantmodulekeeper.Keeper
-	TokenconverterKeeper tokenconvertermodulekeeper.Keeper
-	FeeconverterKeeper   feeconvertermodulekeeper.Keeper
+	BlobKeeper             blobmodulekeeper.Keeper
+	StreamKeeper           streammodulekeeper.Keeper
+	LiquiditypoolKeeper    liquiditypoolmodulekeeper.Keeper
+	GrantKeeper            grantmodulekeeper.Keeper
+	TokenconverterKeeper   tokenconvertermodulekeeper.Keeper
+	FeeconverterKeeper     feeconvertermodulekeeper.Keeper
+	LiquiditystakingKeeper liquiditystakingmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -273,6 +275,7 @@ func New(
 		&app.GrantKeeper,
 		&app.TokenconverterKeeper,
 		&app.FeeconverterKeeper,
+		&app.LiquiditystakingKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

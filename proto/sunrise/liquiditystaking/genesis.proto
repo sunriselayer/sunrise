@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.liquiditystaking;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/liquiditystaking/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditystaking/types";
+
+// GenesisState defines the liquiditystaking module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

@@ -76,6 +76,7 @@ import (
 	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
 	feeconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/feeconverter/module"
 	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module/v1"
+	liquiditystakingmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditystaking/module"
 	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
 	_ "github.com/sunriselayer/sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
@@ -87,6 +88,8 @@ import (
 	feeconvertermoduletypes "github.com/sunriselayer/sunrise/x/feeconverter/types"
 	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module" // import for side-effects
 	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	_ "github.com/sunriselayer/sunrise/x/liquiditystaking/module" // import for side-effects
+	liquiditystakingmoduletypes "github.com/sunriselayer/sunrise/x/liquiditystaking/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -132,6 +135,7 @@ var (
 		grantmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		feeconvertermoduletypes.ModuleName,
+		liquiditystakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -162,6 +166,7 @@ var (
 		grantmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		feeconvertermoduletypes.ModuleName,
+		liquiditystakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -186,6 +191,7 @@ var (
 		grantmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		feeconvertermoduletypes.ModuleName,
+		liquiditystakingmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -369,6 +375,10 @@ var (
 			{
 				Name:   feeconvertermoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feeconvertermodulev1.Module{}),
+			},
+			{
+				Name:   liquiditystakingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&liquiditystakingmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
