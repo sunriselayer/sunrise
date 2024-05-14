@@ -9,8 +9,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	granttypes "github.com/sunriselayer/sunrise/x/blobgrant/types"
 )
 
 // checkTxFeeWithValidatorMinGasPrices implements the default fee logic, where the minimum price per
@@ -33,13 +31,13 @@ func CheckTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx) (sdk.Coins,
 		// <sunrise>
 		var index *int
 		for i, minGasPrice := range minGasPrices {
-			if minGasPrice.Denom == granttypes.GrantTokenDenom {
+			if minGasPrice.Denom == "" {
 				index = &i
 				break
 			}
 		}
 
-		decCoin := sdk.NewInt64DecCoin(granttypes.GrantTokenDenom, 1)
+		decCoin := sdk.NewInt64DecCoin("", 1)
 		if index != nil {
 			minGasPrices[*index] = decCoin
 		} else {

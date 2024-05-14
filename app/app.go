@@ -54,7 +54,6 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	grantmodulekeeper "github.com/sunriselayer/sunrise/x/blobgrant/keeper"
 	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 
@@ -127,7 +126,6 @@ type App struct {
 	BlobKeeper             blobmodulekeeper.Keeper
 	StreamKeeper           streammodulekeeper.Keeper
 	LiquiditypoolKeeper    liquiditypoolmodulekeeper.Keeper
-	GrantKeeper            grantmodulekeeper.Keeper
 	TokenconverterKeeper   tokenconvertermodulekeeper.Keeper
 	FeeconverterKeeper     feeconvertermodulekeeper.Keeper
 	LiquiditystakingKeeper liquiditystakingmodulekeeper.Keeper
@@ -272,7 +270,6 @@ func New(
 		&app.BlobKeeper,
 		&app.StreamKeeper,
 		&app.LiquiditypoolKeeper,
-		&app.GrantKeeper,
 		&app.TokenconverterKeeper,
 		&app.FeeconverterKeeper,
 		&app.LiquiditystakingKeeper,

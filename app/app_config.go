@@ -72,7 +72,6 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/module/v1"
-	grantmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobgrant/module/v1"
 	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
 	feeconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/feeconverter/module"
 	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module/v1"
@@ -80,8 +79,6 @@ import (
 	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
 	_ "github.com/sunriselayer/sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
-	_ "github.com/sunriselayer/sunrise/x/blobgrant/module" // import for side-effects
-	grantmoduletypes "github.com/sunriselayer/sunrise/x/blobgrant/types"
 	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunriselayer/sunrise/x/blobstream/types"
 	_ "github.com/sunriselayer/sunrise/x/feeconverter/module" // import for side-effects
@@ -132,7 +129,6 @@ var (
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		feeconvertermoduletypes.ModuleName,
 		liquiditystakingmoduletypes.ModuleName,
@@ -163,7 +159,6 @@ var (
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		feeconvertermoduletypes.ModuleName,
 		liquiditystakingmoduletypes.ModuleName,
@@ -188,7 +183,6 @@ var (
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
-		grantmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		feeconvertermoduletypes.ModuleName,
 		liquiditystakingmoduletypes.ModuleName,
@@ -215,7 +209,7 @@ var (
 		{Account: blobmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: grantmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
@@ -363,10 +357,6 @@ var (
 			{
 				Name:   liquiditypoolmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
-			},
-			{
-				Name:   grantmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&grantmodulev1.Module{}),
 			},
 			{
 				Name:   tokenconvertermoduletypes.ModuleName,
