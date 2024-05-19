@@ -19524,27 +19524,17 @@ paths:
                     type: string
                   swap_treasury_tax_rate:
                     type: string
-                  swap_interface_fee_rate:
-                    type: string
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunriselayer/sunrise/swap/params:
-    get:
-      summary: Parameters queries the parameters of the module.
-      operationId: SunriseSwapQuery_Params
+  /sunrise.swap.Msg/SwapExactAmountIn:
+    post:
+      operationId: SunriseSwapMsg_SwapExactAmountIn
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
         default:
           description: An unexpected error response.
           schema:
@@ -19563,8 +19553,54 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
       tags:
-        - Query
+        - Msg
+  /sunrise.swap.Msg/SwapExactAmountOut:
+    post:
+      operationId: SunriseSwapMsg_SwapExactAmountOut
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
   /sunrise.swap.Msg/UpdateParams:
     post:
       summary: |-
@@ -19613,14 +19649,53 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
+                properties:
+                  interface_fee_rate:
+                    type: string
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunriselayer/sunrise/swap/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseSwapQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  interface_fee_rate:
+                    type: string
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /sunrise.tokenconverter.Msg/ConvertExactAmountIn:
     post:
       operationId: SunriseTokenconverterMsg_ConvertExactAmountIn
@@ -27678,8 +27753,6 @@ definitions:
             type: string
           swap_treasury_tax_rate:
             type: string
-          swap_interface_fee_rate:
-            type: string
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.liquiditypool.MsgUpdateParamsResponse:
     type: object
@@ -27693,19 +27766,21 @@ definitions:
         type: string
       swap_treasury_tax_rate:
         type: string
-      swap_interface_fee_rate:
-        type: string
     description: Params defines the parameters for the module.
-  sunrise.swap.Params:
-    type: object
-    description: Params defines the parameters for the module.
-  sunrise.swap.QueryParamsResponse:
+  sunrise.swap.MsgSwapExactAmountIn:
     type: object
     properties:
-      params:
-        description: params holds all the parameters of this module.
-        type: object
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
+      sender:
+        type: string
+  sunrise.swap.MsgSwapExactAmountInResponse:
+    type: object
+  sunrise.swap.MsgSwapExactAmountOut:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.swap.MsgSwapExactAmountOutResponse:
+    type: object
   sunrise.swap.MsgUpdateParams:
     type: object
     properties:
@@ -27715,17 +27790,33 @@ definitions:
           authority is the address that controls the module (defaults to x/gov
           unless overwritten).
       params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
+        description: 'NOTE: All parameters must be supplied.'
         type: object
+        properties:
+          interface_fee_rate:
+            type: string
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.swap.MsgUpdateParamsResponse:
     type: object
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
+  sunrise.swap.Params:
+    type: object
+    properties:
+      interface_fee_rate:
+        type: string
+    description: Params defines the parameters for the module.
+  sunrise.swap.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          interface_fee_rate:
+            type: string
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   sunrise.tokenconverter.MsgConvertExactAmountIn:
     type: object
     properties:

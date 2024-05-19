@@ -28,6 +28,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "SwapExactAmountIn",
+					Use:            "swap-exact-amount-in",
+					Short:          "Send a swap-exact-amount-in tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "SwapExactAmountOut",
+					Use:            "swap-exact-amount-out",
+					Short:          "Send a swap-exact-amount-out tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

@@ -6,6 +6,10 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+
 	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
@@ -15,9 +19,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,8 +36,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type MsgUpdateParams struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// params defines the module parameters to update.
-	//
 	// NOTE: All parameters must be supplied.
 	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
 }
@@ -126,15 +125,179 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+type MsgSwapExactAmountIn struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+}
+
+func (m *MsgSwapExactAmountIn) Reset()         { *m = MsgSwapExactAmountIn{} }
+func (m *MsgSwapExactAmountIn) String() string { return proto.CompactTextString(m) }
+func (*MsgSwapExactAmountIn) ProtoMessage()    {}
+func (*MsgSwapExactAmountIn) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41e76ee8abdea714, []int{2}
+}
+func (m *MsgSwapExactAmountIn) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSwapExactAmountIn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSwapExactAmountIn.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSwapExactAmountIn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSwapExactAmountIn.Merge(m, src)
+}
+func (m *MsgSwapExactAmountIn) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSwapExactAmountIn) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSwapExactAmountIn.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSwapExactAmountIn proto.InternalMessageInfo
+
+func (m *MsgSwapExactAmountIn) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+type MsgSwapExactAmountInResponse struct {
+}
+
+func (m *MsgSwapExactAmountInResponse) Reset()         { *m = MsgSwapExactAmountInResponse{} }
+func (m *MsgSwapExactAmountInResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSwapExactAmountInResponse) ProtoMessage()    {}
+func (*MsgSwapExactAmountInResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41e76ee8abdea714, []int{3}
+}
+func (m *MsgSwapExactAmountInResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSwapExactAmountInResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSwapExactAmountInResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSwapExactAmountInResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSwapExactAmountInResponse.Merge(m, src)
+}
+func (m *MsgSwapExactAmountInResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSwapExactAmountInResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSwapExactAmountInResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSwapExactAmountInResponse proto.InternalMessageInfo
+
+type MsgSwapExactAmountOut struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+}
+
+func (m *MsgSwapExactAmountOut) Reset()         { *m = MsgSwapExactAmountOut{} }
+func (m *MsgSwapExactAmountOut) String() string { return proto.CompactTextString(m) }
+func (*MsgSwapExactAmountOut) ProtoMessage()    {}
+func (*MsgSwapExactAmountOut) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41e76ee8abdea714, []int{4}
+}
+func (m *MsgSwapExactAmountOut) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSwapExactAmountOut) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSwapExactAmountOut.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSwapExactAmountOut) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSwapExactAmountOut.Merge(m, src)
+}
+func (m *MsgSwapExactAmountOut) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSwapExactAmountOut) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSwapExactAmountOut.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSwapExactAmountOut proto.InternalMessageInfo
+
+func (m *MsgSwapExactAmountOut) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+type MsgSwapExactAmountOutResponse struct {
+}
+
+func (m *MsgSwapExactAmountOutResponse) Reset()         { *m = MsgSwapExactAmountOutResponse{} }
+func (m *MsgSwapExactAmountOutResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSwapExactAmountOutResponse) ProtoMessage()    {}
+func (*MsgSwapExactAmountOutResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_41e76ee8abdea714, []int{5}
+}
+func (m *MsgSwapExactAmountOutResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSwapExactAmountOutResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSwapExactAmountOutResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSwapExactAmountOutResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSwapExactAmountOutResponse.Merge(m, src)
+}
+func (m *MsgSwapExactAmountOutResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSwapExactAmountOutResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSwapExactAmountOutResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSwapExactAmountOutResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.swap.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.swap.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgSwapExactAmountIn)(nil), "sunrise.swap.MsgSwapExactAmountIn")
+	proto.RegisterType((*MsgSwapExactAmountInResponse)(nil), "sunrise.swap.MsgSwapExactAmountInResponse")
+	proto.RegisterType((*MsgSwapExactAmountOut)(nil), "sunrise.swap.MsgSwapExactAmountOut")
+	proto.RegisterType((*MsgSwapExactAmountOutResponse)(nil), "sunrise.swap.MsgSwapExactAmountOutResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/swap/tx.proto", fileDescriptor_41e76ee8abdea714) }
 
 var fileDescriptor_41e76ee8abdea714 = []byte{
-	// 337 bytes of a gzipped FileDescriptorProto
+	// 447 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2d, 0x2e, 0xcd, 0x2b,
 	0xca, 0x2c, 0x4e, 0xd5, 0x2f, 0x2e, 0x4f, 0x2c, 0xd0, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f,
 	0xc9, 0x17, 0xe2, 0x81, 0x0a, 0xeb, 0x81, 0x84, 0xa5, 0x04, 0x13, 0x73, 0x33, 0xf3, 0xf2, 0xf5,
@@ -149,14 +312,20 @@ var fileDescriptor_41e76ee8abdea714 = []byte{
 	0xc8, 0x5e, 0xd4, 0x83, 0x98, 0xee, 0xc4, 0x79, 0xe2, 0x9e, 0x3c, 0xc3, 0x8a, 0xe7, 0x1b, 0xb4,
 	0x18, 0x83, 0xa0, 0xca, 0xad, 0x0c, 0x9b, 0x9e, 0x6f, 0xd0, 0x42, 0x18, 0xd4, 0xf5, 0x7c, 0x83,
 	0x96, 0x1c, 0xcc, 0xc9, 0x15, 0x10, 0x47, 0xa3, 0xb9, 0x51, 0x49, 0x92, 0x4b, 0x1c, 0x4d, 0x28,
-	0x28, 0xb5, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0xd5, 0x28, 0x89, 0x8b, 0xd9, 0xb7, 0x38, 0x5d, 0x28,
-	0x84, 0x8b, 0x07, 0xc5, 0x57, 0xb2, 0xa8, 0xae, 0x41, 0xd3, 0x2d, 0xa5, 0x8a, 0x57, 0x1a, 0x66,
-	0xb8, 0x14, 0x6b, 0x03, 0xc8, 0xe5, 0x4e, 0x6e, 0x27, 0x1e, 0xc9, 0x31, 0x5e, 0x78, 0x24, 0xc7,
-	0xf8, 0xe0, 0x91, 0x1c, 0xe3, 0x84, 0xc7, 0x72, 0x0c, 0x17, 0x1e, 0xcb, 0x31, 0xdc, 0x78, 0x2c,
-	0xc7, 0x10, 0xa5, 0x93, 0x9e, 0x59, 0x92, 0x51, 0x9a, 0xa4, 0x97, 0x9c, 0x9f, 0xab, 0x0f, 0x35,
-	0x31, 0x27, 0xb1, 0x32, 0xb5, 0x48, 0x1f, 0xcd, 0x43, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c,
-	0xe0, 0x58, 0x30, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xeb, 0x80, 0x81, 0x92, 0x24, 0x02, 0x00,
-	0x00,
+	0x28, 0xb5, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0x55, 0xc9, 0x9a, 0x4b, 0xc4, 0xb7, 0x38, 0x3d, 0xb8,
+	0x3c, 0xb1, 0xc0, 0xb5, 0x22, 0x31, 0xb9, 0xc4, 0x31, 0x37, 0xbf, 0x34, 0xaf, 0xc4, 0x33, 0x4f,
+	0x48, 0x8c, 0x8b, 0xad, 0x38, 0x35, 0x2f, 0x25, 0xb5, 0x08, 0xe2, 0xa7, 0x20, 0x28, 0xcf, 0x8a,
+	0x1b, 0x64, 0x3b, 0x94, 0xa3, 0x24, 0xc7, 0x25, 0x83, 0x4d, 0x33, 0xdc, 0x70, 0x1b, 0x2e, 0x51,
+	0x4c, 0x79, 0xff, 0xd2, 0x12, 0xe2, 0x4c, 0x97, 0xe7, 0x92, 0xc5, 0xaa, 0x1b, 0x66, 0xbc, 0xd1,
+	0x7a, 0x26, 0x2e, 0x66, 0xdf, 0xe2, 0x74, 0xa1, 0x10, 0x2e, 0x1e, 0x94, 0x28, 0x91, 0x45, 0x0d,
+	0x4a, 0x34, 0xaf, 0x4b, 0xa9, 0xe2, 0x95, 0x86, 0x99, 0x2e, 0x94, 0xcc, 0x25, 0x88, 0x19, 0x2c,
+	0x4a, 0x18, 0x7a, 0x31, 0xd4, 0x48, 0x69, 0x11, 0x56, 0x03, 0xb7, 0x24, 0x8d, 0x4b, 0x08, 0x4b,
+	0xf0, 0x28, 0x13, 0x32, 0xc1, 0xbf, 0xb4, 0x44, 0x4a, 0x9b, 0x08, 0x45, 0x30, 0x7b, 0xa4, 0x58,
+	0x1b, 0x40, 0x69, 0xc8, 0xc9, 0xed, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c,
+	0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f, 0xe5, 0x18, 0xa2,
+	0x74, 0xd2, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xa1, 0xe6, 0xe6, 0x24,
+	0x56, 0xa6, 0x16, 0xe9, 0xa3, 0x25, 0xad, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0x70, 0x7e,
+	0x30, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xa2, 0x7b, 0x82, 0xca, 0xae, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -174,6 +343,8 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	SwapExactAmountIn(ctx context.Context, in *MsgSwapExactAmountIn, opts ...grpc.CallOption) (*MsgSwapExactAmountInResponse, error)
+	SwapExactAmountOut(ctx context.Context, in *MsgSwapExactAmountOut, opts ...grpc.CallOption) (*MsgSwapExactAmountOutResponse, error)
 }
 
 type msgClient struct {
@@ -193,11 +364,31 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) SwapExactAmountIn(ctx context.Context, in *MsgSwapExactAmountIn, opts ...grpc.CallOption) (*MsgSwapExactAmountInResponse, error) {
+	out := new(MsgSwapExactAmountInResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.swap.Msg/SwapExactAmountIn", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SwapExactAmountOut(ctx context.Context, in *MsgSwapExactAmountOut, opts ...grpc.CallOption) (*MsgSwapExactAmountOutResponse, error) {
+	out := new(MsgSwapExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.swap.Msg/SwapExactAmountOut", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	SwapExactAmountIn(context.Context, *MsgSwapExactAmountIn) (*MsgSwapExactAmountInResponse, error)
+	SwapExactAmountOut(context.Context, *MsgSwapExactAmountOut) (*MsgSwapExactAmountOutResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -206,6 +397,12 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) SwapExactAmountIn(ctx context.Context, req *MsgSwapExactAmountIn) (*MsgSwapExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwapExactAmountIn not implemented")
+}
+func (*UnimplementedMsgServer) SwapExactAmountOut(ctx context.Context, req *MsgSwapExactAmountOut) (*MsgSwapExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwapExactAmountOut not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -230,6 +427,42 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSwapExactAmountIn)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SwapExactAmountIn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.swap.Msg/SwapExactAmountIn",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SwapExactAmountIn(ctx, req.(*MsgSwapExactAmountIn))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSwapExactAmountOut)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SwapExactAmountOut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.swap.Msg/SwapExactAmountOut",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SwapExactAmountOut(ctx, req.(*MsgSwapExactAmountOut))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.swap.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -237,6 +470,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "SwapExactAmountIn",
+			Handler:    _Msg_SwapExactAmountIn_Handler,
+		},
+		{
+			MethodName: "SwapExactAmountOut",
+			Handler:    _Msg_SwapExactAmountOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -306,6 +547,112 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgSwapExactAmountIn) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSwapExactAmountIn) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSwapExactAmountIn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSwapExactAmountInResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSwapExactAmountInResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSwapExactAmountInResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSwapExactAmountOut) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSwapExactAmountOut) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSwapExactAmountOut) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSwapExactAmountOutResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSwapExactAmountOutResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSwapExactAmountOutResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -333,6 +680,50 @@ func (m *MsgUpdateParams) Size() (n int) {
 }
 
 func (m *MsgUpdateParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSwapExactAmountIn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSwapExactAmountInResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSwapExactAmountOut) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSwapExactAmountOutResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -489,6 +880,270 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSwapExactAmountIn) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSwapExactAmountIn: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSwapExactAmountIn: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSwapExactAmountInResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSwapExactAmountInResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSwapExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSwapExactAmountOut) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSwapExactAmountOut: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSwapExactAmountOut: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSwapExactAmountOutResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSwapExactAmountOutResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSwapExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
