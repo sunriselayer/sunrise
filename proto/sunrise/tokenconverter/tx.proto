@@ -56,7 +56,14 @@ message MsgConvertExactAmountIn {
   ];
 }
 
-message MsgConvertExactAmountInResponse {}
+message MsgConvertExactAmountInResponse {
+  string amount_out = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
 
 message MsgConvertExactAmountOut {
   option (cosmos.msg.v1.signer) = "sender";
@@ -76,5 +83,12 @@ message MsgConvertExactAmountOut {
   ];
 }
 
-message MsgConvertExactAmountOutResponse {}
+message MsgConvertExactAmountOutResponse {
+  string amount_in = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
 

@@ -39,11 +39,11 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgCreatePosition int = 100
 
-	opWeightMsgUpdatePosition = "op_weight_msg_position"
+	opWeightMsgIncreaseLiquidity = "op_weight_msg_position"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgUpdatePosition int = 100
 
-	opWeightMsgDeletePosition = "op_weight_msg_position"
+	opWeightMsgDecreaseLiquidity = "op_weight_msg_position"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgDeletePosition int = 100
 
@@ -68,12 +68,10 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 		Params: types.DefaultParams(),
 		PoolList: []types.Pool{
 			{
-				Id:     0,
-				Sender: sample.AccAddress(),
+				Id: 0,
 			},
 			{
-				Id:     1,
-				Sender: sample.AccAddress(),
+				Id: 1,
 			},
 		},
 		PoolCount: 2,
@@ -111,28 +109,6 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquiditypoolsimulation.SimulateMsgCreatePool(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgUpdatePool int
-	simState.AppParams.GetOrGenerate(opWeightMsgUpdatePool, &weightMsgUpdatePool, nil,
-		func(_ *rand.Rand) {
-			weightMsgUpdatePool = defaultWeightMsgUpdatePool
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgUpdatePool,
-		liquiditypoolsimulation.SimulateMsgUpdatePool(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	var weightMsgDeletePool int
-	simState.AppParams.GetOrGenerate(opWeightMsgDeletePool, &weightMsgDeletePool, nil,
-		func(_ *rand.Rand) {
-			weightMsgDeletePool = defaultWeightMsgDeletePool
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgDeletePool,
-		liquiditypoolsimulation.SimulateMsgDeletePool(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
 	var weightMsgCreatePosition int
 	simState.AppParams.GetOrGenerate(opWeightMsgCreatePosition, &weightMsgCreatePosition, nil,
 		func(_ *rand.Rand) {
@@ -144,26 +120,26 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquiditypoolsimulation.SimulateMsgCreatePosition(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgUpdatePosition int
-	simState.AppParams.GetOrGenerate(opWeightMsgUpdatePosition, &weightMsgUpdatePosition, nil,
+	var weightMsgIncreaseLiquidity int
+	simState.AppParams.GetOrGenerate(opWeightMsgIncreaseLiquidity, &weightMsgIncreaseLiquidity, nil,
 		func(_ *rand.Rand) {
-			weightMsgUpdatePosition = defaultWeightMsgUpdatePosition
+			weightMsgIncreaseLiquidity = defaultWeightMsgUpdatePosition
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgUpdatePosition,
-		liquiditypoolsimulation.SimulateMsgUpdatePosition(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgIncreaseLiquidity,
+		liquiditypoolsimulation.SimulateMsgIncreaseLiquidity(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgDeletePosition int
-	simState.AppParams.GetOrGenerate(opWeightMsgDeletePosition, &weightMsgDeletePosition, nil,
+	var weightMsgDecreaseLiquidity int
+	simState.AppParams.GetOrGenerate(opWeightMsgDecreaseLiquidity, &weightMsgDecreaseLiquidity, nil,
 		func(_ *rand.Rand) {
-			weightMsgDeletePosition = defaultWeightMsgDeletePosition
+			weightMsgDecreaseLiquidity = defaultWeightMsgDeletePosition
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgDeletePosition,
-		liquiditypoolsimulation.SimulateMsgDeletePosition(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgDecreaseLiquidity,
+		liquiditypoolsimulation.SimulateMsgDecreaseLiquidity(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	var weightMsgCollectFees int
@@ -205,22 +181,6 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			},
 		),
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgUpdatePool,
-			defaultWeightMsgUpdatePool,
-			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquiditypoolsimulation.SimulateMsgUpdatePool(am.accountKeeper, am.bankKeeper, am.keeper)
-				return nil
-			},
-		),
-		simulation.NewWeightedProposalMsg(
-			opWeightMsgDeletePool,
-			defaultWeightMsgDeletePool,
-			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquiditypoolsimulation.SimulateMsgDeletePool(am.accountKeeper, am.bankKeeper, am.keeper)
-				return nil
-			},
-		),
-		simulation.NewWeightedProposalMsg(
 			opWeightMsgCreatePosition,
 			defaultWeightMsgCreatePosition,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
@@ -229,18 +189,18 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			},
 		),
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgUpdatePosition,
+			opWeightMsgIncreaseLiquidity,
 			defaultWeightMsgUpdatePosition,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquiditypoolsimulation.SimulateMsgUpdatePosition(am.accountKeeper, am.bankKeeper, am.keeper)
+				liquiditypoolsimulation.SimulateMsgIncreaseLiquidity(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgDeletePosition,
+			opWeightMsgDecreaseLiquidity,
 			defaultWeightMsgDeletePosition,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquiditypoolsimulation.SimulateMsgDeletePosition(am.accountKeeper, am.bankKeeper, am.keeper)
+				liquiditypoolsimulation.SimulateMsgDecreaseLiquidity(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

@@ -42,7 +42,7 @@ func SimulateMsgCreatePosition(
 	}
 }
 
-func SimulateMsgUpdatePosition(
+func SimulateMsgIncreaseLiquidity(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -52,7 +52,7 @@ func SimulateMsgUpdatePosition(
 		var (
 			simAccount  = simtypes.Account{}
 			position    = types.Position{}
-			msg         = &types.MsgUpdatePosition{}
+			msg         = &types.MsgIncreaseLiquidity{}
 			allPosition = k.GetAllPosition(ctx)
 			found       = false
 		)
@@ -86,7 +86,7 @@ func SimulateMsgUpdatePosition(
 	}
 }
 
-func SimulateMsgDeletePosition(
+func SimulateMsgDecreaseLiquidity(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -96,7 +96,7 @@ func SimulateMsgDeletePosition(
 		var (
 			simAccount  = simtypes.Account{}
 			position    = types.Position{}
-			msg         = &types.MsgUpdatePosition{}
+			msg         = &types.MsgDecreaseLiquidity{}
 			allPosition = k.GetAllPosition(ctx)
 			found       = false
 		)

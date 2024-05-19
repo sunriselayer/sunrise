@@ -22,26 +22,26 @@ func TestPositionMsgServerCreate(t *testing.T) {
 	}
 }
 
-func TestPositionMsgServerUpdate(t *testing.T) {
+func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 	sender := "A"
 
 	tests := []struct {
 		desc    string
-		request *types.MsgUpdatePosition
+		request *types.MsgIncreaseLiquidity
 		err     error
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgUpdatePosition{Sender: sender},
+			request: &types.MsgIncreaseLiquidity{Sender: sender},
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgUpdatePosition{Sender: "B"},
+			request: &types.MsgIncreaseLiquidity{Sender: "B"},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgUpdatePosition{Sender: sender, Id: 10},
+			request: &types.MsgIncreaseLiquidity{Sender: sender, Id: 10},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 	}
@@ -53,7 +53,7 @@ func TestPositionMsgServerUpdate(t *testing.T) {
 			_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{Sender: sender})
 			require.NoError(t, err)
 
-			_, err = srv.UpdatePosition(wctx, tc.request)
+			_, err = srv.IncreaseLiquidity(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -63,26 +63,26 @@ func TestPositionMsgServerUpdate(t *testing.T) {
 	}
 }
 
-func TestPositionMsgServerDelete(t *testing.T) {
+func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
 	sender := "A"
 
 	tests := []struct {
 		desc    string
-		request *types.MsgDeletePosition
+		request *types.MsgDecreaseLiquidity
 		err     error
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgDeletePosition{Sender: sender},
+			request: &types.MsgDecreaseLiquidity{Sender: sender},
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgDeletePosition{Sender: "B"},
+			request: &types.MsgDecreaseLiquidity{Sender: "B"},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.MsgDeletePosition{Sender: sender, Id: 10},
+			request: &types.MsgDecreaseLiquidity{Sender: sender, Id: 10},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 	}
@@ -93,7 +93,7 @@ func TestPositionMsgServerDelete(t *testing.T) {
 
 			_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{Sender: sender})
 			require.NoError(t, err)
-			_, err = srv.DeletePosition(wctx, tc.request)
+			_, err = srv.DecreaseLiquidity(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

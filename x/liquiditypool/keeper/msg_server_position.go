@@ -27,7 +27,7 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 	}, nil
 }
 
-func (k msgServer) UpdatePosition(goCtx context.Context, msg *types.MsgUpdatePosition) (*types.MsgUpdatePositionResponse, error) {
+func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncreaseLiquidity) (*types.MsgIncreaseLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var position = types.Position{
@@ -48,10 +48,10 @@ func (k msgServer) UpdatePosition(goCtx context.Context, msg *types.MsgUpdatePos
 
 	k.SetPosition(ctx, position)
 
-	return &types.MsgUpdatePositionResponse{}, nil
+	return &types.MsgIncreaseLiquidityResponse{}, nil
 }
 
-func (k msgServer) DeletePosition(goCtx context.Context, msg *types.MsgDeletePosition) (*types.MsgDeletePositionResponse, error) {
+func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecreaseLiquidity) (*types.MsgDecreaseLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Checks that the element exists
@@ -67,5 +67,5 @@ func (k msgServer) DeletePosition(goCtx context.Context, msg *types.MsgDeletePos
 
 	k.RemovePosition(ctx, msg.Id)
 
-	return &types.MsgDeletePositionResponse{}, nil
+	return &types.MsgDecreaseLiquidityResponse{}, nil
 }
