@@ -4,6 +4,8 @@ package sunrise.swap;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 
+import "cosmos_proto/cosmos.proto";
+
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 // Params defines the parameters for the module.
@@ -11,5 +13,10 @@ message Params {
   option (amino.name) = "sunrise/x/swap/Params";
   option (gogoproto.equal) = true;
 
-  
+  string interface_fee_rate = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
 }
