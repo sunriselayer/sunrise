@@ -2,19 +2,18 @@
 package liquiditypool
 
 import (
-	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	_ "cosmossdk.io/api/amino"
 	_ "cosmossdk.io/api/cosmos/msg/v1"
+	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (
@@ -873,18 +872,18 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgCreatePool           protoreflect.MessageDescriptor
-	fd_MsgCreatePool_sender    protoreflect.FieldDescriptor
-	fd_MsgCreatePool_lowerTick protoreflect.FieldDescriptor
-	fd_MsgCreatePool_upperTick protoreflect.FieldDescriptor
+	md_MsgCreatePool            protoreflect.MessageDescriptor
+	fd_MsgCreatePool_sender     protoreflect.FieldDescriptor
+	fd_MsgCreatePool_lower_tick protoreflect.FieldDescriptor
+	fd_MsgCreatePool_upper_tick protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCreatePool = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCreatePool")
 	fd_MsgCreatePool_sender = md_MsgCreatePool.Fields().ByName("sender")
-	fd_MsgCreatePool_lowerTick = md_MsgCreatePool.Fields().ByName("lowerTick")
-	fd_MsgCreatePool_upperTick = md_MsgCreatePool.Fields().ByName("upperTick")
+	fd_MsgCreatePool_lower_tick = md_MsgCreatePool.Fields().ByName("lower_tick")
+	fd_MsgCreatePool_upper_tick = md_MsgCreatePool.Fields().ByName("upper_tick")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCreatePool)(nil)
@@ -958,15 +957,15 @@ func (x *fastReflection_MsgCreatePool) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
-	if x.LowerTick != "" {
-		value := protoreflect.ValueOfString(x.LowerTick)
-		if !f(fd_MsgCreatePool_lowerTick, value) {
+	if x.LowerTick != int64(0) {
+		value := protoreflect.ValueOfInt64(x.LowerTick)
+		if !f(fd_MsgCreatePool_lower_tick, value) {
 			return
 		}
 	}
-	if x.UpperTick != "" {
-		value := protoreflect.ValueOfString(x.UpperTick)
-		if !f(fd_MsgCreatePool_upperTick, value) {
+	if x.UpperTick != int64(0) {
+		value := protoreflect.ValueOfInt64(x.UpperTick)
+		if !f(fd_MsgCreatePool_upper_tick, value) {
 			return
 		}
 	}
@@ -987,10 +986,10 @@ func (x *fastReflection_MsgCreatePool) Has(fd protoreflect.FieldDescriptor) bool
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePool.sender":
 		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgCreatePool.lowerTick":
-		return x.LowerTick != ""
-	case "sunrise.liquiditypool.MsgCreatePool.upperTick":
-		return x.UpperTick != ""
+	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
+		return x.LowerTick != int64(0)
+	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
+		return x.UpperTick != int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1009,10 +1008,10 @@ func (x *fastReflection_MsgCreatePool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePool.sender":
 		x.Sender = ""
-	case "sunrise.liquiditypool.MsgCreatePool.lowerTick":
-		x.LowerTick = ""
-	case "sunrise.liquiditypool.MsgCreatePool.upperTick":
-		x.UpperTick = ""
+	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
+		x.LowerTick = int64(0)
+	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
+		x.UpperTick = int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1032,12 +1031,12 @@ func (x *fastReflection_MsgCreatePool) Get(descriptor protoreflect.FieldDescript
 	case "sunrise.liquiditypool.MsgCreatePool.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgCreatePool.lowerTick":
+	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
 		value := x.LowerTick
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgCreatePool.upperTick":
+		return protoreflect.ValueOfInt64(value)
+	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
 		value := x.UpperTick
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfInt64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1060,10 +1059,10 @@ func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, valu
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePool.sender":
 		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgCreatePool.lowerTick":
-		x.LowerTick = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgCreatePool.upperTick":
-		x.UpperTick = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
+		x.LowerTick = value.Int()
+	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
+		x.UpperTick = value.Int()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1086,10 +1085,10 @@ func (x *fastReflection_MsgCreatePool) Mutable(fd protoreflect.FieldDescriptor) 
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePool.sender":
 		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgCreatePool.lowerTick":
-		panic(fmt.Errorf("field lowerTick of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgCreatePool.upperTick":
-		panic(fmt.Errorf("field upperTick of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
+		panic(fmt.Errorf("field lower_tick of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
+		panic(fmt.Errorf("field upper_tick of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1105,10 +1104,10 @@ func (x *fastReflection_MsgCreatePool) NewField(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePool.sender":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgCreatePool.lowerTick":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgCreatePool.upperTick":
-		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
+		return protoreflect.ValueOfInt64(int64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1182,13 +1181,11 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.LowerTick)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.LowerTick != 0 {
+			n += 1 + runtime.Sov(uint64(x.LowerTick))
 		}
-		l = len(x.UpperTick)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.UpperTick != 0 {
+			n += 1 + runtime.Sov(uint64(x.UpperTick))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -1219,19 +1216,15 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.UpperTick) > 0 {
-			i -= len(x.UpperTick)
-			copy(dAtA[i:], x.UpperTick)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.UpperTick)))
+		if x.UpperTick != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.UpperTick))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x18
 		}
-		if len(x.LowerTick) > 0 {
-			i -= len(x.LowerTick)
-			copy(dAtA[i:], x.LowerTick)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LowerTick)))
+		if x.LowerTick != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LowerTick))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x10
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -1322,10 +1315,10 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 				x.Sender = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
 				}
-				var stringLen uint64
+				x.LowerTick = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1335,29 +1328,16 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.LowerTick |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.LowerTick = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 3:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UpperTick", wireType)
 				}
-				var stringLen uint64
+				x.UpperTick = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1367,24 +1347,11 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.UpperTick |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.UpperTick = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1824,1782 +1791,6 @@ func (x *fastReflection_MsgCreatePoolResponse) ProtoMethods() *protoiface.Method
 	}
 }
 
-var (
-	md_MsgUpdatePool           protoreflect.MessageDescriptor
-	fd_MsgUpdatePool_sender    protoreflect.FieldDescriptor
-	fd_MsgUpdatePool_id        protoreflect.FieldDescriptor
-	fd_MsgUpdatePool_lowerTick protoreflect.FieldDescriptor
-	fd_MsgUpdatePool_upperTick protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgUpdatePool = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgUpdatePool")
-	fd_MsgUpdatePool_sender = md_MsgUpdatePool.Fields().ByName("sender")
-	fd_MsgUpdatePool_id = md_MsgUpdatePool.Fields().ByName("id")
-	fd_MsgUpdatePool_lowerTick = md_MsgUpdatePool.Fields().ByName("lowerTick")
-	fd_MsgUpdatePool_upperTick = md_MsgUpdatePool.Fields().ByName("upperTick")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgUpdatePool)(nil)
-
-type fastReflection_MsgUpdatePool MsgUpdatePool
-
-func (x *MsgUpdatePool) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePool)(x)
-}
-
-func (x *MsgUpdatePool) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgUpdatePool_messageType fastReflection_MsgUpdatePool_messageType
-var _ protoreflect.MessageType = fastReflection_MsgUpdatePool_messageType{}
-
-type fastReflection_MsgUpdatePool_messageType struct{}
-
-func (x fastReflection_MsgUpdatePool_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePool)(nil)
-}
-func (x fastReflection_MsgUpdatePool_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePool)
-}
-func (x fastReflection_MsgUpdatePool_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePool
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgUpdatePool) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePool
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgUpdatePool) Type() protoreflect.MessageType {
-	return _fastReflection_MsgUpdatePool_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgUpdatePool) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePool)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgUpdatePool) Interface() protoreflect.ProtoMessage {
-	return (*MsgUpdatePool)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgUpdatePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Sender != "" {
-		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgUpdatePool_sender, value) {
-			return
-		}
-	}
-	if x.Id != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_MsgUpdatePool_id, value) {
-			return
-		}
-	}
-	if x.LowerTick != "" {
-		value := protoreflect.ValueOfString(x.LowerTick)
-		if !f(fd_MsgUpdatePool_lowerTick, value) {
-			return
-		}
-	}
-	if x.UpperTick != "" {
-		value := protoreflect.ValueOfString(x.UpperTick)
-		if !f(fd_MsgUpdatePool_upperTick, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgUpdatePool) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePool.sender":
-		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgUpdatePool.id":
-		return x.Id != uint64(0)
-	case "sunrise.liquiditypool.MsgUpdatePool.lowerTick":
-		return x.LowerTick != ""
-	case "sunrise.liquiditypool.MsgUpdatePool.upperTick":
-		return x.UpperTick != ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePool) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePool.sender":
-		x.Sender = ""
-	case "sunrise.liquiditypool.MsgUpdatePool.id":
-		x.Id = uint64(0)
-	case "sunrise.liquiditypool.MsgUpdatePool.lowerTick":
-		x.LowerTick = ""
-	case "sunrise.liquiditypool.MsgUpdatePool.upperTick":
-		x.UpperTick = ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgUpdatePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePool.sender":
-		value := x.Sender
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgUpdatePool.id":
-		value := x.Id
-		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.MsgUpdatePool.lowerTick":
-		value := x.LowerTick
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgUpdatePool.upperTick":
-		value := x.UpperTick
-		return protoreflect.ValueOfString(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePool does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePool.sender":
-		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgUpdatePool.id":
-		x.Id = value.Uint()
-	case "sunrise.liquiditypool.MsgUpdatePool.lowerTick":
-		x.LowerTick = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgUpdatePool.upperTick":
-		x.UpperTick = value.Interface().(string)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePool.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgUpdatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgUpdatePool.id":
-		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgUpdatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgUpdatePool.lowerTick":
-		panic(fmt.Errorf("field lowerTick of message sunrise.liquiditypool.MsgUpdatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgUpdatePool.upperTick":
-		panic(fmt.Errorf("field upperTick of message sunrise.liquiditypool.MsgUpdatePool is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgUpdatePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePool.sender":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgUpdatePool.id":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.MsgUpdatePool.lowerTick":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgUpdatePool.upperTick":
-		return protoreflect.ValueOfString("")
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgUpdatePool) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgUpdatePool", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgUpdatePool) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePool) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgUpdatePool) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgUpdatePool) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgUpdatePool)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Sender)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Id != 0 {
-			n += 1 + runtime.Sov(uint64(x.Id))
-		}
-		l = len(x.LowerTick)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.UpperTick)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePool)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.UpperTick) > 0 {
-			i -= len(x.UpperTick)
-			copy(dAtA[i:], x.UpperTick)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.UpperTick)))
-			i--
-			dAtA[i] = 0x22
-		}
-		if len(x.LowerTick) > 0 {
-			i -= len(x.LowerTick)
-			copy(dAtA[i:], x.LowerTick)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LowerTick)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.Id != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
-			i--
-			dAtA[i] = 0x10
-		}
-		if len(x.Sender) > 0 {
-			i -= len(x.Sender)
-			copy(dAtA[i:], x.Sender)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePool)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePool: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePool: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Sender = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-				}
-				x.Id = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Id |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.LowerTick = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 4:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UpperTick", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.UpperTick = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_MsgUpdatePoolResponse protoreflect.MessageDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgUpdatePoolResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgUpdatePoolResponse")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgUpdatePoolResponse)(nil)
-
-type fastReflection_MsgUpdatePoolResponse MsgUpdatePoolResponse
-
-func (x *MsgUpdatePoolResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePoolResponse)(x)
-}
-
-func (x *MsgUpdatePoolResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgUpdatePoolResponse_messageType fastReflection_MsgUpdatePoolResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgUpdatePoolResponse_messageType{}
-
-type fastReflection_MsgUpdatePoolResponse_messageType struct{}
-
-func (x fastReflection_MsgUpdatePoolResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePoolResponse)(nil)
-}
-func (x fastReflection_MsgUpdatePoolResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePoolResponse)
-}
-func (x fastReflection_MsgUpdatePoolResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePoolResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgUpdatePoolResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePoolResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgUpdatePoolResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgUpdatePoolResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgUpdatePoolResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePoolResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgUpdatePoolResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgUpdatePoolResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgUpdatePoolResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgUpdatePoolResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePoolResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgUpdatePoolResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePoolResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePoolResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePoolResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgUpdatePoolResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgUpdatePoolResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgUpdatePoolResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgUpdatePoolResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePoolResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgUpdatePoolResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgUpdatePoolResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgUpdatePoolResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePoolResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePoolResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePoolResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePoolResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_MsgDeletePool        protoreflect.MessageDescriptor
-	fd_MsgDeletePool_sender protoreflect.FieldDescriptor
-	fd_MsgDeletePool_id     protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgDeletePool = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgDeletePool")
-	fd_MsgDeletePool_sender = md_MsgDeletePool.Fields().ByName("sender")
-	fd_MsgDeletePool_id = md_MsgDeletePool.Fields().ByName("id")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgDeletePool)(nil)
-
-type fastReflection_MsgDeletePool MsgDeletePool
-
-func (x *MsgDeletePool) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgDeletePool)(x)
-}
-
-func (x *MsgDeletePool) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgDeletePool_messageType fastReflection_MsgDeletePool_messageType
-var _ protoreflect.MessageType = fastReflection_MsgDeletePool_messageType{}
-
-type fastReflection_MsgDeletePool_messageType struct{}
-
-func (x fastReflection_MsgDeletePool_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgDeletePool)(nil)
-}
-func (x fastReflection_MsgDeletePool_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePool)
-}
-func (x fastReflection_MsgDeletePool_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePool
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgDeletePool) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePool
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgDeletePool) Type() protoreflect.MessageType {
-	return _fastReflection_MsgDeletePool_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgDeletePool) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePool)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgDeletePool) Interface() protoreflect.ProtoMessage {
-	return (*MsgDeletePool)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgDeletePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Sender != "" {
-		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgDeletePool_sender, value) {
-			return
-		}
-	}
-	if x.Id != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_MsgDeletePool_id, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgDeletePool) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePool.sender":
-		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgDeletePool.id":
-		return x.Id != uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePool) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePool.sender":
-		x.Sender = ""
-	case "sunrise.liquiditypool.MsgDeletePool.id":
-		x.Id = uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgDeletePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePool.sender":
-		value := x.Sender
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgDeletePool.id":
-		value := x.Id
-		return protoreflect.ValueOfUint64(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePool does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePool.sender":
-		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgDeletePool.id":
-		x.Id = value.Uint()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePool.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgDeletePool is not mutable"))
-	case "sunrise.liquiditypool.MsgDeletePool.id":
-		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgDeletePool is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgDeletePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePool.sender":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgDeletePool.id":
-		return protoreflect.ValueOfUint64(uint64(0))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgDeletePool) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgDeletePool", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgDeletePool) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePool) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgDeletePool) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgDeletePool) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgDeletePool)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Sender)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Id != 0 {
-			n += 1 + runtime.Sov(uint64(x.Id))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePool)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Id != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
-			i--
-			dAtA[i] = 0x10
-		}
-		if len(x.Sender) > 0 {
-			i -= len(x.Sender)
-			copy(dAtA[i:], x.Sender)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePool)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePool: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePool: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Sender = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-				}
-				x.Id = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Id |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_MsgDeletePoolResponse protoreflect.MessageDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgDeletePoolResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgDeletePoolResponse")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgDeletePoolResponse)(nil)
-
-type fastReflection_MsgDeletePoolResponse MsgDeletePoolResponse
-
-func (x *MsgDeletePoolResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgDeletePoolResponse)(x)
-}
-
-func (x *MsgDeletePoolResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgDeletePoolResponse_messageType fastReflection_MsgDeletePoolResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgDeletePoolResponse_messageType{}
-
-type fastReflection_MsgDeletePoolResponse_messageType struct{}
-
-func (x fastReflection_MsgDeletePoolResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgDeletePoolResponse)(nil)
-}
-func (x fastReflection_MsgDeletePoolResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePoolResponse)
-}
-func (x fastReflection_MsgDeletePoolResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePoolResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgDeletePoolResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePoolResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgDeletePoolResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgDeletePoolResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgDeletePoolResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePoolResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgDeletePoolResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgDeletePoolResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgDeletePoolResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgDeletePoolResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePoolResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgDeletePoolResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePoolResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePoolResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePoolResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgDeletePoolResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePoolResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePoolResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgDeletePoolResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgDeletePoolResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgDeletePoolResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePoolResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgDeletePoolResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgDeletePoolResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgDeletePoolResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePoolResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePoolResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePoolResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePoolResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -3693,8 +1884,8 @@ type MsgCreatePool struct {
 	unknownFields protoimpl.UnknownFields
 
 	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	LowerTick string `protobuf:"bytes,2,opt,name=lowerTick,proto3" json:"lowerTick,omitempty"`
-	UpperTick string `protobuf:"bytes,3,opt,name=upperTick,proto3" json:"upperTick,omitempty"`
+	LowerTick int64  `protobuf:"varint,2,opt,name=lower_tick,json=lowerTick,proto3" json:"lower_tick,omitempty"`
+	UpperTick int64  `protobuf:"varint,3,opt,name=upper_tick,json=upperTick,proto3" json:"upper_tick,omitempty"`
 }
 
 func (x *MsgCreatePool) Reset() {
@@ -3724,18 +1915,18 @@ func (x *MsgCreatePool) GetSender() string {
 	return ""
 }
 
-func (x *MsgCreatePool) GetLowerTick() string {
+func (x *MsgCreatePool) GetLowerTick() int64 {
 	if x != nil {
 		return x.LowerTick
 	}
-	return ""
+	return 0
 }
 
-func (x *MsgCreatePool) GetUpperTick() string {
+func (x *MsgCreatePool) GetUpperTick() int64 {
 	if x != nil {
 		return x.UpperTick
 	}
-	return ""
+	return 0
 }
 
 type MsgCreatePoolResponse struct {
@@ -3773,160 +1964,6 @@ func (x *MsgCreatePoolResponse) GetId() uint64 {
 	return 0
 }
 
-type MsgUpdatePool struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Id        uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	LowerTick string `protobuf:"bytes,3,opt,name=lowerTick,proto3" json:"lowerTick,omitempty"`
-	UpperTick string `protobuf:"bytes,4,opt,name=upperTick,proto3" json:"upperTick,omitempty"`
-}
-
-func (x *MsgUpdatePool) Reset() {
-	*x = MsgUpdatePool{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgUpdatePool) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgUpdatePool) ProtoMessage() {}
-
-// Deprecated: Use MsgUpdatePool.ProtoReflect.Descriptor instead.
-func (*MsgUpdatePool) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *MsgUpdatePool) GetSender() string {
-	if x != nil {
-		return x.Sender
-	}
-	return ""
-}
-
-func (x *MsgUpdatePool) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *MsgUpdatePool) GetLowerTick() string {
-	if x != nil {
-		return x.LowerTick
-	}
-	return ""
-}
-
-func (x *MsgUpdatePool) GetUpperTick() string {
-	if x != nil {
-		return x.UpperTick
-	}
-	return ""
-}
-
-type MsgUpdatePoolResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *MsgUpdatePoolResponse) Reset() {
-	*x = MsgUpdatePoolResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgUpdatePoolResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgUpdatePoolResponse) ProtoMessage() {}
-
-// Deprecated: Use MsgUpdatePoolResponse.ProtoReflect.Descriptor instead.
-func (*MsgUpdatePoolResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{5}
-}
-
-type MsgDeletePool struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Id     uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (x *MsgDeletePool) Reset() {
-	*x = MsgDeletePool{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgDeletePool) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgDeletePool) ProtoMessage() {}
-
-// Deprecated: Use MsgDeletePool.ProtoReflect.Descriptor instead.
-func (*MsgDeletePool) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *MsgDeletePool) GetSender() string {
-	if x != nil {
-		return x.Sender
-	}
-	return ""
-}
-
-func (x *MsgDeletePool) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-type MsgDeletePoolResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *MsgDeletePoolResponse) Reset() {
-	*x = MsgDeletePoolResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgDeletePoolResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgDeletePoolResponse) ProtoMessage() {}
-
-// Deprecated: Use MsgDeletePoolResponse.ProtoReflect.Descriptor instead.
-func (*MsgDeletePoolResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{7}
-}
-
 var File_sunrise_liquiditypool_tx_proto protoreflect.FileDescriptor
 
 var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
@@ -3958,70 +1995,43 @@ var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
 	0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
 	0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
 	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x70, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
+	0x72, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
 	0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x6f, 0x77, 0x65,
-	0x72, 0x54, 0x69, 0x63, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6c, 0x6f, 0x77,
-	0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1c, 0x0a, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54,
-	0x69, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72,
-	0x54, 0x69, 0x63, 0x6b, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
-	0x72, 0x22, 0x27, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f,
-	0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x80, 0x01, 0x0a, 0x0d, 0x4d,
-	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x16, 0x0a, 0x06,
-	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65,
-	0x6e, 0x64, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04,
-	0x52, 0x02, 0x69, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x54, 0x69, 0x63,
-	0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x54, 0x69,
-	0x63, 0x6b, 0x12, 0x1c, 0x0a, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x18,
-	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b,
-	0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x17, 0x0a,
-	0x15, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x44, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c,
-	0x65, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
-	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a,
-	0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x17, 0x0a, 0x15,
-	0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x9a, 0x03, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x66, 0x0a,
-	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x26, 0x2e,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50,
-	0x6f, 0x6f, 0x6c, 0x12, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x73, 0x75,
+	0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x77, 0x65,
+	0x72, 0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x6f,
+	0x77, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x70, 0x65, 0x72,
+	0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x75, 0x70, 0x70,
+	0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e,
+	0x64, 0x65, 0x72, 0x22, 0x27, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x32, 0xd6, 0x01, 0x0a,
+	0x03, 0x4d, 0x73, 0x67, 0x12, 0x66, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x12, 0x26, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2e, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x0a,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x24, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
+	0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
+	0x1a, 0x2c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05,
+	0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xc1, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
 	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f,
-	0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x0a, 0x44, 0x65, 0x6c,
-	0x65, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e,
-	0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50,
-	0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
-	0x2a, 0x01, 0x42, 0xc1, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c,
-	0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x6f, 0x6c, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -4036,30 +2046,22 @@ func file_sunrise_liquiditypool_tx_proto_rawDescGZIP() []byte {
 	return file_sunrise_liquiditypool_tx_proto_rawDescData
 }
 
-var file_sunrise_liquiditypool_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_sunrise_liquiditypool_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_sunrise_liquiditypool_tx_proto_goTypes = []interface{}{
 	(*MsgUpdateParams)(nil),         // 0: sunrise.liquiditypool.MsgUpdateParams
 	(*MsgUpdateParamsResponse)(nil), // 1: sunrise.liquiditypool.MsgUpdateParamsResponse
 	(*MsgCreatePool)(nil),           // 2: sunrise.liquiditypool.MsgCreatePool
 	(*MsgCreatePoolResponse)(nil),   // 3: sunrise.liquiditypool.MsgCreatePoolResponse
-	(*MsgUpdatePool)(nil),           // 4: sunrise.liquiditypool.MsgUpdatePool
-	(*MsgUpdatePoolResponse)(nil),   // 5: sunrise.liquiditypool.MsgUpdatePoolResponse
-	(*MsgDeletePool)(nil),           // 6: sunrise.liquiditypool.MsgDeletePool
-	(*MsgDeletePoolResponse)(nil),   // 7: sunrise.liquiditypool.MsgDeletePoolResponse
-	(*Params)(nil),                  // 8: sunrise.liquiditypool.Params
+	(*Params)(nil),                  // 4: sunrise.liquiditypool.Params
 }
 var file_sunrise_liquiditypool_tx_proto_depIdxs = []int32{
-	8, // 0: sunrise.liquiditypool.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.Params
+	4, // 0: sunrise.liquiditypool.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.Params
 	0, // 1: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
 	2, // 2: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
-	4, // 3: sunrise.liquiditypool.Msg.UpdatePool:input_type -> sunrise.liquiditypool.MsgUpdatePool
-	6, // 4: sunrise.liquiditypool.Msg.DeletePool:input_type -> sunrise.liquiditypool.MsgDeletePool
-	1, // 5: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
-	3, // 6: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
-	5, // 7: sunrise.liquiditypool.Msg.UpdatePool:output_type -> sunrise.liquiditypool.MsgUpdatePoolResponse
-	7, // 8: sunrise.liquiditypool.Msg.DeletePool:output_type -> sunrise.liquiditypool.MsgDeletePoolResponse
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
+	1, // 3: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
+	3, // 4: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -4121,54 +2123,6 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 				return nil
 			}
 		}
-		file_sunrise_liquiditypool_tx_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdatePool); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_liquiditypool_tx_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdatePoolResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_liquiditypool_tx_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDeletePool); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_liquiditypool_tx_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDeletePoolResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -4176,7 +2130,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sunrise_liquiditypool_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

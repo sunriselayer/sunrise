@@ -5,11 +5,10 @@ package types
 
 import (
 	fmt "fmt"
+	proto "github.com/cosmos/gogoproto/proto"
 	io "io"
 	math "math"
 	math_bits "math/bits"
-
-	proto "github.com/cosmos/gogoproto/proto"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -25,9 +24,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Pool struct {
 	Id        uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	LowerTick string `protobuf:"bytes,2,opt,name=lowerTick,proto3" json:"lowerTick,omitempty"`
-	UpperTick string `protobuf:"bytes,3,opt,name=upperTick,proto3" json:"upperTick,omitempty"`
-	Sender    string `protobuf:"bytes,4,opt,name=sender,proto3" json:"sender,omitempty"`
+	Admin     string `protobuf:"bytes,2,opt,name=admin,proto3" json:"admin,omitempty"`
+	LowerTick int64  `protobuf:"varint,3,opt,name=lower_tick,json=lowerTick,proto3" json:"lower_tick,omitempty"`
+	UpperTick int64  `protobuf:"varint,4,opt,name=upper_tick,json=upperTick,proto3" json:"upper_tick,omitempty"`
 }
 
 func (m *Pool) Reset()         { *m = Pool{} }
@@ -70,25 +69,25 @@ func (m *Pool) GetId() uint64 {
 	return 0
 }
 
-func (m *Pool) GetLowerTick() string {
+func (m *Pool) GetAdmin() string {
+	if m != nil {
+		return m.Admin
+	}
+	return ""
+}
+
+func (m *Pool) GetLowerTick() int64 {
 	if m != nil {
 		return m.LowerTick
 	}
-	return ""
+	return 0
 }
 
-func (m *Pool) GetUpperTick() string {
+func (m *Pool) GetUpperTick() int64 {
 	if m != nil {
 		return m.UpperTick
 	}
-	return ""
-}
-
-func (m *Pool) GetSender() string {
-	if m != nil {
-		return m.Sender
-	}
-	return ""
+	return 0
 }
 
 func init() {
@@ -98,20 +97,21 @@ func init() {
 func init() { proto.RegisterFile("sunrise/liquiditypool/pool.proto", fileDescriptor_b5e900f89b7804df) }
 
 var fileDescriptor_b5e900f89b7804df = []byte{
-	// 200 bytes of a gzipped FileDescriptorProto
+	// 210 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x28, 0x2e, 0xcd, 0x2b,
 	0xca, 0x2c, 0x4e, 0xd5, 0xcf, 0xc9, 0x2c, 0x2c, 0xcd, 0x4c, 0xc9, 0x2c, 0xa9, 0x2c, 0xc8, 0xcf,
 	0xcf, 0xd1, 0x07, 0x11, 0x7a, 0x05, 0x45, 0xf9, 0x25, 0xf9, 0x42, 0xa2, 0x50, 0x15, 0x7a, 0x28,
 	0x2a, 0x94, 0xb2, 0xb8, 0x58, 0x02, 0xf2, 0xf3, 0x73, 0x84, 0xf8, 0xb8, 0x98, 0x32, 0x53, 0x24,
-	0x18, 0x15, 0x18, 0x35, 0x58, 0x82, 0x98, 0x32, 0x53, 0x84, 0x64, 0xb8, 0x38, 0x73, 0xf2, 0xcb,
-	0x53, 0x8b, 0x42, 0x32, 0x93, 0xb3, 0x25, 0x98, 0x14, 0x18, 0x35, 0x38, 0x83, 0x10, 0x02, 0x20,
-	0xd9, 0xd2, 0x82, 0x02, 0xa8, 0x2c, 0x33, 0x44, 0x16, 0x2e, 0x20, 0x24, 0xc6, 0xc5, 0x56, 0x9c,
-	0x9a, 0x97, 0x92, 0x5a, 0x24, 0xc1, 0x02, 0x96, 0x82, 0xf2, 0x9c, 0xfc, 0x4f, 0x3c, 0x92, 0x63,
-	0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96,
-	0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0xca, 0x34, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49, 0x2f, 0x39,
-	0x3f, 0x57, 0x1f, 0xea, 0xce, 0x9c, 0xc4, 0xca, 0xd4, 0x22, 0x18, 0x47, 0xbf, 0x02, 0xcd, 0x63,
-	0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0x60, 0xaf, 0x19, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff,
-	0xf0, 0x65, 0x58, 0x56, 0xfe, 0x00, 0x00, 0x00,
+	0x18, 0x15, 0x18, 0x35, 0x58, 0x82, 0x98, 0x32, 0x53, 0x84, 0x44, 0xb8, 0x58, 0x13, 0x53, 0x72,
+	0x33, 0xf3, 0x24, 0x98, 0x14, 0x18, 0x35, 0x38, 0x83, 0x20, 0x1c, 0x21, 0x59, 0x2e, 0xae, 0x9c,
+	0xfc, 0xf2, 0xd4, 0xa2, 0xf8, 0x92, 0xcc, 0xe4, 0x6c, 0x09, 0x66, 0x05, 0x46, 0x0d, 0xe6, 0x20,
+	0x4e, 0xb0, 0x48, 0x48, 0x66, 0x72, 0x36, 0x48, 0xba, 0xb4, 0xa0, 0x00, 0x26, 0xcd, 0x02, 0x91,
+	0x06, 0x8b, 0x80, 0xa4, 0x9d, 0xfc, 0x4f, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1,
+	0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21,
+	0xca, 0x34, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49, 0x2f, 0x39, 0x3f, 0x57, 0x1f, 0xea, 0xce, 0x9c,
+	0xc4, 0xca, 0xd4, 0x22, 0x18, 0x47, 0xbf, 0x02, 0xcd, 0x63, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49,
+	0x6c, 0x60, 0xaf, 0x19, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xfc, 0x42, 0xe0, 0x2d, 0xfe, 0x00,
+	0x00, 0x00,
 }
 
 func (m *Pool) Marshal() (dAtA []byte, err error) {
@@ -134,24 +134,20 @@ func (m *Pool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintPool(dAtA, i, uint64(len(m.Sender)))
+	if m.UpperTick != 0 {
+		i = encodeVarintPool(dAtA, i, uint64(m.UpperTick))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x20
 	}
-	if len(m.UpperTick) > 0 {
-		i -= len(m.UpperTick)
-		copy(dAtA[i:], m.UpperTick)
-		i = encodeVarintPool(dAtA, i, uint64(len(m.UpperTick)))
+	if m.LowerTick != 0 {
+		i = encodeVarintPool(dAtA, i, uint64(m.LowerTick))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x18
 	}
-	if len(m.LowerTick) > 0 {
-		i -= len(m.LowerTick)
-		copy(dAtA[i:], m.LowerTick)
-		i = encodeVarintPool(dAtA, i, uint64(len(m.LowerTick)))
+	if len(m.Admin) > 0 {
+		i -= len(m.Admin)
+		copy(dAtA[i:], m.Admin)
+		i = encodeVarintPool(dAtA, i, uint64(len(m.Admin)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -183,17 +179,15 @@ func (m *Pool) Size() (n int) {
 	if m.Id != 0 {
 		n += 1 + sovPool(uint64(m.Id))
 	}
-	l = len(m.LowerTick)
+	l = len(m.Admin)
 	if l > 0 {
 		n += 1 + l + sovPool(uint64(l))
 	}
-	l = len(m.UpperTick)
-	if l > 0 {
-		n += 1 + l + sovPool(uint64(l))
+	if m.LowerTick != 0 {
+		n += 1 + sovPool(uint64(m.LowerTick))
 	}
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovPool(uint64(l))
+	if m.UpperTick != 0 {
+		n += 1 + sovPool(uint64(m.UpperTick))
 	}
 	return n
 }
@@ -254,7 +248,7 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 			}
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -282,13 +276,32 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.LowerTick = string(dAtA[iNdEx:postIndex])
+			m.Admin = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
-			if wireType != 2 {
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
+			}
+			m.LowerTick = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPool
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LowerTick |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UpperTick", wireType)
 			}
-			var stringLen uint64
+			m.UpperTick = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPool
@@ -298,56 +311,11 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.UpperTick |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPool
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPool
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UpperTick = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPool
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPool
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPool
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPool(dAtA[iNdEx:])

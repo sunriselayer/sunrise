@@ -8,7 +8,6 @@ package liquiditypool
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -22,8 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_UpdateParams_FullMethodName = "/sunrise.liquiditypool.Msg/UpdateParams"
 	Msg_CreatePool_FullMethodName   = "/sunrise.liquiditypool.Msg/CreatePool"
-	Msg_UpdatePool_FullMethodName   = "/sunrise.liquiditypool.Msg/UpdatePool"
-	Msg_DeletePool_FullMethodName   = "/sunrise.liquiditypool.Msg/DeletePool"
 )
 
 // MsgClient is the client API for Msg service.
@@ -34,8 +31,6 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
-	UpdatePool(ctx context.Context, in *MsgUpdatePool, opts ...grpc.CallOption) (*MsgUpdatePoolResponse, error)
-	DeletePool(ctx context.Context, in *MsgDeletePool, opts ...grpc.CallOption) (*MsgDeletePoolResponse, error)
 }
 
 type msgClient struct {
@@ -64,24 +59,6 @@ func (c *msgClient) CreatePool(ctx context.Context, in *MsgCreatePool, opts ...g
 	return out, nil
 }
 
-func (c *msgClient) UpdatePool(ctx context.Context, in *MsgUpdatePool, opts ...grpc.CallOption) (*MsgUpdatePoolResponse, error) {
-	out := new(MsgUpdatePoolResponse)
-	err := c.cc.Invoke(ctx, Msg_UpdatePool_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) DeletePool(ctx context.Context, in *MsgDeletePool, opts ...grpc.CallOption) (*MsgDeletePoolResponse, error) {
-	out := new(MsgDeletePoolResponse)
-	err := c.cc.Invoke(ctx, Msg_DeletePool_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -90,8 +67,6 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
-	UpdatePool(context.Context, *MsgUpdatePool) (*MsgUpdatePoolResponse, error)
-	DeletePool(context.Context, *MsgDeletePool) (*MsgDeletePoolResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -104,12 +79,6 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePool not implemented")
-}
-func (UnimplementedMsgServer) UpdatePool(context.Context, *MsgUpdatePool) (*MsgUpdatePoolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdatePool not implemented")
-}
-func (UnimplementedMsgServer) DeletePool(context.Context, *MsgDeletePool) (*MsgDeletePoolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeletePool not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -160,42 +129,6 @@ func _Msg_CreatePool_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdatePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdatePool)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdatePool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_UpdatePool_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdatePool(ctx, req.(*MsgUpdatePool))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_DeletePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeletePool)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).DeletePool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_DeletePool_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeletePool(ctx, req.(*MsgDeletePool))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -210,14 +143,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreatePool",
 			Handler:    _Msg_CreatePool_Handler,
-		},
-		{
-			MethodName: "UpdatePool",
-			Handler:    _Msg_UpdatePool_Handler,
-		},
-		{
-			MethodName: "DeletePool",
-			Handler:    _Msg_DeletePool_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

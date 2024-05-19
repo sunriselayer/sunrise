@@ -19,8 +19,6 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams (MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc CreatePool   (MsgCreatePool  ) returns (MsgCreatePoolResponse  );
-  rpc UpdatePool   (MsgUpdatePool  ) returns (MsgUpdatePoolResponse  );
-  rpc DeletePool   (MsgDeletePool  ) returns (MsgDeletePoolResponse  );
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -43,29 +41,10 @@ message MsgUpdateParamsResponse {}
 message MsgCreatePool {
   option (cosmos.msg.v1.signer) = "sender";
   string sender    = 1;
-  string lowerTick = 2;
-  string upperTick = 3;
+  int64 lower_tick = 2;
+  int64 upper_tick = 3;
 }
 
 message MsgCreatePoolResponse {
   uint64 id = 1;
 }
-
-message MsgUpdatePool {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender    = 1;
-  uint64 id        = 2;
-  string lowerTick = 3;
-  string upperTick = 4;
-}
-
-message MsgUpdatePoolResponse {}
-
-message MsgDeletePool {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
-  uint64 id     = 2;
-}
-
-message MsgDeletePoolResponse {}
-

@@ -3,31 +3,30 @@ package liquiditypool
 
 import (
 	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (
-	md_Pool           protoreflect.MessageDescriptor
-	fd_Pool_id        protoreflect.FieldDescriptor
-	fd_Pool_lowerTick protoreflect.FieldDescriptor
-	fd_Pool_upperTick protoreflect.FieldDescriptor
-	fd_Pool_sender    protoreflect.FieldDescriptor
+	md_Pool            protoreflect.MessageDescriptor
+	fd_Pool_id         protoreflect.FieldDescriptor
+	fd_Pool_admin      protoreflect.FieldDescriptor
+	fd_Pool_lower_tick protoreflect.FieldDescriptor
+	fd_Pool_upper_tick protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_pool_proto_init()
 	md_Pool = File_sunrise_liquiditypool_pool_proto.Messages().ByName("Pool")
 	fd_Pool_id = md_Pool.Fields().ByName("id")
-	fd_Pool_lowerTick = md_Pool.Fields().ByName("lowerTick")
-	fd_Pool_upperTick = md_Pool.Fields().ByName("upperTick")
-	fd_Pool_sender = md_Pool.Fields().ByName("sender")
+	fd_Pool_admin = md_Pool.Fields().ByName("admin")
+	fd_Pool_lower_tick = md_Pool.Fields().ByName("lower_tick")
+	fd_Pool_upper_tick = md_Pool.Fields().ByName("upper_tick")
 }
 
 var _ protoreflect.Message = (*fastReflection_Pool)(nil)
@@ -101,21 +100,21 @@ func (x *fastReflection_Pool) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.LowerTick != "" {
-		value := protoreflect.ValueOfString(x.LowerTick)
-		if !f(fd_Pool_lowerTick, value) {
+	if x.Admin != "" {
+		value := protoreflect.ValueOfString(x.Admin)
+		if !f(fd_Pool_admin, value) {
 			return
 		}
 	}
-	if x.UpperTick != "" {
-		value := protoreflect.ValueOfString(x.UpperTick)
-		if !f(fd_Pool_upperTick, value) {
+	if x.LowerTick != int64(0) {
+		value := protoreflect.ValueOfInt64(x.LowerTick)
+		if !f(fd_Pool_lower_tick, value) {
 			return
 		}
 	}
-	if x.Sender != "" {
-		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_Pool_sender, value) {
+	if x.UpperTick != int64(0) {
+		value := protoreflect.ValueOfInt64(x.UpperTick)
+		if !f(fd_Pool_upper_tick, value) {
 			return
 		}
 	}
@@ -136,12 +135,12 @@ func (x *fastReflection_Pool) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.Pool.id":
 		return x.Id != uint64(0)
-	case "sunrise.liquiditypool.Pool.lowerTick":
-		return x.LowerTick != ""
-	case "sunrise.liquiditypool.Pool.upperTick":
-		return x.UpperTick != ""
-	case "sunrise.liquiditypool.Pool.sender":
-		return x.Sender != ""
+	case "sunrise.liquiditypool.Pool.admin":
+		return x.Admin != ""
+	case "sunrise.liquiditypool.Pool.lower_tick":
+		return x.LowerTick != int64(0)
+	case "sunrise.liquiditypool.Pool.upper_tick":
+		return x.UpperTick != int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.Pool"))
@@ -160,12 +159,12 @@ func (x *fastReflection_Pool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.Pool.id":
 		x.Id = uint64(0)
-	case "sunrise.liquiditypool.Pool.lowerTick":
-		x.LowerTick = ""
-	case "sunrise.liquiditypool.Pool.upperTick":
-		x.UpperTick = ""
-	case "sunrise.liquiditypool.Pool.sender":
-		x.Sender = ""
+	case "sunrise.liquiditypool.Pool.admin":
+		x.Admin = ""
+	case "sunrise.liquiditypool.Pool.lower_tick":
+		x.LowerTick = int64(0)
+	case "sunrise.liquiditypool.Pool.upper_tick":
+		x.UpperTick = int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.Pool"))
@@ -185,15 +184,15 @@ func (x *fastReflection_Pool) Get(descriptor protoreflect.FieldDescriptor) proto
 	case "sunrise.liquiditypool.Pool.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.Pool.lowerTick":
+	case "sunrise.liquiditypool.Pool.admin":
+		value := x.Admin
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.Pool.lower_tick":
 		value := x.LowerTick
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.Pool.upperTick":
+		return protoreflect.ValueOfInt64(value)
+	case "sunrise.liquiditypool.Pool.upper_tick":
 		value := x.UpperTick
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.Pool.sender":
-		value := x.Sender
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfInt64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.Pool"))
@@ -216,12 +215,12 @@ func (x *fastReflection_Pool) Set(fd protoreflect.FieldDescriptor, value protore
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.Pool.id":
 		x.Id = value.Uint()
-	case "sunrise.liquiditypool.Pool.lowerTick":
-		x.LowerTick = value.Interface().(string)
-	case "sunrise.liquiditypool.Pool.upperTick":
-		x.UpperTick = value.Interface().(string)
-	case "sunrise.liquiditypool.Pool.sender":
-		x.Sender = value.Interface().(string)
+	case "sunrise.liquiditypool.Pool.admin":
+		x.Admin = value.Interface().(string)
+	case "sunrise.liquiditypool.Pool.lower_tick":
+		x.LowerTick = value.Int()
+	case "sunrise.liquiditypool.Pool.upper_tick":
+		x.UpperTick = value.Int()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.Pool"))
@@ -244,12 +243,12 @@ func (x *fastReflection_Pool) Mutable(fd protoreflect.FieldDescriptor) protorefl
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.Pool.id":
 		panic(fmt.Errorf("field id of message sunrise.liquiditypool.Pool is not mutable"))
-	case "sunrise.liquiditypool.Pool.lowerTick":
-		panic(fmt.Errorf("field lowerTick of message sunrise.liquiditypool.Pool is not mutable"))
-	case "sunrise.liquiditypool.Pool.upperTick":
-		panic(fmt.Errorf("field upperTick of message sunrise.liquiditypool.Pool is not mutable"))
-	case "sunrise.liquiditypool.Pool.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.Pool is not mutable"))
+	case "sunrise.liquiditypool.Pool.admin":
+		panic(fmt.Errorf("field admin of message sunrise.liquiditypool.Pool is not mutable"))
+	case "sunrise.liquiditypool.Pool.lower_tick":
+		panic(fmt.Errorf("field lower_tick of message sunrise.liquiditypool.Pool is not mutable"))
+	case "sunrise.liquiditypool.Pool.upper_tick":
+		panic(fmt.Errorf("field upper_tick of message sunrise.liquiditypool.Pool is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.Pool"))
@@ -265,12 +264,12 @@ func (x *fastReflection_Pool) NewField(fd protoreflect.FieldDescriptor) protoref
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.Pool.id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.Pool.lowerTick":
+	case "sunrise.liquiditypool.Pool.admin":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.Pool.upperTick":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.Pool.sender":
-		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.Pool.lower_tick":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "sunrise.liquiditypool.Pool.upper_tick":
+		return protoreflect.ValueOfInt64(int64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.Pool"))
@@ -343,17 +342,15 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 		if x.Id != 0 {
 			n += 1 + runtime.Sov(uint64(x.Id))
 		}
-		l = len(x.LowerTick)
+		l = len(x.Admin)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.UpperTick)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.LowerTick != 0 {
+			n += 1 + runtime.Sov(uint64(x.LowerTick))
 		}
-		l = len(x.Sender)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.UpperTick != 0 {
+			n += 1 + runtime.Sov(uint64(x.UpperTick))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -384,24 +381,20 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Sender) > 0 {
-			i -= len(x.Sender)
-			copy(dAtA[i:], x.Sender)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+		if x.UpperTick != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.UpperTick))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x20
 		}
-		if len(x.UpperTick) > 0 {
-			i -= len(x.UpperTick)
-			copy(dAtA[i:], x.UpperTick)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.UpperTick)))
+		if x.LowerTick != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LowerTick))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x18
 		}
-		if len(x.LowerTick) > 0 {
-			i -= len(x.LowerTick)
-			copy(dAtA[i:], x.LowerTick)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LowerTick)))
+		if len(x.Admin) > 0 {
+			i -= len(x.Admin)
+			copy(dAtA[i:], x.Admin)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Admin)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -480,7 +473,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 				}
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -508,13 +501,32 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.LowerTick = string(dAtA[iNdEx:postIndex])
+				x.Admin = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
-				if wireType != 2 {
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
+				}
+				x.LowerTick = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.LowerTick |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UpperTick", wireType)
 				}
-				var stringLen uint64
+				x.UpperTick = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -524,56 +536,11 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.UpperTick |= int64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.UpperTick = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 4:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Sender = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -628,9 +595,9 @@ type Pool struct {
 	unknownFields protoimpl.UnknownFields
 
 	Id        uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	LowerTick string `protobuf:"bytes,2,opt,name=lowerTick,proto3" json:"lowerTick,omitempty"`
-	UpperTick string `protobuf:"bytes,3,opt,name=upperTick,proto3" json:"upperTick,omitempty"`
-	Sender    string `protobuf:"bytes,4,opt,name=sender,proto3" json:"sender,omitempty"`
+	Admin     string `protobuf:"bytes,2,opt,name=admin,proto3" json:"admin,omitempty"`
+	LowerTick int64  `protobuf:"varint,3,opt,name=lower_tick,json=lowerTick,proto3" json:"lower_tick,omitempty"`
+	UpperTick int64  `protobuf:"varint,4,opt,name=upper_tick,json=upperTick,proto3" json:"upper_tick,omitempty"`
 }
 
 func (x *Pool) Reset() {
@@ -660,25 +627,25 @@ func (x *Pool) GetId() uint64 {
 	return 0
 }
 
-func (x *Pool) GetLowerTick() string {
+func (x *Pool) GetAdmin() string {
+	if x != nil {
+		return x.Admin
+	}
+	return ""
+}
+
+func (x *Pool) GetLowerTick() int64 {
 	if x != nil {
 		return x.LowerTick
 	}
-	return ""
+	return 0
 }
 
-func (x *Pool) GetUpperTick() string {
+func (x *Pool) GetUpperTick() int64 {
 	if x != nil {
 		return x.UpperTick
 	}
-	return ""
-}
-
-func (x *Pool) GetSender() string {
-	if x != nil {
-		return x.Sender
-	}
-	return ""
+	return 0
 }
 
 var File_sunrise_liquiditypool_pool_proto protoreflect.FileDescriptor
@@ -689,12 +656,12 @@ var file_sunrise_liquiditypool_pool_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x12, 0x15, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
 	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x22, 0x6a, 0x0a, 0x04, 0x50, 0x6f, 0x6f,
 	0x6c, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69,
-	0x64, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12,
-	0x1c, 0x0a, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x16, 0x0a,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x42, 0xc3, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
+	0x64, 0x12, 0x14, 0x0a, 0x05, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x77, 0x65, 0x72,
+	0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x6f, 0x77,
+	0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x70, 0x65, 0x72, 0x5f,
+	0x74, 0x69, 0x63, 0x6b, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65,
+	0x72, 0x54, 0x69, 0x63, 0x6b, 0x42, 0xc3, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
 	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
 	0x6f, 0x6f, 0x6c, 0x42, 0x09, 0x50, 0x6f, 0x6f, 0x6c, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
 	0x5a, 0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
