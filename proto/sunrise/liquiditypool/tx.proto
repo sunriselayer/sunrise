@@ -59,3 +59,20 @@ message MsgCreatePosition {
 message MsgCreatePositionResponse {
   uint64 id = 1;
 }
+
+message MsgUpdatePosition {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+  uint64 id     = 2;
+}
+
+message MsgUpdatePositionResponse {}
+
+message MsgDeletePosition {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+  uint64 id     = 2;
+}
+
+message MsgDeletePositionResponse {}
+
