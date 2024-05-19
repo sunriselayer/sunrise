@@ -197,8 +197,8 @@ var (
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 		{Account: blobmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		// {Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
@@ -215,7 +215,7 @@ var (
 		// icatypes.ModuleName,
 		// blobmoduletypes.ModuleName,
 		// streammoduletypes.ModuleName,
-		// grantmoduletypes.ModuleName,
+		// tokenconvertermoduletypes.ModuleName,
 		// liquiditypoolmoduletypes.ModuleName,
 	}
 
