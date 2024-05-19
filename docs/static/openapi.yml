@@ -19061,191 +19061,6 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise.liquiditypool.Msg/CollectFees:
-    post:
-      operationId: SunriseLiquiditypoolMsg_CollectFees
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.Msg/CreatePool:
-    post:
-      operationId: SunriseLiquiditypoolMsg_CreatePool
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uint64
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-              lower_tick:
-                type: string
-                format: int64
-              upper_tick:
-                type: string
-                format: int64
-      tags:
-        - Msg
-  /sunrise.liquiditypool.Msg/CreatePosition:
-    post:
-      operationId: SunriseLiquiditypoolMsg_CreatePosition
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uint64
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.Msg/UpdateParams:
-    post:
-      summary: |-
-        UpdateParams defines a (governance) operation for updating the module
-        parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseLiquiditypoolMsg_UpdateParams
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            description: >-
-              MsgUpdateParamsResponse defines the response structure for
-              executing a
-
-              MsgUpdateParams message.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          description: MsgUpdateParams is the Msg/UpdateParams request type.
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              authority:
-                type: string
-                description: >-
-                  authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
-              params:
-                description: 'NOTE: All parameters must be supplied.'
-                type: object
-                properties:
-                  withdraw_fee_rate:
-                    type: string
-                  swap_treasury_tax_rate:
-                    type: string
-                  swap_interface_fee_rate:
-                    type: string
-            description: MsgUpdateParams is the Msg/UpdateParams request type.
-      tags:
-        - Msg
   /sunriselayer/sunrise/liquiditypool/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -19637,6 +19452,228 @@ paths:
           format: uint64
       tags:
         - Query
+  /sunrise.liquiditypool.Msg/CollectFees:
+    post:
+      operationId: SunriseLiquiditypoolMsg_CollectFees
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
+  /sunrise.liquiditypool.Msg/CollectIncentives:
+    post:
+      operationId: SunriseLiquiditypoolMsg_CollectIncentives
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
+  /sunrise.liquiditypool.Msg/CreatePool:
+    post:
+      operationId: SunriseLiquiditypoolMsg_CreatePool
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+              lower_tick:
+                type: string
+                format: int64
+              upper_tick:
+                type: string
+                format: int64
+      tags:
+        - Msg
+  /sunrise.liquiditypool.Msg/CreatePosition:
+    post:
+      operationId: SunriseLiquiditypoolMsg_CreatePosition
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
+  /sunrise.liquiditypool.Msg/UpdateParams:
+    post:
+      summary: |-
+        UpdateParams defines a (governance) operation for updating the module
+        parameters. The authority defaults to the x/gov module account.
+      operationId: SunriseLiquiditypoolMsg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: MsgUpdateParams is the Msg/UpdateParams request type.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: 'NOTE: All parameters must be supplied.'
+                type: object
+                properties:
+                  withdraw_fee_rate:
+                    type: string
+                  swap_treasury_tax_rate:
+                    type: string
+                  swap_interface_fee_rate:
+                    type: string
+            description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
   /sunrise.tokenconverter.Msg/ConvertExactAmountIn:
     post:
       operationId: SunriseTokenconverterMsg_ConvertExactAmountIn
@@ -27495,75 +27532,6 @@ definitions:
         type: string
         format: uint64
     description: Params defines the parameters for the module.
-  sunrise.liquiditypool.MsgCollectFees:
-    type: object
-    properties:
-      sender:
-        type: string
-  sunrise.liquiditypool.MsgCollectFeesResponse:
-    type: object
-  sunrise.liquiditypool.MsgCreatePool:
-    type: object
-    properties:
-      sender:
-        type: string
-      lower_tick:
-        type: string
-        format: int64
-      upper_tick:
-        type: string
-        format: int64
-  sunrise.liquiditypool.MsgCreatePoolResponse:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uint64
-  sunrise.liquiditypool.MsgCreatePosition:
-    type: object
-    properties:
-      sender:
-        type: string
-  sunrise.liquiditypool.MsgCreatePositionResponse:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uint64
-  sunrise.liquiditypool.MsgUpdateParams:
-    type: object
-    properties:
-      authority:
-        type: string
-        description: >-
-          authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
-      params:
-        description: 'NOTE: All parameters must be supplied.'
-        type: object
-        properties:
-          withdraw_fee_rate:
-            type: string
-          swap_treasury_tax_rate:
-            type: string
-          swap_interface_fee_rate:
-            type: string
-    description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.liquiditypool.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  sunrise.liquiditypool.Params:
-    type: object
-    properties:
-      withdraw_fee_rate:
-        type: string
-      swap_treasury_tax_rate:
-        type: string
-      swap_interface_fee_rate:
-        type: string
-    description: Params defines the parameters for the module.
   cosmos.base.query.v1beta1.PageRequest:
     type: object
     properties:
@@ -27641,6 +27609,16 @@ definitions:
                repeated Bar results = 1;
                PageResponse page = 2;
        }
+  sunrise.liquiditypool.Params:
+    type: object
+    properties:
+      withdraw_fee_rate:
+        type: string
+      swap_treasury_tax_rate:
+        type: string
+      swap_interface_fee_rate:
+        type: string
+    description: Params defines the parameters for the module.
   sunrise.liquiditypool.Pool:
     type: object
     properties:
@@ -27789,6 +27767,72 @@ definitions:
           swap_interface_fee_rate:
             type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  sunrise.liquiditypool.MsgCollectFees:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.liquiditypool.MsgCollectFeesResponse:
+    type: object
+  sunrise.liquiditypool.MsgCollectIncentives:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.liquiditypool.MsgCollectIncentivesResponse:
+    type: object
+  sunrise.liquiditypool.MsgCreatePool:
+    type: object
+    properties:
+      sender:
+        type: string
+      lower_tick:
+        type: string
+        format: int64
+      upper_tick:
+        type: string
+        format: int64
+  sunrise.liquiditypool.MsgCreatePoolResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+  sunrise.liquiditypool.MsgCreatePosition:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.liquiditypool.MsgCreatePositionResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+  sunrise.liquiditypool.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: 'NOTE: All parameters must be supplied.'
+        type: object
+        properties:
+          withdraw_fee_rate:
+            type: string
+          swap_treasury_tax_rate:
+            type: string
+          swap_interface_fee_rate:
+            type: string
+    description: MsgUpdateParams is the Msg/UpdateParams request type.
+  sunrise.liquiditypool.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
   sunrise.tokenconverter.MsgConvertExactAmountIn:
     type: object
     properties:

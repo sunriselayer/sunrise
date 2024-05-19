@@ -8,7 +8,6 @@ package liquiditypool
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,10 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName   = "/sunrise.liquiditypool.Msg/UpdateParams"
-	Msg_CreatePool_FullMethodName     = "/sunrise.liquiditypool.Msg/CreatePool"
-	Msg_CreatePosition_FullMethodName = "/sunrise.liquiditypool.Msg/CreatePosition"
-	Msg_CollectFees_FullMethodName    = "/sunrise.liquiditypool.Msg/CollectFees"
+	Msg_UpdateParams_FullMethodName      = "/sunrise.liquiditypool.Msg/UpdateParams"
+	Msg_CreatePool_FullMethodName        = "/sunrise.liquiditypool.Msg/CreatePool"
+	Msg_CreatePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/CreatePosition"
+	Msg_UpdatePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/UpdatePosition"
+	Msg_DeletePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/DeletePosition"
+	Msg_CollectFees_FullMethodName       = "/sunrise.liquiditypool.Msg/CollectFees"
+	Msg_CollectIncentives_FullMethodName = "/sunrise.liquiditypool.Msg/CollectIncentives"
 )
 
 // MsgClient is the client API for Msg service.
@@ -35,7 +37,10 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
 	CreatePosition(ctx context.Context, in *MsgCreatePosition, opts ...grpc.CallOption) (*MsgCreatePositionResponse, error)
+	UpdatePosition(ctx context.Context, in *MsgUpdatePosition, opts ...grpc.CallOption) (*MsgUpdatePositionResponse, error)
+	DeletePosition(ctx context.Context, in *MsgDeletePosition, opts ...grpc.CallOption) (*MsgDeletePositionResponse, error)
 	CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error)
+	CollectIncentives(ctx context.Context, in *MsgCollectIncentives, opts ...grpc.CallOption) (*MsgCollectIncentivesResponse, error)
 }
 
 type msgClient struct {
@@ -73,9 +78,36 @@ func (c *msgClient) CreatePosition(ctx context.Context, in *MsgCreatePosition, o
 	return out, nil
 }
 
+func (c *msgClient) UpdatePosition(ctx context.Context, in *MsgUpdatePosition, opts ...grpc.CallOption) (*MsgUpdatePositionResponse, error) {
+	out := new(MsgUpdatePositionResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdatePosition_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeletePosition(ctx context.Context, in *MsgDeletePosition, opts ...grpc.CallOption) (*MsgDeletePositionResponse, error) {
+	out := new(MsgDeletePositionResponse)
+	err := c.cc.Invoke(ctx, Msg_DeletePosition_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error) {
 	out := new(MsgCollectFeesResponse)
 	err := c.cc.Invoke(ctx, Msg_CollectFees_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CollectIncentives(ctx context.Context, in *MsgCollectIncentives, opts ...grpc.CallOption) (*MsgCollectIncentivesResponse, error) {
+	out := new(MsgCollectIncentivesResponse)
+	err := c.cc.Invoke(ctx, Msg_CollectIncentives_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +123,10 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
 	CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error)
+	UpdatePosition(context.Context, *MsgUpdatePosition) (*MsgUpdatePositionResponse, error)
+	DeletePosition(context.Context, *MsgDeletePosition) (*MsgDeletePositionResponse, error)
 	CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error)
+	CollectIncentives(context.Context, *MsgCollectIncentives) (*MsgCollectIncentivesResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -108,8 +143,17 @@ func (UnimplementedMsgServer) CreatePool(context.Context, *MsgCreatePool) (*MsgC
 func (UnimplementedMsgServer) CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePosition not implemented")
 }
+func (UnimplementedMsgServer) UpdatePosition(context.Context, *MsgUpdatePosition) (*MsgUpdatePositionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePosition not implemented")
+}
+func (UnimplementedMsgServer) DeletePosition(context.Context, *MsgDeletePosition) (*MsgDeletePositionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePosition not implemented")
+}
 func (UnimplementedMsgServer) CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CollectFees not implemented")
+}
+func (UnimplementedMsgServer) CollectIncentives(context.Context, *MsgCollectIncentives) (*MsgCollectIncentivesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CollectIncentives not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -178,6 +222,42 @@ func _Msg_CreatePosition_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdatePosition)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdatePosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdatePosition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdatePosition(ctx, req.(*MsgUpdatePosition))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeletePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeletePosition)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeletePosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DeletePosition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeletePosition(ctx, req.(*MsgDeletePosition))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_CollectFees_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgCollectFees)
 	if err := dec(in); err != nil {
@@ -192,6 +272,24 @@ func _Msg_CollectFees_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).CollectFees(ctx, req.(*MsgCollectFees))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CollectIncentives_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCollectIncentives)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CollectIncentives(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CollectIncentives_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CollectIncentives(ctx, req.(*MsgCollectIncentives))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -216,8 +314,20 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_CreatePosition_Handler,
 		},
 		{
+			MethodName: "UpdatePosition",
+			Handler:    _Msg_UpdatePosition_Handler,
+		},
+		{
+			MethodName: "DeletePosition",
+			Handler:    _Msg_DeletePosition_Handler,
+		},
+		{
 			MethodName: "CollectFees",
 			Handler:    _Msg_CollectFees_Handler,
+		},
+		{
+			MethodName: "CollectIncentives",
+			Handler:    _Msg_CollectIncentives_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

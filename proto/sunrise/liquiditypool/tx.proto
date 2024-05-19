@@ -18,10 +18,13 @@ service Msg {
   
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
-  rpc UpdateParams   (MsgUpdateParams  ) returns (MsgUpdateParamsResponse  );
-  rpc CreatePool     (MsgCreatePool    ) returns (MsgCreatePoolResponse    );
-  rpc CreatePosition (MsgCreatePosition) returns (MsgCreatePositionResponse);
-  rpc CollectFees    (MsgCollectFees   ) returns (MsgCollectFeesResponse   );
+  rpc UpdateParams      (MsgUpdateParams     ) returns (MsgUpdateParamsResponse     );
+  rpc CreatePool        (MsgCreatePool       ) returns (MsgCreatePoolResponse       );
+  rpc CreatePosition    (MsgCreatePosition   ) returns (MsgCreatePositionResponse   );
+  rpc UpdatePosition    (MsgUpdatePosition   ) returns (MsgUpdatePositionResponse   );
+  rpc DeletePosition    (MsgDeletePosition   ) returns (MsgDeletePositionResponse   );
+  rpc CollectFees       (MsgCollectFees      ) returns (MsgCollectFeesResponse      );
+  rpc CollectIncentives (MsgCollectIncentives) returns (MsgCollectIncentivesResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -83,4 +86,11 @@ message MsgCollectFees {
 }
 
 message MsgCollectFeesResponse {}
+
+message MsgCollectIncentives {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+}
+
+message MsgCollectIncentivesResponse {}
 

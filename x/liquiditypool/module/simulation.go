@@ -51,6 +51,10 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgCollectFees int = 100
 
+	opWeightMsgCollectIncentives = "op_weight_msg_collect_incentives"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCollectIncentives int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -173,6 +177,17 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquiditypoolsimulation.SimulateMsgCollectFees(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
+	var weightMsgCollectIncentives int
+	simState.AppParams.GetOrGenerate(opWeightMsgCollectIncentives, &weightMsgCollectIncentives, nil,
+		func(_ *rand.Rand) {
+			weightMsgCollectIncentives = defaultWeightMsgCollectIncentives
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCollectIncentives,
+		liquiditypoolsimulation.SimulateMsgCollectIncentives(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -234,6 +249,14 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgCollectFees,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				liquiditypoolsimulation.SimulateMsgCollectFees(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgCollectIncentives,
+			defaultWeightMsgCollectIncentives,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				liquiditypoolsimulation.SimulateMsgCollectIncentives(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
