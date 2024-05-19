@@ -10,13 +10,11 @@ import (
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreatePool{},
-		&MsgUpdatePool{},
-		&MsgDeletePool{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreatePosition{},
-		&MsgUpdatePosition{},
-		&MsgDeletePosition{},
+		&MsgIncreaseLiquidity{},
+		&MsgDecreaseLiquidity{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCollectFees{},

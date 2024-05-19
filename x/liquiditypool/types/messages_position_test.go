@@ -39,21 +39,21 @@ func TestMsgCreatePosition_ValidateBasic(t *testing.T) {
 	}
 }
 
-func TestMsgUpdatePosition_ValidateBasic(t *testing.T) {
+func TestMsgIncreaseLiquidity_ValidateBasic(t *testing.T) {
 	tests := []struct {
 		name string
-		msg  MsgUpdatePosition
+		msg  MsgIncreaseLiquidity
 		err  error
 	}{
 		{
 			name: "invalid address",
-			msg: MsgUpdatePosition{
+			msg: MsgIncreaseLiquidity{
 				Sender: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
-			msg: MsgUpdatePosition{
+			msg: MsgIncreaseLiquidity{
 				Sender: sample.AccAddress(),
 			},
 		},
@@ -70,21 +70,21 @@ func TestMsgUpdatePosition_ValidateBasic(t *testing.T) {
 	}
 }
 
-func TestMsgDeletePosition_ValidateBasic(t *testing.T) {
+func TestMsgDecreaseLiquidity_ValidateBasic(t *testing.T) {
 	tests := []struct {
 		name string
-		msg  MsgDeletePosition
+		msg  MsgDecreaseLiquidity
 		err  error
 	}{
 		{
 			name: "invalid address",
-			msg: MsgDeletePosition{
+			msg: MsgDecreaseLiquidity{
 				Sender: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
-			msg: MsgDeletePosition{
+			msg: MsgDecreaseLiquidity{
 				Sender: sample.AccAddress(),
 			},
 		},
