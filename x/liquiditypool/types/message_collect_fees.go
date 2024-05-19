@@ -8,9 +8,10 @@ import (
 
 var _ sdk.Msg = &MsgCollectFees{}
 
-func NewMsgCollectFees(sender string) *MsgCollectFees {
+func NewMsgCollectFees(sender string, positionIds []uint64) *MsgCollectFees {
 	return &MsgCollectFees{
-		Sender: sender,
+		Sender:      sender,
+		PositionIds: positionIds,
 	}
 }
 
@@ -19,5 +20,10 @@ func (msg *MsgCollectFees) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
+
+	if len(msg.PositionIds) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "position ids cannot be empty")
+	}
+
 	return nil
 }
