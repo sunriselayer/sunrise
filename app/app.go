@@ -58,6 +58,7 @@ import (
 
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
+	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunriselayer/sunrise/docs"
@@ -123,6 +124,7 @@ type App struct {
 	BlobKeeper           blobmodulekeeper.Keeper
 	StreamKeeper         streammodulekeeper.Keeper
 	TokenconverterKeeper tokenconvertermodulekeeper.Keeper
+	LiquiditypoolKeeper  liquiditypoolmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -264,6 +266,7 @@ func New(
 		&app.BlobKeeper,
 		&app.StreamKeeper,
 		&app.TokenconverterKeeper,
+		&app.LiquiditypoolKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

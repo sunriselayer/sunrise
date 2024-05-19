@@ -73,11 +73,14 @@ import (
 
 	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/module/v1"
 	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
+	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module"
 	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
 	_ "github.com/sunriselayer/sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
 	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunriselayer/sunrise/x/blobstream/types"
+	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module" // import for side-effects
+	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -120,6 +123,7 @@ var (
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -147,6 +151,7 @@ var (
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -168,6 +173,7 @@ var (
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -187,6 +193,7 @@ var (
 		{Account: ibctransfertypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
+		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 		{Account: blobmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
@@ -339,6 +346,10 @@ var (
 			{
 				Name:   tokenconvertermoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&tokenconvertermodulev1.Module{}),
+			},
+			{
+				Name:   liquiditypoolmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

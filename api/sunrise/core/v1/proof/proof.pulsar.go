@@ -2,15 +2,16 @@
 package proof
 
 import (
-	crypto "cosmossdk.io/api/tendermint/crypto"
 	fmt "fmt"
+	io "io"
+	reflect "reflect"
+	sync "sync"
+
+	crypto "cosmossdk.io/api/tendermint/crypto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	io "io"
-	reflect "reflect"
-	sync "sync"
 )
 
 var _ protoreflect.List = (*_ShareProof_1_list)(nil)

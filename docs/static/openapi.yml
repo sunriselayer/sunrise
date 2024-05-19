@@ -19061,12 +19061,48 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise.feeconverter.Msg/UpdateParams:
+  /sunriselayer/sunrise/liquiditypool/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseLiquiditypoolQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /sunrise.liquiditypool.Msg/UpdateParams:
     post:
       summary: |-
         UpdateParams defines a (governance) operation for updating the module
         parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseFeeconverterMsg_UpdateParams
+      operationId: SunriseLiquiditypoolMsg_UpdateParams
       responses:
         '200':
           description: A successful response.
@@ -19117,523 +19153,22 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunrise.liquiditypool.v1.Msg/CreatePool:
-    post:
-      operationId: SunriseLiquiditypoolV1Msg_CreatePool
+  /sunriselayer/sunrise/tokenconverter/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseTokenconverterQuery_Params
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              id:
-                type: string
-                format: uint64
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              creator:
-                type: string
-              base_denom:
-                type: string
-              quote_denom:
-                type: string
-              fee_rate:
-                type: string
-              f_x:
-                type: string
-              f_y:
-                type: string
-              f_k:
-                type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.v1.Msg/ExitPool:
-    post:
-      operationId: SunriseLiquiditypoolV1Msg_ExitPool
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              tokens_out:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    denom:
-                      type: string
-                    amount:
-                      type: string
-                  description: >-
-                    Coin defines a token with a denomination and an amount.
-
-
-                    NOTE: The amount field is an Int which implements the custom
-                    method
-
-                    signatures required by gogoproto.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-              pool_id:
-                type: string
-                format: uint64
-              share_amount:
-                type: string
-              min_amount_base:
-                type: string
-              min_amount_quote:
-                type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.v1.Msg/JoinPool:
-    post:
-      operationId: SunriseLiquiditypoolV1Msg_JoinPool
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              share_amount:
-                type: string
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-              pool_id:
-                type: string
-                format: uint64
-              base_token:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
-
-
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-              quote_token:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
-
-
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-              min_share_amount:
-                type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.v1.Msg/SwapExactAmountIn:
-    post:
-      operationId: SunriseLiquiditypoolV1Msg_SwapExactAmountIn
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              tokens_via:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    denom:
-                      type: string
-                    amount:
-                      type: string
-                  description: >-
-                    Coin defines a token with a denomination and an amount.
-
-
-                    NOTE: The amount field is an Int which implements the custom
-                    method
-
-                    signatures required by gogoproto.
-              token_out:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
-
-
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-              token_in:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
-
-
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-              min_amount_out:
-                type: string
-              routes:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    base_denom:
-                      type: string
-                    quote_denom:
-                      type: string
-                    pool_weights:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          pool_id:
-                            type: string
-                            format: uint64
-                          weight:
-                            type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.v1.Msg/SwapExactAmountOut:
-    post:
-      operationId: SunriseLiquiditypoolV1Msg_SwapExactAmountOut
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              token_in:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
-
-
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-              token_out:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
-
-
-                  NOTE: The amount field is an Int which implements the custom
-                  method
-
-                  signatures required by gogoproto.
-              max_amount_in:
-                type: string
-              route:
-                type: object
-                properties:
-                  base_denom:
-                    type: string
-                  quote_denom:
-                    type: string
-                  pool_weights:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        pool_id:
-                          type: string
-                          format: uint64
-                        weight:
-                          type: string
-      tags:
-        - Msg
-  /sunrise.liquiditypool.v1.Msg/UpdateParams:
-    post:
-      summary: |-
-        UpdateParams defines a (governance) operation for updating the module
-        parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseLiquiditypoolV1Msg_UpdateParams
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            description: >-
-              MsgUpdateParamsResponse defines the response structure for
-              executing a
-
-              MsgUpdateParams message.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          description: MsgUpdateParams is the Msg/UpdateParams request type.
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              authority:
-                type: string
-                description: >-
-                  authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
               params:
-                description: 'NOTE: All parameters must be supplied.'
+                description: params holds all the parameters of this module.
                 type: object
-                properties:
-                  swap_treasury_tax_rate:
-                    type: string
-                  pool_exit_fee_rate:
-                    type: string
-                  twap_window:
-                    type: string
-                  twap_expiry:
-                    type: string
-            description: MsgUpdateParams is the Msg/UpdateParams request type.
-      tags:
-        - Msg
-  /sunrise.liquiditypool.v1.Msg/UpdatePool:
-    post:
-      operationId: SunriseLiquiditypoolV1Msg_UpdatePool
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              admin:
-                type: string
-              id:
-                type: string
-                format: uint64
-              base_denom:
-                type: string
-              quote_denom:
-                type: string
-              new_admin:
-                type: string
-              fee_rate:
-                type: string
-              f_x:
-                type: string
-              f_y:
-                type: string
-              f_k:
-                type: string
-      tags:
-        - Msg
-  /sunrise.liquiditystaking.Msg/UpdateParams:
-    post:
-      summary: |-
-        UpdateParams defines a (governance) operation for updating the module
-        parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseLiquiditystakingMsg_UpdateParams
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
             description: >-
-              MsgUpdateParamsResponse defines the response structure for
-              executing a
-
-              MsgUpdateParams message.
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
         default:
           description: An unexpected error response.
           schema:
@@ -19652,28 +19187,8 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
-      parameters:
-        - name: body
-          description: MsgUpdateParams is the Msg/UpdateParams request type.
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              authority:
-                type: string
-                description: >-
-                  authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
-              params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
-                type: object
-            description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
-        - Msg
+        - Query
   /sunrise.tokenconverter.Msg/ConvertExactAmountIn:
     post:
       operationId: SunriseTokenconverterMsg_ConvertExactAmountIn
@@ -19708,6 +19223,10 @@ paths:
             type: object
             properties:
               sender:
+                type: string
+              amount_in:
+                type: string
+              min_amount_out:
                 type: string
       tags:
         - Msg
@@ -19745,6 +19264,10 @@ paths:
             type: object
             properties:
               sender:
+                type: string
+              amount_out:
+                type: string
+              max_amount_in:
                 type: string
       tags:
         - Msg
@@ -19801,42 +19324,6 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunriselayer/sunrise/tokenconverter/params:
-    get:
-      summary: Parameters queries the parameters of the module.
-      operationId: SunriseTokenconverterQuery_Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
 definitions:
   cosmos.auth.v1beta1.MsgUpdateParams:
     type: object
@@ -27560,7 +27047,17 @@ definitions:
         type: string
         format: uint64
     description: Params defines the parameters for the module.
-  sunrise.feeconverter.MsgUpdateParams:
+  sunrise.liquiditypool.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  sunrise.liquiditypool.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  sunrise.liquiditypool.MsgUpdateParams:
     type: object
     properties:
       authority:
@@ -27575,339 +27072,29 @@ definitions:
           NOTE: All parameters must be supplied.
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.feeconverter.MsgUpdateParamsResponse:
+  sunrise.liquiditypool.MsgUpdateParamsResponse:
     type: object
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.feeconverter.Params:
+  sunrise.tokenconverter.Params:
     type: object
     description: Params defines the parameters for the module.
-  sunrise.liquiditypool.v1.MsgCreatePool:
+  sunrise.tokenconverter.QueryParamsResponse:
     type: object
     properties:
-      creator:
-        type: string
-      base_denom:
-        type: string
-      quote_denom:
-        type: string
-      fee_rate:
-        type: string
-      f_x:
-        type: string
-      f_y:
-        type: string
-      f_k:
-        type: string
-  sunrise.liquiditypool.v1.MsgCreatePoolResponse:
-    type: object
-    properties:
-      id:
-        type: string
-        format: uint64
-  sunrise.liquiditypool.v1.MsgExitPool:
-    type: object
-    properties:
-      sender:
-        type: string
-      pool_id:
-        type: string
-        format: uint64
-      share_amount:
-        type: string
-      min_amount_base:
-        type: string
-      min_amount_quote:
-        type: string
-  sunrise.liquiditypool.v1.MsgExitPoolResponse:
-    type: object
-    properties:
-      tokens_out:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-  sunrise.liquiditypool.v1.MsgJoinPool:
-    type: object
-    properties:
-      sender:
-        type: string
-      pool_id:
-        type: string
-        format: uint64
-      base_token:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-      quote_token:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-      min_share_amount:
-        type: string
-  sunrise.liquiditypool.v1.MsgJoinPoolResponse:
-    type: object
-    properties:
-      share_amount:
-        type: string
-  sunrise.liquiditypool.v1.MsgSwapExactAmountIn:
-    type: object
-    properties:
-      sender:
-        type: string
-      token_in:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-      min_amount_out:
-        type: string
-      routes:
-        type: array
-        items:
-          type: object
-          properties:
-            base_denom:
-              type: string
-            quote_denom:
-              type: string
-            pool_weights:
-              type: array
-              items:
-                type: object
-                properties:
-                  pool_id:
-                    type: string
-                    format: uint64
-                  weight:
-                    type: string
-  sunrise.liquiditypool.v1.MsgSwapExactAmountInResponse:
-    type: object
-    properties:
-      tokens_via:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-      token_out:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-  sunrise.liquiditypool.v1.MsgSwapExactAmountOut:
-    type: object
-    properties:
-      sender:
-        type: string
-      token_out:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-      max_amount_in:
-        type: string
-      route:
-        type: object
-        properties:
-          base_denom:
-            type: string
-          quote_denom:
-            type: string
-          pool_weights:
-            type: array
-            items:
-              type: object
-              properties:
-                pool_id:
-                  type: string
-                  format: uint64
-                weight:
-                  type: string
-  sunrise.liquiditypool.v1.MsgSwapExactAmountOutResponse:
-    type: object
-    properties:
-      token_in:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
-  sunrise.liquiditypool.v1.MsgUpdateParams:
-    type: object
-    properties:
-      authority:
-        type: string
-        description: >-
-          authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
       params:
-        description: 'NOTE: All parameters must be supplied.'
+        description: params holds all the parameters of this module.
         type: object
-        properties:
-          swap_treasury_tax_rate:
-            type: string
-          pool_exit_fee_rate:
-            type: string
-          twap_window:
-            type: string
-          twap_expiry:
-            type: string
-    description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.liquiditypool.v1.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  sunrise.liquiditypool.v1.MsgUpdatePool:
-    type: object
-    properties:
-      admin:
-        type: string
-      id:
-        type: string
-        format: uint64
-      base_denom:
-        type: string
-      quote_denom:
-        type: string
-      new_admin:
-        type: string
-      fee_rate:
-        type: string
-      f_x:
-        type: string
-      f_y:
-        type: string
-      f_k:
-        type: string
-  sunrise.liquiditypool.v1.MsgUpdatePoolResponse:
-    type: object
-  sunrise.liquiditypool.v1.Params:
-    type: object
-    properties:
-      swap_treasury_tax_rate:
-        type: string
-      pool_exit_fee_rate:
-        type: string
-      twap_window:
-        type: string
-      twap_expiry:
-        type: string
-    description: Params defines the parameters for the module.
-  sunrise.liquiditypool.v1.PoolWeight:
-    type: object
-    properties:
-      pool_id:
-        type: string
-        format: uint64
-      weight:
-        type: string
-  sunrise.liquiditypool.v1.SwapRoute:
-    type: object
-    properties:
-      base_denom:
-        type: string
-      quote_denom:
-        type: string
-      pool_weights:
-        type: array
-        items:
-          type: object
-          properties:
-            pool_id:
-              type: string
-              format: uint64
-            weight:
-              type: string
-  sunrise.liquiditystaking.MsgUpdateParams:
-    type: object
-    properties:
-      authority:
-        type: string
-        description: >-
-          authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
-      params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
-        type: object
-    description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.liquiditystaking.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  sunrise.liquiditystaking.Params:
-    type: object
-    description: Params defines the parameters for the module.
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   sunrise.tokenconverter.MsgConvertExactAmountIn:
     type: object
     properties:
       sender:
+        type: string
+      amount_in:
+        type: string
+      min_amount_out:
         type: string
   sunrise.tokenconverter.MsgConvertExactAmountInResponse:
     type: object
@@ -27915,6 +27102,10 @@ definitions:
     type: object
     properties:
       sender:
+        type: string
+      amount_out:
+        type: string
+      max_amount_in:
         type: string
   sunrise.tokenconverter.MsgConvertExactAmountOutResponse:
     type: object
@@ -27935,13 +27126,3 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  sunrise.tokenconverter.Params:
-    type: object
-    description: Params defines the parameters for the module.
-  sunrise.tokenconverter.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        description: params holds all the parameters of this module.
-        type: object
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
