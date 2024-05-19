@@ -11,7 +11,7 @@ import (
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	feeante "github.com/sunriselayer/sunrise/x/feeconverter/ante"
+	converterante "github.com/sunriselayer/sunrise/x/tokenconverter/ante"
 )
 
 func NewAnteHandler(
@@ -42,7 +42,7 @@ func NewAnteHandler(
 		ante.NewConsumeGasForTxSizeDecorator(accountKeeper),
 		// Ensure the feepayer (fee granter or first signer) has enough funds to pay for the tx.
 		// Side effect: deducts fees from the fee payer. Sets the tx priority in context.
-		ante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, feeante.CheckTxFeeWithValidatorMinGasPrices),
+		ante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, converterante.CheckTxFeeWithValidatorMinGasPrices),
 		// Set public keys in the context for fee-payer and all signers.
 		// Contract: must be called before all signature verification decorators.
 		ante.NewSetPubKeyDecorator(accountKeeper),
