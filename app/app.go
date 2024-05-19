@@ -54,10 +54,14 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	grantmodulekeeper "github.com/sunriselayer/sunrise/x/blobgrant/keeper"
 	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+
+	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+
+	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 
+	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunriselayer/sunrise/docs"
@@ -120,10 +124,12 @@ type App struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
-	BlobKeeper          blobmodulekeeper.Keeper
-	StreamKeeper        streammodulekeeper.Keeper
-	LiquiditypoolKeeper liquiditypoolmodulekeeper.Keeper
-	GrantKeeper         grantmodulekeeper.Keeper
+	BlobKeeper               blobmodulekeeper.Keeper
+	StreamKeeper             streammodulekeeper.Keeper
+	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
+	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
+	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
+	SwapKeeper               swapmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -266,8 +272,10 @@ func New(
 
 		&app.BlobKeeper,
 		&app.StreamKeeper,
+		&app.TokenconverterKeeper,
 		&app.LiquiditypoolKeeper,
-		&app.GrantKeeper,
+		&app.LiquidityincentiveKeeper,
+		&app.SwapKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

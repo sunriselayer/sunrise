@@ -3,7 +3,7 @@ package liquiditypool
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/v1"
+	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
@@ -18,17 +18,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "PairAll",
-					Use:       "list-pair",
-					Short:     "List all pair",
-				},
-				{
-					RpcMethod:      "Pair",
-					Use:            "show-pair [base_denom] [quote_denom]",
-					Short:          "Shows a pair",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
-				},
-				{
 					RpcMethod: "PoolAll",
 					Use:       "list-pool",
 					Short:     "List all pool",
@@ -40,15 +29,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
-					RpcMethod: "TwapAll",
-					Use:       "list-twap",
-					Short:     "List all twap",
+					RpcMethod: "PositionAll",
+					Use:       "list-position",
+					Short:     "List all position",
 				},
 				{
-					RpcMethod:      "Twap",
-					Use:            "show-twap [base_denom] [quote_denom]",
-					Short:          "Shows a twap",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
+					RpcMethod:      "Position",
+					Use:            "show-position [id]",
+					Short:          "Shows a position by id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
@@ -63,15 +52,51 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "CreatePool",
-					Use:            "create-pool [base_denom] [quote_denom]",
+					Use:            "create-pool [lowerTick] [upperTick]",
 					Short:          "Create pool",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "lowerTick"}, {ProtoField: "upperTick"}},
 				},
 				{
 					RpcMethod:      "UpdatePool",
-					Use:            "update-pool [id] [base_denom] [quote_denom]",
+					Use:            "update-pool [id] [lowerTick] [upperTick]",
 					Short:          "Update pool",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "base_denom"}, {ProtoField: "quote_denom"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "lowerTick"}, {ProtoField: "upperTick"}},
+				},
+				{
+					RpcMethod:      "DeletePool",
+					Use:            "delete-pool [id]",
+					Short:          "Delete pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod:      "CreatePosition",
+					Use:            "create-position ",
+					Short:          "Create position",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "UpdatePosition",
+					Use:            "update-position [id] ",
+					Short:          "Update position",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod:      "DeletePosition",
+					Use:            "delete-position [id]",
+					Short:          "Delete position",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod:      "CollectFees",
+					Use:            "collect-fees",
+					Short:          "Send a collect-fees tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "CollectIncentives",
+					Use:            "collect-incentives",
+					Short:          "Send a collect-incentives tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

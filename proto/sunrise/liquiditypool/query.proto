@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package sunrise.liquiditypool;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "sunrise/liquiditypool/params.proto";
+import "sunrise/liquiditypool/pool.proto";
+import "sunrise/liquiditypool/position.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  
+  // Parameters queries the parameters of the module.
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/params";
+  
+  }
+  
+  // Queries a list of Pool items.
+  rpc Pool    (QueryGetPoolRequest) returns (QueryGetPoolResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pool/{id}";
+  
+  }
+  rpc PoolAll (QueryAllPoolRequest) returns (QueryAllPoolResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pool";
+  
+  }
+  
+  // Queries a list of Position items.
+  rpc Position    (QueryGetPositionRequest) returns (QueryGetPositionResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/position/{id}";
+  
+  }
+  rpc PositionAll (QueryAllPositionRequest) returns (QueryAllPositionResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/position";
+  
+  }
+}
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+}
+
+message QueryGetPoolRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPoolResponse {
+  Pool Pool = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPoolRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPoolResponse {
+  repeated Pool                                   Pool       = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPositionRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPositionResponse {
+  Position Position = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPositionRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPositionResponse {
+  repeated Position                               Position   = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+

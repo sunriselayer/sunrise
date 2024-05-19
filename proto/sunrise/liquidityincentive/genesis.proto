@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.liquidityincentive;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/liquidityincentive/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+// GenesisState defines the liquidityincentive module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

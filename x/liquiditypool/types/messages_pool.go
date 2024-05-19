@@ -8,55 +8,54 @@ import (
 
 var _ sdk.Msg = &MsgCreatePool{}
 
-func NewMsgCreatePool(creator string, baseDenom string, quoteDenom string) *MsgCreatePool {
+func NewMsgCreatePool(sender string, lowerTick string, upperTick string) *MsgCreatePool {
 	return &MsgCreatePool{
-		Creator:    creator,
-		BaseDenom:  baseDenom,
-		QuoteDenom: quoteDenom,
+		Sender:    sender,
+		LowerTick: lowerTick,
+		UpperTick: upperTick,
 	}
 }
 
 func (msg *MsgCreatePool) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
-
-	if err := sdk.ValidateDenom(msg.BaseDenom); err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid base denom (%s)", err)
-	}
-
-	if err := sdk.ValidateDenom(msg.QuoteDenom); err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid quote denom (%s)", err)
-	}
-
 	return nil
 }
 
 var _ sdk.Msg = &MsgUpdatePool{}
 
-func NewMsgUpdatePool(admin string, id uint64, baseDenom string, quoteDenom string) *MsgUpdatePool {
+func NewMsgUpdatePool(sender string, id uint64, lowerTick string, upperTick string) *MsgUpdatePool {
 	return &MsgUpdatePool{
-		Admin:      admin,
-		Id:         id,
-		BaseDenom:  baseDenom,
-		QuoteDenom: quoteDenom,
+		Id:        id,
+		Sender:    sender,
+		LowerTick: lowerTick,
+		UpperTick: upperTick,
 	}
 }
 
 func (msg *MsgUpdatePool) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Admin)
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid admin address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
+	return nil
+}
 
-	if err := sdk.ValidateDenom(msg.BaseDenom); err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid base denom (%s)", err)
+var _ sdk.Msg = &MsgDeletePool{}
+
+func NewMsgDeletePool(sender string, id uint64) *MsgDeletePool {
+	return &MsgDeletePool{
+		Id:     id,
+		Sender: sender,
 	}
+}
 
-	if err := sdk.ValidateDenom(msg.QuoteDenom); err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid quote denom (%s)", err)
+func (msg *MsgDeletePool) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
-
 	return nil
 }

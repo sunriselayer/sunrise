@@ -22,7 +22,7 @@ func SimulateMsgCreatePool(
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 
 		msg := &types.MsgCreatePool{
-			Creator: simAccount.Address.String(),
+			Sender: simAccount.Address.String(),
 		}
 
 		txCtx := simulation.OperationInput{
@@ -57,16 +57,60 @@ func SimulateMsgUpdatePool(
 			found      = false
 		)
 		for _, obj := range allPool {
-			simAccount, found = FindAccount(accs, obj.Admin)
+			simAccount, found = FindAccount(accs, obj.Sender)
 			if found {
 				pool = obj
 				break
 			}
 		}
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "pool admin not found"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "pool sender not found"), nil, nil
 		}
-		msg.Admin = simAccount.Address.String()
+		msg.Sender = simAccount.Address.String()
+		msg.Id = pool.Id
+
+		txCtx := simulation.OperationInput{
+			R:               r,
+			App:             app,
+			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
+			Cdc:             nil,
+			Msg:             msg,
+			Context:         ctx,
+			SimAccount:      simAccount,
+			ModuleName:      types.ModuleName,
+			CoinsSpentInMsg: sdk.NewCoins(),
+			AccountKeeper:   ak,
+			Bankkeeper:      bk,
+		}
+		return simulation.GenAndDeliverTxWithRandFees(txCtx)
+	}
+}
+
+func SimulateMsgDeletePool(
+	ak types.AccountKeeper,
+	bk types.BankKeeper,
+	k keeper.Keeper,
+) simtypes.Operation {
+	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var (
+			simAccount = simtypes.Account{}
+			pool       = types.Pool{}
+			msg        = &types.MsgUpdatePool{}
+			allPool    = k.GetAllPool(ctx)
+			found      = false
+		)
+		for _, obj := range allPool {
+			simAccount, found = FindAccount(accs, obj.Sender)
+			if found {
+				pool = obj
+				break
+			}
+		}
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "pool sender not found"), nil, nil
+		}
+		msg.Sender = simAccount.Address.String()
 		msg.Id = pool.Id
 
 		txCtx := simulation.OperationInput{

@@ -14,16 +14,6 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
-		PairList: []types.Pair{
-			{
-				BaseDenom:  "base0",
-				QuoteDenom: "quote0",
-			},
-			{
-				BaseDenom:  "base1",
-				QuoteDenom: "quote1",
-			},
-		},
 		PoolList: []types.Pool{
 			{
 				Id: 0,
@@ -33,16 +23,15 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		PoolCount: 2,
-		TwapList: []types.Twap{
+		PositionList: []types.Position{
 			{
-				BaseDenom:  "base0",
-				QuoteDenom: "quote0",
+				Id: 0,
 			},
 			{
-				BaseDenom:  "base1",
-				QuoteDenom: "quote1",
+				Id: 1,
 			},
 		},
+		PositionCount: 2,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -54,9 +43,9 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
-	require.ElementsMatch(t, genesisState.PairList, got.PairList)
 	require.ElementsMatch(t, genesisState.PoolList, got.PoolList)
 	require.Equal(t, genesisState.PoolCount, got.PoolCount)
-	require.ElementsMatch(t, genesisState.TwapList, got.TwapList)
+	require.ElementsMatch(t, genesisState.PositionList, got.PositionList)
+	require.Equal(t, genesisState.PositionCount, got.PositionCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

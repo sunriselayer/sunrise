@@ -14,17 +14,15 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var pool = types.Pool{
-		Admin:      msg.Creator,
-		BaseDenom:  msg.BaseDenom,
-		QuoteDenom: msg.QuoteDenom,
+		Sender:    msg.Sender,
+		LowerTick: msg.LowerTick,
+		UpperTick: msg.UpperTick,
 	}
 
 	id := k.AppendPool(
 		ctx,
 		pool,
 	)
-
-	k.CheckSetInitialPairAndTwap(ctx, pool.BaseDenom, pool.QuoteDenom)
 
 	return &types.MsgCreatePoolResponse{
 		Id: id,
@@ -35,10 +33,10 @@ func (k msgServer) UpdatePool(goCtx context.Context, msg *types.MsgUpdatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var pool = types.Pool{
-		Admin:      msg.Admin,
-		Id:         msg.Id,
-		BaseDenom:  msg.BaseDenom,
-		QuoteDenom: msg.QuoteDenom,
+		Sender:    msg.Sender,
+		Id:        msg.Id,
+		LowerTick: msg.LowerTick,
+		UpperTick: msg.UpperTick,
 	}
 
 	// Checks that the element exists
@@ -47,16 +45,31 @@ func (k msgServer) UpdatePool(goCtx context.Context, msg *types.MsgUpdatePool) (
 		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
 
-	// Checks if the msg creator is the same as the current admin
-	if msg.Admin != val.Admin {
-		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect admin")
-	}
-
-	if msg.NewAdmin != "" {
-		pool.Admin = msg.NewAdmin
+	// Checks if the msg sender is the same as the current owner
+	if msg.Sender != val.Sender {
+		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
 	k.SetPool(ctx, pool)
 
 	return &types.MsgUpdatePoolResponse{}, nil
+}
+
+func (k msgServer) DeletePool(goCtx context.Context, msg *types.MsgDeletePool) (*types.MsgDeletePoolResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Checks that the element exists
+	val, found := k.GetPool(ctx, msg.Id)
+	if !found {
+		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
+	}
+
+	// Checks if the msg sender is the same as the current owner
+	if msg.Sender != val.Sender {
+		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	}
+
+	k.RemovePool(ctx, msg.Id)
+
+	return &types.MsgDeletePoolResponse{}, nil
 }
