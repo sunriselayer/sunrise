@@ -8,6 +8,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/liquiditypool/params.proto";
 import "sunrise/liquiditypool/pool.proto";
+import "sunrise/liquiditypool/position.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
@@ -17,8 +18,11 @@ service Msg {
   
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
-  rpc UpdateParams (MsgUpdateParams) returns (MsgUpdateParamsResponse);
-  rpc CreatePool   (MsgCreatePool  ) returns (MsgCreatePoolResponse  );
+  rpc UpdateParams   (MsgUpdateParams  ) returns (MsgUpdateParamsResponse  );
+  rpc CreatePool     (MsgCreatePool    ) returns (MsgCreatePoolResponse    );
+  rpc CreatePosition (MsgCreatePosition) returns (MsgCreatePositionResponse);
+  rpc UpdatePosition (MsgUpdatePosition) returns (MsgUpdatePositionResponse);
+  rpc DeletePosition (MsgDeletePosition) returns (MsgDeletePositionResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -27,7 +31,7 @@ message MsgUpdateParams {
   
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  
+
   // params defines the module parameters to update.
   
   // NOTE: All parameters must be supplied.
@@ -40,11 +44,37 @@ message MsgUpdateParamsResponse {}
 
 message MsgCreatePool {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender    = 1;
-  int64 lower_tick = 2;
-  int64 upper_tick = 3;
+  string sender     = 1;
+  int64  lower_tick = 2;
+  int64  upper_tick = 3;
 }
 
 message MsgCreatePoolResponse {
   uint64 id = 1;
 }
+
+message MsgCreatePosition {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+}
+
+message MsgCreatePositionResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdatePosition {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+  uint64 id     = 2;
+}
+
+message MsgUpdatePositionResponse {}
+
+message MsgDeletePosition {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+  uint64 id     = 2;
+}
+
+message MsgDeletePositionResponse {}
+

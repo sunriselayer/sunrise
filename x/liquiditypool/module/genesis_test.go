@@ -23,6 +23,15 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		PoolCount: 2,
+		PositionList: []types.Position{
+			{
+				Id: 0,
+			},
+			{
+				Id: 1,
+			},
+		},
+		PositionCount: 2,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -36,5 +45,7 @@ func TestGenesis(t *testing.T) {
 
 	require.ElementsMatch(t, genesisState.PoolList, got.PoolList)
 	require.Equal(t, genesisState.PoolCount, got.PoolCount)
+	require.ElementsMatch(t, genesisState.PositionList, got.PositionList)
+	require.Equal(t, genesisState.PositionCount, got.PositionCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

@@ -31,6 +31,15 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				PoolCount: 2,
+				PositionList: []types.Position{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				PositionCount: 2,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -58,6 +67,32 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				PoolCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated position",
+			genState: &types.GenesisState{
+				PositionList: []types.Position{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid position count",
+			genState: &types.GenesisState{
+				PositionList: []types.Position{
+					{
+						Id: 1,
+					},
+				},
+				PositionCount: 0,
 			},
 			valid: false,
 		},

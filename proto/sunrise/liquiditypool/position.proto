@@ -1,0 +1,9 @@
+syntax = "proto3";
+package sunrise.liquiditypool;
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+message Position {
+  uint64 id = 1;
+  string sender = 2;
+}

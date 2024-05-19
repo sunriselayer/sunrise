@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/liquiditypool/params.proto";
 import "sunrise/liquiditypool/pool.proto";
+import "sunrise/liquiditypool/position.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
@@ -27,6 +28,16 @@ service Query {
   }
   rpc PoolAll (QueryAllPoolRequest) returns (QueryAllPoolResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pool";
+  
+  }
+  
+  // Queries a list of Position items.
+  rpc Position    (QueryGetPositionRequest) returns (QueryGetPositionResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/position/{id}";
+  
+  }
+  rpc PositionAll (QueryAllPositionRequest) returns (QueryAllPositionResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/position";
   
   }
 }
@@ -54,6 +65,23 @@ message QueryAllPoolRequest {
 
 message QueryAllPoolResponse {
   repeated Pool                                   Pool       = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPositionRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPositionResponse {
+  Position Position = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPositionRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPositionResponse {
+  repeated Position                               Position   = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

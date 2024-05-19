@@ -23,3 +23,8 @@ const (
 	PoolKey      = "Pool/value/"
 	PoolCountKey = "Pool/count/"
 )
+
+const (
+	PositionKey      = "Position/value/"
+	PositionCountKey = "Position/count/"
+)
