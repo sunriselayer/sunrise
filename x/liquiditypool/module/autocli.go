@@ -17,6 +17,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "PoolAll",
+					Use:       "list-pool",
+					Short:     "List all pool",
+				},
+				{
+					RpcMethod:      "Pool",
+					Use:            "show-pool [id]",
+					Short:          "Shows a pool by id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -27,6 +38,24 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod:      "CreatePool",
+					Use:            "create-pool [lowerTick] [upperTick]",
+					Short:          "Create pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "lowerTick"}, {ProtoField: "upperTick"}},
+				},
+				{
+					RpcMethod:      "UpdatePool",
+					Use:            "update-pool [id] [lowerTick] [upperTick]",
+					Short:          "Update pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "lowerTick"}, {ProtoField: "upperTick"}},
+				},
+				{
+					RpcMethod:      "DeletePool",
+					Use:            "delete-pool [id]",
+					Short:          "Delete pool",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

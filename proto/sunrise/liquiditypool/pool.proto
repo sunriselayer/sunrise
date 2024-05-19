@@ -1,0 +1,11 @@
+syntax = "proto3";
+package sunrise.liquiditypool;
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+message Pool {
+  uint64 id = 1;
+  string lowerTick = 2; 
+  string upperTick = 3; 
+  string sender = 4;
+}
