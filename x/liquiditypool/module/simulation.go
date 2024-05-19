@@ -47,6 +47,10 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgDeletePosition int = 100
 
+	opWeightMsgCollectFees = "op_weight_msg_collect_fees"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCollectFees int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -158,6 +162,17 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquiditypoolsimulation.SimulateMsgDeletePosition(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
+	var weightMsgCollectFees int
+	simState.AppParams.GetOrGenerate(opWeightMsgCollectFees, &weightMsgCollectFees, nil,
+		func(_ *rand.Rand) {
+			weightMsgCollectFees = defaultWeightMsgCollectFees
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCollectFees,
+		liquiditypoolsimulation.SimulateMsgCollectFees(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -211,6 +226,14 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgDeletePosition,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				liquiditypoolsimulation.SimulateMsgDeletePosition(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgCollectFees,
+			defaultWeightMsgCollectFees,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				liquiditypoolsimulation.SimulateMsgCollectFees(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

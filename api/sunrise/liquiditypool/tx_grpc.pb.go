@@ -8,6 +8,7 @@ package liquiditypool
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -22,6 +23,7 @@ const (
 	Msg_UpdateParams_FullMethodName   = "/sunrise.liquiditypool.Msg/UpdateParams"
 	Msg_CreatePool_FullMethodName     = "/sunrise.liquiditypool.Msg/CreatePool"
 	Msg_CreatePosition_FullMethodName = "/sunrise.liquiditypool.Msg/CreatePosition"
+	Msg_CollectFees_FullMethodName    = "/sunrise.liquiditypool.Msg/CollectFees"
 )
 
 // MsgClient is the client API for Msg service.
@@ -33,6 +35,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
 	CreatePosition(ctx context.Context, in *MsgCreatePosition, opts ...grpc.CallOption) (*MsgCreatePositionResponse, error)
+	CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error)
 }
 
 type msgClient struct {
@@ -70,6 +73,15 @@ func (c *msgClient) CreatePosition(ctx context.Context, in *MsgCreatePosition, o
 	return out, nil
 }
 
+func (c *msgClient) CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error) {
+	out := new(MsgCollectFeesResponse)
+	err := c.cc.Invoke(ctx, Msg_CollectFees_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -79,6 +91,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
 	CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error)
+	CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -94,6 +107,9 @@ func (UnimplementedMsgServer) CreatePool(context.Context, *MsgCreatePool) (*MsgC
 }
 func (UnimplementedMsgServer) CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePosition not implemented")
+}
+func (UnimplementedMsgServer) CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CollectFees not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -162,6 +178,24 @@ func _Msg_CreatePosition_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CollectFees_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCollectFees)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CollectFees(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CollectFees_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CollectFees(ctx, req.(*MsgCollectFees))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +214,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreatePosition",
 			Handler:    _Msg_CreatePosition_Handler,
+		},
+		{
+			MethodName: "CollectFees",
+			Handler:    _Msg_CollectFees_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

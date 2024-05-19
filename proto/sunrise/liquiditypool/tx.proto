@@ -21,6 +21,7 @@ service Msg {
   rpc UpdateParams   (MsgUpdateParams  ) returns (MsgUpdateParamsResponse  );
   rpc CreatePool     (MsgCreatePool    ) returns (MsgCreatePoolResponse    );
   rpc CreatePosition (MsgCreatePosition) returns (MsgCreatePositionResponse);
+  rpc CollectFees    (MsgCollectFees   ) returns (MsgCollectFeesResponse   );
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -75,4 +76,11 @@ message MsgDeletePosition {
 }
 
 message MsgDeletePositionResponse {}
+
+message MsgCollectFees {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+}
+
+message MsgCollectFeesResponse {}
 
