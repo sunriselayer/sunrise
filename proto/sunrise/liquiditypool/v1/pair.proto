@@ -1,9 +1,0 @@
-syntax = "proto3";
-package sunrise.liquiditypool.v1;
-
-option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
-
-message Pair {
-  string base_denom = 1; 
-  string quote_denom = 2;
-}

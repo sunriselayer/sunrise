@@ -55,7 +55,6 @@ import (
 
 	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
 	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
-	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
@@ -123,7 +122,6 @@ type App struct {
 
 	BlobKeeper           blobmodulekeeper.Keeper
 	StreamKeeper         streammodulekeeper.Keeper
-	LiquiditypoolKeeper  liquiditypoolmodulekeeper.Keeper
 	TokenconverterKeeper tokenconvertermodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
@@ -265,7 +263,6 @@ func New(
 
 		&app.BlobKeeper,
 		&app.StreamKeeper,
-		&app.LiquiditypoolKeeper,
 		&app.TokenconverterKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {

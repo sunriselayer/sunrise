@@ -73,14 +73,11 @@ import (
 
 	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/module/v1"
 	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
-	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module/v1"
 	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
 	_ "github.com/sunriselayer/sunrise/x/blob/module" // import for side-effects
 	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
 	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunriselayer/sunrise/x/blobstream/types"
-	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module" // import for side-effects
-	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -122,7 +119,6 @@ var (
 		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
@@ -150,7 +146,6 @@ var (
 		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
@@ -172,7 +167,6 @@ var (
 		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
@@ -196,7 +190,7 @@ var (
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 		{Account: blobmoduletypes.ModuleName},
 		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		// {Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
@@ -341,10 +335,6 @@ var (
 			{
 				Name:   streammoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&streammodulev1.Module{}),
-			},
-			{
-				Name:   liquiditypoolmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
 			},
 			{
 				Name:   tokenconvertermoduletypes.ModuleName,
