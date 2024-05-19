@@ -8,7 +8,6 @@ package liquiditypool
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,8 +22,6 @@ const (
 	Msg_UpdateParams_FullMethodName   = "/sunrise.liquiditypool.Msg/UpdateParams"
 	Msg_CreatePool_FullMethodName     = "/sunrise.liquiditypool.Msg/CreatePool"
 	Msg_CreatePosition_FullMethodName = "/sunrise.liquiditypool.Msg/CreatePosition"
-	Msg_UpdatePosition_FullMethodName = "/sunrise.liquiditypool.Msg/UpdatePosition"
-	Msg_DeletePosition_FullMethodName = "/sunrise.liquiditypool.Msg/DeletePosition"
 )
 
 // MsgClient is the client API for Msg service.
@@ -36,8 +33,6 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
 	CreatePosition(ctx context.Context, in *MsgCreatePosition, opts ...grpc.CallOption) (*MsgCreatePositionResponse, error)
-	UpdatePosition(ctx context.Context, in *MsgUpdatePosition, opts ...grpc.CallOption) (*MsgUpdatePositionResponse, error)
-	DeletePosition(ctx context.Context, in *MsgDeletePosition, opts ...grpc.CallOption) (*MsgDeletePositionResponse, error)
 }
 
 type msgClient struct {
@@ -75,24 +70,6 @@ func (c *msgClient) CreatePosition(ctx context.Context, in *MsgCreatePosition, o
 	return out, nil
 }
 
-func (c *msgClient) UpdatePosition(ctx context.Context, in *MsgUpdatePosition, opts ...grpc.CallOption) (*MsgUpdatePositionResponse, error) {
-	out := new(MsgUpdatePositionResponse)
-	err := c.cc.Invoke(ctx, Msg_UpdatePosition_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) DeletePosition(ctx context.Context, in *MsgDeletePosition, opts ...grpc.CallOption) (*MsgDeletePositionResponse, error) {
-	out := new(MsgDeletePositionResponse)
-	err := c.cc.Invoke(ctx, Msg_DeletePosition_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -102,8 +79,6 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
 	CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error)
-	UpdatePosition(context.Context, *MsgUpdatePosition) (*MsgUpdatePositionResponse, error)
-	DeletePosition(context.Context, *MsgDeletePosition) (*MsgDeletePositionResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -119,12 +94,6 @@ func (UnimplementedMsgServer) CreatePool(context.Context, *MsgCreatePool) (*MsgC
 }
 func (UnimplementedMsgServer) CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePosition not implemented")
-}
-func (UnimplementedMsgServer) UpdatePosition(context.Context, *MsgUpdatePosition) (*MsgUpdatePositionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdatePosition not implemented")
-}
-func (UnimplementedMsgServer) DeletePosition(context.Context, *MsgDeletePosition) (*MsgDeletePositionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeletePosition not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -193,42 +162,6 @@ func _Msg_CreatePosition_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdatePosition)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdatePosition(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_UpdatePosition_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdatePosition(ctx, req.(*MsgUpdatePosition))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_DeletePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeletePosition)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).DeletePosition(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_DeletePosition_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeletePosition(ctx, req.(*MsgDeletePosition))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -247,14 +180,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreatePosition",
 			Handler:    _Msg_CreatePosition_Handler,
-		},
-		{
-			MethodName: "UpdatePosition",
-			Handler:    _Msg_UpdatePosition_Handler,
-		},
-		{
-			MethodName: "DeletePosition",
-			Handler:    _Msg_DeletePosition_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
