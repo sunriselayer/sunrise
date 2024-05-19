@@ -40,14 +40,16 @@ message MsgUpdateParamsResponse {}
 
 message MsgSwapExactAmountIn {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string interface_provider = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 message MsgSwapExactAmountInResponse {}
 
 message MsgSwapExactAmountOut {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string interface_provider = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 message MsgSwapExactAmountOutResponse {}
