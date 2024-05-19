@@ -19061,6 +19061,98 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunrise.liquidityincentive.Msg/UpdateParams:
+    post:
+      summary: |-
+        UpdateParams defines a (governance) operation for updating the module
+        parameters. The authority defaults to the x/gov module account.
+      operationId: SunriseLiquidityincentiveMsg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: MsgUpdateParams is the Msg/UpdateParams request type.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: |-
+                  params defines the module parameters to update.
+
+                  NOTE: All parameters must be supplied.
+                type: object
+            description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
+  /sunriselayer/sunrise/liquidityincentive/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseLiquidityincentiveQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /sunriselayer/sunrise/liquiditypool/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -19123,12 +19215,6 @@ paths:
                       format: uint64
                     admin:
                       type: string
-                    lower_tick:
-                      type: string
-                      format: int64
-                    upper_tick:
-                      type: string
-                      format: int64
               pagination:
                 type: object
                 properties:
@@ -19252,12 +19338,6 @@ paths:
                     format: uint64
                   admin:
                     type: string
-                  lower_tick:
-                    type: string
-                    format: int64
-                  upper_tick:
-                    type: string
-                    format: int64
         default:
           description: An unexpected error response.
           schema:
@@ -19303,6 +19383,12 @@ paths:
                       format: uint64
                     sender:
                       type: string
+                    lower_tick:
+                      type: string
+                      format: int64
+                    upper_tick:
+                      type: string
+                      format: int64
               pagination:
                 type: object
                 properties:
@@ -19426,6 +19512,12 @@ paths:
                     format: uint64
                   sender:
                     type: string
+                  lower_tick:
+                    type: string
+                    format: int64
+                  upper_tick:
+                    type: string
+                    format: int64
         default:
           description: An unexpected error response.
           schema:
@@ -19460,6 +19552,24 @@ paths:
           description: A successful response.
           schema:
             type: object
+            properties:
+              collected_fees:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
         default:
           description: An unexpected error response.
           schema:
@@ -19487,6 +19597,11 @@ paths:
             properties:
               sender:
                 type: string
+              position_ids:
+                type: array
+                items:
+                  type: string
+                  format: uint64
       tags:
         - Msg
   /sunrise.liquiditypool.Msg/CollectIncentives:
@@ -19497,6 +19612,24 @@ paths:
           description: A successful response.
           schema:
             type: object
+            properties:
+              collected_incentives:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
         default:
           description: An unexpected error response.
           schema:
@@ -19524,6 +19657,11 @@ paths:
             properties:
               sender:
                 type: string
+              position_ids:
+                type: array
+                items:
+                  type: string
+                  format: uint64
       tags:
         - Msg
   /sunrise.liquiditypool.Msg/CreatePool:
@@ -19563,14 +19701,12 @@ paths:
           schema:
             type: object
             properties:
-              sender:
+              authority:
                 type: string
-              lower_tick:
+              denom_base:
                 type: string
-                format: int64
-              upper_tick:
+              denom_quote:
                 type: string
-                format: int64
       tags:
         - Msg
   /sunrise.liquiditypool.Msg/CreatePosition:
@@ -19585,6 +19721,12 @@ paths:
               id:
                 type: string
                 format: uint64
+              amount_base:
+                type: string
+              amount_quote:
+                type: string
+              liquidity:
+                type: string
         default:
           description: An unexpected error response.
           schema:
@@ -19611,6 +19753,146 @@ paths:
             type: object
             properties:
               sender:
+                type: string
+              lower_tick:
+                type: string
+                format: int64
+              upper_tick:
+                type: string
+                format: int64
+              token_base:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+              token_quote:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+              amount_min_base:
+                type: string
+              amount_min_quote:
+                type: string
+      tags:
+        - Msg
+  /sunrise.liquiditypool.Msg/DecreaseLiquidity:
+    post:
+      operationId: SunriseLiquiditypoolMsg_DecreaseLiquidity
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              amount_base:
+                type: string
+              amount_quote:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+              id:
+                type: string
+                format: uint64
+              liquidity:
+                type: string
+      tags:
+        - Msg
+  /sunrise.liquiditypool.Msg/IncreaseLiquidity:
+    post:
+      operationId: SunriseLiquiditypoolMsg_IncreaseLiquidity
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              amount_base:
+                type: string
+              amount_quote:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+              id:
+                type: string
+                format: uint64
+              amount_base:
+                type: string
+              amount_quote:
+                type: string
+              amount_min_base:
+                type: string
+              amount_min_quote:
                 type: string
       tags:
         - Msg
@@ -27532,6 +27814,36 @@ definitions:
         type: string
         format: uint64
     description: Params defines the parameters for the module.
+  sunrise.liquidityincentive.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: |-
+          params defines the module parameters to update.
+
+          NOTE: All parameters must be supplied.
+        type: object
+    description: MsgUpdateParams is the Msg/UpdateParams request type.
+  sunrise.liquidityincentive.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
+  sunrise.liquidityincentive.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  sunrise.liquidityincentive.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   cosmos.base.query.v1beta1.PageRequest:
     type: object
     properties:
@@ -27627,12 +27939,6 @@ definitions:
         format: uint64
       admin:
         type: string
-      lower_tick:
-        type: string
-        format: int64
-      upper_tick:
-        type: string
-        format: int64
   sunrise.liquiditypool.Position:
     type: object
     properties:
@@ -27641,6 +27947,12 @@ definitions:
         format: uint64
       sender:
         type: string
+      lower_tick:
+        type: string
+        format: int64
+      upper_tick:
+        type: string
+        format: int64
   sunrise.liquiditypool.QueryAllPoolResponse:
     type: object
     properties:
@@ -27654,12 +27966,6 @@ definitions:
               format: uint64
             admin:
               type: string
-            lower_tick:
-              type: string
-              format: int64
-            upper_tick:
-              type: string
-              format: int64
       pagination:
         type: object
         properties:
@@ -27699,6 +28005,12 @@ definitions:
               format: uint64
             sender:
               type: string
+            lower_tick:
+              type: string
+              format: int64
+            upper_tick:
+              type: string
+              format: int64
       pagination:
         type: object
         properties:
@@ -27736,12 +28048,6 @@ definitions:
             format: uint64
           admin:
             type: string
-          lower_tick:
-            type: string
-            format: int64
-          upper_tick:
-            type: string
-            format: int64
   sunrise.liquiditypool.QueryGetPositionResponse:
     type: object
     properties:
@@ -27753,6 +28059,12 @@ definitions:
             format: uint64
           sender:
             type: string
+          lower_tick:
+            type: string
+            format: int64
+          upper_tick:
+            type: string
+            format: int64
   sunrise.liquiditypool.QueryParamsResponse:
     type: object
     properties:
@@ -27772,26 +28084,64 @@ definitions:
     properties:
       sender:
         type: string
+      position_ids:
+        type: array
+        items:
+          type: string
+          format: uint64
   sunrise.liquiditypool.MsgCollectFeesResponse:
     type: object
+    properties:
+      collected_fees:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
   sunrise.liquiditypool.MsgCollectIncentives:
     type: object
     properties:
       sender:
         type: string
+      position_ids:
+        type: array
+        items:
+          type: string
+          format: uint64
   sunrise.liquiditypool.MsgCollectIncentivesResponse:
     type: object
+    properties:
+      collected_incentives:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
   sunrise.liquiditypool.MsgCreatePool:
     type: object
     properties:
-      sender:
+      authority:
         type: string
-      lower_tick:
+      denom_base:
         type: string
-        format: int64
-      upper_tick:
+      denom_quote:
         type: string
-        format: int64
   sunrise.liquiditypool.MsgCreatePoolResponse:
     type: object
     properties:
@@ -27803,12 +28153,92 @@ definitions:
     properties:
       sender:
         type: string
+      lower_tick:
+        type: string
+        format: int64
+      upper_tick:
+        type: string
+        format: int64
+      token_base:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      token_quote:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      amount_min_base:
+        type: string
+      amount_min_quote:
+        type: string
   sunrise.liquiditypool.MsgCreatePositionResponse:
     type: object
     properties:
       id:
         type: string
         format: uint64
+      amount_base:
+        type: string
+      amount_quote:
+        type: string
+      liquidity:
+        type: string
+  sunrise.liquiditypool.MsgDecreaseLiquidity:
+    type: object
+    properties:
+      sender:
+        type: string
+      id:
+        type: string
+        format: uint64
+      liquidity:
+        type: string
+  sunrise.liquiditypool.MsgDecreaseLiquidityResponse:
+    type: object
+    properties:
+      amount_base:
+        type: string
+      amount_quote:
+        type: string
+  sunrise.liquiditypool.MsgIncreaseLiquidity:
+    type: object
+    properties:
+      sender:
+        type: string
+      id:
+        type: string
+        format: uint64
+      amount_base:
+        type: string
+      amount_quote:
+        type: string
+      amount_min_base:
+        type: string
+      amount_min_quote:
+        type: string
+  sunrise.liquiditypool.MsgIncreaseLiquidityResponse:
+    type: object
+    properties:
+      amount_base:
+        type: string
+      amount_quote:
+        type: string
   sunrise.liquiditypool.MsgUpdateParams:
     type: object
     properties:
