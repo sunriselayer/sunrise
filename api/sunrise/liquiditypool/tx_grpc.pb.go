@@ -22,8 +22,8 @@ const (
 	Msg_UpdateParams_FullMethodName      = "/sunrise.liquiditypool.Msg/UpdateParams"
 	Msg_CreatePool_FullMethodName        = "/sunrise.liquiditypool.Msg/CreatePool"
 	Msg_CreatePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/CreatePosition"
-	Msg_UpdatePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/UpdatePosition"
-	Msg_DeletePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/DeletePosition"
+	Msg_IncreaseLiquidity_FullMethodName = "/sunrise.liquiditypool.Msg/IncreaseLiquidity"
+	Msg_DecreaseLiquidity_FullMethodName = "/sunrise.liquiditypool.Msg/DecreaseLiquidity"
 	Msg_CollectFees_FullMethodName       = "/sunrise.liquiditypool.Msg/CollectFees"
 	Msg_CollectIncentives_FullMethodName = "/sunrise.liquiditypool.Msg/CollectIncentives"
 )
@@ -37,8 +37,8 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
 	CreatePosition(ctx context.Context, in *MsgCreatePosition, opts ...grpc.CallOption) (*MsgCreatePositionResponse, error)
-	UpdatePosition(ctx context.Context, in *MsgUpdatePosition, opts ...grpc.CallOption) (*MsgUpdatePositionResponse, error)
-	DeletePosition(ctx context.Context, in *MsgDeletePosition, opts ...grpc.CallOption) (*MsgDeletePositionResponse, error)
+	IncreaseLiquidity(ctx context.Context, in *MsgIncreaseLiquidity, opts ...grpc.CallOption) (*MsgIncreaseLiquidityResponse, error)
+	DecreaseLiquidity(ctx context.Context, in *MsgDecreaseLiquidity, opts ...grpc.CallOption) (*MsgDecreaseLiquidityResponse, error)
 	CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error)
 	CollectIncentives(ctx context.Context, in *MsgCollectIncentives, opts ...grpc.CallOption) (*MsgCollectIncentivesResponse, error)
 }
@@ -78,18 +78,18 @@ func (c *msgClient) CreatePosition(ctx context.Context, in *MsgCreatePosition, o
 	return out, nil
 }
 
-func (c *msgClient) UpdatePosition(ctx context.Context, in *MsgUpdatePosition, opts ...grpc.CallOption) (*MsgUpdatePositionResponse, error) {
-	out := new(MsgUpdatePositionResponse)
-	err := c.cc.Invoke(ctx, Msg_UpdatePosition_FullMethodName, in, out, opts...)
+func (c *msgClient) IncreaseLiquidity(ctx context.Context, in *MsgIncreaseLiquidity, opts ...grpc.CallOption) (*MsgIncreaseLiquidityResponse, error) {
+	out := new(MsgIncreaseLiquidityResponse)
+	err := c.cc.Invoke(ctx, Msg_IncreaseLiquidity_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) DeletePosition(ctx context.Context, in *MsgDeletePosition, opts ...grpc.CallOption) (*MsgDeletePositionResponse, error) {
-	out := new(MsgDeletePositionResponse)
-	err := c.cc.Invoke(ctx, Msg_DeletePosition_FullMethodName, in, out, opts...)
+func (c *msgClient) DecreaseLiquidity(ctx context.Context, in *MsgDecreaseLiquidity, opts ...grpc.CallOption) (*MsgDecreaseLiquidityResponse, error) {
+	out := new(MsgDecreaseLiquidityResponse)
+	err := c.cc.Invoke(ctx, Msg_DecreaseLiquidity_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +123,8 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
 	CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error)
-	UpdatePosition(context.Context, *MsgUpdatePosition) (*MsgUpdatePositionResponse, error)
-	DeletePosition(context.Context, *MsgDeletePosition) (*MsgDeletePositionResponse, error)
+	IncreaseLiquidity(context.Context, *MsgIncreaseLiquidity) (*MsgIncreaseLiquidityResponse, error)
+	DecreaseLiquidity(context.Context, *MsgDecreaseLiquidity) (*MsgDecreaseLiquidityResponse, error)
 	CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error)
 	CollectIncentives(context.Context, *MsgCollectIncentives) (*MsgCollectIncentivesResponse, error)
 	mustEmbedUnimplementedMsgServer()
@@ -143,11 +143,11 @@ func (UnimplementedMsgServer) CreatePool(context.Context, *MsgCreatePool) (*MsgC
 func (UnimplementedMsgServer) CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePosition not implemented")
 }
-func (UnimplementedMsgServer) UpdatePosition(context.Context, *MsgUpdatePosition) (*MsgUpdatePositionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdatePosition not implemented")
+func (UnimplementedMsgServer) IncreaseLiquidity(context.Context, *MsgIncreaseLiquidity) (*MsgIncreaseLiquidityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncreaseLiquidity not implemented")
 }
-func (UnimplementedMsgServer) DeletePosition(context.Context, *MsgDeletePosition) (*MsgDeletePositionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeletePosition not implemented")
+func (UnimplementedMsgServer) DecreaseLiquidity(context.Context, *MsgDecreaseLiquidity) (*MsgDecreaseLiquidityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecreaseLiquidity not implemented")
 }
 func (UnimplementedMsgServer) CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CollectFees not implemented")
@@ -222,38 +222,38 @@ func _Msg_CreatePosition_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdatePosition)
+func _Msg_IncreaseLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgIncreaseLiquidity)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).UpdatePosition(ctx, in)
+		return srv.(MsgServer).IncreaseLiquidity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_UpdatePosition_FullMethodName,
+		FullMethod: Msg_IncreaseLiquidity_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdatePosition(ctx, req.(*MsgUpdatePosition))
+		return srv.(MsgServer).IncreaseLiquidity(ctx, req.(*MsgIncreaseLiquidity))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_DeletePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeletePosition)
+func _Msg_DecreaseLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDecreaseLiquidity)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).DeletePosition(ctx, in)
+		return srv.(MsgServer).DecreaseLiquidity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_DeletePosition_FullMethodName,
+		FullMethod: Msg_DecreaseLiquidity_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeletePosition(ctx, req.(*MsgDeletePosition))
+		return srv.(MsgServer).DecreaseLiquidity(ctx, req.(*MsgDecreaseLiquidity))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -314,12 +314,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_CreatePosition_Handler,
 		},
 		{
-			MethodName: "UpdatePosition",
-			Handler:    _Msg_UpdatePosition_Handler,
+			MethodName: "IncreaseLiquidity",
+			Handler:    _Msg_IncreaseLiquidity_Handler,
 		},
 		{
-			MethodName: "DeletePosition",
-			Handler:    _Msg_DeletePosition_Handler,
+			MethodName: "DecreaseLiquidity",
+			Handler:    _Msg_DecreaseLiquidity_Handler,
 		},
 		{
 			MethodName: "CollectFees",

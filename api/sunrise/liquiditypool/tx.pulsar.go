@@ -3,6 +3,7 @@ package liquiditypool
 
 import (
 	_ "cosmossdk.io/api/amino"
+	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
 	_ "cosmossdk.io/api/cosmos/msg/v1"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
@@ -872,18 +873,18 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgCreatePool            protoreflect.MessageDescriptor
-	fd_MsgCreatePool_sender     protoreflect.FieldDescriptor
-	fd_MsgCreatePool_lower_tick protoreflect.FieldDescriptor
-	fd_MsgCreatePool_upper_tick protoreflect.FieldDescriptor
+	md_MsgCreatePool             protoreflect.MessageDescriptor
+	fd_MsgCreatePool_authority   protoreflect.FieldDescriptor
+	fd_MsgCreatePool_denom_base  protoreflect.FieldDescriptor
+	fd_MsgCreatePool_denom_quote protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCreatePool = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCreatePool")
-	fd_MsgCreatePool_sender = md_MsgCreatePool.Fields().ByName("sender")
-	fd_MsgCreatePool_lower_tick = md_MsgCreatePool.Fields().ByName("lower_tick")
-	fd_MsgCreatePool_upper_tick = md_MsgCreatePool.Fields().ByName("upper_tick")
+	fd_MsgCreatePool_authority = md_MsgCreatePool.Fields().ByName("authority")
+	fd_MsgCreatePool_denom_base = md_MsgCreatePool.Fields().ByName("denom_base")
+	fd_MsgCreatePool_denom_quote = md_MsgCreatePool.Fields().ByName("denom_quote")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCreatePool)(nil)
@@ -951,21 +952,21 @@ func (x *fastReflection_MsgCreatePool) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_MsgCreatePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Sender != "" {
-		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgCreatePool_sender, value) {
+	if x.Authority != "" {
+		value := protoreflect.ValueOfString(x.Authority)
+		if !f(fd_MsgCreatePool_authority, value) {
 			return
 		}
 	}
-	if x.LowerTick != int64(0) {
-		value := protoreflect.ValueOfInt64(x.LowerTick)
-		if !f(fd_MsgCreatePool_lower_tick, value) {
+	if x.DenomBase != "" {
+		value := protoreflect.ValueOfString(x.DenomBase)
+		if !f(fd_MsgCreatePool_denom_base, value) {
 			return
 		}
 	}
-	if x.UpperTick != int64(0) {
-		value := protoreflect.ValueOfInt64(x.UpperTick)
-		if !f(fd_MsgCreatePool_upper_tick, value) {
+	if x.DenomQuote != "" {
+		value := protoreflect.ValueOfString(x.DenomQuote)
+		if !f(fd_MsgCreatePool_denom_quote, value) {
 			return
 		}
 	}
@@ -984,12 +985,12 @@ func (x *fastReflection_MsgCreatePool) Range(f func(protoreflect.FieldDescriptor
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_MsgCreatePool) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.sender":
-		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
-		return x.LowerTick != int64(0)
-	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
-		return x.UpperTick != int64(0)
+	case "sunrise.liquiditypool.MsgCreatePool.authority":
+		return x.Authority != ""
+	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
+		return x.DenomBase != ""
+	case "sunrise.liquiditypool.MsgCreatePool.denom_quote":
+		return x.DenomQuote != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1006,12 +1007,12 @@ func (x *fastReflection_MsgCreatePool) Has(fd protoreflect.FieldDescriptor) bool
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCreatePool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.sender":
-		x.Sender = ""
-	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
-		x.LowerTick = int64(0)
-	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
-		x.UpperTick = int64(0)
+	case "sunrise.liquiditypool.MsgCreatePool.authority":
+		x.Authority = ""
+	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
+		x.DenomBase = ""
+	case "sunrise.liquiditypool.MsgCreatePool.denom_quote":
+		x.DenomQuote = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1028,15 +1029,15 @@ func (x *fastReflection_MsgCreatePool) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_MsgCreatePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.sender":
-		value := x.Sender
+	case "sunrise.liquiditypool.MsgCreatePool.authority":
+		value := x.Authority
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
-		value := x.LowerTick
-		return protoreflect.ValueOfInt64(value)
-	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
-		value := x.UpperTick
-		return protoreflect.ValueOfInt64(value)
+	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
+		value := x.DenomBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCreatePool.denom_quote":
+		value := x.DenomQuote
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1057,12 +1058,12 @@ func (x *fastReflection_MsgCreatePool) Get(descriptor protoreflect.FieldDescript
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.sender":
-		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
-		x.LowerTick = value.Int()
-	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
-		x.UpperTick = value.Int()
+	case "sunrise.liquiditypool.MsgCreatePool.authority":
+		x.Authority = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
+		x.DenomBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePool.denom_quote":
+		x.DenomQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1083,12 +1084,12 @@ func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, valu
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCreatePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
-		panic(fmt.Errorf("field lower_tick of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
-	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
-		panic(fmt.Errorf("field upper_tick of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.authority":
+		panic(fmt.Errorf("field authority of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
+		panic(fmt.Errorf("field denom_base of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.denom_quote":
+		panic(fmt.Errorf("field denom_quote of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1102,12 +1103,12 @@ func (x *fastReflection_MsgCreatePool) Mutable(fd protoreflect.FieldDescriptor) 
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_MsgCreatePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.sender":
+	case "sunrise.liquiditypool.MsgCreatePool.authority":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgCreatePool.lower_tick":
-		return protoreflect.ValueOfInt64(int64(0))
-	case "sunrise.liquiditypool.MsgCreatePool.upper_tick":
-		return protoreflect.ValueOfInt64(int64(0))
+	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePool.denom_quote":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1177,15 +1178,17 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.Sender)
+		l = len(x.Authority)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.LowerTick != 0 {
-			n += 1 + runtime.Sov(uint64(x.LowerTick))
+		l = len(x.DenomBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.UpperTick != 0 {
-			n += 1 + runtime.Sov(uint64(x.UpperTick))
+		l = len(x.DenomQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -1216,20 +1219,24 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.UpperTick != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.UpperTick))
+		if len(x.DenomQuote) > 0 {
+			i -= len(x.DenomQuote)
+			copy(dAtA[i:], x.DenomQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DenomQuote)))
 			i--
-			dAtA[i] = 0x18
+			dAtA[i] = 0x1a
 		}
-		if x.LowerTick != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.LowerTick))
+		if len(x.DenomBase) > 0 {
+			i -= len(x.DenomBase)
+			copy(dAtA[i:], x.DenomBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DenomBase)))
 			i--
-			dAtA[i] = 0x10
+			dAtA[i] = 0x12
 		}
-		if len(x.Sender) > 0 {
-			i -= len(x.Sender)
-			copy(dAtA[i:], x.Sender)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+		if len(x.Authority) > 0 {
+			i -= len(x.Authority)
+			copy(dAtA[i:], x.Authority)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Authority)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -1284,7 +1291,7 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1312,13 +1319,13 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Sender = string(dAtA[iNdEx:postIndex])
+				x.Authority = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DenomBase", wireType)
 				}
-				x.LowerTick = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1328,16 +1335,29 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.LowerTick |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DenomBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UpperTick", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DenomQuote", wireType)
 				}
-				x.UpperTick = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1347,11 +1367,24 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.UpperTick |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DenomQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1792,14 +1825,26 @@ func (x *fastReflection_MsgCreatePoolResponse) ProtoMethods() *protoiface.Method
 }
 
 var (
-	md_MsgCreatePosition        protoreflect.MessageDescriptor
-	fd_MsgCreatePosition_sender protoreflect.FieldDescriptor
+	md_MsgCreatePosition                  protoreflect.MessageDescriptor
+	fd_MsgCreatePosition_sender           protoreflect.FieldDescriptor
+	fd_MsgCreatePosition_lower_tick       protoreflect.FieldDescriptor
+	fd_MsgCreatePosition_upper_tick       protoreflect.FieldDescriptor
+	fd_MsgCreatePosition_token_base       protoreflect.FieldDescriptor
+	fd_MsgCreatePosition_token_quote      protoreflect.FieldDescriptor
+	fd_MsgCreatePosition_amount_min_base  protoreflect.FieldDescriptor
+	fd_MsgCreatePosition_amount_min_quote protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCreatePosition = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCreatePosition")
 	fd_MsgCreatePosition_sender = md_MsgCreatePosition.Fields().ByName("sender")
+	fd_MsgCreatePosition_lower_tick = md_MsgCreatePosition.Fields().ByName("lower_tick")
+	fd_MsgCreatePosition_upper_tick = md_MsgCreatePosition.Fields().ByName("upper_tick")
+	fd_MsgCreatePosition_token_base = md_MsgCreatePosition.Fields().ByName("token_base")
+	fd_MsgCreatePosition_token_quote = md_MsgCreatePosition.Fields().ByName("token_quote")
+	fd_MsgCreatePosition_amount_min_base = md_MsgCreatePosition.Fields().ByName("amount_min_base")
+	fd_MsgCreatePosition_amount_min_quote = md_MsgCreatePosition.Fields().ByName("amount_min_quote")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCreatePosition)(nil)
@@ -1873,6 +1918,42 @@ func (x *fastReflection_MsgCreatePosition) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
+	if x.LowerTick != int64(0) {
+		value := protoreflect.ValueOfInt64(x.LowerTick)
+		if !f(fd_MsgCreatePosition_lower_tick, value) {
+			return
+		}
+	}
+	if x.UpperTick != int64(0) {
+		value := protoreflect.ValueOfInt64(x.UpperTick)
+		if !f(fd_MsgCreatePosition_upper_tick, value) {
+			return
+		}
+	}
+	if x.TokenBase != nil {
+		value := protoreflect.ValueOfMessage(x.TokenBase.ProtoReflect())
+		if !f(fd_MsgCreatePosition_token_base, value) {
+			return
+		}
+	}
+	if x.TokenQuote != nil {
+		value := protoreflect.ValueOfMessage(x.TokenQuote.ProtoReflect())
+		if !f(fd_MsgCreatePosition_token_quote, value) {
+			return
+		}
+	}
+	if x.AmountMinBase != "" {
+		value := protoreflect.ValueOfString(x.AmountMinBase)
+		if !f(fd_MsgCreatePosition_amount_min_base, value) {
+			return
+		}
+	}
+	if x.AmountMinQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountMinQuote)
+		if !f(fd_MsgCreatePosition_amount_min_quote, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -1890,6 +1971,18 @@ func (x *fastReflection_MsgCreatePosition) Has(fd protoreflect.FieldDescriptor) 
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePosition.sender":
 		return x.Sender != ""
+	case "sunrise.liquiditypool.MsgCreatePosition.lower_tick":
+		return x.LowerTick != int64(0)
+	case "sunrise.liquiditypool.MsgCreatePosition.upper_tick":
+		return x.UpperTick != int64(0)
+	case "sunrise.liquiditypool.MsgCreatePosition.token_base":
+		return x.TokenBase != nil
+	case "sunrise.liquiditypool.MsgCreatePosition.token_quote":
+		return x.TokenQuote != nil
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_base":
+		return x.AmountMinBase != ""
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_quote":
+		return x.AmountMinQuote != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePosition"))
@@ -1908,6 +2001,18 @@ func (x *fastReflection_MsgCreatePosition) Clear(fd protoreflect.FieldDescriptor
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePosition.sender":
 		x.Sender = ""
+	case "sunrise.liquiditypool.MsgCreatePosition.lower_tick":
+		x.LowerTick = int64(0)
+	case "sunrise.liquiditypool.MsgCreatePosition.upper_tick":
+		x.UpperTick = int64(0)
+	case "sunrise.liquiditypool.MsgCreatePosition.token_base":
+		x.TokenBase = nil
+	case "sunrise.liquiditypool.MsgCreatePosition.token_quote":
+		x.TokenQuote = nil
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_base":
+		x.AmountMinBase = ""
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_quote":
+		x.AmountMinQuote = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePosition"))
@@ -1926,6 +2031,24 @@ func (x *fastReflection_MsgCreatePosition) Get(descriptor protoreflect.FieldDesc
 	switch descriptor.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePosition.sender":
 		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCreatePosition.lower_tick":
+		value := x.LowerTick
+		return protoreflect.ValueOfInt64(value)
+	case "sunrise.liquiditypool.MsgCreatePosition.upper_tick":
+		value := x.UpperTick
+		return protoreflect.ValueOfInt64(value)
+	case "sunrise.liquiditypool.MsgCreatePosition.token_base":
+		value := x.TokenBase
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePosition.token_quote":
+		value := x.TokenQuote
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_base":
+		value := x.AmountMinBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_quote":
+		value := x.AmountMinQuote
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -1949,6 +2072,18 @@ func (x *fastReflection_MsgCreatePosition) Set(fd protoreflect.FieldDescriptor, 
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePosition.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePosition.lower_tick":
+		x.LowerTick = value.Int()
+	case "sunrise.liquiditypool.MsgCreatePosition.upper_tick":
+		x.UpperTick = value.Int()
+	case "sunrise.liquiditypool.MsgCreatePosition.token_base":
+		x.TokenBase = value.Message().Interface().(*v1beta1.Coin)
+	case "sunrise.liquiditypool.MsgCreatePosition.token_quote":
+		x.TokenQuote = value.Message().Interface().(*v1beta1.Coin)
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_base":
+		x.AmountMinBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_quote":
+		x.AmountMinQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePosition"))
@@ -1969,8 +2104,26 @@ func (x *fastReflection_MsgCreatePosition) Set(fd protoreflect.FieldDescriptor, 
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCreatePosition) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCreatePosition.token_base":
+		if x.TokenBase == nil {
+			x.TokenBase = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TokenBase.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePosition.token_quote":
+		if x.TokenQuote == nil {
+			x.TokenQuote = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TokenQuote.ProtoReflect())
 	case "sunrise.liquiditypool.MsgCreatePosition.sender":
 		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePosition.lower_tick":
+		panic(fmt.Errorf("field lower_tick of message sunrise.liquiditypool.MsgCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePosition.upper_tick":
+		panic(fmt.Errorf("field upper_tick of message sunrise.liquiditypool.MsgCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_base":
+		panic(fmt.Errorf("field amount_min_base of message sunrise.liquiditypool.MsgCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_quote":
+		panic(fmt.Errorf("field amount_min_quote of message sunrise.liquiditypool.MsgCreatePosition is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePosition"))
@@ -1985,6 +2138,20 @@ func (x *fastReflection_MsgCreatePosition) Mutable(fd protoreflect.FieldDescript
 func (x *fastReflection_MsgCreatePosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePosition.sender":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePosition.lower_tick":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "sunrise.liquiditypool.MsgCreatePosition.upper_tick":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "sunrise.liquiditypool.MsgCreatePosition.token_base":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePosition.token_quote":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePosition.amount_min_quote":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -2059,6 +2226,28 @@ func (x *fastReflection_MsgCreatePosition) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.LowerTick != 0 {
+			n += 1 + runtime.Sov(uint64(x.LowerTick))
+		}
+		if x.UpperTick != 0 {
+			n += 1 + runtime.Sov(uint64(x.UpperTick))
+		}
+		if x.TokenBase != nil {
+			l = options.Size(x.TokenBase)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.TokenQuote != nil {
+			l = options.Size(x.TokenQuote)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountMinBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountMinQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -2087,6 +2276,58 @@ func (x *fastReflection_MsgCreatePosition) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.AmountMinQuote) > 0 {
+			i -= len(x.AmountMinQuote)
+			copy(dAtA[i:], x.AmountMinQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountMinQuote)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if len(x.AmountMinBase) > 0 {
+			i -= len(x.AmountMinBase)
+			copy(dAtA[i:], x.AmountMinBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountMinBase)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if x.TokenQuote != nil {
+			encoded, err := options.Marshal(x.TokenQuote)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if x.TokenBase != nil {
+			encoded, err := options.Marshal(x.TokenBase)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if x.UpperTick != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.UpperTick))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.LowerTick != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.LowerTick))
+			i--
+			dAtA[i] = 0x10
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -2176,6 +2417,180 @@ func (x *fastReflection_MsgCreatePosition) ProtoMethods() *protoiface.Methods {
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LowerTick", wireType)
+				}
+				x.LowerTick = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.LowerTick |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UpperTick", wireType)
+				}
+				x.UpperTick = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.UpperTick |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TokenBase", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.TokenBase == nil {
+					x.TokenBase = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TokenBase); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TokenQuote", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.TokenQuote == nil {
+					x.TokenQuote = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TokenQuote); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountMinBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountMinBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountMinQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountMinQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -2212,14 +2627,20 @@ func (x *fastReflection_MsgCreatePosition) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgCreatePositionResponse    protoreflect.MessageDescriptor
-	fd_MsgCreatePositionResponse_id protoreflect.FieldDescriptor
+	md_MsgCreatePositionResponse              protoreflect.MessageDescriptor
+	fd_MsgCreatePositionResponse_id           protoreflect.FieldDescriptor
+	fd_MsgCreatePositionResponse_amount_base  protoreflect.FieldDescriptor
+	fd_MsgCreatePositionResponse_amount_quote protoreflect.FieldDescriptor
+	fd_MsgCreatePositionResponse_liquidity    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCreatePositionResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCreatePositionResponse")
 	fd_MsgCreatePositionResponse_id = md_MsgCreatePositionResponse.Fields().ByName("id")
+	fd_MsgCreatePositionResponse_amount_base = md_MsgCreatePositionResponse.Fields().ByName("amount_base")
+	fd_MsgCreatePositionResponse_amount_quote = md_MsgCreatePositionResponse.Fields().ByName("amount_quote")
+	fd_MsgCreatePositionResponse_liquidity = md_MsgCreatePositionResponse.Fields().ByName("liquidity")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCreatePositionResponse)(nil)
@@ -2293,6 +2714,24 @@ func (x *fastReflection_MsgCreatePositionResponse) Range(f func(protoreflect.Fie
 			return
 		}
 	}
+	if x.AmountBase != "" {
+		value := protoreflect.ValueOfString(x.AmountBase)
+		if !f(fd_MsgCreatePositionResponse_amount_base, value) {
+			return
+		}
+	}
+	if x.AmountQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountQuote)
+		if !f(fd_MsgCreatePositionResponse_amount_quote, value) {
+			return
+		}
+	}
+	if x.Liquidity != "" {
+		value := protoreflect.ValueOfString(x.Liquidity)
+		if !f(fd_MsgCreatePositionResponse_liquidity, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -2310,6 +2749,12 @@ func (x *fastReflection_MsgCreatePositionResponse) Has(fd protoreflect.FieldDesc
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePositionResponse.id":
 		return x.Id != uint64(0)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_base":
+		return x.AmountBase != ""
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_quote":
+		return x.AmountQuote != ""
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.liquidity":
+		return x.Liquidity != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePositionResponse"))
@@ -2328,6 +2773,12 @@ func (x *fastReflection_MsgCreatePositionResponse) Clear(fd protoreflect.FieldDe
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePositionResponse.id":
 		x.Id = uint64(0)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_base":
+		x.AmountBase = ""
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_quote":
+		x.AmountQuote = ""
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.liquidity":
+		x.Liquidity = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePositionResponse"))
@@ -2347,6 +2798,15 @@ func (x *fastReflection_MsgCreatePositionResponse) Get(descriptor protoreflect.F
 	case "sunrise.liquiditypool.MsgCreatePositionResponse.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_base":
+		value := x.AmountBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_quote":
+		value := x.AmountQuote
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.liquidity":
+		value := x.Liquidity
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePositionResponse"))
@@ -2369,6 +2829,12 @@ func (x *fastReflection_MsgCreatePositionResponse) Set(fd protoreflect.FieldDesc
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePositionResponse.id":
 		x.Id = value.Uint()
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_base":
+		x.AmountBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_quote":
+		x.AmountQuote = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.liquidity":
+		x.Liquidity = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePositionResponse"))
@@ -2391,6 +2857,12 @@ func (x *fastReflection_MsgCreatePositionResponse) Mutable(fd protoreflect.Field
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePositionResponse.id":
 		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgCreatePositionResponse is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_base":
+		panic(fmt.Errorf("field amount_base of message sunrise.liquiditypool.MsgCreatePositionResponse is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_quote":
+		panic(fmt.Errorf("field amount_quote of message sunrise.liquiditypool.MsgCreatePositionResponse is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.liquidity":
+		panic(fmt.Errorf("field liquidity of message sunrise.liquiditypool.MsgCreatePositionResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePositionResponse"))
@@ -2406,6 +2878,12 @@ func (x *fastReflection_MsgCreatePositionResponse) NewField(fd protoreflect.Fiel
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCreatePositionResponse.id":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.amount_quote":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePositionResponse.liquidity":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePositionResponse"))
@@ -2478,6 +2956,18 @@ func (x *fastReflection_MsgCreatePositionResponse) ProtoMethods() *protoiface.Me
 		if x.Id != 0 {
 			n += 1 + runtime.Sov(uint64(x.Id))
 		}
+		l = len(x.AmountBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Liquidity)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -2506,6 +2996,27 @@ func (x *fastReflection_MsgCreatePositionResponse) ProtoMethods() *protoiface.Me
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Liquidity) > 0 {
+			i -= len(x.Liquidity)
+			copy(dAtA[i:], x.Liquidity)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Liquidity)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.AmountQuote) > 0 {
+			i -= len(x.AmountQuote)
+			copy(dAtA[i:], x.AmountQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountQuote)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.AmountBase) > 0 {
+			i -= len(x.AmountBase)
+			copy(dAtA[i:], x.AmountBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountBase)))
+			i--
+			dAtA[i] = 0x12
 		}
 		if x.Id != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
@@ -2580,6 +3091,102 @@ func (x *fastReflection_MsgCreatePositionResponse) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Liquidity", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Liquidity = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -2616,27 +3223,35 @@ func (x *fastReflection_MsgCreatePositionResponse) ProtoMethods() *protoiface.Me
 }
 
 var (
-	md_MsgUpdatePosition        protoreflect.MessageDescriptor
-	fd_MsgUpdatePosition_sender protoreflect.FieldDescriptor
-	fd_MsgUpdatePosition_id     protoreflect.FieldDescriptor
+	md_MsgIncreaseLiquidity                  protoreflect.MessageDescriptor
+	fd_MsgIncreaseLiquidity_sender           protoreflect.FieldDescriptor
+	fd_MsgIncreaseLiquidity_id               protoreflect.FieldDescriptor
+	fd_MsgIncreaseLiquidity_amount_base      protoreflect.FieldDescriptor
+	fd_MsgIncreaseLiquidity_amount_quote     protoreflect.FieldDescriptor
+	fd_MsgIncreaseLiquidity_amount_min_base  protoreflect.FieldDescriptor
+	fd_MsgIncreaseLiquidity_amount_min_quote protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgUpdatePosition = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgUpdatePosition")
-	fd_MsgUpdatePosition_sender = md_MsgUpdatePosition.Fields().ByName("sender")
-	fd_MsgUpdatePosition_id = md_MsgUpdatePosition.Fields().ByName("id")
+	md_MsgIncreaseLiquidity = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgIncreaseLiquidity")
+	fd_MsgIncreaseLiquidity_sender = md_MsgIncreaseLiquidity.Fields().ByName("sender")
+	fd_MsgIncreaseLiquidity_id = md_MsgIncreaseLiquidity.Fields().ByName("id")
+	fd_MsgIncreaseLiquidity_amount_base = md_MsgIncreaseLiquidity.Fields().ByName("amount_base")
+	fd_MsgIncreaseLiquidity_amount_quote = md_MsgIncreaseLiquidity.Fields().ByName("amount_quote")
+	fd_MsgIncreaseLiquidity_amount_min_base = md_MsgIncreaseLiquidity.Fields().ByName("amount_min_base")
+	fd_MsgIncreaseLiquidity_amount_min_quote = md_MsgIncreaseLiquidity.Fields().ByName("amount_min_quote")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgUpdatePosition)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgIncreaseLiquidity)(nil)
 
-type fastReflection_MsgUpdatePosition MsgUpdatePosition
+type fastReflection_MsgIncreaseLiquidity MsgIncreaseLiquidity
 
-func (x *MsgUpdatePosition) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePosition)(x)
+func (x *MsgIncreaseLiquidity) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgIncreaseLiquidity)(x)
 }
 
-func (x *MsgUpdatePosition) slowProtoReflect() protoreflect.Message {
+func (x *MsgIncreaseLiquidity) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2648,43 +3263,43 @@ func (x *MsgUpdatePosition) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgUpdatePosition_messageType fastReflection_MsgUpdatePosition_messageType
-var _ protoreflect.MessageType = fastReflection_MsgUpdatePosition_messageType{}
+var _fastReflection_MsgIncreaseLiquidity_messageType fastReflection_MsgIncreaseLiquidity_messageType
+var _ protoreflect.MessageType = fastReflection_MsgIncreaseLiquidity_messageType{}
 
-type fastReflection_MsgUpdatePosition_messageType struct{}
+type fastReflection_MsgIncreaseLiquidity_messageType struct{}
 
-func (x fastReflection_MsgUpdatePosition_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePosition)(nil)
+func (x fastReflection_MsgIncreaseLiquidity_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgIncreaseLiquidity)(nil)
 }
-func (x fastReflection_MsgUpdatePosition_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePosition)
+func (x fastReflection_MsgIncreaseLiquidity_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgIncreaseLiquidity)
 }
-func (x fastReflection_MsgUpdatePosition_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePosition
+func (x fastReflection_MsgIncreaseLiquidity_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgIncreaseLiquidity
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgUpdatePosition) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePosition
+func (x *fastReflection_MsgIncreaseLiquidity) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgIncreaseLiquidity
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgUpdatePosition) Type() protoreflect.MessageType {
-	return _fastReflection_MsgUpdatePosition_messageType
+func (x *fastReflection_MsgIncreaseLiquidity) Type() protoreflect.MessageType {
+	return _fastReflection_MsgIncreaseLiquidity_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgUpdatePosition) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePosition)
+func (x *fastReflection_MsgIncreaseLiquidity) New() protoreflect.Message {
+	return new(fastReflection_MsgIncreaseLiquidity)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgUpdatePosition) Interface() protoreflect.ProtoMessage {
-	return (*MsgUpdatePosition)(x)
+func (x *fastReflection_MsgIncreaseLiquidity) Interface() protoreflect.ProtoMessage {
+	return (*MsgIncreaseLiquidity)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2692,16 +3307,40 @@ func (x *fastReflection_MsgUpdatePosition) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgUpdatePosition) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgIncreaseLiquidity) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgUpdatePosition_sender, value) {
+		if !f(fd_MsgIncreaseLiquidity_sender, value) {
 			return
 		}
 	}
 	if x.Id != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_MsgUpdatePosition_id, value) {
+		if !f(fd_MsgIncreaseLiquidity_id, value) {
+			return
+		}
+	}
+	if x.AmountBase != "" {
+		value := protoreflect.ValueOfString(x.AmountBase)
+		if !f(fd_MsgIncreaseLiquidity_amount_base, value) {
+			return
+		}
+	}
+	if x.AmountQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountQuote)
+		if !f(fd_MsgIncreaseLiquidity_amount_quote, value) {
+			return
+		}
+	}
+	if x.AmountMinBase != "" {
+		value := protoreflect.ValueOfString(x.AmountMinBase)
+		if !f(fd_MsgIncreaseLiquidity_amount_min_base, value) {
+			return
+		}
+	}
+	if x.AmountMinQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountMinQuote)
+		if !f(fd_MsgIncreaseLiquidity_amount_min_quote, value) {
 			return
 		}
 	}
@@ -2718,17 +3357,25 @@ func (x *fastReflection_MsgUpdatePosition) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgUpdatePosition) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgIncreaseLiquidity) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePosition.sender":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.sender":
 		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgUpdatePosition.id":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.id":
 		return x.Id != uint64(0)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_base":
+		return x.AmountBase != ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_quote":
+		return x.AmountQuote != ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_base":
+		return x.AmountMinBase != ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_quote":
+		return x.AmountMinQuote != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2738,17 +3385,25 @@ func (x *fastReflection_MsgUpdatePosition) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePosition) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgIncreaseLiquidity) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePosition.sender":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.sender":
 		x.Sender = ""
-	case "sunrise.liquiditypool.MsgUpdatePosition.id":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.id":
 		x.Id = uint64(0)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_base":
+		x.AmountBase = ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_quote":
+		x.AmountQuote = ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_base":
+		x.AmountMinBase = ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_quote":
+		x.AmountMinQuote = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2758,19 +3413,31 @@ func (x *fastReflection_MsgUpdatePosition) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgUpdatePosition) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgIncreaseLiquidity) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePosition.sender":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgUpdatePosition.id":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_base":
+		value := x.AmountBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_quote":
+		value := x.AmountQuote
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_base":
+		value := x.AmountMinBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_quote":
+		value := x.AmountMinQuote
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePosition does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidity does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2784,17 +3451,25 @@ func (x *fastReflection_MsgUpdatePosition) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePosition) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgIncreaseLiquidity) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePosition.sender":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.sender":
 		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgUpdatePosition.id":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.id":
 		x.Id = value.Uint()
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_base":
+		x.AmountBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_quote":
+		x.AmountQuote = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_base":
+		x.AmountMinBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_quote":
+		x.AmountMinQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2808,44 +3483,60 @@ func (x *fastReflection_MsgUpdatePosition) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePosition) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgIncreaseLiquidity) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePosition.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgUpdatePosition is not mutable"))
-	case "sunrise.liquiditypool.MsgUpdatePosition.id":
-		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgUpdatePosition is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.sender":
+		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.id":
+		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_base":
+		panic(fmt.Errorf("field amount_base of message sunrise.liquiditypool.MsgIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_quote":
+		panic(fmt.Errorf("field amount_quote of message sunrise.liquiditypool.MsgIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_base":
+		panic(fmt.Errorf("field amount_min_base of message sunrise.liquiditypool.MsgIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_quote":
+		panic(fmt.Errorf("field amount_min_quote of message sunrise.liquiditypool.MsgIncreaseLiquidity is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgUpdatePosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgIncreaseLiquidity) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgUpdatePosition.sender":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.sender":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgUpdatePosition.id":
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.id":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_quote":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgIncreaseLiquidity.amount_min_quote":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgUpdatePosition) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgIncreaseLiquidity) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgUpdatePosition", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgIncreaseLiquidity", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2853,7 +3544,7 @@ func (x *fastReflection_MsgUpdatePosition) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgUpdatePosition) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgIncreaseLiquidity) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2864,7 +3555,7 @@ func (x *fastReflection_MsgUpdatePosition) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePosition) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgIncreaseLiquidity) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2876,7 +3567,7 @@ func (x *fastReflection_MsgUpdatePosition) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgUpdatePosition) IsValid() bool {
+func (x *fastReflection_MsgIncreaseLiquidity) IsValid() bool {
 	return x != nil
 }
 
@@ -2886,9 +3577,9 @@ func (x *fastReflection_MsgUpdatePosition) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgIncreaseLiquidity) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgUpdatePosition)
+		x := input.Message.Interface().(*MsgIncreaseLiquidity)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2907,6 +3598,22 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 		if x.Id != 0 {
 			n += 1 + runtime.Sov(uint64(x.Id))
 		}
+		l = len(x.AmountBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountMinBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountMinQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -2917,7 +3624,7 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePosition)
+		x := input.Message.Interface().(*MsgIncreaseLiquidity)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2935,6 +3642,34 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.AmountMinQuote) > 0 {
+			i -= len(x.AmountMinQuote)
+			copy(dAtA[i:], x.AmountMinQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountMinQuote)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.AmountMinBase) > 0 {
+			i -= len(x.AmountMinBase)
+			copy(dAtA[i:], x.AmountMinBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountMinBase)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.AmountQuote) > 0 {
+			i -= len(x.AmountQuote)
+			copy(dAtA[i:], x.AmountQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountQuote)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.AmountBase) > 0 {
+			i -= len(x.AmountBase)
+			copy(dAtA[i:], x.AmountBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountBase)))
+			i--
+			dAtA[i] = 0x1a
 		}
 		if x.Id != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
@@ -2959,7 +3694,7 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePosition)
+		x := input.Message.Interface().(*MsgIncreaseLiquidity)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2991,10 +3726,10 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePosition: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgIncreaseLiquidity: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePosition: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgIncreaseLiquidity: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3048,6 +3783,134 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountMinBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountMinBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountMinQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountMinQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -3084,23 +3947,27 @@ func (x *fastReflection_MsgUpdatePosition) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgUpdatePositionResponse protoreflect.MessageDescriptor
+	md_MsgIncreaseLiquidityResponse              protoreflect.MessageDescriptor
+	fd_MsgIncreaseLiquidityResponse_amount_base  protoreflect.FieldDescriptor
+	fd_MsgIncreaseLiquidityResponse_amount_quote protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgUpdatePositionResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgUpdatePositionResponse")
+	md_MsgIncreaseLiquidityResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgIncreaseLiquidityResponse")
+	fd_MsgIncreaseLiquidityResponse_amount_base = md_MsgIncreaseLiquidityResponse.Fields().ByName("amount_base")
+	fd_MsgIncreaseLiquidityResponse_amount_quote = md_MsgIncreaseLiquidityResponse.Fields().ByName("amount_quote")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgUpdatePositionResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgIncreaseLiquidityResponse)(nil)
 
-type fastReflection_MsgUpdatePositionResponse MsgUpdatePositionResponse
+type fastReflection_MsgIncreaseLiquidityResponse MsgIncreaseLiquidityResponse
 
-func (x *MsgUpdatePositionResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePositionResponse)(x)
+func (x *MsgIncreaseLiquidityResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgIncreaseLiquidityResponse)(x)
 }
 
-func (x *MsgUpdatePositionResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgIncreaseLiquidityResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3112,43 +3979,43 @@ func (x *MsgUpdatePositionResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgUpdatePositionResponse_messageType fastReflection_MsgUpdatePositionResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgUpdatePositionResponse_messageType{}
+var _fastReflection_MsgIncreaseLiquidityResponse_messageType fastReflection_MsgIncreaseLiquidityResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgIncreaseLiquidityResponse_messageType{}
 
-type fastReflection_MsgUpdatePositionResponse_messageType struct{}
+type fastReflection_MsgIncreaseLiquidityResponse_messageType struct{}
 
-func (x fastReflection_MsgUpdatePositionResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgUpdatePositionResponse)(nil)
+func (x fastReflection_MsgIncreaseLiquidityResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgIncreaseLiquidityResponse)(nil)
 }
-func (x fastReflection_MsgUpdatePositionResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePositionResponse)
+func (x fastReflection_MsgIncreaseLiquidityResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgIncreaseLiquidityResponse)
 }
-func (x fastReflection_MsgUpdatePositionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePositionResponse
+func (x fastReflection_MsgIncreaseLiquidityResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgIncreaseLiquidityResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgUpdatePositionResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgUpdatePositionResponse
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgIncreaseLiquidityResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgUpdatePositionResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgUpdatePositionResponse_messageType
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgIncreaseLiquidityResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgUpdatePositionResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgUpdatePositionResponse)
+func (x *fastReflection_MsgIncreaseLiquidityResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgIncreaseLiquidityResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgUpdatePositionResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgUpdatePositionResponse)(x)
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgIncreaseLiquidityResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3156,7 +4023,19 @@ func (x *fastReflection_MsgUpdatePositionResponse) Interface() protoreflect.Prot
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgUpdatePositionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.AmountBase != "" {
+		value := protoreflect.ValueOfString(x.AmountBase)
+		if !f(fd_MsgIncreaseLiquidityResponse_amount_base, value) {
+			return
+		}
+	}
+	if x.AmountQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountQuote)
+		if !f(fd_MsgIncreaseLiquidityResponse_amount_quote, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -3170,13 +4049,17 @@ func (x *fastReflection_MsgUpdatePositionResponse) Range(f func(protoreflect.Fie
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgUpdatePositionResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_base":
+		return x.AmountBase != ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_quote":
+		return x.AmountQuote != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3186,13 +4069,17 @@ func (x *fastReflection_MsgUpdatePositionResponse) Has(fd protoreflect.FieldDesc
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePositionResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_base":
+		x.AmountBase = ""
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_quote":
+		x.AmountQuote = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3202,13 +4089,19 @@ func (x *fastReflection_MsgUpdatePositionResponse) Clear(fd protoreflect.FieldDe
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgUpdatePositionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_base":
+		value := x.AmountBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_quote":
+		value := x.AmountQuote
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePositionResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidityResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3222,13 +4115,17 @@ func (x *fastReflection_MsgUpdatePositionResponse) Get(descriptor protoreflect.F
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePositionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_base":
+		x.AmountBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_quote":
+		x.AmountQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3242,36 +4139,44 @@ func (x *fastReflection_MsgUpdatePositionResponse) Set(fd protoreflect.FieldDesc
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePositionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_base":
+		panic(fmt.Errorf("field amount_base of message sunrise.liquiditypool.MsgIncreaseLiquidityResponse is not mutable"))
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_quote":
+		panic(fmt.Errorf("field amount_quote of message sunrise.liquiditypool.MsgIncreaseLiquidityResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgUpdatePositionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgIncreaseLiquidityResponse.amount_quote":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgUpdatePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgIncreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgUpdatePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgIncreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgUpdatePositionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgUpdatePositionResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgIncreaseLiquidityResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3279,7 +4184,7 @@ func (x *fastReflection_MsgUpdatePositionResponse) WhichOneof(d protoreflect.One
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgUpdatePositionResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3290,7 +4195,7 @@ func (x *fastReflection_MsgUpdatePositionResponse) GetUnknown() protoreflect.Raw
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgUpdatePositionResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3302,7 +4207,7 @@ func (x *fastReflection_MsgUpdatePositionResponse) SetUnknown(fields protoreflec
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgUpdatePositionResponse) IsValid() bool {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -3312,9 +4217,9 @@ func (x *fastReflection_MsgUpdatePositionResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgIncreaseLiquidityResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgUpdatePositionResponse)
+		x := input.Message.Interface().(*MsgIncreaseLiquidityResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3326,6 +4231,14 @@ func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Me
 		var n int
 		var l int
 		_ = l
+		l = len(x.AmountBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -3336,7 +4249,7 @@ func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Me
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePositionResponse)
+		x := input.Message.Interface().(*MsgIncreaseLiquidityResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3355,6 +4268,20 @@ func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Me
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.AmountQuote) > 0 {
+			i -= len(x.AmountQuote)
+			copy(dAtA[i:], x.AmountQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountQuote)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.AmountBase) > 0 {
+			i -= len(x.AmountBase)
+			copy(dAtA[i:], x.AmountBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountBase)))
+			i--
+			dAtA[i] = 0xa
+		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
 		} else {
@@ -3366,7 +4293,7 @@ func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Me
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgUpdatePositionResponse)
+		x := input.Message.Interface().(*MsgIncreaseLiquidityResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3398,12 +4325,76 @@ func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Me
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePositionResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgIncreaseLiquidityResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgUpdatePositionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgIncreaseLiquidityResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -3440,27 +4431,29 @@ func (x *fastReflection_MsgUpdatePositionResponse) ProtoMethods() *protoiface.Me
 }
 
 var (
-	md_MsgDeletePosition        protoreflect.MessageDescriptor
-	fd_MsgDeletePosition_sender protoreflect.FieldDescriptor
-	fd_MsgDeletePosition_id     protoreflect.FieldDescriptor
+	md_MsgDecreaseLiquidity           protoreflect.MessageDescriptor
+	fd_MsgDecreaseLiquidity_sender    protoreflect.FieldDescriptor
+	fd_MsgDecreaseLiquidity_id        protoreflect.FieldDescriptor
+	fd_MsgDecreaseLiquidity_liquidity protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgDeletePosition = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgDeletePosition")
-	fd_MsgDeletePosition_sender = md_MsgDeletePosition.Fields().ByName("sender")
-	fd_MsgDeletePosition_id = md_MsgDeletePosition.Fields().ByName("id")
+	md_MsgDecreaseLiquidity = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgDecreaseLiquidity")
+	fd_MsgDecreaseLiquidity_sender = md_MsgDecreaseLiquidity.Fields().ByName("sender")
+	fd_MsgDecreaseLiquidity_id = md_MsgDecreaseLiquidity.Fields().ByName("id")
+	fd_MsgDecreaseLiquidity_liquidity = md_MsgDecreaseLiquidity.Fields().ByName("liquidity")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgDeletePosition)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgDecreaseLiquidity)(nil)
 
-type fastReflection_MsgDeletePosition MsgDeletePosition
+type fastReflection_MsgDecreaseLiquidity MsgDecreaseLiquidity
 
-func (x *MsgDeletePosition) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgDeletePosition)(x)
+func (x *MsgDecreaseLiquidity) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgDecreaseLiquidity)(x)
 }
 
-func (x *MsgDeletePosition) slowProtoReflect() protoreflect.Message {
+func (x *MsgDecreaseLiquidity) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3472,43 +4465,43 @@ func (x *MsgDeletePosition) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgDeletePosition_messageType fastReflection_MsgDeletePosition_messageType
-var _ protoreflect.MessageType = fastReflection_MsgDeletePosition_messageType{}
+var _fastReflection_MsgDecreaseLiquidity_messageType fastReflection_MsgDecreaseLiquidity_messageType
+var _ protoreflect.MessageType = fastReflection_MsgDecreaseLiquidity_messageType{}
 
-type fastReflection_MsgDeletePosition_messageType struct{}
+type fastReflection_MsgDecreaseLiquidity_messageType struct{}
 
-func (x fastReflection_MsgDeletePosition_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgDeletePosition)(nil)
+func (x fastReflection_MsgDecreaseLiquidity_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgDecreaseLiquidity)(nil)
 }
-func (x fastReflection_MsgDeletePosition_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePosition)
+func (x fastReflection_MsgDecreaseLiquidity_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgDecreaseLiquidity)
 }
-func (x fastReflection_MsgDeletePosition_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePosition
+func (x fastReflection_MsgDecreaseLiquidity_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDecreaseLiquidity
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgDeletePosition) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePosition
+func (x *fastReflection_MsgDecreaseLiquidity) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDecreaseLiquidity
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgDeletePosition) Type() protoreflect.MessageType {
-	return _fastReflection_MsgDeletePosition_messageType
+func (x *fastReflection_MsgDecreaseLiquidity) Type() protoreflect.MessageType {
+	return _fastReflection_MsgDecreaseLiquidity_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgDeletePosition) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePosition)
+func (x *fastReflection_MsgDecreaseLiquidity) New() protoreflect.Message {
+	return new(fastReflection_MsgDecreaseLiquidity)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgDeletePosition) Interface() protoreflect.ProtoMessage {
-	return (*MsgDeletePosition)(x)
+func (x *fastReflection_MsgDecreaseLiquidity) Interface() protoreflect.ProtoMessage {
+	return (*MsgDecreaseLiquidity)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3516,16 +4509,22 @@ func (x *fastReflection_MsgDeletePosition) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgDeletePosition) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgDecreaseLiquidity) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgDeletePosition_sender, value) {
+		if !f(fd_MsgDecreaseLiquidity_sender, value) {
 			return
 		}
 	}
 	if x.Id != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_MsgDeletePosition_id, value) {
+		if !f(fd_MsgDecreaseLiquidity_id, value) {
+			return
+		}
+	}
+	if x.Liquidity != "" {
+		value := protoreflect.ValueOfString(x.Liquidity)
+		if !f(fd_MsgDecreaseLiquidity_liquidity, value) {
 			return
 		}
 	}
@@ -3542,17 +4541,19 @@ func (x *fastReflection_MsgDeletePosition) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgDeletePosition) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgDecreaseLiquidity) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePosition.sender":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.sender":
 		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgDeletePosition.id":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.id":
 		return x.Id != uint64(0)
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.liquidity":
+		return x.Liquidity != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3562,17 +4563,19 @@ func (x *fastReflection_MsgDeletePosition) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePosition) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgDecreaseLiquidity) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePosition.sender":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.sender":
 		x.Sender = ""
-	case "sunrise.liquiditypool.MsgDeletePosition.id":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.id":
 		x.Id = uint64(0)
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.liquidity":
+		x.Liquidity = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3582,19 +4585,22 @@ func (x *fastReflection_MsgDeletePosition) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgDeletePosition) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDecreaseLiquidity) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePosition.sender":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgDeletePosition.id":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.id":
 		value := x.Id
 		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.liquidity":
+		value := x.Liquidity
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePosition does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidity does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3608,17 +4614,19 @@ func (x *fastReflection_MsgDeletePosition) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePosition) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgDecreaseLiquidity) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePosition.sender":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.sender":
 		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgDeletePosition.id":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.id":
 		x.Id = value.Uint()
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.liquidity":
+		x.Liquidity = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3632,44 +4640,48 @@ func (x *fastReflection_MsgDeletePosition) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePosition) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDecreaseLiquidity) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePosition.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgDeletePosition is not mutable"))
-	case "sunrise.liquiditypool.MsgDeletePosition.id":
-		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgDeletePosition is not mutable"))
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.sender":
+		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgDecreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.id":
+		panic(fmt.Errorf("field id of message sunrise.liquiditypool.MsgDecreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.liquidity":
+		panic(fmt.Errorf("field liquidity of message sunrise.liquiditypool.MsgDecreaseLiquidity is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgDeletePosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDecreaseLiquidity) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgDeletePosition.sender":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.sender":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgDeletePosition.id":
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.id":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.MsgDecreaseLiquidity.liquidity":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgDeletePosition) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgDecreaseLiquidity) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgDeletePosition", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgDecreaseLiquidity", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3677,7 +4689,7 @@ func (x *fastReflection_MsgDeletePosition) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgDeletePosition) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgDecreaseLiquidity) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3688,7 +4700,7 @@ func (x *fastReflection_MsgDeletePosition) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePosition) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgDecreaseLiquidity) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3700,7 +4712,7 @@ func (x *fastReflection_MsgDeletePosition) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgDeletePosition) IsValid() bool {
+func (x *fastReflection_MsgDecreaseLiquidity) IsValid() bool {
 	return x != nil
 }
 
@@ -3710,9 +4722,9 @@ func (x *fastReflection_MsgDeletePosition) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgDecreaseLiquidity) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgDeletePosition)
+		x := input.Message.Interface().(*MsgDecreaseLiquidity)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3731,6 +4743,10 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 		if x.Id != 0 {
 			n += 1 + runtime.Sov(uint64(x.Id))
 		}
+		l = len(x.Liquidity)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -3741,7 +4757,7 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePosition)
+		x := input.Message.Interface().(*MsgDecreaseLiquidity)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3759,6 +4775,13 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Liquidity) > 0 {
+			i -= len(x.Liquidity)
+			copy(dAtA[i:], x.Liquidity)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Liquidity)))
+			i--
+			dAtA[i] = 0x1a
 		}
 		if x.Id != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
@@ -3783,7 +4806,7 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePosition)
+		x := input.Message.Interface().(*MsgDecreaseLiquidity)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3815,10 +4838,10 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePosition: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDecreaseLiquidity: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePosition: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDecreaseLiquidity: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3872,6 +4895,38 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Liquidity", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Liquidity = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -3908,23 +4963,27 @@ func (x *fastReflection_MsgDeletePosition) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgDeletePositionResponse protoreflect.MessageDescriptor
+	md_MsgDecreaseLiquidityResponse              protoreflect.MessageDescriptor
+	fd_MsgDecreaseLiquidityResponse_amount_base  protoreflect.FieldDescriptor
+	fd_MsgDecreaseLiquidityResponse_amount_quote protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgDeletePositionResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgDeletePositionResponse")
+	md_MsgDecreaseLiquidityResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgDecreaseLiquidityResponse")
+	fd_MsgDecreaseLiquidityResponse_amount_base = md_MsgDecreaseLiquidityResponse.Fields().ByName("amount_base")
+	fd_MsgDecreaseLiquidityResponse_amount_quote = md_MsgDecreaseLiquidityResponse.Fields().ByName("amount_quote")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgDeletePositionResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgDecreaseLiquidityResponse)(nil)
 
-type fastReflection_MsgDeletePositionResponse MsgDeletePositionResponse
+type fastReflection_MsgDecreaseLiquidityResponse MsgDecreaseLiquidityResponse
 
-func (x *MsgDeletePositionResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgDeletePositionResponse)(x)
+func (x *MsgDecreaseLiquidityResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgDecreaseLiquidityResponse)(x)
 }
 
-func (x *MsgDeletePositionResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgDecreaseLiquidityResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3936,43 +4995,43 @@ func (x *MsgDeletePositionResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgDeletePositionResponse_messageType fastReflection_MsgDeletePositionResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgDeletePositionResponse_messageType{}
+var _fastReflection_MsgDecreaseLiquidityResponse_messageType fastReflection_MsgDecreaseLiquidityResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgDecreaseLiquidityResponse_messageType{}
 
-type fastReflection_MsgDeletePositionResponse_messageType struct{}
+type fastReflection_MsgDecreaseLiquidityResponse_messageType struct{}
 
-func (x fastReflection_MsgDeletePositionResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgDeletePositionResponse)(nil)
+func (x fastReflection_MsgDecreaseLiquidityResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgDecreaseLiquidityResponse)(nil)
 }
-func (x fastReflection_MsgDeletePositionResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePositionResponse)
+func (x fastReflection_MsgDecreaseLiquidityResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgDecreaseLiquidityResponse)
 }
-func (x fastReflection_MsgDeletePositionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePositionResponse
+func (x fastReflection_MsgDecreaseLiquidityResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDecreaseLiquidityResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgDeletePositionResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeletePositionResponse
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDecreaseLiquidityResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgDeletePositionResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgDeletePositionResponse_messageType
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgDecreaseLiquidityResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgDeletePositionResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgDeletePositionResponse)
+func (x *fastReflection_MsgDecreaseLiquidityResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgDecreaseLiquidityResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgDeletePositionResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgDeletePositionResponse)(x)
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgDecreaseLiquidityResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -3980,7 +5039,19 @@ func (x *fastReflection_MsgDeletePositionResponse) Interface() protoreflect.Prot
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgDeletePositionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.AmountBase != "" {
+		value := protoreflect.ValueOfString(x.AmountBase)
+		if !f(fd_MsgDecreaseLiquidityResponse_amount_base, value) {
+			return
+		}
+	}
+	if x.AmountQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountQuote)
+		if !f(fd_MsgDecreaseLiquidityResponse_amount_quote, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -3994,13 +5065,17 @@ func (x *fastReflection_MsgDeletePositionResponse) Range(f func(protoreflect.Fie
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgDeletePositionResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_base":
+		return x.AmountBase != ""
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_quote":
+		return x.AmountQuote != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4010,13 +5085,17 @@ func (x *fastReflection_MsgDeletePositionResponse) Has(fd protoreflect.FieldDesc
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePositionResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_base":
+		x.AmountBase = ""
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_quote":
+		x.AmountQuote = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4026,13 +5105,19 @@ func (x *fastReflection_MsgDeletePositionResponse) Clear(fd protoreflect.FieldDe
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgDeletePositionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_base":
+		value := x.AmountBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_quote":
+		value := x.AmountQuote
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePositionResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidityResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -4046,13 +5131,17 @@ func (x *fastReflection_MsgDeletePositionResponse) Get(descriptor protoreflect.F
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePositionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_base":
+		x.AmountBase = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_quote":
+		x.AmountQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4066,36 +5155,44 @@ func (x *fastReflection_MsgDeletePositionResponse) Set(fd protoreflect.FieldDesc
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePositionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_base":
+		panic(fmt.Errorf("field amount_base of message sunrise.liquiditypool.MsgDecreaseLiquidityResponse is not mutable"))
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_quote":
+		panic(fmt.Errorf("field amount_quote of message sunrise.liquiditypool.MsgDecreaseLiquidityResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgDeletePositionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgDecreaseLiquidityResponse.amount_quote":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDeletePositionResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgDecreaseLiquidityResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDeletePositionResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgDecreaseLiquidityResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgDeletePositionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgDeletePositionResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgDecreaseLiquidityResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -4103,7 +5200,7 @@ func (x *fastReflection_MsgDeletePositionResponse) WhichOneof(d protoreflect.One
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgDeletePositionResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -4114,7 +5211,7 @@ func (x *fastReflection_MsgDeletePositionResponse) GetUnknown() protoreflect.Raw
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeletePositionResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -4126,7 +5223,7 @@ func (x *fastReflection_MsgDeletePositionResponse) SetUnknown(fields protoreflec
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgDeletePositionResponse) IsValid() bool {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -4136,9 +5233,9 @@ func (x *fastReflection_MsgDeletePositionResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgDecreaseLiquidityResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgDeletePositionResponse)
+		x := input.Message.Interface().(*MsgDecreaseLiquidityResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4150,6 +5247,14 @@ func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Me
 		var n int
 		var l int
 		_ = l
+		l = len(x.AmountBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -4160,7 +5265,7 @@ func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Me
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePositionResponse)
+		x := input.Message.Interface().(*MsgDecreaseLiquidityResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4179,6 +5284,20 @@ func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Me
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.AmountQuote) > 0 {
+			i -= len(x.AmountQuote)
+			copy(dAtA[i:], x.AmountQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountQuote)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.AmountBase) > 0 {
+			i -= len(x.AmountBase)
+			copy(dAtA[i:], x.AmountBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountBase)))
+			i--
+			dAtA[i] = 0xa
+		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
 		} else {
@@ -4190,7 +5309,7 @@ func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Me
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeletePositionResponse)
+		x := input.Message.Interface().(*MsgDecreaseLiquidityResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4222,12 +5341,76 @@ func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Me
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePositionResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDecreaseLiquidityResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeletePositionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDecreaseLiquidityResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -4263,15 +5446,63 @@ func (x *fastReflection_MsgDeletePositionResponse) ProtoMethods() *protoiface.Me
 	}
 }
 
+var _ protoreflect.List = (*_MsgCollectFees_2_list)(nil)
+
+type _MsgCollectFees_2_list struct {
+	list *[]uint64
+}
+
+func (x *_MsgCollectFees_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgCollectFees_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfUint64((*x.list)[i])
+}
+
+func (x *_MsgCollectFees_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgCollectFees_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgCollectFees_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgCollectFees at list field PositionIds as it is not of Message kind"))
+}
+
+func (x *_MsgCollectFees_2_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgCollectFees_2_list) NewElement() protoreflect.Value {
+	v := uint64(0)
+	return protoreflect.ValueOfUint64(v)
+}
+
+func (x *_MsgCollectFees_2_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgCollectFees        protoreflect.MessageDescriptor
-	fd_MsgCollectFees_sender protoreflect.FieldDescriptor
+	md_MsgCollectFees              protoreflect.MessageDescriptor
+	fd_MsgCollectFees_sender       protoreflect.FieldDescriptor
+	fd_MsgCollectFees_position_ids protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCollectFees = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectFees")
 	fd_MsgCollectFees_sender = md_MsgCollectFees.Fields().ByName("sender")
+	fd_MsgCollectFees_position_ids = md_MsgCollectFees.Fields().ByName("position_ids")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCollectFees)(nil)
@@ -4345,6 +5576,12 @@ func (x *fastReflection_MsgCollectFees) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
+	if len(x.PositionIds) != 0 {
+		value := protoreflect.ValueOfList(&_MsgCollectFees_2_list{list: &x.PositionIds})
+		if !f(fd_MsgCollectFees_position_ids, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -4362,6 +5599,8 @@ func (x *fastReflection_MsgCollectFees) Has(fd protoreflect.FieldDescriptor) boo
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectFees.sender":
 		return x.Sender != ""
+	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+		return len(x.PositionIds) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
@@ -4380,6 +5619,8 @@ func (x *fastReflection_MsgCollectFees) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectFees.sender":
 		x.Sender = ""
+	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+		x.PositionIds = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
@@ -4399,6 +5640,12 @@ func (x *fastReflection_MsgCollectFees) Get(descriptor protoreflect.FieldDescrip
 	case "sunrise.liquiditypool.MsgCollectFees.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+		if len(x.PositionIds) == 0 {
+			return protoreflect.ValueOfList(&_MsgCollectFees_2_list{})
+		}
+		listValue := &_MsgCollectFees_2_list{list: &x.PositionIds}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
@@ -4421,6 +5668,10 @@ func (x *fastReflection_MsgCollectFees) Set(fd protoreflect.FieldDescriptor, val
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectFees.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+		lv := value.List()
+		clv := lv.(*_MsgCollectFees_2_list)
+		x.PositionIds = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
@@ -4441,6 +5692,12 @@ func (x *fastReflection_MsgCollectFees) Set(fd protoreflect.FieldDescriptor, val
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectFees) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+		if x.PositionIds == nil {
+			x.PositionIds = []uint64{}
+		}
+		value := &_MsgCollectFees_2_list{list: &x.PositionIds}
+		return protoreflect.ValueOfList(value)
 	case "sunrise.liquiditypool.MsgCollectFees.sender":
 		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCollectFees is not mutable"))
 	default:
@@ -4458,6 +5715,9 @@ func (x *fastReflection_MsgCollectFees) NewField(fd protoreflect.FieldDescriptor
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectFees.sender":
 		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+		list := []uint64{}
+		return protoreflect.ValueOfList(&_MsgCollectFees_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
@@ -4531,6 +5791,13 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if len(x.PositionIds) > 0 {
+			l = 0
+			for _, e := range x.PositionIds {
+				l += runtime.Sov(uint64(e))
+			}
+			n += 1 + runtime.Sov(uint64(l)) + l
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -4559,6 +5826,26 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.PositionIds) > 0 {
+			var pksize2 int
+			for _, num := range x.PositionIds {
+				pksize2 += runtime.Sov(uint64(num))
+			}
+			i -= pksize2
+			j1 := i
+			for _, num := range x.PositionIds {
+				for num >= 1<<7 {
+					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+					num >>= 7
+					j1++
+				}
+				dAtA[j1] = uint8(num)
+				j1++
+			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
+			i--
+			dAtA[i] = 0x12
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -4648,6 +5935,82 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 2:
+				if wireType == 0 {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					x.PositionIds = append(x.PositionIds, v)
+				} else if wireType == 2 {
+					var packedLen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						packedLen |= int(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if packedLen < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					postIndex := iNdEx + packedLen
+					if postIndex < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					if postIndex > l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					var elementCount int
+					var count int
+					for _, integer := range dAtA[iNdEx:postIndex] {
+						if integer < 128 {
+							count++
+						}
+					}
+					elementCount = count
+					if elementCount != 0 && len(x.PositionIds) == 0 {
+						x.PositionIds = make([]uint64, 0, elementCount)
+					}
+					for iNdEx < postIndex {
+						var v uint64
+						for shift := uint(0); ; shift += 7 {
+							if shift >= 64 {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+							}
+							if iNdEx >= l {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+							}
+							b := dAtA[iNdEx]
+							iNdEx++
+							v |= uint64(b&0x7F) << shift
+							if b < 0x80 {
+								break
+							}
+						}
+						x.PositionIds = append(x.PositionIds, v)
+					}
+				} else {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PositionIds", wireType)
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -4683,13 +6046,66 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var _ protoreflect.List = (*_MsgCollectFeesResponse_1_list)(nil)
+
+type _MsgCollectFeesResponse_1_list struct {
+	list *[]*v1beta1.Coin
+}
+
+func (x *_MsgCollectFeesResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgCollectFeesResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_MsgCollectFeesResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgCollectFeesResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgCollectFeesResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgCollectFeesResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgCollectFeesResponse_1_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgCollectFeesResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgCollectFeesResponse protoreflect.MessageDescriptor
+	md_MsgCollectFeesResponse                protoreflect.MessageDescriptor
+	fd_MsgCollectFeesResponse_collected_fees protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCollectFeesResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectFeesResponse")
+	fd_MsgCollectFeesResponse_collected_fees = md_MsgCollectFeesResponse.Fields().ByName("collected_fees")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCollectFeesResponse)(nil)
@@ -4757,6 +6173,12 @@ func (x *fastReflection_MsgCollectFeesResponse) Interface() protoreflect.ProtoMe
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_MsgCollectFeesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.CollectedFees) != 0 {
+		value := protoreflect.ValueOfList(&_MsgCollectFeesResponse_1_list{list: &x.CollectedFees})
+		if !f(fd_MsgCollectFeesResponse_collected_fees, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -4772,6 +6194,8 @@ func (x *fastReflection_MsgCollectFeesResponse) Range(f func(protoreflect.FieldD
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_MsgCollectFeesResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+		return len(x.CollectedFees) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
@@ -4788,6 +6212,8 @@ func (x *fastReflection_MsgCollectFeesResponse) Has(fd protoreflect.FieldDescrip
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectFeesResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+		x.CollectedFees = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
@@ -4804,6 +6230,12 @@ func (x *fastReflection_MsgCollectFeesResponse) Clear(fd protoreflect.FieldDescr
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_MsgCollectFeesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+		if len(x.CollectedFees) == 0 {
+			return protoreflect.ValueOfList(&_MsgCollectFeesResponse_1_list{})
+		}
+		listValue := &_MsgCollectFeesResponse_1_list{list: &x.CollectedFees}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
@@ -4824,6 +6256,10 @@ func (x *fastReflection_MsgCollectFeesResponse) Get(descriptor protoreflect.Fiel
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectFeesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+		lv := value.List()
+		clv := lv.(*_MsgCollectFeesResponse_1_list)
+		x.CollectedFees = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
@@ -4844,6 +6280,12 @@ func (x *fastReflection_MsgCollectFeesResponse) Set(fd protoreflect.FieldDescrip
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectFeesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+		if x.CollectedFees == nil {
+			x.CollectedFees = []*v1beta1.Coin{}
+		}
+		value := &_MsgCollectFeesResponse_1_list{list: &x.CollectedFees}
+		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
@@ -4857,6 +6299,9 @@ func (x *fastReflection_MsgCollectFeesResponse) Mutable(fd protoreflect.FieldDes
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_MsgCollectFeesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+		list := []*v1beta1.Coin{}
+		return protoreflect.ValueOfList(&_MsgCollectFeesResponse_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
@@ -4926,6 +6371,12 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 		var n int
 		var l int
 		_ = l
+		if len(x.CollectedFees) > 0 {
+			for _, e := range x.CollectedFees {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -4954,6 +6405,22 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.CollectedFees) > 0 {
+			for iNdEx := len(x.CollectedFees) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.CollectedFees[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -5004,6 +6471,40 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectFeesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollectedFees", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.CollectedFees = append(x.CollectedFees, &v1beta1.Coin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CollectedFees[len(x.CollectedFees)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -5039,15 +6540,63 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 	}
 }
 
+var _ protoreflect.List = (*_MsgCollectIncentives_2_list)(nil)
+
+type _MsgCollectIncentives_2_list struct {
+	list *[]uint64
+}
+
+func (x *_MsgCollectIncentives_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgCollectIncentives_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfUint64((*x.list)[i])
+}
+
+func (x *_MsgCollectIncentives_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgCollectIncentives_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgCollectIncentives_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgCollectIncentives at list field PositionIds as it is not of Message kind"))
+}
+
+func (x *_MsgCollectIncentives_2_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgCollectIncentives_2_list) NewElement() protoreflect.Value {
+	v := uint64(0)
+	return protoreflect.ValueOfUint64(v)
+}
+
+func (x *_MsgCollectIncentives_2_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgCollectIncentives        protoreflect.MessageDescriptor
-	fd_MsgCollectIncentives_sender protoreflect.FieldDescriptor
+	md_MsgCollectIncentives              protoreflect.MessageDescriptor
+	fd_MsgCollectIncentives_sender       protoreflect.FieldDescriptor
+	fd_MsgCollectIncentives_position_ids protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCollectIncentives = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectIncentives")
 	fd_MsgCollectIncentives_sender = md_MsgCollectIncentives.Fields().ByName("sender")
+	fd_MsgCollectIncentives_position_ids = md_MsgCollectIncentives.Fields().ByName("position_ids")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCollectIncentives)(nil)
@@ -5121,6 +6670,12 @@ func (x *fastReflection_MsgCollectIncentives) Range(f func(protoreflect.FieldDes
 			return
 		}
 	}
+	if len(x.PositionIds) != 0 {
+		value := protoreflect.ValueOfList(&_MsgCollectIncentives_2_list{list: &x.PositionIds})
+		if !f(fd_MsgCollectIncentives_position_ids, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -5138,6 +6693,8 @@ func (x *fastReflection_MsgCollectIncentives) Has(fd protoreflect.FieldDescripto
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
 		return x.Sender != ""
+	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
+		return len(x.PositionIds) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
@@ -5156,6 +6713,8 @@ func (x *fastReflection_MsgCollectIncentives) Clear(fd protoreflect.FieldDescrip
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
 		x.Sender = ""
+	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
+		x.PositionIds = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
@@ -5175,6 +6734,12 @@ func (x *fastReflection_MsgCollectIncentives) Get(descriptor protoreflect.FieldD
 	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
+		if len(x.PositionIds) == 0 {
+			return protoreflect.ValueOfList(&_MsgCollectIncentives_2_list{})
+		}
+		listValue := &_MsgCollectIncentives_2_list{list: &x.PositionIds}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
@@ -5197,6 +6762,10 @@ func (x *fastReflection_MsgCollectIncentives) Set(fd protoreflect.FieldDescripto
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
+		lv := value.List()
+		clv := lv.(*_MsgCollectIncentives_2_list)
+		x.PositionIds = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
@@ -5217,6 +6786,12 @@ func (x *fastReflection_MsgCollectIncentives) Set(fd protoreflect.FieldDescripto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectIncentives) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
+		if x.PositionIds == nil {
+			x.PositionIds = []uint64{}
+		}
+		value := &_MsgCollectIncentives_2_list{list: &x.PositionIds}
+		return protoreflect.ValueOfList(value)
 	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
 		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCollectIncentives is not mutable"))
 	default:
@@ -5234,6 +6809,9 @@ func (x *fastReflection_MsgCollectIncentives) NewField(fd protoreflect.FieldDesc
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
 		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
+		list := []uint64{}
+		return protoreflect.ValueOfList(&_MsgCollectIncentives_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
@@ -5307,6 +6885,13 @@ func (x *fastReflection_MsgCollectIncentives) ProtoMethods() *protoiface.Methods
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if len(x.PositionIds) > 0 {
+			l = 0
+			for _, e := range x.PositionIds {
+				l += runtime.Sov(uint64(e))
+			}
+			n += 1 + runtime.Sov(uint64(l)) + l
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -5335,6 +6920,26 @@ func (x *fastReflection_MsgCollectIncentives) ProtoMethods() *protoiface.Methods
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.PositionIds) > 0 {
+			var pksize2 int
+			for _, num := range x.PositionIds {
+				pksize2 += runtime.Sov(uint64(num))
+			}
+			i -= pksize2
+			j1 := i
+			for _, num := range x.PositionIds {
+				for num >= 1<<7 {
+					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+					num >>= 7
+					j1++
+				}
+				dAtA[j1] = uint8(num)
+				j1++
+			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
+			i--
+			dAtA[i] = 0x12
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -5424,6 +7029,82 @@ func (x *fastReflection_MsgCollectIncentives) ProtoMethods() *protoiface.Methods
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 2:
+				if wireType == 0 {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					x.PositionIds = append(x.PositionIds, v)
+				} else if wireType == 2 {
+					var packedLen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						packedLen |= int(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if packedLen < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					postIndex := iNdEx + packedLen
+					if postIndex < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					if postIndex > l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					var elementCount int
+					var count int
+					for _, integer := range dAtA[iNdEx:postIndex] {
+						if integer < 128 {
+							count++
+						}
+					}
+					elementCount = count
+					if elementCount != 0 && len(x.PositionIds) == 0 {
+						x.PositionIds = make([]uint64, 0, elementCount)
+					}
+					for iNdEx < postIndex {
+						var v uint64
+						for shift := uint(0); ; shift += 7 {
+							if shift >= 64 {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+							}
+							if iNdEx >= l {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+							}
+							b := dAtA[iNdEx]
+							iNdEx++
+							v |= uint64(b&0x7F) << shift
+							if b < 0x80 {
+								break
+							}
+						}
+						x.PositionIds = append(x.PositionIds, v)
+					}
+				} else {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PositionIds", wireType)
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -5459,13 +7140,66 @@ func (x *fastReflection_MsgCollectIncentives) ProtoMethods() *protoiface.Methods
 	}
 }
 
+var _ protoreflect.List = (*_MsgCollectIncentivesResponse_1_list)(nil)
+
+type _MsgCollectIncentivesResponse_1_list struct {
+	list *[]*v1beta1.Coin
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgCollectIncentivesResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgCollectIncentivesResponse protoreflect.MessageDescriptor
+	md_MsgCollectIncentivesResponse                      protoreflect.MessageDescriptor
+	fd_MsgCollectIncentivesResponse_collected_incentives protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
 	md_MsgCollectIncentivesResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectIncentivesResponse")
+	fd_MsgCollectIncentivesResponse_collected_incentives = md_MsgCollectIncentivesResponse.Fields().ByName("collected_incentives")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCollectIncentivesResponse)(nil)
@@ -5533,6 +7267,12 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Interface() protoreflect.P
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_MsgCollectIncentivesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.CollectedIncentives) != 0 {
+		value := protoreflect.ValueOfList(&_MsgCollectIncentivesResponse_1_list{list: &x.CollectedIncentives})
+		if !f(fd_MsgCollectIncentivesResponse_collected_incentives, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -5548,6 +7288,8 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Range(f func(protoreflect.
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_MsgCollectIncentivesResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
+		return len(x.CollectedIncentives) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
@@ -5564,6 +7306,8 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Has(fd protoreflect.FieldD
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectIncentivesResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
+		x.CollectedIncentives = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
@@ -5580,6 +7324,12 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Clear(fd protoreflect.Fiel
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_MsgCollectIncentivesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
+		if len(x.CollectedIncentives) == 0 {
+			return protoreflect.ValueOfList(&_MsgCollectIncentivesResponse_1_list{})
+		}
+		listValue := &_MsgCollectIncentivesResponse_1_list{list: &x.CollectedIncentives}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
@@ -5600,6 +7350,10 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Get(descriptor protoreflec
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectIncentivesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
+		lv := value.List()
+		clv := lv.(*_MsgCollectIncentivesResponse_1_list)
+		x.CollectedIncentives = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
@@ -5620,6 +7374,12 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Set(fd protoreflect.FieldD
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCollectIncentivesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
+		if x.CollectedIncentives == nil {
+			x.CollectedIncentives = []*v1beta1.Coin{}
+		}
+		value := &_MsgCollectIncentivesResponse_1_list{list: &x.CollectedIncentives}
+		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
@@ -5633,6 +7393,9 @@ func (x *fastReflection_MsgCollectIncentivesResponse) Mutable(fd protoreflect.Fi
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_MsgCollectIncentivesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
+		list := []*v1beta1.Coin{}
+		return protoreflect.ValueOfList(&_MsgCollectIncentivesResponse_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
@@ -5702,6 +7465,12 @@ func (x *fastReflection_MsgCollectIncentivesResponse) ProtoMethods() *protoiface
 		var n int
 		var l int
 		_ = l
+		if len(x.CollectedIncentives) > 0 {
+			for _, e := range x.CollectedIncentives {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -5730,6 +7499,22 @@ func (x *fastReflection_MsgCollectIncentivesResponse) ProtoMethods() *protoiface
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.CollectedIncentives) > 0 {
+			for iNdEx := len(x.CollectedIncentives) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.CollectedIncentives[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -5780,6 +7565,40 @@ func (x *fastReflection_MsgCollectIncentivesResponse) ProtoMethods() *protoiface
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectIncentivesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollectedIncentives", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.CollectedIncentives = append(x.CollectedIncentives, &v1beta1.Coin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CollectedIncentives[len(x.CollectedIncentives)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -5907,9 +7726,9 @@ type MsgCreatePool struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	LowerTick int64  `protobuf:"varint,2,opt,name=lower_tick,json=lowerTick,proto3" json:"lower_tick,omitempty"`
-	UpperTick int64  `protobuf:"varint,3,opt,name=upper_tick,json=upperTick,proto3" json:"upper_tick,omitempty"`
+	Authority  string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	DenomBase  string `protobuf:"bytes,2,opt,name=denom_base,json=denomBase,proto3" json:"denom_base,omitempty"`
+	DenomQuote string `protobuf:"bytes,3,opt,name=denom_quote,json=denomQuote,proto3" json:"denom_quote,omitempty"`
 }
 
 func (x *MsgCreatePool) Reset() {
@@ -5932,25 +7751,25 @@ func (*MsgCreatePool) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgCreatePool) GetSender() string {
+func (x *MsgCreatePool) GetAuthority() string {
 	if x != nil {
-		return x.Sender
+		return x.Authority
 	}
 	return ""
 }
 
-func (x *MsgCreatePool) GetLowerTick() int64 {
+func (x *MsgCreatePool) GetDenomBase() string {
 	if x != nil {
-		return x.LowerTick
+		return x.DenomBase
 	}
-	return 0
+	return ""
 }
 
-func (x *MsgCreatePool) GetUpperTick() int64 {
+func (x *MsgCreatePool) GetDenomQuote() string {
 	if x != nil {
-		return x.UpperTick
+		return x.DenomQuote
 	}
-	return 0
+	return ""
 }
 
 type MsgCreatePoolResponse struct {
@@ -5993,7 +7812,13 @@ type MsgCreatePosition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender         string        `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	LowerTick      int64         `protobuf:"varint,2,opt,name=lower_tick,json=lowerTick,proto3" json:"lower_tick,omitempty"`
+	UpperTick      int64         `protobuf:"varint,3,opt,name=upper_tick,json=upperTick,proto3" json:"upper_tick,omitempty"`
+	TokenBase      *v1beta1.Coin `protobuf:"bytes,4,opt,name=token_base,json=tokenBase,proto3" json:"token_base,omitempty"`
+	TokenQuote     *v1beta1.Coin `protobuf:"bytes,5,opt,name=token_quote,json=tokenQuote,proto3" json:"token_quote,omitempty"`
+	AmountMinBase  string        `protobuf:"bytes,6,opt,name=amount_min_base,json=amountMinBase,proto3" json:"amount_min_base,omitempty"`
+	AmountMinQuote string        `protobuf:"bytes,7,opt,name=amount_min_quote,json=amountMinQuote,proto3" json:"amount_min_quote,omitempty"`
 }
 
 func (x *MsgCreatePosition) Reset() {
@@ -6023,12 +7848,57 @@ func (x *MsgCreatePosition) GetSender() string {
 	return ""
 }
 
+func (x *MsgCreatePosition) GetLowerTick() int64 {
+	if x != nil {
+		return x.LowerTick
+	}
+	return 0
+}
+
+func (x *MsgCreatePosition) GetUpperTick() int64 {
+	if x != nil {
+		return x.UpperTick
+	}
+	return 0
+}
+
+func (x *MsgCreatePosition) GetTokenBase() *v1beta1.Coin {
+	if x != nil {
+		return x.TokenBase
+	}
+	return nil
+}
+
+func (x *MsgCreatePosition) GetTokenQuote() *v1beta1.Coin {
+	if x != nil {
+		return x.TokenQuote
+	}
+	return nil
+}
+
+func (x *MsgCreatePosition) GetAmountMinBase() string {
+	if x != nil {
+		return x.AmountMinBase
+	}
+	return ""
+}
+
+func (x *MsgCreatePosition) GetAmountMinQuote() string {
+	if x != nil {
+		return x.AmountMinQuote
+	}
+	return ""
+}
+
 type MsgCreatePositionResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id          uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	AmountBase  string `protobuf:"bytes,2,opt,name=amount_base,json=amountBase,proto3" json:"amount_base,omitempty"`
+	AmountQuote string `protobuf:"bytes,3,opt,name=amount_quote,json=amountQuote,proto3" json:"amount_quote,omitempty"`
+	Liquidity   string `protobuf:"bytes,4,opt,name=liquidity,proto3" json:"liquidity,omitempty"`
 }
 
 func (x *MsgCreatePositionResponse) Reset() {
@@ -6058,17 +7928,42 @@ func (x *MsgCreatePositionResponse) GetId() uint64 {
 	return 0
 }
 
-type MsgUpdatePosition struct {
+func (x *MsgCreatePositionResponse) GetAmountBase() string {
+	if x != nil {
+		return x.AmountBase
+	}
+	return ""
+}
+
+func (x *MsgCreatePositionResponse) GetAmountQuote() string {
+	if x != nil {
+		return x.AmountQuote
+	}
+	return ""
+}
+
+func (x *MsgCreatePositionResponse) GetLiquidity() string {
+	if x != nil {
+		return x.Liquidity
+	}
+	return ""
+}
+
+type MsgIncreaseLiquidity struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Id     uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Sender         string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Id             uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	AmountBase     string `protobuf:"bytes,3,opt,name=amount_base,json=amountBase,proto3" json:"amount_base,omitempty"`
+	AmountQuote    string `protobuf:"bytes,4,opt,name=amount_quote,json=amountQuote,proto3" json:"amount_quote,omitempty"`
+	AmountMinBase  string `protobuf:"bytes,5,opt,name=amount_min_base,json=amountMinBase,proto3" json:"amount_min_base,omitempty"`
+	AmountMinQuote string `protobuf:"bytes,6,opt,name=amount_min_quote,json=amountMinQuote,proto3" json:"amount_min_quote,omitempty"`
 }
 
-func (x *MsgUpdatePosition) Reset() {
-	*x = MsgUpdatePosition{}
+func (x *MsgIncreaseLiquidity) Reset() {
+	*x = MsgIncreaseLiquidity{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6076,39 +7971,70 @@ func (x *MsgUpdatePosition) Reset() {
 	}
 }
 
-func (x *MsgUpdatePosition) String() string {
+func (x *MsgIncreaseLiquidity) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgUpdatePosition) ProtoMessage() {}
+func (*MsgIncreaseLiquidity) ProtoMessage() {}
 
-// Deprecated: Use MsgUpdatePosition.ProtoReflect.Descriptor instead.
-func (*MsgUpdatePosition) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgIncreaseLiquidity.ProtoReflect.Descriptor instead.
+func (*MsgIncreaseLiquidity) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *MsgUpdatePosition) GetSender() string {
+func (x *MsgIncreaseLiquidity) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgUpdatePosition) GetId() uint64 {
+func (x *MsgIncreaseLiquidity) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-type MsgUpdatePositionResponse struct {
+func (x *MsgIncreaseLiquidity) GetAmountBase() string {
+	if x != nil {
+		return x.AmountBase
+	}
+	return ""
+}
+
+func (x *MsgIncreaseLiquidity) GetAmountQuote() string {
+	if x != nil {
+		return x.AmountQuote
+	}
+	return ""
+}
+
+func (x *MsgIncreaseLiquidity) GetAmountMinBase() string {
+	if x != nil {
+		return x.AmountMinBase
+	}
+	return ""
+}
+
+func (x *MsgIncreaseLiquidity) GetAmountMinQuote() string {
+	if x != nil {
+		return x.AmountMinQuote
+	}
+	return ""
+}
+
+type MsgIncreaseLiquidityResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	AmountBase  string `protobuf:"bytes,1,opt,name=amount_base,json=amountBase,proto3" json:"amount_base,omitempty"`
+	AmountQuote string `protobuf:"bytes,2,opt,name=amount_quote,json=amountQuote,proto3" json:"amount_quote,omitempty"`
 }
 
-func (x *MsgUpdatePositionResponse) Reset() {
-	*x = MsgUpdatePositionResponse{}
+func (x *MsgIncreaseLiquidityResponse) Reset() {
+	*x = MsgIncreaseLiquidityResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6116,28 +8042,43 @@ func (x *MsgUpdatePositionResponse) Reset() {
 	}
 }
 
-func (x *MsgUpdatePositionResponse) String() string {
+func (x *MsgIncreaseLiquidityResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgUpdatePositionResponse) ProtoMessage() {}
+func (*MsgIncreaseLiquidityResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgUpdatePositionResponse.ProtoReflect.Descriptor instead.
-func (*MsgUpdatePositionResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgIncreaseLiquidityResponse.ProtoReflect.Descriptor instead.
+func (*MsgIncreaseLiquidityResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{7}
 }
 
-type MsgDeletePosition struct {
+func (x *MsgIncreaseLiquidityResponse) GetAmountBase() string {
+	if x != nil {
+		return x.AmountBase
+	}
+	return ""
+}
+
+func (x *MsgIncreaseLiquidityResponse) GetAmountQuote() string {
+	if x != nil {
+		return x.AmountQuote
+	}
+	return ""
+}
+
+type MsgDecreaseLiquidity struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Id     uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Id        uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Liquidity string `protobuf:"bytes,3,opt,name=liquidity,proto3" json:"liquidity,omitempty"`
 }
 
-func (x *MsgDeletePosition) Reset() {
-	*x = MsgDeletePosition{}
+func (x *MsgDecreaseLiquidity) Reset() {
+	*x = MsgDecreaseLiquidity{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6145,39 +8086,49 @@ func (x *MsgDeletePosition) Reset() {
 	}
 }
 
-func (x *MsgDeletePosition) String() string {
+func (x *MsgDecreaseLiquidity) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgDeletePosition) ProtoMessage() {}
+func (*MsgDecreaseLiquidity) ProtoMessage() {}
 
-// Deprecated: Use MsgDeletePosition.ProtoReflect.Descriptor instead.
-func (*MsgDeletePosition) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgDecreaseLiquidity.ProtoReflect.Descriptor instead.
+func (*MsgDecreaseLiquidity) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *MsgDeletePosition) GetSender() string {
+func (x *MsgDecreaseLiquidity) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgDeletePosition) GetId() uint64 {
+func (x *MsgDecreaseLiquidity) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-type MsgDeletePositionResponse struct {
+func (x *MsgDecreaseLiquidity) GetLiquidity() string {
+	if x != nil {
+		return x.Liquidity
+	}
+	return ""
+}
+
+type MsgDecreaseLiquidityResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	AmountBase  string `protobuf:"bytes,1,opt,name=amount_base,json=amountBase,proto3" json:"amount_base,omitempty"`
+	AmountQuote string `protobuf:"bytes,2,opt,name=amount_quote,json=amountQuote,proto3" json:"amount_quote,omitempty"`
 }
 
-func (x *MsgDeletePositionResponse) Reset() {
-	*x = MsgDeletePositionResponse{}
+func (x *MsgDecreaseLiquidityResponse) Reset() {
+	*x = MsgDecreaseLiquidityResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6185,15 +8136,29 @@ func (x *MsgDeletePositionResponse) Reset() {
 	}
 }
 
-func (x *MsgDeletePositionResponse) String() string {
+func (x *MsgDecreaseLiquidityResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgDeletePositionResponse) ProtoMessage() {}
+func (*MsgDecreaseLiquidityResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgDeletePositionResponse.ProtoReflect.Descriptor instead.
-func (*MsgDeletePositionResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgDecreaseLiquidityResponse.ProtoReflect.Descriptor instead.
+func (*MsgDecreaseLiquidityResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *MsgDecreaseLiquidityResponse) GetAmountBase() string {
+	if x != nil {
+		return x.AmountBase
+	}
+	return ""
+}
+
+func (x *MsgDecreaseLiquidityResponse) GetAmountQuote() string {
+	if x != nil {
+		return x.AmountQuote
+	}
+	return ""
 }
 
 type MsgCollectFees struct {
@@ -6201,7 +8166,8 @@ type MsgCollectFees struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender      string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	PositionIds []uint64 `protobuf:"varint,2,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`
 }
 
 func (x *MsgCollectFees) Reset() {
@@ -6231,10 +8197,19 @@ func (x *MsgCollectFees) GetSender() string {
 	return ""
 }
 
+func (x *MsgCollectFees) GetPositionIds() []uint64 {
+	if x != nil {
+		return x.PositionIds
+	}
+	return nil
+}
+
 type MsgCollectFeesResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	CollectedFees []*v1beta1.Coin `protobuf:"bytes,1,rep,name=collected_fees,json=collectedFees,proto3" json:"collected_fees,omitempty"`
 }
 
 func (x *MsgCollectFeesResponse) Reset() {
@@ -6257,12 +8232,20 @@ func (*MsgCollectFeesResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{11}
 }
 
+func (x *MsgCollectFeesResponse) GetCollectedFees() []*v1beta1.Coin {
+	if x != nil {
+		return x.CollectedFees
+	}
+	return nil
+}
+
 type MsgCollectIncentives struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender      string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	PositionIds []uint64 `protobuf:"varint,2,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`
 }
 
 func (x *MsgCollectIncentives) Reset() {
@@ -6292,10 +8275,19 @@ func (x *MsgCollectIncentives) GetSender() string {
 	return ""
 }
 
+func (x *MsgCollectIncentives) GetPositionIds() []uint64 {
+	if x != nil {
+		return x.PositionIds
+	}
+	return nil
+}
+
 type MsgCollectIncentivesResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	CollectedIncentives []*v1beta1.Coin `protobuf:"bytes,1,rep,name=collected_incentives,json=collectedIncentives,proto3" json:"collected_incentives,omitempty"`
 }
 
 func (x *MsgCollectIncentivesResponse) Reset() {
@@ -6318,6 +8310,13 @@ func (*MsgCollectIncentivesResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{13}
 }
 
+func (x *MsgCollectIncentivesResponse) GetCollectedIncentives() []*v1beta1.Coin {
+	if x != nil {
+		return x.CollectedIncentives
+	}
+	return nil
+}
+
 var File_sunrise_liquiditypool_tx_proto protoreflect.FileDescriptor
 
 var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
@@ -6330,6 +8329,8 @@ var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14,
 	0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73,
+	0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x22, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69,
 	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x70, 0x61, 0x72, 0x61,
 	0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x20, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
@@ -6351,107 +8352,219 @@ var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
 	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73,
 	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x72, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x1d,
-	0x0a, 0x0a, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x03, 0x52, 0x09, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1d, 0x0a,
-	0x0a, 0x75, 0x70, 0x70, 0x65, 0x72, 0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x03, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x3a, 0x0b, 0x82, 0xe7,
-	0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x27, 0x0a, 0x15, 0x4d, 0x73, 0x67,
-	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
-	0x69, 0x64, 0x22, 0x38, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
-	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x3a,
-	0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x2b, 0x0a, 0x19,
-	0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x48, 0x0a, 0x11, 0x4d, 0x73, 0x67,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x97, 0x01, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f,
+	0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74,
+	0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12,
+	0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x42, 0x61, 0x73, 0x65, 0x12, 0x1f,
+	0x0a, 0x0b, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0a, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x3a,
+	0x0e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22,
+	0x27, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0xae, 0x03, 0x0a, 0x11, 0x4d, 0x73, 0x67,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16,
+	0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x5f,
+	0x74, 0x69, 0x63, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x6f, 0x77, 0x65,
+	0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x70, 0x65, 0x72, 0x5f, 0x74,
+	0x69, 0x63, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72,
+	0x54, 0x69, 0x63, 0x6b, 0x12, 0x3e, 0x0a, 0x0a, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x62, 0x61,
+	0x73, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43,
+	0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
+	0x42, 0x61, 0x73, 0x65, 0x12, 0x40, 0x0a, 0x0b, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x71, 0x75,
+	0x6f, 0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0a, 0x74, 0x6f, 0x6b, 0x65,
+	0x6e, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x12, 0x58, 0x0a, 0x0f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x5f, 0x6d, 0x69, 0x6e, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4,
+	0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x0d, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4d, 0x69, 0x6e, 0x42, 0x61, 0x73, 0x65,
+	0x12, 0x5a, 0x0a, 0x10, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6d, 0x69, 0x6e, 0x5f, 0x71,
+	0x75, 0x6f, 0x74, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
+	0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
+	0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0e, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x4d, 0x69, 0x6e, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x3a, 0x0b, 0x82, 0xe7,
+	0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0xa9, 0x02, 0x0a, 0x19, 0x4d, 0x73,
+	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x51, 0x0a, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde,
+	0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e,
+	0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a,
+	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x61, 0x73, 0x65, 0x12, 0x53, 0x0a, 0x0c, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2,
+	0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0,
+	0x2a, 0x01, 0x52, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x12,
+	0x54, 0x0a, 0x09, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65,
+	0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x22, 0xa9, 0x03, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x63,
+	0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x16,
 	0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
 	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e,
-	0x64, 0x65, 0x72, 0x22, 0x1b, 0x0a, 0x19, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x48, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6f, 0x73,
-	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x0e, 0x0a,
-	0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x3a, 0x0b, 0x82,
-	0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1b, 0x0a, 0x19, 0x4d, 0x73,
-	0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x35, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x43, 0x6f,
+	0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x51, 0x0a, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f,
+	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x61, 0x73, 0x65, 0x12, 0x53, 0x0a, 0x0c, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4,
+	0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x12, 0x58,
+	0x0a, 0x0f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6d, 0x69, 0x6e, 0x5f, 0x62, 0x61, 0x73,
+	0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f,
+	0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61,
+	0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0d, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x4d, 0x69, 0x6e, 0x42, 0x61, 0x73, 0x65, 0x12, 0x5a, 0x0a, 0x10, 0x61, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x5f, 0x6d, 0x69, 0x6e, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e,
+	0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8,
+	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0e, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4d, 0x69, 0x6e, 0x51,
+	0x75, 0x6f, 0x74, 0x65, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x22, 0xc6, 0x01, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73,
+	0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x62, 0x61, 0x73,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f,
+	0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61,
+	0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x42, 0x61, 0x73, 0x65, 0x12, 0x53, 0x0a, 0x0c, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f,
+	0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f,
+	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x22, 0xa1, 0x01, 0x0a, 0x14, 0x4d,
+	0x73, 0x67, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x54, 0x0a, 0x09, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x36,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79,
+	0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65,
+	0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0xc6,
+	0x01, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x51, 0x0a, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e,
+	0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e,
+	0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x61,
+	0x73, 0x65, 0x12, 0x53, 0x0a, 0x0c, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x71, 0x75, 0x6f,
+	0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde,
+	0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d,
+	0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x61, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x22, 0x58, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x43, 0x6f,
 	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e,
 	0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
-	0x72, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x18,
-	0x0a, 0x16, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3b, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x43,
-	0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73,
-	0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x1e, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c,
-	0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xfc, 0x05, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x66, 0x0a,
-	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x26, 0x2e,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50,
-	0x6f, 0x6f, 0x6c, 0x12, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x72, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64,
+	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
+	0x6e, 0x49, 0x64, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x22, 0x8c, 0x01, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74,
+	0x46, 0x65, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x0e,
+	0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61,
+	0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42,
+	0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
+	0x73, 0x52, 0x0d, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x46, 0x65, 0x65, 0x73,
+	0x22, 0x5e, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e,
+	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
+	0x12, 0x21, 0x0a, 0x0c, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x73,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x49, 0x64, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
+	0x22, 0x9e, 0x01, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x7e, 0x0a, 0x14, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x69,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
+	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
+	0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x13, 0x63, 0x6f,
+	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0x73, 0x32, 0x8e, 0x06, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x66, 0x0a, 0x0c, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x26, 0x2e, 0x73, 0x75, 0x6e, 0x72,
 	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74,
-	0x69, 0x6f, 0x6e, 0x1a, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e,
-	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x1a, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
 	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6f, 0x73,
+	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x60, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12,
+	0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
+	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73,
 	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
 	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x1a,
+	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x1a,
 	0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74,
 	0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x63, 0x0a, 0x0b, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73,
-	0x12, 0x25, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c,
-	0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x1a, 0x2d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e,
-	0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x75, 0x0a, 0x11, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
-	0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e,
-	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c,
-	0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e,
-	0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80,
-	0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xc1, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e,
+	0x65, 0x12, 0x75, 0x0a, 0x11, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71,
+	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x2b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d,
+	0x73, 0x67, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x49,
+	0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x75, 0x0a, 0x11, 0x44, 0x65, 0x63, 0x72,
+	0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x2b, 0x2e,
+	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73,
+	0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e,
 	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
-	0x6f, 0x6c, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x63, 0x0a, 0x0b, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x12, 0x25,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
+	0x74, 0x46, 0x65, 0x65, 0x73, 0x1a, 0x2d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
+	0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x75, 0x0a, 0x11, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
+	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65,
+	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d,
+	0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
+	0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
+	0x2a, 0x01, 0x42, 0xc1, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c,
+	0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
+	0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
+	0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
+	0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -6474,37 +8587,42 @@ var file_sunrise_liquiditypool_tx_proto_goTypes = []interface{}{
 	(*MsgCreatePoolResponse)(nil),        // 3: sunrise.liquiditypool.MsgCreatePoolResponse
 	(*MsgCreatePosition)(nil),            // 4: sunrise.liquiditypool.MsgCreatePosition
 	(*MsgCreatePositionResponse)(nil),    // 5: sunrise.liquiditypool.MsgCreatePositionResponse
-	(*MsgUpdatePosition)(nil),            // 6: sunrise.liquiditypool.MsgUpdatePosition
-	(*MsgUpdatePositionResponse)(nil),    // 7: sunrise.liquiditypool.MsgUpdatePositionResponse
-	(*MsgDeletePosition)(nil),            // 8: sunrise.liquiditypool.MsgDeletePosition
-	(*MsgDeletePositionResponse)(nil),    // 9: sunrise.liquiditypool.MsgDeletePositionResponse
+	(*MsgIncreaseLiquidity)(nil),         // 6: sunrise.liquiditypool.MsgIncreaseLiquidity
+	(*MsgIncreaseLiquidityResponse)(nil), // 7: sunrise.liquiditypool.MsgIncreaseLiquidityResponse
+	(*MsgDecreaseLiquidity)(nil),         // 8: sunrise.liquiditypool.MsgDecreaseLiquidity
+	(*MsgDecreaseLiquidityResponse)(nil), // 9: sunrise.liquiditypool.MsgDecreaseLiquidityResponse
 	(*MsgCollectFees)(nil),               // 10: sunrise.liquiditypool.MsgCollectFees
 	(*MsgCollectFeesResponse)(nil),       // 11: sunrise.liquiditypool.MsgCollectFeesResponse
 	(*MsgCollectIncentives)(nil),         // 12: sunrise.liquiditypool.MsgCollectIncentives
 	(*MsgCollectIncentivesResponse)(nil), // 13: sunrise.liquiditypool.MsgCollectIncentivesResponse
 	(*Params)(nil),                       // 14: sunrise.liquiditypool.Params
+	(*v1beta1.Coin)(nil),                 // 15: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_liquiditypool_tx_proto_depIdxs = []int32{
 	14, // 0: sunrise.liquiditypool.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.Params
-	0,  // 1: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
-	2,  // 2: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
-	4,  // 3: sunrise.liquiditypool.Msg.CreatePosition:input_type -> sunrise.liquiditypool.MsgCreatePosition
-	6,  // 4: sunrise.liquiditypool.Msg.UpdatePosition:input_type -> sunrise.liquiditypool.MsgUpdatePosition
-	8,  // 5: sunrise.liquiditypool.Msg.DeletePosition:input_type -> sunrise.liquiditypool.MsgDeletePosition
-	10, // 6: sunrise.liquiditypool.Msg.CollectFees:input_type -> sunrise.liquiditypool.MsgCollectFees
-	12, // 7: sunrise.liquiditypool.Msg.CollectIncentives:input_type -> sunrise.liquiditypool.MsgCollectIncentives
-	1,  // 8: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
-	3,  // 9: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
-	5,  // 10: sunrise.liquiditypool.Msg.CreatePosition:output_type -> sunrise.liquiditypool.MsgCreatePositionResponse
-	7,  // 11: sunrise.liquiditypool.Msg.UpdatePosition:output_type -> sunrise.liquiditypool.MsgUpdatePositionResponse
-	9,  // 12: sunrise.liquiditypool.Msg.DeletePosition:output_type -> sunrise.liquiditypool.MsgDeletePositionResponse
-	11, // 13: sunrise.liquiditypool.Msg.CollectFees:output_type -> sunrise.liquiditypool.MsgCollectFeesResponse
-	13, // 14: sunrise.liquiditypool.Msg.CollectIncentives:output_type -> sunrise.liquiditypool.MsgCollectIncentivesResponse
-	8,  // [8:15] is the sub-list for method output_type
-	1,  // [1:8] is the sub-list for method input_type
-	1,  // [1:1] is the sub-list for extension type_name
-	1,  // [1:1] is the sub-list for extension extendee
-	0,  // [0:1] is the sub-list for field type_name
+	15, // 1: sunrise.liquiditypool.MsgCreatePosition.token_base:type_name -> cosmos.base.v1beta1.Coin
+	15, // 2: sunrise.liquiditypool.MsgCreatePosition.token_quote:type_name -> cosmos.base.v1beta1.Coin
+	15, // 3: sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees:type_name -> cosmos.base.v1beta1.Coin
+	15, // 4: sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives:type_name -> cosmos.base.v1beta1.Coin
+	0,  // 5: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
+	2,  // 6: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
+	4,  // 7: sunrise.liquiditypool.Msg.CreatePosition:input_type -> sunrise.liquiditypool.MsgCreatePosition
+	6,  // 8: sunrise.liquiditypool.Msg.IncreaseLiquidity:input_type -> sunrise.liquiditypool.MsgIncreaseLiquidity
+	8,  // 9: sunrise.liquiditypool.Msg.DecreaseLiquidity:input_type -> sunrise.liquiditypool.MsgDecreaseLiquidity
+	10, // 10: sunrise.liquiditypool.Msg.CollectFees:input_type -> sunrise.liquiditypool.MsgCollectFees
+	12, // 11: sunrise.liquiditypool.Msg.CollectIncentives:input_type -> sunrise.liquiditypool.MsgCollectIncentives
+	1,  // 12: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
+	3,  // 13: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
+	5,  // 14: sunrise.liquiditypool.Msg.CreatePosition:output_type -> sunrise.liquiditypool.MsgCreatePositionResponse
+	7,  // 15: sunrise.liquiditypool.Msg.IncreaseLiquidity:output_type -> sunrise.liquiditypool.MsgIncreaseLiquidityResponse
+	9,  // 16: sunrise.liquiditypool.Msg.DecreaseLiquidity:output_type -> sunrise.liquiditypool.MsgDecreaseLiquidityResponse
+	11, // 17: sunrise.liquiditypool.Msg.CollectFees:output_type -> sunrise.liquiditypool.MsgCollectFeesResponse
+	13, // 18: sunrise.liquiditypool.Msg.CollectIncentives:output_type -> sunrise.liquiditypool.MsgCollectIncentivesResponse
+	12, // [12:19] is the sub-list for method output_type
+	5,  // [5:12] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquiditypool_tx_proto_init() }
@@ -6589,7 +8707,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_tx_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdatePosition); i {
+			switch v := v.(*MsgIncreaseLiquidity); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -6601,7 +8719,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_tx_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdatePositionResponse); i {
+			switch v := v.(*MsgIncreaseLiquidityResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -6613,7 +8731,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_tx_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDeletePosition); i {
+			switch v := v.(*MsgDecreaseLiquidity); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -6625,7 +8743,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_tx_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDeletePositionResponse); i {
+			switch v := v.(*MsgDecreaseLiquidityResponse); i {
 			case 0:
 				return &v.state
 			case 1:

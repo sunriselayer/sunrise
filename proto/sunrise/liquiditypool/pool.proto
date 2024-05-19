@@ -6,6 +6,4 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 message Pool {
   uint64 id = 1;
   string admin = 2;
-  int64 lower_tick = 3; 
-  int64 upper_tick = 4; 
 }
