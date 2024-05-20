@@ -57,7 +57,7 @@ func SimulateMsgIncreaseLiquidity(
 			found       = false
 		)
 		for _, obj := range allPosition {
-			simAccount, found = FindAccount(accs, obj.Sender)
+			simAccount, found = FindAccount(accs, obj.Address)
 			if found {
 				position = obj
 				break
@@ -101,7 +101,7 @@ func SimulateMsgDecreaseLiquidity(
 			found       = false
 		)
 		for _, obj := range allPosition {
-			simAccount, found = FindAccount(accs, obj.Sender)
+			simAccount, found = FindAccount(accs, obj.Address)
 			if found {
 				position = obj
 				break

@@ -77,12 +77,12 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 		PoolCount: 2,
 		PositionList: []types.Position{
 			{
-				Id:     0,
-				Sender: sample.AccAddress(),
+				Id:      0,
+				Address: sample.AccAddress(),
 			},
 			{
-				Id:     1,
-				Sender: sample.AccAddress(),
+				Id:      1,
+				Address: sample.AccAddress(),
 			},
 		},
 		PositionCount: 2,

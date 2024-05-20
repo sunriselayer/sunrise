@@ -11,11 +11,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var pool = types.Pool{}
-
-	id := k.AppendPool(
-		ctx,
-		pool,
-	)
+	id := k.AppendPool(ctx, pool)
 
 	return &types.MsgCreatePoolResponse{
 		Id: id,
