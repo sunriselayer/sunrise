@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -20,7 +21,10 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 	id := k.AppendPosition(ctx, position)
 
 	return &types.MsgCreatePositionResponse{
-		Id: id,
+		Id:          id,
+		AmountBase:  math.ZeroInt(), // TODO:
+		AmountQuote: math.ZeroInt(), // TODO:
+		Liquidity:   position.Liquidity,
 	}, nil
 }
 

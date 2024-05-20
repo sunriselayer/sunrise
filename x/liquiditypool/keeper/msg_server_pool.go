@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
@@ -10,7 +11,16 @@ import (
 func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	var pool = types.Pool{}
+	var pool = types.Pool{
+		Id:                   0,
+		DenomBase:            msg.DenomBase,
+		DenomQuote:           msg.DenomQuote,
+		FeeRate:              msg.FeeRate,
+		TickParams:           types.TickParams{}, // TODO:
+		CurrentTick:          0,
+		CurrentTickLiquidity: math.LegacyZeroDec(),
+		CurrentSqrtPrice:     math.LegacyZeroDec(),
+	}
 	id := k.AppendPool(ctx, pool)
 
 	return &types.MsgCreatePoolResponse{
