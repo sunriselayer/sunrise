@@ -14,13 +14,10 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var position = types.Position{
-		Sender: msg.Sender,
+		Address: msg.Sender,
 	}
 
-	id := k.AppendPosition(
-		ctx,
-		position,
-	)
+	id := k.AppendPosition(ctx, position)
 
 	return &types.MsgCreatePositionResponse{
 		Id: id,
@@ -31,8 +28,8 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var position = types.Position{
-		Sender: msg.Sender,
-		Id:     msg.Id,
+		Address: msg.Sender,
+		Id:      msg.Id,
 	}
 
 	// Checks that the element exists
@@ -42,7 +39,7 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 	}
 
 	// Checks if the msg sender is the same as the current owner
-	if msg.Sender != val.Sender {
+	if msg.Sender != val.Address {
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
@@ -55,13 +52,13 @@ func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecrea
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Checks that the element exists
-	val, found := k.GetPosition(ctx, msg.Id)
+	position, found := k.GetPosition(ctx, msg.Id)
 	if !found {
 		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
 
 	// Checks if the msg sender is the same as the current owner
-	if msg.Sender != val.Sender {
+	if msg.Sender != position.Address {
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
