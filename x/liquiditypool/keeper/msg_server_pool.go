@@ -11,6 +11,10 @@ import (
 func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	if msg.Authority != k.authority {
+		return nil, types.ErrInvalidSigner
+	}
+
 	var pool = types.Pool{
 		Id:                   0,
 		DenomBase:            msg.DenomBase,
