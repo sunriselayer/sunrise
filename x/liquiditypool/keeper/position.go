@@ -37,10 +37,7 @@ func (k Keeper) SetPositionCount(ctx context.Context, count uint64) {
 }
 
 // AppendPosition appends a position in the store with a new id and update the count
-func (k Keeper) AppendPosition(
-	ctx context.Context,
-	position types.Position,
-) uint64 {
+func (k Keeper) AppendPosition(ctx context.Context, position types.Position) uint64 {
 	// Create the position
 	count := k.GetPositionCount(ctx)
 
