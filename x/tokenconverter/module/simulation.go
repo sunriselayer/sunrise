@@ -23,13 +23,9 @@ var (
 )
 
 const (
-	opWeightMsgConvertExactAmountIn = "op_weight_msg_convert_exact_amount_in"
+	opWeightMsgConvert = "op_weight_msg_convert"
 	// TODO: Determine the simulation weight value
-	defaultWeightMsgConvertExactAmountIn int = 100
-
-	opWeightMsgConvertExactAmountOut = "op_weight_msg_convert_exact_amount_out"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgConvertExactAmountOut int = 100
+	defaultWeightMsgConvert int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const
 )
@@ -55,25 +51,14 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	operations := make([]simtypes.WeightedOperation, 0)
 
 	var weightMsgConvertExactAmountIn int
-	simState.AppParams.GetOrGenerate(opWeightMsgConvertExactAmountIn, &weightMsgConvertExactAmountIn, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgConvert, &weightMsgConvertExactAmountIn, nil,
 		func(_ *rand.Rand) {
-			weightMsgConvertExactAmountIn = defaultWeightMsgConvertExactAmountIn
+			weightMsgConvertExactAmountIn = defaultWeightMsgConvert
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgConvertExactAmountIn,
-		tokenconvertersimulation.SimulateMsgConvertExactAmountIn(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	var weightMsgConvertExactAmountOut int
-	simState.AppParams.GetOrGenerate(opWeightMsgConvertExactAmountOut, &weightMsgConvertExactAmountOut, nil,
-		func(_ *rand.Rand) {
-			weightMsgConvertExactAmountOut = defaultWeightMsgConvertExactAmountOut
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgConvertExactAmountOut,
-		tokenconvertersimulation.SimulateMsgConvertExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper),
+		tokenconvertersimulation.SimulateMsgConvert(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
@@ -85,18 +70,10 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
 		simulation.NewWeightedProposalMsg(
-			opWeightMsgConvertExactAmountIn,
-			defaultWeightMsgConvertExactAmountIn,
+			opWeightMsgConvert,
+			defaultWeightMsgConvert,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				tokenconvertersimulation.SimulateMsgConvertExactAmountIn(am.accountKeeper, am.bankKeeper, am.keeper)
-				return nil
-			},
-		),
-		simulation.NewWeightedProposalMsg(
-			opWeightMsgConvertExactAmountOut,
-			defaultWeightMsgConvertExactAmountOut,
-			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				tokenconvertersimulation.SimulateMsgConvertExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper)
+				tokenconvertersimulation.SimulateMsgConvert(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
