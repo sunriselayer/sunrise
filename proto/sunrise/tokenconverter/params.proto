@@ -15,7 +15,7 @@ message Params {
 
   string denom_gov_token = 1;
   string denom_fee_token = 2;
-  string supply_cap_fee_token = 3 [
+  string max_supply_fee_token = 3 [
     (cosmos_proto.scalar)  = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable)   = false,

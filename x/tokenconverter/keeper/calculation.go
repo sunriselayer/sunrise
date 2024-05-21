@@ -12,10 +12,9 @@ import (
 func (k Keeper) CalculateAmountOutFeeToken(ctx context.Context, amountInGovToken math.Int) math.Int {
 	params := k.GetParams(ctx)
 
-	supplyFee := k.bankKeeper.GetSupply(ctx, params.DenomFeeToken)
 	supplyGov := k.bankKeeper.GetSupply(ctx, params.DenomGovToken)
 
-	output := types.CalculateAmountOutFeeToken(supplyFee.Amount, supplyGov.Amount, amountInGovToken)
+	output := types.CalculateAmountOutFeeToken(params.MaxSupplyFeeToken, supplyGov.Amount, amountInGovToken)
 
 	return output
 }
@@ -23,10 +22,9 @@ func (k Keeper) CalculateAmountOutFeeToken(ctx context.Context, amountInGovToken
 func (k Keeper) CalculateAmountInGovToken(ctx context.Context, amountOutFeeToken math.Int) math.Int {
 	params := k.GetParams(ctx)
 
-	supplyFee := k.bankKeeper.GetSupply(ctx, params.DenomFeeToken)
 	supplyGov := k.bankKeeper.GetSupply(ctx, params.DenomGovToken)
 
-	input := types.CalculateAmountInGovToken(supplyFee.Amount, supplyGov.Amount, amountOutFeeToken)
+	input := types.CalculateAmountInGovToken(params.MaxSupplyFeeToken, supplyGov.Amount, amountOutFeeToken)
 
 	return input
 }
@@ -45,8 +43,8 @@ func (k Keeper) Convert(ctx context.Context, amountInGovToken math.Int, amountOu
 
 	supplyFee := k.bankKeeper.GetSupply(ctx, params.DenomFeeToken)
 
-	if supplyFee.Amount.Add(amountOutFeeToken).GT(params.SupplyCapFeeToken) {
-		return types.ErrExceedsSupplyCap
+	if supplyFee.Amount.Add(amountOutFeeToken).GT(params.MaxSupplyFeeToken) {
+		return types.ErrExceedsMaxSupply
 	}
 
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(govToken)); err != nil {
