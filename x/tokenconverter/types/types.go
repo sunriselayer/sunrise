@@ -4,8 +4,8 @@ import (
 	"cosmossdk.io/math"
 )
 
-func ratio(supplyFeeToken math.Int, supplyGovToken math.Int) math.LegacyDec {
-	feeDec := math.LegacyNewDecFromInt(supplyFeeToken)
+func ratio(maxSupplyFeeToken math.Int, supplyGovToken math.Int) math.LegacyDec {
+	feeDec := math.LegacyNewDecFromInt(maxSupplyFeeToken)
 	govDec := math.LegacyNewDecFromInt(supplyGovToken)
 	ratio := feeDec.Quo(govDec)
 
@@ -17,14 +17,14 @@ func ratio(supplyFeeToken math.Int, supplyGovToken math.Int) math.LegacyDec {
 
 }
 
-func CalculateAmountOutFeeToken(supplyFeeToken math.Int, supplyGovToken math.Int, amountInGovToken math.Int) math.Int {
-	ratio := ratio(supplyFeeToken, supplyGovToken)
+func CalculateAmountOutFeeToken(maxSupplyFeeToken math.Int, supplyGovToken math.Int, amountInGovToken math.Int) math.Int {
+	ratio := ratio(maxSupplyFeeToken, supplyGovToken)
 
 	return ratio.MulInt(amountInGovToken).TruncateInt()
 }
 
-func CalculateAmountInGovToken(supplyFeeToken math.Int, supplyGovToken math.Int, amountOutFeeToken math.Int) math.Int {
-	ratio := ratio(supplyFeeToken, supplyGovToken)
+func CalculateAmountInGovToken(maxSupplyFeeToken math.Int, supplyGovToken math.Int, amountOutFeeToken math.Int) math.Int {
+	ratio := ratio(maxSupplyFeeToken, supplyGovToken)
 
 	return math.LegacyOneDec().Quo(ratio).MulInt(amountOutFeeToken).TruncateInt()
 }
