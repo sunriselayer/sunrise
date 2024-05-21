@@ -1,7 +1,16 @@
 package types
 
 import (
+	"fmt"
+
 	"cosmossdk.io/math"
+)
+
+var powPrecision, _ = math.LegacyNewDecFromStr("0.00000001")
+
+var (
+	oneHalf math.LegacyDec = math.LegacyMustNewDecFromStr("0.5")
+	one     math.LegacyDec = math.LegacyOneDec()
 )
 
 // LiquidityBase = amountBase * (sqrtPriceA * sqrtPriceB) / (sqrtPriceB - sqrtPriceA)
@@ -118,4 +127,97 @@ func SquareRoundUp(sqrtPrice math.LegacyDec) math.LegacyDec {
 
 func SquareTruncate(sqrtPrice math.LegacyDec) math.LegacyDec {
 	return sqrtPrice.MulTruncate(sqrtPrice)
+}
+
+func Pow(base math.LegacyDec, exp math.LegacyDec) math.LegacyDec {
+	if !base.IsPositive() {
+		panic(fmt.Errorf("base must be greater than 0"))
+	}
+
+	// We will use an approximation algorithm to compute the power.
+	// Since computing an integer power is easy, we split up the exponent into
+	// an integer component and a fractional component.
+	integer := exp.TruncateDec()
+	fractional := exp.Sub(integer)
+
+	integerPow := base.Power(uint64(integer.TruncateInt64()))
+
+	if fractional.IsZero() {
+		return integerPow
+	}
+
+	fractionalPow := PowApprox(base, fractional, powPrecision)
+
+	return integerPow.Mul(fractionalPow)
+}
+
+// Contract: 0 < base <= 2
+// 0 <= exp < 1.
+func PowApprox(originalBase math.LegacyDec, exp math.LegacyDec, precision math.LegacyDec) math.LegacyDec {
+	if !originalBase.IsPositive() {
+		panic(fmt.Errorf("base must be greater than 0"))
+	}
+
+	if exp.IsZero() {
+		return math.LegacyOneDec()
+	}
+
+	// Common case optimization
+	// Optimize for it being equal to one-half
+	if exp.Equal(oneHalf) {
+		output, err := originalBase.ApproxSqrt()
+		if err != nil {
+			panic(err)
+		}
+		return output
+	}
+
+	base := originalBase.Clone()
+	x, xneg := AbsDifferenceWithSign(base, one)
+	term := math.LegacyOneDec()
+	sum := math.LegacyOneDec()
+	negative := false
+
+	a := exp.Clone()
+	bigK := math.LegacyNewDec(0)
+	for i := int64(1); term.GTE(precision); i++ {
+		// At each iteration, we need two values, i and i-1.
+		// To avoid expensive big.Int allocation, we reuse bigK variable.
+		// On this line, bigK == i-1.
+		c, cneg := AbsDifferenceWithSign(a, bigK)
+		// On this line, bigK == i.
+		bigK.SetInt64(i)
+		term.MulMut(c).MulMut(x).QuoMut(bigK)
+
+		// a is mutated on absDifferenceWithSign, reset
+		a.Set(exp)
+
+		if term.IsZero() {
+			break
+		}
+		if xneg {
+			negative = !negative
+		}
+
+		if cneg {
+			negative = !negative
+		}
+
+		if negative {
+			sum.SubMut(term)
+		} else {
+			sum.AddMut(term)
+		}
+	}
+	return sum
+}
+
+// AbsDifferenceWithSign returns | a - b |, (a - b).sign()
+// a is mutated and returned.
+func AbsDifferenceWithSign(a, b math.LegacyDec) (math.LegacyDec, bool) {
+	if a.GTE(b) {
+		return a.SubMut(b), false
+	} else {
+		return a.NegMut().AddMut(b), true
+	}
 }

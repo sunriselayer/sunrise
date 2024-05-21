@@ -7,23 +7,23 @@ import (
 	"cosmossdk.io/math"
 )
 
-func TicksToSqrtPrice(lowerTick, upperTick int64) (math.LegacyDec, math.LegacyDec, error) {
+func TicksToSqrtPrice(lowerTick, upperTick int64, tickParams TickParams) (math.LegacyDec, math.LegacyDec, error) {
 	if lowerTick >= upperTick {
 		return math.LegacyDec{}, math.LegacyDec{}, errors.New("tickLower should be less than tickUpper")
 	}
-	sqrtPriceUpperTick, err := TickToSqrtPrice(upperTick)
+	sqrtPriceUpperTick, err := TickToSqrtPrice(upperTick, tickParams)
 	if err != nil {
 		return math.LegacyDec{}, math.LegacyDec{}, err
 	}
-	sqrtPriceLowerTick, err := TickToSqrtPrice(lowerTick)
+	sqrtPriceLowerTick, err := TickToSqrtPrice(lowerTick, tickParams)
 	if err != nil {
 		return math.LegacyDec{}, math.LegacyDec{}, err
 	}
 	return sqrtPriceLowerTick, sqrtPriceUpperTick, nil
 }
 
-func TickToSqrtPrice(tickIndex int64) (math.LegacyDec, error) {
-	priceDec, err := TickToPrice(tickIndex)
+func TickToSqrtPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, error) {
+	priceDec, err := TickToPrice(tickIndex, tickParams)
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
@@ -43,7 +43,7 @@ func TickToSqrtPrice(tickIndex int64) (math.LegacyDec, error) {
 	return sqrtPrice, nil
 }
 
-func TickToPrice(tickIndex int64) (math.LegacyDec, error) {
+func TickToPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, error) {
 	if tickIndex == 0 {
 		return math.LegacyOneDec(), nil
 	}
@@ -65,6 +65,9 @@ func TickToPrice(tickIndex int64) (math.LegacyDec, error) {
 	}
 	unscaledPrice += numAdditiveTicks
 	price := PowTenInternal(exponentAtCurrentTick).MulInt64(unscaledPrice)
+
+	offsetPrice := Pow(tickParams.PriceRatio, tickParams.BaseOffset)
+	price = price.Mul(offsetPrice)
 
 	if price.GT(MaxSpotPrice) || price.LT(MinSpotPrice) {
 		return math.LegacyDec{}, ErrPriceOutOfBound
@@ -94,37 +97,6 @@ func TickToAdditiveGeometricIndices(tickIndex int64) (additiveTicks int64, geome
 	return numAdditiveTicks, geometricExponentDelta, nil
 }
 
-func RoundDownTickToSpacing(tickIndex int64, tickSpacing int64) (int64, error) {
-	tickIndexModulus := tickIndex % tickSpacing
-	if tickIndexModulus < 0 {
-		tickIndexModulus += tickSpacing
-	}
-
-	if tickIndexModulus != 0 {
-		tickIndex = tickIndex - tickIndexModulus
-	}
-
-	if tickIndex > TICK_MAX || tickIndex < TICK_MIN {
-		return 0, ErrInvalidTickers
-	}
-
-	return tickIndex, nil
-}
-
-func SqrtPriceToTickRoundDownSpacing(sqrtPrice math.LegacyDec, tickSpacing uint64) (int64, error) {
-	tickIndex, err := CalculateSqrtPriceToTick(sqrtPrice)
-	if err != nil {
-		return 0, err
-	}
-
-	tickIndex, err = RoundDownTickToSpacing(tickIndex, int64(tickSpacing))
-	if err != nil {
-		return 0, err
-	}
-
-	return tickIndex, nil
-}
-
 func PowTenInternal(exponent int64) math.LegacyDec {
 	if exponent >= 0 {
 		return powersOfTen[exponent]
@@ -132,7 +104,7 @@ func PowTenInternal(exponent int64) math.LegacyDec {
 	return negPowersOfTen[-exponent]
 }
 
-func CalculatePriceToTick(price math.LegacyDec) (tickIndex int64, err error) {
+func CalculatePriceToTick(price math.LegacyDec, tickParams TickParams) (tickIndex int64, err error) {
 	if price.IsNegative() {
 		return 0, fmt.Errorf("price must be greater than zero")
 	}
@@ -142,34 +114,36 @@ func CalculatePriceToTick(price math.LegacyDec) (tickIndex int64, err error) {
 	if price.Equal(sdkOneDec) {
 		return 0, nil
 	}
+	offsetPrice := Pow(tickParams.PriceRatio, tickParams.BaseOffset)
+	priceAfterOffset := price.Quo(offsetPrice)
 
 	var geoSpacing *tickExpIndexData
-	if price.GT(sdkOneDec) {
+	if priceAfterOffset.GT(sdkOneDec) {
 		index := 0
 		geoSpacing = tickExp[int64(index)]
-		for geoSpacing.maxPrice.LT(price) {
+		for geoSpacing.maxPrice.LT(priceAfterOffset) {
 			index += 1
 			geoSpacing = tickExp[int64(index)]
 		}
 	} else {
 		index := -1
 		geoSpacing = tickExp[int64(index)]
-		for geoSpacing.initialPrice.GT(price) {
+		for geoSpacing.initialPrice.GT(priceAfterOffset) {
 			index -= 1
 			geoSpacing = tickExp[int64(index)]
 		}
 	}
 
-	priceInThisExponent := price.Sub(geoSpacing.initialPrice)
+	priceInThisExponent := priceAfterOffset.Sub(geoSpacing.initialPrice)
 	ticksFilledByCurrentSpacing := priceInThisExponent.QuoMut(geoSpacing.additiveIncrementPerTick)
 	tickIndex = ticksFilledByCurrentSpacing.TruncateInt64() + geoSpacing.initialTick
 	return tickIndex, nil
 }
 
-func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec) (tickIndex int64, err error) {
+func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec, tickParams TickParams) (tickIndex int64, err error) {
 	price := sqrtPrice.Mul(sqrtPrice)
 
-	tick, err := CalculatePriceToTick(price)
+	tick, err := CalculatePriceToTick(price, tickParams)
 	if err != nil {
 		return 0, err
 	}
@@ -187,13 +161,13 @@ func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec) (tickIndex int64, err er
 		outOfBounds = true
 	}
 
-	sqrtPriceTplus1, err := TickToSqrtPrice(tick + 1)
+	sqrtPriceTplus1, err := TickToSqrtPrice(tick+1, tickParams)
 	if err != nil {
 		return 0, ErrSqrtPriceToTick
 	}
 
 	if sqrtPrice.GTE(sqrtPriceTplus1) {
-		sqrtPriceTplus2, err := TickToSqrtPrice(tick + 2)
+		sqrtPriceTplus2, err := TickToSqrtPrice(tick+2, tickParams)
 		if err != nil {
 			return 0, ErrSqrtPriceToTick
 		}
@@ -207,7 +181,7 @@ func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec) (tickIndex int64, err er
 		return tick + 1, nil
 	}
 
-	sqrtPriceT, err := TickToSqrtPrice(tick)
+	sqrtPriceT, err := TickToSqrtPrice(tick, tickParams)
 	if err != nil {
 		return 0, ErrSqrtPriceToTick
 	}
@@ -215,7 +189,7 @@ func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec) (tickIndex int64, err er
 		return tick, nil
 	}
 
-	sqrtPriceTmin1, err := TickToSqrtPrice(tick - 1)
+	sqrtPriceTmin1, err := TickToSqrtPrice(tick-1, tickParams)
 	if err != nil {
 		return 0, ErrSqrtPriceToTick
 	}
