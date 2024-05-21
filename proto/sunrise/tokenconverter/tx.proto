@@ -16,9 +16,8 @@ service Msg {
   
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
-  rpc UpdateParams          (MsgUpdateParams         ) returns (MsgUpdateParamsResponse         );
-  rpc ConvertExactAmountIn  (MsgConvertExactAmountIn ) returns (MsgConvertExactAmountInResponse );
-  rpc ConvertExactAmountOut (MsgConvertExactAmountOut) returns (MsgConvertExactAmountOutResponse);
+  rpc UpdateParams (MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc Convert      (MsgConvert     ) returns (MsgConvertResponse     );
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -38,26 +37,17 @@ message MsgUpdateParams {
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
 
-message MsgConvertExactAmountIn {
+message MsgConvert {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1;
 
-  string amount_in = 2 [
+  string min_amount = 2 [
     (cosmos_proto.scalar)  = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  string min_amount_out = 3 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-}
-
-message MsgConvertExactAmountInResponse {
-  string amount_out = 1 [
+  string max_amount = 3 [
     (cosmos_proto.scalar)  = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable)   = false,
@@ -65,30 +55,11 @@ message MsgConvertExactAmountInResponse {
   ];
 }
 
-message MsgConvertExactAmountOut {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
-
-  string amount_out = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-  string max_amount_in = 3 [
+message MsgConvertResponse {
+  string amount = 1 [
     (cosmos_proto.scalar)  = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
 }
-
-message MsgConvertExactAmountOutResponse {
-  string amount_in = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-}
-
