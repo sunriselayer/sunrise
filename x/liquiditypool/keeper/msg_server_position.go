@@ -58,13 +58,11 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 	amountBaseDesired := msg.TokenBase.Amount
 	amountQuoteDesired := msg.TokenQuote.Amount
 
-	// Transform the provided ticks to sqrtPrices.
 	sqrtPriceLowerTick, sqrtPriceUpperTick, err := types.TicksToSqrtPrice(msg.LowerTick, msg.UpperTick, pool.TickParams)
 	if err != nil {
 		return nil, err
 	}
 
-	// If this is the first position created in this pool, ensure that the position includes both assets.
 	hasPositions := pool.HasPosition(ctx)
 	if !hasPositions {
 		err := k.initFirstPositionForPool(ctx, pool, amountBaseDesired, amountQuoteDesired)
@@ -79,46 +77,42 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 		return nil, fmt.Errorf(`liquidityDelta got 0 value unexpectedly`)
 	}
 
-	// Add a position in the pool
+	// Add an empty position in the pool
 	var position = types.Position{
 		PoolId:    msg.PoolId,
 		Address:   msg.Sender,
 		LowerTick: msg.LowerTick,
 		UpperTick: msg.UpperTick,
-		Liquidity: liquidityDelta,
+		Liquidity: math.LegacyZeroDec(),
 	}
+	positionId := k.AppendPosition(ctx, position)
 
-	id := k.AppendPosition(ctx, position)
-
-	// calculate the actual amounts of tokens 0 and 1 that were added or removed from the pool.
-	amountBase, amountQuote, err := pool.CalcActualAmounts(ctx, msg.LowerTick, msg.UpperTick, liquidityDelta)
+	// Initialize / update the position in the pool based on the provided tick range and liquidity delta.
+	amountBase, amountQuote, _, _, err := k.UpdatePosition(ctx, position.PoolId, sender, position.LowerTick, position.UpperTick, liquidityDelta, positionId)
 	if err != nil {
 		return nil, err
 	}
 
 	// Check if the actual amounts are greater than or equal to minimum amounts
-	if amountBase.LT(msg.MinAmountBase.ToLegacyDec()) {
+	if amountBase.LT(msg.MinAmountBase) {
 		return nil, types.ErrInsufficientAmountPut
 	}
-	if amountQuote.LT(msg.MinAmountQuote.ToLegacyDec()) {
+	if amountQuote.LT(msg.MinAmountQuote) {
 		return nil, types.ErrInsufficientAmountPut
 	}
 
 	// Transfer amounts to the pool
-	coins := sdk.Coins{}
-	amountBaseInt := amountBase.TruncateInt()
-	amountQuoteInt := amountQuote.TruncateInt()
-	coins = coins.Add(sdk.NewCoin(msg.TokenBase.Denom, amountBaseInt))
-	coins = coins.Add(sdk.NewCoin(msg.TokenQuote.Denom, amountQuoteInt))
+	coins := sdk.Coins{sdk.NewCoin(msg.TokenBase.Denom, amountBase)}
+	coins = coins.Add(sdk.NewCoin(msg.TokenQuote.Denom, amountQuote))
 	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
 	if err != nil {
 		return nil, err
 	}
 
 	return &types.MsgCreatePositionResponse{
-		Id:          id,
-		AmountBase:  amountBaseInt,
-		AmountQuote: amountQuoteInt,
+		Id:          positionId,
+		AmountBase:  amountBase,
+		AmountQuote: amountQuote,
 		Liquidity:   position.Liquidity,
 	}, nil
 }
@@ -126,44 +120,130 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncreaseLiquidity) (*types.MsgIncreaseLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	var position = types.Position{
-		Address: msg.Sender,
-		Id:      msg.Id,
-	}
-
-	// Checks that the element exists
-	val, found := k.GetPosition(ctx, msg.Id)
-	if !found {
-		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
-	}
-
-	// Checks if the msg sender is the same as the current owner
-	if msg.Sender != val.Address {
-		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
-	}
-
-	k.SetPosition(ctx, position)
-
-	return &types.MsgIncreaseLiquidityResponse{}, nil
-}
-
-func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecreaseLiquidity) (*types.MsgDecreaseLiquidityResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// Checks that the element exists
 	position, found := k.GetPosition(ctx, msg.Id)
 	if !found {
 		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
 
-	// Checks if the msg sender is the same as the current owner
 	if msg.Sender != position.Address {
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	k.RemovePosition(ctx, msg.Id)
+	if msg.AmountBase.IsNegative() || msg.AmountQuote.IsNegative() {
+		return nil, types.ErrNegativeTokenAmount
+	}
 
-	return &types.MsgDecreaseLiquidityResponse{}, nil
+	if msg.AmountBase.IsZero() && msg.AmountQuote.IsZero() {
+		return nil, errorsmod.Wrapf(types.ErrInvalidTokenAmounts, "base amount %s, quote amount %s", msg.AmountBase.String(), msg.AmountQuote.String())
+	}
+
+	k.SetPosition(ctx, position)
+
+	// Remove full position liquidity
+	sender := sdk.MustAccAddressFromBech32(msg.Sender)
+	amountBaseWithdrawn, amountQuoteWithdrawn, err := k.Keeper.DecreaseLiquidity(ctx, sender, msg.Id, position.Liquidity)
+	if err != nil {
+		return nil, err
+	}
+
+	pool, found := k.GetPool(ctx, position.PoolId)
+	if !found {
+		return nil, types.ErrPoolNotFound
+	}
+
+	// Create a new position with combined liquidity
+	amountBaseDesired := amountBaseWithdrawn.Add(msg.AmountBase)
+	amountQuoteDesired := amountQuoteWithdrawn.Add(msg.AmountQuote)
+	minimumAmountBase := amountBaseWithdrawn.Add(msg.MinAmountBase)
+	minimumAmountQuote := amountQuoteWithdrawn.Add(msg.MinAmountQuote)
+
+	res, err := k.CreatePosition(ctx, &types.MsgCreatePosition{
+		Sender:         msg.Sender,
+		PoolId:         position.PoolId,
+		LowerTick:      position.LowerTick,
+		UpperTick:      position.UpperTick,
+		TokenBase:      sdk.NewCoin(pool.DenomBase, amountBaseDesired),
+		TokenQuote:     sdk.NewCoin(pool.DenomQuote, amountQuoteDesired),
+		MinAmountBase:  minimumAmountBase,
+		MinAmountQuote: minimumAmountQuote,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgIncreaseLiquidityResponse{
+		AmountBase:  res.AmountBase,
+		AmountQuote: res.AmountQuote,
+	}, nil
+}
+
+func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positionId uint64, liquidity math.LegacyDec) (amountBase math.Int, amountQuote math.Int, err error) {
+	// Checks that the element exists
+	position, found := k.GetPosition(ctx, positionId)
+	if !found {
+		return math.Int{}, math.Int{}, errorsmod.Wrap(types.ErrPositionNotFound, fmt.Sprintf("id: %d", positionId))
+	}
+
+	// Checks if the msg sender is the same as the current owner
+	if sender.String() != position.Address {
+		return math.Int{}, math.Int{}, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	}
+
+	// Check if withdrawing negative amount
+	if liquidity.IsNegative() {
+		return math.Int{}, math.Int{}, types.ErrNegativeTokenAmount
+	}
+
+	if position.Liquidity.LT(liquidity) {
+		return math.Int{}, math.Int{}, types.ErrInsufficientLiquidity
+	}
+
+	pool, found := k.GetPool(ctx, position.PoolId)
+	if !found {
+		return math.Int{}, math.Int{}, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", position.PoolId)
+	}
+
+	liquiditDelta := liquidity.Neg()
+	amountBase, amountQuote, lowerTickEmpty, upperTickEmpty, err := k.UpdatePosition(ctx, position.PoolId, sender, position.LowerTick, position.UpperTick, liquiditDelta, positionId)
+	if err != nil {
+		return math.Int{}, math.Int{}, err
+	}
+
+	coins := sdk.Coins{sdk.NewCoin(pool.DenomBase, amountBase)}
+	coins = coins.Add(sdk.NewCoin(pool.DenomQuote, amountQuote))
+	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
+	if err != nil {
+		return math.Int{}, math.Int{}, err
+	}
+
+	if liquidity.Equal(position.Liquidity) {
+		// TODO: collectFees
+		k.RemovePosition(ctx, position.Id)
+		k.resetPool(ctx, pool)
+	}
+
+	if lowerTickEmpty {
+		k.RemoveTickInfo(ctx, position.PoolId, position.LowerTick)
+	}
+	if upperTickEmpty {
+		k.RemoveTickInfo(ctx, position.PoolId, position.UpperTick)
+	}
+	return amountBase, amountQuote, nil
+}
+
+func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecreaseLiquidity) (*types.MsgDecreaseLiquidityResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	sender := sdk.MustAccAddressFromBech32(msg.Sender)
+	amountBase, amountQuote, err := k.Keeper.DecreaseLiquidity(ctx, sender, msg.Id, msg.Liquidity)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgDecreaseLiquidityResponse{
+		AmountBase:  amountBase,
+		AmountQuote: amountQuote,
+	}, nil
 }
 
 func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amountBaseDesired, amountQuoteDesired math.Int) error {
@@ -190,4 +270,53 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 	k.SetPool(ctx, pool)
 
 	return nil
+}
+
+func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) {
+	pool.CurrentSqrtPrice = math.LegacyZeroDec()
+	pool.CurrentTick = 0
+
+	k.SetPool(ctx, pool)
+}
+
+func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddress, lowerTick, upperTick int64, liquidityDelta math.LegacyDec, positionId uint64) (amountBase math.Int, amountQuote math.Int, lowerTickEmpty bool, upperTickEmpty bool, err error) {
+	lowerTickIsEmpty, err := k.initOrUpdateTick(ctx, poolId, lowerTick, liquidityDelta, false)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, err
+	}
+
+	upperTickIsEmpty, err := k.initOrUpdateTick(ctx, poolId, upperTick, liquidityDelta, true)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, err
+	}
+
+	pool, found := k.GetPool(ctx, poolId)
+	if !found {
+		return math.Int{}, math.Int{}, false, false, types.ErrPoolNotFound
+	}
+
+	position, found := k.GetPosition(ctx, positionId)
+	if !found {
+		return math.Int{}, math.Int{}, false, false, types.ErrPositionNotFound
+	}
+
+	// Update position liquidity
+	position.Liquidity = position.Liquidity.Add(liquidityDelta)
+	if position.Liquidity.IsNegative() {
+		return math.Int{}, math.Int{}, false, false, types.ErrNegativeLiquidity
+	}
+	k.SetPosition(ctx, position)
+
+	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(ctx, lowerTick, upperTick, liquidityDelta)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, err
+	}
+
+	pool.UpdateLiquidityIfActivePosition(ctx, lowerTick, upperTick, liquidityDelta)
+
+	k.SetPool(ctx, pool)
+
+	// TODO: update feeAccumulator
+
+	return actualAmountBase.TruncateInt(), actualAmountQuote.TruncateInt(), lowerTickIsEmpty, upperTickIsEmpty, nil
 }

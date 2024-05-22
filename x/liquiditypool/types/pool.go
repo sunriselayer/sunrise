@@ -62,3 +62,11 @@ func (p Pool) HasPosition(ctx sdk.Context) bool {
 	}
 	return true
 }
+
+func (p *Pool) UpdateLiquidityIfActivePosition(ctx sdk.Context, lowerTick, upperTick int64, liquidityDelta math.LegacyDec) bool {
+	if p.IsCurrentTickInRange(lowerTick, upperTick) {
+		p.CurrentTickLiquidity = p.CurrentTickLiquidity.Add(liquidityDelta)
+		return true
+	}
+	return false
+}

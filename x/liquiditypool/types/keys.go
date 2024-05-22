@@ -28,3 +28,9 @@ const (
 	PositionKey      = "Position/value/"
 	PositionCountKey = "Position/count/"
 )
+
+const (
+	TickInfoKey        = "TickInfo/value/"
+	TickNegativePrefix = "Negative/value/"
+	TickPositivePrefix = "Positive/value/"
+)

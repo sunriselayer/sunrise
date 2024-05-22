@@ -20,4 +20,8 @@ var (
 	ErrZeroLiquidity         = sdkerrors.Register(ModuleName, 1109, "zero liquidity")
 	ErrInsufficientAmountPut = sdkerrors.Register(ModuleName, 1110, "insufficient amount of tokens were put")
 	ErrInvalidFirstPosition  = sdkerrors.Register(ModuleName, 1111, "invalid first position")
+	ErrPositionNotFound      = sdkerrors.Register(ModuleName, 1112, "position not found")
+	ErrInsufficientLiquidity = sdkerrors.Register(ModuleName, 1113, "insufficient liquidity")
+	ErrNextTickInfoNil       = sdkerrors.Register(ModuleName, 1114, "next tick info cannot be nil")
+	ErrNegativeLiquidity     = sdkerrors.Register(ModuleName, 1115, "negative liquidity")
 )
