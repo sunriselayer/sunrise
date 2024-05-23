@@ -1,5 +1,14 @@
 package types
 
+import (
+	"encoding/binary"
+	"fmt"
+	"strconv"
+	"strings"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "liquiditypool"
@@ -30,7 +39,56 @@ const (
 )
 
 const (
-	TickInfoKey        = "TickInfo/value/"
-	TickNegativePrefix = "Negative/value/"
-	TickPositivePrefix = "Positive/value/"
+	TickInfoKey                  = "TickInfo/value/"
+	TickNegativePrefix           = "Negative/value/"
+	TickPositivePrefix           = "Positive/value/"
+	FeePositionAccumulatorPrefix = "FeePositionAccumulator/value/"
+	KeyFeePoolAccumulatorPrefix  = "FeePoolAccumulator/value/"
+	KeyAccumPrefix               = "Accumulator/Acc/value/"
+	KeyAccumPositionPrefix       = "Accumulator/Pos/value"
+	KeySeparator                 = "||"
 )
+
+func TickIndexToBytes(tickIndex int64) []byte {
+	key := make([]byte, 9)
+	if tickIndex < 0 {
+		copy(key[:1], TickNegativePrefix)
+		copy(key[1:], sdk.Uint64ToBigEndian(uint64(tickIndex)))
+	} else {
+		copy(key[:1], TickPositivePrefix)
+		copy(key[1:], sdk.Uint64ToBigEndian(uint64(tickIndex)))
+	}
+
+	return key
+}
+
+func GetTickInfoIDBytes(poolId uint64, tickIndex int64) []byte {
+	bz := KeyTickPrefixByPoolId(poolId)
+	bz = append(bz, TickIndexToBytes(tickIndex)...)
+	return bz
+}
+
+func KeyTickPrefixByPoolId(poolId uint64) []byte {
+	bz := KeyPrefix(TickInfoKey)
+	bz = append(bz, []byte("/")...)
+	bz = binary.BigEndian.AppendUint64(bz, poolId)
+	return bz
+}
+
+func KeyFeePositionAccumulator(positionId uint64) string {
+	return strings.Join([]string{string(FeePositionAccumulatorPrefix), strconv.FormatUint(positionId, 10)}, "|")
+}
+
+// This is guaranteed to not contain "||" so it can be used as an accumulator name.
+func KeyFeePoolAccumulator(poolId uint64) string {
+	poolIdStr := strconv.FormatUint(poolId, 10)
+	return strings.Join([]string{string(KeyFeePoolAccumulatorPrefix), poolIdStr}, "/")
+}
+
+func FormatKeyAccumPrefix(accumName string) []byte {
+	return []byte(fmt.Sprintf(KeyAccumPrefix+"%s", accumName))
+}
+
+func FormatKeyAccumPositionPrefix(accumName, name string) []byte {
+	return []byte(fmt.Sprintf(KeyAccumPositionPrefix+"%s"+KeySeparator+"%s", accumName, name))
+}

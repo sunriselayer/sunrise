@@ -20,7 +20,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		DenomBase:            msg.DenomBase,
 		DenomQuote:           msg.DenomQuote,
 		FeeRate:              msg.FeeRate,
-		TickParams:           types.TickParams{}, // TODO:
+		TickParams:           msg.TickParams,
 		CurrentTick:          0,
 		CurrentTickLiquidity: math.LegacyZeroDec(),
 		CurrentSqrtPrice:     math.LegacyZeroDec(),

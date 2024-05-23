@@ -61,6 +61,7 @@ message MsgCreatePool {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+  TickParams tick_params = 5 [ (gogoproto.nullable) = false ];
 }
 
 message MsgCreatePoolResponse { uint64 id = 1; }

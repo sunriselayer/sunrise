@@ -2,13 +2,14 @@ package keeper
 
 import (
 	"context"
-	"encoding/binary"
+	"errors"
 
 	"cosmossdk.io/math"
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/gogoproto/proto"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -76,45 +77,19 @@ func (k Keeper) newTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 	}, nil
 }
 
-func TickIndexToBytes(tickIndex int64) []byte {
-	key := make([]byte, 9)
-	if tickIndex < 0 {
-		copy(key[:1], types.TickNegativePrefix)
-		copy(key[1:], sdk.Uint64ToBigEndian(uint64(tickIndex)))
-	} else {
-		copy(key[:1], types.TickPositivePrefix)
-		copy(key[1:], sdk.Uint64ToBigEndian(uint64(tickIndex)))
-	}
-
-	return key
-}
-
-func GetTickInfoIDBytes(poolId uint64, tickIndex int64) []byte {
-	bz := KeyTickPrefixByPoolId(poolId)
-	bz = append(bz, TickIndexToBytes(tickIndex)...)
-	return bz
-}
-
-func KeyTickPrefixByPoolId(poolId uint64) []byte {
-	bz := types.KeyPrefix(types.TickInfoKey)
-	bz = append(bz, []byte("/")...)
-	bz = binary.BigEndian.AppendUint64(bz, poolId)
-	return bz
-}
-
 // SetTickInfo set a specific tickInfo in the store
 func (k Keeper) SetTickInfo(ctx context.Context, tickInfo types.TickInfo) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
 	b := k.cdc.MustMarshal(&tickInfo)
-	store.Set(GetTickInfoIDBytes(tickInfo.PoolId, tickInfo.TickIndex), b)
+	store.Set(types.GetTickInfoIDBytes(tickInfo.PoolId, tickInfo.TickIndex), b)
 }
 
 // GetTickInfo returns a tickInfo from its id
 func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (val types.TickInfo, err error) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	b := store.Get(GetTickInfoIDBytes(poolId, tickIndex))
+	b := store.Get(types.GetTickInfoIDBytes(poolId, tickIndex))
 	if b == nil {
 		return k.newTickInfo(ctx, poolId, tickIndex)
 	}
@@ -125,13 +100,13 @@ func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 func (k Keeper) RemoveTickInfo(ctx context.Context, poolId uint64, tickIndex int64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	store.Delete(GetTickInfoIDBytes(poolId, tickIndex))
+	store.Delete(types.GetTickInfoIDBytes(poolId, tickIndex))
 }
 
 func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (list []types.TickInfo) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	iterator := storetypes.KVStorePrefixIterator(store, KeyTickPrefixByPoolId(poolId))
+	iterator := storetypes.KVStorePrefixIterator(store, types.KeyTickPrefixByPoolId(poolId))
 
 	defer iterator.Close()
 
@@ -158,4 +133,12 @@ func (k Keeper) GetAllTickInfos(ctx context.Context) (list []types.TickInfo) {
 	}
 
 	return
+}
+
+func ParseTickFromBz(bz []byte) (tick types.TickInfo, err error) {
+	if len(bz) == 0 {
+		return types.TickInfo{}, errors.New("tick not found")
+	}
+	err = proto.Unmarshal(bz, &tick)
+	return tick, err
 }

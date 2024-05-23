@@ -217,7 +217,10 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 	}
 
 	if liquidity.Equal(position.Liquidity) {
-		// TODO: collectFees
+		// Collect fees
+		if _, err := k.collectFees(ctx, sender, positionId); err != nil {
+			return math.Int{}, math.Int{}, err
+		}
 		k.RemovePosition(ctx, position.Id)
 		k.resetPool(ctx, pool)
 	}
@@ -316,7 +319,10 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 
 	k.SetPool(ctx, pool)
 
-	// TODO: update feeAccumulator
+	// update fee accumulator
+	if err := k.initOrUpdatePositionFeeAccumulator(ctx, poolId, lowerTick, upperTick, positionId, liquidityDelta); err != nil {
+		return math.Int{}, math.Int{}, false, false, err
+	}
 
 	return actualAmountBase.TruncateInt(), actualAmountQuote.TruncateInt(), lowerTickIsEmpty, upperTickIsEmpty, nil
 }
