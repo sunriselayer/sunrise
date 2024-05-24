@@ -60,7 +60,12 @@ func (k Keeper) newTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 	}
 	_ = pool
 
-	// TODO: initial fee Growth calculation
+	// initial fee Growth calculation
+	initialFeeGrowth, err := k.getInitialFeeGrowth(ctx, pool, tickIndex)
+	if err != nil {
+		return tickStruct, err
+	}
+
 	// TODO: update pool uptime accumulators
 	// TODO: get initial update growth
 
@@ -72,7 +77,7 @@ func (k Keeper) newTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 		TickIndex:      tickIndex,
 		LiquidityGross: math.LegacyZeroDec(),
 		LiquidityNet:   math.LegacyZeroDec(),
-		FeeGrowth:      sdk.DecCoins{}, // TODO:
+		FeeGrowth:      initialFeeGrowth,
 		UptimeTrackers: uptimeTrackers,
 	}, nil
 }
