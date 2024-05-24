@@ -23,6 +23,7 @@ type (
 
 		accountKeeper types.AccountKeeper
 		bankKeeper    types.BankKeeper
+		swapKeeper    types.SwapKeeper
 	}
 )
 
