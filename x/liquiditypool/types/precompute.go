@@ -48,9 +48,8 @@ func buildTickExp() {
 		curExpIndex += 1
 	}
 
-	minPrice := sdkOneDec
 	curExpIndex = -1
-	for minPrice.GT(math.LegacyNewDecWithPrec(1, 18)) {
+	for curExpIndex >= -12 {
 		tickExp[curExpIndex] = &tickExpIndexData{
 			// price range 10^curExpIndex to 10^(curExpIndex + 1). (0.001, 0.01)
 			initialPrice:             PowTenInternal(curExpIndex),
@@ -58,7 +57,6 @@ func buildTickExp() {
 			additiveIncrementPerTick: PowTenInternal(ExponentAtPriceOne + curExpIndex),
 			initialTick:              geometricExponentIncrementDistanceInTicks * curExpIndex,
 		}
-		minPrice = tickExp[curExpIndex].initialPrice
 		curExpIndex -= 1
 	}
 }

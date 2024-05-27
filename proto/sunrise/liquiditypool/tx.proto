@@ -55,13 +55,11 @@ message MsgCreatePool {
   string authority = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   string denom_base = 2;
   string denom_quote = 3;
-  string fee_rate = 4 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
-  TickParams tick_params = 5 [ (gogoproto.nullable) = false ];
+  string fee_rate = 4;
+  // Basically 1.0001
+  string price_ratio = 5;
+  // basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
+  string base_offset = 6;
 }
 
 message MsgCreatePoolResponse { uint64 id = 1; }

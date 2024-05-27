@@ -32,13 +32,23 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod:      "SwapExactAmountIn",
 					Use:            "swap-exact-amount-in",
 					Short:          "Send a swap-exact-amount-in tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						// {ProtoField: "interface_provider"},
+						// {ProtoField: "route"},
+						// {ProtoField: "amount_in"},
+						// {ProtoField: "min_amount_out"},
+					},
 				},
 				{
 					RpcMethod:      "SwapExactAmountOut",
 					Use:            "swap-exact-amount-out",
 					Short:          "Send a swap-exact-amount-out tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						// {ProtoField: "interface_provider"},
+						// {ProtoField: "route"},
+						// {ProtoField: "amount_out"},
+						// {ProtoField: "max_amount_in"},
+					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

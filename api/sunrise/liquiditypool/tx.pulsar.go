@@ -878,7 +878,8 @@ var (
 	fd_MsgCreatePool_denom_base  protoreflect.FieldDescriptor
 	fd_MsgCreatePool_denom_quote protoreflect.FieldDescriptor
 	fd_MsgCreatePool_fee_rate    protoreflect.FieldDescriptor
-	fd_MsgCreatePool_tick_params protoreflect.FieldDescriptor
+	fd_MsgCreatePool_price_ratio protoreflect.FieldDescriptor
+	fd_MsgCreatePool_base_offset protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -888,7 +889,8 @@ func init() {
 	fd_MsgCreatePool_denom_base = md_MsgCreatePool.Fields().ByName("denom_base")
 	fd_MsgCreatePool_denom_quote = md_MsgCreatePool.Fields().ByName("denom_quote")
 	fd_MsgCreatePool_fee_rate = md_MsgCreatePool.Fields().ByName("fee_rate")
-	fd_MsgCreatePool_tick_params = md_MsgCreatePool.Fields().ByName("tick_params")
+	fd_MsgCreatePool_price_ratio = md_MsgCreatePool.Fields().ByName("price_ratio")
+	fd_MsgCreatePool_base_offset = md_MsgCreatePool.Fields().ByName("base_offset")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgCreatePool)(nil)
@@ -980,9 +982,15 @@ func (x *fastReflection_MsgCreatePool) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
-	if x.TickParams != nil {
-		value := protoreflect.ValueOfMessage(x.TickParams.ProtoReflect())
-		if !f(fd_MsgCreatePool_tick_params, value) {
+	if x.PriceRatio != "" {
+		value := protoreflect.ValueOfString(x.PriceRatio)
+		if !f(fd_MsgCreatePool_price_ratio, value) {
+			return
+		}
+	}
+	if x.BaseOffset != "" {
+		value := protoreflect.ValueOfString(x.BaseOffset)
+		if !f(fd_MsgCreatePool_base_offset, value) {
 			return
 		}
 	}
@@ -1009,8 +1017,10 @@ func (x *fastReflection_MsgCreatePool) Has(fd protoreflect.FieldDescriptor) bool
 		return x.DenomQuote != ""
 	case "sunrise.liquiditypool.MsgCreatePool.fee_rate":
 		return x.FeeRate != ""
-	case "sunrise.liquiditypool.MsgCreatePool.tick_params":
-		return x.TickParams != nil
+	case "sunrise.liquiditypool.MsgCreatePool.price_ratio":
+		return x.PriceRatio != ""
+	case "sunrise.liquiditypool.MsgCreatePool.base_offset":
+		return x.BaseOffset != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1035,8 +1045,10 @@ func (x *fastReflection_MsgCreatePool) Clear(fd protoreflect.FieldDescriptor) {
 		x.DenomQuote = ""
 	case "sunrise.liquiditypool.MsgCreatePool.fee_rate":
 		x.FeeRate = ""
-	case "sunrise.liquiditypool.MsgCreatePool.tick_params":
-		x.TickParams = nil
+	case "sunrise.liquiditypool.MsgCreatePool.price_ratio":
+		x.PriceRatio = ""
+	case "sunrise.liquiditypool.MsgCreatePool.base_offset":
+		x.BaseOffset = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1065,9 +1077,12 @@ func (x *fastReflection_MsgCreatePool) Get(descriptor protoreflect.FieldDescript
 	case "sunrise.liquiditypool.MsgCreatePool.fee_rate":
 		value := x.FeeRate
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgCreatePool.tick_params":
-		value := x.TickParams
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePool.price_ratio":
+		value := x.PriceRatio
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.MsgCreatePool.base_offset":
+		value := x.BaseOffset
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1096,8 +1111,10 @@ func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, valu
 		x.DenomQuote = value.Interface().(string)
 	case "sunrise.liquiditypool.MsgCreatePool.fee_rate":
 		x.FeeRate = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgCreatePool.tick_params":
-		x.TickParams = value.Message().Interface().(*TickParams)
+	case "sunrise.liquiditypool.MsgCreatePool.price_ratio":
+		x.PriceRatio = value.Interface().(string)
+	case "sunrise.liquiditypool.MsgCreatePool.base_offset":
+		x.BaseOffset = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1118,11 +1135,6 @@ func (x *fastReflection_MsgCreatePool) Set(fd protoreflect.FieldDescriptor, valu
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgCreatePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCreatePool.tick_params":
-		if x.TickParams == nil {
-			x.TickParams = new(TickParams)
-		}
-		return protoreflect.ValueOfMessage(x.TickParams.ProtoReflect())
 	case "sunrise.liquiditypool.MsgCreatePool.authority":
 		panic(fmt.Errorf("field authority of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
 	case "sunrise.liquiditypool.MsgCreatePool.denom_base":
@@ -1131,6 +1143,10 @@ func (x *fastReflection_MsgCreatePool) Mutable(fd protoreflect.FieldDescriptor) 
 		panic(fmt.Errorf("field denom_quote of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
 	case "sunrise.liquiditypool.MsgCreatePool.fee_rate":
 		panic(fmt.Errorf("field fee_rate of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.price_ratio":
+		panic(fmt.Errorf("field price_ratio of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
+	case "sunrise.liquiditypool.MsgCreatePool.base_offset":
+		panic(fmt.Errorf("field base_offset of message sunrise.liquiditypool.MsgCreatePool is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1152,9 +1168,10 @@ func (x *fastReflection_MsgCreatePool) NewField(fd protoreflect.FieldDescriptor)
 		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.MsgCreatePool.fee_rate":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgCreatePool.tick_params":
-		m := new(TickParams)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.liquiditypool.MsgCreatePool.price_ratio":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.MsgCreatePool.base_offset":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCreatePool"))
@@ -1240,8 +1257,12 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.TickParams != nil {
-			l = options.Size(x.TickParams)
+		l = len(x.PriceRatio)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.BaseOffset)
+		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -1273,17 +1294,17 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.TickParams != nil {
-			encoded, err := options.Marshal(x.TickParams)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+		if len(x.BaseOffset) > 0 {
+			i -= len(x.BaseOffset)
+			copy(dAtA[i:], x.BaseOffset)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BaseOffset)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.PriceRatio) > 0 {
+			i -= len(x.PriceRatio)
+			copy(dAtA[i:], x.PriceRatio)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PriceRatio)))
 			i--
 			dAtA[i] = 0x2a
 		}
@@ -1494,9 +1515,9 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TickParams", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PriceRatio", wireType)
 				}
-				var msglen int
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1506,27 +1527,55 @@ func (x *fastReflection_MsgCreatePool) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					msglen |= int(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				if msglen < 0 {
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + msglen
+				postIndex := iNdEx + intStringLen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.TickParams == nil {
-					x.TickParams = &TickParams{}
+				x.PriceRatio = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BaseOffset", wireType)
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TickParams); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.BaseOffset = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -7918,11 +7967,14 @@ type MsgCreatePool struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Authority  string      `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	DenomBase  string      `protobuf:"bytes,2,opt,name=denom_base,json=denomBase,proto3" json:"denom_base,omitempty"`
-	DenomQuote string      `protobuf:"bytes,3,opt,name=denom_quote,json=denomQuote,proto3" json:"denom_quote,omitempty"`
-	FeeRate    string      `protobuf:"bytes,4,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
-	TickParams *TickParams `protobuf:"bytes,5,opt,name=tick_params,json=tickParams,proto3" json:"tick_params,omitempty"`
+	Authority  string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	DenomBase  string `protobuf:"bytes,2,opt,name=denom_base,json=denomBase,proto3" json:"denom_base,omitempty"`
+	DenomQuote string `protobuf:"bytes,3,opt,name=denom_quote,json=denomQuote,proto3" json:"denom_quote,omitempty"`
+	FeeRate    string `protobuf:"bytes,4,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
+	// Basically 1.0001
+	PriceRatio string `protobuf:"bytes,5,opt,name=price_ratio,json=priceRatio,proto3" json:"price_ratio,omitempty"`
+	// basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
+	BaseOffset string `protobuf:"bytes,6,opt,name=base_offset,json=baseOffset,proto3" json:"base_offset,omitempty"`
 }
 
 func (x *MsgCreatePool) Reset() {
@@ -7973,11 +8025,18 @@ func (x *MsgCreatePool) GetFeeRate() string {
 	return ""
 }
 
-func (x *MsgCreatePool) GetTickParams() *TickParams {
+func (x *MsgCreatePool) GetPriceRatio() string {
 	if x != nil {
-		return x.TickParams
+		return x.PriceRatio
 	}
-	return nil
+	return ""
+}
+
+func (x *MsgCreatePool) GetBaseOffset() string {
+	if x != nil {
+		return x.BaseOffset
+	}
+	return ""
 }
 
 type MsgCreatePoolResponse struct {
@@ -8568,7 +8627,7 @@ var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
 	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73,
 	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xb4, 0x02, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xf4, 0x01, 0x0a, 0x0d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65,
 	0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f,
 	0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74,
@@ -8577,16 +8636,12 @@ var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
 	0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x42, 0x61, 0x73, 0x65, 0x12, 0x1f,
 	0x0a, 0x0b, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x03, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x0a, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x12,
-	0x51, 0x0a, 0x08, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x42, 0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67,
-	0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x66, 0x65, 0x65, 0x52, 0x61,
-	0x74, 0x65, 0x12, 0x48, 0x0a, 0x0b, 0x74, 0x69, 0x63, 0x6b, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e,
-	0x54, 0x69, 0x63, 0x6b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
-	0x52, 0x0a, 0x74, 0x69, 0x63, 0x6b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x0e, 0x82, 0xe7,
+	0x19, 0x0a, 0x08, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x07, 0x66, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x72,
+	0x69, 0x63, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0a, 0x70, 0x72, 0x69, 0x63, 0x65, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x12, 0x1f, 0x0a, 0x0b, 0x62,
+	0x61, 0x73, 0x65, 0x5f, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0a, 0x62, 0x61, 0x73, 0x65, 0x4f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x3a, 0x0e, 0x82, 0xe7,
 	0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0x27, 0x0a, 0x15,
 	0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
@@ -8832,35 +8887,33 @@ var file_sunrise_liquiditypool_tx_proto_goTypes = []interface{}{
 	(*MsgCollectIncentives)(nil),         // 12: sunrise.liquiditypool.MsgCollectIncentives
 	(*MsgCollectIncentivesResponse)(nil), // 13: sunrise.liquiditypool.MsgCollectIncentivesResponse
 	(*Params)(nil),                       // 14: sunrise.liquiditypool.Params
-	(*TickParams)(nil),                   // 15: sunrise.liquiditypool.TickParams
-	(*v1beta1.Coin)(nil),                 // 16: cosmos.base.v1beta1.Coin
+	(*v1beta1.Coin)(nil),                 // 15: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_liquiditypool_tx_proto_depIdxs = []int32{
 	14, // 0: sunrise.liquiditypool.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.Params
-	15, // 1: sunrise.liquiditypool.MsgCreatePool.tick_params:type_name -> sunrise.liquiditypool.TickParams
-	16, // 2: sunrise.liquiditypool.MsgCreatePosition.token_base:type_name -> cosmos.base.v1beta1.Coin
-	16, // 3: sunrise.liquiditypool.MsgCreatePosition.token_quote:type_name -> cosmos.base.v1beta1.Coin
-	16, // 4: sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees:type_name -> cosmos.base.v1beta1.Coin
-	16, // 5: sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives:type_name -> cosmos.base.v1beta1.Coin
-	0,  // 6: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
-	2,  // 7: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
-	4,  // 8: sunrise.liquiditypool.Msg.CreatePosition:input_type -> sunrise.liquiditypool.MsgCreatePosition
-	6,  // 9: sunrise.liquiditypool.Msg.IncreaseLiquidity:input_type -> sunrise.liquiditypool.MsgIncreaseLiquidity
-	8,  // 10: sunrise.liquiditypool.Msg.DecreaseLiquidity:input_type -> sunrise.liquiditypool.MsgDecreaseLiquidity
-	10, // 11: sunrise.liquiditypool.Msg.CollectFees:input_type -> sunrise.liquiditypool.MsgCollectFees
-	12, // 12: sunrise.liquiditypool.Msg.CollectIncentives:input_type -> sunrise.liquiditypool.MsgCollectIncentives
-	1,  // 13: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
-	3,  // 14: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
-	5,  // 15: sunrise.liquiditypool.Msg.CreatePosition:output_type -> sunrise.liquiditypool.MsgCreatePositionResponse
-	7,  // 16: sunrise.liquiditypool.Msg.IncreaseLiquidity:output_type -> sunrise.liquiditypool.MsgIncreaseLiquidityResponse
-	9,  // 17: sunrise.liquiditypool.Msg.DecreaseLiquidity:output_type -> sunrise.liquiditypool.MsgDecreaseLiquidityResponse
-	11, // 18: sunrise.liquiditypool.Msg.CollectFees:output_type -> sunrise.liquiditypool.MsgCollectFeesResponse
-	13, // 19: sunrise.liquiditypool.Msg.CollectIncentives:output_type -> sunrise.liquiditypool.MsgCollectIncentivesResponse
-	13, // [13:20] is the sub-list for method output_type
-	6,  // [6:13] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	15, // 1: sunrise.liquiditypool.MsgCreatePosition.token_base:type_name -> cosmos.base.v1beta1.Coin
+	15, // 2: sunrise.liquiditypool.MsgCreatePosition.token_quote:type_name -> cosmos.base.v1beta1.Coin
+	15, // 3: sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees:type_name -> cosmos.base.v1beta1.Coin
+	15, // 4: sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives:type_name -> cosmos.base.v1beta1.Coin
+	0,  // 5: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
+	2,  // 6: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
+	4,  // 7: sunrise.liquiditypool.Msg.CreatePosition:input_type -> sunrise.liquiditypool.MsgCreatePosition
+	6,  // 8: sunrise.liquiditypool.Msg.IncreaseLiquidity:input_type -> sunrise.liquiditypool.MsgIncreaseLiquidity
+	8,  // 9: sunrise.liquiditypool.Msg.DecreaseLiquidity:input_type -> sunrise.liquiditypool.MsgDecreaseLiquidity
+	10, // 10: sunrise.liquiditypool.Msg.CollectFees:input_type -> sunrise.liquiditypool.MsgCollectFees
+	12, // 11: sunrise.liquiditypool.Msg.CollectIncentives:input_type -> sunrise.liquiditypool.MsgCollectIncentives
+	1,  // 12: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
+	3,  // 13: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
+	5,  // 14: sunrise.liquiditypool.Msg.CreatePosition:output_type -> sunrise.liquiditypool.MsgCreatePositionResponse
+	7,  // 15: sunrise.liquiditypool.Msg.IncreaseLiquidity:output_type -> sunrise.liquiditypool.MsgIncreaseLiquidityResponse
+	9,  // 16: sunrise.liquiditypool.Msg.DecreaseLiquidity:output_type -> sunrise.liquiditypool.MsgDecreaseLiquidityResponse
+	11, // 17: sunrise.liquiditypool.Msg.CollectFees:output_type -> sunrise.liquiditypool.MsgCollectFeesResponse
+	13, // 18: sunrise.liquiditypool.Msg.CollectIncentives:output_type -> sunrise.liquiditypool.MsgCollectIncentivesResponse
+	12, // [12:19] is the sub-list for method output_type
+	5,  // [5:12] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquiditypool_tx_proto_init() }

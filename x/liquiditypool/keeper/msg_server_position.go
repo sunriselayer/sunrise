@@ -20,7 +20,7 @@ func checkTicks(tickLower, tickUpper int64) error {
 		return errors.New("tickLower is out of range")
 	}
 
-	if tickUpper < types.TICK_MAX {
+	if tickUpper > types.TICK_MAX {
 		return errors.New("tickUpper is out of range")
 	}
 	return nil
