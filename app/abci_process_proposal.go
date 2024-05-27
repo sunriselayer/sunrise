@@ -2,7 +2,6 @@ package app
 
 import (
 	"bytes"
-	"encoding/binary"
 	"fmt"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/pkg/da"
 	"github.com/sunriselayer/sunrise/pkg/shares"
 	"github.com/sunriselayer/sunrise/pkg/square"
+
 	blobtypes "github.com/sunriselayer/sunrise/x/blob/types"
 
 	"cosmossdk.io/log"
@@ -61,11 +61,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		return accept()
 	}
 
-	txs, dataHash, squareSize, err := ExtractInfoFromTxs(req.Txs)
-	if err != nil {
-		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
-		return reject(err)
-	}
+	txs := req.Txs
 
 	// iterate over all txs and ensure that all blobTxs are valid, PFBs are correctly signed and non
 	// blobTxs have no PFBs present
@@ -127,7 +123,6 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 			logInvalidPropBlockError(app.Logger(), req.ProposerAddress, "invalid PFB signature", err)
 			return reject(err)
 		}
-
 	}
 
 	// Construct the data square from the block's transactions
@@ -138,8 +133,8 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 	}
 
 	// Assert that the square size stated by the proposer is correct
-	if uint64(dataSquare.Size()) != squareSize {
-		err := fmt.Errorf("proposed square size differs from calculated square size, expected %d, got %d", squareSize, dataSquare.Size())
+	if uint64(dataSquare.Size()) != req.SquareSize {
+		err := fmt.Errorf("proposed square size differs from calculated square size, expected %d, got %d", req.SquareSize, dataSquare.Size())
 		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
 		return reject(err)
 	}
@@ -158,8 +153,8 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 	// by comparing the hashes we know the computed IndexWrappers (with the share indexes of the PFB's blobs)
 	// are identical and that square layout is consistent. This also means that the share commitment rules
 	// have been followed and thus each blobs share commitment should be valid
-	if !bytes.Equal(dah.Hash(), dataHash) {
-		err := fmt.Errorf("proposed data root %X differs from calculated data root %X", dataHash, dah.Hash())
+	if !bytes.Equal(dah.Hash(), req.DataHash) {
+		err := fmt.Errorf("proposed data root %X differs from calculated data root %X", req.DataHash, dah.Hash())
 		logInvalidPropBlock(app.Logger(), req.ProposerAddress, err.Error())
 		return reject(err)
 	}
@@ -208,18 +203,4 @@ func accept() (*abci.ResponseProcessProposal, error) {
 	return &abci.ResponseProcessProposal{
 		Status: abci.ResponseProcessProposal_ACCEPT,
 	}, nil
-}
-
-func ExtractInfoFromTxs(txsWithInfo [][]byte) (txs [][]byte, dataHash []byte, squareSize uint64, err error) {
-	length := len(txsWithInfo)
-	txs = txsWithInfo
-	if length >= 3 {
-		if len(txsWithInfo[length-3]) == 0 {
-			txs = txsWithInfo[:length-3]
-			dataHash = txsWithInfo[length-2]
-			squareSizeBigEndian := txsWithInfo[length-1]
-			squareSize = binary.BigEndian.Uint64(squareSizeBigEndian)
-		}
-	}
-	return
 }

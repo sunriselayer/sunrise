@@ -233,7 +233,8 @@ func New(
 				//
 				// func() runtime.ValidatorAddressCodec { return <- custom validator address codec type -> }
 				// func() runtime.ConsensusAddressCodec { return <- custom consensus address codec type -> }
-
+			),
+			depinject.Provide(
 				//
 				// MINT
 				//
@@ -241,6 +242,7 @@ func New(
 				// For providing a custom inflation function for x/mint add here your
 				// custom function that implements the minttypes.InflationCalculationFn
 				// interface.
+				ProvideInflationCalculatorFn,
 			),
 		)
 	)
