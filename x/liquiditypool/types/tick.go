@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TicksToSqrtPrice(lowerTick, upperTick int64, tickParams TickParams) (math.LegacyDec, math.LegacyDec, error) {
@@ -199,18 +198,4 @@ func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec, tickParams TickParams) (
 	}
 
 	return tick - 1, nil
-}
-
-func TickIndexFromBytes(bz []byte) (int64, error) {
-	if len(bz) != 9 {
-		return 0, ErrInvalidTickIndexEncoding
-	}
-
-	i := int64(sdk.BigEndianToUint64(bz[1:]))
-	if bz[0] == TickNegativePrefix[0] && i >= 0 {
-		return 0, ErrInvalidTickIndexEncoding
-	} else if bz[0] == TickPositivePrefix[0] && i < 0 {
-		return 0, ErrInvalidTickIndexEncoding
-	}
-	return i, nil
 }

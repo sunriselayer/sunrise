@@ -40,14 +40,28 @@ const (
 
 const (
 	TickInfoKey                  = "TickInfo/value/"
-	TickNegativePrefix           = "Negative/value/"
-	TickPositivePrefix           = "Positive/value/"
+	TickNegativePrefix           = "N"
+	TickPositivePrefix           = "P"
 	FeePositionAccumulatorPrefix = "FeePositionAccumulator/value/"
 	KeyFeePoolAccumulatorPrefix  = "FeePoolAccumulator/value/"
 	KeyAccumPrefix               = "Accumulator/Acc/value/"
 	KeyAccumPositionPrefix       = "Accumulator/Pos/value"
 	KeySeparator                 = "||"
 )
+
+func TickIndexFromBytes(bz []byte) (int64, error) {
+	if len(bz) != 9 {
+		return 0, ErrInvalidTickIndexEncoding
+	}
+
+	i := int64(sdk.BigEndianToUint64(bz[1:]))
+	if bz[0] == TickNegativePrefix[0] && i >= 0 {
+		return 0, ErrInvalidTickIndexEncoding
+	} else if bz[0] == TickPositivePrefix[0] && i < 0 {
+		return 0, ErrInvalidTickIndexEncoding
+	}
+	return i, nil
+}
 
 func TickIndexToBytes(tickIndex int64) []byte {
 	key := make([]byte, 9)

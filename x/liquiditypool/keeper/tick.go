@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"cosmossdk.io/math"
-	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -85,16 +84,14 @@ func (k Keeper) newTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 // SetTickInfo set a specific tickInfo in the store
 func (k Keeper) SetTickInfo(ctx context.Context, tickInfo types.TickInfo) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
 	b := k.cdc.MustMarshal(&tickInfo)
-	store.Set(types.GetTickInfoIDBytes(tickInfo.PoolId, tickInfo.TickIndex), b)
+	storeAdapter.Set(types.GetTickInfoIDBytes(tickInfo.PoolId, tickInfo.TickIndex), b)
 }
 
 // GetTickInfo returns a tickInfo from its id
 func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (val types.TickInfo, err error) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	b := store.Get(types.GetTickInfoIDBytes(poolId, tickIndex))
+	b := storeAdapter.Get(types.GetTickInfoIDBytes(poolId, tickIndex))
 	if b == nil {
 		return k.newTickInfo(ctx, poolId, tickIndex)
 	}
@@ -104,14 +101,12 @@ func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 
 func (k Keeper) RemoveTickInfo(ctx context.Context, poolId uint64, tickIndex int64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	store.Delete(types.GetTickInfoIDBytes(poolId, tickIndex))
+	storeAdapter.Delete(types.GetTickInfoIDBytes(poolId, tickIndex))
 }
 
 func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (list []types.TickInfo) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	iterator := storetypes.KVStorePrefixIterator(store, types.KeyTickPrefixByPoolId(poolId))
+	iterator := storetypes.KVStorePrefixIterator(storeAdapter, types.KeyTickPrefixByPoolId(poolId))
 
 	defer iterator.Close()
 
@@ -126,8 +121,7 @@ func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (l
 
 func (k Keeper) GetAllTickInfos(ctx context.Context) (list []types.TickInfo) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.TickInfoKey))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+	iterator := storetypes.KVStorePrefixIterator(storeAdapter, []byte{})
 
 	defer iterator.Close()
 
