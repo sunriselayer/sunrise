@@ -51,7 +51,7 @@ func CalcAmountBaseDelta(liq math.LegacyDec, sqrtPriceA, sqrtPriceB math.LegacyD
 	}
 	diff := sqrtPriceB.Sub(sqrtPriceA)
 	if roundUp {
-		return diff.Mul(liq).Quo(sqrtPriceB).Quo(sqrtPriceA)
+		return diff.Mul(liq).Quo(sqrtPriceB).Quo(sqrtPriceA).Ceil()
 	}
 	return diff.Mul(liq).Quo(sqrtPriceB).Quo(sqrtPriceA)
 }
@@ -66,13 +66,13 @@ func CalcAmountQuoteDelta(liq math.LegacyDec, sqrtPriceA, sqrtPriceB math.Legacy
 }
 
 // sqrt_next = liq * sqrt_cur / (liq + token_in * sqrt_cur)
-func GetNextSqrtPriceFromAmountBaseInRoundingUp(sqrtPriceCurrent, liquidity, amountZeroRemainingIn math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
-	if amountZeroRemainingIn.IsZero() {
+func GetNextSqrtPriceFromAmountBaseInRoundingUp(sqrtPriceCurrent, liquidity, amountBaseRemainingIn math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
+	if amountBaseRemainingIn.IsZero() {
 		return sqrtPriceCurrent
 	}
 
 	// Truncate at precision end to make denominator smaller so that the final result is larger.
-	product := amountZeroRemainingIn.MulTruncate(sqrtPriceCurrent)
+	product := amountBaseRemainingIn.MulTruncate(sqrtPriceCurrent)
 	// denominator = product + liquidity
 	denominator := product
 	denominator.AddMut(liquidity)
@@ -80,13 +80,13 @@ func GetNextSqrtPriceFromAmountBaseInRoundingUp(sqrtPriceCurrent, liquidity, amo
 }
 
 // sqrt_next = liq * sqrt_cur / (liq - token_out * sqrt_cur)
-func GetNextSqrtPriceFromAmountBaseOutRoundingUp(sqrtPriceCurrent, liquidity math.LegacyDec, amountZeroRemainingOut math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
-	if amountZeroRemainingOut.IsZero() {
+func GetNextSqrtPriceFromAmountBaseOutRoundingUp(sqrtPriceCurrent, liquidity math.LegacyDec, amountBaseRemainingOut math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
+	if amountBaseRemainingOut.IsZero() {
 		return sqrtPriceCurrent
 	}
 
 	// mul round up to make the final denominator smaller and final result larger
-	product := sqrtPriceCurrent.MulRoundUp(amountZeroRemainingOut)
+	product := sqrtPriceCurrent.MulRoundUp(amountBaseRemainingOut)
 	denominator := liquidity.Sub(product)
 	// mul round up numerator to make the final result larger
 	// quo round up to make the final result larger
@@ -94,13 +94,13 @@ func GetNextSqrtPriceFromAmountBaseOutRoundingUp(sqrtPriceCurrent, liquidity mat
 }
 
 // sqrt_next = sqrt_cur + token_in / liq
-func GetNextSqrtPriceFromAmountQuoteInRoundingDown(sqrtPriceCurrent math.LegacyDec, liquidity math.LegacyDec, amountOneRemainingIn math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
-	return amountOneRemainingIn.QuoTruncate(liquidity).Add(sqrtPriceCurrent)
+func GetNextSqrtPriceFromAmountQuoteInRoundingDown(sqrtPriceCurrent math.LegacyDec, liquidity math.LegacyDec, amountQuoteRemainingIn math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
+	return amountQuoteRemainingIn.QuoTruncate(liquidity).Add(sqrtPriceCurrent)
 }
 
 // sqrt_next = sqrt_cur - token_out / liq
-func GetNextSqrtPriceFromAmountQuoteOutRoundingDown(sqrtPriceCurrent math.LegacyDec, liquidity math.LegacyDec, amountOneRemainingOut math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
-	return sqrtPriceCurrent.Sub(amountOneRemainingOut.QuoRoundUp(liquidity))
+func GetNextSqrtPriceFromAmountQuoteOutRoundingDown(sqrtPriceCurrent math.LegacyDec, liquidity math.LegacyDec, amountQuoteRemainingOut math.LegacyDec) (sqrtPriceNext math.LegacyDec) {
+	return sqrtPriceCurrent.Sub(amountQuoteRemainingOut.QuoRoundUp(liquidity))
 }
 
 func GetLiquidityFromAmounts(sqrtPrice math.LegacyDec, sqrtPriceA, sqrtPriceB math.LegacyDec, amountBase, amountQuote math.Int) (liquidity math.LegacyDec) {

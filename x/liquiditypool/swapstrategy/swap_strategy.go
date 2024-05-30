@@ -18,30 +18,30 @@ type SwapStrategy interface {
 	SetLiquidityDeltaSign(liquidityDelta math.LegacyDec) math.LegacyDec
 	UpdateTickAfterCrossing(nextTick int64) (updatedNextTick int64)
 	ValidateSqrtPrice(sqrtPriceLimit math.LegacyDec, currentSqrtPrice math.LegacyDec) error
-	ZeroForOne() bool
+	BaseForQuote() bool
 }
 
 var (
 	oneDec = math.LegacyOneDec()
 )
 
-func New(zeroForOne bool, sqrtPriceLimit math.LegacyDec, storeService store.KVStoreService, spreadFactor math.LegacyDec) SwapStrategy {
-	if zeroForOne {
-		return &zeroForOneStrategy{sqrtPriceLimit: sqrtPriceLimit, storeService: storeService, spreadFactor: spreadFactor}
+func New(baseForQuote bool, sqrtPriceLimit math.LegacyDec, storeService store.KVStoreService, spreadFactor math.LegacyDec) SwapStrategy {
+	if baseForQuote {
+		return &baseForQuoteStrategy{sqrtPriceLimit: sqrtPriceLimit, storeService: storeService, spreadFactor: spreadFactor}
 	}
-	return &oneForZeroStrategy{sqrtPriceLimit: sqrtPriceLimit, storeService: storeService, spreadFactor: spreadFactor}
+	return &quoteForBaseStrategy{sqrtPriceLimit: sqrtPriceLimit, storeService: storeService, spreadFactor: spreadFactor}
 }
 
-func GetPriceLimit(zeroForOne bool) math.LegacyDec {
-	if zeroForOne {
+func GetPriceLimit(baseForQuote bool) math.LegacyDec {
+	if baseForQuote {
 		return types.MinSpotPrice
 	}
 	return types.MaxSpotPrice
 }
 
-func GetSqrtPriceLimit(priceLimit math.LegacyDec, zeroForOne bool) (math.LegacyDec, error) {
+func GetSqrtPriceLimit(priceLimit math.LegacyDec, baseForQuote bool) (math.LegacyDec, error) {
 	if priceLimit.IsZero() {
-		if zeroForOne {
+		if baseForQuote {
 			return types.MinSqrtPrice, nil
 		}
 		return types.MaxSqrtPrice, nil

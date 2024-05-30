@@ -105,9 +105,9 @@ func (k Keeper) SwapExactAmountIn(
 		return math.Int{}, types.ErrDenomDuplication
 	}
 
-	zeroForOne := getZeroForOne(tokenIn.Denom, pool.DenomBase)
+	baseForQuote := getBaseForQuote(tokenIn.Denom, pool.DenomBase)
 
-	priceLimit := swapstrategy.GetPriceLimit(zeroForOne)
+	priceLimit := swapstrategy.GetPriceLimit(baseForQuote)
 	tokenIn, tokenOut, _, err := k.swapOutAmtGivenIn(ctx, sender, pool, tokenIn, tokenOutDenom, spreadFactor, priceLimit)
 	if err != nil {
 		return math.Int{}, err
@@ -134,9 +134,9 @@ func (k Keeper) SwapExactAmountOut(
 		return math.Int{}, types.ErrDenomDuplication
 	}
 
-	zeroForOne := getZeroForOne(tokenInDenom, pool.DenomBase)
+	baseForQuote := getBaseForQuote(tokenInDenom, pool.DenomBase)
 
-	priceLimit := swapstrategy.GetPriceLimit(zeroForOne)
+	priceLimit := swapstrategy.GetPriceLimit(baseForQuote)
 	tokenIn, tokenOut, _, err := k.swapInAmtGivenOut(ctx, sender, pool, tokenOut, tokenInDenom, spreadFactor, priceLimit)
 	if err != nil {
 		return math.Int{}, err
@@ -177,8 +177,6 @@ func (k Keeper) swapOutAmtGivenIn(
 	return tokenIn, tokenOut, poolUpdates, nil
 }
 
-// swapInAmtGivenOut is the internal mutative method for calcInAmtGivenOut. Utilizing calcInAmtGivenOut's output, this function applies the
-// new tick, liquidity, and sqrtPrice to the respective pool.
 func (k *Keeper) swapInAmtGivenOut(
 	ctx sdk.Context,
 	sender sdk.AccAddress,
@@ -340,14 +338,13 @@ func (k Keeper) computeOutAmtGivenIn(
 		swapState.sqrtPrice = computedSqrtPrice
 		swapState.amountSpecifiedRemaining.SubMut(amountIn.Add(feeCharge))
 		swapState.amountCalculated.AddMut(amountOut)
-
 		if nextInitializedTickSqrtPrice.Equal(computedSqrtPrice) {
 			swapState, err = k.swapCrossTickLogic(ctx, swapState, swapStrategy,
 				nextInitializedTick, nextInitTickIter, p, feeAccumulator, &uptimeAccums, tokenInMin.Denom, updateAccumulators)
 			if err != nil {
 				return SwapResult{}, PoolUpdates{}, err
 			}
-		} else if edgeCaseInequalityBasedOnSwapStrategy(swapStrategy.ZeroForOne(), nextInitializedTickSqrtPrice, computedSqrtPrice) {
+		} else if edgeCaseInequalityBasedOnSwapStrategy(swapStrategy.BaseForQuote(), nextInitializedTickSqrtPrice, computedSqrtPrice) {
 			return SwapResult{}, PoolUpdates{}, types.ErrInvalidComputedSqrtPrice
 		} else if !sqrtPriceStart.Equal(computedSqrtPrice) {
 			newTick, err := types.CalculateSqrtPriceToTick(computedSqrtPrice, p.TickParams)
@@ -454,7 +451,7 @@ func (k Keeper) computeInAmtGivenOut(
 			if err != nil {
 				return SwapResult{}, PoolUpdates{}, err
 			}
-		} else if edgeCaseInequalityBasedOnSwapStrategy(swapStrategy.ZeroForOne(), nextInitializedTickSqrtPrice, computedSqrtPrice) {
+		} else if edgeCaseInequalityBasedOnSwapStrategy(swapStrategy.BaseForQuote(), nextInitializedTickSqrtPrice, computedSqrtPrice) {
 			return SwapResult{}, PoolUpdates{}, types.ErrInvalidComputedSqrtPrice
 		} else if !sqrtPriceStart.Equal(computedSqrtPrice) {
 			swapState.tick, err = types.CalculateSqrtPriceToTick(computedSqrtPrice, p.TickParams)
@@ -560,8 +557,8 @@ func (k Keeper) updatePoolForSwap(
 	return err
 }
 
-func getZeroForOne(inDenom, asset0 string) bool {
-	return inDenom == asset0
+func getBaseForQuote(inDenom, assetBase string) bool {
+	return inDenom == assetBase
 }
 
 func checkDenomValidity(inDenom, outDenom, assetBase, assetQuote string) error {
@@ -579,15 +576,15 @@ func checkDenomValidity(inDenom, outDenom, assetBase, assetQuote string) error {
 }
 
 func (k Keeper) setupSwapStrategy(p types.Pool, spreadFactor math.LegacyDec, tokenInDenom string, priceLimit math.LegacyDec) (strategy swapstrategy.SwapStrategy, sqrtPriceLimit math.LegacyDec, err error) {
-	zeroForOne := getZeroForOne(tokenInDenom, p.DenomBase)
+	baseForQuote := getBaseForQuote(tokenInDenom, p.DenomBase)
 
 	// take provided price limit and turn into a sqrt price limit
-	sqrtPriceLimit, err = swapstrategy.GetSqrtPriceLimit(priceLimit, zeroForOne)
+	sqrtPriceLimit, err = swapstrategy.GetSqrtPriceLimit(priceLimit, baseForQuote)
 	if err != nil {
 		return strategy, math.LegacyDec{}, err
 	}
 
-	swapStrategy := swapstrategy.New(zeroForOne, sqrtPriceLimit, k.storeService, spreadFactor)
+	swapStrategy := swapstrategy.New(baseForQuote, sqrtPriceLimit, k.storeService, spreadFactor)
 
 	// get current sqrt price
 	curSqrtPrice := p.CurrentSqrtPrice
@@ -617,8 +614,8 @@ func validateSwapProgressAndAmountConsumption(computedSqrtPrice, sqrtPriceStart 
 	return nil
 }
 
-func edgeCaseInequalityBasedOnSwapStrategy(isZeroForOne bool, nextInitializedTickSqrtPrice, computedSqrtPrice math.LegacyDec) bool {
-	if isZeroForOne {
+func edgeCaseInequalityBasedOnSwapStrategy(isBaseForQuote bool, nextInitializedTickSqrtPrice, computedSqrtPrice math.LegacyDec) bool {
+	if isBaseForQuote {
 		return nextInitializedTickSqrtPrice.GT(computedSqrtPrice)
 	}
 	return nextInitializedTickSqrtPrice.LT(computedSqrtPrice)
@@ -698,7 +695,7 @@ func (k Keeper) ComputeMaxInAmtGivenMaxTicksCrossed(
 			swapState.liquidity.AddMut(liquidityNet)
 
 			swapState.tick = swapStrategy.UpdateTickAfterCrossing(nextInitializedTick)
-		} else if edgeCaseInequalityBasedOnSwapStrategy(swapStrategy.ZeroForOne(), nextInitializedTickSqrtPrice, computedSqrtPrice) {
+		} else if edgeCaseInequalityBasedOnSwapStrategy(swapStrategy.BaseForQuote(), nextInitializedTickSqrtPrice, computedSqrtPrice) {
 			return sdk.Coin{}, sdk.Coin{}, types.ErrNotEqualSqrtPrice
 		} else if !swapState.sqrtPrice.Equal(computedSqrtPrice) {
 			newTick, err := types.CalculateSqrtPriceToTick(computedSqrtPrice, p.TickParams)
