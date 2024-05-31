@@ -50,7 +50,7 @@ message MsgSwapExactAmountIn {
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   string interface_provider = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  repeated Route route = 3
+  repeated Route routes = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
   cosmos.base.v1beta1.Coin amount_in = 4 [ (gogoproto.nullable) = false ];
   string min_amount_out = 5 [
@@ -75,7 +75,7 @@ message MsgSwapExactAmountOut {
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   string interface_provider = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  repeated Route route = 3
+  repeated Route routes = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
   cosmos.base.v1beta1.Coin amount_out = 4 [ (gogoproto.nullable) = false ];
   string max_amount_in = 5 [
