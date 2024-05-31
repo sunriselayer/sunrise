@@ -23,6 +23,8 @@ import (
 	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/swap/module"
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
+
+	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 )
 
 var (
@@ -182,6 +184,8 @@ type ModuleInputs struct {
 
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
+	ICS4Wrapper   porttypes.ICS4Wrapper
+	SwapKeeper    types.SwapKeeper
 }
 
 type ModuleOutputs struct {
@@ -204,6 +208,8 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority.String(),
 		in.AccountKeeper,
 		in.BankKeeper,
+		in.ICS4Wrapper,
+		in.SwapKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,

@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
@@ -23,6 +24,11 @@ type (
 
 		accountKeeper types.AccountKeeper
 		bankKeeper    types.BankKeeper
+<<<<<<< HEAD
+=======
+		ics4Wrapper   porttypes.ICS4Wrapper
+		swapKeeper    types.SwapKeeper
+>>>>>>> 1a66dc3 (feat: merge mod)
 	}
 )
 
@@ -34,6 +40,11 @@ func NewKeeper(
 
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+<<<<<<< HEAD
+=======
+	ics4Wrapper porttypes.ICS4Wrapper,
+	swapKeeper types.SwapKeeper,
+>>>>>>> 1a66dc3 (feat: merge mod)
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
@@ -47,6 +58,11 @@ func NewKeeper(
 
 		accountKeeper: accountKeeper,
 		bankKeeper:    bankKeeper,
+<<<<<<< HEAD
+=======
+		ics4Wrapper:   ics4Wrapper,
+		swapKeeper:    swapKeeper,
+>>>>>>> 1a66dc3 (feat: merge mod)
 	}
 }
 
