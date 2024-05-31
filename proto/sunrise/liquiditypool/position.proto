@@ -1,5 +1,7 @@
 syntax = "proto3";
 package sunrise.liquiditypool;
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
@@ -8,4 +10,10 @@ message Position {
   string sender = 2;
   int64 lower_tick = 3; 
   int64 upper_tick = 4; 
+  cosmos.base.v1beta1.Coin base = 5 [
+    (gogoproto.nullable) = false
+  ];
+  cosmos.base.v1beta1.Coin quote = 6 [
+    (gogoproto.nullable) = false
+  ];
 }
