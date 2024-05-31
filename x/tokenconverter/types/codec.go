@@ -9,10 +9,7 @@ import (
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgConvertExactAmountIn{},
-	)
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgConvertExactAmountOut{},
+		&MsgConvert{},
 	)
 	// this line is used by starport scaffolding # 3
 

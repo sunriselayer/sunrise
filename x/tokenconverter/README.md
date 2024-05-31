@@ -1,9 +1,9 @@
 # tokenconverter
 
-This module is for converting `SRG` to `SR` token.
+This module is for converting `SSR` to `SR` token equivalently if the following rule satisfies
 
 $$
-  \text{OutputSR} = \text{InputSSR} \times \min\left(1, \frac{\text{CurrentSupplySR}}{\text{CurrentSupplySSR}} \right) \ \text{if} \ \text{CurrentSupplySR} + \text{OutputSR} \le \text{MaxSupplySR}
+  \text{if} \ \text{CurrentSupplySR} + \text{OutputSR} \le \text{MaxSupplySR}
 $$
 
 ## Ante Handler
