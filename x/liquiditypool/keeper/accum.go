@@ -74,6 +74,10 @@ func GetAccumulator(accumStore store.KVStore, accumName string) (*AccumulatorObj
 		return &AccumulatorObject{}, types.ErrAccumDoesNotExist
 	}
 
+	err = proto.Unmarshal(bz, &accumContent)
+	if err != nil {
+		return &AccumulatorObject{}, err
+	}
 	accum := AccumulatorObject{accumStore, accumName, accumContent.AccumValue, accumContent.TotalShares}
 
 	return &accum, nil
@@ -177,6 +181,9 @@ func (accum *AccumulatorObject) AddToPositionIntervalAccumulation(name string, n
 	if err != nil {
 		return err
 	}
+	if updatedAccum.totalShares.IsNil() {
+		updatedAccum.totalShares = math.LegacyZeroDec()
+	}
 	accum.totalShares = updatedAccum.totalShares.Add(newShares)
 	return setAccumulator(accum, accum.valuePerShare, accum.totalShares)
 }
@@ -210,6 +217,9 @@ func (accum *AccumulatorObject) RemoveFromPositionIntervalAccumulation(name stri
 	updatedAccum, err := GetAccumulator(accum.store, accum.name)
 	if err != nil {
 		return err
+	}
+	if updatedAccum.totalShares.IsNil() {
+		updatedAccum.totalShares = math.LegacyZeroDec()
 	}
 	accum.totalShares = updatedAccum.totalShares.Sub(numSharesToRemove)
 	return setAccumulator(accum, accum.valuePerShare, accum.totalShares)

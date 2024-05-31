@@ -209,8 +209,8 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 		return math.Int{}, math.Int{}, err
 	}
 
-	coins := sdk.Coins{sdk.NewCoin(pool.DenomBase, amountBase)}
-	coins = coins.Add(sdk.NewCoin(pool.DenomQuote, amountQuote))
+	coins := sdk.Coins{sdk.NewCoin(pool.DenomBase, amountBase.Abs())}
+	coins = coins.Add(sdk.NewCoin(pool.DenomQuote, amountQuote.Abs()))
 	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
 	if err != nil {
 		return math.Int{}, math.Int{}, err

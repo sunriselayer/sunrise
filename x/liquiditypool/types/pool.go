@@ -57,10 +57,6 @@ func (p Pool) CalcActualAmounts(ctx sdk.Context, lowerTick, upperTick int64, liq
 		actualAmountQuote = CalcAmountQuoteDelta(liquidityDelta, sqrtPriceLowerTick, sqrtPriceUpperTick, roundUp)
 	}
 
-	if roundUp {
-		return actualAmountBase, actualAmountQuote, nil
-	}
-
 	return actualAmountBase, actualAmountQuote, nil
 }
 

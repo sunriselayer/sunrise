@@ -77,8 +77,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "IncreaseLiquidity",
-					Use:            "update-position [id] ",
-					Short:          "Update position",
+					Use:            "increase-liquidity",
+					Short:          "Increase liquidity",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						// {ProtoField: "id"},
 						// {ProtoField: "amount_base"},
@@ -89,8 +89,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "DecreaseLiquidity",
-					Use:            "delete-position [id]",
-					Short:          "Delete position",
+					Use:            "decrease-liquidity",
+					Short:          "Decrease liquidity",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						// {ProtoField: "id"},
 						// {ProtoField: "liquidity"},
