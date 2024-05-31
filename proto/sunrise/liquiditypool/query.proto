@@ -56,7 +56,7 @@ message QueryGetPoolRequest {
 }
 
 message QueryGetPoolResponse {
-  Pool Pool = 1 [(gogoproto.nullable) = false];
+  Pool pool = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllPoolRequest {
@@ -64,7 +64,7 @@ message QueryAllPoolRequest {
 }
 
 message QueryAllPoolResponse {
-  repeated Pool                                   Pool       = 1 [(gogoproto.nullable) = false];
+  repeated Pool                                   pools       = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -73,7 +73,7 @@ message QueryGetPositionRequest {
 }
 
 message QueryGetPositionResponse {
-  Position Position = 1 [(gogoproto.nullable) = false];
+  Position position = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllPositionRequest {
@@ -81,7 +81,7 @@ message QueryAllPositionRequest {
 }
 
 message QueryAllPositionResponse {
-  repeated Position                               Position   = 1 [(gogoproto.nullable) = false];
+  repeated Position                               positions   = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
