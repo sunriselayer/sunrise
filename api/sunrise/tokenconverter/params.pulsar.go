@@ -19,7 +19,7 @@ var (
 	md_Params                      protoreflect.MessageDescriptor
 	fd_Params_denom_gov_token      protoreflect.FieldDescriptor
 	fd_Params_denom_fee_token      protoreflect.FieldDescriptor
-	fd_Params_supply_cap_fee_token protoreflect.FieldDescriptor
+	fd_Params_max_supply_fee_token protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -27,7 +27,7 @@ func init() {
 	md_Params = File_sunrise_tokenconverter_params_proto.Messages().ByName("Params")
 	fd_Params_denom_gov_token = md_Params.Fields().ByName("denom_gov_token")
 	fd_Params_denom_fee_token = md_Params.Fields().ByName("denom_fee_token")
-	fd_Params_supply_cap_fee_token = md_Params.Fields().ByName("supply_cap_fee_token")
+	fd_Params_max_supply_fee_token = md_Params.Fields().ByName("max_supply_fee_token")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -107,9 +107,9 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.SupplyCapFeeToken != "" {
-		value := protoreflect.ValueOfString(x.SupplyCapFeeToken)
-		if !f(fd_Params_supply_cap_fee_token, value) {
+	if x.MaxSupplyFeeToken != "" {
+		value := protoreflect.ValueOfString(x.MaxSupplyFeeToken)
+		if !f(fd_Params_max_supply_fee_token, value) {
 			return
 		}
 	}
@@ -132,8 +132,8 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.DenomGovToken != ""
 	case "sunrise.tokenconverter.Params.denom_fee_token":
 		return x.DenomFeeToken != ""
-	case "sunrise.tokenconverter.Params.supply_cap_fee_token":
-		return x.SupplyCapFeeToken != ""
+	case "sunrise.tokenconverter.Params.max_supply_fee_token":
+		return x.MaxSupplyFeeToken != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.Params"))
@@ -154,8 +154,8 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.DenomGovToken = ""
 	case "sunrise.tokenconverter.Params.denom_fee_token":
 		x.DenomFeeToken = ""
-	case "sunrise.tokenconverter.Params.supply_cap_fee_token":
-		x.SupplyCapFeeToken = ""
+	case "sunrise.tokenconverter.Params.max_supply_fee_token":
+		x.MaxSupplyFeeToken = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.Params"))
@@ -178,8 +178,8 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "sunrise.tokenconverter.Params.denom_fee_token":
 		value := x.DenomFeeToken
 		return protoreflect.ValueOfString(value)
-	case "sunrise.tokenconverter.Params.supply_cap_fee_token":
-		value := x.SupplyCapFeeToken
+	case "sunrise.tokenconverter.Params.max_supply_fee_token":
+		value := x.MaxSupplyFeeToken
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -205,8 +205,8 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.DenomGovToken = value.Interface().(string)
 	case "sunrise.tokenconverter.Params.denom_fee_token":
 		x.DenomFeeToken = value.Interface().(string)
-	case "sunrise.tokenconverter.Params.supply_cap_fee_token":
-		x.SupplyCapFeeToken = value.Interface().(string)
+	case "sunrise.tokenconverter.Params.max_supply_fee_token":
+		x.MaxSupplyFeeToken = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.Params"))
@@ -231,8 +231,8 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		panic(fmt.Errorf("field denom_gov_token of message sunrise.tokenconverter.Params is not mutable"))
 	case "sunrise.tokenconverter.Params.denom_fee_token":
 		panic(fmt.Errorf("field denom_fee_token of message sunrise.tokenconverter.Params is not mutable"))
-	case "sunrise.tokenconverter.Params.supply_cap_fee_token":
-		panic(fmt.Errorf("field supply_cap_fee_token of message sunrise.tokenconverter.Params is not mutable"))
+	case "sunrise.tokenconverter.Params.max_supply_fee_token":
+		panic(fmt.Errorf("field max_supply_fee_token of message sunrise.tokenconverter.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.Params"))
@@ -250,7 +250,7 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfString("")
 	case "sunrise.tokenconverter.Params.denom_fee_token":
 		return protoreflect.ValueOfString("")
-	case "sunrise.tokenconverter.Params.supply_cap_fee_token":
+	case "sunrise.tokenconverter.Params.max_supply_fee_token":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -329,7 +329,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.SupplyCapFeeToken)
+		l = len(x.MaxSupplyFeeToken)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -362,10 +362,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.SupplyCapFeeToken) > 0 {
-			i -= len(x.SupplyCapFeeToken)
-			copy(dAtA[i:], x.SupplyCapFeeToken)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SupplyCapFeeToken)))
+		if len(x.MaxSupplyFeeToken) > 0 {
+			i -= len(x.MaxSupplyFeeToken)
+			copy(dAtA[i:], x.MaxSupplyFeeToken)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MaxSupplyFeeToken)))
 			i--
 			dAtA[i] = 0x1a
 		}
@@ -498,7 +498,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SupplyCapFeeToken", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxSupplyFeeToken", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -526,7 +526,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.SupplyCapFeeToken = string(dAtA[iNdEx:postIndex])
+				x.MaxSupplyFeeToken = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -584,7 +584,7 @@ type Params struct {
 
 	DenomGovToken     string `protobuf:"bytes,1,opt,name=denom_gov_token,json=denomGovToken,proto3" json:"denom_gov_token,omitempty"`
 	DenomFeeToken     string `protobuf:"bytes,2,opt,name=denom_fee_token,json=denomFeeToken,proto3" json:"denom_fee_token,omitempty"`
-	SupplyCapFeeToken string `protobuf:"bytes,3,opt,name=supply_cap_fee_token,json=supplyCapFeeToken,proto3" json:"supply_cap_fee_token,omitempty"`
+	MaxSupplyFeeToken string `protobuf:"bytes,3,opt,name=max_supply_fee_token,json=maxSupplyFeeToken,proto3" json:"max_supply_fee_token,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -621,9 +621,9 @@ func (x *Params) GetDenomFeeToken() string {
 	return ""
 }
 
-func (x *Params) GetSupplyCapFeeToken() string {
+func (x *Params) GetMaxSupplyFeeToken() string {
 	if x != nil {
-		return x.SupplyCapFeeToken
+		return x.MaxSupplyFeeToken
 	}
 	return ""
 }
@@ -645,12 +645,12 @@ var file_sunrise_tokenconverter_params_proto_rawDesc = []byte{
 	0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x26, 0x0a, 0x0f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x66, 0x65,
 	0x65, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x64,
 	0x65, 0x6e, 0x6f, 0x6d, 0x46, 0x65, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x61, 0x0a, 0x14,
-	0x73, 0x75, 0x70, 0x70, 0x6c, 0x79, 0x5f, 0x63, 0x61, 0x70, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x74,
+	0x6d, 0x61, 0x78, 0x5f, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x79, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x74,
 	0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
 	0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
 	0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x11, 0x73, 0x75,
-	0x70, 0x70, 0x6c, 0x79, 0x43, 0x61, 0x70, 0x46, 0x65, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x3a,
+	0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x11, 0x6d, 0x61,
+	0x78, 0x53, 0x75, 0x70, 0x70, 0x6c, 0x79, 0x46, 0x65, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x3a,
 	0x28, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x1f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
 	0x65, 0x2f, 0x78, 0x2f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74,
 	0x65, 0x72, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0xcb, 0x01, 0x0a, 0x1a, 0x63, 0x6f,
