@@ -182,9 +182,9 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
+	ICS4Wrapper   porttypes.ICS4Wrapper
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
-	ICS4Wrapper   porttypes.ICS4Wrapper
 	SwapKeeper    types.SwapKeeper
 }
 
@@ -206,9 +206,9 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
+		in.ICS4Wrapper,
 		in.AccountKeeper,
 		in.BankKeeper,
-		in.ICS4Wrapper,
 		in.SwapKeeper,
 	)
 	m := NewAppModule(
