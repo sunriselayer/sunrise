@@ -57,6 +57,8 @@ import (
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
+	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
 	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
@@ -180,7 +182,9 @@ func AppConfig() depinject.Config {
 				govtypes.ModuleName: defaultoverrides.GovModuleBasic{
 					AppModuleBasic: gov.NewAppModuleBasic(getGovProposalHandlers()),
 				},
-				stakingtypes.ModuleName: defaultoverrides.StakingModuleBasic{},
+				stakingtypes.ModuleName:        defaultoverrides.StakingModuleBasic{},
+				tokenconvertertypes.ModuleName: defaultoverrides.TokenConverterModuleBasic{},
+				feetypes.ModuleName:            defaultoverrides.FeeModuleBasic{},
 
 				// this line is used by starport scaffolding # stargate/appConfig/moduleBasic
 			},

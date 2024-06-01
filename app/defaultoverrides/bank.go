@@ -8,7 +8,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
-// BankModuleBasic defines a custom wrapper around the x/bank module's BankModuleBasic
+// BankModuleBasic defines a custom wrapper around the x/bank module's AppModuleBasic
 // implementation to provide custom default genesis state.
 type BankModuleBasic struct {
 	bank.AppModuleBasic
