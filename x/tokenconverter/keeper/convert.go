@@ -12,9 +12,9 @@ import (
 func (k Keeper) CalculateConversionAmount(ctx context.Context, minAmountOutFeeToken math.Int, maxAmountInGovToken math.Int) (math.Int, error) {
 	params := k.GetParams(ctx)
 
-	supplyFee := k.bankKeeper.GetSupply(ctx, params.DenomFeeToken)
+	supplyFee := k.bankKeeper.GetSupply(ctx, params.FeeDenom)
 
-	space := params.MaxSupplyFeeToken.Sub(supplyFee.Amount)
+	space := params.MaxSupplyFee.Sub(supplyFee.Amount)
 	if space.IsZero() || space.LT(minAmountOutFeeToken) {
 		return math.ZeroInt(), types.ErrExceedsMaxSupply
 	}
@@ -32,11 +32,11 @@ func (k Keeper) CalculateConversionAmount(ctx context.Context, minAmountOutFeeTo
 func (k Keeper) BurnAndMint(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
 	params := k.GetParams(ctx)
 
-	govToken := sdk.NewCoin(params.DenomGovToken, amount)
+	govToken := sdk.NewCoin(params.GovDenom, amount)
 	if err := govToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(params.DenomFeeToken, amount)
+	feeToken := sdk.NewCoin(params.FeeDenom, amount)
 	if err := feeToken.Validate(); err != nil {
 		return err
 	}

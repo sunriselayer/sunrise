@@ -4,6 +4,7 @@ package fee
 import (
 	_ "cosmossdk.io/api/amino"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -14,13 +15,65 @@ import (
 	sync "sync"
 )
 
+var _ protoreflect.List = (*_Params_3_list)(nil)
+
+type _Params_3_list struct {
+	list *[]string
+}
+
+func (x *_Params_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Params_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_Params_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Params_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Params_3_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field BypassDenoms as it is not of Message kind"))
+}
+
+func (x *_Params_3_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Params_3_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_Params_3_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_Params protoreflect.MessageDescriptor
+	md_Params               protoreflect.MessageDescriptor
+	fd_Params_fee_denom     protoreflect.FieldDescriptor
+	fd_Params_burn_rate     protoreflect.FieldDescriptor
+	fd_Params_bypass_denoms protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_fee_params_proto_init()
 	md_Params = File_sunrise_fee_params_proto.Messages().ByName("Params")
+	fd_Params_fee_denom = md_Params.Fields().ByName("fee_denom")
+	fd_Params_burn_rate = md_Params.Fields().ByName("burn_rate")
+	fd_Params_bypass_denoms = md_Params.Fields().ByName("bypass_denoms")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -88,6 +141,24 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.FeeDenom != "" {
+		value := protoreflect.ValueOfString(x.FeeDenom)
+		if !f(fd_Params_fee_denom, value) {
+			return
+		}
+	}
+	if x.BurnRate != "" {
+		value := protoreflect.ValueOfString(x.BurnRate)
+		if !f(fd_Params_burn_rate, value) {
+			return
+		}
+	}
+	if len(x.BypassDenoms) != 0 {
+		value := protoreflect.ValueOfList(&_Params_3_list{list: &x.BypassDenoms})
+		if !f(fd_Params_bypass_denoms, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -103,6 +174,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.fee.Params.fee_denom":
+		return x.FeeDenom != ""
+	case "sunrise.fee.Params.burn_rate":
+		return x.BurnRate != ""
+	case "sunrise.fee.Params.bypass_denoms":
+		return len(x.BypassDenoms) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.Params"))
@@ -119,6 +196,12 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.fee.Params.fee_denom":
+		x.FeeDenom = ""
+	case "sunrise.fee.Params.burn_rate":
+		x.BurnRate = ""
+	case "sunrise.fee.Params.bypass_denoms":
+		x.BypassDenoms = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.Params"))
@@ -135,6 +218,18 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.fee.Params.fee_denom":
+		value := x.FeeDenom
+		return protoreflect.ValueOfString(value)
+	case "sunrise.fee.Params.burn_rate":
+		value := x.BurnRate
+		return protoreflect.ValueOfString(value)
+	case "sunrise.fee.Params.bypass_denoms":
+		if len(x.BypassDenoms) == 0 {
+			return protoreflect.ValueOfList(&_Params_3_list{})
+		}
+		listValue := &_Params_3_list{list: &x.BypassDenoms}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.Params"))
@@ -155,6 +250,14 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.fee.Params.fee_denom":
+		x.FeeDenom = value.Interface().(string)
+	case "sunrise.fee.Params.burn_rate":
+		x.BurnRate = value.Interface().(string)
+	case "sunrise.fee.Params.bypass_denoms":
+		lv := value.List()
+		clv := lv.(*_Params_3_list)
+		x.BypassDenoms = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.Params"))
@@ -175,6 +278,16 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.fee.Params.bypass_denoms":
+		if x.BypassDenoms == nil {
+			x.BypassDenoms = []string{}
+		}
+		value := &_Params_3_list{list: &x.BypassDenoms}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.fee.Params.fee_denom":
+		panic(fmt.Errorf("field fee_denom of message sunrise.fee.Params is not mutable"))
+	case "sunrise.fee.Params.burn_rate":
+		panic(fmt.Errorf("field burn_rate of message sunrise.fee.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.Params"))
@@ -188,6 +301,13 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.fee.Params.fee_denom":
+		return protoreflect.ValueOfString("")
+	case "sunrise.fee.Params.burn_rate":
+		return protoreflect.ValueOfString("")
+	case "sunrise.fee.Params.bypass_denoms":
+		list := []string{}
+		return protoreflect.ValueOfList(&_Params_3_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.Params"))
@@ -257,6 +377,20 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		l = len(x.FeeDenom)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.BurnRate)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.BypassDenoms) > 0 {
+			for _, s := range x.BypassDenoms {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -285,6 +419,29 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.BypassDenoms) > 0 {
+			for iNdEx := len(x.BypassDenoms) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.BypassDenoms[iNdEx])
+				copy(dAtA[i:], x.BypassDenoms[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BypassDenoms[iNdEx])))
+				i--
+				dAtA[i] = 0x1a
+			}
+		}
+		if len(x.BurnRate) > 0 {
+			i -= len(x.BurnRate)
+			copy(dAtA[i:], x.BurnRate)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BurnRate)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.FeeDenom) > 0 {
+			i -= len(x.FeeDenom)
+			copy(dAtA[i:], x.FeeDenom)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeDenom)))
+			i--
+			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -335,6 +492,102 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeDenom", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.FeeDenom = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BurnRate", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.BurnRate = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BypassDenoms", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.BypassDenoms = append(x.BypassDenoms, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -388,6 +641,10 @@ type Params struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	FeeDenom     string   `protobuf:"bytes,1,opt,name=fee_denom,json=feeDenom,proto3" json:"fee_denom,omitempty"`
+	BurnRate     string   `protobuf:"bytes,2,opt,name=burn_rate,json=burnRate,proto3" json:"burn_rate,omitempty"`
+	BypassDenoms []string `protobuf:"bytes,3,rep,name=bypass_denoms,json=bypassDenoms,proto3" json:"bypass_denoms,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -410,6 +667,27 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_sunrise_fee_params_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Params) GetFeeDenom() string {
+	if x != nil {
+		return x.FeeDenom
+	}
+	return ""
+}
+
+func (x *Params) GetBurnRate() string {
+	if x != nil {
+		return x.BurnRate
+	}
+	return ""
+}
+
+func (x *Params) GetBypassDenoms() []string {
+	if x != nil {
+		return x.BypassDenoms
+	}
+	return nil
+}
+
 var File_sunrise_fee_params_proto protoreflect.FileDescriptor
 
 var file_sunrise_fee_params_proto_rawDesc = []byte{
@@ -418,18 +696,29 @@ var file_sunrise_fee_params_proto_rawDesc = []byte{
 	0x69, 0x73, 0x65, 0x2e, 0x66, 0x65, 0x65, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61,
 	0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0x27, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x1d, 0xe8, 0xa0, 0x1f, 0x01,
-	0x8a, 0xe7, 0xb0, 0x2a, 0x14, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x66,
-	0x65, 0x65, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x89, 0x01, 0x0a, 0x0f, 0x63, 0x6f,
-	0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x66, 0x65, 0x65, 0x42, 0x0b, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1c, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x66, 0x65, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x46, 0x58,
-	0xaa, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x46, 0x65, 0x65, 0xca, 0x02,
-	0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0xe2, 0x02, 0x17, 0x53,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x3a, 0x3a, 0x46, 0x65, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xbe, 0x01, 0x0a, 0x06,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x66, 0x65, 0x65, 0x5f, 0x64, 0x65,
+	0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x66, 0x65, 0x65, 0x44, 0x65,
+	0x6e, 0x6f, 0x6d, 0x12, 0x53, 0x0a, 0x09, 0x62, 0x75, 0x72, 0x6e, 0x5f, 0x72, 0x61, 0x74, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x36, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
+	0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0xd2, 0xb4, 0x2d, 0x0a, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x44, 0x65, 0x63, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x08,
+	0x62, 0x75, 0x72, 0x6e, 0x52, 0x61, 0x74, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x62, 0x79, 0x70, 0x61,
+	0x73, 0x73, 0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52,
+	0x0c, 0x62, 0x79, 0x70, 0x61, 0x73, 0x73, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x73, 0x3a, 0x1d, 0xe8,
+	0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x14, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f,
+	0x78, 0x2f, 0x66, 0x65, 0x65, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x89, 0x01, 0x0a,
+	0x0f, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x66, 0x65, 0x65,
+	0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x1c, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x66, 0x65, 0x65, 0xa2, 0x02, 0x03,
+	0x53, 0x46, 0x58, 0xaa, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x46, 0x65,
+	0x65, 0xca, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0xe2,
+	0x02, 0x17, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x3a, 0x3a, 0x46, 0x65, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
