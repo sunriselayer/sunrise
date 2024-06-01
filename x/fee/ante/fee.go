@@ -147,7 +147,7 @@ func DeductFees(bankKeeper BankKeeper, ctx sdk.Context, acc sdk.AccountI, fees s
 		if fee.Denom != params.FeeDenom {
 			continue
 		}
-		burnAmount := params.BurnRate.MulInt(fee.Amount).TruncateInt()
+		burnAmount := params.BurnRatio.MulInt(fee.Amount).TruncateInt()
 
 		// skip if burn amount is zero
 		if burnAmount.IsZero() {

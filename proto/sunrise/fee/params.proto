@@ -14,7 +14,7 @@ message Params {
   option (gogoproto.equal) = true;
 
   string fee_denom = 1;
-  string burn_rate = 2 [
+  string burn_ratio = 2 [
     (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable)   = false,
