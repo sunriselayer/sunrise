@@ -13,7 +13,7 @@ import (
 
 // checkTxFeeWithValidatorMinGasPrices implements the default fee logic, where the minimum price per
 // unit of gas is fixed and set by each validator, can the tx priority is computed from the gas price.
-func CheckTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
+func checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
 	feeTx, ok := tx.(sdk.FeeTx)
 	if !ok {
 		return nil, 0, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
@@ -27,24 +27,6 @@ func CheckTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx) (sdk.Coins,
 	// is only ran on check tx.
 	if ctx.ExecMode() == sdk.ExecModeCheck { // NOTE: using environment here breaks the API of fee logic, an alternative must be found for server/v2. ref: https://github.com/cosmos/cosmos-sdk/issues/19640
 		minGasPrices := ctx.MinGasPrices()
-
-		// <sunrise>
-		var index *int
-		for i, minGasPrice := range minGasPrices {
-			if minGasPrice.Denom == "" {
-				index = &i
-				break
-			}
-		}
-
-		decCoin := sdk.NewInt64DecCoin("", 1)
-		if index != nil {
-			minGasPrices[*index] = decCoin
-		} else {
-			minGasPrices = append(minGasPrices, decCoin)
-		}
-		// </sunrise>
-
 		if !minGasPrices.IsZero() {
 			requiredFees := make(sdk.Coins, len(minGasPrices))
 
