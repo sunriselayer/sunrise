@@ -23,6 +23,20 @@ type IBCMiddleware struct {
 	keeper *keeper.Keeper
 }
 
+// NewIBCMiddleware creates a new IBCMiddleware given the keeper and underlying application.
+func NewIBCMiddleware(
+	app porttypes.IBCModule,
+	k *keeper.Keeper,
+) IBCMiddleware {
+	return IBCMiddleware{
+		IBCModule: app,
+		keeper:    k,
+	}
+}
+
+// OnRecvPacket checks the memo field on this packet and if the metadata inside's root key indicates this packet
+// should be handled by the swap middleware it attempts to perform a swap. If the swap is successful
+// the underlying application's OnRecvPacket callback is invoked, an ack error is returned otherwise.
 func (im *IBCMiddleware) OnRecvPacket(
 	ctx sdk.Context,
 	packet channeltypes.Packet,
