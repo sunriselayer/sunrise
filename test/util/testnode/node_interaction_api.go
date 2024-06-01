@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"github.com/sunriselayer/sunrise/pkg/blob"
@@ -28,6 +27,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 const (
@@ -41,7 +42,7 @@ type Context struct {
 }
 
 func NewContext(goCtx context.Context, kr keyring.Keyring, tmCfg *tmconfig.Config, chainID string) Context {
-	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	ecfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	cctx := client.Context{}.
 		WithKeyring(kr).
 		WithHomeDir(tmCfg.RootDir).

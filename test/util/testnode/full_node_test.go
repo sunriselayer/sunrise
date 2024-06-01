@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	apprand "github.com/sunriselayer/sunrise/pkg/random"
@@ -19,6 +18,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 func TestIntegrationTestSuite(t *testing.T) {
@@ -39,7 +40,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	t := s.T()
 	s.accounts = RandomAccounts(10)
 
-	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	ecfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	blobGenState := blobtypes.DefaultGenesis()
 	blobGenState.Params.GovMaxSquareSize = uint64(appconsts.DefaultSquareSizeUpperBound)
 

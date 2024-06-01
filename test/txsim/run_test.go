@@ -11,9 +11,9 @@ import (
 	"time"
 
 	blob "github.com/sunriselayer/sunrise/api/sunrise/blob/v1"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/test/txsim"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
@@ -29,7 +29,7 @@ func TestTxSimulator(t *testing.T) {
 		t.Skip("skipping TestTxSimulator in short mode.")
 	}
 
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	testCases := []struct {
 		name        string
 		sequences   []txsim.Sequence

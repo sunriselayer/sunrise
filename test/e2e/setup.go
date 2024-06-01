@@ -21,7 +21,9 @@ import (
 	slashing "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/sunriselayer/sunrise/app"
+	testutil "github.com/sunriselayer/sunrise/test/util"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
+
 	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
@@ -33,8 +35,8 @@ type Account struct {
 }
 
 func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
-	encCdc := encoding.MakeConfig(app.ModuleEncodingRegisters...)
-	appGenState := app.ModuleBasics().DefaultGenesis(encCdc.Codec)
+	encCdc := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
+	appGenState := testutil.ModuleBasics.DefaultGenesis(encCdc.Codec)
 	bankGenesis := bank.DefaultGenesisState()
 	stakingGenesis := staking.DefaultGenesisState()
 	slashingGenesis := slashing.DefaultGenesisState()
@@ -117,7 +119,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	appGenState[staking.ModuleName] = encCdc.Codec.MustMarshalJSON(stakingGenesis)
 	appGenState[slashing.ModuleName] = encCdc.Codec.MustMarshalJSON(slashingGenesis)
 
-	if err := app.ModuleBasics().ValidateGenesis(encCdc.Codec, encCdc.TxConfig, appGenState); err != nil {
+	if err := testutil.ModuleBasics.ValidateGenesis(encCdc.Codec, encCdc.TxConfig, appGenState); err != nil {
 		return types.GenesisDoc{}, fmt.Errorf("validating genesis: %w", err)
 	}
 

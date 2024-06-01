@@ -23,6 +23,8 @@ import (
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 func New(t *testing.T, config network.Config, genAccNames ...string) *network.Network {
@@ -67,7 +69,7 @@ func GRPCConn(net *network.Network) error {
 // genesis and single validator. All other parameters are inherited from
 // cosmos-sdk/testutil/network.DefaultConfig
 func DefaultConfig() network.Config {
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 
 	return network.Config{
 		Codec:             encCfg.Codec,
@@ -82,7 +84,7 @@ func DefaultConfig() network.Config {
 			)
 			return a
 		},
-		GenesisState:    app.ModuleBasics().DefaultGenesis(encCfg.Codec),
+		GenesisState:    testencoding.ModuleBasics.DefaultGenesis(encCfg.Codec),
 		TimeoutCommit:   2 * time.Second,
 		ChainID:         "chain-" + tmrand.Str(6),
 		NumValidators:   1,

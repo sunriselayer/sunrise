@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/hex"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
@@ -18,6 +17,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	"github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 func TestAddress() sdk.AccAddress {
@@ -43,7 +44,7 @@ func QueryWithoutProof(clientCtx client.Context, hashHexStr string) (*rpctypes.R
 }
 
 func NewKeyring(accounts ...string) (keyring.Keyring, []sdk.AccAddress) {
-	cdc := encoding.MakeConfig(app.ModuleEncodingRegisters...).Codec
+	cdc := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...).Codec
 	kb := keyring.NewInMemory(cdc)
 
 	addresses := make([]sdk.AccAddress, len(accounts))

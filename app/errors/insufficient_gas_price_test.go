@@ -10,7 +10,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	apperr "github.com/sunriselayer/sunrise/app/errors"
@@ -18,6 +17,7 @@ import (
 	apprand "github.com/sunriselayer/sunrise/pkg/random"
 	"github.com/sunriselayer/sunrise/pkg/user"
 	testutil "github.com/sunriselayer/sunrise/test/util"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
 	blob "github.com/sunriselayer/sunrise/x/blob/types"
 )
@@ -36,7 +36,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)
 	addr := testfactory.GetAddress(kr, account)
-	enc := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	enc := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	acc := testutil.DirectQueryAccount(testApp, addr)
 	signer, err := user.NewSigner(kr, nil, addr, enc.TxConfig, testutil.ChainID, acc.GetAccountNumber(), acc.GetSequence())
 	require.NoError(t, err)

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"cosmossdk.io/log"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 
@@ -16,6 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 // Genesis manages the creation of the genesis state of a network. It is meant
@@ -48,7 +48,7 @@ type Genesis struct {
 
 // NewDefaultGenesis creates a new default genesis with no accounts or validators.
 func NewDefaultGenesis() *Genesis {
-	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	ecfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	cparams := defaultoverrides.DefaultConsensusParams().ToProto()
 	g := &Genesis{
 		ecfg:            ecfg,
