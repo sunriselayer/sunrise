@@ -233,10 +233,13 @@ var (
 		// ibctransfertypes.ModuleName,
 		// ibcfeetypes.ModuleName,
 		// icatypes.ModuleName,
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
-		// tokenconvertermoduletypes.ModuleName,
-		// liquiditypoolmoduletypes.ModuleName,
+		blobmoduletypes.ModuleName,
+		streammoduletypes.ModuleName,
+		tokenconvertermoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
+		liquidityincentivemoduletypes.ModuleName,
+		swapmoduletypes.ModuleName,
+		feemoduletypes.ModuleName,
 	}
 
 	// appConfig application configuration (used by depinject)
