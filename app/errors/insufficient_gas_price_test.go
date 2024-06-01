@@ -11,6 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	apperr "github.com/sunriselayer/sunrise/app/errors"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
@@ -30,7 +31,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 		gasPrice         = float64(feeAmount) / float64(gasLimit)
 	)
 	account := "test"
-	testApp, kr := testutil.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), account)
+	testApp, kr := testutil.SetupTestAppWithGenesisValSet(defaultoverrides.DefaultConsensusParams(), account)
 	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom))
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)

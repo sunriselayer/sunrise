@@ -22,6 +22,7 @@ import (
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 )
@@ -126,7 +127,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	}
 
 	// Validator set and app hash are set in InitChain
-	consensusParamsTmp := app.DefaultConsensusParams()
+	consensusParamsTmp := defaultoverrides.DefaultConsensusParams()
 	return types.GenesisDoc{
 		ChainID:     "testnet",
 		GenesisTime: time.Now().UTC(),
