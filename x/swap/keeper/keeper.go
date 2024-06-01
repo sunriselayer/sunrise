@@ -24,8 +24,6 @@ type (
 
 		accountKeeper types.AccountKeeper
 		bankKeeper    types.BankKeeper
-		ics4Wrapper   porttypes.ICS4Wrapper
-		swapKeeper    types.SwapKeeper
 
 		ibcKeeperFn func() *ibckeeper.Keeper
 	}
@@ -39,7 +37,6 @@ func NewKeeper(
 
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
-	ics4Wrapper porttypes.ICS4Wrapper,
 	swapKeeper types.SwapKeeper,
 	ibcKeeperFn func() *ibckeeper.Keeper,
 ) Keeper {
