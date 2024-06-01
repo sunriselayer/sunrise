@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 
+	feemodule "github.com/sunriselayer/sunrise/x/fee/module"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 )
 
 // FeeModuleBasic defines a custom wrapper around the x/fee module's AppModuleBasic
 // implementation to provide custom default genesis state.
 type FeeModuleBasic struct {
-	bank.AppModuleBasic
+	feemodule.AppModuleBasic
 }
 
 // DefaultGenesis returns custom x/fee module genesis state.

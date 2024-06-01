@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 
+	tokenconvertermodule "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // TokenConverterModuleBasic defines a custom wrapper around the x/tokenconverter module's AppModuleBasic
 // implementation to provide custom default genesis state.
 type TokenConverterModuleBasic struct {
-	bank.AppModuleBasic
+	tokenconvertermodule.AppModuleBasic
 }
 
 // DefaultGenesis returns custom x/tokenconverter module genesis state.
