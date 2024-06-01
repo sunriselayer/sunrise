@@ -16,6 +16,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	// this line is used by starport scaffolding # 1
@@ -23,8 +24,6 @@ import (
 	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/swap/module"
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
-
-	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 )
 
 var (
@@ -182,10 +181,11 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	ICS4Wrapper   porttypes.ICS4Wrapper
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
 	SwapKeeper    types.SwapKeeper
+
+	IBCKeeperFn func() *ibckeeper.Keeper `optional:"true"`
 }
 
 type ModuleOutputs struct {
@@ -206,10 +206,10 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
-		in.ICS4Wrapper,
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.SwapKeeper,
+		in.IBCKeeperFn,
 	)
 	m := NewAppModule(
 		in.Cdc,
