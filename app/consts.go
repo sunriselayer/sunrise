@@ -5,7 +5,6 @@ import (
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/sunriselayer/sunrise/app/encoding"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	blobmodule "github.com/sunriselayer/sunrise/x/blob/module"
 	bsmodule "github.com/sunriselayer/sunrise/x/blobstream/module"
 	feemodule "github.com/sunriselayer/sunrise/x/fee/module"
@@ -30,15 +29,6 @@ import (
 	capability "github.com/cosmos/ibc-go/modules/capability"
 	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
-)
-
-const (
-	// BondDenom defines the native staking token denomination.
-	BondDenom = appconsts.BondDenom
-	// BondDenomAlias defines an alias for BondDenom.
-	BondDenomAlias = "micro-sr"
-	// DisplayDenom defines the name, symbol, and display value of the Celestia token.
-	DisplayDenom = "SR"
 )
 
 var (

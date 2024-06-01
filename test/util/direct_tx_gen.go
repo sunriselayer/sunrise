@@ -16,6 +16,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"github.com/sunriselayer/sunrise/pkg/blob"
 	"github.com/sunriselayer/sunrise/pkg/user"
 	"github.com/sunriselayer/sunrise/test/util/blobfactory"
@@ -208,7 +209,7 @@ func SendTxWithManualSequence(
 	signer, err := user.NewSigner(kr, nil, fromAddr, cfg, chainid, accountNum, sequence)
 	require.NoError(t, err)
 
-	msg := banktypes.NewMsgSend(fromAddr, toAddr, sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewIntFromUint64(amount))))
+	msg := banktypes.NewMsgSend(fromAddr, toAddr, sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewIntFromUint64(amount))))
 	stx, err := signer.CreateTx([]sdk.Msg{msg}, opts...)
 	require.NoError(t, err)
 	return stx

@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"github.com/sunriselayer/sunrise/pkg/user"
 	util "github.com/sunriselayer/sunrise/test/util"
 	"github.com/sunriselayer/sunrise/test/util/blobfactory"
@@ -65,7 +65,7 @@ func (s *SignerTestSuite) TestSubmitTx() {
 	t := s.T()
 	fee := user.SetFee(1e6)
 	gas := user.SetGasLimit(1e6)
-	msg := bank.NewMsgSend(s.signer.Address(), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(app.BondDenom, 10)))
+	msg := bank.NewMsgSend(s.signer.Address(), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(appconsts.BondDenom, 10)))
 	resp, err := s.signer.SubmitTx(s.ctx.GoContext(), []sdk.Msg{msg}, fee, gas)
 	require.NoError(t, err)
 	require.EqualValues(t, 0, resp.Code)
@@ -87,7 +87,7 @@ func (s *SignerTestSuite) TestGasConsumption() {
 	t := s.T()
 
 	usrToSend := int64(1)
-	msg := bank.NewMsgSend(s.signer.Address(), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(app.BondDenom, usrToSend)))
+	msg := bank.NewMsgSend(s.signer.Address(), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(appconsts.BondDenom, usrToSend)))
 
 	gasPrice := int64(1)
 	gasLimit := uint64(1e6)
@@ -118,5 +118,5 @@ func (s *SignerTestSuite) queryCurrentBalance(t *testing.T) int64 {
 	balanceQuery := bank.NewQueryClient(s.ctx.GRPCClient)
 	balanceResp, err := balanceQuery.AllBalances(s.ctx.GoContext(), &bank.QueryAllBalancesRequest{Address: s.signer.Address().String()})
 	require.NoError(t, err)
-	return balanceResp.Balances.AmountOf(app.BondDenom).Int64()
+	return balanceResp.Balances.AmountOf(appconsts.BondDenom).Int64()
 }

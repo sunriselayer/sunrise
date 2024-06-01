@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/sunriselayer/sunrise/app"
 	blobtypes "github.com/sunriselayer/sunrise/x/blob/types"
 	bstypes "github.com/sunriselayer/sunrise/x/blobstream/types"
 
@@ -15,6 +14,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 )
 
 // Modifier allows for arbitrary changes to be made on the genesis state
@@ -37,7 +38,7 @@ func SetBlobParams(codec codec.Codec, params blobtypes.Params) Modifier {
 func ImmediateProposals(codec codec.Codec) Modifier {
 	return func(state map[string]json.RawMessage) map[string]json.RawMessage {
 		gs := v1.DefaultGenesisState()
-		gs.DepositParams.MinDeposit = sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(1)))
+		gs.DepositParams.MinDeposit = sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(1)))
 		gs.TallyParams.Quorum = "0.000001"
 		gs.TallyParams.Threshold = "0.000001"
 		vp := time.Second * 5

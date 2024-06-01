@@ -35,30 +35,51 @@ type bankModule struct {
 
 // DefaultGenesis returns custom x/bank module genesis state.
 func (bankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	metadata := banktypes.Metadata{
-		Description: "The native token of the Sunrise network.",
-		Base:        BondDenom,
-		Name:        DisplayDenom,
-		Display:     DisplayDenom,
-		Symbol:      DisplayDenom,
+	metadataFee := banktypes.Metadata{
+		Description: "The native token of the Sunrise network for fees.",
 		DenomUnits: []*banktypes.DenomUnit{
 			{
-				Denom:    BondDenom,
+				Denom:    "urise",
 				Exponent: 0,
-				Aliases: []string{
-					BondDenomAlias,
-				},
 			},
 			{
-				Denom:    DisplayDenom,
+				Denom:    "rise",
 				Exponent: 6,
-				Aliases:  []string{},
 			},
 		},
+		Base:    "urise",
+		Display: "rise",
+		Name:    "Sunrise RISE",
+		Symbol:  "RISE",
+	}
+	metadataBond := banktypes.Metadata{
+		Description: "The native token of the Sunrise network for staking. This token is non transferrable. This token can be retrieved by providing liquidity.",
+		DenomUnits: []*banktypes.DenomUnit{
+			{
+				Denom:    "uvrise",
+				Exponent: 0,
+			},
+			{
+				Denom:    "vrise",
+				Exponent: 6,
+			},
+		},
+		Base:    "uvrise",
+		Display: "vrise",
+		Name:    "Sunrise VRISE",
+		Symbol:  "VRISE",
+	}
+
+	sendEnabledVrise := banktypes.SendEnabled{
+		Denom:   "uvrise",
+		Enabled: false,
 	}
 
 	genState := banktypes.DefaultGenesisState()
-	genState.DenomMetadata = append(genState.DenomMetadata, metadata)
+	genState.DenomMetadata = append(genState.DenomMetadata, metadataFee)
+	genState.DenomMetadata = append(genState.DenomMetadata, metadataBond)
+
+	genState.SendEnabled = append(genState.SendEnabled, sendEnabledVrise)
 
 	return cdc.MustMarshalJSON(genState)
 }
@@ -73,7 +94,7 @@ type stakingModule struct {
 func (stakingModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	params := stakingtypes.DefaultParams()
 	params.UnbondingTime = appconsts.DefaultUnbondingTime
-	params.BondDenom = BondDenom
+	params.BondDenom = appconsts.BondDenom
 	params.MinCommissionRate = sdkmath.LegacyNewDecWithPrec(5, 2) // 5%
 
 	return cdc.MustMarshalJSON(&stakingtypes.GenesisState{
@@ -108,7 +129,7 @@ type crisisModule struct {
 // DefaultGenesis returns custom x/crisis module genesis state.
 func (crisisModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	return cdc.MustMarshalJSON(&crisistypes.GenesisState{
-		ConstantFee: sdk.NewCoin(BondDenom, sdkmath.NewInt(1000)),
+		ConstantFee: sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(1000)),
 	})
 }
 
@@ -138,7 +159,7 @@ func (govModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	day := time.Duration(time.Hour * 24)
 	oneWeek := day * 7
 
-	genState.Params.MinDeposit = sdk.NewCoins(sdk.NewCoin(BondDenom, sdkmath.NewInt(10_000_000_000))) // 10,000 TIA
+	genState.Params.MinDeposit = sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(10_000_000_000))) // 10,000 TIA
 	genState.Params.MaxDepositPeriod = &oneWeek
 	genState.Params.VotingPeriod = &oneWeek
 
@@ -225,6 +246,6 @@ func DefaultAppConfig() *serverconfig.Config {
 	// snapshots to nodes that state sync
 	cfg.StateSync.SnapshotInterval = 1500
 	cfg.StateSync.SnapshotKeepRecent = 2
-	cfg.MinGasPrices = fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, BondDenom)
+	cfg.MinGasPrices = fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom)
 	return cfg
 }

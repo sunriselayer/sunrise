@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"github.com/sunriselayer/sunrise/pkg/blob"
@@ -142,7 +141,7 @@ func TestValidateBlobTx(t *testing.T) {
 			getTx: func() blob.BlobTx {
 				signerAddr := signer.Address()
 
-				sendMsg := banktypes.NewMsgSend(signerAddr, signerAddr, sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(10))))
+				sendMsg := banktypes.NewMsgSend(signerAddr, signerAddr, sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(10))))
 				tx := blobfactory.ComplexBlobTxWithOtherMsgs(
 					t,
 					tmrand.NewRand(),

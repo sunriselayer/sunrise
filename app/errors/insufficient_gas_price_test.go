@@ -31,7 +31,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	)
 	account := "test"
 	testApp, kr := testutil.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), account)
-	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, app.BondDenom))
+	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom))
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)
 	addr := testfactory.GetAddress(kr, account)
@@ -40,7 +40,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	signer, err := user.NewSigner(kr, nil, addr, enc.TxConfig, testutil.ChainID, acc.GetAccountNumber(), acc.GetSequence())
 	require.NoError(t, err)
 
-	fee := sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(feeAmount)))
+	fee := sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(feeAmount)))
 	b, err := blob.NewBlob(apprand.RandomNamespace(), []byte("hello world"), 0)
 	require.NoError(t, err)
 
