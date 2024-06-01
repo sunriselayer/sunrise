@@ -33,6 +33,8 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v8/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
+
+	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
@@ -139,7 +141,9 @@ func (app *App) registerIBCModules() {
 	app.GovKeeper.SetLegacyRouter(govRouter)
 
 	// Create IBC modules with ibcfee middleware
-	transferIBCModule := ibcfee.NewIBCMiddleware(ibctransfer.NewIBCModule(app.TransferKeeper), app.IBCFeeKeeper)
+	// transferIBCModule := ibcfee.NewIBCMiddleware(ibctransfer.NewIBCModule(app.TransferKeeper), app.IBCFeeKeeper)
+	transferIBCModuleIbcFee := ibcfee.NewIBCMiddleware(ibctransfer.NewIBCModule(app.TransferKeeper), app.IBCFeeKeeper)
+	transferIBCModule := swapmodule.NewIBCMiddleware(transferIBCModuleIbcFee, app.SwapKeeper)
 
 	// integration point for custom authentication modules
 	var noAuthzModule porttypes.IBCModule
