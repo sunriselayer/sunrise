@@ -31,7 +31,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 		gasPrice         = float64(feeAmount) / float64(gasLimit)
 	)
 	account := "test"
-	testApp, kr := testutil.SetupTestAppWithGenesisValSet(defaultoverrides.DefaultConsensusParams(), account)
+	testApp, kr := testutil.SetupTestAppWithGenesisValSet(defaultoverrides.DefaultConsensusParams().ToProto(), account)
 	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom))
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)

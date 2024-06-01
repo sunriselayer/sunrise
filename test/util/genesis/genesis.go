@@ -49,9 +49,10 @@ type Genesis struct {
 // NewDefaultGenesis creates a new default genesis with no accounts or validators.
 func NewDefaultGenesis() *Genesis {
 	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	cparams := defaultoverrides.DefaultConsensusParams().ToProto()
 	g := &Genesis{
 		ecfg:            ecfg,
-		ConsensusParams: defaultoverrides.DefaultConsensusParams(),
+		ConsensusParams: &cparams,
 		ChainID:         "test-app", // tmrand.Str(6), (for err check in v0.50)
 		GenesisTime:     time.Now(),
 		kr:              keyring.NewInMemory(ecfg.Codec),

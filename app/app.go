@@ -53,6 +53,11 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
+
 	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
 	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
@@ -167,7 +172,16 @@ func AppConfig() depinject.Config {
 			// supply custom module basics
 			map[string]module.AppModuleBasic{
 				genutiltypes.ModuleName: genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
-				govtypes.ModuleName:     gov.NewAppModuleBasic(getGovProposalHandlers()),
+				// govtypes.ModuleName:     gov.NewAppModuleBasic(getGovProposalHandlers()),
+
+				// overrides
+				banktypes.ModuleName:   defaultoverrides.BankModuleBasic{},
+				crisistypes.ModuleName: defaultoverrides.CrisisModuleBasic{},
+				govtypes.ModuleName: defaultoverrides.GovModuleBasic{
+					AppModuleBasic: gov.NewAppModuleBasic(getGovProposalHandlers()),
+				},
+				stakingtypes.ModuleName: defaultoverrides.StakingModuleBasic{},
+
 				// this line is used by starport scaffolding # stargate/appConfig/moduleBasic
 			},
 		),

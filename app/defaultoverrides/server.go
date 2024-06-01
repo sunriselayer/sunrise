@@ -7,7 +7,7 @@ import (
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 )
 
-func DefaultAppConfig() *serverconfig.Config {
+func DefaultServerConfig() *serverconfig.Config {
 	cfg := serverconfig.DefaultConfig()
 	cfg.API.Enable = false
 	cfg.GRPC.Enable = false

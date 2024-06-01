@@ -73,7 +73,7 @@ func ModuleBasics() sdkmodule.BasicManager {
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 
-	moduleBasics := sdkmodule.BasicManager{}
+	var moduleBasics sdkmodule.BasicManager
 
 	moduleBasics = sdkmodule.NewBasicManager(
 		auth.AppModuleBasic{},
