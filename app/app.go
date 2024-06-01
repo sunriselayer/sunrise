@@ -55,6 +55,7 @@ import (
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
@@ -182,6 +183,7 @@ func AppConfig() depinject.Config {
 				govtypes.ModuleName: defaultoverrides.GovModuleBasic{
 					AppModuleBasic: gov.NewAppModuleBasic(getGovProposalHandlers()),
 				},
+				minttypes.ModuleName:           defaultoverrides.MintModuleBasic{},
 				stakingtypes.ModuleName:        defaultoverrides.StakingModuleBasic{},
 				tokenconvertertypes.ModuleName: defaultoverrides.TokenConverterModuleBasic{},
 				feetypes.ModuleName:            defaultoverrides.FeeModuleBasic{},

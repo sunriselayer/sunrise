@@ -17,9 +17,9 @@ type TokenConverterModuleBasic struct {
 
 // DefaultGenesis returns custom x/tokenconverter module genesis state.
 func (m TokenConverterModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	genesis := tokenconvertertypes.DefaultGenesis()
-	genesis.Params.BondDenom = "uvrise"
-	genesis.Params.FeeDenom = "urise"
+	genState := tokenconvertertypes.DefaultGenesis()
+	genState.Params.BondDenom = "uvrise"
+	genState.Params.FeeDenom = "urise"
 
-	return cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genState)
 }

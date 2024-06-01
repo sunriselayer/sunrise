@@ -17,9 +17,9 @@ type FeeModuleBasic struct {
 
 // DefaultGenesis returns custom x/fee module genesis state.
 func (FeeModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	genesis := feetypes.DefaultGenesis()
-	genesis.Params.FeeDenom = "urise"
-	genesis.Params.BypassDenoms = []string{"uvrise"}
+	genState := feetypes.DefaultGenesis()
+	genState.Params.FeeDenom = "urise"
+	genState.Params.BypassDenoms = []string{"uvrise"}
 
-	return cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genState)
 }
