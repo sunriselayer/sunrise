@@ -1,11 +1,7 @@
 # tokenconverter
 
-This module is for converting `SSR` to `SR` token equivalently if the following rule satisfies
+This module is for converting `VRISE` to `RISE` token equivalently if the following rule satisfies
 
 $$
-  \text{if} \ \text{CurrentSupplySR} + \text{OutputSR} \le \text{MaxSupplySR}
+  \text{if} \ \text{CurrentSupplyRISE} + \text{OutputRISE} \le \text{MaxSupplyRISE}
 $$
-
-## Ante Handler
-
-Only for `BlobTx`, this module accept SSR paid for fee.

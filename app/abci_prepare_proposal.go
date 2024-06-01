@@ -50,8 +50,9 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 	handler := ante.NewAnteHandler(
 		app.AccountKeeper,
 		app.BankKeeper,
-		app.BlobKeeper,
 		app.FeeGrantKeeper,
+		app.BlobKeeper,
+		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,

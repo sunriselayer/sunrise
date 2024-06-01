@@ -9,6 +9,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	feekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
+	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 )
 
 // TxFeeChecker check if the provided fee is enough and returns the effective fee and tx priority,
@@ -21,18 +24,20 @@ type TxFeeChecker func(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error)
 // CONTRACT: Tx must implement FeeTx interface to use DeductFeeDecorator
 type DeductFeeDecorator struct {
 	accountKeeper  AccountKeeper
-	bankKeeper     types.BankKeeper
+	bankKeeper     BankKeeper
 	feegrantKeeper FeegrantKeeper
+	feeKeeper      feekeeper.Keeper
 	txFeeChecker   TxFeeChecker
 }
 
-func NewDeductFeeDecorator(ak AccountKeeper, bk types.BankKeeper, fk FeegrantKeeper) DeductFeeDecorator {
-	tfc := checkTxFeeWithValidatorMinGasPrices
+func NewDeductFeeDecorator(ak AccountKeeper, bk BankKeeper, fk FeegrantKeeper, k feekeeper.Keeper) DeductFeeDecorator {
+	tfc := checkTxFeeWithValidatorMinGasPrices(k)
 
 	return DeductFeeDecorator{
 		accountKeeper:  ak,
 		bankKeeper:     bk,
 		feegrantKeeper: fk,
+		feeKeeper:      k,
 		txFeeChecker:   tfc,
 	}
 }
@@ -106,7 +111,7 @@ func (dfd DeductFeeDecorator) checkDeductFee(ctx sdk.Context, sdkTx sdk.Tx, fee 
 
 	// deduct the fees
 	if !fee.IsZero() {
-		err := DeductFees(dfd.bankKeeper, ctx, deductFeesFromAcc, fee)
+		err := DeductFees(dfd.bankKeeper, ctx, deductFeesFromAcc, fee, dfd.feeKeeper)
 		if err != nil {
 			return err
 		}
@@ -125,7 +130,7 @@ func (dfd DeductFeeDecorator) checkDeductFee(ctx sdk.Context, sdkTx sdk.Tx, fee 
 }
 
 // DeductFees deducts fees from the given account.
-func DeductFees(bankKeeper types.BankKeeper, ctx sdk.Context, acc sdk.AccountI, fees sdk.Coins) error {
+func DeductFees(bankKeeper BankKeeper, ctx sdk.Context, acc sdk.AccountI, fees sdk.Coins, feeKeeper feekeeper.Keeper) error {
 	if !fees.IsValid() {
 		return errorsmod.Wrapf(sdkerrors.ErrInsufficientFee, "invalid fee amount: %s", fees)
 	}
@@ -134,6 +139,38 @@ func DeductFees(bankKeeper types.BankKeeper, ctx sdk.Context, acc sdk.AccountI, 
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, err.Error())
 	}
+
+	// <sunrise>
+	params := feeKeeper.GetParams(ctx)
+	for _, fee := range fees {
+		// skip if fee is not the fee denom
+		if fee.Denom != params.FeeDenom {
+			continue
+		}
+		burnAmount := params.BurnRate.MulInt(fee.Amount).TruncateInt()
+
+		// skip if burn amount is zero
+		if burnAmount.IsZero() {
+			continue
+		}
+
+		burnCoins := sdk.NewCoins(sdk.NewCoin(fee.Denom, burnAmount))
+
+		// burn coins from the fee module account
+		err := bankKeeper.SendCoinsFromModuleToModule(ctx,
+			types.FeeCollectorName,
+			feetypes.ModuleName,
+			burnCoins,
+		)
+		if err != nil {
+			return errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, err.Error())
+		}
+
+		if err := bankKeeper.BurnCoins(ctx, feetypes.ModuleName, burnCoins); err != nil {
+			return err
+		}
+	}
+	// </sunrise>
 
 	return nil
 }
