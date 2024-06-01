@@ -14,9 +14,9 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params instance
-func NewParams(govDenom string, feeDenom string, maxSupplyFee math.Int) Params {
+func NewParams(bondDenom string, feeDenom string, maxSupplyFee math.Int) Params {
 	return Params{
-		GovDenom:     govDenom,
+		BondDenom:    bondDenom,
 		FeeDenom:     feeDenom,
 		MaxSupplyFee: maxSupplyFee,
 	}
@@ -38,8 +38,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if p.GovDenom == "" {
-		return ErrEmptyGovDenom
+	if p.BondDenom == "" {
+		return ErrEmptyBondDenom
 	}
 
 	if p.FeeDenom == "" {
