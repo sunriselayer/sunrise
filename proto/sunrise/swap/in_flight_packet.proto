@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sunrise.swap;
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+message InFlightPacket {
+  string index = 1; 
+  
+}
+
