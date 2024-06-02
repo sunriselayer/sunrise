@@ -28,6 +28,12 @@ func (m *SwapMetadata) Validate() error {
 		return err
 	}
 
+	if m.ReturnAmountIn != nil {
+		if err := m.ReturnAmountIn.Validate(); err != nil {
+			return err
+		}
+	}
+
 	if m.Forward != nil {
 		if err := m.Forward.Validate(); err != nil {
 			return err

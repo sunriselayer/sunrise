@@ -11,7 +11,7 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 )
 
-func (k Keeper) ForwardSwappedToken(
+func (k Keeper) TransferSwappedToken(
 	ctx context.Context,
 	swapper sdk.AccAddress,
 	token sdk.Coin,
