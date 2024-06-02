@@ -20,6 +20,7 @@ func (k Keeper) swapRoute(
 		if err != nil {
 			return math.Int{}, err
 		}
+
 	case *types.Route_Series:
 		for _, r := range strategy.Series.Routes {
 			amountOut, err = k.swapRoute(ctx, sender, r, amountIn)
@@ -28,6 +29,9 @@ func (k Keeper) swapRoute(
 			}
 			amountIn = amountOut
 		}
+		// No needs to do
+		// amountOut = amountIn
+
 	case *types.Route_Parallel:
 		// Calculate the sum of the weights
 		weightSum := math.LegacyZeroDec()
@@ -75,7 +79,15 @@ func (k Keeper) swapRoutePool(
 
 	// No needs to validate the denom,
 	// as liquiditypool side is responsible for ensuring the denom exists in the pool.
-	amountOut, err = k.liquidityPoolKeeper.SwapExactAmountIn(ctx, sender, pool, tokenIn, denomOut, math.ZeroInt(), pool.FeeRate)
+	amountOut, err = k.liquidityPoolKeeper.SwapExactAmountIn(
+		ctx,
+		sender,
+		pool,
+		tokenIn,
+		denomOut,
+		math.ZeroInt(),
+		pool.FeeRate, // TODO: eliminate
+	)
 	if err != nil {
 		return math.Int{}, err
 	}
