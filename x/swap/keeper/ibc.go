@@ -3,39 +3,27 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
-	types "github.com/sunriselayer/sunrise/x/swap/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
+	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 )
 
-func (k Keeper) SetInFlightPackets(ctx context.Context, inFlightPackets map[string]types.InFlightPacket) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.InFlightPacketKey))
-
-	for key, value := range inFlightPackets {
-		key := key
-		value := value
-		bz := k.cdc.MustMarshal(&value)
-		store.Set([]byte(key), bz)
-	}
-}
-
-func (k Keeper) GetInFlightPackets(ctx context.Context) map[string]types.InFlightPacket {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.InFlightPacketKey))
-
-	inFlightPackets := make(map[string]types.InFlightPacket)
-
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
-
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.InFlightPacket
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		inFlightPackets[string(iterator.Key())] = val
+func (k Keeper) ForwardSwappedToken(
+	ctx context.Context,
+	swapper sdk.AccAddress,
+	token sdk.Coin,
+	metadata packetforwardtypes.ForwardMetadata,
+) error {
+	msgTransfer := transfertypes.MsgTransfer{}
+	// forward token to receiver
+	res, err := k.transferKeeper.Transfer(ctx, &msgTransfer)
+	if err != nil {
+		return err
 	}
 
-	return inFlightPackets
+	// TODO: save forwarding packet
+	_ = res.Sequence
+
+	return nil
 }

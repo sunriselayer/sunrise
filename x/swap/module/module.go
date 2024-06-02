@@ -181,9 +181,10 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper types.AccountKeeper
-	BankKeeper    types.BankKeeper
-	SwapKeeper    types.SwapKeeper
+	AccountKeeper       types.AccountKeeper
+	BankKeeper          types.BankKeeper
+	TransferKeeper      types.TransferKeeper
+	LiquidityPoolKeeper types.LiquidityPoolKeeper
 
 	IBCKeeperFn func() *ibckeeper.Keeper `optional:"true"`
 }
@@ -208,7 +209,8 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority.String(),
 		in.AccountKeeper,
 		in.BankKeeper,
-		in.SwapKeeper,
+		in.TransferKeeper,
+		in.LiquidityPoolKeeper,
 		in.IBCKeeperFn,
 	)
 	m := NewAppModule(

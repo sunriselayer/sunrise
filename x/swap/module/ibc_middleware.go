@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
@@ -15,8 +16,6 @@ import (
 	keeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	types "github.com/sunriselayer/sunrise/x/swap/types"
 )
-
-const ModuleName = "ibcswap"
 
 type IBCMiddleware struct {
 	porttypes.IBCModule
@@ -32,6 +31,47 @@ func NewIBCMiddleware(
 		IBCModule: app,
 		keeper:    k,
 	}
+}
+
+// receiveFunds receives funds from the packet into the override receiver
+// address and returns an error if the funds cannot be received.
+func (im IBCMiddleware) receiveFunds(
+	ctx sdk.Context,
+	packet channeltypes.Packet,
+	data transfertypes.FungibleTokenPacketData,
+	overrideReceiver string,
+	relayer sdk.AccAddress,
+) (exported.Acknowledgement, error) {
+	overrideData := transfertypes.FungibleTokenPacketData{
+		Denom:    data.Denom,
+		Amount:   data.Amount,
+		Sender:   data.Sender,
+		Receiver: overrideReceiver, // override receiver
+		// Memo explicitly zeroed
+	}
+	overrideDataBz := transfertypes.ModuleCdc.MustMarshalJSON(&overrideData)
+	overridePacket := channeltypes.Packet{
+		Sequence:           packet.Sequence,
+		SourcePort:         packet.SourcePort,
+		SourceChannel:      packet.SourceChannel,
+		DestinationPort:    packet.DestinationPort,
+		DestinationChannel: packet.DestinationChannel,
+		Data:               overrideDataBz, // override data
+		TimeoutHeight:      packet.TimeoutHeight,
+		TimeoutTimestamp:   packet.TimeoutTimestamp,
+	}
+
+	ack := im.IBCModule.OnRecvPacket(ctx, overridePacket, relayer)
+
+	if ack == nil {
+		return ack, fmt.Errorf("ack is nil")
+	}
+
+	if !ack.Success() {
+		return ack, fmt.Errorf("ack error: %s", string(ack.Acknowledgement()))
+	}
+
+	return ack, nil
 }
 
 // OnRecvPacket checks the memo field on this packet and if the metadata inside's root key indicates this packet
@@ -70,17 +110,60 @@ func (im IBCMiddleware) OnRecvPacket(
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
 
-	// TODO: swap
-	err = nil
+	// Prepare for swap
+	swapper, err := sdk.AccAddressFromBech32(data.Receiver) // TODO: override would be better
 	if err != nil {
-		ackErr := errors.Wrapf(sdkerrors.ErrInvalidType, "Failed to swap")
-
-		return channeltypes.NewErrorAcknowledgement(ackErr)
+		return channeltypes.NewErrorAcknowledgement(err)
+	}
+	amountIn, ok := sdkmath.NewIntFromString(data.Amount)
+	if !ok {
+		return channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrInvalidCoins, "invalid amount"))
 	}
 
-	// returning nil ack will prevent WriteAcknowledgement from occurring for forwarded packet.
-	// This is intentional so that the acknowledgement will be written later based on the ack/timeout of the forwarded packet.
-	return nil
+	// Settle the incoming fund
+	ack, err := im.receiveFunds(ctx, packet, data, swapper.String(), relayer)
+	if err != nil {
+		return channeltypes.NewErrorAcknowledgement(err)
+	}
+
+	// Swap
+	denomIn := data.Denom // TODO: convert ibc denom
+	tokenIn := sdk.NewCoin(denomIn, amountIn)
+	amountOut, err := im.keeper.RouteExactAmountIn(ctx, swapper, metadata.Routes, tokenIn, metadata.MinAmountOut)
+	if err != nil {
+		return channeltypes.NewErrorAcknowledgement(err)
+	}
+
+	if metadata.Forward != nil {
+		denomOut := metadata.Routes[len(metadata.Routes)-1].DenomOut
+		tokenOut := sdk.NewCoin(denomOut, amountOut)
+
+		err := im.keeper.ForwardSwappedToken(
+			ctx,
+			swapper,
+			tokenOut,
+			*metadata.Forward,
+		)
+		if err != nil {
+			return channeltypes.NewErrorAcknowledgement(err)
+		}
+
+		// returning nil ack will prevent WriteAcknowledgement from occurring for forwarded packet.
+		// This is intentional so that the acknowledgement will be written later based on the ack/timeout of the forwarded packet.
+		return nil
+	}
+
+	fullAck := types.SwapAcknowledgement{
+		AmountOut:   amountOut,
+		IncomingAck: ack.Acknowledgement(),
+	}
+
+	bz, err := fullAck.Acknowledgement()
+	if err != nil {
+		return channeltypes.NewErrorAcknowledgement(err)
+	}
+
+	return channeltypes.NewResultAcknowledgement(bz)
 }
 
 // OnAcknowledgementPacket implements the IBCModule interface.
