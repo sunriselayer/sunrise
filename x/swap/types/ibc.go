@@ -9,6 +9,8 @@ import (
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 )
 
+const DefaultRetryCount uint8 = 3
+
 type PacketMetadata struct {
 	Swap *SwapMetadata `json:"swap"`
 }

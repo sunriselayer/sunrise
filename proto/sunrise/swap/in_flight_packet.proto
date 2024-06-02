@@ -1,13 +1,25 @@
 syntax = "proto3";
 package sunrise.swap;
 
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 message InFlightPacket {
   string src_port_id = 1;
   string src_channel_id = 2;
   uint64 sequence = 3;
-  bytes data = 4;
-  int32 retries_remaining = 5;
+  int32 retries_remaining = 4;
+  string amount_out = 5  [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  bytes incoming_ack = 6;
+  string return_port_id = 7;
+  string return_channel_id = 8;
 }
 

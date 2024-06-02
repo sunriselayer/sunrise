@@ -111,17 +111,19 @@ func (im IBCMiddleware) OnRecvPacket(
 	}
 
 	// Prepare for swap
-	swapper, err := sdk.AccAddressFromBech32(data.Receiver) // TODO: override would be better
+	swapper := im.keeper.AccountKeeper.GetModuleAddress(types.ModuleName)
+	receiver, err := sdk.AccAddressFromBech32(data.Receiver)
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
+
 	amountIn, ok := sdkmath.NewIntFromString(data.Amount)
 	if !ok {
 		return channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrInvalidCoins, "invalid amount"))
 	}
 
 	// Settle the incoming fund
-	ack, err := im.receiveFunds(ctx, packet, data, swapper.String(), relayer)
+	incomingAck, err := im.receiveFunds(ctx, packet, data, swapper.String(), relayer)
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
@@ -133,15 +135,21 @@ func (im IBCMiddleware) OnRecvPacket(
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
+	denomOut := metadata.Routes[len(metadata.Routes)-1].DenomOut
+	tokenOut := sdk.NewCoin(denomOut, amountOut)
+
+	// Transfer from swapper to receiver
+	err = im.keeper.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiver, sdk.NewCoins(tokenOut))
+	if err != nil {
+		return channeltypes.NewErrorAcknowledgement(err)
+	}
 
 	if metadata.Forward != nil {
-		denomOut := metadata.Routes[len(metadata.Routes)-1].DenomOut
-		tokenOut := sdk.NewCoin(denomOut, amountOut)
-
 		err := im.keeper.ForwardSwappedToken(
 			ctx,
 			swapper,
 			tokenOut,
+			incomingAck.Acknowledgement(),
 			*metadata.Forward,
 		)
 		if err != nil {
@@ -155,7 +163,7 @@ func (im IBCMiddleware) OnRecvPacket(
 
 	fullAck := types.SwapAcknowledgement{
 		AmountOut:   amountOut,
-		IncomingAck: ack.Acknowledgement(),
+		IncomingAck: incomingAck.Acknowledgement(),
 	}
 
 	bz, err := fullAck.Acknowledgement()
@@ -178,14 +186,74 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 		return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
 	}
 
-	return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+	inflightPacket, found := im.keeper.GetInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
+	if !found {
+		return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+	}
+
+	fullAck := types.SwapAcknowledgement{
+		AmountOut:   inflightPacket.AmountOut,
+		IncomingAck: inflightPacket.IncomingAck,
+		ForwardAck:  acknowledgement,
+	}
+	bz, err := fullAck.Acknowledgement()
+	if err != nil {
+		return err
+	}
+	im.keeper.RemoveInFlightPacket(ctx, inflightPacket.SrcPortId, inflightPacket.SrcChannelId, inflightPacket.Sequence)
+
+	return im.IBCModule.OnAcknowledgementPacket(ctx, packet, bz, relayer)
 }
 
 // OnTimeoutPacket implements the IBCModule interface.
-func (im IBCMiddleware) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) error {
+func (im IBCMiddleware) OnTimeoutPacket(
+	ctx sdk.Context,
+	packet channeltypes.Packet,
+	relayer sdk.AccAddress,
+) error {
 	var data transfertypes.FungibleTokenPacketData
 	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
 		return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
+	}
+
+	inflightPacket, found := im.keeper.GetInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
+	if !found {
+		return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
+	}
+
+	inflightPacket.RetriesRemaining--
+
+	if inflightPacket.RetriesRemaining > 0 {
+		// TODO: Resend packet
+
+		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.SrcPortId, inflightPacket.SrcChannelId, inflightPacket.Sequence)
+		inflightPacket.Sequence = 0 // TODO: Reset sequence
+		im.keeper.SetInFlightPacket(ctx, inflightPacket)
+	} else {
+		// If remaining retry count is zero:
+		// - Returning non error acknowledgement to the origin
+		// - However it contains error acknowledgement of forwarding packet
+		forwardAck := channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrUnknownRequest, "Retry count on timeout exceeds"))
+		fullAck := types.SwapAcknowledgement{
+			AmountOut:   inflightPacket.AmountOut,
+			IncomingAck: inflightPacket.IncomingAck,
+			ForwardAck:  forwardAck.Acknowledgement(),
+		}
+		bz, err := fullAck.Acknowledgement()
+		if err != nil {
+			return err
+		}
+
+		if err := im.keeper.IbcKeeperFn().ChannelKeeper.WriteAcknowledgement(
+			ctx,
+			nil, // TODO
+			nil, // TODO
+			channeltypes.NewResultAcknowledgement(bz),
+		); err != nil {
+			return err
+		}
+
+		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.SrcPortId, inflightPacket.SrcChannelId, inflightPacket.Sequence)
 	}
 
 	return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)

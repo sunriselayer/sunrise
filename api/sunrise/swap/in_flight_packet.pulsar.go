@@ -2,8 +2,11 @@
 package swap
 
 import (
+	_ "cosmossdk.io/api/amino"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -17,8 +20,11 @@ var (
 	fd_InFlightPacket_src_port_id       protoreflect.FieldDescriptor
 	fd_InFlightPacket_src_channel_id    protoreflect.FieldDescriptor
 	fd_InFlightPacket_sequence          protoreflect.FieldDescriptor
-	fd_InFlightPacket_data              protoreflect.FieldDescriptor
 	fd_InFlightPacket_retries_remaining protoreflect.FieldDescriptor
+	fd_InFlightPacket_amount_out        protoreflect.FieldDescriptor
+	fd_InFlightPacket_incoming_ack      protoreflect.FieldDescriptor
+	fd_InFlightPacket_return_port_id    protoreflect.FieldDescriptor
+	fd_InFlightPacket_return_channel_id protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -27,8 +33,11 @@ func init() {
 	fd_InFlightPacket_src_port_id = md_InFlightPacket.Fields().ByName("src_port_id")
 	fd_InFlightPacket_src_channel_id = md_InFlightPacket.Fields().ByName("src_channel_id")
 	fd_InFlightPacket_sequence = md_InFlightPacket.Fields().ByName("sequence")
-	fd_InFlightPacket_data = md_InFlightPacket.Fields().ByName("data")
 	fd_InFlightPacket_retries_remaining = md_InFlightPacket.Fields().ByName("retries_remaining")
+	fd_InFlightPacket_amount_out = md_InFlightPacket.Fields().ByName("amount_out")
+	fd_InFlightPacket_incoming_ack = md_InFlightPacket.Fields().ByName("incoming_ack")
+	fd_InFlightPacket_return_port_id = md_InFlightPacket.Fields().ByName("return_port_id")
+	fd_InFlightPacket_return_channel_id = md_InFlightPacket.Fields().ByName("return_channel_id")
 }
 
 var _ protoreflect.Message = (*fastReflection_InFlightPacket)(nil)
@@ -114,15 +123,33 @@ func (x *fastReflection_InFlightPacket) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
-	if len(x.Data) != 0 {
-		value := protoreflect.ValueOfBytes(x.Data)
-		if !f(fd_InFlightPacket_data, value) {
-			return
-		}
-	}
 	if x.RetriesRemaining != int32(0) {
 		value := protoreflect.ValueOfInt32(x.RetriesRemaining)
 		if !f(fd_InFlightPacket_retries_remaining, value) {
+			return
+		}
+	}
+	if x.AmountOut != "" {
+		value := protoreflect.ValueOfString(x.AmountOut)
+		if !f(fd_InFlightPacket_amount_out, value) {
+			return
+		}
+	}
+	if len(x.IncomingAck) != 0 {
+		value := protoreflect.ValueOfBytes(x.IncomingAck)
+		if !f(fd_InFlightPacket_incoming_ack, value) {
+			return
+		}
+	}
+	if x.ReturnPortId != "" {
+		value := protoreflect.ValueOfString(x.ReturnPortId)
+		if !f(fd_InFlightPacket_return_port_id, value) {
+			return
+		}
+	}
+	if x.ReturnChannelId != "" {
+		value := protoreflect.ValueOfString(x.ReturnChannelId)
+		if !f(fd_InFlightPacket_return_channel_id, value) {
 			return
 		}
 	}
@@ -147,10 +174,16 @@ func (x *fastReflection_InFlightPacket) Has(fd protoreflect.FieldDescriptor) boo
 		return x.SrcChannelId != ""
 	case "sunrise.swap.InFlightPacket.sequence":
 		return x.Sequence != uint64(0)
-	case "sunrise.swap.InFlightPacket.data":
-		return len(x.Data) != 0
 	case "sunrise.swap.InFlightPacket.retries_remaining":
 		return x.RetriesRemaining != int32(0)
+	case "sunrise.swap.InFlightPacket.amount_out":
+		return x.AmountOut != ""
+	case "sunrise.swap.InFlightPacket.incoming_ack":
+		return len(x.IncomingAck) != 0
+	case "sunrise.swap.InFlightPacket.return_port_id":
+		return x.ReturnPortId != ""
+	case "sunrise.swap.InFlightPacket.return_channel_id":
+		return x.ReturnChannelId != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -173,10 +206,16 @@ func (x *fastReflection_InFlightPacket) Clear(fd protoreflect.FieldDescriptor) {
 		x.SrcChannelId = ""
 	case "sunrise.swap.InFlightPacket.sequence":
 		x.Sequence = uint64(0)
-	case "sunrise.swap.InFlightPacket.data":
-		x.Data = nil
 	case "sunrise.swap.InFlightPacket.retries_remaining":
 		x.RetriesRemaining = int32(0)
+	case "sunrise.swap.InFlightPacket.amount_out":
+		x.AmountOut = ""
+	case "sunrise.swap.InFlightPacket.incoming_ack":
+		x.IncomingAck = nil
+	case "sunrise.swap.InFlightPacket.return_port_id":
+		x.ReturnPortId = ""
+	case "sunrise.swap.InFlightPacket.return_channel_id":
+		x.ReturnChannelId = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -202,12 +241,21 @@ func (x *fastReflection_InFlightPacket) Get(descriptor protoreflect.FieldDescrip
 	case "sunrise.swap.InFlightPacket.sequence":
 		value := x.Sequence
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.swap.InFlightPacket.data":
-		value := x.Data
-		return protoreflect.ValueOfBytes(value)
 	case "sunrise.swap.InFlightPacket.retries_remaining":
 		value := x.RetriesRemaining
 		return protoreflect.ValueOfInt32(value)
+	case "sunrise.swap.InFlightPacket.amount_out":
+		value := x.AmountOut
+		return protoreflect.ValueOfString(value)
+	case "sunrise.swap.InFlightPacket.incoming_ack":
+		value := x.IncomingAck
+		return protoreflect.ValueOfBytes(value)
+	case "sunrise.swap.InFlightPacket.return_port_id":
+		value := x.ReturnPortId
+		return protoreflect.ValueOfString(value)
+	case "sunrise.swap.InFlightPacket.return_channel_id":
+		value := x.ReturnChannelId
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -234,10 +282,16 @@ func (x *fastReflection_InFlightPacket) Set(fd protoreflect.FieldDescriptor, val
 		x.SrcChannelId = value.Interface().(string)
 	case "sunrise.swap.InFlightPacket.sequence":
 		x.Sequence = value.Uint()
-	case "sunrise.swap.InFlightPacket.data":
-		x.Data = value.Bytes()
 	case "sunrise.swap.InFlightPacket.retries_remaining":
 		x.RetriesRemaining = int32(value.Int())
+	case "sunrise.swap.InFlightPacket.amount_out":
+		x.AmountOut = value.Interface().(string)
+	case "sunrise.swap.InFlightPacket.incoming_ack":
+		x.IncomingAck = value.Bytes()
+	case "sunrise.swap.InFlightPacket.return_port_id":
+		x.ReturnPortId = value.Interface().(string)
+	case "sunrise.swap.InFlightPacket.return_channel_id":
+		x.ReturnChannelId = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -264,10 +318,16 @@ func (x *fastReflection_InFlightPacket) Mutable(fd protoreflect.FieldDescriptor)
 		panic(fmt.Errorf("field src_channel_id of message sunrise.swap.InFlightPacket is not mutable"))
 	case "sunrise.swap.InFlightPacket.sequence":
 		panic(fmt.Errorf("field sequence of message sunrise.swap.InFlightPacket is not mutable"))
-	case "sunrise.swap.InFlightPacket.data":
-		panic(fmt.Errorf("field data of message sunrise.swap.InFlightPacket is not mutable"))
 	case "sunrise.swap.InFlightPacket.retries_remaining":
 		panic(fmt.Errorf("field retries_remaining of message sunrise.swap.InFlightPacket is not mutable"))
+	case "sunrise.swap.InFlightPacket.amount_out":
+		panic(fmt.Errorf("field amount_out of message sunrise.swap.InFlightPacket is not mutable"))
+	case "sunrise.swap.InFlightPacket.incoming_ack":
+		panic(fmt.Errorf("field incoming_ack of message sunrise.swap.InFlightPacket is not mutable"))
+	case "sunrise.swap.InFlightPacket.return_port_id":
+		panic(fmt.Errorf("field return_port_id of message sunrise.swap.InFlightPacket is not mutable"))
+	case "sunrise.swap.InFlightPacket.return_channel_id":
+		panic(fmt.Errorf("field return_channel_id of message sunrise.swap.InFlightPacket is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -287,10 +347,16 @@ func (x *fastReflection_InFlightPacket) NewField(fd protoreflect.FieldDescriptor
 		return protoreflect.ValueOfString("")
 	case "sunrise.swap.InFlightPacket.sequence":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.swap.InFlightPacket.data":
-		return protoreflect.ValueOfBytes(nil)
 	case "sunrise.swap.InFlightPacket.retries_remaining":
 		return protoreflect.ValueOfInt32(int32(0))
+	case "sunrise.swap.InFlightPacket.amount_out":
+		return protoreflect.ValueOfString("")
+	case "sunrise.swap.InFlightPacket.incoming_ack":
+		return protoreflect.ValueOfBytes(nil)
+	case "sunrise.swap.InFlightPacket.return_port_id":
+		return protoreflect.ValueOfString("")
+	case "sunrise.swap.InFlightPacket.return_channel_id":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -371,12 +437,24 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 		if x.Sequence != 0 {
 			n += 1 + runtime.Sov(uint64(x.Sequence))
 		}
-		l = len(x.Data)
+		if x.RetriesRemaining != 0 {
+			n += 1 + runtime.Sov(uint64(x.RetriesRemaining))
+		}
+		l = len(x.AmountOut)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.RetriesRemaining != 0 {
-			n += 1 + runtime.Sov(uint64(x.RetriesRemaining))
+		l = len(x.IncomingAck)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ReturnPortId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ReturnChannelId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -407,17 +485,38 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.ReturnChannelId) > 0 {
+			i -= len(x.ReturnChannelId)
+			copy(dAtA[i:], x.ReturnChannelId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReturnChannelId)))
+			i--
+			dAtA[i] = 0x42
+		}
+		if len(x.ReturnPortId) > 0 {
+			i -= len(x.ReturnPortId)
+			copy(dAtA[i:], x.ReturnPortId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReturnPortId)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if len(x.IncomingAck) > 0 {
+			i -= len(x.IncomingAck)
+			copy(dAtA[i:], x.IncomingAck)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.IncomingAck)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.AmountOut) > 0 {
+			i -= len(x.AmountOut)
+			copy(dAtA[i:], x.AmountOut)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
+			i--
+			dAtA[i] = 0x2a
+		}
 		if x.RetriesRemaining != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.RetriesRemaining))
 			i--
-			dAtA[i] = 0x28
-		}
-		if len(x.Data) > 0 {
-			i -= len(x.Data)
-			copy(dAtA[i:], x.Data)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Data)))
-			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x20
 		}
 		if x.Sequence != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Sequence))
@@ -571,8 +670,59 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 					}
 				}
 			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RetriesRemaining", wireType)
+				}
+				x.RetriesRemaining = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.RetriesRemaining |= int32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountOut = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IncomingAck", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -599,16 +749,16 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Data = append(x.Data[:0], dAtA[iNdEx:postIndex]...)
-				if x.Data == nil {
-					x.Data = []byte{}
+				x.IncomingAck = append(x.IncomingAck[:0], dAtA[iNdEx:postIndex]...)
+				if x.IncomingAck == nil {
+					x.IncomingAck = []byte{}
 				}
 				iNdEx = postIndex
-			case 5:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RetriesRemaining", wireType)
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReturnPortId", wireType)
 				}
-				x.RetriesRemaining = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -618,11 +768,56 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.RetriesRemaining |= int32(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ReturnPortId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 8:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReturnChannelId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ReturnChannelId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -679,8 +874,11 @@ type InFlightPacket struct {
 	SrcPortId        string `protobuf:"bytes,1,opt,name=src_port_id,json=srcPortId,proto3" json:"src_port_id,omitempty"`
 	SrcChannelId     string `protobuf:"bytes,2,opt,name=src_channel_id,json=srcChannelId,proto3" json:"src_channel_id,omitempty"`
 	Sequence         uint64 `protobuf:"varint,3,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	Data             []byte `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
-	RetriesRemaining int32  `protobuf:"varint,5,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
+	RetriesRemaining int32  `protobuf:"varint,4,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
+	AmountOut        string `protobuf:"bytes,5,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
+	IncomingAck      []byte `protobuf:"bytes,6,opt,name=incoming_ack,json=incomingAck,proto3" json:"incoming_ack,omitempty"`
+	ReturnPortId     string `protobuf:"bytes,7,opt,name=return_port_id,json=returnPortId,proto3" json:"return_port_id,omitempty"`
+	ReturnChannelId  string `protobuf:"bytes,8,opt,name=return_channel_id,json=returnChannelId,proto3" json:"return_channel_id,omitempty"`
 }
 
 func (x *InFlightPacket) Reset() {
@@ -724,18 +922,39 @@ func (x *InFlightPacket) GetSequence() uint64 {
 	return 0
 }
 
-func (x *InFlightPacket) GetData() []byte {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
 func (x *InFlightPacket) GetRetriesRemaining() int32 {
 	if x != nil {
 		return x.RetriesRemaining
 	}
 	return 0
+}
+
+func (x *InFlightPacket) GetAmountOut() string {
+	if x != nil {
+		return x.AmountOut
+	}
+	return ""
+}
+
+func (x *InFlightPacket) GetIncomingAck() []byte {
+	if x != nil {
+		return x.IncomingAck
+	}
+	return nil
+}
+
+func (x *InFlightPacket) GetReturnPortId() string {
+	if x != nil {
+		return x.ReturnPortId
+	}
+	return ""
+}
+
+func (x *InFlightPacket) GetReturnChannelId() string {
+	if x != nil {
+		return x.ReturnChannelId
+	}
+	return ""
 }
 
 var File_sunrise_swap_in_flight_packet_proto protoreflect.FileDescriptor
@@ -744,28 +963,44 @@ var file_sunrise_swap_in_flight_packet_proto_rawDesc = []byte{
 	0x0a, 0x23, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x69,
 	0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x22, 0xb3, 0x01, 0x0a, 0x0e, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74,
-	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x1e, 0x0a, 0x0b, 0x73, 0x72, 0x63, 0x5f, 0x70, 0x6f,
-	0x72, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x72, 0x63,
-	0x50, 0x6f, 0x72, 0x74, 0x49, 0x64, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x72, 0x63, 0x5f, 0x63, 0x68,
-	0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
-	0x73, 0x72, 0x63, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08,
-	0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08,
-	0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x2b, 0x0a, 0x11,
+	0x77, 0x61, 0x70, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67,
+	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xe5, 0x02, 0x0a, 0x0e, 0x49, 0x6e, 0x46, 0x6c,
+	0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x1e, 0x0a, 0x0b, 0x73, 0x72,
+	0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x73, 0x72, 0x63, 0x50, 0x6f, 0x72, 0x74, 0x49, 0x64, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x72,
+	0x63, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0c, 0x73, 0x72, 0x63, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64,
+	0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x2b, 0x0a, 0x11,
 	0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73, 0x5f, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x69, 0x6e,
-	0x67, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x10, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73,
-	0x52, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x69, 0x6e, 0x67, 0x42, 0x97, 0x01, 0x0a, 0x10, 0x63, 0x6f,
-	0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x42, 0x13,
-	0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x50, 0x72,
-	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
-	0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f,
-	0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53,
-	0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x67, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x10, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73,
+	0x52, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x69, 0x6e, 0x67, 0x12, 0x4f, 0x0a, 0x0a, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
+	0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
+	0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
+	0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x69, 0x6e,
+	0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x63, 0x6b, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x0b, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x41, 0x63, 0x6b, 0x12, 0x24, 0x0a,
+	0x0e, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x18,
+	0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x50, 0x6f, 0x72,
+	0x74, 0x49, 0x64, 0x12, 0x2a, 0x0a, 0x11, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x63, 0x68,
+	0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f,
+	0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64, 0x42,
+	0x97, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x73, 0x77, 0x61, 0x70, 0x42, 0x13, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61,
+	0x63, 0x6b, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58,
+	0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca,
+	0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02,
+	0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (

@@ -22,12 +22,12 @@ type (
 		// should be the x/gov module account.
 		authority string
 
-		accountKeeper  types.AccountKeeper
-		bankKeeper     types.BankKeeper
+		AccountKeeper  types.AccountKeeper
+		BankKeeper     types.BankKeeper
 		transferKeeper types.TransferKeeper
 		swapKeeper     types.LiquidityPoolKeeper
 
-		ibcKeeperFn func() *ibckeeper.Keeper
+		IbcKeeperFn func() *ibckeeper.Keeper
 	}
 )
 
@@ -53,10 +53,10 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 
-		accountKeeper: accountKeeper,
-		bankKeeper:    bankKeeper,
+		AccountKeeper: accountKeeper,
+		BankKeeper:    bankKeeper,
 		swapKeeper:    swapKeeper,
-		ibcKeeperFn:   ibcKeeperFn,
+		IbcKeeperFn:   ibcKeeperFn,
 	}
 }
 
