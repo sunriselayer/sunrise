@@ -19,9 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName       = "/sunrise.swap.Msg/UpdateParams"
-	Msg_SwapExactAmountIn_FullMethodName  = "/sunrise.swap.Msg/SwapExactAmountIn"
-	Msg_SwapExactAmountOut_FullMethodName = "/sunrise.swap.Msg/SwapExactAmountOut"
+	Msg_UpdateParams_FullMethodName      = "/sunrise.swap.Msg/UpdateParams"
+	Msg_SwapExactAmountIn_FullMethodName = "/sunrise.swap.Msg/SwapExactAmountIn"
 )
 
 // MsgClient is the client API for Msg service.
@@ -32,7 +31,6 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	SwapExactAmountIn(ctx context.Context, in *MsgSwapExactAmountIn, opts ...grpc.CallOption) (*MsgSwapExactAmountInResponse, error)
-	SwapExactAmountOut(ctx context.Context, in *MsgSwapExactAmountOut, opts ...grpc.CallOption) (*MsgSwapExactAmountOutResponse, error)
 }
 
 type msgClient struct {
@@ -61,15 +59,6 @@ func (c *msgClient) SwapExactAmountIn(ctx context.Context, in *MsgSwapExactAmoun
 	return out, nil
 }
 
-func (c *msgClient) SwapExactAmountOut(ctx context.Context, in *MsgSwapExactAmountOut, opts ...grpc.CallOption) (*MsgSwapExactAmountOutResponse, error) {
-	out := new(MsgSwapExactAmountOutResponse)
-	err := c.cc.Invoke(ctx, Msg_SwapExactAmountOut_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -78,7 +67,6 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	SwapExactAmountIn(context.Context, *MsgSwapExactAmountIn) (*MsgSwapExactAmountInResponse, error)
-	SwapExactAmountOut(context.Context, *MsgSwapExactAmountOut) (*MsgSwapExactAmountOutResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -91,9 +79,6 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) SwapExactAmountIn(context.Context, *MsgSwapExactAmountIn) (*MsgSwapExactAmountInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SwapExactAmountIn not implemented")
-}
-func (UnimplementedMsgServer) SwapExactAmountOut(context.Context, *MsgSwapExactAmountOut) (*MsgSwapExactAmountOutResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SwapExactAmountOut not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -144,24 +129,6 @@ func _Msg_SwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSwapExactAmountOut)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SwapExactAmountOut(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_SwapExactAmountOut_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SwapExactAmountOut(ctx, req.(*MsgSwapExactAmountOut))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,10 +143,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SwapExactAmountIn",
 			Handler:    _Msg_SwapExactAmountIn_Handler,
-		},
-		{
-			MethodName: "SwapExactAmountOut",
-			Handler:    _Msg_SwapExactAmountOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,7 +1,7 @@
 package types
 
 import (
-	"fmt"
+	errorsmod "cosmossdk.io/errors"
 )
 
 func (route *Route) Validate() error {
@@ -12,7 +12,7 @@ func (route *Route) Validate() error {
 		series := strategy.Series
 
 		if len(series.Routes) == 0 {
-			return fmt.Errorf("TODO")
+			return errorsmod.Wrapf(ErrInvalidRoute, "empty series")
 		}
 
 		denomIn := route.DenomIn
@@ -22,12 +22,13 @@ func (route *Route) Validate() error {
 			}
 
 			if r.DenomIn != denomIn {
-				return fmt.Errorf("TODO")
+				return errorsmod.Wrapf(ErrInvalidRoute, "invalid denom in: %s", r)
 			}
 			denomIn = r.DenomOut
 		}
-		if denomIn != route.DenomOut {
-			return fmt.Errorf("TODO")
+		denomOut := denomIn
+		if denomOut != route.DenomOut {
+			return errorsmod.Wrapf(ErrInvalidRoute, "denom out mismatch: %s, %s", denomOut, route.DenomOut)
 		}
 
 		return nil
@@ -35,10 +36,10 @@ func (route *Route) Validate() error {
 		parallel := strategy.Parallel
 
 		if len(parallel.Routes) == 0 {
-			return fmt.Errorf("TODO")
+			return errorsmod.Wrapf(ErrInvalidRoute, "empty parallel")
 		}
 		if len(parallel.Routes) != len(parallel.Weights) {
-			return fmt.Errorf("TODO")
+			return errorsmod.Wrapf(ErrInvalidRoute, "mismatched length of parallel routes and weights")
 		}
 
 		for i, r := range parallel.Routes {
@@ -47,23 +48,22 @@ func (route *Route) Validate() error {
 			}
 
 			if r.DenomIn != route.DenomIn {
-				return fmt.Errorf("TODO")
+				return errorsmod.Wrapf(ErrInvalidRoute, "invalid denom in: %s", r)
 			}
 			if r.DenomOut != route.DenomOut {
-				return fmt.Errorf("TODO")
+				return errorsmod.Wrapf(ErrInvalidRoute, "invalid denom out: %s", r)
 			}
 
 			if parallel.Weights[i].IsNil() {
-				return fmt.Errorf("TODO")
+				return errorsmod.Wrapf(ErrInvalidRoute, "nil weight")
 			}
 			if !parallel.Weights[i].IsPositive() {
-				return fmt.Errorf("TODO")
+				return errorsmod.Wrapf(ErrInvalidRoute, "non-positive weight: %s", parallel.Weights[i])
 			}
 		}
 
 		return nil
 	}
 
-	return fmt.Errorf("TODO")
-
+	return errorsmod.Wrapf(ErrInvalidRoute, "unknown strategy: %s", route.Strategy)
 }
