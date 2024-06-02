@@ -65,16 +65,16 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		swapsimulation.SimulateMsgSwapExactAmountIn(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	// var weightMsgSwapExactAmountOut int
-	// simState.AppParams.GetOrGenerate(opWeightMsgSwapExactAmountOut, &weightMsgSwapExactAmountOut, nil,
-	// 	func(_ *rand.Rand) {
-	// 		weightMsgSwapExactAmountOut = defaultWeightMsgSwapExactAmountOut
-	// 	},
-	// )
-	// operations = append(operations, simulation.NewWeightedOperation(
-	// 	weightMsgSwapExactAmountOut,
-	// 	swapsimulation.SimulateMsgSwapExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper),
-	// ))
+	var weightMsgSwapExactAmountOut int
+	simState.AppParams.GetOrGenerate(opWeightMsgSwapExactAmountOut, &weightMsgSwapExactAmountOut, nil,
+		func(_ *rand.Rand) {
+			weightMsgSwapExactAmountOut = defaultWeightMsgSwapExactAmountOut
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSwapExactAmountOut,
+		swapsimulation.SimulateMsgSwapExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
 
@@ -92,14 +92,14 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 				return nil
 			},
 		),
-		// simulation.NewWeightedProposalMsg(
-		// 	opWeightMsgSwapExactAmountOut,
-		// 	defaultWeightMsgSwapExactAmountOut,
-		// 	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		// 		swapsimulation.SimulateMsgSwapExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper)
-		// 		return nil
-		// 	},
-		// ),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgSwapExactAmountOut,
+			defaultWeightMsgSwapExactAmountOut,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				swapsimulation.SimulateMsgSwapExactAmountOut(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
 		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }

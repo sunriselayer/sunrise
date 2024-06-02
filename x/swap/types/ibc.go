@@ -15,9 +15,12 @@ type PacketMetadata struct {
 }
 
 type SwapMetadata struct {
-	Route        Route                               `json:"route,omitempty"`
-	MinAmountOut sdkmath.Int                         `json:"min_amount_out,omitempty"`
-	Forward      *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
+	InterfaceProvider string                              `json:"interface_provider,omitempty"`
+	Route             Route                               `json:"route,omitempty"`
+	MinAmountOut      sdkmath.Int                         `json:"min_amount_out,omitempty"`
+	ExactAmountOut    *sdkmath.Int                        `json:"exact_amount_out,omitempty"`
+	ReturnAmountIn    *packetforwardtypes.ForwardMetadata `json:"return,omitempty"`
+	Forward           *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
 }
 
 func (m *SwapMetadata) Validate() error {

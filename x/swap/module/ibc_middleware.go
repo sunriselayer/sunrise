@@ -133,7 +133,14 @@ func (im IBCMiddleware) OnRecvPacket(
 	// TODO: validaatep converted denomIn is equal to the route DenomIn
 	_ = denomIn
 
-	amountOut, err := im.keeper.SwapExactAmountIn(ctx, swapper, metadata.Route, amountIn, metadata.MinAmountOut)
+	amountOut, err := im.keeper.SwapExactAmountIn(
+		ctx,
+		swapper,
+		metadata.InterfaceProvider,
+		metadata.Route,
+		amountIn,
+		metadata.MinAmountOut,
+	)
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
 	}

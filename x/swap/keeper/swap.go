@@ -11,26 +11,40 @@ func (k Keeper) swapRoute(
 	ctx sdk.Context,
 	sender sdk.AccAddress,
 	route types.Route,
-	amountIn math.Int,
-) (amountOut math.Int, err error) {
+	amountExact math.Int,
+	isExactAmountIn bool,
+) (amountResult math.Int, err error) {
 	switch strategy := route.Strategy.(type) {
 	case *types.Route_Pool:
-		tokenIn := sdk.NewCoin(route.DenomIn, amountIn)
-		amountOut, err = k.swapRoutePool(ctx, sender, strategy.Pool.PoolId, tokenIn, route.DenomOut)
+		amountResult, err = k.swapRoutePool(
+			ctx,
+			sender,
+			strategy.Pool.PoolId,
+			route.DenomIn,
+			route.DenomOut,
+			amountExact,
+			isExactAmountIn,
+		)
 		if err != nil {
 			return math.Int{}, err
 		}
 
 	case *types.Route_Series:
-		for _, r := range strategy.Series.Routes {
-			amountOut, err = k.swapRoute(ctx, sender, r, amountIn)
+		for i := range strategy.Series.Routes {
+			var r types.Route
+			if isExactAmountIn {
+				r = strategy.Series.Routes[i]
+			} else {
+				r = strategy.Series.Routes[len(strategy.Series.Routes)-1-i]
+			}
+			amountResult, err = k.swapRoute(ctx, sender, r, amountExact, isExactAmountIn)
 			if err != nil {
 				return math.Int{}, err
 			}
-			amountIn = amountOut
+			amountExact = amountResult
 		}
 		// No needs to do
-		// amountOut = amountIn
+		// amountResult = amountExact
 
 	case *types.Route_Parallel:
 		// Calculate the sum of the weights
@@ -40,38 +54,40 @@ func (k Keeper) swapRoute(
 		}
 
 		// Calculate the amount of input for each route
-		amountsIn := make([]math.Int, len(strategy.Parallel.Routes))
-		amountsInSum := math.ZeroInt()
+		amountsExact := make([]math.Int, len(strategy.Parallel.Routes))
+		amountsExactSum := math.ZeroInt()
 		length := len(strategy.Parallel.Weights)
 
 		for i, w := range strategy.Parallel.Weights[:length-1] {
-			amountsIn[i] = w.MulInt(amountIn).Quo(weightSum).TruncateInt()
+			amountsExact[i] = w.MulInt(amountExact).Quo(weightSum).TruncateInt()
 		}
 		// For avoiding rounding errors
-		amountsIn[length-1] = amountIn.Sub(amountsInSum)
+		amountsExact[length-1] = amountExact.Sub(amountsExactSum)
 
 		// Execute the swaps
-		amountsOutSum := math.ZeroInt()
+		amountsResultSum := math.ZeroInt()
 
 		for i, r := range strategy.Parallel.Routes {
-			aOut, err := k.swapRoute(ctx, sender, r, amountsIn[i])
+			aResult, err := k.swapRoute(ctx, sender, r, amountsExact[i], isExactAmountIn)
 			if err != nil {
 				return math.Int{}, err
 			}
-			amountsOutSum = amountsOutSum.Add(aOut)
+			amountsResultSum = amountsResultSum.Add(aResult)
 		}
-		amountOut = amountsOutSum
+		amountResult = amountsResultSum
 	}
-	return amountOut, nil
+	return amountResult, nil
 }
 
 func (k Keeper) swapRoutePool(
 	ctx sdk.Context,
 	sender sdk.AccAddress,
 	poolId uint64,
-	tokenIn sdk.Coin,
+	denomIn string,
 	denomOut string,
-) (amountOut math.Int, err error) {
+	amountExact math.Int,
+	isExactAmountIn bool,
+) (amountResult math.Int, err error) {
 	pool, found := k.liquidityPoolKeeper.GetPool(ctx, poolId)
 	if !found {
 		return math.Int{}, lptypes.ErrPoolNotFound
@@ -79,18 +95,34 @@ func (k Keeper) swapRoutePool(
 
 	// No needs to validate the denom,
 	// as liquiditypool side is responsible for ensuring the denom exists in the pool.
-	amountOut, err = k.liquidityPoolKeeper.SwapExactAmountIn(
-		ctx,
-		sender,
-		pool,
-		tokenIn,
-		denomOut,
-		math.ZeroInt(),
-		pool.FeeRate, // TODO: eliminate
-	)
-	if err != nil {
-		return math.Int{}, err
+
+	if isExactAmountIn {
+		tokenIn := sdk.NewCoin(denomIn, amountExact)
+
+		amountResult, err = k.liquidityPoolKeeper.SwapExactAmountIn(
+			ctx,
+			sender,
+			pool,
+			tokenIn,
+			denomOut,
+		)
+		if err != nil {
+			return math.Int{}, err
+		}
+	} else {
+		tokenOut := sdk.NewCoin(denomOut, amountExact)
+
+		amountResult, err = k.liquidityPoolKeeper.SwapExactAmountOut(
+			ctx,
+			sender,
+			pool,
+			tokenOut,
+			denomIn,
+		)
+		if err != nil {
+			return math.Int{}, err
+		}
 	}
 
-	return amountOut, nil
+	return amountResult, nil
 }
