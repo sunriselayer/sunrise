@@ -24,9 +24,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "InFlightPacket",
-					Use:            "show-in-flight-packet [index]",
+					Use:            "show-in-flight-packet [src-port] [src-channel] [sequence]",
 					Short:          "Shows a in-flight-packet",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "src_port_id"}, {ProtoField: "src_channel_id"}, {ProtoField: "sequence"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},

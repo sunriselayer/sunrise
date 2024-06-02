@@ -4,7 +4,10 @@ package sunrise.swap;
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 message InFlightPacket {
-  string index = 1; 
-  
+  string src_port_id = 1;
+  string src_channel_id = 2;
+  uint64 sequence = 3;
+  bytes data = 4;
+  int32 retries_remaining = 5;
 }
 

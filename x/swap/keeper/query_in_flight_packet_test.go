@@ -29,21 +29,27 @@ func TestInFlightPacketQuerySingle(t *testing.T) {
 		{
 			desc: "First",
 			request: &types.QueryGetInFlightPacketRequest{
-				Index: msgs[0].Index,
+				SrcPortId:    msgs[0].SrcPortId,
+				SrcChannelId: msgs[0].SrcChannelId,
+				Sequence:     msgs[0].Sequence,
 			},
 			response: &types.QueryGetInFlightPacketResponse{InFlightPacket: msgs[0]},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetInFlightPacketRequest{
-				Index: msgs[1].Index,
+				SrcPortId:    msgs[1].SrcPortId,
+				SrcChannelId: msgs[1].SrcChannelId,
+				Sequence:     msgs[1].Sequence,
 			},
 			response: &types.QueryGetInFlightPacketResponse{InFlightPacket: msgs[1]},
 		},
 		{
 			desc: "KeyNotFound",
 			request: &types.QueryGetInFlightPacketRequest{
-				Index: strconv.Itoa(100000),
+				SrcPortId:    strconv.Itoa(100000),
+				SrcChannelId: strconv.Itoa(100000),
+				Sequence:     uint64(100000),
 			},
 			err: status.Error(codes.NotFound, "not found"),
 		},

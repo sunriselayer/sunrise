@@ -22,7 +22,7 @@ service Query {
   
   // Queries a list of InFlightPacket items.
   rpc InFlightPacket    (QueryGetInFlightPacketRequest) returns (QueryGetInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/{index}";
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/{src_port_id}/{src_channel_id}/{sequence}";
   
   }
   rpc InFlightPacketAll (QueryAllInFlightPacketRequest) returns (QueryAllInFlightPacketResponse) {
@@ -41,7 +41,9 @@ message QueryParamsResponse {
 }
 
 message QueryGetInFlightPacketRequest {
-  string index = 1;
+  string src_port_id = 1;
+  string src_channel_id = 2;
+  uint64 sequence = 3;
 }
 
 message QueryGetInFlightPacketResponse {

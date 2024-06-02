@@ -16,10 +16,14 @@ func TestGenesis(t *testing.T) {
 
 		InFlightPacketList: []types.InFlightPacket{
 			{
-				Index: "0",
+				SrcPortId:    "0",
+				SrcChannelId: "0",
+				Sequence:     0,
 			},
 			{
-				Index: "1",
+				SrcPortId:    "1",
+				SrcChannelId: "1",
+				Sequence:     1,
 			},
 		},
 		// this line is used by starport scaffolding # genesis/test/state

@@ -2,6 +2,8 @@ package types
 
 import "encoding/binary"
 
+import "fmt"
+
 var _ binary.ByteOrder
 
 const (
@@ -11,8 +13,12 @@ const (
 
 // InFlightPacketKey returns the store key to retrieve a InFlightPacket from the index fields
 func InFlightPacketKey(
-	index string,
+	srcPortId string,
+	srcChannelId string,
+	sequence uint64,
 ) []byte {
+	index := fmt.Sprintf("%s/%s/%d", srcPortId, srcChannelId, sequence)
+
 	var key []byte
 
 	indexBytes := []byte(index)

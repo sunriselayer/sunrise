@@ -45,7 +45,9 @@ func (k Keeper) InFlightPacket(ctx context.Context, req *types.QueryGetInFlightP
 
 	val, found := k.GetInFlightPacket(
 		ctx,
-		req.Index,
+		req.SrcPortId,
+		req.SrcChannelId,
+		req.Sequence,
 	)
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")

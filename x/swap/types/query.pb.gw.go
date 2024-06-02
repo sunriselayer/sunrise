@@ -62,15 +62,37 @@ func request_Query_InFlightPacket_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["index"]
+	val, ok = pathParams["src_port_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "index")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "src_port_id")
 	}
 
-	protoReq.Index, err = runtime.String(val)
+	protoReq.SrcPortId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "index", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "src_port_id", err)
+	}
+
+	val, ok = pathParams["src_channel_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "src_channel_id")
+	}
+
+	protoReq.SrcChannelId, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "src_channel_id", err)
+	}
+
+	val, ok = pathParams["sequence"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "sequence")
+	}
+
+	protoReq.Sequence, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "sequence", err)
 	}
 
 	msg, err := client.InFlightPacket(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -89,15 +111,37 @@ func local_request_Query_InFlightPacket_0(ctx context.Context, marshaler runtime
 		_   = err
 	)
 
-	val, ok = pathParams["index"]
+	val, ok = pathParams["src_port_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "index")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "src_port_id")
 	}
 
-	protoReq.Index, err = runtime.String(val)
+	protoReq.SrcPortId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "index", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "src_port_id", err)
+	}
+
+	val, ok = pathParams["src_channel_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "src_channel_id")
+	}
+
+	protoReq.SrcChannelId, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "src_channel_id", err)
+	}
+
+	val, ok = pathParams["sequence"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "sequence")
+	}
+
+	protoReq.Sequence, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "sequence", err)
 	}
 
 	msg, err := server.InFlightPacket(ctx, &protoReq)
@@ -323,7 +367,7 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "swap", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_InFlightPacket_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunriselayer", "sunrise", "swap", "in_flight_packet", "index"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_InFlightPacket_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "swap", "in_flight_packet", "src_port_id", "src_channel_id", "sequence"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_InFlightPacketAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "swap", "in_flight_packet"}, "", runtime.AssumeColonVerbOpt(false)))
 )
