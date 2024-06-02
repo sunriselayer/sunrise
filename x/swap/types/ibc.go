@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/json"
-	"fmt"
 
 	sdkmath "cosmossdk.io/math"
 
@@ -16,19 +15,18 @@ type PacketMetadata struct {
 }
 
 type SwapMetadata struct {
-	Routes       []Route                             `json:"routes,omitempty"`
+	Route        Route                               `json:"route,omitempty"`
 	MinAmountOut sdkmath.Int                         `json:"min_amount_out,omitempty"`
 	Forward      *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
 }
 
 func (m *SwapMetadata) Validate() error {
-	if len(m.Routes) == 0 {
-		return fmt.Errorf("failed to validate metadata. routes cannot be empty")
+	if err := m.Route.Validate(); err != nil {
+		return err
 	}
 
 	if m.Forward != nil {
-		err := m.Forward.Validate()
-		if err != nil {
+		if err := m.Forward.Validate(); err != nil {
 			return err
 		}
 	}

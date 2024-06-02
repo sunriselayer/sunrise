@@ -22,10 +22,10 @@ type (
 		// should be the x/gov module account.
 		authority string
 
-		AccountKeeper  types.AccountKeeper
-		BankKeeper     types.BankKeeper
-		transferKeeper types.TransferKeeper
-		swapKeeper     types.LiquidityPoolKeeper
+		AccountKeeper       types.AccountKeeper
+		BankKeeper          types.BankKeeper
+		transferKeeper      types.TransferKeeper
+		liquidityPoolKeeper types.LiquidityPoolKeeper
 
 		IbcKeeperFn func() *ibckeeper.Keeper
 	}
@@ -40,7 +40,7 @@ func NewKeeper(
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	transferKeeper types.TransferKeeper,
-	swapKeeper types.LiquidityPoolKeeper,
+	liquidityPoolKeeper types.LiquidityPoolKeeper,
 	ibcKeeperFn func() *ibckeeper.Keeper,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
@@ -53,10 +53,10 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 
-		AccountKeeper: accountKeeper,
-		BankKeeper:    bankKeeper,
-		swapKeeper:    swapKeeper,
-		IbcKeeperFn:   ibcKeeperFn,
+		AccountKeeper:       accountKeeper,
+		BankKeeper:          bankKeeper,
+		liquidityPoolKeeper: liquidityPoolKeeper,
+		IbcKeeperFn:         ibcKeeperFn,
 	}
 }
 

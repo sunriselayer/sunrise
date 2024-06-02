@@ -1987,8 +1987,8 @@ var (
 	fd_MsgSwapExactAmountOut_sender             protoreflect.FieldDescriptor
 	fd_MsgSwapExactAmountOut_interface_provider protoreflect.FieldDescriptor
 	fd_MsgSwapExactAmountOut_route              protoreflect.FieldDescriptor
-	fd_MsgSwapExactAmountOut_amount_out         protoreflect.FieldDescriptor
 	fd_MsgSwapExactAmountOut_max_amount_in      protoreflect.FieldDescriptor
+	fd_MsgSwapExactAmountOut_amount_out         protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -1997,8 +1997,8 @@ func init() {
 	fd_MsgSwapExactAmountOut_sender = md_MsgSwapExactAmountOut.Fields().ByName("sender")
 	fd_MsgSwapExactAmountOut_interface_provider = md_MsgSwapExactAmountOut.Fields().ByName("interface_provider")
 	fd_MsgSwapExactAmountOut_route = md_MsgSwapExactAmountOut.Fields().ByName("route")
-	fd_MsgSwapExactAmountOut_amount_out = md_MsgSwapExactAmountOut.Fields().ByName("amount_out")
 	fd_MsgSwapExactAmountOut_max_amount_in = md_MsgSwapExactAmountOut.Fields().ByName("max_amount_in")
+	fd_MsgSwapExactAmountOut_amount_out = md_MsgSwapExactAmountOut.Fields().ByName("amount_out")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgSwapExactAmountOut)(nil)
@@ -2084,15 +2084,15 @@ func (x *fastReflection_MsgSwapExactAmountOut) Range(f func(protoreflect.FieldDe
 			return
 		}
 	}
-	if x.AmountOut != "" {
-		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_MsgSwapExactAmountOut_amount_out, value) {
-			return
-		}
-	}
 	if x.MaxAmountIn != "" {
 		value := protoreflect.ValueOfString(x.MaxAmountIn)
 		if !f(fd_MsgSwapExactAmountOut_max_amount_in, value) {
+			return
+		}
+	}
+	if x.AmountOut != "" {
+		value := protoreflect.ValueOfString(x.AmountOut)
+		if !f(fd_MsgSwapExactAmountOut_amount_out, value) {
 			return
 		}
 	}
@@ -2117,10 +2117,10 @@ func (x *fastReflection_MsgSwapExactAmountOut) Has(fd protoreflect.FieldDescript
 		return x.InterfaceProvider != ""
 	case "sunrise.swap.MsgSwapExactAmountOut.route":
 		return x.Route != nil
-	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
-		return x.AmountOut != ""
 	case "sunrise.swap.MsgSwapExactAmountOut.max_amount_in":
 		return x.MaxAmountIn != ""
+	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
+		return x.AmountOut != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.MsgSwapExactAmountOut"))
@@ -2143,10 +2143,10 @@ func (x *fastReflection_MsgSwapExactAmountOut) Clear(fd protoreflect.FieldDescri
 		x.InterfaceProvider = ""
 	case "sunrise.swap.MsgSwapExactAmountOut.route":
 		x.Route = nil
-	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
-		x.AmountOut = ""
 	case "sunrise.swap.MsgSwapExactAmountOut.max_amount_in":
 		x.MaxAmountIn = ""
+	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
+		x.AmountOut = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.MsgSwapExactAmountOut"))
@@ -2172,11 +2172,11 @@ func (x *fastReflection_MsgSwapExactAmountOut) Get(descriptor protoreflect.Field
 	case "sunrise.swap.MsgSwapExactAmountOut.route":
 		value := x.Route
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
-		value := x.AmountOut
-		return protoreflect.ValueOfString(value)
 	case "sunrise.swap.MsgSwapExactAmountOut.max_amount_in":
 		value := x.MaxAmountIn
+		return protoreflect.ValueOfString(value)
+	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
+		value := x.AmountOut
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -2204,10 +2204,10 @@ func (x *fastReflection_MsgSwapExactAmountOut) Set(fd protoreflect.FieldDescript
 		x.InterfaceProvider = value.Interface().(string)
 	case "sunrise.swap.MsgSwapExactAmountOut.route":
 		x.Route = value.Message().Interface().(*Route)
-	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
-		x.AmountOut = value.Interface().(string)
 	case "sunrise.swap.MsgSwapExactAmountOut.max_amount_in":
 		x.MaxAmountIn = value.Interface().(string)
+	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
+		x.AmountOut = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.MsgSwapExactAmountOut"))
@@ -2237,10 +2237,10 @@ func (x *fastReflection_MsgSwapExactAmountOut) Mutable(fd protoreflect.FieldDesc
 		panic(fmt.Errorf("field sender of message sunrise.swap.MsgSwapExactAmountOut is not mutable"))
 	case "sunrise.swap.MsgSwapExactAmountOut.interface_provider":
 		panic(fmt.Errorf("field interface_provider of message sunrise.swap.MsgSwapExactAmountOut is not mutable"))
-	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.swap.MsgSwapExactAmountOut is not mutable"))
 	case "sunrise.swap.MsgSwapExactAmountOut.max_amount_in":
 		panic(fmt.Errorf("field max_amount_in of message sunrise.swap.MsgSwapExactAmountOut is not mutable"))
+	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
+		panic(fmt.Errorf("field amount_out of message sunrise.swap.MsgSwapExactAmountOut is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.MsgSwapExactAmountOut"))
@@ -2261,9 +2261,9 @@ func (x *fastReflection_MsgSwapExactAmountOut) NewField(fd protoreflect.FieldDes
 	case "sunrise.swap.MsgSwapExactAmountOut.route":
 		m := new(Route)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
-		return protoreflect.ValueOfString("")
 	case "sunrise.swap.MsgSwapExactAmountOut.max_amount_in":
+		return protoreflect.ValueOfString("")
+	case "sunrise.swap.MsgSwapExactAmountOut.amount_out":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -2346,11 +2346,11 @@ func (x *fastReflection_MsgSwapExactAmountOut) ProtoMethods() *protoiface.Method
 			l = options.Size(x.Route)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.AmountOut)
+		l = len(x.MaxAmountIn)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.MaxAmountIn)
+		l = len(x.AmountOut)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -2383,17 +2383,17 @@ func (x *fastReflection_MsgSwapExactAmountOut) ProtoMethods() *protoiface.Method
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.MaxAmountIn) > 0 {
-			i -= len(x.MaxAmountIn)
-			copy(dAtA[i:], x.MaxAmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MaxAmountIn)))
-			i--
-			dAtA[i] = 0x2a
-		}
 		if len(x.AmountOut) > 0 {
 			i -= len(x.AmountOut)
 			copy(dAtA[i:], x.AmountOut)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.MaxAmountIn) > 0 {
+			i -= len(x.MaxAmountIn)
+			copy(dAtA[i:], x.MaxAmountIn)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MaxAmountIn)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -2576,38 +2576,6 @@ func (x *fastReflection_MsgSwapExactAmountOut) ProtoMethods() *protoiface.Method
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AmountOut = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 5:
-				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxAmountIn", wireType)
 				}
 				var stringLen uint64
@@ -2637,6 +2605,38 @@ func (x *fastReflection_MsgSwapExactAmountOut) ProtoMethods() *protoiface.Method
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.MaxAmountIn = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountOut = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -3290,8 +3290,8 @@ type MsgSwapExactAmountOut struct {
 	Sender            string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	InterfaceProvider string `protobuf:"bytes,2,opt,name=interface_provider,json=interfaceProvider,proto3" json:"interface_provider,omitempty"`
 	Route             *Route `protobuf:"bytes,3,opt,name=route,proto3" json:"route,omitempty"`
-	AmountOut         string `protobuf:"bytes,4,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
-	MaxAmountIn       string `protobuf:"bytes,5,opt,name=max_amount_in,json=maxAmountIn,proto3" json:"max_amount_in,omitempty"`
+	MaxAmountIn       string `protobuf:"bytes,4,opt,name=max_amount_in,json=maxAmountIn,proto3" json:"max_amount_in,omitempty"`
+	AmountOut         string `protobuf:"bytes,5,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
 }
 
 func (x *MsgSwapExactAmountOut) Reset() {
@@ -3335,16 +3335,16 @@ func (x *MsgSwapExactAmountOut) GetRoute() *Route {
 	return nil
 }
 
-func (x *MsgSwapExactAmountOut) GetAmountOut() string {
+func (x *MsgSwapExactAmountOut) GetMaxAmountIn() string {
 	if x != nil {
-		return x.AmountOut
+		return x.MaxAmountIn
 	}
 	return ""
 }
 
-func (x *MsgSwapExactAmountOut) GetMaxAmountIn() string {
+func (x *MsgSwapExactAmountOut) GetAmountOut() string {
 	if x != nil {
-		return x.MaxAmountIn
+		return x.AmountOut
 	}
 	return ""
 }
@@ -3455,17 +3455,17 @@ var file_sunrise_swap_tx_proto_rawDesc = []byte{
 	0x0a, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e,
 	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75,
 	0x74, 0x65, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x05, 0x72,
-	0x6f, 0x75, 0x74, 0x65, 0x12, 0x4f, 0x0a, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f,
-	0x75, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde,
-	0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d,
-	0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x54, 0x0a, 0x0d, 0x6d, 0x61, 0x78, 0x5f, 0x61, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde,
-	0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e,
-	0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b,
-	0x6d, 0x61, 0x78, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x6f, 0x75, 0x74, 0x65, 0x12, 0x54, 0x0a, 0x0d, 0x6d, 0x61, 0x78, 0x5f, 0x61, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f,
+	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x6d,
+	0x61, 0x78, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x4f, 0x0a, 0x0a, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d,
+	0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
 	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x6e, 0x0a, 0x1d, 0x4d, 0x73, 0x67, 0x53,
 	0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75,
 	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4d, 0x0a, 0x09, 0x61, 0x6d, 0x6f,

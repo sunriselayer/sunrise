@@ -32,20 +32,13 @@ message RouteSeries {
 }
 
 message RouteParallel {
-  repeated WeightedRoute routes = 1 [
+  repeated Route routes = 1 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-}
-
-message WeightedRoute {
-  string weight = 1 [
+  repeated string weights = 2 [
     (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-  Route route = 2 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];

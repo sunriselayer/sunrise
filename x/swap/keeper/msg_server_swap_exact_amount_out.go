@@ -13,5 +13,12 @@ func (k msgServer) SwapExactAmountOut(goCtx context.Context, msg *types.MsgSwapE
 	// TODO: Handling the message
 	_ = ctx
 
-	return &types.MsgSwapExactAmountOutResponse{}, nil
+	amountIn, err := k.Keeper.SwapExactAmountOut(ctx, sender, msg.Route, msg.MaxAmountIn, msg.AmountOut)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgSwapExactAmountOutResponse{
+		AmountIn: amountIn,
+	}, nil
 }

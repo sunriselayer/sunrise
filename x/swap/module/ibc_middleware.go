@@ -130,12 +130,14 @@ func (im IBCMiddleware) OnRecvPacket(
 
 	// Swap
 	denomIn := data.Denom // TODO: convert ibc denom
-	tokenIn := sdk.NewCoin(denomIn, amountIn)
-	amountOut, err := im.keeper.RouteExactAmountIn(ctx, swapper, metadata.Routes, tokenIn, metadata.MinAmountOut)
+	// TODO: validaatep converted denomIn is equal to the route DenomIn
+	_ = denomIn
+
+	amountOut, err := im.keeper.SwapExactAmountIn(ctx, swapper, metadata.Route, amountIn, metadata.MinAmountOut)
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
-	denomOut := metadata.Routes[len(metadata.Routes)-1].DenomOut
+	denomOut := metadata.Route.DenomOut
 	tokenOut := sdk.NewCoin(denomOut, amountOut)
 
 	// Transfer from swapper to receiver

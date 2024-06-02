@@ -19,5 +19,9 @@ func (msg *MsgSwapExactAmountIn) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
+	if err := msg.Route.Validate(); err != nil {
+		return errorsmod.Wrapf(ErrInvalidRoute, "invalid route: %s", err)
+	}
+
 	return nil
 }
