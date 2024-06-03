@@ -29,16 +29,14 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "ConvertExactAmountIn",
-					Use:            "convert-exact-amount-in",
-					Short:          "Send a convert-exact-amount-in tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
-				},
-				{
-					RpcMethod:      "ConvertExactAmountOut",
-					Use:            "convert-exact-amount-out",
-					Short:          "Send a convert-exact-amount-out tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "Convert",
+					Use:       "convert [sender] [min-amount] [max-amount]",
+					Short:     "Send a convert tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "sender"},
+						{ProtoField: "min_amount"},
+						{ProtoField: "max_amount"},
+					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
