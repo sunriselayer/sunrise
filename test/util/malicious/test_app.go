@@ -45,7 +45,7 @@ func TestNodeConfig(behavior BehaviorConfig) *testnode.Config {
 
 // NewTestApp creates a new malicious application with the provided consensus
 // params.
-func NewTestApp(cparams *tmproto.ConsensusParams, mcfg BehaviorConfig, genAccounts ...string) *App {
+func NewTestApp(cparams tmproto.ConsensusParams, mcfg BehaviorConfig, genAccounts ...string) *App {
 	app, _ := util.SetupTestAppWithGenesisValSet(cparams, genAccounts...)
 	badapp := &App{App: app}
 	badapp.SetMaliciousBehavior(mcfg)

@@ -127,14 +127,11 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	}
 
 	// Validator set and app hash are set in InitChain
-	consensusParamsTmp := defaultoverrides.DefaultConsensusParams()
 	return types.GenesisDoc{
-		ChainID:     "testnet",
-		GenesisTime: time.Now().UTC(),
-		ConsensusParams: &types.ConsensusParams{
-			Block: types.BlockParams(*consensusParamsTmp.Block),
-		},
-		AppState: appState,
+		ChainID:         "testnet",
+		GenesisTime:     time.Now().UTC(),
+		ConsensusParams: defaultoverrides.DefaultConsensusParams(),
+		AppState:        appState,
 		// AppHash is not provided but computed after InitChain
 	}, nil
 }

@@ -52,7 +52,7 @@ func (ao EmptyAppOptions) Get(_ string) interface{} {
 // genesis accounts that also act as delegators. For simplicity, each validator
 // is bonded with a delegation of one consensus engine unit in the default token
 // of the app from first genesis account. A no-op logger is set in app.
-func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts ...string) (*app.App, keyring.Keyring) {
+func SetupTestAppWithGenesisValSet(cparams tmproto.ConsensusParams, genAccounts ...string) (*app.App, keyring.Keyring) {
 	testutil.InitSDKConfig()
 	// var cache storetypes.MultiStorePersistentCache
 	// EmptyAppOptions is a stub implementing AppOptions
@@ -91,7 +91,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 		&abci.RequestInitChain{
 			Time:            genesisTime,
 			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: cparams,
+			ConsensusParams: &cparams,
 			AppStateBytes:   stateBytes,
 			ChainId:         ChainID,
 		},

@@ -111,7 +111,7 @@ func NewRootCmd() *cobra.Command {
 	for name, module := range ibcModules {
 		autoCliOpts.Modules[name] = module
 	}
-	initRootCmd(rootCmd, clientCtx.TxConfig, clientCtx.InterfaceRegistry, clientCtx.Codec, moduleBasicManager)
+	initRootCmd(rootCmd, clientCtx.TxConfig, moduleBasicManager)
 
 	overwriteFlagDefaults(rootCmd, map[string]string{
 		flags.FlagChainID:        strings.ReplaceAll(app.Name, "-", ""),

@@ -3,45 +3,44 @@ package defaultoverrides
 import (
 	"time"
 
-	tmcfg "github.com/cometbft/cometbft/config"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmtcfg "github.com/cometbft/cometbft/config"
 	coretypes "github.com/cometbft/cometbft/types"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 )
 
 // DefaultConsensusParams returns a ConsensusParams with a MaxBytes
 // determined using a goal square size.
-func DefaultConsensusParams() *tmproto.ConsensusParams {
-	block := DefaultBlockParams()
-	evidence := DefaultEvidenceParams()
+func DefaultConsensusParams() *coretypes.ConsensusParams {
+	block := defaultBlockParams()
+	evidence := defaultEvidenceParams()
 	validatorTmp := coretypes.DefaultValidatorParams()
-	validator := tmproto.ValidatorParams{
+	validator := coretypes.ValidatorParams{
 		PubKeyTypes: validatorTmp.PubKeyTypes,
 	}
-	return &tmproto.ConsensusParams{
-		Block:     &block,
-		Evidence:  &evidence,
-		Validator: &validator,
-		Version: &tmproto.VersionParams{
+	return &coretypes.ConsensusParams{
+		Block:     block,
+		Evidence:  evidence,
+		Validator: validator,
+		Version: coretypes.VersionParams{
 			App: appconsts.LatestVersion,
 		},
 	}
 }
 
-// DefaultBlockParams returns a default BlockParams with a MaxBytes determined
+// defaultBlockParams returns a default BlockParams with a MaxBytes determined
 // using a goal square size.
-func DefaultBlockParams() tmproto.BlockParams {
-	return tmproto.BlockParams{
+func defaultBlockParams() coretypes.BlockParams {
+	return coretypes.BlockParams{
 		MaxBytes: appconsts.DefaultMaxBytes,
 		MaxGas:   -1,
 	}
 }
 
-// DefaultEvidenceParams returns a default EvidenceParams with a MaxAge
+// defaultEvidenceParams returns a default EvidenceParams with a MaxAge
 // determined using a goal block time.
-func DefaultEvidenceParams() tmproto.EvidenceParams {
+func defaultEvidenceParams() coretypes.EvidenceParams {
 	evdParamsTmp := coretypes.DefaultEvidenceParams()
-	evdParams := tmproto.EvidenceParams{
+	evdParams := coretypes.EvidenceParams{
 		MaxBytes: evdParamsTmp.MaxBytes,
 	}
 	evdParams.MaxAgeDuration = appconsts.DefaultUnbondingTime
@@ -49,8 +48,8 @@ func DefaultEvidenceParams() tmproto.EvidenceParams {
 	return evdParams
 }
 
-func DefaultConsensusConfig() *tmcfg.Config {
-	cfg := tmcfg.DefaultConfig()
+func DefaultConsensusConfig() *cmtcfg.Config {
+	cfg := cmtcfg.DefaultConfig()
 	// Set broadcast timeout to be 50 seconds in order to avoid timeouts for long block times
 	// TODO: make TimeoutBroadcastTx configurable per https://github.com/celestiaorg/celestia-app/issues/1034
 	cfg.RPC.TimeoutBroadcastTxCommit = 50 * time.Second
