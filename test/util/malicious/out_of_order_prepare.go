@@ -25,8 +25,9 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 	handler := ante.NewAnteHandler(
 		a.AccountKeeper,
 		a.BankKeeper,
-		a.BlobKeeper,
 		a.FeeGrantKeeper,
+		a.BlobKeeper,
+		a.FeeKeeper,
 		a.GetTxConfig().SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		a.IBCKeeper,

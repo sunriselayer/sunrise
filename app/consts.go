@@ -5,9 +5,13 @@ import (
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/sunriselayer/sunrise/app/encoding"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	blobmodule "github.com/sunriselayer/sunrise/x/blob/module"
 	bsmodule "github.com/sunriselayer/sunrise/x/blobstream/module"
+	feemodule "github.com/sunriselayer/sunrise/x/fee/module"
+	liquidityincentivemodule "github.com/sunriselayer/sunrise/x/liquidityincentive/module"
+	liquiditypoolmodule "github.com/sunriselayer/sunrise/x/liquiditypool/module"
+	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
+	tokenconvertermodule "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 
 	// "cosmossdk.io/depinject"
 	"cosmossdk.io/x/evidence"
@@ -18,22 +22,17 @@ import (
 	auth "github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
+	distribution "github.com/cosmos/cosmos-sdk/x/distribution"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	mint "github.com/cosmos/cosmos-sdk/x/mint"
 	"github.com/cosmos/cosmos-sdk/x/params"
+	slashing "github.com/cosmos/cosmos-sdk/x/slashing"
 
 	capability "github.com/cosmos/ibc-go/modules/capability"
 	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
-)
 
-const (
-	// BondDenom defines the native staking token denomination.
-	BondDenom = appconsts.BondDenom
-	// BondDenomAlias defines an alias for BondDenom.
-	BondDenomAlias = "micro-sr"
-	// DisplayDenom defines the name, symbol, and display value of the Celestia token.
-	DisplayDenom = "SR"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 )
 
 var (
@@ -74,18 +73,20 @@ func ModuleBasics() sdkmodule.BasicManager {
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 
-	moduleBasics := sdkmodule.NewBasicManager(
+	moduleBasics := sdkmodule.BasicManager{}
+
+	moduleBasics = sdkmodule.NewBasicManager(
 		auth.AppModuleBasic{},
 		genutil.AppModuleBasic{},
-		bankModule{},
+		defaultoverrides.BankModuleBasic{},
 		capability.AppModuleBasic{},
-		stakingModule{},
+		defaultoverrides.StakingModuleBasic{},
 		mint.AppModuleBasic{},
-		distributionModule{},
-		govModule{},
+		distribution.AppModuleBasic{},
+		defaultoverrides.GovModuleBasic{},
 		params.AppModuleBasic{},
-		crisisModule{},
-		slashingModule{},
+		defaultoverrides.CrisisModuleBasic{},
+		slashing.AppModuleBasic{},
 		authzmodule.AppModuleBasic{},
 		feegrantmodule.AppModuleBasic{},
 		ibc.AppModuleBasic{},
@@ -94,9 +95,14 @@ func ModuleBasics() sdkmodule.BasicManager {
 		vesting.AppModuleBasic{},
 		blobmodule.AppModuleBasic{},
 		bsmodule.AppModuleBasic{},
+		tokenconvertermodule.AppModuleBasic{},
+		liquiditypoolmodule.AppModuleBasic{},
+		liquidityincentivemodule.AppModuleBasic{},
+		swapmodule.AppModuleBasic{},
+		feemodule.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 	)
-	// moduleBasics := sdkmodule.BasicManager{}
+
 	// depinject.Inject(
 	// 	depinject.Configs(AppConfig()),
 	// 	&moduleBasics,

@@ -8,6 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	apperr "github.com/sunriselayer/sunrise/app/errors"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
@@ -22,9 +23,9 @@ import (
 // different error message that does not match the regexp.
 func TestNonceMismatchIntegration(t *testing.T) {
 	account := "test"
-	testApp, kr := testutil.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), account)
+	testApp, kr := testutil.SetupTestAppWithGenesisValSet(defaultoverrides.DefaultConsensusParams(), account)
 	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
-	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, app.BondDenom))
+	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom))
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)
 	addr := testfactory.GetAddress(kr, account)

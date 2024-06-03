@@ -11,6 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	apperr "github.com/sunriselayer/sunrise/app/errors"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
@@ -30,8 +31,8 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 		gasPrice         = float64(feeAmount) / float64(gasLimit)
 	)
 	account := "test"
-	testApp, kr := testutil.SetupTestAppWithGenesisValSet(app.DefaultConsensusParams(), account)
-	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, app.BondDenom))
+	testApp, kr := testutil.SetupTestAppWithGenesisValSet(defaultoverrides.DefaultConsensusParams(), account)
+	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom))
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)
 	addr := testfactory.GetAddress(kr, account)
@@ -40,7 +41,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	signer, err := user.NewSigner(kr, nil, addr, enc.TxConfig, testutil.ChainID, acc.GetAccountNumber(), acc.GetSequence())
 	require.NoError(t, err)
 
-	fee := sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(feeAmount)))
+	fee := sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(feeAmount)))
 	b, err := blob.NewBlob(apprand.RandomNamespace(), []byte("hello world"), 0)
 	require.NoError(t, err)
 

@@ -7,6 +7,7 @@ import (
 
 	"cosmossdk.io/log"
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -50,7 +51,7 @@ func NewDefaultGenesis() *Genesis {
 	ecfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 	g := &Genesis{
 		ecfg:            ecfg,
-		ConsensusParams: app.DefaultConsensusParams(),
+		ConsensusParams: defaultoverrides.DefaultConsensusParams(),
 		ChainID:         "test-app", // tmrand.Str(6), (for err check in v0.50)
 		GenesisTime:     time.Now(),
 		kr:              keyring.NewInMemory(ecfg.Codec),
