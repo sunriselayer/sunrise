@@ -3,13 +3,13 @@ package types
 import ()
 
 func NewPacketIndex(
-	srcPortId string,
-	srcChannelId string,
+	portId string,
+	channelId string,
 	sequence uint64,
 ) PacketIndex {
 	return PacketIndex{
-		SrcPortId:    srcPortId,
-		SrcChannelId: srcChannelId,
-		Sequence:     sequence,
+		PortId:    portId,
+		ChannelId: channelId,
+		Sequence:  sequence,
 	}
 }

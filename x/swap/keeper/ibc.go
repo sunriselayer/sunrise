@@ -13,6 +13,7 @@ import (
 
 func (k Keeper) TransferAndCreateInFlightPacket(
 	ctx context.Context,
+	ackWaitingIndex types.PacketIndex,
 	sender string,
 	tokenOut sdk.Coin,
 	metadata packetforwardtypes.ForwardMetadata,
@@ -52,6 +53,7 @@ func (k Keeper) TransferAndCreateInFlightPacket(
 			metadata.Channel,
 			res.Sequence,
 		),
+		AckWaitingIndex:  ackWaitingIndex,
 		RetriesRemaining: int32(retries),
 	}
 

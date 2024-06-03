@@ -130,6 +130,10 @@ func (im IBCMiddleware) OnRecvPacket(
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
 
+	im.keeper.SetAckWaitingPacket(ctx, types.AckWaitingPacket{
+		Index: types.NewPacketIndex(packet.DestinationPort, packet.DestinationChannel, packet.Sequence),
+	})
+
 	// Swap
 	denomIn := data.Denom // TODO: convert ibc denom
 	// TODO: validate converted denomIn is equal to the route DenomIn
@@ -275,7 +279,7 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 	if err != nil {
 		return err
 	}
-	im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.SrcPortId, inflightPacket.Index.SrcChannelId, inflightPacket.Index.Sequence)
+	im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.PortId, inflightPacket.Index.ChannelId, inflightPacket.Index.Sequence)
 
 	return im.IBCModule.OnAcknowledgementPacket(ctx, packet, bz, relayer)
 }
@@ -301,7 +305,7 @@ func (im IBCMiddleware) OnTimeoutPacket(
 	if inflightPacket.RetriesRemaining > 0 {
 		// TODO: Resend packet
 
-		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.SrcPortId, inflightPacket.Index.SrcChannelId, inflightPacket.Index.Sequence)
+		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.PortId, inflightPacket.Index.ChannelId, inflightPacket.Index.Sequence)
 		inflightPacket.Index.Sequence = 0 // TODO: Reset sequence
 		im.keeper.SetInFlightPacket(ctx, inflightPacket)
 	} else {
@@ -328,7 +332,7 @@ func (im IBCMiddleware) OnTimeoutPacket(
 			return err
 		}
 
-		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.SrcPortId, inflightPacket.Index.SrcChannelId, inflightPacket.Index.Sequence)
+		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.PortId, inflightPacket.Index.ChannelId, inflightPacket.Index.Sequence)
 	}
 
 	return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)

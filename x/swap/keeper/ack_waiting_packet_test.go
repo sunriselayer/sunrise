@@ -19,9 +19,9 @@ func createNAckWaitingPacket(keeper keeper.Keeper, ctx context.Context, n int) [
 	items := make([]types.AckWaitingPacket, n)
 	for i := range items {
 		items[i].Index = types.PacketIndex{
-			SrcPortId:    strconv.Itoa(i),
-			SrcChannelId: strconv.Itoa(i),
-			Sequence:     uint64(i),
+			PortId:    strconv.Itoa(i),
+			ChannelId: strconv.Itoa(i),
+			Sequence:  uint64(i),
 		}
 
 		keeper.SetAckWaitingPacket(ctx, items[i])
@@ -34,8 +34,8 @@ func TestAckWaitingPacketGet(t *testing.T) {
 	items := createNAckWaitingPacket(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetAckWaitingPacket(ctx,
-			item.Index.SrcPortId,
-			item.Index.SrcChannelId,
+			item.Index.PortId,
+			item.Index.ChannelId,
 			item.Index.Sequence,
 		)
 		require.True(t, found)
@@ -50,13 +50,13 @@ func TestAckWaitingPacketRemove(t *testing.T) {
 	items := createNAckWaitingPacket(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveAckWaitingPacket(ctx,
-			item.Index.SrcPortId,
-			item.Index.SrcChannelId,
+			item.Index.PortId,
+			item.Index.ChannelId,
 			item.Index.Sequence,
 		)
 		_, found := keeper.GetAckWaitingPacket(ctx,
-			item.Index.SrcPortId,
-			item.Index.SrcChannelId,
+			item.Index.PortId,
+			item.Index.ChannelId,
 			item.Index.Sequence,
 		)
 		require.False(t, found)

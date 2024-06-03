@@ -30,7 +30,7 @@ message AckWaitingPacket {
 }
 
 message PacketIndex {
-  string src_port_id = 1;
-  string src_channel_id = 2;
+  string port_id = 1;
+  string channel_id = 2;
   uint64 sequence = 3;
 }

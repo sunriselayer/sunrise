@@ -17,32 +17,32 @@ func TestGenesis(t *testing.T) {
 		InFlightPacketList: []types.InFlightPacket{
 			{
 				Index: types.PacketIndex{
-					SrcPortId:    "0",
-					SrcChannelId: "0",
-					Sequence:     0,
+					PortId:    "0",
+					ChannelId: "0",
+					Sequence:  0,
 				},
 			},
 			{
 				Index: types.PacketIndex{
-					SrcPortId:    "1",
-					SrcChannelId: "1",
-					Sequence:     1,
+					PortId:    "1",
+					ChannelId: "1",
+					Sequence:  1,
 				},
 			},
 		},
 		AckWaitingPacketList: []types.AckWaitingPacket{
 			{
 				Index: types.PacketIndex{
-					SrcPortId:    "0",
-					SrcChannelId: "0",
-					Sequence:     0,
+					PortId:    "0",
+					ChannelId: "0",
+					Sequence:  0,
 				},
 			},
 			{
 				Index: types.PacketIndex{
-					SrcPortId:    "1",
-					SrcChannelId: "1",
-					Sequence:     1,
+					PortId:    "1",
+					ChannelId: "1",
+					Sequence:  1,
 				},
 			},
 		},
