@@ -20,8 +20,11 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 func New(t *testing.T, config network.Config, genAccNames ...string) *network.Network {
@@ -66,7 +69,7 @@ func GRPCConn(net *network.Network) error {
 // genesis and single validator. All other parameters are inherited from
 // cosmos-sdk/testutil/network.DefaultConfig
 func DefaultConfig() network.Config {
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 
 	return network.Config{
 		Codec:             encCfg.Codec,
@@ -81,12 +84,12 @@ func DefaultConfig() network.Config {
 			)
 			return a
 		},
-		GenesisState:    app.ModuleBasics().DefaultGenesis(encCfg.Codec),
+		GenesisState:    testencoding.ModuleBasics.DefaultGenesis(encCfg.Codec),
 		TimeoutCommit:   2 * time.Second,
 		ChainID:         "chain-" + tmrand.Str(6),
 		NumValidators:   1,
-		BondDenom:       app.BondDenom,
-		MinGasPrices:    fmt.Sprintf("0.000006%s", app.BondDenom),
+		BondDenom:       appconsts.BondDenom,
+		MinGasPrices:    fmt.Sprintf("0.000006%s", appconsts.BondDenom),
 		AccountTokens:   sdk.TokensFromConsensusPower(1000, sdk.DefaultPowerReduction),
 		StakingTokens:   sdk.TokensFromConsensusPower(500, sdk.DefaultPowerReduction),
 		BondedTokens:    sdk.TokensFromConsensusPower(100, sdk.DefaultPowerReduction),
@@ -129,8 +132,8 @@ func newGenAccout(kr keyring.Keyring, name string, amount int64) (authtypes.Gene
 
 	// create coin
 	balances := sdk.NewCoins(
-		sdk.NewCoin(fmt.Sprintf("%stoken", app.BondDenom), sdkmath.NewInt(amount)),
-		sdk.NewCoin(app.BondDenom, sdkmath.NewInt(amount)),
+		sdk.NewCoin(fmt.Sprintf("%stoken", appconsts.BondDenom), sdkmath.NewInt(amount)),
+		sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(amount)),
 	)
 
 	addr, err := info.GetAddress()

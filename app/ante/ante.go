@@ -3,6 +3,7 @@ package ante
 import (
 	blobante "github.com/sunriselayer/sunrise/x/blob/ante"
 	blob "github.com/sunriselayer/sunrise/x/blob/keeper"
+	fee "github.com/sunriselayer/sunrise/x/fee/keeper"
 
 	"cosmossdk.io/x/tx/signing"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -11,14 +12,15 @@ import (
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	converterante "github.com/sunriselayer/sunrise/x/tokenconverter/ante"
+	feeante "github.com/sunriselayer/sunrise/x/fee/ante"
 )
 
 func NewAnteHandler(
 	accountKeeper ante.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
-	blobKeeper blob.Keeper,
 	feegrantKeeper ante.FeegrantKeeper,
+	blobKeeper blob.Keeper,
+	feeKeeper fee.Keeper,
 	signModeHandler *signing.HandlerMap,
 	sigGasConsumer ante.SignatureVerificationGasConsumer,
 	channelKeeper *ibckeeper.Keeper,
@@ -42,7 +44,8 @@ func NewAnteHandler(
 		ante.NewConsumeGasForTxSizeDecorator(accountKeeper),
 		// Ensure the feepayer (fee granter or first signer) has enough funds to pay for the tx.
 		// Side effect: deducts fees from the fee payer. Sets the tx priority in context.
-		ante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, converterante.CheckTxFeeWithValidatorMinGasPrices),
+		// ante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, nil),
+		feeante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, feeKeeper),
 		// Set public keys in the context for fee-payer and all signers.
 		// Contract: must be called before all signature verification decorators.
 		ante.NewSetPubKeyDecorator(accountKeeper),

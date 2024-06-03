@@ -6,10 +6,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/app"
+
+	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 )
 
 func initSDKConfig() {
 	// Set prefixes
+	accountAddressPrefix := app.Bech32PrefixAccAddr
 	accountPubKeyPrefix := app.Bech32PrefixAccPub
 	validatorAddressPrefix := app.Bech32PrefixValAddr
 	validatorPubKeyPrefix := app.Bech32PrefixValPub
@@ -18,7 +21,7 @@ func initSDKConfig() {
 
 	// Set and seal config
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(app.AccountAddressPrefix, accountPubKeyPrefix)
+	config.SetBech32PrefixForAccount(accountAddressPrefix, accountPubKeyPrefix)
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 	config.Seal()
@@ -27,11 +30,13 @@ func initSDKConfig() {
 // initCometBFTConfig helps to override default CometBFT Config values.
 // return cmtcfg.DefaultConfig if no custom configuration is required for the application.
 func initCometBFTConfig() *cmtcfg.Config {
-	cfg := cmtcfg.DefaultConfig()
+	// cfg := cmtcfg.DefaultConfig()
 
 	// these values put a higher strain on node memory
 	// cfg.P2P.MaxNumInboundPeers = 100
 	// cfg.P2P.MaxNumOutboundPeers = 40
+
+	cfg := defaultoverrides.DefaultConsensusConfig()
 
 	return cfg
 }
@@ -46,7 +51,7 @@ func initAppConfig() (string, interface{}) {
 
 	// Optionally allow the chain developer to overwrite the SDK's default
 	// server config.
-	srvCfg := serverconfig.DefaultConfig()
+	// srvCfg := serverconfig.DefaultConfig()
 	// The SDK's default minimum gas price is set to "" (empty value) inside
 	// app.toml. If left empty by validators, the node will halt on startup.
 	// However, the chain developer can set a default app.toml value for their
@@ -61,6 +66,7 @@ func initAppConfig() (string, interface{}) {
 	// In tests, we set the min gas prices to 0.
 	// srvCfg.MinGasPrices = "0stake"
 	// srvCfg.BaseConfig.IAVLDisableFastNode = true // disable fastnode by default
+	srvCfg := defaultoverrides.DefaultServerConfig()
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,

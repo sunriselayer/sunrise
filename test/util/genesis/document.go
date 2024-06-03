@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
 
@@ -17,6 +16,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 // Document will create a valid genesis doc with funded addresses.
@@ -59,7 +60,7 @@ func Document(
 	// 	return nil, err
 	// }
 
-	state := app.ModuleBasics().DefaultGenesis(ecfg.Codec)
+	state := testencoding.ModuleBasics.DefaultGenesis(ecfg.Codec)
 	state[authtypes.ModuleName] = ecfg.Codec.MustMarshalJSON(authGenState)
 	state[banktypes.ModuleName] = ecfg.Codec.MustMarshalJSON(bankGenState)
 	state[genutiltypes.ModuleName] = ecfg.Codec.MustMarshalJSON(genutilGenState)

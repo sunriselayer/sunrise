@@ -28,6 +28,7 @@ func GeneratePrivKeyAddressPairs(n int) (keys []cryptotypes.PrivKey, addrs []sdk
 
 func InitSDKConfig() {
 	// Set prefixes
+	accountAddressPrefix := app.Bech32PrefixAccAddr
 	accountPubKeyPrefix := app.Bech32PrefixAccPub
 	validatorAddressPrefix := app.Bech32PrefixValAddr
 	validatorPubKeyPrefix := app.Bech32PrefixValPub
@@ -36,7 +37,7 @@ func InitSDKConfig() {
 
 	// Set and seal config
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(app.AccountAddressPrefix, accountPubKeyPrefix)
+	config.SetBech32PrefixForAccount(accountAddressPrefix, accountPubKeyPrefix)
 	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 	// config.Seal()

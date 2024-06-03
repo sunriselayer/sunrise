@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/ante"
 	"github.com/sunriselayer/sunrise/app/encoding"
+	appconsts "github.com/sunriselayer/sunrise/pkg/appconsts"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -18,9 +19,9 @@ func TestPanicHandlerDecorator(t *testing.T) {
 	decorator := ante.NewHandlePanicDecorator()
 	anteHandler := sdk.ChainAnteDecorators(decorator, mockPanicDecorator{})
 	ctx := sdk.Context{}
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	builder := encCfg.TxConfig.NewTxBuilder()
-	err := builder.SetMsgs(banktypes.NewMsgSend(testnode.RandomAddress().(sdk.AccAddress), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(app.BondDenom, 10))))
+	err := builder.SetMsgs(banktypes.NewMsgSend(testnode.RandomAddress().(sdk.AccAddress), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(appconsts.BondDenom, 10))))
 	require.NoError(t, err)
 	tx := builder.GetTx()
 	defer func() {

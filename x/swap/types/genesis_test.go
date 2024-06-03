@@ -19,12 +19,42 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
+				InFlightPacketList: []types.InFlightPacket{
+					{
+						SrcPortId:    "0",
+						SrcChannelId: "0",
+						Sequence:     0,
+					},
+					{
+						SrcPortId:    "1",
+						SrcChannelId: "1",
+						Sequence:     1,
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "duplicated inFlightPacket",
+			genState: &types.GenesisState{
+				InFlightPacketList: []types.InFlightPacket{
+					{
+						SrcPortId:    "0",
+						SrcChannelId: "0",
+						Sequence:     0,
+					},
+					{
+						SrcPortId:    "0",
+						SrcChannelId: "0",
+						Sequence:     0,
+					},
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}

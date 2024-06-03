@@ -12,11 +12,12 @@ import (
 	"github.com/celestiaorg/knuu/pkg/knuu"
 	"github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	v1 "github.com/sunriselayer/sunrise/pkg/appconsts/v1"
 	v2 "github.com/sunriselayer/sunrise/pkg/appconsts/v2"
 	"github.com/sunriselayer/sunrise/test/txsim"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 // This will only run tests within the v1 major release cycle
@@ -71,7 +72,7 @@ func TestMinorVersionCompatibility(t *testing.T) {
 	sequences = append(sequences, txsim.NewSendSequence(4, 1000, 100).Clone(5)...)
 
 	errCh := make(chan error)
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	opts := txsim.DefaultOptions().WithSeed(seed).SuppressLogs()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -170,7 +171,7 @@ func TestMajorUpgradeToV2(t *testing.T) {
 	require.NoError(t, testnet.Start())
 
 	errCh := make(chan error)
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	opts := txsim.DefaultOptions().WithSeed(seed).SuppressLogs()
 	sequences := txsim.NewBlobSequence(txsim.NewRange(200, 4000), txsim.NewRange(1, 3)).Clone(5)
 	sequences = append(sequences, txsim.NewSendSequence(4, 1000, 100).Clone(5)...)

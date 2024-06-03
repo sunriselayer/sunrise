@@ -17,6 +17,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "InFlightPacketAll",
+					Use:       "list-in-flight-packet",
+					Short:     "List all in-flight-packet",
+				},
+				{
+					RpcMethod:      "InFlightPacket",
+					Use:            "show-in-flight-packet [src-port] [src-channel] [sequence]",
+					Short:          "Shows a in-flight-packet",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "src_port_id"}, {ProtoField: "src_channel_id"}, {ProtoField: "sequence"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -38,7 +49,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod:      "SwapExactAmountOut",
 					Use:            "swap-exact-amount-out",
 					Short:          "Send a swap-exact-amount-out tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						// {ProtoField: "interface_provider"},
+						// {ProtoField: "route"},
+						// {ProtoField: "max_amount_in"},
+						// {ProtoField: "amount_out"},
+					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

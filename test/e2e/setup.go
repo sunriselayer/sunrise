@@ -20,8 +20,12 @@ import (
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 	slashing "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/sunriselayer/sunrise/app"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
+
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 )
 
 type Account struct {
@@ -30,13 +34,13 @@ type Account struct {
 }
 
 func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
-	encCdc := encoding.MakeConfig(app.ModuleEncodingRegisters...)
-	appGenState := app.ModuleBasics().DefaultGenesis(encCdc.Codec)
+	encCdc := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
+	appGenState := testencoding.ModuleBasics.DefaultGenesis(encCdc.Codec)
 	bankGenesis := bank.DefaultGenesisState()
 	stakingGenesis := staking.DefaultGenesisState()
 	slashingGenesis := slashing.DefaultGenesisState()
 	genAccs := []auth.GenesisAccount{}
-	stakingGenesis.Params.BondDenom = app.BondDenom
+	stakingGenesis.Params.BondDenom = appconsts.BondDenom
 	delegations := make([]staking.Delegation, 0, len(nodes))
 	valInfo := make([]slashing.SigningInfo, 0, len(nodes))
 	balances := make([]bank.Balance, 0, len(accounts))
@@ -96,14 +100,14 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 		balances = append(balances, bank.Balance{
 			Address: sdk.AccAddress(addr).String(),
 			Coins: sdk.NewCoins(
-				sdk.NewCoin(app.BondDenom, sdkmath.NewInt(account.InitialTokens)),
+				sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(account.InitialTokens)),
 			),
 		})
 	}
 	// add bonded amount to bonded pool module account
 	balances = append(balances, bank.Balance{
 		Address: auth.NewModuleAddress(staking.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(app.BondDenom, sdkmath.NewInt(totalBonded))},
+		Coins:   sdk.Coins{sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(totalBonded))},
 	})
 	bankGenesis.Balances = bank.SanitizeGenesisBalances(balances)
 	authGenesis := auth.NewGenesisState(auth.DefaultParams(), genAccs)
@@ -114,7 +118,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	appGenState[staking.ModuleName] = encCdc.Codec.MustMarshalJSON(stakingGenesis)
 	appGenState[slashing.ModuleName] = encCdc.Codec.MustMarshalJSON(slashingGenesis)
 
-	if err := app.ModuleBasics().ValidateGenesis(encCdc.Codec, encCdc.TxConfig, appGenState); err != nil {
+	if err := testencoding.ModuleBasics.ValidateGenesis(encCdc.Codec, encCdc.TxConfig, appGenState); err != nil {
 		return types.GenesisDoc{}, fmt.Errorf("validating genesis: %w", err)
 	}
 
@@ -124,14 +128,11 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	}
 
 	// Validator set and app hash are set in InitChain
-	consensusParamsTmp := app.DefaultConsensusParams()
 	return types.GenesisDoc{
-		ChainID:     "testnet",
-		GenesisTime: time.Now().UTC(),
-		ConsensusParams: &types.ConsensusParams{
-			Block: types.BlockParams(*consensusParamsTmp.Block),
-		},
-		AppState: appState,
+		ChainID:         "testnet",
+		GenesisTime:     time.Now().UTC(),
+		ConsensusParams: defaultoverrides.DefaultConsensusParams(),
+		AppState:        appState,
 		// AppHash is not provided but computed after InitChain
 	}, nil
 }
@@ -166,6 +167,6 @@ func WriteAddressBook(peers []string, file string) error {
 
 func MakeAppConfig(_ *Node) (*serverconfig.Config, error) {
 	srvCfg := serverconfig.DefaultConfig()
-	srvCfg.MinGasPrices = fmt.Sprintf("0.001%s", app.BondDenom)
+	srvCfg.MinGasPrices = fmt.Sprintf("0.001%s", appconsts.BondDenom)
 	return srvCfg, srvCfg.ValidateBasic()
 }

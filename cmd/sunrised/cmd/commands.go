@@ -14,8 +14,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/pruning"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/client/snapshot"
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/server"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -26,17 +24,17 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/sunriselayer/sunrise/app"
+	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 )
 
 func initRootCmd(
 	rootCmd *cobra.Command,
 	txConfig client.TxConfig,
-	interfaceRegistry codectypes.InterfaceRegistry,
-	appCodec codec.Codec,
 	basicManager module.BasicManager,
 ) {
 	rootCmd.AddCommand(
-		genutilcli.InitCmd(basicManager, app.DefaultNodeHome),
+		// genutilcli.InitCmd(basicManager, app.DefaultNodeHome),
+		defaultoverrides.InitCmd(basicManager, app.DefaultNodeHome),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),

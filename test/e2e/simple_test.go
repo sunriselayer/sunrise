@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	v1 "github.com/sunriselayer/sunrise/pkg/appconsts/v1"
 	"github.com/sunriselayer/sunrise/test/txsim"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
 )
 
@@ -57,7 +57,7 @@ func TestE2ESimple(t *testing.T) {
 	sequences := txsim.NewBlobSequence(txsim.NewRange(200, 4000), txsim.NewRange(1, 3)).Clone(5)
 	sequences = append(sequences, txsim.NewSendSequence(4, 1000, 100).Clone(5)...)
 
-	encCfg := encoding.MakeConfig(app.ModuleEncodingRegisters...)
+	encCfg := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	opts := txsim.DefaultOptions().WithSeed(seed).SuppressLogs()

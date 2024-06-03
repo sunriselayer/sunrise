@@ -10,8 +10,19 @@ import (
 func (k msgServer) SwapExactAmountOut(goCtx context.Context, msg *types.MsgSwapExactAmountOut) (*types.MsgSwapExactAmountOutResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
 
-	return &types.MsgSwapExactAmountOutResponse{}, nil
+	result, interfaceProviderFee, err := k.Keeper.SwapExactAmountOut(ctx, sender, msg.InterfaceProvider, msg.Route, msg.MaxAmountIn, msg.AmountOut)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgSwapExactAmountOutResponse{
+		Result:               result,
+		InterfaceProviderFee: interfaceProviderFee,
+		AmountOut:            result.TokenOut.Amount.Sub(interfaceProviderFee),
+	}, nil
 }

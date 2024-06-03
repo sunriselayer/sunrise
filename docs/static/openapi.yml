@@ -19061,6 +19061,62 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunrise.fee.Msg/UpdateParams:
+    post:
+      summary: |-
+        UpdateParams defines a (governance) operation for updating the module
+        parameters. The authority defaults to the x/gov module account.
+      operationId: SunriseFeeMsg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: MsgUpdateParams is the Msg/UpdateParams request type.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: |-
+                  params defines the module parameters to update.
+
+                  NOTE: All parameters must be supplied.
+                type: object
+            description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
   /sunrise.liquidityincentive.Msg/UpdateParams:
     post:
       summary: |-
@@ -19280,6 +19336,8 @@ paths:
                 type: string
               denom_quote:
                 type: string
+              fee_rate:
+                type: string
       tags:
         - Msg
   /sunrise.liquiditypool.Msg/CreatePosition:
@@ -19363,9 +19421,9 @@ paths:
                   method
 
                   signatures required by gogoproto.
-              amount_min_base:
+              min_amount_base:
                 type: string
-              amount_min_quote:
+              min_amount_quote:
                 type: string
       tags:
         - Msg
@@ -19463,9 +19521,9 @@ paths:
                 type: string
               amount_quote:
                 type: string
-              amount_min_base:
+              min_amount_base:
                 type: string
-              amount_min_quote:
+              min_amount_quote:
                 type: string
       tags:
         - Msg
@@ -19527,6 +19585,431 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunriselayer/sunrise/liquiditypool/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseLiquiditypoolQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  withdraw_fee_rate:
+                    type: string
+                  swap_treasury_tax_rate:
+                    type: string
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /sunriselayer/sunrise/liquiditypool/pool:
+    get:
+      operationId: SunriseLiquiditypoolQuery_PoolAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Pool:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uint64
+                    denom_base:
+                      type: string
+                    denom_quote:
+                      type: string
+                    fee_rate:
+                      type: string
+                    tick_params:
+                      type: object
+                    current_tick:
+                      type: string
+                      format: int64
+                    current_tick_liquidity:
+                      type: string
+                    current_sqrt_price:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /sunriselayer/sunrise/liquiditypool/pool/{id}:
+    get:
+      summary: Queries a list of Pool items.
+      operationId: SunriseLiquiditypoolQuery_Pool
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Pool:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uint64
+                  denom_base:
+                    type: string
+                  denom_quote:
+                    type: string
+                  fee_rate:
+                    type: string
+                  tick_params:
+                    type: object
+                  current_tick:
+                    type: string
+                    format: int64
+                  current_tick_liquidity:
+                    type: string
+                  current_sqrt_price:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /sunriselayer/sunrise/liquiditypool/position:
+    get:
+      operationId: SunriseLiquiditypoolQuery_PositionAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Position:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uint64
+                    address:
+                      type: string
+                    pool_id:
+                      type: string
+                      format: uint64
+                    lower_tick:
+                      type: string
+                      format: int64
+                    upper_tick:
+                      type: string
+                      format: int64
+                    liquidity:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /sunriselayer/sunrise/liquiditypool/position/{id}:
+    get:
+      summary: Queries a list of Position items.
+      operationId: SunriseLiquiditypoolQuery_Position
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Position:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uint64
+                  address:
+                    type: string
+                  pool_id:
+                    type: string
+                    format: uint64
+                  lower_tick:
+                    type: string
+                    format: int64
+                  upper_tick:
+                    type: string
+                    format: int64
+                  liquidity:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
   /sunrise.swap.Msg/SwapExactAmountIn:
     post:
       operationId: SunriseSwapMsg_SwapExactAmountIn
@@ -19534,7 +20017,7 @@ paths:
         '200':
           description: A successful response.
           schema:
-            type: object
+            $ref: '#/definitions/sunrise.swap.MsgSwapExactAmountInResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -19558,10 +20041,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              sender:
-                type: string
+            $ref: '#/definitions/sunrise.swap.MsgSwapExactAmountIn'
       tags:
         - Msg
   /sunrise.swap.Msg/SwapExactAmountOut:
@@ -19571,7 +20051,7 @@ paths:
         '200':
           description: A successful response.
           schema:
-            type: object
+            $ref: '#/definitions/sunrise.swap.MsgSwapExactAmountOutResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -19595,10 +20075,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              sender:
-                type: string
+            $ref: '#/definitions/sunrise.swap.MsgSwapExactAmountOut'
       tags:
         - Msg
   /sunrise.swap.Msg/UpdateParams:
@@ -19657,6 +20134,134 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunriselayer/sunrise/swap/in_flight_packet:
+    get:
+      operationId: SunriseSwapQuery_InFlightPacketAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/sunrise.swap.QueryAllInFlightPacketResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /sunriselayer/sunrise/swap/in_flight_packet/{src_port_id}/{src_channel_id}/{sequence}:
+    get:
+      summary: Queries a list of InFlightPacket items.
+      operationId: SunriseSwapQuery_InFlightPacket
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/sunrise.swap.QueryGetInFlightPacketResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: src_port_id
+          in: path
+          required: true
+          type: string
+        - name: src_channel_id
+          in: path
+          required: true
+          type: string
+        - name: sequence
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
   /sunriselayer/sunrise/swap/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -19696,14 +20301,17 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /sunrise.tokenconverter.Msg/ConvertExactAmountIn:
+  /sunrise.tokenconverter.Msg/Convert:
     post:
-      operationId: SunriseTokenconverterMsg_ConvertExactAmountIn
+      operationId: SunriseTokenconverterMsg_Convert
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
+            properties:
+              amount:
+                type: string
         default:
           description: An unexpected error response.
           schema:
@@ -19731,50 +20339,9 @@ paths:
             properties:
               sender:
                 type: string
-              amount_in:
+              min_amount:
                 type: string
-              min_amount_out:
-                type: string
-      tags:
-        - Msg
-  /sunrise.tokenconverter.Msg/ConvertExactAmountOut:
-    post:
-      operationId: SunriseTokenconverterMsg_ConvertExactAmountOut
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-              amount_out:
-                type: string
-              max_amount_in:
+              max_amount:
                 type: string
       tags:
         - Msg
@@ -19828,6 +20395,13 @@ paths:
               params:
                 description: 'NOTE: All parameters must be supplied.'
                 type: object
+                properties:
+                  denom_gov_token:
+                    type: string
+                  denom_fee_token:
+                    type: string
+                  max_supply_fee_token:
+                    type: string
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
@@ -27554,6 +28128,29 @@ definitions:
         type: string
         format: uint64
     description: Params defines the parameters for the module.
+  sunrise.fee.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: |-
+          params defines the module parameters to update.
+
+          NOTE: All parameters must be supplied.
+        type: object
+    description: MsgUpdateParams is the Msg/UpdateParams request type.
+  sunrise.fee.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
+  sunrise.fee.Params:
+    type: object
+    description: Params defines the parameters for the module.
   sunrise.liquidityincentive.MsgUpdateParams:
     type: object
     properties:
@@ -27640,6 +28237,8 @@ definitions:
         type: string
       denom_quote:
         type: string
+      fee_rate:
+        type: string
   sunrise.liquiditypool.MsgCreatePoolResponse:
     type: object
     properties:
@@ -27681,9 +28280,9 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
-      amount_min_base:
+      min_amount_base:
         type: string
-      amount_min_quote:
+      min_amount_quote:
         type: string
   sunrise.liquiditypool.MsgCreatePositionResponse:
     type: object
@@ -27726,9 +28325,9 @@ definitions:
         type: string
       amount_quote:
         type: string
-      amount_min_base:
+      min_amount_base:
         type: string
-      amount_min_quote:
+      min_amount_quote:
         type: string
   sunrise.liquiditypool.MsgIncreaseLiquidityResponse:
     type: object
@@ -27767,20 +28366,329 @@ definitions:
       swap_treasury_tax_rate:
         type: string
     description: Params defines the parameters for the module.
+  cosmos.base.query.v1beta1.PageRequest:
+    type: object
+    properties:
+      key:
+        type: string
+        format: byte
+        description: |-
+          key is a value returned in PageResponse.next_key to begin
+          querying the next page most efficiently. Only one of offset or key
+          should be set.
+      offset:
+        type: string
+        format: uint64
+        description: |-
+          offset is a numeric offset that can be used when key is unavailable.
+          It is less efficient than using key. Only one of offset or key should
+          be set.
+      limit:
+        type: string
+        format: uint64
+        description: >-
+          limit is the total number of results to be returned in the result
+          page.
+
+          If left empty it will default to a value to be set by each app.
+      count_total:
+        type: boolean
+        description: >-
+          count_total is set to true  to indicate that the result set should
+          include
+
+          a count of the total number of items available for pagination in UIs.
+
+          count_total is only respected when offset is used. It is ignored when
+          key
+
+          is set.
+      reverse:
+        type: boolean
+        description: >-
+          reverse is set to true if results are to be returned in the descending
+          order.
+
+
+          Since: cosmos-sdk 0.43
+    description: |-
+      message SomeRequest {
+               Foo some_parameter = 1;
+               PageRequest pagination = 2;
+       }
+    title: |-
+      PageRequest is to be embedded in gRPC request messages for efficient
+      pagination. Ex:
+  cosmos.base.query.v1beta1.PageResponse:
+    type: object
+    properties:
+      next_key:
+        type: string
+        format: byte
+        description: |-
+          next_key is the key to be passed to PageRequest.key to
+          query the next page most efficiently. It will be empty if
+          there are no more results.
+      total:
+        type: string
+        format: uint64
+        title: |-
+          total is total number of results available if PageRequest.count_total
+          was set, its value is undefined otherwise
+    description: |-
+      PageResponse is to be embedded in gRPC response messages where the
+      corresponding request message has used PageRequest.
+
+       message SomeResponse {
+               repeated Bar results = 1;
+               PageResponse page = 2;
+       }
+  sunrise.liquiditypool.Pool:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+      denom_base:
+        type: string
+      denom_quote:
+        type: string
+      fee_rate:
+        type: string
+      tick_params:
+        type: object
+      current_tick:
+        type: string
+        format: int64
+      current_tick_liquidity:
+        type: string
+      current_sqrt_price:
+        type: string
+  sunrise.liquiditypool.Position:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+      address:
+        type: string
+      pool_id:
+        type: string
+        format: uint64
+      lower_tick:
+        type: string
+        format: int64
+      upper_tick:
+        type: string
+        format: int64
+      liquidity:
+        type: string
+  sunrise.liquiditypool.QueryAllPoolResponse:
+    type: object
+    properties:
+      Pool:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uint64
+            denom_base:
+              type: string
+            denom_quote:
+              type: string
+            fee_rate:
+              type: string
+            tick_params:
+              type: object
+            current_tick:
+              type: string
+              format: int64
+            current_tick_liquidity:
+              type: string
+            current_sqrt_price:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  sunrise.liquiditypool.QueryAllPositionResponse:
+    type: object
+    properties:
+      Position:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uint64
+            address:
+              type: string
+            pool_id:
+              type: string
+              format: uint64
+            lower_tick:
+              type: string
+              format: int64
+            upper_tick:
+              type: string
+              format: int64
+            liquidity:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  sunrise.liquiditypool.QueryGetPoolResponse:
+    type: object
+    properties:
+      Pool:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uint64
+          denom_base:
+            type: string
+          denom_quote:
+            type: string
+          fee_rate:
+            type: string
+          tick_params:
+            type: object
+          current_tick:
+            type: string
+            format: int64
+          current_tick_liquidity:
+            type: string
+          current_sqrt_price:
+            type: string
+  sunrise.liquiditypool.QueryGetPositionResponse:
+    type: object
+    properties:
+      Position:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uint64
+          address:
+            type: string
+          pool_id:
+            type: string
+            format: uint64
+          lower_tick:
+            type: string
+            format: int64
+          upper_tick:
+            type: string
+            format: int64
+          liquidity:
+            type: string
+  sunrise.liquiditypool.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          withdraw_fee_rate:
+            type: string
+          swap_treasury_tax_rate:
+            type: string
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  sunrise.liquiditypool.TickParams:
+    type: object
   sunrise.swap.MsgSwapExactAmountIn:
     type: object
     properties:
       sender:
         type: string
+      interface_provider:
+        type: string
+      route:
+        $ref: '#/definitions/sunrise.swap.Route'
+      amount_in:
+        type: string
+      min_amount_out:
+        type: string
   sunrise.swap.MsgSwapExactAmountInResponse:
     type: object
+    properties:
+      result:
+        $ref: '#/definitions/sunrise.swap.RouteResult'
+      interface_provider_fee:
+        type: string
+      amount_out:
+        type: string
   sunrise.swap.MsgSwapExactAmountOut:
     type: object
     properties:
       sender:
         type: string
+      interface_provider:
+        type: string
+      route:
+        $ref: '#/definitions/sunrise.swap.Route'
+      max_amount_in:
+        type: string
+      amount_out:
+        type: string
   sunrise.swap.MsgSwapExactAmountOutResponse:
     type: object
+    properties:
+      result:
+        $ref: '#/definitions/sunrise.swap.RouteResult'
+      interface_provider_fee:
+        type: string
+      amount_out:
+        type: string
   sunrise.swap.MsgUpdateParams:
     type: object
     properties:
@@ -27807,6 +28715,177 @@ definitions:
       interface_fee_rate:
         type: string
     description: Params defines the parameters for the module.
+  sunrise.swap.Route:
+    type: object
+    properties:
+      denom_in:
+        type: string
+      denom_out:
+        type: string
+      pool:
+        type: object
+        properties:
+          pool_id:
+            type: string
+            format: uint64
+      series:
+        $ref: '#/definitions/sunrise.swap.RouteSeries'
+      parallel:
+        $ref: '#/definitions/sunrise.swap.RouteParallel'
+  sunrise.swap.RouteParallel:
+    type: object
+    properties:
+      routes:
+        type: array
+        items:
+          $ref: '#/definitions/sunrise.swap.Route'
+          type: object
+      weights:
+        type: array
+        items:
+          type: string
+  sunrise.swap.RoutePool:
+    type: object
+    properties:
+      pool_id:
+        type: string
+        format: uint64
+  sunrise.swap.RouteResult:
+    type: object
+    properties:
+      token_in:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      token_out:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      pool:
+        type: object
+        properties:
+          pool_id:
+            type: string
+            format: uint64
+      series:
+        $ref: '#/definitions/sunrise.swap.RouteResultSeries'
+      parallel:
+        $ref: '#/definitions/sunrise.swap.RouteResultParallel'
+  sunrise.swap.RouteResultParallel:
+    type: object
+    properties:
+      route_results:
+        type: array
+        items:
+          $ref: '#/definitions/sunrise.swap.RouteResult'
+          type: object
+  sunrise.swap.RouteResultPool:
+    type: object
+    properties:
+      pool_id:
+        type: string
+        format: uint64
+  sunrise.swap.RouteResultSeries:
+    type: object
+    properties:
+      route_results:
+        type: array
+        items:
+          $ref: '#/definitions/sunrise.swap.RouteResult'
+          type: object
+  sunrise.swap.RouteSeries:
+    type: object
+    properties:
+      routes:
+        type: array
+        items:
+          $ref: '#/definitions/sunrise.swap.Route'
+          type: object
+  sunrise.swap.InFlightPacket:
+    type: object
+    properties:
+      src_port_id:
+        type: string
+      src_channel_id:
+        type: string
+      sequence:
+        type: string
+        format: uint64
+      retries_remaining:
+        type: integer
+        format: int32
+      incoming_ack:
+        type: string
+        format: byte
+      result:
+        $ref: '#/definitions/sunrise.swap.RouteResult'
+      return_info:
+        type: object
+        properties:
+          return_port_id:
+            type: string
+          return_channel_id:
+            type: string
+          remainder_amount_in:
+            type: string
+          forward_ack:
+            type: string
+            format: byte
+  sunrise.swap.QueryAllInFlightPacketResponse:
+    type: object
+    properties:
+      inFlightPacket:
+        type: array
+        items:
+          $ref: '#/definitions/sunrise.swap.InFlightPacket'
+          type: object
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  sunrise.swap.QueryGetInFlightPacketResponse:
+    type: object
+    properties:
+      inFlightPacket:
+        $ref: '#/definitions/sunrise.swap.InFlightPacket'
   sunrise.swap.QueryParamsResponse:
     type: object
     properties:
@@ -27817,28 +28896,32 @@ definitions:
           interface_fee_rate:
             type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  sunrise.tokenconverter.MsgConvertExactAmountIn:
+  sunrise.swap.ReturnInfo:
+    type: object
+    properties:
+      return_port_id:
+        type: string
+      return_channel_id:
+        type: string
+      remainder_amount_in:
+        type: string
+      forward_ack:
+        type: string
+        format: byte
+  sunrise.tokenconverter.MsgConvert:
     type: object
     properties:
       sender:
         type: string
-      amount_in:
+      min_amount:
         type: string
-      min_amount_out:
+      max_amount:
         type: string
-  sunrise.tokenconverter.MsgConvertExactAmountInResponse:
-    type: object
-  sunrise.tokenconverter.MsgConvertExactAmountOut:
+  sunrise.tokenconverter.MsgConvertResponse:
     type: object
     properties:
-      sender:
+      amount:
         type: string
-      amount_out:
-        type: string
-      max_amount_in:
-        type: string
-  sunrise.tokenconverter.MsgConvertExactAmountOutResponse:
-    type: object
   sunrise.tokenconverter.MsgUpdateParams:
     type: object
     properties:
@@ -27850,6 +28933,13 @@ definitions:
       params:
         description: 'NOTE: All parameters must be supplied.'
         type: object
+        properties:
+          denom_gov_token:
+            type: string
+          denom_fee_token:
+            type: string
+          max_supply_fee_token:
+            type: string
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.tokenconverter.MsgUpdateParamsResponse:
     type: object
@@ -27858,4 +28948,11 @@ definitions:
       MsgUpdateParams message.
   sunrise.tokenconverter.Params:
     type: object
+    properties:
+      denom_gov_token:
+        type: string
+      denom_fee_token:
+        type: string
+      max_supply_fee_token:
+        type: string
     description: Params defines the parameters for the module.

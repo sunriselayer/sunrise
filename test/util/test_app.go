@@ -25,7 +25,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/sunriselayer/sunrise/app"
-	"github.com/sunriselayer/sunrise/testutil"
+	"github.com/sunriselayer/sunrise/pkg/appconsts"
 
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
@@ -51,8 +51,7 @@ func (ao EmptyAppOptions) Get(_ string) interface{} {
 // genesis accounts that also act as delegators. For simplicity, each validator
 // is bonded with a delegation of one consensus engine unit in the default token
 // of the app from first genesis account. A no-op logger is set in app.
-func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts ...string) (*app.App, keyring.Keyring) {
-	testutil.InitSDKConfig()
+func SetupTestAppWithGenesisValSet(cparams tmproto.ConsensusParams, genAccounts ...string) (*app.App, keyring.Keyring) {
 	// var cache storetypes.MultiStorePersistentCache
 	// EmptyAppOptions is a stub implementing AppOptions
 	emptyOpts := EmptyAppOptions{}
@@ -90,7 +89,7 @@ func SetupTestAppWithGenesisValSet(cparams *tmproto.ConsensusParams, genAccounts
 		&abci.RequestInitChain{
 			Time:            genesisTime,
 			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: cparams,
+			ConsensusParams: &cparams,
 			AppStateBytes:   stateBytes,
 			ChainId:         ChainID,
 		},
@@ -129,7 +128,7 @@ func AddAccount(addr sdk.AccAddress, appState app.GenesisState, cdc codec.Codec)
 
 	coins := sdk.Coins{
 		sdk.NewCoin("token", sdkmath.NewInt(1000000)),
-		sdk.NewCoin(app.BondDenom, sdkmath.NewInt(1000000)),
+		sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(1000000)),
 	}
 
 	balances := banktypes.Balance{Address: addr.String(), Coins: coins.Sort()}
@@ -204,7 +203,7 @@ func GenesisStateWithSingleValidator(testApp *app.App, genAccounts ...string) (a
 	balances := make([]banktypes.Balance, 0, len(genAccounts)+1)
 	balances = append(balances, banktypes.Balance{
 		Address: acc.GetAddress().String(),
-		Coins:   sdk.NewCoins(sdk.NewCoin(app.BondDenom, sdkmath.NewInt(100000000000000))),
+		Coins:   sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(100000000000000))),
 	})
 
 	kr, fundedBankAccs, fundedAuthAccs := testnode.FundKeyringAccounts(genAccounts...)
@@ -267,7 +266,7 @@ func genesisStateWithValSet(
 	}
 	// set validators and delegations
 	params := stakingtypes.DefaultParams()
-	params.BondDenom = app.BondDenom
+	params.BondDenom = appconsts.BondDenom
 	stakingGenesis := stakingtypes.NewGenesisState(params, validators, delegations)
 	genesisState[stakingtypes.ModuleName] = a.AppCodec().MustMarshalJSON(stakingGenesis)
 
@@ -279,13 +278,13 @@ func genesisStateWithValSet(
 
 	for range delegations {
 		// add delegated tokens to total supply
-		totalSupply = totalSupply.Add(sdk.NewCoin(app.BondDenom, bondAmt))
+		totalSupply = totalSupply.Add(sdk.NewCoin(appconsts.BondDenom, bondAmt))
 	}
 
 	// add bonded amount to bonded pool module account
 	balances = append(balances, banktypes.Balance{
 		Address: authtypes.NewModuleAddress(stakingtypes.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(app.BondDenom, bondAmt)},
+		Coins:   sdk.Coins{sdk.NewCoin(appconsts.BondDenom, bondAmt)},
 	})
 
 	// update total supply
@@ -297,5 +296,5 @@ func genesisStateWithValSet(
 
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.JSONCodec) app.GenesisState {
-	return app.ModuleBasics().DefaultGenesis(cdc)
+	return ModuleBasics.DefaultGenesis(cdc)
 }

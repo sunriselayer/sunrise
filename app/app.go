@@ -53,23 +53,36 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
+	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+
 	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
 	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
-
-	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
-
+	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
-
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
+	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunriselayer/sunrise/docs"
 )
 
 const (
-	AccountAddressPrefix = "sunrise"
-	Name                 = "sunrise"
+	Bech32MainPrefix = "sunrise"
+	Name             = "sunrise"
+
+	Bech32PrefixAccAddr  = Bech32MainPrefix
+	Bech32PrefixAccPub   = Bech32MainPrefix + "pub"
+	Bech32PrefixValAddr  = Bech32MainPrefix + "valoper"
+	Bech32PrefixValPub   = Bech32MainPrefix + "valoperpub"
+	Bech32PrefixConsAddr = Bech32MainPrefix + "valcons"
+	Bech32PrefixConsPub  = Bech32MainPrefix + "valconspub"
 )
 
 var (
@@ -130,6 +143,7 @@ type App struct {
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
+	FeeKeeper                feemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -168,7 +182,19 @@ func AppConfig() depinject.Config {
 			// supply custom module basics
 			map[string]module.AppModuleBasic{
 				genutiltypes.ModuleName: genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
-				govtypes.ModuleName:     gov.NewAppModuleBasic(getGovProposalHandlers()),
+				// govtypes.ModuleName:     gov.NewAppModuleBasic(getGovProposalHandlers()),
+
+				// overrides
+				banktypes.ModuleName:   defaultoverrides.BankModuleBasic{},
+				crisistypes.ModuleName: defaultoverrides.CrisisModuleBasic{},
+				govtypes.ModuleName: defaultoverrides.GovModuleBasic{
+					AppModuleBasic: gov.NewAppModuleBasic(getGovProposalHandlers()),
+				},
+				minttypes.ModuleName:           defaultoverrides.MintModuleBasic{},
+				stakingtypes.ModuleName:        defaultoverrides.StakingModuleBasic{},
+				tokenconvertertypes.ModuleName: defaultoverrides.TokenConverterModuleBasic{},
+				feetypes.ModuleName:            defaultoverrides.FeeModuleBasic{},
+
 				// this line is used by starport scaffolding # stargate/appConfig/moduleBasic
 			},
 		),
@@ -276,6 +302,7 @@ func New(
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
+		&app.FeeKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
@@ -464,4 +491,9 @@ func BlockedAddresses() map[string]bool {
 		}
 	}
 	return result
+}
+
+// GetTxConfig implements the TestingApp interface.
+func (app *App) GetTxConfig() client.TxConfig {
+	return app.txConfig
 }
