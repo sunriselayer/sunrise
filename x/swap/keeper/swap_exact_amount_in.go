@@ -13,19 +13,19 @@ import (
 func (k Keeper) calculateInterfaceFeeExactAmountIn(
 	ctx sdk.Context,
 	hasInterfaceFee bool,
-	totalAmountOut math.Int,
-) (amountOut math.Int, interfaceFee math.Int) {
+	amountOutGross math.Int,
+) (amountOutNet math.Int, interfaceFee math.Int) {
 	if !hasInterfaceFee {
-		return totalAmountOut, math.ZeroInt()
+		return amountOutGross, math.ZeroInt()
 	}
 
 	params := k.GetParams(ctx)
 	// amountOut = totalAmountOut - interfaceFee
 	//           = totalAmountOut * (1 - interfaceFeeRate)
-	amountOut = math.LegacyNewDecFromInt(totalAmountOut).Mul(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
-	interfaceFee = totalAmountOut.Sub(amountOut)
+	amountOutNet = math.LegacyNewDecFromInt(amountOutGross).Mul(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
+	interfaceFee = amountOutGross.Sub(amountOutNet)
 
-	return amountOut, interfaceFee
+	return amountOutNet, interfaceFee
 }
 
 func (k Keeper) CalculateResultExactAmountIn(
@@ -35,10 +35,10 @@ func (k Keeper) CalculateResultExactAmountIn(
 	amountIn math.Int,
 ) (result types.RouteResult, interfaceFee math.Int, err error) {
 	var (
-		totalAmountOut = result.TokenOut.Amount
+		amountOutGross = result.TokenOut.Amount
 	)
 
-	_, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, totalAmountOut)
+	_, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, amountOutGross)
 
 	result, err = k.calculateResultRouteExactAmountIn(ctx, route, amountIn)
 	if err != nil {
@@ -59,11 +59,11 @@ func (k Keeper) SwapExactAmountIn(
 
 	var (
 		hasInterfaceFee = interfaceProvider != ""
-		amountOut       math.Int
-		totalAmountOut  = result.TokenOut.Amount
+		amountOutNet    math.Int
+		amountOutGross  = result.TokenOut.Amount
 	)
 
-	amountOut, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, totalAmountOut)
+	amountOutNet, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, amountOutGross)
 
 	result, err = k.swapRouteExactAmountIn(ctx, sender, route, amountIn)
 	if err != nil {
@@ -78,7 +78,7 @@ func (k Keeper) SwapExactAmountIn(
 		_ = addr
 	}
 
-	if amountOut.LT(minAmountOut) {
+	if amountOutNet.LT(minAmountOut) {
 		return result, interfaceFee, fmt.Errorf("TODO")
 	}
 

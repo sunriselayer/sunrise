@@ -13,3 +13,9 @@ func NewPacketIndex(
 		Sequence:  sequence,
 	}
 }
+
+func (index PacketIndex) Equal(other PacketIndex) bool {
+	return index.PortId == other.PortId &&
+		index.ChannelId == other.ChannelId &&
+		index.Sequence == other.Sequence
+}

@@ -67,8 +67,8 @@ func (m *SwapMetadata) Validate() error {
 type SwapAcknowledgement struct {
 	Result      RouteResult `json:"result"`
 	IncomingAck []byte      `json:"ibc_ack"`
-	ForwardAck  []byte      `json:"forward_ack,omitempty"`
 	ReturnAck   []byte      `json:"return_ack,omitempty"`
+	ForwardAck  []byte      `json:"forward_ack,omitempty"`
 }
 
 func (a SwapAcknowledgement) Acknowledgement() ([]byte, error) {
