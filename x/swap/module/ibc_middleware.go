@@ -13,6 +13,8 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	exported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
+	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
+
 	keeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	types "github.com/sunriselayer/sunrise/x/swap/types"
 )
@@ -139,9 +141,10 @@ func (im IBCMiddleware) OnRecvPacket(
 		remainderAmountIn sdkmath.Int
 	)
 
-	if metadata.ExactAmountOut == nil {
+	if metadata.ExactAmountIn != nil {
 		// Swap exact amount in
 		amountIn := maxAmountIn
+		minAmountOut := metadata.ExactAmountIn.MinAmountOut
 
 		result, interfaceFee, err = im.keeper.SwapExactAmountIn(
 			ctx,
@@ -149,14 +152,14 @@ func (im IBCMiddleware) OnRecvPacket(
 			metadata.InterfaceProvider,
 			metadata.Route,
 			amountIn,
-			metadata.MinAmountOut,
+			minAmountOut,
 		)
 		if err != nil {
 			return channeltypes.NewErrorAcknowledgement(err)
 		}
 	} else {
 		// Swap exact amount out
-		amountOut := *metadata.ExactAmountOut
+		amountOut := metadata.ExactAmountOut.AmountOut
 
 		result, interfaceFee, err = im.keeper.SwapExactAmountOut(
 			ctx,
@@ -173,7 +176,7 @@ func (im IBCMiddleware) OnRecvPacket(
 
 		remainderAmountIn = maxAmountIn.Sub(amountIn)
 
-		if remainderAmountIn.IsPositive() && metadata.ReturnAmountIn == nil {
+		if remainderAmountIn.IsPositive() && metadata.ExactAmountOut.Return == nil {
 			// Send from swapper to receiver
 			remainderTokenIn := sdk.NewCoin(denomIn, remainderAmountIn)
 			err = im.keeper.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiver, sdk.NewCoins(remainderTokenIn))
@@ -210,6 +213,12 @@ func (im IBCMiddleware) OnRecvPacket(
 
 	if metadata.Forward != nil {
 		// Forward the swapped token out
+
+		var returnMetadata *packetforwardtypes.ForwardMetadata = nil
+		if metadata.ExactAmountOut != nil {
+			returnMetadata = metadata.ExactAmountOut.Return
+		}
+
 		err := im.keeper.TransferSwappedToken(
 			ctx,
 			receiver.String(),
@@ -218,7 +227,7 @@ func (im IBCMiddleware) OnRecvPacket(
 			incomingAck.Acknowledgement(),
 			result,
 			remainderAmountIn,
-			metadata.ReturnAmountIn,
+			returnMetadata,
 		)
 		if err != nil {
 			return channeltypes.NewErrorAcknowledgement(err)

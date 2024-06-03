@@ -61,7 +61,10 @@ func (k Keeper) TransferSwappedToken(
 	}
 
 	if returnMetadata != nil {
-		val.ReturnInfo = &types.ReturnInfo{}
+		val.ReturnInfo = &types.ReturnInfo{
+			// TODO
+			RemainderAmountIn: remainderAmountIn,
+		}
 	}
 
 	k.SetInFlightPacket(ctx, val)

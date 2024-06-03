@@ -9,14 +9,42 @@ import (
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
+func (k Keeper) calculateInterfaceFeeExactAmountOut(
+	ctx sdk.Context,
+	hasInterfaceFee bool,
+	amountOut math.Int,
+) (totalAmountOut math.Int, interfaceFee math.Int) {
+	if !hasInterfaceFee {
+		return amountOut, math.ZeroInt()
+	}
+
+	params := k.GetParams(ctx)
+	// totalAmountOut = amountOut + interfaceFee
+	//                = amountOut / (1 - interfaceFeeRate)
+	totalAmountOut = math.LegacyNewDecFromInt(amountOut).Quo(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
+	interfaceFee = totalAmountOut.Sub(amountOut)
+
+	return amountOut, interfaceFee
+}
+
 func (k Keeper) CalculateResultExactAmountOut(
 	ctx sdk.Context,
+	hasInterfaceFee bool,
 	route types.Route,
 	amountOut math.Int,
-) (result types.RouteResult, err error) {
-	_ = lptypes.ModuleName
+) (result types.RouteResult, interfaceFee math.Int, err error) {
+	var (
+		totalAmountOut math.Int
+	)
 
-	return result, nil
+	totalAmountOut, interfaceFee = k.calculateInterfaceFeeExactAmountOut(ctx, hasInterfaceFee, amountOut)
+
+	result, err = k.calculateResultRouteExactAmountOut(ctx, route, totalAmountOut)
+	if err != nil {
+		return result, interfaceFee, err
+	}
+
+	return result, interfaceFee, nil
 }
 
 func (k Keeper) SwapExactAmountOut(
@@ -27,28 +55,27 @@ func (k Keeper) SwapExactAmountOut(
 	maxAmountIn math.Int,
 	amountOut math.Int,
 ) (result types.RouteResult, interfaceFee math.Int, err error) {
-	if interfaceProvider != "" {
-		addr, err := sdk.AccAddressFromBech32(interfaceProvider)
-		if err != nil {
-			return result, interfaceFee, err
-		}
+	var (
+		hasInterfaceFee = interfaceProvider != ""
+		totalAmountOut  math.Int
+	)
 
-		params := k.GetParams(ctx)
-		// totalAmountOut = amountOut + interfaceFee
-		//                = amountOut / (1 - interfaceFeeRate)
-		totalAmountOut := math.LegacyNewDecFromInt(amountOut).Quo(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
-		interfaceFee = totalAmountOut.Sub(amountOut)
+	result, interfaceFee, err = k.CalculateResultExactAmountOut(ctx, hasInterfaceFee, route, totalAmountOut)
+	if err != nil {
+		return result, interfaceFee, err
+	}
 
-		result, err = k.swapRouteExactAmountOut(ctx, sender, route, totalAmountOut)
+	// TODO: swap following the result
+	if err := k.swapRouteExactAmountOut(ctx, sender, result); err != nil {
+		return result, interfaceFee, err
+	}
 
-		if err != nil {
-			return result, interfaceFee, err
-		}
+	if hasInterfaceFee {
+		// Validated in ValidateBasic
+		addr := sdk.MustAccAddressFromBech32(interfaceProvider)
 
 		// TODO: Deduct interface fee
 		_ = addr
-	} else {
-		interfaceFee = math.ZeroInt()
 	}
 
 	if result.TokenIn.Amount.GT(maxAmountIn) {
@@ -62,22 +89,97 @@ func generateResultExactAmountOut(denomIn, denomOut string, amountExact, amountR
 	return sdk.NewCoin(denomIn, amountResult), sdk.NewCoin(denomOut, amountExact)
 }
 
-func (k Keeper) swapRouteExactAmountOut(
+func (k Keeper) calculateResultRouteExactAmountOut(
 	ctx sdk.Context,
-	sender sdk.AccAddress,
 	route types.Route,
 	amountOut math.Int,
 ) (result types.RouteResult, err error) {
 	_, result, err = route.InspectRoute(
 		amountOut,
 		func(denomIn string, denomOut string, pool types.RoutePool, amountExact math.Int) (math.Int, error) {
-			return k.swapRoutePoolExactAmountOut(ctx, sender, pool.PoolId, denomIn, denomOut, amountExact)
+			return k.calculateResultRoutePoolExactAmountOut(ctx, pool.PoolId, denomIn, denomOut, amountExact)
 		},
 		generateResultExactAmountOut,
-		false,
+		true,
 	)
 
 	return result, err
+}
+
+func (k Keeper) calculateResultRoutePoolExactAmountOut(
+	ctx sdk.Context,
+	poolId uint64,
+	denomIn string,
+	denomOut string,
+	amountOut math.Int,
+) (amountIn math.Int, err error) {
+	pool, found := k.liquidityPoolKeeper.GetPool(ctx, poolId)
+	if !found {
+		return math.Int{}, lptypes.ErrPoolNotFound
+	}
+
+	// No needs to validate the denom,
+	// as liquiditypool side is responsible for ensuring the denom exists in the pool.
+	tokenOut := sdk.NewCoin(denomOut, amountOut)
+
+	amountIn, err = k.liquidityPoolKeeper.CalculateResultExactAmountOut(
+		ctx,
+		pool,
+		tokenOut,
+		denomIn,
+	)
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	return amountIn, nil
+}
+
+func (k Keeper) swapRouteExactAmountOut(
+	ctx sdk.Context,
+	sender sdk.AccAddress,
+	result types.RouteResult,
+) error {
+	switch strategy := result.Strategy.(type) {
+	case *types.RouteResult_Pool:
+		amountIn, err := k.swapRoutePoolExactAmountOut(
+			ctx,
+			sender,
+			strategy.Pool.PoolId,
+			result.TokenIn.Denom,
+			result.TokenOut.Denom,
+			result.TokenOut.Amount,
+		)
+		if err != nil {
+			return err
+		}
+
+		if !amountIn.Equal(result.TokenIn.Amount) {
+			return fmt.Errorf("TODO")
+		}
+
+		return nil
+
+	case *types.RouteResult_Series:
+		for _, r := range strategy.Series.RouteResults {
+			if err := k.swapRouteExactAmountOut(ctx, sender, r); err != nil {
+				return err
+			}
+		}
+
+		return nil
+
+	case *types.RouteResult_Parallel:
+		for _, r := range strategy.Parallel.RouteResults {
+			if err := k.swapRouteExactAmountOut(ctx, sender, r); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	}
+
+	return fmt.Errorf("TODO")
 }
 
 func (k Keeper) swapRoutePoolExactAmountOut(

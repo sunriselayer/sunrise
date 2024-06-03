@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 
 	sdkmath "cosmossdk.io/math"
 
@@ -15,12 +16,16 @@ type PacketMetadata struct {
 }
 
 type SwapMetadata struct {
-	InterfaceProvider string                              `json:"interface_provider,omitempty"`
-	Route             Route                               `json:"route,omitempty"`
-	MinAmountOut      sdkmath.Int                         `json:"min_amount_out,omitempty"`
-	ExactAmountOut    *sdkmath.Int                        `json:"exact_amount_out,omitempty"`
-	Forward           *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
-	ReturnAmountIn    *packetforwardtypes.ForwardMetadata `json:"return,omitempty"`
+	InterfaceProvider string `json:"interface_provider,omitempty"`
+	Route             Route  `json:"route,omitempty"`
+	ExactAmountIn     *struct {
+		MinAmountOut sdkmath.Int `json:"min_amount_out,omitempty"`
+	} `json:"exact_amount_in,omitempty"`
+	ExactAmountOut *struct {
+		AmountOut sdkmath.Int                         `json:"amount_out"`
+		Return    *packetforwardtypes.ForwardMetadata `json:"return,omitempty"`
+	} `json:"exact_amount_out,omitempty"`
+	Forward *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
 }
 
 func (m *SwapMetadata) Validate() error {
@@ -28,9 +33,25 @@ func (m *SwapMetadata) Validate() error {
 		return err
 	}
 
-	if m.ReturnAmountIn != nil {
-		if err := m.ReturnAmountIn.Validate(); err != nil {
-			return err
+	if m.ExactAmountIn != nil && m.ExactAmountOut != nil {
+		return fmt.Errorf("cannot have both exact_amount_in and exact_amount_out")
+	}
+
+	if m.ExactAmountIn == nil && m.ExactAmountOut == nil {
+		return fmt.Errorf("must have either exact_amount_in or exact_amount_out")
+	}
+
+	if m.ExactAmountIn != nil {
+		if !m.ExactAmountIn.MinAmountOut.IsPositive() {
+			return fmt.Errorf("min_amount_out must be positive")
+		}
+	}
+
+	if m.ExactAmountOut != nil {
+		if m.ExactAmountOut.Return != nil {
+			if err := m.ExactAmountOut.Return.Validate(); err != nil {
+				return err
+			}
 		}
 	}
 

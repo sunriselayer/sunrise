@@ -46,8 +46,8 @@ func (msg *MsgSwapExactAmountIn) ValidateBasic() error {
 		return errorsmod.Wrapf(ErrInvalidAmount, "amount in must be positive: %s", msg.AmountIn)
 	}
 
-	if msg.MinAmountOut.IsNegative() {
-		return errorsmod.Wrapf(ErrInvalidAmount, "min amount out must be non-negative: %s", msg.MinAmountOut)
+	if !msg.MinAmountOut.IsPositive() {
+		return errorsmod.Wrapf(ErrInvalidAmount, "min amount out must be positive: %s", msg.MinAmountOut)
 	}
 
 	return nil
