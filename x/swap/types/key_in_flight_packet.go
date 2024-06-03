@@ -5,12 +5,12 @@ import "encoding/binary"
 var _ binary.ByteOrder
 
 const (
-	// InFlightPacketKeyPrefix is the prefix to retrieve all InFlightPacket
-	InFlightPacketKeyPrefix = "InFlightPacket/value/"
+	// OutgoingInFlightPacketKeyPrefix is the prefix to retrieve all OutgoingInFlightPacket
+	OutgoingInFlightPacketKeyPrefix = "OutgoingInFlightPacket/value/"
 )
 
-// InFlightPacketKey returns the store key to retrieve a InFlightPacket from the index fields
-func InFlightPacketKey(
+// OutgoingInFlightPacketKey returns the store key to retrieve a OutgoingInFlightPacket from the index fields
+func OutgoingInFlightPacketKey(
 	index PacketIndex,
 ) []byte {
 	// var key []byte
@@ -25,5 +25,5 @@ func InFlightPacketKey(
 	if err != nil {
 		panic(err)
 	}
-	return append([]byte(InFlightPacketKeyPrefix), bz...)
+	return append([]byte(OutgoingInFlightPacketKeyPrefix), bz...)
 }

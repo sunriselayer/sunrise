@@ -145,7 +145,7 @@ func (im IBCMiddleware) OnRecvPacket(
 	}
 
 	if waitingPacket != nil {
-		im.keeper.SetAckWaitingPacket(ctx, *waitingPacket)
+		im.keeper.SetIncomingInFlightPacket(ctx, *waitingPacket)
 
 		// Returning nil ack will prevent WriteAcknowledgement from occurring for forwarded packet.
 		// This is intentional so that the acknowledgement will be written later based on the ack/timeout of the forwarded packet.
@@ -177,12 +177,12 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 		return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
 	}
 
-	inflightPacket, found := im.keeper.GetInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
+	inflightPacket, found := im.keeper.GetOutgoingInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
 	if !found {
 		return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
 	}
 
-	err := im.keeper.OnAcknowledgementInFlightPacket(ctx, packet, acknowledgement, inflightPacket)
+	err := im.keeper.OnAcknowledgementOutgoingInFlightPacket(ctx, packet, acknowledgement, inflightPacket)
 	if err != nil {
 		return err
 	}
@@ -203,12 +203,12 @@ func (im IBCMiddleware) OnTimeoutPacket(
 		return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
 	}
 
-	inflightPacket, found := im.keeper.GetInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
+	inflightPacket, found := im.keeper.GetOutgoingInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
 	if !found {
 		return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
 	}
 
-	if err := im.keeper.OnTimeoutInFlightPacket(ctx, packet, inflightPacket); err != nil {
+	if err := im.keeper.OnTimeoutOutgoingInFlightPacket(ctx, packet, inflightPacket); err != nil {
 		return err
 	}
 

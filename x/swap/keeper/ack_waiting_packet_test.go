@@ -15,8 +15,8 @@ import (
 // Prevent strconv unused error
 var _ = strconv.IntSize
 
-func createNAckWaitingPacket(keeper keeper.Keeper, ctx context.Context, n int) []types.AckWaitingPacket {
-	items := make([]types.AckWaitingPacket, n)
+func createNIncomingInFlightPacket(keeper keeper.Keeper, ctx context.Context, n int) []types.IncomingInFlightPacket {
+	items := make([]types.IncomingInFlightPacket, n)
 	for i := range items {
 		items[i].Index = types.PacketIndex{
 			PortId:    strconv.Itoa(i),
@@ -24,16 +24,16 @@ func createNAckWaitingPacket(keeper keeper.Keeper, ctx context.Context, n int) [
 			Sequence:  uint64(i),
 		}
 
-		keeper.SetAckWaitingPacket(ctx, items[i])
+		keeper.SetIncomingInFlightPacket(ctx, items[i])
 	}
 	return items
 }
 
-func TestAckWaitingPacketGet(t *testing.T) {
+func TestIncomingInFlightPacketGet(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	items := createNAckWaitingPacket(keeper, ctx, 10)
+	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetAckWaitingPacket(ctx,
+		rst, found := keeper.GetIncomingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
@@ -45,16 +45,16 @@ func TestAckWaitingPacketGet(t *testing.T) {
 		)
 	}
 }
-func TestAckWaitingPacketRemove(t *testing.T) {
+func TestIncomingInFlightPacketRemove(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	items := createNAckWaitingPacket(keeper, ctx, 10)
+	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
-		keeper.RemoveAckWaitingPacket(ctx,
+		keeper.RemoveIncomingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
 		)
-		_, found := keeper.GetAckWaitingPacket(ctx,
+		_, found := keeper.GetIncomingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
@@ -63,11 +63,11 @@ func TestAckWaitingPacketRemove(t *testing.T) {
 	}
 }
 
-func TestAckWaitingPacketGetAll(t *testing.T) {
+func TestIncomingInFlightPacketGetAll(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	items := createNAckWaitingPacket(keeper, ctx, 10)
+	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllAckWaitingPacket(ctx)),
+		nullify.Fill(keeper.GetAllIncomingInFlightPacket(ctx)),
 	)
 }

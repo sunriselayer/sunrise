@@ -8,7 +8,6 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/swap/params.proto";
 import "sunrise/swap/in_flight_packet.proto";
-import "sunrise/swap/ack_waiting_packet.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
@@ -21,25 +20,25 @@ service Query {
   
   }
   
-  // Queries a list of InFlightPacket items.
-  rpc InFlightPacket    (QueryGetInFlightPacketRequest) returns (QueryGetInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/{src_port_id}/{src_channel_id}/{sequence}";
+  // Queries a list of IncomingInFlightPacket items.
+  rpc IncomingInFlightPacket    (QueryGetIncomingInFlightPacketRequest) returns (QueryGetIncomingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/incoming/{src_port_id}/{src_channel_id}/{sequence}";
   
   }
-  rpc InFlightPacketAll (QueryAllInFlightPacketRequest) returns (QueryAllInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet";
+  rpc IncomingInFlightPacketAll (QueryAllIncomingInFlightPacketRequest) returns (QueryAllIncomingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/incoming";
+  }
+
+  // Queries a list of OutgoingInFlightPacket items.
+  rpc OutgoingInFlightPacket    (QueryGetOutgoingInFlightPacketRequest) returns (QueryGetOutgoingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
+  
+  }
+  rpc OutgoingInFlightPacketAll (QueryAllOutgoingInFlightPacketRequest) returns (QueryAllOutgoingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/outgoing";
   
   }
   
-  // Queries a list of AckWaitingPacket items.
-  rpc AckWaitingPacket    (QueryGetAckWaitingPacketRequest) returns (QueryGetAckWaitingPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/{src_port_id}/{src_channel_id}/{sequence}";
-  
-  }
-  rpc AckWaitingPacketAll (QueryAllAckWaitingPacketRequest) returns (QueryAllAckWaitingPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet";
-  
-  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -51,41 +50,40 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
 
-message QueryGetInFlightPacketRequest {
+message QueryGetIncomingInFlightPacketRequest {
   string src_port_id    = 1;
   string src_channel_id = 2;
   uint64 sequence       = 3;
 }
 
-message QueryGetInFlightPacketResponse {
-  InFlightPacket inFlightPacket = 1 [(gogoproto.nullable) = false];
+message QueryGetIncomingInFlightPacketResponse {
+  IncomingInFlightPacket incomingInFlightPacket = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllInFlightPacketRequest {
+message QueryAllIncomingInFlightPacketRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-message QueryAllInFlightPacketResponse {
-  repeated InFlightPacket                         inFlightPacket = 1 [(gogoproto.nullable) = false];
-           cosmos.base.query.v1beta1.PageResponse pagination     = 2;
-}
-
-message QueryGetAckWaitingPacketRequest {
-  string src_port_id    = 1;
-  string src_channel_id = 2;
-  uint64 sequence       = 3;
-}
-
-message QueryGetAckWaitingPacketResponse {
-  AckWaitingPacket ackWaitingPacket = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryAllAckWaitingPacketRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllAckWaitingPacketResponse {
-  repeated AckWaitingPacket                       ackWaitingPacket = 1 [(gogoproto.nullable) = false];
+message QueryAllIncomingInFlightPacketResponse {
+  repeated IncomingInFlightPacket                 incomingInFlightPacket = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination       = 2;
 }
 
+message QueryGetOutgoingInFlightPacketRequest {
+  string src_port_id    = 1;
+  string src_channel_id = 2;
+  uint64 sequence       = 3;
+}
+
+message QueryGetOutgoingInFlightPacketResponse {
+  OutgoingInFlightPacket outgoingInFlightPacket = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllOutgoingInFlightPacketRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllOutgoingInFlightPacketResponse {
+  repeated OutgoingInFlightPacket                 outgoingInFlightPacket = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination     = 2;
+}

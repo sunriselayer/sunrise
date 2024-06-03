@@ -15,23 +15,23 @@ import (
 // Prevent strconv unused error
 var _ = strconv.IntSize
 
-func createNInFlightPacket(keeper keeper.Keeper, ctx context.Context, n int) []types.InFlightPacket {
-	items := make([]types.InFlightPacket, n)
+func createNOutgoingInFlightPacket(keeper keeper.Keeper, ctx context.Context, n int) []types.OutgoingInFlightPacket {
+	items := make([]types.OutgoingInFlightPacket, n)
 	for i := range items {
 		items[i].Index.PortId = strconv.Itoa(i)
 		items[i].Index.ChannelId = strconv.Itoa(i)
 		items[i].Index.Sequence = uint64(i)
 
-		keeper.SetInFlightPacket(ctx, items[i])
+		keeper.SetOutgoingInFlightPacket(ctx, items[i])
 	}
 	return items
 }
 
-func TestInFlightPacketGet(t *testing.T) {
+func TestOutgoingInFlightPacketGet(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	items := createNInFlightPacket(keeper, ctx, 10)
+	items := createNOutgoingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetInFlightPacket(ctx,
+		rst, found := keeper.GetOutgoingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
@@ -43,16 +43,16 @@ func TestInFlightPacketGet(t *testing.T) {
 		)
 	}
 }
-func TestInFlightPacketRemove(t *testing.T) {
+func TestOutgoingInFlightPacketRemove(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	items := createNInFlightPacket(keeper, ctx, 10)
+	items := createNOutgoingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
-		keeper.RemoveInFlightPacket(ctx,
+		keeper.RemoveOutgoingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
 		)
-		_, found := keeper.GetInFlightPacket(ctx,
+		_, found := keeper.GetOutgoingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
@@ -61,11 +61,11 @@ func TestInFlightPacketRemove(t *testing.T) {
 	}
 }
 
-func TestInFlightPacketGetAll(t *testing.T) {
+func TestOutgoingInFlightPacketGetAll(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	items := createNInFlightPacket(keeper, ctx, 10)
+	items := createNOutgoingInFlightPacket(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllInFlightPacket(ctx)),
+		nullify.Fill(keeper.GetAllOutgoingInFlightPacket(ctx)),
 	)
 }

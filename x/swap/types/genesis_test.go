@@ -22,7 +22,7 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
-				AckWaitingPacketList: []types.AckWaitingPacket{
+				IncomingInFlightPacketList: []types.IncomingInFlightPacket{
 					{
 						Index: types.PacketIndex{
 							PortId:    "0",
@@ -38,7 +38,7 @@ func TestGenesisState_Validate(t *testing.T) {
 						},
 					},
 				},
-				InFlightPacketList: []types.InFlightPacket{
+				OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
 					{
 						Index: types.PacketIndex{
 							PortId:    "0",
@@ -61,7 +61,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "duplicated inFlightPacket",
 			genState: &types.GenesisState{
-				InFlightPacketList: []types.InFlightPacket{
+				OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
 					{
 						Index: types.PacketIndex{
 							PortId:    "0",
@@ -83,7 +83,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "duplicated ackWaitingPacket",
 			genState: &types.GenesisState{
-				AckWaitingPacketList: []types.AckWaitingPacket{
+				IncomingInFlightPacketList: []types.IncomingInFlightPacket{
 					{
 						Index: types.PacketIndex{
 							PortId:    "0",

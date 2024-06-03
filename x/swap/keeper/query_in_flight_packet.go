@@ -11,18 +11,18 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) InFlightPacketAll(ctx context.Context, req *types.QueryAllInFlightPacketRequest) (*types.QueryAllInFlightPacketResponse, error) {
+func (k Keeper) OutgoingInFlightPacketAll(ctx context.Context, req *types.QueryAllOutgoingInFlightPacketRequest) (*types.QueryAllOutgoingInFlightPacketResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var inFlightPackets []types.InFlightPacket
+	var inFlightPackets []types.OutgoingInFlightPacket
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	inFlightPacketStore := prefix.NewStore(store, types.KeyPrefix(types.InFlightPacketKeyPrefix))
+	inFlightPacketStore := prefix.NewStore(store, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
 
 	pageRes, err := query.Paginate(inFlightPacketStore, req.Pagination, func(key []byte, value []byte) error {
-		var inFlightPacket types.InFlightPacket
+		var inFlightPacket types.OutgoingInFlightPacket
 		if err := k.cdc.Unmarshal(value, &inFlightPacket); err != nil {
 			return err
 		}
@@ -35,15 +35,15 @@ func (k Keeper) InFlightPacketAll(ctx context.Context, req *types.QueryAllInFlig
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllInFlightPacketResponse{InFlightPacket: inFlightPackets, Pagination: pageRes}, nil
+	return &types.QueryAllOutgoingInFlightPacketResponse{OutgoingInFlightPacket: inFlightPackets, Pagination: pageRes}, nil
 }
 
-func (k Keeper) InFlightPacket(ctx context.Context, req *types.QueryGetInFlightPacketRequest) (*types.QueryGetInFlightPacketResponse, error) {
+func (k Keeper) OutgoingInFlightPacket(ctx context.Context, req *types.QueryGetOutgoingInFlightPacketRequest) (*types.QueryGetOutgoingInFlightPacketResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := k.GetInFlightPacket(
+	val, found := k.GetOutgoingInFlightPacket(
 		ctx,
 		req.SrcPortId,
 		req.SrcChannelId,
@@ -53,5 +53,5 @@ func (k Keeper) InFlightPacket(ctx context.Context, req *types.QueryGetInFlightP
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &types.QueryGetInFlightPacketResponse{InFlightPacket: val}, nil
+	return &types.QueryGetOutgoingInFlightPacketResponse{OutgoingInFlightPacket: val}, nil
 }

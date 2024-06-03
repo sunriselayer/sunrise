@@ -9,27 +9,27 @@ import (
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-// SetAckWaitingPacket set a specific ackWaitingPacket in the store from its index
-func (k Keeper) SetAckWaitingPacket(ctx context.Context, ackWaitingPacket types.AckWaitingPacket) {
+// SetIncomingInFlightPacket set a specific ackWaitingPacket in the store from its index
+func (k Keeper) SetIncomingInFlightPacket(ctx context.Context, ackWaitingPacket types.IncomingInFlightPacket) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.AckWaitingPacketKeyPrefix))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
 	b := k.cdc.MustMarshal(&ackWaitingPacket)
-	store.Set(types.AckWaitingPacketKey(
+	store.Set(types.IncomingInFlightPacketKey(
 		ackWaitingPacket.Index,
 	), b)
 }
 
-// GetAckWaitingPacket returns a ackWaitingPacket from its index
-func (k Keeper) GetAckWaitingPacket(
+// GetIncomingInFlightPacket returns a ackWaitingPacket from its index
+func (k Keeper) GetIncomingInFlightPacket(
 	ctx context.Context,
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
-) (val types.AckWaitingPacket, found bool) {
+) (val types.IncomingInFlightPacket, found bool) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.AckWaitingPacketKeyPrefix))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
 
-	b := store.Get(types.AckWaitingPacketKey(
+	b := store.Get(types.IncomingInFlightPacketKey(
 		types.NewPacketIndex(
 			srcPortId,
 			srcChannelId,
@@ -44,16 +44,16 @@ func (k Keeper) GetAckWaitingPacket(
 	return val, true
 }
 
-// RemoveAckWaitingPacket removes a ackWaitingPacket from the store
-func (k Keeper) RemoveAckWaitingPacket(
+// RemoveIncomingInFlightPacket removes a ackWaitingPacket from the store
+func (k Keeper) RemoveIncomingInFlightPacket(
 	ctx context.Context,
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
 ) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.AckWaitingPacketKeyPrefix))
-	store.Delete(types.AckWaitingPacketKey(
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
+	store.Delete(types.IncomingInFlightPacketKey(
 		types.NewPacketIndex(
 			srcPortId,
 			srcChannelId,
@@ -62,16 +62,16 @@ func (k Keeper) RemoveAckWaitingPacket(
 	))
 }
 
-// GetAllAckWaitingPacket returns all ackWaitingPacket
-func (k Keeper) GetAllAckWaitingPacket(ctx context.Context) (list []types.AckWaitingPacket) {
+// GetAllIncomingInFlightPacket returns all ackWaitingPacket
+func (k Keeper) GetAllIncomingInFlightPacket(ctx context.Context) (list []types.IncomingInFlightPacket) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.AckWaitingPacketKeyPrefix))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.AckWaitingPacket
+		var val types.IncomingInFlightPacket
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}

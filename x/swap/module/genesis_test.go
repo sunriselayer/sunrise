@@ -14,7 +14,7 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
-		InFlightPacketList: []types.InFlightPacket{
+		OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
 			{
 				Index: types.PacketIndex{
 					PortId:    "0",
@@ -30,7 +30,7 @@ func TestGenesis(t *testing.T) {
 				},
 			},
 		},
-		AckWaitingPacketList: []types.AckWaitingPacket{
+		IncomingInFlightPacketList: []types.IncomingInFlightPacket{
 			{
 				Index: types.PacketIndex{
 					PortId:    "0",
@@ -57,7 +57,7 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
-	require.ElementsMatch(t, genesisState.InFlightPacketList, got.InFlightPacketList)
-	require.ElementsMatch(t, genesisState.AckWaitingPacketList, got.AckWaitingPacketList)
+	require.ElementsMatch(t, genesisState.OutgoingInFlightPacketList, got.OutgoingInFlightPacketList)
+	require.ElementsMatch(t, genesisState.IncomingInFlightPacketList, got.IncomingInFlightPacketList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

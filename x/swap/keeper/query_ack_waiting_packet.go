@@ -11,18 +11,18 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) AckWaitingPacketAll(ctx context.Context, req *types.QueryAllAckWaitingPacketRequest) (*types.QueryAllAckWaitingPacketResponse, error) {
+func (k Keeper) IncomingInFlightPacketAll(ctx context.Context, req *types.QueryAllIncomingInFlightPacketRequest) (*types.QueryAllIncomingInFlightPacketResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var ackWaitingPackets []types.AckWaitingPacket
+	var ackWaitingPackets []types.IncomingInFlightPacket
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	ackWaitingPacketStore := prefix.NewStore(store, types.KeyPrefix(types.AckWaitingPacketKeyPrefix))
+	ackWaitingPacketStore := prefix.NewStore(store, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
 
 	pageRes, err := query.Paginate(ackWaitingPacketStore, req.Pagination, func(key []byte, value []byte) error {
-		var ackWaitingPacket types.AckWaitingPacket
+		var ackWaitingPacket types.IncomingInFlightPacket
 		if err := k.cdc.Unmarshal(value, &ackWaitingPacket); err != nil {
 			return err
 		}
@@ -35,15 +35,15 @@ func (k Keeper) AckWaitingPacketAll(ctx context.Context, req *types.QueryAllAckW
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllAckWaitingPacketResponse{AckWaitingPacket: ackWaitingPackets, Pagination: pageRes}, nil
+	return &types.QueryAllIncomingInFlightPacketResponse{IncomingInFlightPacket: ackWaitingPackets, Pagination: pageRes}, nil
 }
 
-func (k Keeper) AckWaitingPacket(ctx context.Context, req *types.QueryGetAckWaitingPacketRequest) (*types.QueryGetAckWaitingPacketResponse, error) {
+func (k Keeper) IncomingInFlightPacket(ctx context.Context, req *types.QueryGetIncomingInFlightPacketRequest) (*types.QueryGetIncomingInFlightPacketResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := k.GetAckWaitingPacket(
+	val, found := k.GetIncomingInFlightPacket(
 		ctx,
 		req.SrcPortId, req.SrcChannelId, req.Sequence,
 	)
@@ -51,5 +51,5 @@ func (k Keeper) AckWaitingPacket(ctx context.Context, req *types.QueryGetAckWait
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &types.QueryGetAckWaitingPacketResponse{AckWaitingPacket: val}, nil
+	return &types.QueryGetIncomingInFlightPacketResponse{IncomingInFlightPacket: val}, nil
 }
