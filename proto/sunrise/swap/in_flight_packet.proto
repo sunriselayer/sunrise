@@ -5,32 +5,18 @@ import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
-import "sunrise/swap/route.proto";
+import "sunrise/swap/ack_waiting_packet.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 message InFlightPacket {
-  InFlightPacketIndex index = 1 [
+  PacketIndex index = 1 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  string ack_port_id = 2;
-  string ack_channel_id = 3;
-  uint64 ack_sequence = 4;
-  bytes ack = 2;
-  RouteResult result = 3 [
+  PacketIndex ack_waiting_index = 2 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  int32 retries_remaining = 4;
-  InFlightPacketIndex sync_index = 5 [
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-}
-
-message InFlightPacketIndex {
-  string src_port_id = 1;
-  string src_channel_id = 2;
-  uint64 sequence = 3;
+  int32 retries_remaining = 3;
 }

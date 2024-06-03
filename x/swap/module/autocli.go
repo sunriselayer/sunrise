@@ -28,7 +28,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Shows a in-flight-packet",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "src_port_id"}, {ProtoField: "src_channel_id"}, {ProtoField: "sequence"}},
 				},
-				// this line is used by ignite scaffolding # autocli/query
+				{
+			RpcMethod: "AckWaitingPacketAll",
+			Use: "list-ack-waiting-packet",
+			Short: "List all ack-waiting-packet",
+		},
+		{
+			RpcMethod: "AckWaitingPacket",
+			Use: "show-ack-waiting-packet [id]",
+			Short: "Shows a ack-waiting-packet",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"},},
+		},
+		// this line is used by ignite scaffolding # autocli/query
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{

@@ -24,14 +24,30 @@ func TestGenesisState_Validate(t *testing.T) {
 
 				InFlightPacketList: []types.InFlightPacket{
 					{
-						Index: types.InFlightPacketIndex{
+						Index: types.PacketIndex{
 							SrcPortId:    "0",
 							SrcChannelId: "0",
 							Sequence:     0,
 						},
 					},
 					{
-						Index: types.InFlightPacketIndex{
+						Index: types.PacketIndex{
+							SrcPortId:    "1",
+							SrcChannelId: "1",
+							Sequence:     1,
+						},
+					},
+				},
+				AckWaitingPacketList: []types.AckWaitingPacket{
+					{
+						Index: types.PacketIndex{
+							SrcPortId:    "0",
+							SrcChannelId: "0",
+							Sequence:     0,
+						},
+					},
+					{
+						Index: types.PacketIndex{
 							SrcPortId:    "1",
 							SrcChannelId: "1",
 							Sequence:     1,
@@ -47,14 +63,36 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				InFlightPacketList: []types.InFlightPacket{
 					{
-						Index: types.InFlightPacketIndex{
+						Index: types.PacketIndex{
 							SrcPortId:    "0",
 							SrcChannelId: "0",
 							Sequence:     0,
 						},
 					},
 					{
-						Index: types.InFlightPacketIndex{
+						Index: types.PacketIndex{
+							SrcPortId:    "0",
+							SrcChannelId: "0",
+							Sequence:     0,
+						},
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated ackWaitingPacket",
+			genState: &types.GenesisState{
+				AckWaitingPacketList: []types.AckWaitingPacket{
+					{
+						Index: types.PacketIndex{
+							SrcPortId:    "0",
+							SrcChannelId: "0",
+							Sequence:     0,
+						},
+					},
+					{
+						Index: types.PacketIndex{
 							SrcPortId:    "0",
 							SrcChannelId: "0",
 							Sequence:     0,

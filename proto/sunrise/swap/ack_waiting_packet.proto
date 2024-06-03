@@ -1,0 +1,36 @@
+syntax = "proto3";
+package sunrise.swap;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+import "sunrise/swap/route.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+message AckWaitingPacket {
+  PacketIndex index = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  RouteResult result = 2 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  bytes ack = 3;
+  oneof return {
+    PacketIndex in_flight_index_return = 4;
+    bytes ack_return = 5;
+  }
+  oneof forward {
+    PacketIndex in_flight_index_forward = 6;
+    bytes ack_forward = 7;
+  }
+}
+
+message PacketIndex {
+  string src_port_id = 1;
+  string src_channel_id = 2;
+  uint64 sequence = 3;
+}

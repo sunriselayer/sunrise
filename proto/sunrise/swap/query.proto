@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/swap/params.proto";
 import "sunrise/swap/in_flight_packet.proto";
+import "sunrise/swap/ack_waiting_packet.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
@@ -29,6 +30,16 @@ service Query {
     option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet";
   
   }
+  
+  // Queries a list of AckWaitingPacket items.
+  rpc AckWaitingPacket    (QueryGetAckWaitingPacketRequest) returns (QueryGetAckWaitingPacketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/{src_port_id}/{src_channel_id}/{sequence}";
+  
+  }
+  rpc AckWaitingPacketAll (QueryAllAckWaitingPacketRequest) returns (QueryAllAckWaitingPacketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -41,9 +52,9 @@ message QueryParamsResponse {
 }
 
 message QueryGetInFlightPacketRequest {
-  string src_port_id = 1;
+  string src_port_id    = 1;
   string src_channel_id = 2;
-  uint64 sequence = 3;
+  uint64 sequence       = 3;
 }
 
 message QueryGetInFlightPacketResponse {
@@ -57,5 +68,24 @@ message QueryAllInFlightPacketRequest {
 message QueryAllInFlightPacketResponse {
   repeated InFlightPacket                         inFlightPacket = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination     = 2;
+}
+
+message QueryGetAckWaitingPacketRequest {
+  string src_port_id    = 1;
+  string src_channel_id = 2;
+  uint64 sequence       = 3;
+}
+
+message QueryGetAckWaitingPacketResponse {
+  AckWaitingPacket ackWaitingPacket = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllAckWaitingPacketRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllAckWaitingPacketResponse {
+  repeated AckWaitingPacket                       ackWaitingPacket = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination       = 2;
 }
 

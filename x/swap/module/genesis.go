@@ -13,7 +13,11 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	for _, elem := range genState.InFlightPacketList {
 		k.SetInFlightPacket(ctx, elem)
 	}
-	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the ackWaitingPacket
+for _, elem := range genState.AckWaitingPacketList {
+	k.SetAckWaitingPacket(ctx, elem)
+}
+// this line is used by starport scaffolding # genesis/module/init
 	if err := k.SetParams(ctx, genState.Params); err != nil {
 		panic(err)
 	}
@@ -25,7 +29,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.Params = k.GetParams(ctx)
 
 	genesis.InFlightPacketList = k.GetAllInFlightPacket(ctx)
-	// this line is used by starport scaffolding # genesis/module/export
+	genesis.AckWaitingPacketList = k.GetAllAckWaitingPacket(ctx)
+// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis
 }

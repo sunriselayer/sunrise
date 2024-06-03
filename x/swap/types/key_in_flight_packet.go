@@ -11,7 +11,7 @@ const (
 
 // InFlightPacketKey returns the store key to retrieve a InFlightPacket from the index fields
 func InFlightPacketKey(
-	index InFlightPacketIndex,
+	index PacketIndex,
 ) []byte {
 	// var key []byte
 

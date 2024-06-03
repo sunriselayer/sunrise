@@ -11,7 +11,8 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		InFlightPacketList: []InFlightPacket{},
-		// this line is used by starport scaffolding # genesis/types/default
+		AckWaitingPacketList: []AckWaitingPacket{},
+// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
 }
@@ -29,7 +30,17 @@ func (gs GenesisState) Validate() error {
 		}
 		inFlightPacketIndexMap[index] = struct{}{}
 	}
-	// this line is used by starport scaffolding # genesis/types/validate
+	// Check for duplicated index in ackWaitingPacket
+ackWaitingPacketIndexMap := make(map[string]struct{})
+
+for _, elem := range gs.AckWaitingPacketList {
+	index := string(AckWaitingPacketKey(elem.Index))
+	if _, ok := ackWaitingPacketIndexMap[index]; ok {
+		return fmt.Errorf("duplicated index for ackWaitingPacket")
+	}
+	ackWaitingPacketIndexMap[index] = struct{}{}
+}
+// this line is used by starport scaffolding # genesis/types/validate
 
 	return gs.Params.Validate()
 }

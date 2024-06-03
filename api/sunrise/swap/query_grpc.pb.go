@@ -19,9 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName            = "/sunrise.swap.Query/Params"
-	Query_InFlightPacket_FullMethodName    = "/sunrise.swap.Query/InFlightPacket"
-	Query_InFlightPacketAll_FullMethodName = "/sunrise.swap.Query/InFlightPacketAll"
+	Query_Params_FullMethodName              = "/sunrise.swap.Query/Params"
+	Query_InFlightPacket_FullMethodName      = "/sunrise.swap.Query/InFlightPacket"
+	Query_InFlightPacketAll_FullMethodName   = "/sunrise.swap.Query/InFlightPacketAll"
+	Query_AckWaitingPacket_FullMethodName    = "/sunrise.swap.Query/AckWaitingPacket"
+	Query_AckWaitingPacketAll_FullMethodName = "/sunrise.swap.Query/AckWaitingPacketAll"
 )
 
 // QueryClient is the client API for Query service.
@@ -33,6 +35,9 @@ type QueryClient interface {
 	// Queries a list of InFlightPacket items.
 	InFlightPacket(ctx context.Context, in *QueryGetInFlightPacketRequest, opts ...grpc.CallOption) (*QueryGetInFlightPacketResponse, error)
 	InFlightPacketAll(ctx context.Context, in *QueryAllInFlightPacketRequest, opts ...grpc.CallOption) (*QueryAllInFlightPacketResponse, error)
+	// Queries a list of AckWaitingPacket items.
+	AckWaitingPacket(ctx context.Context, in *QueryGetAckWaitingPacketRequest, opts ...grpc.CallOption) (*QueryGetAckWaitingPacketResponse, error)
+	AckWaitingPacketAll(ctx context.Context, in *QueryAllAckWaitingPacketRequest, opts ...grpc.CallOption) (*QueryAllAckWaitingPacketResponse, error)
 }
 
 type queryClient struct {
@@ -70,6 +75,24 @@ func (c *queryClient) InFlightPacketAll(ctx context.Context, in *QueryAllInFligh
 	return out, nil
 }
 
+func (c *queryClient) AckWaitingPacket(ctx context.Context, in *QueryGetAckWaitingPacketRequest, opts ...grpc.CallOption) (*QueryGetAckWaitingPacketResponse, error) {
+	out := new(QueryGetAckWaitingPacketResponse)
+	err := c.cc.Invoke(ctx, Query_AckWaitingPacket_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) AckWaitingPacketAll(ctx context.Context, in *QueryAllAckWaitingPacketRequest, opts ...grpc.CallOption) (*QueryAllAckWaitingPacketResponse, error) {
+	out := new(QueryAllAckWaitingPacketResponse)
+	err := c.cc.Invoke(ctx, Query_AckWaitingPacketAll_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -79,6 +102,9 @@ type QueryServer interface {
 	// Queries a list of InFlightPacket items.
 	InFlightPacket(context.Context, *QueryGetInFlightPacketRequest) (*QueryGetInFlightPacketResponse, error)
 	InFlightPacketAll(context.Context, *QueryAllInFlightPacketRequest) (*QueryAllInFlightPacketResponse, error)
+	// Queries a list of AckWaitingPacket items.
+	AckWaitingPacket(context.Context, *QueryGetAckWaitingPacketRequest) (*QueryGetAckWaitingPacketResponse, error)
+	AckWaitingPacketAll(context.Context, *QueryAllAckWaitingPacketRequest) (*QueryAllAckWaitingPacketResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -94,6 +120,12 @@ func (UnimplementedQueryServer) InFlightPacket(context.Context, *QueryGetInFligh
 }
 func (UnimplementedQueryServer) InFlightPacketAll(context.Context, *QueryAllInFlightPacketRequest) (*QueryAllInFlightPacketResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InFlightPacketAll not implemented")
+}
+func (UnimplementedQueryServer) AckWaitingPacket(context.Context, *QueryGetAckWaitingPacketRequest) (*QueryGetAckWaitingPacketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AckWaitingPacket not implemented")
+}
+func (UnimplementedQueryServer) AckWaitingPacketAll(context.Context, *QueryAllAckWaitingPacketRequest) (*QueryAllAckWaitingPacketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AckWaitingPacketAll not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -162,6 +194,42 @@ func _Query_InFlightPacketAll_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_AckWaitingPacket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetAckWaitingPacketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).AckWaitingPacket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_AckWaitingPacket_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).AckWaitingPacket(ctx, req.(*QueryGetAckWaitingPacketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_AckWaitingPacketAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAllAckWaitingPacketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).AckWaitingPacketAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_AckWaitingPacketAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).AckWaitingPacketAll(ctx, req.(*QueryAllAckWaitingPacketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +248,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "InFlightPacketAll",
 			Handler:    _Query_InFlightPacketAll_Handler,
+		},
+		{
+			MethodName: "AckWaitingPacket",
+			Handler:    _Query_AckWaitingPacket_Handler,
+		},
+		{
+			MethodName: "AckWaitingPacketAll",
+			Handler:    _Query_AckWaitingPacketAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -2,12 +2,12 @@ package types
 
 import ()
 
-func NewInFlightPacketIndex(
+func NewPacketIndex(
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
-) InFlightPacketIndex {
-	return InFlightPacketIndex{
+) PacketIndex {
+	return PacketIndex{
 		SrcPortId:    srcPortId,
 		SrcChannelId: srcChannelId,
 		Sequence:     sequence,

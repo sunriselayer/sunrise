@@ -49,7 +49,7 @@ func (k Keeper) TransferAndCreateInFlightPacket(
 	}
 
 	packet = types.InFlightPacket{
-		Index: types.NewInFlightPacketIndex(
+		Index: types.NewPacketIndex(
 			metadata.Port,
 			metadata.Channel,
 			res.Sequence,
