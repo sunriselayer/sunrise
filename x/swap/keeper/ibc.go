@@ -94,11 +94,15 @@ func (k Keeper) ProcessSwappedFund(
 	incomingAck exported.Acknowledgement,
 ) (waitingPacket *types.AckWaitingPacket, err error) {
 	waitingPacket = &types.AckWaitingPacket{
-		Index:   types.NewPacketIndex(incomingPacket.DestinationPort, incomingPacket.DestinationChannel, incomingPacket.Sequence),
-		Result:  result,
-		Ack:     incomingAck.Acknowledgement(),
-		Return:  &types.AckWaitingPacket_AckReturn{},  // default value is nil ack
-		Forward: &types.AckWaitingPacket_AckForward{}, // default value is nil ack
+		Index:        types.NewPacketIndex(incomingPacket.DestinationPort, incomingPacket.DestinationChannel, incomingPacket.Sequence),
+		Data:         incomingPacket.Data,
+		SrcPortId:    incomingPacket.SourcePort,
+		SrcChannelId: incomingPacket.SourceChannel,
+		Ack:          incomingAck.Acknowledgement(),
+		Result:       result,
+		InterfaceFee: interfaceFee,
+		Return:       &types.AckWaitingPacket_AckReturn{},  // default value is nil ack
+		Forward:      &types.AckWaitingPacket_AckForward{}, // default value is nil ack
 	}
 
 	maxAmountIn, ok := sdkmath.NewIntFromString(tokenData.Amount)
@@ -376,12 +380,12 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		ctx,
 		chanCap,
 		channeltypes.NewPacket(
-			nil, // TODO
+			packet.Data,
 			packet.Index.Sequence,
-			nil, // TODO
-			nil, // TODO
-			nil, // TODO
-			nil, // TODO
+			packet.SrcPortId,
+			packet.SrcChannelId,
+			packet.Index.PortId,
+			packet.Index.ChannelId,
 			nil, // TODO
 			nil, // TODO
 		),

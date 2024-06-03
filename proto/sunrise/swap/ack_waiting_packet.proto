@@ -14,18 +14,27 @@ message AckWaitingPacket {
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  RouteResult result = 2 [
+  bytes data = 2;
+  string src_port_id = 3;
+  string src_channel_id = 4;
+  bytes ack = 5;
+  RouteResult result = 6 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  bytes ack = 3;
+  string interface_fee = 7 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
   oneof return {
-    PacketIndex in_flight_index_return = 4;
-    bytes ack_return = 5;
+    PacketIndex in_flight_index_return = 8;
+    bytes ack_return = 9;
   }
   oneof forward {
-    PacketIndex in_flight_index_forward = 6;
-    bytes ack_forward = 7;
+    PacketIndex in_flight_index_forward = 10;
+    bytes ack_forward = 11;
   }
 }
 
