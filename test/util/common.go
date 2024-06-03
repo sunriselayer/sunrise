@@ -53,11 +53,13 @@ import (
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
+
+	encoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 var (
 	// ModuleBasics is a mock module basic manager for testing
-	ModuleBasics = app.ModuleBasics()
+	ModuleBasics = encoding.ModuleBasics
 	// TestingStakeParams is a set of staking params for testing
 	TestingStakeParams = stakingtypes.Params{
 		UnbondingTime:     100,
@@ -239,7 +241,7 @@ func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 		authtypes.ProtoBaseAccount,        // prototype
 		maccPerms,
 		authcodec.NewBech32Codec(app.Bech32PrefixAccAddr),
-		app.Bech32PrefixAccAddr,
+		app.Bech32MainPrefix,
 		authrity,
 	)
 

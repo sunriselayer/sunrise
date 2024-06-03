@@ -9,8 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/rs/zerolog/log"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 type Testnet struct {
@@ -68,7 +69,7 @@ func (t *Testnet) CreateNode(version string, startHeight, upgradeHeight int64) e
 }
 
 func (t *Testnet) CreateAccount(name string, tokens int64) (keyring.Keyring, error) {
-	cdc := encoding.MakeConfig(app.ModuleEncodingRegisters...).Codec
+	cdc := encoding.MakeConfig(testencoding.ModuleEncodingRegisters...).Codec
 	kr := keyring.NewInMemory(cdc)
 	key, _, err := kr.NewMnemonic(name, keyring.English, "", "", hd.Secp256k1)
 	if err != nil {

@@ -26,7 +26,6 @@ import (
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
-	"github.com/sunriselayer/sunrise/testutil"
 
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
@@ -53,7 +52,6 @@ func (ao EmptyAppOptions) Get(_ string) interface{} {
 // is bonded with a delegation of one consensus engine unit in the default token
 // of the app from first genesis account. A no-op logger is set in app.
 func SetupTestAppWithGenesisValSet(cparams tmproto.ConsensusParams, genAccounts ...string) (*app.App, keyring.Keyring) {
-	testutil.InitSDKConfig()
 	// var cache storetypes.MultiStorePersistentCache
 	// EmptyAppOptions is a stub implementing AppOptions
 	emptyOpts := EmptyAppOptions{}
@@ -298,5 +296,5 @@ func genesisStateWithValSet(
 
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.JSONCodec) app.GenesisState {
-	return app.ModuleBasics().DefaultGenesis(cdc)
+	return ModuleBasics.DefaultGenesis(cdc)
 }

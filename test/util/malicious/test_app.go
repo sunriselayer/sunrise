@@ -17,9 +17,9 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 
 	"github.com/spf13/cast"
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 	util "github.com/sunriselayer/sunrise/test/util"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
 )
 
@@ -80,7 +80,7 @@ func NewAppServer(logger log.Logger, db dbm.DB, traceStore io.Writer, appOpts se
 	return New(
 		logger, db, traceStore, true,
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
-		encoding.MakeConfig(app.ModuleEncodingRegisters...), // Ideally, we would reuse the one created by NewRootCmd.
+		encoding.MakeConfig(testencoding.ModuleEncodingRegisters...), // Ideally, we would reuse the one created by NewRootCmd.
 		appOpts,
 		baseapp.SetPruning(pruningOpts),
 		baseapp.SetMinGasPrices(cast.ToString(appOpts.Get(server.FlagMinGasPrices))),

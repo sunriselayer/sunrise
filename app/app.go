@@ -74,8 +74,15 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "sunrise"
-	Name                 = "sunrise"
+	Bech32MainPrefix = "sunrise"
+	Name             = "sunrise"
+
+	Bech32PrefixAccAddr  = Bech32MainPrefix
+	Bech32PrefixAccPub   = Bech32MainPrefix + "pub"
+	Bech32PrefixValAddr  = Bech32MainPrefix + "valoper"
+	Bech32PrefixValPub   = Bech32MainPrefix + "valoperpub"
+	Bech32PrefixConsAddr = Bech32MainPrefix + "valcons"
+	Bech32PrefixConsPub  = Bech32MainPrefix + "valconspub"
 )
 
 var (
@@ -484,4 +491,9 @@ func BlockedAddresses() map[string]bool {
 		}
 	}
 	return result
+}
+
+// GetTxConfig implements the TestingApp interface.
+func (app *App) GetTxConfig() client.TxConfig {
+	return app.txConfig
 }

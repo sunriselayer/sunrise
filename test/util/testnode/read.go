@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 
 	"github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/cometbft/cometbft/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 )
 
 func ReadRecentBlocks(ctx context.Context, rpcAddress string, blocks int64) ([]*types.Block, error) {
@@ -80,7 +81,7 @@ func CalculateMeanGasFromRecentBlocks(ctx context.Context, rpcAddress, msgType s
 
 func CalculateMeanGas(ctx context.Context, rpcAddress, msgType string, fromHeight int64, toHeight int64) (float64, int64, error) {
 	var (
-		encCfg   = encoding.MakeConfig(app.ModuleEncodingRegisters...)
+		encCfg   = encoding.MakeConfig(testencoding.ModuleEncodingRegisters...)
 		decoder  = encCfg.TxConfig.TxDecoder()
 		totalGas int64
 		count    int64
