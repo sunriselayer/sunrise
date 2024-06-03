@@ -8,6 +8,8 @@ import (
 
 // x/liquiditypool module sentinel errors
 var (
-	ErrInvalidSigner = sdkerrors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
-	ErrSample        = sdkerrors.Register(ModuleName, 1101, "sample error")
+	ErrInvalidSigner     = sdkerrors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
+	ErrPoolNotFound      = sdkerrors.Register(ModuleName, 1101, "pool not found")
+	ErrInvalidBaseDenom  = sdkerrors.Register(ModuleName, 1102, "invalid base denom")
+	ErrInvalidQuoteDenom = sdkerrors.Register(ModuleName, 1103, "invalid quote denom")
 )
