@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
@@ -12,20 +11,18 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 )
 
-func (k Keeper) TransferSwappedToken(
+func (k Keeper) TransferAndCreateInFlightPacket(
 	ctx context.Context,
 	sender string,
 	tokenOut sdk.Coin,
 	metadata packetforwardtypes.ForwardMetadata,
 	incomingAck []byte,
 	result types.RouteResult,
-	remainderAmountIn sdkmath.Int,
-	returnMetadata *packetforwardtypes.ForwardMetadata,
-) error {
+) (packet types.InFlightPacket, err error) {
 	var memo string
 	if metadata.Next != nil {
 		if err := json.Unmarshal([]byte(memo), &metadata.Next); err != nil {
-			return err
+			return packet, err
 		}
 	}
 
@@ -41,7 +38,7 @@ func (k Keeper) TransferSwappedToken(
 	// forward token to receiver
 	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)
 	if err != nil {
-		return err
+		return packet, err
 	}
 
 	var retries uint8
@@ -51,23 +48,22 @@ func (k Keeper) TransferSwappedToken(
 		retries = types.DefaultRetryCount
 	}
 
-	val := types.InFlightPacket{
-		SrcPortId:        metadata.Port,
-		SrcChannelId:     metadata.Channel,
-		Sequence:         res.Sequence,
+	packet = types.InFlightPacket{
+		Index: types.NewInFlightPacketIndex(
+			metadata.Port,
+			metadata.Channel,
+			res.Sequence,
+		),
 		RetriesRemaining: int32(retries),
 		IncomingAck:      incomingAck,
 		Result:           result,
 	}
 
-	if returnMetadata != nil {
-		val.ReturnInfo = &types.ReturnInfo{
-			// TODO
-			RemainderAmountIn: remainderAmountIn,
-		}
-	}
+	k.SetInFlightPacket(ctx, packet)
 
-	k.SetInFlightPacket(ctx, val)
-
-	return nil
+	return packet, nil
 }
+
+func (k Keeper) OnAcknowledgementInFlightPacket() {}
+
+func (k Keeper) OnTimeoutInFlightPacket() {}

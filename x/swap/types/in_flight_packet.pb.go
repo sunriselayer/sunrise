@@ -4,7 +4,6 @@
 package types
 
 import (
-	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
@@ -27,13 +26,11 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type InFlightPacket struct {
-	SrcPortId        string      `protobuf:"bytes,1,opt,name=src_port_id,json=srcPortId,proto3" json:"src_port_id,omitempty"`
-	SrcChannelId     string      `protobuf:"bytes,2,opt,name=src_channel_id,json=srcChannelId,proto3" json:"src_channel_id,omitempty"`
-	Sequence         uint64      `protobuf:"varint,3,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	RetriesRemaining int32       `protobuf:"varint,4,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
-	IncomingAck      []byte      `protobuf:"bytes,5,opt,name=incoming_ack,json=incomingAck,proto3" json:"incoming_ack,omitempty"`
-	Result           RouteResult `protobuf:"bytes,6,opt,name=result,proto3" json:"result"`
-	ReturnInfo       *ReturnInfo `protobuf:"bytes,7,opt,name=return_info,json=returnInfo,proto3" json:"return_info,omitempty"`
+	Index            InFlightPacketIndex `protobuf:"bytes,1,opt,name=index,proto3" json:"index"`
+	IncomingAck      []byte              `protobuf:"bytes,2,opt,name=incoming_ack,json=incomingAck,proto3" json:"incoming_ack,omitempty"`
+	Result           RouteResult         `protobuf:"bytes,3,opt,name=result,proto3" json:"result"`
+	RetriesRemaining int32               `protobuf:"varint,4,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
+	SyncIndex        InFlightPacketIndex `protobuf:"bytes,5,opt,name=sync_index,json=syncIndex,proto3" json:"sync_index"`
 }
 
 func (m *InFlightPacket) Reset()         { *m = InFlightPacket{} }
@@ -69,32 +66,11 @@ func (m *InFlightPacket) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_InFlightPacket proto.InternalMessageInfo
 
-func (m *InFlightPacket) GetSrcPortId() string {
+func (m *InFlightPacket) GetIndex() InFlightPacketIndex {
 	if m != nil {
-		return m.SrcPortId
+		return m.Index
 	}
-	return ""
-}
-
-func (m *InFlightPacket) GetSrcChannelId() string {
-	if m != nil {
-		return m.SrcChannelId
-	}
-	return ""
-}
-
-func (m *InFlightPacket) GetSequence() uint64 {
-	if m != nil {
-		return m.Sequence
-	}
-	return 0
-}
-
-func (m *InFlightPacket) GetRetriesRemaining() int32 {
-	if m != nil {
-		return m.RetriesRemaining
-	}
-	return 0
+	return InFlightPacketIndex{}
 }
 
 func (m *InFlightPacket) GetIncomingAck() []byte {
@@ -111,32 +87,38 @@ func (m *InFlightPacket) GetResult() RouteResult {
 	return RouteResult{}
 }
 
-func (m *InFlightPacket) GetReturnInfo() *ReturnInfo {
+func (m *InFlightPacket) GetRetriesRemaining() int32 {
 	if m != nil {
-		return m.ReturnInfo
+		return m.RetriesRemaining
 	}
-	return nil
+	return 0
 }
 
-type ReturnInfo struct {
-	ReturnPortId      string                `protobuf:"bytes,1,opt,name=return_port_id,json=returnPortId,proto3" json:"return_port_id,omitempty"`
-	ReturnChannelId   string                `protobuf:"bytes,2,opt,name=return_channel_id,json=returnChannelId,proto3" json:"return_channel_id,omitempty"`
-	RemainderAmountIn cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=remainder_amount_in,json=remainderAmountIn,proto3,customtype=cosmossdk.io/math.Int" json:"remainder_amount_in"`
-	ForwardAck        []byte                `protobuf:"bytes,4,opt,name=forward_ack,json=forwardAck,proto3" json:"forward_ack,omitempty"`
+func (m *InFlightPacket) GetSyncIndex() InFlightPacketIndex {
+	if m != nil {
+		return m.SyncIndex
+	}
+	return InFlightPacketIndex{}
 }
 
-func (m *ReturnInfo) Reset()         { *m = ReturnInfo{} }
-func (m *ReturnInfo) String() string { return proto.CompactTextString(m) }
-func (*ReturnInfo) ProtoMessage()    {}
-func (*ReturnInfo) Descriptor() ([]byte, []int) {
+type InFlightPacketIndex struct {
+	SrcPortId    string `protobuf:"bytes,1,opt,name=src_port_id,json=srcPortId,proto3" json:"src_port_id,omitempty"`
+	SrcChannelId string `protobuf:"bytes,2,opt,name=src_channel_id,json=srcChannelId,proto3" json:"src_channel_id,omitempty"`
+	Sequence     uint64 `protobuf:"varint,3,opt,name=sequence,proto3" json:"sequence,omitempty"`
+}
+
+func (m *InFlightPacketIndex) Reset()         { *m = InFlightPacketIndex{} }
+func (m *InFlightPacketIndex) String() string { return proto.CompactTextString(m) }
+func (*InFlightPacketIndex) ProtoMessage()    {}
+func (*InFlightPacketIndex) Descriptor() ([]byte, []int) {
 	return fileDescriptor_80eca52a3b33713a, []int{1}
 }
-func (m *ReturnInfo) XXX_Unmarshal(b []byte) error {
+func (m *InFlightPacketIndex) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ReturnInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *InFlightPacketIndex) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_ReturnInfo.Marshal(b, m, deterministic)
+		return xxx_messageInfo_InFlightPacketIndex.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -146,42 +128,42 @@ func (m *ReturnInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *ReturnInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReturnInfo.Merge(m, src)
+func (m *InFlightPacketIndex) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InFlightPacketIndex.Merge(m, src)
 }
-func (m *ReturnInfo) XXX_Size() int {
+func (m *InFlightPacketIndex) XXX_Size() int {
 	return m.Size()
 }
-func (m *ReturnInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_ReturnInfo.DiscardUnknown(m)
+func (m *InFlightPacketIndex) XXX_DiscardUnknown() {
+	xxx_messageInfo_InFlightPacketIndex.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ReturnInfo proto.InternalMessageInfo
+var xxx_messageInfo_InFlightPacketIndex proto.InternalMessageInfo
 
-func (m *ReturnInfo) GetReturnPortId() string {
+func (m *InFlightPacketIndex) GetSrcPortId() string {
 	if m != nil {
-		return m.ReturnPortId
+		return m.SrcPortId
 	}
 	return ""
 }
 
-func (m *ReturnInfo) GetReturnChannelId() string {
+func (m *InFlightPacketIndex) GetSrcChannelId() string {
 	if m != nil {
-		return m.ReturnChannelId
+		return m.SrcChannelId
 	}
 	return ""
 }
 
-func (m *ReturnInfo) GetForwardAck() []byte {
+func (m *InFlightPacketIndex) GetSequence() uint64 {
 	if m != nil {
-		return m.ForwardAck
+		return m.Sequence
 	}
-	return nil
+	return 0
 }
 
 func init() {
 	proto.RegisterType((*InFlightPacket)(nil), "sunrise.swap.InFlightPacket")
-	proto.RegisterType((*ReturnInfo)(nil), "sunrise.swap.ReturnInfo")
+	proto.RegisterType((*InFlightPacketIndex)(nil), "sunrise.swap.InFlightPacketIndex")
 }
 
 func init() {
@@ -189,39 +171,33 @@ func init() {
 }
 
 var fileDescriptor_80eca52a3b33713a = []byte{
-	// 498 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x92, 0xc1, 0x6e, 0xd3, 0x30,
-	0x18, 0xc7, 0xeb, 0xd1, 0x15, 0xea, 0x56, 0x83, 0x06, 0x90, 0xb2, 0x1e, 0xd2, 0x30, 0x38, 0x44,
-	0x03, 0x12, 0x04, 0x27, 0x24, 0x2e, 0x2d, 0xd2, 0xa4, 0xdc, 0xa6, 0x1c, 0xb9, 0x18, 0xcf, 0x71,
-	0x53, 0x2b, 0x8d, 0x1d, 0x6c, 0x47, 0x63, 0x6f, 0xc1, 0x63, 0x70, 0xe4, 0xc0, 0x8d, 0x17, 0xd8,
-	0x71, 0xe2, 0x84, 0x38, 0x4c, 0xd0, 0x1e, 0x78, 0x0d, 0x14, 0xdb, 0xed, 0x18, 0xbb, 0x44, 0xfe,
-	0xfe, 0xff, 0x7f, 0x3e, 0xfb, 0xfb, 0xe9, 0x83, 0x8f, 0x55, 0xc3, 0x25, 0x53, 0x34, 0x51, 0xa7,
-	0xb8, 0x4e, 0x18, 0x47, 0xf3, 0x25, 0x2b, 0x16, 0x1a, 0xd5, 0x98, 0x94, 0x54, 0xc7, 0xb5, 0x14,
-	0x5a, 0x78, 0x43, 0x17, 0x8a, 0xdb, 0xd0, 0x78, 0x84, 0x2b, 0xc6, 0x45, 0x62, 0xbe, 0x36, 0x30,
-	0xde, 0x27, 0x42, 0x55, 0x42, 0x21, 0x53, 0x25, 0xb6, 0x70, 0xd6, 0x83, 0x42, 0x14, 0xc2, 0xea,
-	0xed, 0xc9, 0xa9, 0xfe, 0xb5, 0x6b, 0xa5, 0x68, 0x34, 0xb5, 0xce, 0xc1, 0xb7, 0x1d, 0xb8, 0x97,
-	0xf2, 0x23, 0xf3, 0x8a, 0x63, 0xf3, 0x08, 0x2f, 0x80, 0x03, 0x25, 0x09, 0xaa, 0x85, 0xd4, 0x88,
-	0xe5, 0x3e, 0x08, 0x41, 0xd4, 0xcf, 0xfa, 0x4a, 0x92, 0x63, 0x21, 0x75, 0x9a, 0x7b, 0x4f, 0xe0,
-	0x5e, 0xeb, 0x93, 0x05, 0xe6, 0x9c, 0x2e, 0xdb, 0xc8, 0x8e, 0x89, 0x0c, 0x95, 0x24, 0x6f, 0xad,
-	0x98, 0xe6, 0xde, 0x18, 0xde, 0x51, 0xf4, 0x43, 0x43, 0x39, 0xa1, 0xfe, 0xad, 0x10, 0x44, 0xdd,
-	0x6c, 0x5b, 0x7b, 0x4f, 0xe1, 0x48, 0x52, 0x2d, 0x19, 0x55, 0x48, 0xd2, 0x0a, 0x33, 0xce, 0x78,
-	0xe1, 0x77, 0x43, 0x10, 0xed, 0x66, 0xf7, 0x9c, 0x91, 0x6d, 0x74, 0xef, 0x11, 0x1c, 0x32, 0x4e,
-	0x44, 0xc5, 0x78, 0x81, 0x30, 0x29, 0xfd, 0xdd, 0x10, 0x44, 0xc3, 0x6c, 0xb0, 0xd1, 0xa6, 0xa4,
-	0xf4, 0xde, 0xc0, 0x9e, 0xa4, 0xaa, 0x59, 0x6a, 0xbf, 0x17, 0x82, 0x68, 0xf0, 0x72, 0x3f, 0xfe,
-	0x97, 0x60, 0x9c, 0xb5, 0xf3, 0x66, 0x26, 0x30, 0xeb, 0x9f, 0x5f, 0x4e, 0x3a, 0x9f, 0xff, 0x7c,
-	0x39, 0x04, 0x99, 0xfb, 0xc7, 0x7b, 0x0d, 0x07, 0x92, 0xea, 0x46, 0x72, 0xc4, 0xf8, 0x5c, 0xf8,
-	0xb7, 0x4d, 0x0b, 0xff, 0xbf, 0x16, 0x26, 0x90, 0xf2, 0xb9, 0xc8, 0xa0, 0xdc, 0x9e, 0x0f, 0x7e,
-	0x03, 0x08, 0xaf, 0xac, 0x96, 0x8c, 0xeb, 0x74, 0x1d, 0xde, 0xd0, 0xaa, 0x8e, 0xdf, 0xa1, 0x99,
-	0xbe, 0x4d, 0xdd, 0x40, 0x78, 0xd7, 0x1a, 0x57, 0x14, 0xdf, 0xc3, 0xfb, 0x96, 0x50, 0x4e, 0x25,
-	0xc2, 0x95, 0x68, 0xb8, 0x46, 0x8c, 0x1b, 0xa0, 0xfd, 0xd9, 0x8b, 0x76, 0x96, 0x9f, 0x97, 0x93,
-	0x87, 0x76, 0x03, 0x54, 0x5e, 0xc6, 0x4c, 0x24, 0x15, 0xd6, 0x8b, 0x38, 0xe5, 0xfa, 0xfb, 0xd7,
-	0xe7, 0xd0, 0xad, 0x46, 0xca, 0xb5, 0x1d, 0x79, 0xb4, 0x6d, 0x36, 0x35, 0xbd, 0x52, 0xee, 0x4d,
-	0xe0, 0x60, 0x2e, 0xe4, 0x29, 0x96, 0xb9, 0xa1, 0xdb, 0x35, 0x74, 0xa1, 0x93, 0xa6, 0xa4, 0x9c,
-	0x1d, 0x9d, 0xaf, 0x02, 0x70, 0xb1, 0x0a, 0xc0, 0xaf, 0x55, 0x00, 0x3e, 0xad, 0x83, 0xce, 0xc5,
-	0x3a, 0xe8, 0xfc, 0x58, 0x07, 0x9d, 0x77, 0xcf, 0x0a, 0xa6, 0x17, 0xcd, 0x49, 0x4c, 0x44, 0x95,
-	0x38, 0x5a, 0x4b, 0x7c, 0x46, 0xe5, 0xa6, 0x48, 0x3e, 0xda, 0x7d, 0xd3, 0x67, 0x35, 0x55, 0x27,
-	0x3d, 0xb3, 0x70, 0xaf, 0xfe, 0x06, 0x00, 0x00, 0xff, 0xff, 0x3f, 0x4a, 0xf3, 0x2c, 0x03, 0x03,
-	0x00, 0x00,
+	// 407 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x91, 0xb1, 0xae, 0xd3, 0x30,
+	0x14, 0x86, 0xe3, 0x72, 0x7b, 0x45, 0xdc, 0xe8, 0x8a, 0x6b, 0x18, 0x72, 0x3b, 0x84, 0xde, 0xc2,
+	0x50, 0x01, 0x4a, 0x24, 0x58, 0x59, 0x28, 0x52, 0xa5, 0x88, 0xa5, 0xf2, 0xc8, 0x62, 0xa5, 0x8e,
+	0x49, 0xad, 0x26, 0x76, 0xb0, 0x1d, 0xb5, 0x7d, 0x0b, 0x1e, 0x83, 0x0d, 0x1e, 0xa3, 0x63, 0x47,
+	0x26, 0x84, 0xda, 0x81, 0xd7, 0x40, 0xb1, 0x53, 0xd4, 0x4a, 0x4c, 0x2c, 0x51, 0xce, 0xff, 0x7f,
+	0xc7, 0xe7, 0x3f, 0x36, 0x7c, 0xa6, 0x1b, 0xa1, 0xb8, 0x66, 0x89, 0x5e, 0x67, 0x75, 0xc2, 0x05,
+	0xf9, 0x54, 0xf2, 0x62, 0x69, 0x48, 0x9d, 0xd1, 0x15, 0x33, 0x71, 0xad, 0xa4, 0x91, 0x28, 0xe8,
+	0xa0, 0xb8, 0x85, 0x86, 0xb7, 0x59, 0xc5, 0x85, 0x4c, 0xec, 0xd7, 0x01, 0xc3, 0x3b, 0x2a, 0x75,
+	0x25, 0x35, 0xb1, 0x55, 0xe2, 0x8a, 0xce, 0x7a, 0x52, 0xc8, 0x42, 0x3a, 0xbd, 0xfd, 0xeb, 0xd4,
+	0xf0, 0x62, 0xac, 0x92, 0x8d, 0x61, 0xce, 0x19, 0x7f, 0xeb, 0xc1, 0x9b, 0x54, 0xcc, 0x6c, 0x8a,
+	0xb9, 0x0d, 0x81, 0xa6, 0xb0, 0xcf, 0x45, 0xce, 0x36, 0x21, 0x18, 0x81, 0xc9, 0xe0, 0xf5, 0x7d,
+	0x7c, 0x1e, 0x27, 0xbe, 0x84, 0xd3, 0x16, 0x9c, 0xfa, 0xbb, 0x9f, 0x4f, 0xbd, 0xaf, 0xbf, 0xbf,
+	0xbf, 0x00, 0xd8, 0xb5, 0xa2, 0x7b, 0x18, 0x70, 0x41, 0x65, 0xc5, 0x45, 0x41, 0x32, 0xba, 0x0a,
+	0x7b, 0x23, 0x30, 0x09, 0xf0, 0xe0, 0xa4, 0xbd, 0xa3, 0x2b, 0xf4, 0x16, 0x5e, 0x2b, 0xa6, 0x9b,
+	0xd2, 0x84, 0x0f, 0xec, 0x9c, 0xbb, 0xcb, 0x39, 0xb8, 0x0d, 0x89, 0x2d, 0x70, 0x7e, 0x7e, 0xd7,
+	0x83, 0x5e, 0xc2, 0x5b, 0xc5, 0x8c, 0xe2, 0x4c, 0x13, 0xc5, 0xaa, 0x8c, 0x0b, 0x2e, 0x8a, 0xf0,
+	0x6a, 0x04, 0x26, 0x7d, 0xfc, 0xa8, 0x33, 0xf0, 0x49, 0x47, 0x1f, 0x20, 0xd4, 0x5b, 0x41, 0x89,
+	0x5b, 0xab, 0xff, 0x1f, 0x6b, 0xf9, 0x6d, 0xbf, 0x55, 0xc7, 0x6b, 0xf8, 0xf8, 0x1f, 0x30, 0x8a,
+	0xe0, 0x40, 0x2b, 0x4a, 0x6a, 0xa9, 0x0c, 0xe1, 0xb9, 0xbd, 0x3b, 0x1f, 0xfb, 0x5a, 0xd1, 0xb9,
+	0x54, 0x26, 0xcd, 0xd1, 0x73, 0x78, 0xd3, 0xfa, 0x74, 0x99, 0x09, 0xc1, 0xca, 0x16, 0xe9, 0x59,
+	0x24, 0xd0, 0x8a, 0xbe, 0x77, 0x62, 0x9a, 0xa3, 0x21, 0x7c, 0xa8, 0xd9, 0xe7, 0x86, 0x09, 0xca,
+	0xec, 0xb5, 0x5c, 0xe1, 0xbf, 0xf5, 0x74, 0xb6, 0x3b, 0x44, 0x60, 0x7f, 0x88, 0xc0, 0xaf, 0x43,
+	0x04, 0xbe, 0x1c, 0x23, 0x6f, 0x7f, 0x8c, 0xbc, 0x1f, 0xc7, 0xc8, 0xfb, 0xf8, 0xaa, 0xe0, 0x66,
+	0xd9, 0x2c, 0x62, 0x2a, 0xab, 0xa4, 0xdb, 0xaa, 0xcc, 0xb6, 0x4c, 0x9d, 0x8a, 0x64, 0xe3, 0x1e,
+	0xde, 0x6c, 0x6b, 0xa6, 0x17, 0xd7, 0xf6, 0xe5, 0xdf, 0xfc, 0x09, 0x00, 0x00, 0xff, 0xff, 0x6a,
+	0x13, 0xb6, 0xa7, 0x8c, 0x02, 0x00, 0x00,
 }
 
 func (m *InFlightPacket) Marshal() (dAtA []byte, err error) {
@@ -244,17 +220,20 @@ func (m *InFlightPacket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ReturnInfo != nil {
-		{
-			size, err := m.ReturnInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintInFlightPacket(dAtA, i, uint64(size))
+	{
+		size, err := m.SyncIndex.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
+		i -= size
+		i = encodeVarintInFlightPacket(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x2a
+	if m.RetriesRemaining != 0 {
+		i = encodeVarintInFlightPacket(dAtA, i, uint64(m.RetriesRemaining))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x20
 	}
 	{
 		size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
@@ -265,19 +244,47 @@ func (m *InFlightPacket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintInFlightPacket(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x32
+	dAtA[i] = 0x1a
 	if len(m.IncomingAck) > 0 {
 		i -= len(m.IncomingAck)
 		copy(dAtA[i:], m.IncomingAck)
 		i = encodeVarintInFlightPacket(dAtA, i, uint64(len(m.IncomingAck)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x12
 	}
-	if m.RetriesRemaining != 0 {
-		i = encodeVarintInFlightPacket(dAtA, i, uint64(m.RetriesRemaining))
-		i--
-		dAtA[i] = 0x20
+	{
+		size, err := m.Index.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintInFlightPacket(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *InFlightPacketIndex) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *InFlightPacketIndex) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InFlightPacketIndex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	if m.Sequence != 0 {
 		i = encodeVarintInFlightPacket(dAtA, i, uint64(m.Sequence))
 		i--
@@ -294,60 +301,6 @@ func (m *InFlightPacket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.SrcPortId)
 		copy(dAtA[i:], m.SrcPortId)
 		i = encodeVarintInFlightPacket(dAtA, i, uint64(len(m.SrcPortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ReturnInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ReturnInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReturnInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ForwardAck) > 0 {
-		i -= len(m.ForwardAck)
-		copy(dAtA[i:], m.ForwardAck)
-		i = encodeVarintInFlightPacket(dAtA, i, uint64(len(m.ForwardAck)))
-		i--
-		dAtA[i] = 0x22
-	}
-	{
-		size := m.RemainderAmountIn.Size()
-		i -= size
-		if _, err := m.RemainderAmountIn.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintInFlightPacket(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.ReturnChannelId) > 0 {
-		i -= len(m.ReturnChannelId)
-		copy(dAtA[i:], m.ReturnChannelId)
-		i = encodeVarintInFlightPacket(dAtA, i, uint64(len(m.ReturnChannelId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ReturnPortId) > 0 {
-		i -= len(m.ReturnPortId)
-		copy(dAtA[i:], m.ReturnPortId)
-		i = encodeVarintInFlightPacket(dAtA, i, uint64(len(m.ReturnPortId)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -371,6 +324,28 @@ func (m *InFlightPacket) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = m.Index.Size()
+	n += 1 + l + sovInFlightPacket(uint64(l))
+	l = len(m.IncomingAck)
+	if l > 0 {
+		n += 1 + l + sovInFlightPacket(uint64(l))
+	}
+	l = m.Result.Size()
+	n += 1 + l + sovInFlightPacket(uint64(l))
+	if m.RetriesRemaining != 0 {
+		n += 1 + sovInFlightPacket(uint64(m.RetriesRemaining))
+	}
+	l = m.SyncIndex.Size()
+	n += 1 + l + sovInFlightPacket(uint64(l))
+	return n
+}
+
+func (m *InFlightPacketIndex) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	l = len(m.SrcPortId)
 	if l > 0 {
 		n += 1 + l + sovInFlightPacket(uint64(l))
@@ -381,42 +356,6 @@ func (m *InFlightPacket) Size() (n int) {
 	}
 	if m.Sequence != 0 {
 		n += 1 + sovInFlightPacket(uint64(m.Sequence))
-	}
-	if m.RetriesRemaining != 0 {
-		n += 1 + sovInFlightPacket(uint64(m.RetriesRemaining))
-	}
-	l = len(m.IncomingAck)
-	if l > 0 {
-		n += 1 + l + sovInFlightPacket(uint64(l))
-	}
-	l = m.Result.Size()
-	n += 1 + l + sovInFlightPacket(uint64(l))
-	if m.ReturnInfo != nil {
-		l = m.ReturnInfo.Size()
-		n += 1 + l + sovInFlightPacket(uint64(l))
-	}
-	return n
-}
-
-func (m *ReturnInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ReturnPortId)
-	if l > 0 {
-		n += 1 + l + sovInFlightPacket(uint64(l))
-	}
-	l = len(m.ReturnChannelId)
-	if l > 0 {
-		n += 1 + l + sovInFlightPacket(uint64(l))
-	}
-	l = m.RemainderAmountIn.Size()
-	n += 1 + l + sovInFlightPacket(uint64(l))
-	l = len(m.ForwardAck)
-	if l > 0 {
-		n += 1 + l + sovInFlightPacket(uint64(l))
 	}
 	return n
 }
@@ -454,6 +393,208 @@ func (m *InFlightPacket) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: InFlightPacket: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInFlightPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Index.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IncomingAck", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInFlightPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IncomingAck = append(m.IncomingAck[:0], dAtA[iNdEx:postIndex]...)
+			if m.IncomingAck == nil {
+				m.IncomingAck = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInFlightPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RetriesRemaining", wireType)
+			}
+			m.RetriesRemaining = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInFlightPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RetriesRemaining |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SyncIndex", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowInFlightPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.SyncIndex.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipInFlightPacket(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthInFlightPacket
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InFlightPacketIndex) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowInFlightPacket
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InFlightPacketIndex: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InFlightPacketIndex: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -539,310 +680,6 @@ func (m *InFlightPacket) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RetriesRemaining", wireType)
-			}
-			m.RetriesRemaining = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RetriesRemaining |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IncomingAck", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.IncomingAck = append(m.IncomingAck[:0], dAtA[iNdEx:postIndex]...)
-			if m.IncomingAck == nil {
-				m.IncomingAck = []byte{}
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReturnInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ReturnInfo == nil {
-				m.ReturnInfo = &ReturnInfo{}
-			}
-			if err := m.ReturnInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipInFlightPacket(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ReturnInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowInFlightPacket
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ReturnInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ReturnInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReturnPortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ReturnPortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReturnChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ReturnChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RemainderAmountIn", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.RemainderAmountIn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ForwardAck", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowInFlightPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthInFlightPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ForwardAck = append(m.ForwardAck[:0], dAtA[iNdEx:postIndex]...)
-			if m.ForwardAck == nil {
-				m.ForwardAck = []byte{}
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipInFlightPacket(dAtA[iNdEx:])

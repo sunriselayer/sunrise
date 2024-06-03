@@ -23,7 +23,7 @@ func (gs GenesisState) Validate() error {
 	inFlightPacketIndexMap := make(map[string]struct{})
 
 	for _, elem := range gs.InFlightPacketList {
-		index := string(InFlightPacketKey(elem.SrcPortId, elem.SrcChannelId, elem.Sequence))
+		index := string(InFlightPacketKey(elem.Index))
 		if _, ok := inFlightPacketIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for inFlightPacket")
 		}

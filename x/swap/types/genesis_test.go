@@ -24,14 +24,18 @@ func TestGenesisState_Validate(t *testing.T) {
 
 				InFlightPacketList: []types.InFlightPacket{
 					{
-						SrcPortId:    "0",
-						SrcChannelId: "0",
-						Sequence:     0,
+						Index: types.InFlightPacketIndex{
+							SrcPortId:    "0",
+							SrcChannelId: "0",
+							Sequence:     0,
+						},
 					},
 					{
-						SrcPortId:    "1",
-						SrcChannelId: "1",
-						Sequence:     1,
+						Index: types.InFlightPacketIndex{
+							SrcPortId:    "1",
+							SrcChannelId: "1",
+							Sequence:     1,
+						},
 					},
 				},
 				// this line is used by starport scaffolding # types/genesis/validField
@@ -43,14 +47,18 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				InFlightPacketList: []types.InFlightPacket{
 					{
-						SrcPortId:    "0",
-						SrcChannelId: "0",
-						Sequence:     0,
+						Index: types.InFlightPacketIndex{
+							SrcPortId:    "0",
+							SrcChannelId: "0",
+							Sequence:     0,
+						},
 					},
 					{
-						SrcPortId:    "0",
-						SrcChannelId: "0",
-						Sequence:     0,
+						Index: types.InFlightPacketIndex{
+							SrcPortId:    "0",
+							SrcChannelId: "0",
+							Sequence:     0,
+						},
 					},
 				},
 			},

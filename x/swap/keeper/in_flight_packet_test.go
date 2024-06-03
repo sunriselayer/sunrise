@@ -18,9 +18,9 @@ var _ = strconv.IntSize
 func createNInFlightPacket(keeper keeper.Keeper, ctx context.Context, n int) []types.InFlightPacket {
 	items := make([]types.InFlightPacket, n)
 	for i := range items {
-		items[i].SrcPortId = strconv.Itoa(i)
-		items[i].SrcChannelId = strconv.Itoa(i)
-		items[i].Sequence = uint64(i)
+		items[i].Index.SrcPortId = strconv.Itoa(i)
+		items[i].Index.SrcChannelId = strconv.Itoa(i)
+		items[i].Index.Sequence = uint64(i)
 
 		keeper.SetInFlightPacket(ctx, items[i])
 	}
@@ -32,9 +32,9 @@ func TestInFlightPacketGet(t *testing.T) {
 	items := createNInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetInFlightPacket(ctx,
-			item.SrcPortId,
-			item.SrcChannelId,
-			item.Sequence,
+			item.Index.SrcPortId,
+			item.Index.SrcChannelId,
+			item.Index.Sequence,
 		)
 		require.True(t, found)
 		require.Equal(t,
@@ -48,14 +48,14 @@ func TestInFlightPacketRemove(t *testing.T) {
 	items := createNInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveInFlightPacket(ctx,
-			item.SrcPortId,
-			item.SrcChannelId,
-			item.Sequence,
+			item.Index.SrcPortId,
+			item.Index.SrcChannelId,
+			item.Index.Sequence,
 		)
 		_, found := keeper.GetInFlightPacket(ctx,
-			item.SrcPortId,
-			item.SrcChannelId,
-			item.Sequence,
+			item.Index.SrcPortId,
+			item.Index.SrcChannelId,
+			item.Index.Sequence,
 		)
 		require.False(t, found)
 	}

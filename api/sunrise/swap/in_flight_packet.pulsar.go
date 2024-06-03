@@ -17,25 +17,21 @@ import (
 
 var (
 	md_InFlightPacket                   protoreflect.MessageDescriptor
-	fd_InFlightPacket_src_port_id       protoreflect.FieldDescriptor
-	fd_InFlightPacket_src_channel_id    protoreflect.FieldDescriptor
-	fd_InFlightPacket_sequence          protoreflect.FieldDescriptor
-	fd_InFlightPacket_retries_remaining protoreflect.FieldDescriptor
+	fd_InFlightPacket_index             protoreflect.FieldDescriptor
 	fd_InFlightPacket_incoming_ack      protoreflect.FieldDescriptor
 	fd_InFlightPacket_result            protoreflect.FieldDescriptor
-	fd_InFlightPacket_return_info       protoreflect.FieldDescriptor
+	fd_InFlightPacket_retries_remaining protoreflect.FieldDescriptor
+	fd_InFlightPacket_sync_index        protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_swap_in_flight_packet_proto_init()
 	md_InFlightPacket = File_sunrise_swap_in_flight_packet_proto.Messages().ByName("InFlightPacket")
-	fd_InFlightPacket_src_port_id = md_InFlightPacket.Fields().ByName("src_port_id")
-	fd_InFlightPacket_src_channel_id = md_InFlightPacket.Fields().ByName("src_channel_id")
-	fd_InFlightPacket_sequence = md_InFlightPacket.Fields().ByName("sequence")
-	fd_InFlightPacket_retries_remaining = md_InFlightPacket.Fields().ByName("retries_remaining")
+	fd_InFlightPacket_index = md_InFlightPacket.Fields().ByName("index")
 	fd_InFlightPacket_incoming_ack = md_InFlightPacket.Fields().ByName("incoming_ack")
 	fd_InFlightPacket_result = md_InFlightPacket.Fields().ByName("result")
-	fd_InFlightPacket_return_info = md_InFlightPacket.Fields().ByName("return_info")
+	fd_InFlightPacket_retries_remaining = md_InFlightPacket.Fields().ByName("retries_remaining")
+	fd_InFlightPacket_sync_index = md_InFlightPacket.Fields().ByName("sync_index")
 }
 
 var _ protoreflect.Message = (*fastReflection_InFlightPacket)(nil)
@@ -103,27 +99,9 @@ func (x *fastReflection_InFlightPacket) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_InFlightPacket) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.SrcPortId != "" {
-		value := protoreflect.ValueOfString(x.SrcPortId)
-		if !f(fd_InFlightPacket_src_port_id, value) {
-			return
-		}
-	}
-	if x.SrcChannelId != "" {
-		value := protoreflect.ValueOfString(x.SrcChannelId)
-		if !f(fd_InFlightPacket_src_channel_id, value) {
-			return
-		}
-	}
-	if x.Sequence != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Sequence)
-		if !f(fd_InFlightPacket_sequence, value) {
-			return
-		}
-	}
-	if x.RetriesRemaining != int32(0) {
-		value := protoreflect.ValueOfInt32(x.RetriesRemaining)
-		if !f(fd_InFlightPacket_retries_remaining, value) {
+	if x.Index != nil {
+		value := protoreflect.ValueOfMessage(x.Index.ProtoReflect())
+		if !f(fd_InFlightPacket_index, value) {
 			return
 		}
 	}
@@ -139,9 +117,15 @@ func (x *fastReflection_InFlightPacket) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
-	if x.ReturnInfo != nil {
-		value := protoreflect.ValueOfMessage(x.ReturnInfo.ProtoReflect())
-		if !f(fd_InFlightPacket_return_info, value) {
+	if x.RetriesRemaining != int32(0) {
+		value := protoreflect.ValueOfInt32(x.RetriesRemaining)
+		if !f(fd_InFlightPacket_retries_remaining, value) {
+			return
+		}
+	}
+	if x.SyncIndex != nil {
+		value := protoreflect.ValueOfMessage(x.SyncIndex.ProtoReflect())
+		if !f(fd_InFlightPacket_sync_index, value) {
 			return
 		}
 	}
@@ -160,20 +144,16 @@ func (x *fastReflection_InFlightPacket) Range(f func(protoreflect.FieldDescripto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_InFlightPacket) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.swap.InFlightPacket.src_port_id":
-		return x.SrcPortId != ""
-	case "sunrise.swap.InFlightPacket.src_channel_id":
-		return x.SrcChannelId != ""
-	case "sunrise.swap.InFlightPacket.sequence":
-		return x.Sequence != uint64(0)
-	case "sunrise.swap.InFlightPacket.retries_remaining":
-		return x.RetriesRemaining != int32(0)
+	case "sunrise.swap.InFlightPacket.index":
+		return x.Index != nil
 	case "sunrise.swap.InFlightPacket.incoming_ack":
 		return len(x.IncomingAck) != 0
 	case "sunrise.swap.InFlightPacket.result":
 		return x.Result != nil
-	case "sunrise.swap.InFlightPacket.return_info":
-		return x.ReturnInfo != nil
+	case "sunrise.swap.InFlightPacket.retries_remaining":
+		return x.RetriesRemaining != int32(0)
+	case "sunrise.swap.InFlightPacket.sync_index":
+		return x.SyncIndex != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -190,20 +170,16 @@ func (x *fastReflection_InFlightPacket) Has(fd protoreflect.FieldDescriptor) boo
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_InFlightPacket) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.swap.InFlightPacket.src_port_id":
-		x.SrcPortId = ""
-	case "sunrise.swap.InFlightPacket.src_channel_id":
-		x.SrcChannelId = ""
-	case "sunrise.swap.InFlightPacket.sequence":
-		x.Sequence = uint64(0)
-	case "sunrise.swap.InFlightPacket.retries_remaining":
-		x.RetriesRemaining = int32(0)
+	case "sunrise.swap.InFlightPacket.index":
+		x.Index = nil
 	case "sunrise.swap.InFlightPacket.incoming_ack":
 		x.IncomingAck = nil
 	case "sunrise.swap.InFlightPacket.result":
 		x.Result = nil
-	case "sunrise.swap.InFlightPacket.return_info":
-		x.ReturnInfo = nil
+	case "sunrise.swap.InFlightPacket.retries_remaining":
+		x.RetriesRemaining = int32(0)
+	case "sunrise.swap.InFlightPacket.sync_index":
+		x.SyncIndex = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -220,26 +196,20 @@ func (x *fastReflection_InFlightPacket) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_InFlightPacket) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.swap.InFlightPacket.src_port_id":
-		value := x.SrcPortId
-		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.InFlightPacket.src_channel_id":
-		value := x.SrcChannelId
-		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.InFlightPacket.sequence":
-		value := x.Sequence
-		return protoreflect.ValueOfUint64(value)
-	case "sunrise.swap.InFlightPacket.retries_remaining":
-		value := x.RetriesRemaining
-		return protoreflect.ValueOfInt32(value)
+	case "sunrise.swap.InFlightPacket.index":
+		value := x.Index
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.swap.InFlightPacket.incoming_ack":
 		value := x.IncomingAck
 		return protoreflect.ValueOfBytes(value)
 	case "sunrise.swap.InFlightPacket.result":
 		value := x.Result
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.InFlightPacket.return_info":
-		value := x.ReturnInfo
+	case "sunrise.swap.InFlightPacket.retries_remaining":
+		value := x.RetriesRemaining
+		return protoreflect.ValueOfInt32(value)
+	case "sunrise.swap.InFlightPacket.sync_index":
+		value := x.SyncIndex
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -261,20 +231,16 @@ func (x *fastReflection_InFlightPacket) Get(descriptor protoreflect.FieldDescrip
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_InFlightPacket) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.swap.InFlightPacket.src_port_id":
-		x.SrcPortId = value.Interface().(string)
-	case "sunrise.swap.InFlightPacket.src_channel_id":
-		x.SrcChannelId = value.Interface().(string)
-	case "sunrise.swap.InFlightPacket.sequence":
-		x.Sequence = value.Uint()
-	case "sunrise.swap.InFlightPacket.retries_remaining":
-		x.RetriesRemaining = int32(value.Int())
+	case "sunrise.swap.InFlightPacket.index":
+		x.Index = value.Message().Interface().(*InFlightPacketIndex)
 	case "sunrise.swap.InFlightPacket.incoming_ack":
 		x.IncomingAck = value.Bytes()
 	case "sunrise.swap.InFlightPacket.result":
 		x.Result = value.Message().Interface().(*RouteResult)
-	case "sunrise.swap.InFlightPacket.return_info":
-		x.ReturnInfo = value.Message().Interface().(*ReturnInfo)
+	case "sunrise.swap.InFlightPacket.retries_remaining":
+		x.RetriesRemaining = int32(value.Int())
+	case "sunrise.swap.InFlightPacket.sync_index":
+		x.SyncIndex = value.Message().Interface().(*InFlightPacketIndex)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -295,26 +261,25 @@ func (x *fastReflection_InFlightPacket) Set(fd protoreflect.FieldDescriptor, val
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_InFlightPacket) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.swap.InFlightPacket.index":
+		if x.Index == nil {
+			x.Index = new(InFlightPacketIndex)
+		}
+		return protoreflect.ValueOfMessage(x.Index.ProtoReflect())
 	case "sunrise.swap.InFlightPacket.result":
 		if x.Result == nil {
 			x.Result = new(RouteResult)
 		}
 		return protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-	case "sunrise.swap.InFlightPacket.return_info":
-		if x.ReturnInfo == nil {
-			x.ReturnInfo = new(ReturnInfo)
+	case "sunrise.swap.InFlightPacket.sync_index":
+		if x.SyncIndex == nil {
+			x.SyncIndex = new(InFlightPacketIndex)
 		}
-		return protoreflect.ValueOfMessage(x.ReturnInfo.ProtoReflect())
-	case "sunrise.swap.InFlightPacket.src_port_id":
-		panic(fmt.Errorf("field src_port_id of message sunrise.swap.InFlightPacket is not mutable"))
-	case "sunrise.swap.InFlightPacket.src_channel_id":
-		panic(fmt.Errorf("field src_channel_id of message sunrise.swap.InFlightPacket is not mutable"))
-	case "sunrise.swap.InFlightPacket.sequence":
-		panic(fmt.Errorf("field sequence of message sunrise.swap.InFlightPacket is not mutable"))
-	case "sunrise.swap.InFlightPacket.retries_remaining":
-		panic(fmt.Errorf("field retries_remaining of message sunrise.swap.InFlightPacket is not mutable"))
+		return protoreflect.ValueOfMessage(x.SyncIndex.ProtoReflect())
 	case "sunrise.swap.InFlightPacket.incoming_ack":
 		panic(fmt.Errorf("field incoming_ack of message sunrise.swap.InFlightPacket is not mutable"))
+	case "sunrise.swap.InFlightPacket.retries_remaining":
+		panic(fmt.Errorf("field retries_remaining of message sunrise.swap.InFlightPacket is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacket"))
@@ -328,21 +293,18 @@ func (x *fastReflection_InFlightPacket) Mutable(fd protoreflect.FieldDescriptor)
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_InFlightPacket) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.InFlightPacket.src_port_id":
-		return protoreflect.ValueOfString("")
-	case "sunrise.swap.InFlightPacket.src_channel_id":
-		return protoreflect.ValueOfString("")
-	case "sunrise.swap.InFlightPacket.sequence":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.swap.InFlightPacket.retries_remaining":
-		return protoreflect.ValueOfInt32(int32(0))
+	case "sunrise.swap.InFlightPacket.index":
+		m := new(InFlightPacketIndex)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.swap.InFlightPacket.incoming_ack":
 		return protoreflect.ValueOfBytes(nil)
 	case "sunrise.swap.InFlightPacket.result":
 		m := new(RouteResult)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.InFlightPacket.return_info":
-		m := new(ReturnInfo)
+	case "sunrise.swap.InFlightPacket.retries_remaining":
+		return protoreflect.ValueOfInt32(int32(0))
+	case "sunrise.swap.InFlightPacket.sync_index":
+		m := new(InFlightPacketIndex)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -413,19 +375,9 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.SrcPortId)
-		if l > 0 {
+		if x.Index != nil {
+			l = options.Size(x.Index)
 			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.SrcChannelId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.Sequence != 0 {
-			n += 1 + runtime.Sov(uint64(x.Sequence))
-		}
-		if x.RetriesRemaining != 0 {
-			n += 1 + runtime.Sov(uint64(x.RetriesRemaining))
 		}
 		l = len(x.IncomingAck)
 		if l > 0 {
@@ -435,8 +387,11 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Result)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.ReturnInfo != nil {
-			l = options.Size(x.ReturnInfo)
+		if x.RetriesRemaining != 0 {
+			n += 1 + runtime.Sov(uint64(x.RetriesRemaining))
+		}
+		if x.SyncIndex != nil {
+			l = options.Size(x.SyncIndex)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -468,8 +423,8 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.ReturnInfo != nil {
-			encoded, err := options.Marshal(x.ReturnInfo)
+		if x.SyncIndex != nil {
+			encoded, err := options.Marshal(x.SyncIndex)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -480,7 +435,12 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x3a
+			dAtA[i] = 0x2a
+		}
+		if x.RetriesRemaining != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.RetriesRemaining))
+			i--
+			dAtA[i] = 0x20
 		}
 		if x.Result != nil {
 			encoded, err := options.Marshal(x.Result)
@@ -494,36 +454,26 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x1a
 		}
 		if len(x.IncomingAck) > 0 {
 			i -= len(x.IncomingAck)
 			copy(dAtA[i:], x.IncomingAck)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.IncomingAck)))
 			i--
-			dAtA[i] = 0x2a
-		}
-		if x.RetriesRemaining != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.RetriesRemaining))
-			i--
-			dAtA[i] = 0x20
-		}
-		if x.Sequence != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Sequence))
-			i--
-			dAtA[i] = 0x18
-		}
-		if len(x.SrcChannelId) > 0 {
-			i -= len(x.SrcChannelId)
-			copy(dAtA[i:], x.SrcChannelId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SrcChannelId)))
-			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.SrcPortId) > 0 {
-			i -= len(x.SrcPortId)
-			copy(dAtA[i:], x.SrcPortId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SrcPortId)))
+		if x.Index != nil {
+			encoded, err := options.Marshal(x.Index)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -574,6 +524,616 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 			}
 			if fieldNum <= 0 {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: InFlightPacket: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Index == nil {
+					x.Index = &InFlightPacketIndex{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Index); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IncomingAck", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.IncomingAck = append(x.IncomingAck[:0], dAtA[iNdEx:postIndex]...)
+				if x.IncomingAck == nil {
+					x.IncomingAck = []byte{}
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Result == nil {
+					x.Result = &RouteResult{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Result); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RetriesRemaining", wireType)
+				}
+				x.RetriesRemaining = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.RetriesRemaining |= int32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SyncIndex", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.SyncIndex == nil {
+					x.SyncIndex = &InFlightPacketIndex{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.SyncIndex); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_InFlightPacketIndex                protoreflect.MessageDescriptor
+	fd_InFlightPacketIndex_src_port_id    protoreflect.FieldDescriptor
+	fd_InFlightPacketIndex_src_channel_id protoreflect.FieldDescriptor
+	fd_InFlightPacketIndex_sequence       protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_swap_in_flight_packet_proto_init()
+	md_InFlightPacketIndex = File_sunrise_swap_in_flight_packet_proto.Messages().ByName("InFlightPacketIndex")
+	fd_InFlightPacketIndex_src_port_id = md_InFlightPacketIndex.Fields().ByName("src_port_id")
+	fd_InFlightPacketIndex_src_channel_id = md_InFlightPacketIndex.Fields().ByName("src_channel_id")
+	fd_InFlightPacketIndex_sequence = md_InFlightPacketIndex.Fields().ByName("sequence")
+}
+
+var _ protoreflect.Message = (*fastReflection_InFlightPacketIndex)(nil)
+
+type fastReflection_InFlightPacketIndex InFlightPacketIndex
+
+func (x *InFlightPacketIndex) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_InFlightPacketIndex)(x)
+}
+
+func (x *InFlightPacketIndex) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_swap_in_flight_packet_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_InFlightPacketIndex_messageType fastReflection_InFlightPacketIndex_messageType
+var _ protoreflect.MessageType = fastReflection_InFlightPacketIndex_messageType{}
+
+type fastReflection_InFlightPacketIndex_messageType struct{}
+
+func (x fastReflection_InFlightPacketIndex_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_InFlightPacketIndex)(nil)
+}
+func (x fastReflection_InFlightPacketIndex_messageType) New() protoreflect.Message {
+	return new(fastReflection_InFlightPacketIndex)
+}
+func (x fastReflection_InFlightPacketIndex_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_InFlightPacketIndex
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_InFlightPacketIndex) Descriptor() protoreflect.MessageDescriptor {
+	return md_InFlightPacketIndex
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_InFlightPacketIndex) Type() protoreflect.MessageType {
+	return _fastReflection_InFlightPacketIndex_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_InFlightPacketIndex) New() protoreflect.Message {
+	return new(fastReflection_InFlightPacketIndex)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_InFlightPacketIndex) Interface() protoreflect.ProtoMessage {
+	return (*InFlightPacketIndex)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_InFlightPacketIndex) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.SrcPortId != "" {
+		value := protoreflect.ValueOfString(x.SrcPortId)
+		if !f(fd_InFlightPacketIndex_src_port_id, value) {
+			return
+		}
+	}
+	if x.SrcChannelId != "" {
+		value := protoreflect.ValueOfString(x.SrcChannelId)
+		if !f(fd_InFlightPacketIndex_src_channel_id, value) {
+			return
+		}
+	}
+	if x.Sequence != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Sequence)
+		if !f(fd_InFlightPacketIndex_sequence, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_InFlightPacketIndex) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.swap.InFlightPacketIndex.src_port_id":
+		return x.SrcPortId != ""
+	case "sunrise.swap.InFlightPacketIndex.src_channel_id":
+		return x.SrcChannelId != ""
+	case "sunrise.swap.InFlightPacketIndex.sequence":
+		return x.Sequence != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacketIndex"))
+		}
+		panic(fmt.Errorf("message sunrise.swap.InFlightPacketIndex does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InFlightPacketIndex) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.swap.InFlightPacketIndex.src_port_id":
+		x.SrcPortId = ""
+	case "sunrise.swap.InFlightPacketIndex.src_channel_id":
+		x.SrcChannelId = ""
+	case "sunrise.swap.InFlightPacketIndex.sequence":
+		x.Sequence = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacketIndex"))
+		}
+		panic(fmt.Errorf("message sunrise.swap.InFlightPacketIndex does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_InFlightPacketIndex) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.swap.InFlightPacketIndex.src_port_id":
+		value := x.SrcPortId
+		return protoreflect.ValueOfString(value)
+	case "sunrise.swap.InFlightPacketIndex.src_channel_id":
+		value := x.SrcChannelId
+		return protoreflect.ValueOfString(value)
+	case "sunrise.swap.InFlightPacketIndex.sequence":
+		value := x.Sequence
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacketIndex"))
+		}
+		panic(fmt.Errorf("message sunrise.swap.InFlightPacketIndex does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InFlightPacketIndex) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.swap.InFlightPacketIndex.src_port_id":
+		x.SrcPortId = value.Interface().(string)
+	case "sunrise.swap.InFlightPacketIndex.src_channel_id":
+		x.SrcChannelId = value.Interface().(string)
+	case "sunrise.swap.InFlightPacketIndex.sequence":
+		x.Sequence = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacketIndex"))
+		}
+		panic(fmt.Errorf("message sunrise.swap.InFlightPacketIndex does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InFlightPacketIndex) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.swap.InFlightPacketIndex.src_port_id":
+		panic(fmt.Errorf("field src_port_id of message sunrise.swap.InFlightPacketIndex is not mutable"))
+	case "sunrise.swap.InFlightPacketIndex.src_channel_id":
+		panic(fmt.Errorf("field src_channel_id of message sunrise.swap.InFlightPacketIndex is not mutable"))
+	case "sunrise.swap.InFlightPacketIndex.sequence":
+		panic(fmt.Errorf("field sequence of message sunrise.swap.InFlightPacketIndex is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacketIndex"))
+		}
+		panic(fmt.Errorf("message sunrise.swap.InFlightPacketIndex does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_InFlightPacketIndex) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.swap.InFlightPacketIndex.src_port_id":
+		return protoreflect.ValueOfString("")
+	case "sunrise.swap.InFlightPacketIndex.src_channel_id":
+		return protoreflect.ValueOfString("")
+	case "sunrise.swap.InFlightPacketIndex.sequence":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.InFlightPacketIndex"))
+		}
+		panic(fmt.Errorf("message sunrise.swap.InFlightPacketIndex does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_InFlightPacketIndex) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.InFlightPacketIndex", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_InFlightPacketIndex) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_InFlightPacketIndex) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_InFlightPacketIndex) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_InFlightPacketIndex) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*InFlightPacketIndex)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.SrcPortId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.SrcChannelId)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Sequence != 0 {
+			n += 1 + runtime.Sov(uint64(x.Sequence))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*InFlightPacketIndex)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Sequence != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Sequence))
+			i--
+			dAtA[i] = 0x18
+		}
+		if len(x.SrcChannelId) > 0 {
+			i -= len(x.SrcChannelId)
+			copy(dAtA[i:], x.SrcChannelId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SrcChannelId)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.SrcPortId) > 0 {
+			i -= len(x.SrcPortId)
+			copy(dAtA[i:], x.SrcPortId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SrcPortId)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*InFlightPacketIndex)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: InFlightPacketIndex: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: InFlightPacketIndex: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -659,745 +1219,6 @@ func (x *fastReflection_InFlightPacket) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 4:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RetriesRemaining", wireType)
-				}
-				x.RetriesRemaining = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.RetriesRemaining |= int32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IncomingAck", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.IncomingAck = append(x.IncomingAck[:0], dAtA[iNdEx:postIndex]...)
-				if x.IncomingAck == nil {
-					x.IncomingAck = []byte{}
-				}
-				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Result == nil {
-					x.Result = &RouteResult{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Result); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReturnInfo", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.ReturnInfo == nil {
-					x.ReturnInfo = &ReturnInfo{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ReturnInfo); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_ReturnInfo                     protoreflect.MessageDescriptor
-	fd_ReturnInfo_return_port_id      protoreflect.FieldDescriptor
-	fd_ReturnInfo_return_channel_id   protoreflect.FieldDescriptor
-	fd_ReturnInfo_remainder_amount_in protoreflect.FieldDescriptor
-	fd_ReturnInfo_forward_ack         protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_swap_in_flight_packet_proto_init()
-	md_ReturnInfo = File_sunrise_swap_in_flight_packet_proto.Messages().ByName("ReturnInfo")
-	fd_ReturnInfo_return_port_id = md_ReturnInfo.Fields().ByName("return_port_id")
-	fd_ReturnInfo_return_channel_id = md_ReturnInfo.Fields().ByName("return_channel_id")
-	fd_ReturnInfo_remainder_amount_in = md_ReturnInfo.Fields().ByName("remainder_amount_in")
-	fd_ReturnInfo_forward_ack = md_ReturnInfo.Fields().ByName("forward_ack")
-}
-
-var _ protoreflect.Message = (*fastReflection_ReturnInfo)(nil)
-
-type fastReflection_ReturnInfo ReturnInfo
-
-func (x *ReturnInfo) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ReturnInfo)(x)
-}
-
-func (x *ReturnInfo) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_swap_in_flight_packet_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_ReturnInfo_messageType fastReflection_ReturnInfo_messageType
-var _ protoreflect.MessageType = fastReflection_ReturnInfo_messageType{}
-
-type fastReflection_ReturnInfo_messageType struct{}
-
-func (x fastReflection_ReturnInfo_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ReturnInfo)(nil)
-}
-func (x fastReflection_ReturnInfo_messageType) New() protoreflect.Message {
-	return new(fastReflection_ReturnInfo)
-}
-func (x fastReflection_ReturnInfo_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ReturnInfo
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_ReturnInfo) Descriptor() protoreflect.MessageDescriptor {
-	return md_ReturnInfo
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ReturnInfo) Type() protoreflect.MessageType {
-	return _fastReflection_ReturnInfo_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ReturnInfo) New() protoreflect.Message {
-	return new(fastReflection_ReturnInfo)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_ReturnInfo) Interface() protoreflect.ProtoMessage {
-	return (*ReturnInfo)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_ReturnInfo) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.ReturnPortId != "" {
-		value := protoreflect.ValueOfString(x.ReturnPortId)
-		if !f(fd_ReturnInfo_return_port_id, value) {
-			return
-		}
-	}
-	if x.ReturnChannelId != "" {
-		value := protoreflect.ValueOfString(x.ReturnChannelId)
-		if !f(fd_ReturnInfo_return_channel_id, value) {
-			return
-		}
-	}
-	if x.RemainderAmountIn != "" {
-		value := protoreflect.ValueOfString(x.RemainderAmountIn)
-		if !f(fd_ReturnInfo_remainder_amount_in, value) {
-			return
-		}
-	}
-	if len(x.ForwardAck) != 0 {
-		value := protoreflect.ValueOfBytes(x.ForwardAck)
-		if !f(fd_ReturnInfo_forward_ack, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_ReturnInfo) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.swap.ReturnInfo.return_port_id":
-		return x.ReturnPortId != ""
-	case "sunrise.swap.ReturnInfo.return_channel_id":
-		return x.ReturnChannelId != ""
-	case "sunrise.swap.ReturnInfo.remainder_amount_in":
-		return x.RemainderAmountIn != ""
-	case "sunrise.swap.ReturnInfo.forward_ack":
-		return len(x.ForwardAck) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ReturnInfo"))
-		}
-		panic(fmt.Errorf("message sunrise.swap.ReturnInfo does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ReturnInfo) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.swap.ReturnInfo.return_port_id":
-		x.ReturnPortId = ""
-	case "sunrise.swap.ReturnInfo.return_channel_id":
-		x.ReturnChannelId = ""
-	case "sunrise.swap.ReturnInfo.remainder_amount_in":
-		x.RemainderAmountIn = ""
-	case "sunrise.swap.ReturnInfo.forward_ack":
-		x.ForwardAck = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ReturnInfo"))
-		}
-		panic(fmt.Errorf("message sunrise.swap.ReturnInfo does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ReturnInfo) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.swap.ReturnInfo.return_port_id":
-		value := x.ReturnPortId
-		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.ReturnInfo.return_channel_id":
-		value := x.ReturnChannelId
-		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.ReturnInfo.remainder_amount_in":
-		value := x.RemainderAmountIn
-		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.ReturnInfo.forward_ack":
-		value := x.ForwardAck
-		return protoreflect.ValueOfBytes(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ReturnInfo"))
-		}
-		panic(fmt.Errorf("message sunrise.swap.ReturnInfo does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ReturnInfo) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.swap.ReturnInfo.return_port_id":
-		x.ReturnPortId = value.Interface().(string)
-	case "sunrise.swap.ReturnInfo.return_channel_id":
-		x.ReturnChannelId = value.Interface().(string)
-	case "sunrise.swap.ReturnInfo.remainder_amount_in":
-		x.RemainderAmountIn = value.Interface().(string)
-	case "sunrise.swap.ReturnInfo.forward_ack":
-		x.ForwardAck = value.Bytes()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ReturnInfo"))
-		}
-		panic(fmt.Errorf("message sunrise.swap.ReturnInfo does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ReturnInfo) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.swap.ReturnInfo.return_port_id":
-		panic(fmt.Errorf("field return_port_id of message sunrise.swap.ReturnInfo is not mutable"))
-	case "sunrise.swap.ReturnInfo.return_channel_id":
-		panic(fmt.Errorf("field return_channel_id of message sunrise.swap.ReturnInfo is not mutable"))
-	case "sunrise.swap.ReturnInfo.remainder_amount_in":
-		panic(fmt.Errorf("field remainder_amount_in of message sunrise.swap.ReturnInfo is not mutable"))
-	case "sunrise.swap.ReturnInfo.forward_ack":
-		panic(fmt.Errorf("field forward_ack of message sunrise.swap.ReturnInfo is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ReturnInfo"))
-		}
-		panic(fmt.Errorf("message sunrise.swap.ReturnInfo does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ReturnInfo) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.swap.ReturnInfo.return_port_id":
-		return protoreflect.ValueOfString("")
-	case "sunrise.swap.ReturnInfo.return_channel_id":
-		return protoreflect.ValueOfString("")
-	case "sunrise.swap.ReturnInfo.remainder_amount_in":
-		return protoreflect.ValueOfString("")
-	case "sunrise.swap.ReturnInfo.forward_ack":
-		return protoreflect.ValueOfBytes(nil)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ReturnInfo"))
-		}
-		panic(fmt.Errorf("message sunrise.swap.ReturnInfo does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ReturnInfo) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.ReturnInfo", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ReturnInfo) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ReturnInfo) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_ReturnInfo) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_ReturnInfo) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ReturnInfo)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.ReturnPortId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.ReturnChannelId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.RemainderAmountIn)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.ForwardAck)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ReturnInfo)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.ForwardAck) > 0 {
-			i -= len(x.ForwardAck)
-			copy(dAtA[i:], x.ForwardAck)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ForwardAck)))
-			i--
-			dAtA[i] = 0x22
-		}
-		if len(x.RemainderAmountIn) > 0 {
-			i -= len(x.RemainderAmountIn)
-			copy(dAtA[i:], x.RemainderAmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RemainderAmountIn)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if len(x.ReturnChannelId) > 0 {
-			i -= len(x.ReturnChannelId)
-			copy(dAtA[i:], x.ReturnChannelId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReturnChannelId)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if len(x.ReturnPortId) > 0 {
-			i -= len(x.ReturnPortId)
-			copy(dAtA[i:], x.ReturnPortId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReturnPortId)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ReturnInfo)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ReturnInfo: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ReturnInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReturnPortId", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.ReturnPortId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReturnChannelId", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.ReturnChannelId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RemainderAmountIn", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.RemainderAmountIn = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 4:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ForwardAck", wireType)
-				}
-				var byteLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					byteLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + byteLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.ForwardAck = append(x.ForwardAck[:0], dAtA[iNdEx:postIndex]...)
-				if x.ForwardAck == nil {
-					x.ForwardAck = []byte{}
-				}
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1451,13 +1272,11 @@ type InFlightPacket struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SrcPortId        string       `protobuf:"bytes,1,opt,name=src_port_id,json=srcPortId,proto3" json:"src_port_id,omitempty"`
-	SrcChannelId     string       `protobuf:"bytes,2,opt,name=src_channel_id,json=srcChannelId,proto3" json:"src_channel_id,omitempty"`
-	Sequence         uint64       `protobuf:"varint,3,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	RetriesRemaining int32        `protobuf:"varint,4,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
-	IncomingAck      []byte       `protobuf:"bytes,5,opt,name=incoming_ack,json=incomingAck,proto3" json:"incoming_ack,omitempty"`
-	Result           *RouteResult `protobuf:"bytes,6,opt,name=result,proto3" json:"result,omitempty"`
-	ReturnInfo       *ReturnInfo  `protobuf:"bytes,7,opt,name=return_info,json=returnInfo,proto3" json:"return_info,omitempty"`
+	Index            *InFlightPacketIndex `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
+	IncomingAck      []byte               `protobuf:"bytes,2,opt,name=incoming_ack,json=incomingAck,proto3" json:"incoming_ack,omitempty"`
+	Result           *RouteResult         `protobuf:"bytes,3,opt,name=result,proto3" json:"result,omitempty"`
+	RetriesRemaining int32                `protobuf:"varint,4,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
+	SyncIndex        *InFlightPacketIndex `protobuf:"bytes,5,opt,name=sync_index,json=syncIndex,proto3" json:"sync_index,omitempty"`
 }
 
 func (x *InFlightPacket) Reset() {
@@ -1480,32 +1299,11 @@ func (*InFlightPacket) Descriptor() ([]byte, []int) {
 	return file_sunrise_swap_in_flight_packet_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *InFlightPacket) GetSrcPortId() string {
+func (x *InFlightPacket) GetIndex() *InFlightPacketIndex {
 	if x != nil {
-		return x.SrcPortId
+		return x.Index
 	}
-	return ""
-}
-
-func (x *InFlightPacket) GetSrcChannelId() string {
-	if x != nil {
-		return x.SrcChannelId
-	}
-	return ""
-}
-
-func (x *InFlightPacket) GetSequence() uint64 {
-	if x != nil {
-		return x.Sequence
-	}
-	return 0
-}
-
-func (x *InFlightPacket) GetRetriesRemaining() int32 {
-	if x != nil {
-		return x.RetriesRemaining
-	}
-	return 0
+	return nil
 }
 
 func (x *InFlightPacket) GetIncomingAck() []byte {
@@ -1522,26 +1320,32 @@ func (x *InFlightPacket) GetResult() *RouteResult {
 	return nil
 }
 
-func (x *InFlightPacket) GetReturnInfo() *ReturnInfo {
+func (x *InFlightPacket) GetRetriesRemaining() int32 {
 	if x != nil {
-		return x.ReturnInfo
+		return x.RetriesRemaining
+	}
+	return 0
+}
+
+func (x *InFlightPacket) GetSyncIndex() *InFlightPacketIndex {
+	if x != nil {
+		return x.SyncIndex
 	}
 	return nil
 }
 
-type ReturnInfo struct {
+type InFlightPacketIndex struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ReturnPortId      string `protobuf:"bytes,1,opt,name=return_port_id,json=returnPortId,proto3" json:"return_port_id,omitempty"`
-	ReturnChannelId   string `protobuf:"bytes,2,opt,name=return_channel_id,json=returnChannelId,proto3" json:"return_channel_id,omitempty"`
-	RemainderAmountIn string `protobuf:"bytes,3,opt,name=remainder_amount_in,json=remainderAmountIn,proto3" json:"remainder_amount_in,omitempty"`
-	ForwardAck        []byte `protobuf:"bytes,4,opt,name=forward_ack,json=forwardAck,proto3" json:"forward_ack,omitempty"`
+	SrcPortId    string `protobuf:"bytes,1,opt,name=src_port_id,json=srcPortId,proto3" json:"src_port_id,omitempty"`
+	SrcChannelId string `protobuf:"bytes,2,opt,name=src_channel_id,json=srcChannelId,proto3" json:"src_channel_id,omitempty"`
+	Sequence     uint64 `protobuf:"varint,3,opt,name=sequence,proto3" json:"sequence,omitempty"`
 }
 
-func (x *ReturnInfo) Reset() {
-	*x = ReturnInfo{}
+func (x *InFlightPacketIndex) Reset() {
+	*x = InFlightPacketIndex{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_swap_in_flight_packet_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1549,43 +1353,36 @@ func (x *ReturnInfo) Reset() {
 	}
 }
 
-func (x *ReturnInfo) String() string {
+func (x *InFlightPacketIndex) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReturnInfo) ProtoMessage() {}
+func (*InFlightPacketIndex) ProtoMessage() {}
 
-// Deprecated: Use ReturnInfo.ProtoReflect.Descriptor instead.
-func (*ReturnInfo) Descriptor() ([]byte, []int) {
+// Deprecated: Use InFlightPacketIndex.ProtoReflect.Descriptor instead.
+func (*InFlightPacketIndex) Descriptor() ([]byte, []int) {
 	return file_sunrise_swap_in_flight_packet_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ReturnInfo) GetReturnPortId() string {
+func (x *InFlightPacketIndex) GetSrcPortId() string {
 	if x != nil {
-		return x.ReturnPortId
+		return x.SrcPortId
 	}
 	return ""
 }
 
-func (x *ReturnInfo) GetReturnChannelId() string {
+func (x *InFlightPacketIndex) GetSrcChannelId() string {
 	if x != nil {
-		return x.ReturnChannelId
+		return x.SrcChannelId
 	}
 	return ""
 }
 
-func (x *ReturnInfo) GetRemainderAmountIn() string {
+func (x *InFlightPacketIndex) GetSequence() uint64 {
 	if x != nil {
-		return x.RemainderAmountIn
+		return x.Sequence
 	}
-	return ""
-}
-
-func (x *ReturnInfo) GetForwardAck() []byte {
-	if x != nil {
-		return x.ForwardAck
-	}
-	return nil
+	return 0
 }
 
 var File_sunrise_swap_in_flight_packet_proto protoreflect.FileDescriptor
@@ -1600,51 +1397,43 @@ var file_sunrise_swap_in_flight_packet_proto_rawDesc = []byte{
 	0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67,
 	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x18, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
 	0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0xbb, 0x02, 0x0a, 0x0e, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61,
-	0x63, 0x6b, 0x65, 0x74, 0x12, 0x1e, 0x0a, 0x0b, 0x73, 0x72, 0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x72, 0x63, 0x50, 0x6f,
-	0x72, 0x74, 0x49, 0x64, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x72, 0x63, 0x5f, 0x63, 0x68, 0x61, 0x6e,
-	0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73, 0x72,
-	0x63, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65,
-	0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x73, 0x65,
-	0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x2b, 0x0a, 0x11, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65,
-	0x73, 0x5f, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x69, 0x6e, 0x67, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x05, 0x52, 0x10, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73, 0x52, 0x65, 0x6d, 0x61, 0x69, 0x6e,
-	0x69, 0x6e, 0x67, 0x12, 0x21, 0x0a, 0x0c, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x5f,
-	0x61, 0x63, 0x6b, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b, 0x69, 0x6e, 0x63, 0x6f, 0x6d,
-	0x69, 0x6e, 0x67, 0x41, 0x63, 0x6b, 0x12, 0x3c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x12, 0x39, 0x0a, 0x0b, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x69,
-	0x6e, 0x66, 0x6f, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x49,
-	0x6e, 0x66, 0x6f, 0x52, 0x0a, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x49, 0x6e, 0x66, 0x6f, 0x22,
-	0xe1, 0x01, 0x0a, 0x0a, 0x52, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x24,
-	0x0a, 0x0e, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x50, 0x6f,
-	0x72, 0x74, 0x49, 0x64, 0x12, 0x2a, 0x0a, 0x11, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f, 0x63,
-	0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0f, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64,
-	0x12, 0x60, 0x0a, 0x13, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x64, 0x65, 0x72, 0x5f, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
-	0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
-	0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x11, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x64, 0x65, 0x72, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x49, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x61, 0x63,
-	0x6b, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64,
-	0x41, 0x63, 0x6b, 0x42, 0x97, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x42, 0x13, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67,
-	0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
-	0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70,
-	0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02,
-	0x03, 0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53,
-	0x77, 0x61, 0x70, 0xca, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77,
-	0x61, 0x70, 0xe2, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61,
-	0x70, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x22, 0xaf, 0x02, 0x0a, 0x0e, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61,
+	0x63, 0x6b, 0x65, 0x74, 0x12, 0x42, 0x0a, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77,
+	0x61, 0x70, 0x2e, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65,
+	0x74, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x21, 0x0a, 0x0c, 0x69, 0x6e, 0x63, 0x6f,
+	0x6d, 0x69, 0x6e, 0x67, 0x5f, 0x61, 0x63, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b,
+	0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x41, 0x63, 0x6b, 0x12, 0x3c, 0x0a, 0x06, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65,
+	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x2b, 0x0a, 0x11, 0x72, 0x65, 0x74,
+	0x72, 0x69, 0x65, 0x73, 0x5f, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x69, 0x6e, 0x67, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x10, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73, 0x52, 0x65, 0x6d,
+	0x61, 0x69, 0x6e, 0x69, 0x6e, 0x67, 0x12, 0x4b, 0x0a, 0x0a, 0x73, 0x79, 0x6e, 0x63, 0x5f, 0x69,
+	0x6e, 0x64, 0x65, 0x78, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67,
+	0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x42, 0x09, 0xc8,
+	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x73, 0x79, 0x6e, 0x63, 0x49, 0x6e,
+	0x64, 0x65, 0x78, 0x22, 0x77, 0x0a, 0x13, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50,
+	0x61, 0x63, 0x6b, 0x65, 0x74, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x1e, 0x0a, 0x0b, 0x73, 0x72,
+	0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x73, 0x72, 0x63, 0x50, 0x6f, 0x72, 0x74, 0x49, 0x64, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x72,
+	0x63, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0c, 0x73, 0x72, 0x63, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x49, 0x64,
+	0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x08, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x42, 0x97, 0x01, 0x0a,
+	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61,
+	0x70, 0x42, 0x13, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65,
+	0x74, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca, 0x02, 0x0c, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02, 0x18, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1661,18 +1450,19 @@ func file_sunrise_swap_in_flight_packet_proto_rawDescGZIP() []byte {
 
 var file_sunrise_swap_in_flight_packet_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_sunrise_swap_in_flight_packet_proto_goTypes = []interface{}{
-	(*InFlightPacket)(nil), // 0: sunrise.swap.InFlightPacket
-	(*ReturnInfo)(nil),     // 1: sunrise.swap.ReturnInfo
-	(*RouteResult)(nil),    // 2: sunrise.swap.RouteResult
+	(*InFlightPacket)(nil),      // 0: sunrise.swap.InFlightPacket
+	(*InFlightPacketIndex)(nil), // 1: sunrise.swap.InFlightPacketIndex
+	(*RouteResult)(nil),         // 2: sunrise.swap.RouteResult
 }
 var file_sunrise_swap_in_flight_packet_proto_depIdxs = []int32{
-	2, // 0: sunrise.swap.InFlightPacket.result:type_name -> sunrise.swap.RouteResult
-	1, // 1: sunrise.swap.InFlightPacket.return_info:type_name -> sunrise.swap.ReturnInfo
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 0: sunrise.swap.InFlightPacket.index:type_name -> sunrise.swap.InFlightPacketIndex
+	2, // 1: sunrise.swap.InFlightPacket.result:type_name -> sunrise.swap.RouteResult
+	1, // 2: sunrise.swap.InFlightPacket.sync_index:type_name -> sunrise.swap.InFlightPacketIndex
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_swap_in_flight_packet_proto_init() }
@@ -1695,7 +1485,7 @@ func file_sunrise_swap_in_flight_packet_proto_init() {
 			}
 		}
 		file_sunrise_swap_in_flight_packet_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReturnInfo); i {
+			switch v := v.(*InFlightPacketIndex); i {
 			case 0:
 				return &v.state
 			case 1:

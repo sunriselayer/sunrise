@@ -13,7 +13,7 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	exported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
-	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
+	// packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 
 	keeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	types "github.com/sunriselayer/sunrise/x/swap/types"
@@ -214,20 +214,18 @@ func (im IBCMiddleware) OnRecvPacket(
 	if metadata.Forward != nil {
 		// Forward the swapped token out
 
-		var returnMetadata *packetforwardtypes.ForwardMetadata = nil
-		if metadata.ExactAmountOut != nil {
-			returnMetadata = metadata.ExactAmountOut.Return
-		}
+		// var returnMetadata *packetforwardtypes.ForwardMetadata = nil
+		// if metadata.ExactAmountOut != nil {
+		// 	returnMetadata = metadata.ExactAmountOut.Return
+		// }
 
-		err := im.keeper.TransferSwappedToken(
+		_, err := im.keeper.TransferAndCreateInFlightPacket(
 			ctx,
 			receiver.String(),
 			tokenOut,
 			*metadata.Forward,
 			incomingAck.Acknowledgement(),
 			result,
-			remainderAmountIn,
-			returnMetadata,
 		)
 		if err != nil {
 			return channeltypes.NewErrorAcknowledgement(err)
@@ -277,7 +275,7 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 	if err != nil {
 		return err
 	}
-	im.keeper.RemoveInFlightPacket(ctx, inflightPacket.SrcPortId, inflightPacket.SrcChannelId, inflightPacket.Sequence)
+	im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.SrcPortId, inflightPacket.Index.SrcChannelId, inflightPacket.Index.Sequence)
 
 	return im.IBCModule.OnAcknowledgementPacket(ctx, packet, bz, relayer)
 }
@@ -303,8 +301,8 @@ func (im IBCMiddleware) OnTimeoutPacket(
 	if inflightPacket.RetriesRemaining > 0 {
 		// TODO: Resend packet
 
-		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.SrcPortId, inflightPacket.SrcChannelId, inflightPacket.Sequence)
-		inflightPacket.Sequence = 0 // TODO: Reset sequence
+		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.SrcPortId, inflightPacket.Index.SrcChannelId, inflightPacket.Index.Sequence)
+		inflightPacket.Index.Sequence = 0 // TODO: Reset sequence
 		im.keeper.SetInFlightPacket(ctx, inflightPacket)
 	} else {
 		// If remaining retry count is zero:
@@ -330,7 +328,7 @@ func (im IBCMiddleware) OnTimeoutPacket(
 			return err
 		}
 
-		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.SrcPortId, inflightPacket.SrcChannelId, inflightPacket.Sequence)
+		im.keeper.RemoveInFlightPacket(ctx, inflightPacket.Index.SrcPortId, inflightPacket.Index.SrcChannelId, inflightPacket.Index.Sequence)
 	}
 
 	return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)

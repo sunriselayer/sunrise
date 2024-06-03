@@ -29,18 +29,18 @@ func TestInFlightPacketQuerySingle(t *testing.T) {
 		{
 			desc: "First",
 			request: &types.QueryGetInFlightPacketRequest{
-				SrcPortId:    msgs[0].SrcPortId,
-				SrcChannelId: msgs[0].SrcChannelId,
-				Sequence:     msgs[0].Sequence,
+				SrcPortId:    msgs[0].Index.SrcPortId,
+				SrcChannelId: msgs[0].Index.SrcChannelId,
+				Sequence:     msgs[0].Index.Sequence,
 			},
 			response: &types.QueryGetInFlightPacketResponse{InFlightPacket: msgs[0]},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetInFlightPacketRequest{
-				SrcPortId:    msgs[1].SrcPortId,
-				SrcChannelId: msgs[1].SrcChannelId,
-				Sequence:     msgs[1].Sequence,
+				SrcPortId:    msgs[1].Index.SrcPortId,
+				SrcChannelId: msgs[1].Index.SrcChannelId,
+				Sequence:     msgs[1].Index.Sequence,
 			},
 			response: &types.QueryGetInFlightPacketResponse{InFlightPacket: msgs[1]},
 		},
