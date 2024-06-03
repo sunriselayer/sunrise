@@ -22,7 +22,7 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
-				InFlightPacketList: []types.InFlightPacket{
+				AckWaitingPacketList: []types.AckWaitingPacket{
 					{
 						Index: types.PacketIndex{
 							SrcPortId:    "0",
@@ -38,7 +38,7 @@ func TestGenesisState_Validate(t *testing.T) {
 						},
 					},
 				},
-				AckWaitingPacketList: []types.AckWaitingPacket{
+				InFlightPacketList: []types.InFlightPacket{
 					{
 						Index: types.PacketIndex{
 							SrcPortId:    "0",

@@ -10,9 +10,9 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		InFlightPacketList: []InFlightPacket{},
 		AckWaitingPacketList: []AckWaitingPacket{},
-// this line is used by starport scaffolding # genesis/types/default
+		InFlightPacketList:   []InFlightPacket{},
+		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
 }
@@ -20,6 +20,16 @@ func DefaultGenesis() *GenesisState {
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
+	// Check for duplicated index in ackWaitingPacket
+	ackWaitingPacketIndexMap := make(map[string]struct{})
+
+	for _, elem := range gs.AckWaitingPacketList {
+		index := string(AckWaitingPacketKey(elem.Index))
+		if _, ok := ackWaitingPacketIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for ackWaitingPacket")
+		}
+		ackWaitingPacketIndexMap[index] = struct{}{}
+	}
 	// Check for duplicated index in inFlightPacket
 	inFlightPacketIndexMap := make(map[string]struct{})
 
@@ -30,17 +40,7 @@ func (gs GenesisState) Validate() error {
 		}
 		inFlightPacketIndexMap[index] = struct{}{}
 	}
-	// Check for duplicated index in ackWaitingPacket
-ackWaitingPacketIndexMap := make(map[string]struct{})
-
-for _, elem := range gs.AckWaitingPacketList {
-	index := string(AckWaitingPacketKey(elem.Index))
-	if _, ok := ackWaitingPacketIndexMap[index]; ok {
-		return fmt.Errorf("duplicated index for ackWaitingPacket")
-	}
-	ackWaitingPacketIndexMap[index] = struct{}{}
-}
-// this line is used by starport scaffolding # genesis/types/validate
+	// this line is used by starport scaffolding # genesis/types/validate
 
 	return gs.Params.Validate()
 }

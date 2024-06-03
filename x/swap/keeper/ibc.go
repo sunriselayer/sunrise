@@ -16,8 +16,6 @@ func (k Keeper) TransferAndCreateInFlightPacket(
 	sender string,
 	tokenOut sdk.Coin,
 	metadata packetforwardtypes.ForwardMetadata,
-	incomingAck []byte,
-	result types.RouteResult,
 ) (packet types.InFlightPacket, err error) {
 	var memo string
 	if metadata.Next != nil {
@@ -55,8 +53,6 @@ func (k Keeper) TransferAndCreateInFlightPacket(
 			res.Sequence,
 		),
 		RetriesRemaining: int32(retries),
-		IncomingAck:      incomingAck,
-		Result:           result,
 	}
 
 	k.SetInFlightPacket(ctx, packet)
