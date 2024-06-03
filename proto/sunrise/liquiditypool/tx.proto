@@ -16,29 +16,34 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 // Msg defines the Msg service.
 service Msg {
   option (cosmos.msg.v1.service) = true;
-  
+
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
-  rpc UpdateParams      (MsgUpdateParams     ) returns (MsgUpdateParamsResponse     );
-  rpc CreatePool        (MsgCreatePool       ) returns (MsgCreatePoolResponse       );
-  rpc CreatePosition    (MsgCreatePosition   ) returns (MsgCreatePositionResponse   );
-  rpc IncreaseLiquidity (MsgIncreaseLiquidity) returns (MsgIncreaseLiquidityResponse);
-  rpc DecreaseLiquidity (MsgDecreaseLiquidity) returns (MsgDecreaseLiquidityResponse);
-  rpc CollectFees       (MsgCollectFees      ) returns (MsgCollectFeesResponse      );
-  rpc CollectIncentives (MsgCollectIncentives) returns (MsgCollectIncentivesResponse);
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc CreatePool(MsgCreatePool) returns (MsgCreatePoolResponse);
+  rpc CreatePosition(MsgCreatePosition) returns (MsgCreatePositionResponse);
+  rpc IncreaseLiquidity(MsgIncreaseLiquidity)
+      returns (MsgIncreaseLiquidityResponse);
+  rpc DecreaseLiquidity(MsgDecreaseLiquidity)
+      returns (MsgDecreaseLiquidityResponse);
+  rpc CollectFees(MsgCollectFees) returns (MsgCollectFeesResponse);
+  rpc CollectIncentives(MsgCollectIncentives)
+      returns (MsgCollectIncentivesResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
-  option (cosmos.msg.v1.signer) =                               "authority";
-  option           (amino.name) = "sunrise/x/liquiditypool/MsgUpdateParams";
-  
-  // authority is the address that controls the module (defaults to x/gov unless overwritten).
-  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "sunrise/x/liquiditypool/MsgUpdateParams";
+
+  // authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // params defines the module parameters to update.
-  
+
   // NOTE: All parameters must be supplied.
-  Params params = 2 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  Params params = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
 // MsgUpdateParamsResponse defines the response structure for executing a
@@ -47,42 +52,37 @@ message MsgUpdateParamsResponse {}
 
 message MsgCreatePool {
   option (cosmos.msg.v1.signer) = "authority";
-  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string authority = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   string denom_base = 2;
   string denom_quote = 3;
   string fee_rate = 4 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
-message MsgCreatePoolResponse {
-  uint64 id = 1;
-}
+message MsgCreatePoolResponse { uint64 id = 1; }
 
 message MsgCreatePosition {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  int64  lower_tick = 2;
-  int64  upper_tick = 3;
-  cosmos.base.v1beta1.Coin token_base = 4 [
-    (gogoproto.nullable) = false
-  ];
-  cosmos.base.v1beta1.Coin token_quote = 5 [
-    (gogoproto.nullable) = false
-  ];
-  string min_amount_base = 6 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint64 pool_id = 2;
+  int64 lower_tick = 3;
+  int64 upper_tick = 4;
+  cosmos.base.v1beta1.Coin token_base = 5 [ (gogoproto.nullable) = false ];
+  cosmos.base.v1beta1.Coin token_quote = 6 [ (gogoproto.nullable) = false ];
+  string min_amount_base = 7 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  string min_amount_quote = 7 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+  string min_amount_quote = 8 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
@@ -90,100 +90,100 @@ message MsgCreatePosition {
 message MsgCreatePositionResponse {
   uint64 id = 1;
   string amount_base = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string amount_quote = 3 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string liquidity = 4 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
 message MsgIncreaseLiquidity {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id     = 2;
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint64 id = 2;
   string amount_base = 3 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string amount_quote = 4 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string min_amount_base = 5 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string min_amount_quote = 6 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
 message MsgIncreaseLiquidityResponse {
   string amount_base = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string amount_quote = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
 message MsgDecreaseLiquidity {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id     = 2;
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint64 id = 2;
   string liquidity = 3 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
 message MsgDecreaseLiquidityResponse {
   string amount_base = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string amount_quote = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
 message MsgCollectFees {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   repeated uint64 position_ids = 2;
 }
 
@@ -196,7 +196,7 @@ message MsgCollectFeesResponse {
 
 message MsgCollectIncentives {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   repeated uint64 position_ids = 2;
 }
 
@@ -206,4 +206,3 @@ message MsgCollectIncentivesResponse {
     (gogoproto.nullable) = false
   ];
 }
-
