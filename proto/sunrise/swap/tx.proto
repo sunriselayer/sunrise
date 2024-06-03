@@ -18,9 +18,11 @@ service Msg {
   
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
-  rpc UpdateParams       (MsgUpdateParams      ) returns (MsgUpdateParamsResponse      );
-  rpc SwapExactAmountIn  (MsgSwapExactAmountIn ) returns (MsgSwapExactAmountInResponse );
-  rpc SwapExactAmountOut (MsgSwapExactAmountOut) returns (MsgSwapExactAmountOutResponse);
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc SwapExactAmountIn(MsgSwapExactAmountIn)
+      returns (MsgSwapExactAmountInResponse);
+  rpc SwapExactAmountOut(MsgSwapExactAmountOut)
+      returns (MsgSwapExactAmountOutResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -42,16 +44,15 @@ message MsgUpdateParamsResponse {}
 
 message MsgSwapExactAmountIn {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string interface_provider = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  Route route = 3 [ 
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string interface_provider = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  Route route = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
   string amount_in = 4 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
   string min_amount_out = 5 [
@@ -63,8 +64,18 @@ message MsgSwapExactAmountIn {
 }
 
 message MsgSwapExactAmountInResponse {
-  string amount_out = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+  RouteResult result = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string amount_out = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
@@ -73,32 +84,40 @@ message MsgSwapExactAmountInResponse {
 
 message MsgSwapExactAmountOut {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string interface_provider = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  Route route = 3 [ 
-    (gogoproto.nullable)   = false,
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string interface_provider = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  Route route = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  string max_amount_in = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  string amount_out = 4 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+  string amount_out = 5 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-  string max_amount_in = 5 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
 message MsgSwapExactAmountOutResponse {
-  string amount_in = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+  RouteResult result = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string amount_out = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
-
