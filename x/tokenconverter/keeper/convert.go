@@ -32,8 +32,8 @@ func (k Keeper) CalculateConversionAmount(ctx context.Context, minAmountOutFeeTo
 func (k Keeper) BurnAndMint(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
 	params := k.GetParams(ctx)
 
-	govToken := sdk.NewCoin(params.GovDenom, amount)
-	if err := govToken.Validate(); err != nil {
+	bondToken := sdk.NewCoin(params.BondDenom, amount)
+	if err := bondToken.Validate(); err != nil {
 		return err
 	}
 	feeToken := sdk.NewCoin(params.FeeDenom, amount)
@@ -41,11 +41,11 @@ func (k Keeper) BurnAndMint(ctx context.Context, amount math.Int, address sdk.Ac
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(govToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(govToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
 		return err
 	}
 
