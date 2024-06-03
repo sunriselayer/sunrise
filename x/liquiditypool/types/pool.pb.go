@@ -108,7 +108,9 @@ func (m *Pool) GetCurrentTick() int64 {
 
 // PriceRatio^(Tick - BaseOffSet)
 type TickParams struct {
+	// Basically 1.0001
 	PriceRatio cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=price_ratio,json=priceRatio,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"price_ratio"`
+	// basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
 	BaseOffset cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=base_offset,json=baseOffset,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"base_offset"`
 }
 
