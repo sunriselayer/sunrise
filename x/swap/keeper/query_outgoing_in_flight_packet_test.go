@@ -17,36 +17,36 @@ import (
 // Prevent strconv unused error
 var _ = strconv.IntSize
 
-func TestInFlightPacketQuerySingle(t *testing.T) {
+func TestOutgoingInFlightPacketQuerySingle(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	msgs := createNInFlightPacket(keeper, ctx, 2)
+	msgs := createNOutgoingInFlightPacket(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
-		request  *types.QueryGetInFlightPacketRequest
-		response *types.QueryGetInFlightPacketResponse
+		request  *types.QueryGetOutgoingInFlightPacketRequest
+		response *types.QueryGetOutgoingInFlightPacketResponse
 		err      error
 	}{
 		{
 			desc: "First",
-			request: &types.QueryGetInFlightPacketRequest{
-				SrcPortId:    msgs[0].SrcPortId,
-				SrcChannelId: msgs[0].SrcChannelId,
-				Sequence:     msgs[0].Sequence,
+			request: &types.QueryGetOutgoingInFlightPacketRequest{
+				SrcPortId:    msgs[0].Index.PortId,
+				SrcChannelId: msgs[0].Index.ChannelId,
+				Sequence:     msgs[0].Index.Sequence,
 			},
-			response: &types.QueryGetInFlightPacketResponse{InFlightPacket: msgs[0]},
+			response: &types.QueryGetOutgoingInFlightPacketResponse{OutgoingInFlightPacket: msgs[0]},
 		},
 		{
 			desc: "Second",
-			request: &types.QueryGetInFlightPacketRequest{
-				SrcPortId:    msgs[1].SrcPortId,
-				SrcChannelId: msgs[1].SrcChannelId,
-				Sequence:     msgs[1].Sequence,
+			request: &types.QueryGetOutgoingInFlightPacketRequest{
+				SrcPortId:    msgs[1].Index.PortId,
+				SrcChannelId: msgs[1].Index.ChannelId,
+				Sequence:     msgs[1].Index.Sequence,
 			},
-			response: &types.QueryGetInFlightPacketResponse{InFlightPacket: msgs[1]},
+			response: &types.QueryGetOutgoingInFlightPacketResponse{OutgoingInFlightPacket: msgs[1]},
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.QueryGetInFlightPacketRequest{
+			request: &types.QueryGetOutgoingInFlightPacketRequest{
 				SrcPortId:    strconv.Itoa(100000),
 				SrcChannelId: strconv.Itoa(100000),
 				Sequence:     uint64(100000),
@@ -60,7 +60,7 @@ func TestInFlightPacketQuerySingle(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.InFlightPacket(ctx, tc.request)
+			response, err := keeper.OutgoingInFlightPacket(ctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -74,12 +74,12 @@ func TestInFlightPacketQuerySingle(t *testing.T) {
 	}
 }
 
-func TestInFlightPacketQueryPaginated(t *testing.T) {
+func TestOutgoingInFlightPacketQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
-	msgs := createNInFlightPacket(keeper, ctx, 5)
+	msgs := createNOutgoingInFlightPacket(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllInFlightPacketRequest {
-		return &types.QueryAllInFlightPacketRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllOutgoingInFlightPacketRequest {
+		return &types.QueryAllOutgoingInFlightPacketRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -91,12 +91,12 @@ func TestInFlightPacketQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.InFlightPacketAll(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.OutgoingInFlightPacketAll(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.InFlightPacket), step)
+			require.LessOrEqual(t, len(resp.OutgoingInFlightPacket), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.InFlightPacket),
+				nullify.Fill(resp.OutgoingInFlightPacket),
 			)
 		}
 	})
@@ -104,27 +104,27 @@ func TestInFlightPacketQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.InFlightPacketAll(ctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.OutgoingInFlightPacketAll(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.InFlightPacket), step)
+			require.LessOrEqual(t, len(resp.OutgoingInFlightPacket), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.InFlightPacket),
+				nullify.Fill(resp.OutgoingInFlightPacket),
 			)
 			next = resp.Pagination.NextKey
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.InFlightPacketAll(ctx, request(nil, 0, 0, true))
+		resp, err := keeper.OutgoingInFlightPacketAll(ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
 			nullify.Fill(msgs),
-			nullify.Fill(resp.InFlightPacket),
+			nullify.Fill(resp.OutgoingInFlightPacket),
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.InFlightPacketAll(ctx, nil)
+		_, err := keeper.OutgoingInFlightPacketAll(ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }

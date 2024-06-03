@@ -12,19 +12,19 @@ import (
 func (k Keeper) calculateInterfaceFeeExactAmountOut(
 	ctx sdk.Context,
 	hasInterfaceFee bool,
-	amountOut math.Int,
-) (totalAmountOut math.Int, interfaceFee math.Int) {
+	amountOutNet math.Int,
+) (amountOutGross math.Int, interfaceFee math.Int) {
 	if !hasInterfaceFee {
-		return amountOut, math.ZeroInt()
+		return amountOutNet, math.ZeroInt()
 	}
 
 	params := k.GetParams(ctx)
 	// totalAmountOut = amountOut + interfaceFee
 	//                = amountOut / (1 - interfaceFeeRate)
-	totalAmountOut = math.LegacyNewDecFromInt(amountOut).Quo(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
-	interfaceFee = totalAmountOut.Sub(amountOut)
+	amountOutGross = math.LegacyNewDecFromInt(amountOutNet).Quo(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
+	interfaceFee = amountOutGross.Sub(amountOutNet)
 
-	return amountOut, interfaceFee
+	return amountOutNet, interfaceFee
 }
 
 func (k Keeper) CalculateResultExactAmountOut(
@@ -34,12 +34,12 @@ func (k Keeper) CalculateResultExactAmountOut(
 	amountOut math.Int,
 ) (result types.RouteResult, interfaceFee math.Int, err error) {
 	var (
-		totalAmountOut math.Int
+		amountOutGross math.Int
 	)
 
-	totalAmountOut, interfaceFee = k.calculateInterfaceFeeExactAmountOut(ctx, hasInterfaceFee, amountOut)
+	amountOutGross, interfaceFee = k.calculateInterfaceFeeExactAmountOut(ctx, hasInterfaceFee, amountOut)
 
-	result, err = k.calculateResultRouteExactAmountOut(ctx, route, totalAmountOut)
+	result, err = k.calculateResultRouteExactAmountOut(ctx, route, amountOutGross)
 	if err != nil {
 		return result, interfaceFee, err
 	}

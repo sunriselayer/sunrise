@@ -9,27 +9,51 @@ import "sunrise/swap/route.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
-message InFlightPacket {
-  string src_port_id = 1;
-  string src_channel_id = 2;
+message PacketIndex {
+  string port_id = 1;
+  string channel_id = 2;
   uint64 sequence = 3;
-  int32 retries_remaining = 4;
-  bytes incoming_ack = 5;
-  RouteResult result = 6  [
+}
+
+message IncomingInFlightPacket {
+  PacketIndex index = 1 [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  ReturnInfo return_info = 7;
-}
-
-message ReturnInfo {
-  string return_port_id = 1;
-  string return_channel_id = 2;
-  string remainder_amount_in = 3 [
+  bytes data = 2;
+  string src_port_id = 3;
+  string src_channel_id = 4;
+  string timeout_height = 5;
+  uint64 timeout_timestamp = 6;
+  bytes ack = 7;
+  RouteResult result = 8 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_fee = 9 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  bytes forward_ack = 4;
+  oneof return {
+    PacketIndex outgoing_index_return = 10;
+    bytes ack_return = 11;
+  }
+  oneof forward {
+    PacketIndex outgoing_index_forward = 12;
+    bytes ack_forward = 13;
+  }
+}
+
+message OutgoingInFlightPacket {
+  PacketIndex index = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  PacketIndex ack_waiting_index = 2 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  int32 retries_remaining = 3;
 }

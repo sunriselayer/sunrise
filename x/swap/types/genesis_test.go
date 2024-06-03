@@ -22,16 +22,36 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
-				InFlightPacketList: []types.InFlightPacket{
+				IncomingInFlightPacketList: []types.IncomingInFlightPacket{
 					{
-						SrcPortId:    "0",
-						SrcChannelId: "0",
-						Sequence:     0,
+						Index: types.PacketIndex{
+							PortId:    "0",
+							ChannelId: "0",
+							Sequence:  0,
+						},
 					},
 					{
-						SrcPortId:    "1",
-						SrcChannelId: "1",
-						Sequence:     1,
+						Index: types.PacketIndex{
+							PortId:    "1",
+							ChannelId: "1",
+							Sequence:  1,
+						},
+					},
+				},
+				OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
+					{
+						Index: types.PacketIndex{
+							PortId:    "0",
+							ChannelId: "0",
+							Sequence:  0,
+						},
+					},
+					{
+						Index: types.PacketIndex{
+							PortId:    "1",
+							ChannelId: "1",
+							Sequence:  1,
+						},
 					},
 				},
 				// this line is used by starport scaffolding # types/genesis/validField
@@ -39,18 +59,44 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid: true,
 		},
 		{
-			desc: "duplicated inFlightPacket",
+			desc: "duplicated outgoingInFlightPacket",
 			genState: &types.GenesisState{
-				InFlightPacketList: []types.InFlightPacket{
+				OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
 					{
-						SrcPortId:    "0",
-						SrcChannelId: "0",
-						Sequence:     0,
+						Index: types.PacketIndex{
+							PortId:    "0",
+							ChannelId: "0",
+							Sequence:  0,
+						},
 					},
 					{
-						SrcPortId:    "0",
-						SrcChannelId: "0",
-						Sequence:     0,
+						Index: types.PacketIndex{
+							PortId:    "0",
+							ChannelId: "0",
+							Sequence:  0,
+						},
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated incomingPacket",
+			genState: &types.GenesisState{
+				IncomingInFlightPacketList: []types.IncomingInFlightPacket{
+					{
+						Index: types.PacketIndex{
+							PortId:    "0",
+							ChannelId: "0",
+							Sequence:  0,
+						},
+					},
+					{
+						Index: types.PacketIndex{
+							PortId:    "0",
+							ChannelId: "0",
+							Sequence:  0,
+						},
 					},
 				},
 			},
