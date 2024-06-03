@@ -872,29 +872,29 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgConvertExactAmountIn                protoreflect.MessageDescriptor
-	fd_MsgConvertExactAmountIn_sender         protoreflect.FieldDescriptor
-	fd_MsgConvertExactAmountIn_amount_in      protoreflect.FieldDescriptor
-	fd_MsgConvertExactAmountIn_min_amount_out protoreflect.FieldDescriptor
+	md_MsgConvert            protoreflect.MessageDescriptor
+	fd_MsgConvert_sender     protoreflect.FieldDescriptor
+	fd_MsgConvert_min_amount protoreflect.FieldDescriptor
+	fd_MsgConvert_max_amount protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_tokenconverter_tx_proto_init()
-	md_MsgConvertExactAmountIn = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertExactAmountIn")
-	fd_MsgConvertExactAmountIn_sender = md_MsgConvertExactAmountIn.Fields().ByName("sender")
-	fd_MsgConvertExactAmountIn_amount_in = md_MsgConvertExactAmountIn.Fields().ByName("amount_in")
-	fd_MsgConvertExactAmountIn_min_amount_out = md_MsgConvertExactAmountIn.Fields().ByName("min_amount_out")
+	md_MsgConvert = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvert")
+	fd_MsgConvert_sender = md_MsgConvert.Fields().ByName("sender")
+	fd_MsgConvert_min_amount = md_MsgConvert.Fields().ByName("min_amount")
+	fd_MsgConvert_max_amount = md_MsgConvert.Fields().ByName("max_amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgConvertExactAmountIn)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgConvert)(nil)
 
-type fastReflection_MsgConvertExactAmountIn MsgConvertExactAmountIn
+type fastReflection_MsgConvert MsgConvert
 
-func (x *MsgConvertExactAmountIn) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountIn)(x)
+func (x *MsgConvert) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgConvert)(x)
 }
 
-func (x *MsgConvertExactAmountIn) slowProtoReflect() protoreflect.Message {
+func (x *MsgConvert) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -906,43 +906,43 @@ func (x *MsgConvertExactAmountIn) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgConvertExactAmountIn_messageType fastReflection_MsgConvertExactAmountIn_messageType
-var _ protoreflect.MessageType = fastReflection_MsgConvertExactAmountIn_messageType{}
+var _fastReflection_MsgConvert_messageType fastReflection_MsgConvert_messageType
+var _ protoreflect.MessageType = fastReflection_MsgConvert_messageType{}
 
-type fastReflection_MsgConvertExactAmountIn_messageType struct{}
+type fastReflection_MsgConvert_messageType struct{}
 
-func (x fastReflection_MsgConvertExactAmountIn_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountIn)(nil)
+func (x fastReflection_MsgConvert_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgConvert)(nil)
 }
-func (x fastReflection_MsgConvertExactAmountIn_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountIn)
+func (x fastReflection_MsgConvert_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgConvert)
 }
-func (x fastReflection_MsgConvertExactAmountIn_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountIn
+func (x fastReflection_MsgConvert_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgConvert
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgConvertExactAmountIn) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountIn
+func (x *fastReflection_MsgConvert) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgConvert
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgConvertExactAmountIn) Type() protoreflect.MessageType {
-	return _fastReflection_MsgConvertExactAmountIn_messageType
+func (x *fastReflection_MsgConvert) Type() protoreflect.MessageType {
+	return _fastReflection_MsgConvert_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgConvertExactAmountIn) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountIn)
+func (x *fastReflection_MsgConvert) New() protoreflect.Message {
+	return new(fastReflection_MsgConvert)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgConvertExactAmountIn) Interface() protoreflect.ProtoMessage {
-	return (*MsgConvertExactAmountIn)(x)
+func (x *fastReflection_MsgConvert) Interface() protoreflect.ProtoMessage {
+	return (*MsgConvert)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -950,22 +950,22 @@ func (x *fastReflection_MsgConvertExactAmountIn) Interface() protoreflect.ProtoM
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgConvertExactAmountIn) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgConvert) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgConvertExactAmountIn_sender, value) {
+		if !f(fd_MsgConvert_sender, value) {
 			return
 		}
 	}
-	if x.AmountIn != "" {
-		value := protoreflect.ValueOfString(x.AmountIn)
-		if !f(fd_MsgConvertExactAmountIn_amount_in, value) {
+	if x.MinAmount != "" {
+		value := protoreflect.ValueOfString(x.MinAmount)
+		if !f(fd_MsgConvert_min_amount, value) {
 			return
 		}
 	}
-	if x.MinAmountOut != "" {
-		value := protoreflect.ValueOfString(x.MinAmountOut)
-		if !f(fd_MsgConvertExactAmountIn_min_amount_out, value) {
+	if x.MaxAmount != "" {
+		value := protoreflect.ValueOfString(x.MaxAmount)
+		if !f(fd_MsgConvert_max_amount, value) {
 			return
 		}
 	}
@@ -982,19 +982,19 @@ func (x *fastReflection_MsgConvertExactAmountIn) Range(f func(protoreflect.Field
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgConvertExactAmountIn) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgConvert) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
+	case "sunrise.tokenconverter.MsgConvert.sender":
 		return x.Sender != ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
-		return x.AmountIn != ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
-		return x.MinAmountOut != ""
+	case "sunrise.tokenconverter.MsgConvert.min_amount":
+		return x.MinAmount != ""
+	case "sunrise.tokenconverter.MsgConvert.max_amount":
+		return x.MaxAmount != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountIn does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvert does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1004,19 +1004,19 @@ func (x *fastReflection_MsgConvertExactAmountIn) Has(fd protoreflect.FieldDescri
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountIn) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgConvert) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
+	case "sunrise.tokenconverter.MsgConvert.sender":
 		x.Sender = ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
-		x.AmountIn = ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
-		x.MinAmountOut = ""
+	case "sunrise.tokenconverter.MsgConvert.min_amount":
+		x.MinAmount = ""
+	case "sunrise.tokenconverter.MsgConvert.max_amount":
+		x.MaxAmount = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountIn does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvert does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1026,22 +1026,22 @@ func (x *fastReflection_MsgConvertExactAmountIn) Clear(fd protoreflect.FieldDesc
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgConvertExactAmountIn) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgConvert) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
+	case "sunrise.tokenconverter.MsgConvert.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
-		value := x.AmountIn
+	case "sunrise.tokenconverter.MsgConvert.min_amount":
+		value := x.MinAmount
 		return protoreflect.ValueOfString(value)
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
-		value := x.MinAmountOut
+	case "sunrise.tokenconverter.MsgConvert.max_amount":
+		value := x.MaxAmount
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountIn does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvert does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1055,19 +1055,19 @@ func (x *fastReflection_MsgConvertExactAmountIn) Get(descriptor protoreflect.Fie
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountIn) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgConvert) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
+	case "sunrise.tokenconverter.MsgConvert.sender":
 		x.Sender = value.Interface().(string)
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
-		x.AmountIn = value.Interface().(string)
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
-		x.MinAmountOut = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvert.min_amount":
+		x.MinAmount = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvert.max_amount":
+		x.MaxAmount = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountIn does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvert does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1081,48 +1081,48 @@ func (x *fastReflection_MsgConvertExactAmountIn) Set(fd protoreflect.FieldDescri
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountIn) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgConvert) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
-		panic(fmt.Errorf("field sender of message sunrise.tokenconverter.MsgConvertExactAmountIn is not mutable"))
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
-		panic(fmt.Errorf("field amount_in of message sunrise.tokenconverter.MsgConvertExactAmountIn is not mutable"))
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
-		panic(fmt.Errorf("field min_amount_out of message sunrise.tokenconverter.MsgConvertExactAmountIn is not mutable"))
+	case "sunrise.tokenconverter.MsgConvert.sender":
+		panic(fmt.Errorf("field sender of message sunrise.tokenconverter.MsgConvert is not mutable"))
+	case "sunrise.tokenconverter.MsgConvert.min_amount":
+		panic(fmt.Errorf("field min_amount of message sunrise.tokenconverter.MsgConvert is not mutable"))
+	case "sunrise.tokenconverter.MsgConvert.max_amount":
+		panic(fmt.Errorf("field max_amount of message sunrise.tokenconverter.MsgConvert is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountIn does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvert does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgConvertExactAmountIn) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgConvert) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.sender":
+	case "sunrise.tokenconverter.MsgConvert.sender":
 		return protoreflect.ValueOfString("")
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.amount_in":
+	case "sunrise.tokenconverter.MsgConvert.min_amount":
 		return protoreflect.ValueOfString("")
-	case "sunrise.tokenconverter.MsgConvertExactAmountIn.min_amount_out":
+	case "sunrise.tokenconverter.MsgConvert.max_amount":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountIn"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountIn does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvert does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgConvertExactAmountIn) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgConvert) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.MsgConvertExactAmountIn", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.MsgConvert", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1130,7 +1130,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) WhichOneof(d protoreflect.Oneof
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgConvertExactAmountIn) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgConvert) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1141,7 +1141,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) GetUnknown() protoreflect.RawFi
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountIn) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgConvert) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1153,7 +1153,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) SetUnknown(fields protoreflect.
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgConvertExactAmountIn) IsValid() bool {
+func (x *fastReflection_MsgConvert) IsValid() bool {
 	return x != nil
 }
 
@@ -1163,9 +1163,9 @@ func (x *fastReflection_MsgConvertExactAmountIn) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgConvert) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgConvertExactAmountIn)
+		x := input.Message.Interface().(*MsgConvert)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1181,11 +1181,11 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.AmountIn)
+		l = len(x.MinAmount)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.MinAmountOut)
+		l = len(x.MaxAmount)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1199,7 +1199,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountIn)
+		x := input.Message.Interface().(*MsgConvert)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1218,17 +1218,17 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.MinAmountOut) > 0 {
-			i -= len(x.MinAmountOut)
-			copy(dAtA[i:], x.MinAmountOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MinAmountOut)))
+		if len(x.MaxAmount) > 0 {
+			i -= len(x.MaxAmount)
+			copy(dAtA[i:], x.MaxAmount)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MaxAmount)))
 			i--
 			dAtA[i] = 0x1a
 		}
-		if len(x.AmountIn) > 0 {
-			i -= len(x.AmountIn)
-			copy(dAtA[i:], x.AmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountIn)))
+		if len(x.MinAmount) > 0 {
+			i -= len(x.MinAmount)
+			copy(dAtA[i:], x.MinAmount)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MinAmount)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -1250,7 +1250,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountIn)
+		x := input.Message.Interface().(*MsgConvert)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1282,10 +1282,10 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountIn: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvert: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountIn: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvert: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1322,7 +1322,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountIn", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MinAmount", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1350,11 +1350,11 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.AmountIn = string(dAtA[iNdEx:postIndex])
+				x.MinAmount = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MinAmountOut", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxAmount", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1382,7 +1382,7 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.MinAmountOut = string(dAtA[iNdEx:postIndex])
+				x.MaxAmount = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -1420,25 +1420,25 @@ func (x *fastReflection_MsgConvertExactAmountIn) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgConvertExactAmountInResponse            protoreflect.MessageDescriptor
-	fd_MsgConvertExactAmountInResponse_amount_out protoreflect.FieldDescriptor
+	md_MsgConvertResponse        protoreflect.MessageDescriptor
+	fd_MsgConvertResponse_amount protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_tokenconverter_tx_proto_init()
-	md_MsgConvertExactAmountInResponse = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertExactAmountInResponse")
-	fd_MsgConvertExactAmountInResponse_amount_out = md_MsgConvertExactAmountInResponse.Fields().ByName("amount_out")
+	md_MsgConvertResponse = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertResponse")
+	fd_MsgConvertResponse_amount = md_MsgConvertResponse.Fields().ByName("amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgConvertExactAmountInResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgConvertResponse)(nil)
 
-type fastReflection_MsgConvertExactAmountInResponse MsgConvertExactAmountInResponse
+type fastReflection_MsgConvertResponse MsgConvertResponse
 
-func (x *MsgConvertExactAmountInResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountInResponse)(x)
+func (x *MsgConvertResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgConvertResponse)(x)
 }
 
-func (x *MsgConvertExactAmountInResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgConvertResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1450,43 +1450,43 @@ func (x *MsgConvertExactAmountInResponse) slowProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgConvertExactAmountInResponse_messageType fastReflection_MsgConvertExactAmountInResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgConvertExactAmountInResponse_messageType{}
+var _fastReflection_MsgConvertResponse_messageType fastReflection_MsgConvertResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgConvertResponse_messageType{}
 
-type fastReflection_MsgConvertExactAmountInResponse_messageType struct{}
+type fastReflection_MsgConvertResponse_messageType struct{}
 
-func (x fastReflection_MsgConvertExactAmountInResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountInResponse)(nil)
+func (x fastReflection_MsgConvertResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgConvertResponse)(nil)
 }
-func (x fastReflection_MsgConvertExactAmountInResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountInResponse)
+func (x fastReflection_MsgConvertResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgConvertResponse)
 }
-func (x fastReflection_MsgConvertExactAmountInResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountInResponse
+func (x fastReflection_MsgConvertResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgConvertResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountInResponse
+func (x *fastReflection_MsgConvertResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgConvertResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgConvertExactAmountInResponse_messageType
+func (x *fastReflection_MsgConvertResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgConvertResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgConvertExactAmountInResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountInResponse)
+func (x *fastReflection_MsgConvertResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgConvertResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgConvertExactAmountInResponse)(x)
+func (x *fastReflection_MsgConvertResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgConvertResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1494,10 +1494,10 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) Interface() protoreflec
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.AmountOut != "" {
-		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_MsgConvertExactAmountInResponse_amount_out, value) {
+func (x *fastReflection_MsgConvertResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Amount != "" {
+		value := protoreflect.ValueOfString(x.Amount)
+		if !f(fd_MsgConvertResponse_amount, value) {
 			return
 		}
 	}
@@ -1514,15 +1514,15 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) Range(f func(protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgConvertResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountInResponse.amount_out":
-		return x.AmountOut != ""
+	case "sunrise.tokenconverter.MsgConvertResponse.amount":
+		return x.Amount != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1532,15 +1532,15 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) Has(fd protoreflect.Fie
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgConvertResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountInResponse.amount_out":
-		x.AmountOut = ""
+	case "sunrise.tokenconverter.MsgConvertResponse.amount":
+		x.Amount = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1550,16 +1550,16 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) Clear(fd protoreflect.F
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgConvertResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountInResponse.amount_out":
-		value := x.AmountOut
+	case "sunrise.tokenconverter.MsgConvertResponse.amount":
+		value := x.Amount
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountInResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1573,15 +1573,15 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) Get(descriptor protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgConvertResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountInResponse.amount_out":
-		x.AmountOut = value.Interface().(string)
+	case "sunrise.tokenconverter.MsgConvertResponse.amount":
+		x.Amount = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1595,40 +1595,40 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) Set(fd protoreflect.Fie
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountInResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgConvertResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountInResponse.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.tokenconverter.MsgConvertExactAmountInResponse is not mutable"))
+	case "sunrise.tokenconverter.MsgConvertResponse.amount":
+		panic(fmt.Errorf("field amount of message sunrise.tokenconverter.MsgConvertResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgConvertExactAmountInResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgConvertResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountInResponse.amount_out":
+	case "sunrise.tokenconverter.MsgConvertResponse.amount":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgConvertExactAmountInResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgConvertResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.MsgConvertExactAmountInResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.MsgConvertResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1636,7 +1636,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) WhichOneof(d protorefle
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgConvertExactAmountInResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgConvertResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1647,7 +1647,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) GetUnknown() protorefle
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountInResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgConvertResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1659,7 +1659,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) SetUnknown(fields proto
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgConvertExactAmountInResponse) IsValid() bool {
+func (x *fastReflection_MsgConvertResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -1669,9 +1669,9 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgConvertResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgConvertExactAmountInResponse)
+		x := input.Message.Interface().(*MsgConvertResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1683,7 +1683,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 		var n int
 		var l int
 		_ = l
-		l = len(x.AmountOut)
+		l = len(x.Amount)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1697,7 +1697,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountInResponse)
+		x := input.Message.Interface().(*MsgConvertResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1716,10 +1716,10 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.AmountOut) > 0 {
-			i -= len(x.AmountOut)
-			copy(dAtA[i:], x.AmountOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
+		if len(x.Amount) > 0 {
+			i -= len(x.Amount)
+			copy(dAtA[i:], x.Amount)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Amount)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -1734,7 +1734,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountInResponse)
+		x := input.Message.Interface().(*MsgConvertResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1766,15 +1766,15 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountInResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1802,975 +1802,7 @@ func (x *fastReflection_MsgConvertExactAmountInResponse) ProtoMethods() *protoif
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.AmountOut = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_MsgConvertExactAmountOut               protoreflect.MessageDescriptor
-	fd_MsgConvertExactAmountOut_sender        protoreflect.FieldDescriptor
-	fd_MsgConvertExactAmountOut_amount_out    protoreflect.FieldDescriptor
-	fd_MsgConvertExactAmountOut_max_amount_in protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_tokenconverter_tx_proto_init()
-	md_MsgConvertExactAmountOut = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertExactAmountOut")
-	fd_MsgConvertExactAmountOut_sender = md_MsgConvertExactAmountOut.Fields().ByName("sender")
-	fd_MsgConvertExactAmountOut_amount_out = md_MsgConvertExactAmountOut.Fields().ByName("amount_out")
-	fd_MsgConvertExactAmountOut_max_amount_in = md_MsgConvertExactAmountOut.Fields().ByName("max_amount_in")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgConvertExactAmountOut)(nil)
-
-type fastReflection_MsgConvertExactAmountOut MsgConvertExactAmountOut
-
-func (x *MsgConvertExactAmountOut) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountOut)(x)
-}
-
-func (x *MsgConvertExactAmountOut) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgConvertExactAmountOut_messageType fastReflection_MsgConvertExactAmountOut_messageType
-var _ protoreflect.MessageType = fastReflection_MsgConvertExactAmountOut_messageType{}
-
-type fastReflection_MsgConvertExactAmountOut_messageType struct{}
-
-func (x fastReflection_MsgConvertExactAmountOut_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountOut)(nil)
-}
-func (x fastReflection_MsgConvertExactAmountOut_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountOut)
-}
-func (x fastReflection_MsgConvertExactAmountOut_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountOut
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgConvertExactAmountOut) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountOut
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgConvertExactAmountOut) Type() protoreflect.MessageType {
-	return _fastReflection_MsgConvertExactAmountOut_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgConvertExactAmountOut) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountOut)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgConvertExactAmountOut) Interface() protoreflect.ProtoMessage {
-	return (*MsgConvertExactAmountOut)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgConvertExactAmountOut) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Sender != "" {
-		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgConvertExactAmountOut_sender, value) {
-			return
-		}
-	}
-	if x.AmountOut != "" {
-		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_MsgConvertExactAmountOut_amount_out, value) {
-			return
-		}
-	}
-	if x.MaxAmountIn != "" {
-		value := protoreflect.ValueOfString(x.MaxAmountIn)
-		if !f(fd_MsgConvertExactAmountOut_max_amount_in, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgConvertExactAmountOut) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
-		return x.Sender != ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
-		return x.AmountOut != ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
-		return x.MaxAmountIn != ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOut does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOut) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
-		x.Sender = ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
-		x.AmountOut = ""
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
-		x.MaxAmountIn = ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOut does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgConvertExactAmountOut) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
-		value := x.Sender
-		return protoreflect.ValueOfString(value)
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
-		value := x.AmountOut
-		return protoreflect.ValueOfString(value)
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
-		value := x.MaxAmountIn
-		return protoreflect.ValueOfString(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOut does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOut) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
-		x.Sender = value.Interface().(string)
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
-		x.AmountOut = value.Interface().(string)
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
-		x.MaxAmountIn = value.Interface().(string)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOut does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOut) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
-		panic(fmt.Errorf("field sender of message sunrise.tokenconverter.MsgConvertExactAmountOut is not mutable"))
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.tokenconverter.MsgConvertExactAmountOut is not mutable"))
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
-		panic(fmt.Errorf("field max_amount_in of message sunrise.tokenconverter.MsgConvertExactAmountOut is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOut does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgConvertExactAmountOut) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.sender":
-		return protoreflect.ValueOfString("")
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.amount_out":
-		return protoreflect.ValueOfString("")
-	case "sunrise.tokenconverter.MsgConvertExactAmountOut.max_amount_in":
-		return protoreflect.ValueOfString("")
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOut"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOut does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgConvertExactAmountOut) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.MsgConvertExactAmountOut", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgConvertExactAmountOut) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOut) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgConvertExactAmountOut) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgConvertExactAmountOut) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgConvertExactAmountOut)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Sender)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.AmountOut)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.MaxAmountIn)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountOut)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.MaxAmountIn) > 0 {
-			i -= len(x.MaxAmountIn)
-			copy(dAtA[i:], x.MaxAmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MaxAmountIn)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if len(x.AmountOut) > 0 {
-			i -= len(x.AmountOut)
-			copy(dAtA[i:], x.AmountOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if len(x.Sender) > 0 {
-			i -= len(x.Sender)
-			copy(dAtA[i:], x.Sender)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountOut)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountOut: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountOut: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Sender = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AmountOut = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxAmountIn", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.MaxAmountIn = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_MsgConvertExactAmountOutResponse           protoreflect.MessageDescriptor
-	fd_MsgConvertExactAmountOutResponse_amount_in protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_tokenconverter_tx_proto_init()
-	md_MsgConvertExactAmountOutResponse = File_sunrise_tokenconverter_tx_proto.Messages().ByName("MsgConvertExactAmountOutResponse")
-	fd_MsgConvertExactAmountOutResponse_amount_in = md_MsgConvertExactAmountOutResponse.Fields().ByName("amount_in")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgConvertExactAmountOutResponse)(nil)
-
-type fastReflection_MsgConvertExactAmountOutResponse MsgConvertExactAmountOutResponse
-
-func (x *MsgConvertExactAmountOutResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountOutResponse)(x)
-}
-
-func (x *MsgConvertExactAmountOutResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgConvertExactAmountOutResponse_messageType fastReflection_MsgConvertExactAmountOutResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgConvertExactAmountOutResponse_messageType{}
-
-type fastReflection_MsgConvertExactAmountOutResponse_messageType struct{}
-
-func (x fastReflection_MsgConvertExactAmountOutResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgConvertExactAmountOutResponse)(nil)
-}
-func (x fastReflection_MsgConvertExactAmountOutResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountOutResponse)
-}
-func (x fastReflection_MsgConvertExactAmountOutResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountOutResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgConvertExactAmountOutResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgConvertExactAmountOutResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgConvertExactAmountOutResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgConvertExactAmountOutResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.AmountIn != "" {
-		value := protoreflect.ValueOfString(x.AmountIn)
-		if !f(fd_MsgConvertExactAmountOutResponse_amount_in, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOutResponse.amount_in":
-		return x.AmountIn != ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOutResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOutResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOutResponse.amount_in":
-		x.AmountIn = ""
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOutResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOutResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOutResponse.amount_in":
-		value := x.AmountIn
-		return protoreflect.ValueOfString(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOutResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOutResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOutResponse.amount_in":
-		x.AmountIn = value.Interface().(string)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOutResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOutResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOutResponse.amount_in":
-		panic(fmt.Errorf("field amount_in of message sunrise.tokenconverter.MsgConvertExactAmountOutResponse is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOutResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOutResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.tokenconverter.MsgConvertExactAmountOutResponse.amount_in":
-		return protoreflect.ValueOfString("")
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.MsgConvertExactAmountOutResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.MsgConvertExactAmountOutResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.MsgConvertExactAmountOutResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgConvertExactAmountOutResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgConvertExactAmountOutResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.AmountIn)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountOutResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.AmountIn) > 0 {
-			i -= len(x.AmountIn)
-			copy(dAtA[i:], x.AmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountIn)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgConvertExactAmountOutResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountOutResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgConvertExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountIn", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AmountIn = string(dAtA[iNdEx:postIndex])
+				x.Amount = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -2894,18 +1926,18 @@ func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_tokenconverter_tx_proto_rawDescGZIP(), []int{1}
 }
 
-type MsgConvertExactAmountIn struct {
+type MsgConvert struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender       string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	AmountIn     string `protobuf:"bytes,2,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
-	MinAmountOut string `protobuf:"bytes,3,opt,name=min_amount_out,json=minAmountOut,proto3" json:"min_amount_out,omitempty"`
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	MinAmount string `protobuf:"bytes,2,opt,name=min_amount,json=minAmount,proto3" json:"min_amount,omitempty"`
+	MaxAmount string `protobuf:"bytes,3,opt,name=max_amount,json=maxAmount,proto3" json:"max_amount,omitempty"`
 }
 
-func (x *MsgConvertExactAmountIn) Reset() {
-	*x = MsgConvertExactAmountIn{}
+func (x *MsgConvert) Reset() {
+	*x = MsgConvert{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2913,48 +1945,48 @@ func (x *MsgConvertExactAmountIn) Reset() {
 	}
 }
 
-func (x *MsgConvertExactAmountIn) String() string {
+func (x *MsgConvert) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgConvertExactAmountIn) ProtoMessage() {}
+func (*MsgConvert) ProtoMessage() {}
 
-// Deprecated: Use MsgConvertExactAmountIn.ProtoReflect.Descriptor instead.
-func (*MsgConvertExactAmountIn) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgConvert.ProtoReflect.Descriptor instead.
+func (*MsgConvert) Descriptor() ([]byte, []int) {
 	return file_sunrise_tokenconverter_tx_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgConvertExactAmountIn) GetSender() string {
+func (x *MsgConvert) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgConvertExactAmountIn) GetAmountIn() string {
+func (x *MsgConvert) GetMinAmount() string {
 	if x != nil {
-		return x.AmountIn
+		return x.MinAmount
 	}
 	return ""
 }
 
-func (x *MsgConvertExactAmountIn) GetMinAmountOut() string {
+func (x *MsgConvert) GetMaxAmount() string {
 	if x != nil {
-		return x.MinAmountOut
+		return x.MaxAmount
 	}
 	return ""
 }
 
-type MsgConvertExactAmountInResponse struct {
+type MsgConvertResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AmountOut string `protobuf:"bytes,1,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
+	Amount string `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
-func (x *MsgConvertExactAmountInResponse) Reset() {
-	*x = MsgConvertExactAmountInResponse{}
+func (x *MsgConvertResponse) Reset() {
+	*x = MsgConvertResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2962,106 +1994,20 @@ func (x *MsgConvertExactAmountInResponse) Reset() {
 	}
 }
 
-func (x *MsgConvertExactAmountInResponse) String() string {
+func (x *MsgConvertResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgConvertExactAmountInResponse) ProtoMessage() {}
+func (*MsgConvertResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgConvertExactAmountInResponse.ProtoReflect.Descriptor instead.
-func (*MsgConvertExactAmountInResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgConvertResponse.ProtoReflect.Descriptor instead.
+func (*MsgConvertResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_tokenconverter_tx_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *MsgConvertExactAmountInResponse) GetAmountOut() string {
+func (x *MsgConvertResponse) GetAmount() string {
 	if x != nil {
-		return x.AmountOut
-	}
-	return ""
-}
-
-type MsgConvertExactAmountOut struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Sender      string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	AmountOut   string `protobuf:"bytes,2,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
-	MaxAmountIn string `protobuf:"bytes,3,opt,name=max_amount_in,json=maxAmountIn,proto3" json:"max_amount_in,omitempty"`
-}
-
-func (x *MsgConvertExactAmountOut) Reset() {
-	*x = MsgConvertExactAmountOut{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgConvertExactAmountOut) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgConvertExactAmountOut) ProtoMessage() {}
-
-// Deprecated: Use MsgConvertExactAmountOut.ProtoReflect.Descriptor instead.
-func (*MsgConvertExactAmountOut) Descriptor() ([]byte, []int) {
-	return file_sunrise_tokenconverter_tx_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *MsgConvertExactAmountOut) GetSender() string {
-	if x != nil {
-		return x.Sender
-	}
-	return ""
-}
-
-func (x *MsgConvertExactAmountOut) GetAmountOut() string {
-	if x != nil {
-		return x.AmountOut
-	}
-	return ""
-}
-
-func (x *MsgConvertExactAmountOut) GetMaxAmountIn() string {
-	if x != nil {
-		return x.MaxAmountIn
-	}
-	return ""
-}
-
-type MsgConvertExactAmountOutResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	AmountIn string `protobuf:"bytes,1,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
-}
-
-func (x *MsgConvertExactAmountOutResponse) Reset() {
-	*x = MsgConvertExactAmountOutResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_tokenconverter_tx_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgConvertExactAmountOutResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgConvertExactAmountOutResponse) ProtoMessage() {}
-
-// Deprecated: Use MsgConvertExactAmountOutResponse.ProtoReflect.Descriptor instead.
-func (*MsgConvertExactAmountOutResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_tokenconverter_tx_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *MsgConvertExactAmountOutResponse) GetAmountIn() string {
-	if x != nil {
-		return x.AmountIn
+		return x.Amount
 	}
 	return ""
 }
@@ -3095,73 +2041,38 @@ var file_sunrise_tokenconverter_tx_proto_rawDesc = []byte{
 	0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
 	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0xe5, 0x01, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72,
-	0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x16,
-	0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
-	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x4d, 0x0a, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x5f, 0x69, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda,
-	0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
-	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x08, 0x61, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x56, 0x0a, 0x0e, 0x6d, 0x69, 0x6e, 0x5f, 0x61, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
+	0x73, 0x65, 0x22, 0xd3, 0x01, 0x0a, 0x0a, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72,
+	0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x4f, 0x0a, 0x0a, 0x6d, 0x69, 0x6e,
+	0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
 	0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
 	0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x0c, 0x6d, 0x69, 0x6e, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x3a, 0x0b, 0x82,
-	0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x72, 0x0a, 0x1f, 0x4d, 0x73,
-	0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4f, 0x0a,
-	0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74,
-	0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7,
-	0xb0, 0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x22, 0xe6,
-	0x01, 0x0a, 0x18, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61,
-	0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73,
-	0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e,
-	0x64, 0x65, 0x72, 0x12, 0x4f, 0x0a, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75,
-	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f,
-	0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61,
-	0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
-	0x74, 0x4f, 0x75, 0x74, 0x12, 0x54, 0x0a, 0x0d, 0x6d, 0x61, 0x78, 0x5f, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f,
-	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
-	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x6d,
-	0x61, 0x78, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x71, 0x0a, 0x20, 0x4d, 0x73, 0x67, 0x43, 0x6f,
-	0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x4f, 0x75, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4d, 0x0a, 0x09, 0x61,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30,
+	0x09, 0x6d, 0x69, 0x6e, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x4f, 0x0a, 0x0a, 0x6d, 0x61,
+	0x78, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30,
 	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
 	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d,
 	0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
-	0x52, 0x08, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x32, 0xff, 0x02, 0x0a, 0x03, 0x4d,
-	0x73, 0x67, 0x12, 0x68, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x12, 0x27, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b,
-	0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2f, 0x2e, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65,
-	0x72, 0x74, 0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x80, 0x01, 0x0a,
-	0x14, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f,
-	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2e, 0x4d,
-	0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x1a, 0x37, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2e,
-	0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x83, 0x01, 0x0a, 0x15, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61, 0x63, 0x74,
-	0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x52, 0x09, 0x6d, 0x61, 0x78, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x5e, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x43,
+	0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x48,
+	0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d,
+	0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x32, 0xd1, 0x01, 0x0a, 0x03, 0x4d, 0x73, 0x67,
+	0x12, 0x68, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x12, 0x27, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
+	0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72,
 	0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74,
-	0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45, 0x78, 0x61,
-	0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x1a, 0x38, 0x2e, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65,
-	0x72, 0x74, 0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x45,
-	0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x73,
+	0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x59, 0x0a, 0x07, 0x43, 0x6f,
+	0x6e, 0x76, 0x65, 0x72, 0x74, 0x12, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x2e, 0x4d,
+	0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74,
+	0x65, 0x72, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xc7, 0x01, 0x0a,
 	0x1a, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b,
 	0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x42, 0x07, 0x54, 0x78, 0x50,
@@ -3190,26 +2101,22 @@ func file_sunrise_tokenconverter_tx_proto_rawDescGZIP() []byte {
 	return file_sunrise_tokenconverter_tx_proto_rawDescData
 }
 
-var file_sunrise_tokenconverter_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_sunrise_tokenconverter_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_sunrise_tokenconverter_tx_proto_goTypes = []interface{}{
-	(*MsgUpdateParams)(nil),                  // 0: sunrise.tokenconverter.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),          // 1: sunrise.tokenconverter.MsgUpdateParamsResponse
-	(*MsgConvertExactAmountIn)(nil),          // 2: sunrise.tokenconverter.MsgConvertExactAmountIn
-	(*MsgConvertExactAmountInResponse)(nil),  // 3: sunrise.tokenconverter.MsgConvertExactAmountInResponse
-	(*MsgConvertExactAmountOut)(nil),         // 4: sunrise.tokenconverter.MsgConvertExactAmountOut
-	(*MsgConvertExactAmountOutResponse)(nil), // 5: sunrise.tokenconverter.MsgConvertExactAmountOutResponse
-	(*Params)(nil),                           // 6: sunrise.tokenconverter.Params
+	(*MsgUpdateParams)(nil),         // 0: sunrise.tokenconverter.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil), // 1: sunrise.tokenconverter.MsgUpdateParamsResponse
+	(*MsgConvert)(nil),              // 2: sunrise.tokenconverter.MsgConvert
+	(*MsgConvertResponse)(nil),      // 3: sunrise.tokenconverter.MsgConvertResponse
+	(*Params)(nil),                  // 4: sunrise.tokenconverter.Params
 }
 var file_sunrise_tokenconverter_tx_proto_depIdxs = []int32{
-	6, // 0: sunrise.tokenconverter.MsgUpdateParams.params:type_name -> sunrise.tokenconverter.Params
+	4, // 0: sunrise.tokenconverter.MsgUpdateParams.params:type_name -> sunrise.tokenconverter.Params
 	0, // 1: sunrise.tokenconverter.Msg.UpdateParams:input_type -> sunrise.tokenconverter.MsgUpdateParams
-	2, // 2: sunrise.tokenconverter.Msg.ConvertExactAmountIn:input_type -> sunrise.tokenconverter.MsgConvertExactAmountIn
-	4, // 3: sunrise.tokenconverter.Msg.ConvertExactAmountOut:input_type -> sunrise.tokenconverter.MsgConvertExactAmountOut
-	1, // 4: sunrise.tokenconverter.Msg.UpdateParams:output_type -> sunrise.tokenconverter.MsgUpdateParamsResponse
-	3, // 5: sunrise.tokenconverter.Msg.ConvertExactAmountIn:output_type -> sunrise.tokenconverter.MsgConvertExactAmountInResponse
-	5, // 6: sunrise.tokenconverter.Msg.ConvertExactAmountOut:output_type -> sunrise.tokenconverter.MsgConvertExactAmountOutResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
+	2, // 2: sunrise.tokenconverter.Msg.Convert:input_type -> sunrise.tokenconverter.MsgConvert
+	1, // 3: sunrise.tokenconverter.Msg.UpdateParams:output_type -> sunrise.tokenconverter.MsgUpdateParamsResponse
+	3, // 4: sunrise.tokenconverter.Msg.Convert:output_type -> sunrise.tokenconverter.MsgConvertResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -3247,7 +2154,7 @@ func file_sunrise_tokenconverter_tx_proto_init() {
 			}
 		}
 		file_sunrise_tokenconverter_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgConvertExactAmountIn); i {
+			switch v := v.(*MsgConvert); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3259,31 +2166,7 @@ func file_sunrise_tokenconverter_tx_proto_init() {
 			}
 		}
 		file_sunrise_tokenconverter_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgConvertExactAmountInResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_tokenconverter_tx_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgConvertExactAmountOut); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_tokenconverter_tx_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgConvertExactAmountOutResponse); i {
+			switch v := v.(*MsgConvertResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3301,7 +2184,7 @@ func file_sunrise_tokenconverter_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sunrise_tokenconverter_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

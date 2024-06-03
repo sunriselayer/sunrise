@@ -13,7 +13,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 message Route {
   string denom_in = 1;
   string denom_out = 2;
-  oneof type {
+  oneof strategy {
     RoutePool pool = 3;
     RouteSeries series = 4;
     RouteParallel parallel = 5;

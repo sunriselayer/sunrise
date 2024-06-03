@@ -10,7 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
-func SimulateMsgConvertExactAmountIn(
+func SimulateMsgConvert(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -18,12 +18,12 @@ func SimulateMsgConvertExactAmountIn(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-		msg := &types.MsgConvertExactAmountIn{
+		msg := &types.MsgConvert{
 			Sender: simAccount.Address.String(),
 		}
 
-		// TODO: Handling the ConvertExactAmountIn simulation
+		// TODO: Handling the Convert simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "ConvertExactAmountIn simulation not implemented"), nil, nil
+		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "Convert simulation not implemented"), nil, nil
 	}
 }

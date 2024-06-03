@@ -8,21 +8,21 @@ import (
 	"github.com/sunriselayer/sunrise/testutil/sample"
 )
 
-func TestMsgConvertExactAmountOut_ValidateBasic(t *testing.T) {
+func TestMsgConvert_ValidateBasic(t *testing.T) {
 	tests := []struct {
 		name string
-		msg  MsgConvertExactAmountOut
+		msg  MsgConvert
 		err  error
 	}{
 		{
 			name: "invalid address",
-			msg: MsgConvertExactAmountOut{
+			msg: MsgConvert{
 				Sender: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
-			msg: MsgConvertExactAmountOut{
+			msg: MsgConvert{
 				Sender: sample.AccAddress(),
 			},
 		},

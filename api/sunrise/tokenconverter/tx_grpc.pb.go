@@ -19,9 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName          = "/sunrise.tokenconverter.Msg/UpdateParams"
-	Msg_ConvertExactAmountIn_FullMethodName  = "/sunrise.tokenconverter.Msg/ConvertExactAmountIn"
-	Msg_ConvertExactAmountOut_FullMethodName = "/sunrise.tokenconverter.Msg/ConvertExactAmountOut"
+	Msg_UpdateParams_FullMethodName = "/sunrise.tokenconverter.Msg/UpdateParams"
+	Msg_Convert_FullMethodName      = "/sunrise.tokenconverter.Msg/Convert"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,8 +30,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
-	ConvertExactAmountIn(ctx context.Context, in *MsgConvertExactAmountIn, opts ...grpc.CallOption) (*MsgConvertExactAmountInResponse, error)
-	ConvertExactAmountOut(ctx context.Context, in *MsgConvertExactAmountOut, opts ...grpc.CallOption) (*MsgConvertExactAmountOutResponse, error)
+	Convert(ctx context.Context, in *MsgConvert, opts ...grpc.CallOption) (*MsgConvertResponse, error)
 }
 
 type msgClient struct {
@@ -52,18 +50,9 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
-func (c *msgClient) ConvertExactAmountIn(ctx context.Context, in *MsgConvertExactAmountIn, opts ...grpc.CallOption) (*MsgConvertExactAmountInResponse, error) {
-	out := new(MsgConvertExactAmountInResponse)
-	err := c.cc.Invoke(ctx, Msg_ConvertExactAmountIn_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) ConvertExactAmountOut(ctx context.Context, in *MsgConvertExactAmountOut, opts ...grpc.CallOption) (*MsgConvertExactAmountOutResponse, error) {
-	out := new(MsgConvertExactAmountOutResponse)
-	err := c.cc.Invoke(ctx, Msg_ConvertExactAmountOut_FullMethodName, in, out, opts...)
+func (c *msgClient) Convert(ctx context.Context, in *MsgConvert, opts ...grpc.CallOption) (*MsgConvertResponse, error) {
+	out := new(MsgConvertResponse)
+	err := c.cc.Invoke(ctx, Msg_Convert_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +66,7 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
-	ConvertExactAmountIn(context.Context, *MsgConvertExactAmountIn) (*MsgConvertExactAmountInResponse, error)
-	ConvertExactAmountOut(context.Context, *MsgConvertExactAmountOut) (*MsgConvertExactAmountOutResponse, error)
+	Convert(context.Context, *MsgConvert) (*MsgConvertResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -89,11 +77,8 @@ type UnimplementedMsgServer struct {
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
-func (UnimplementedMsgServer) ConvertExactAmountIn(context.Context, *MsgConvertExactAmountIn) (*MsgConvertExactAmountInResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConvertExactAmountIn not implemented")
-}
-func (UnimplementedMsgServer) ConvertExactAmountOut(context.Context, *MsgConvertExactAmountOut) (*MsgConvertExactAmountOutResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConvertExactAmountOut not implemented")
+func (UnimplementedMsgServer) Convert(context.Context, *MsgConvert) (*MsgConvertResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Convert not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -126,38 +111,20 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_ConvertExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgConvertExactAmountIn)
+func _Msg_Convert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgConvert)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).ConvertExactAmountIn(ctx, in)
+		return srv.(MsgServer).Convert(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_ConvertExactAmountIn_FullMethodName,
+		FullMethod: Msg_Convert_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ConvertExactAmountIn(ctx, req.(*MsgConvertExactAmountIn))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_ConvertExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgConvertExactAmountOut)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ConvertExactAmountOut(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_ConvertExactAmountOut_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ConvertExactAmountOut(ctx, req.(*MsgConvertExactAmountOut))
+		return srv.(MsgServer).Convert(ctx, req.(*MsgConvert))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -174,12 +141,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_UpdateParams_Handler,
 		},
 		{
-			MethodName: "ConvertExactAmountIn",
-			Handler:    _Msg_ConvertExactAmountIn_Handler,
-		},
-		{
-			MethodName: "ConvertExactAmountOut",
-			Handler:    _Msg_ConvertExactAmountOut_Handler,
+			MethodName: "Convert",
+			Handler:    _Msg_Convert_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
