@@ -59,7 +59,7 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid: true,
 		},
 		{
-			desc: "duplicated inFlightPacket",
+			desc: "duplicated outgoingInFlightPacket",
 			genState: &types.GenesisState{
 				OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
 					{
@@ -81,7 +81,7 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid: false,
 		},
 		{
-			desc: "duplicated ackWaitingPacket",
+			desc: "duplicated incomingPacket",
 			genState: &types.GenesisState{
 				IncomingInFlightPacketList: []types.IncomingInFlightPacket{
 					{

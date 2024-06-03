@@ -9,15 +9,15 @@ import (
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-// SetOutgoingInFlightPacket set a specific inFlightPacket in the store from its index
-func (k Keeper) SetOutgoingInFlightPacket(ctx context.Context, inFlightPacket types.OutgoingInFlightPacket) {
+// SetOutgoingInFlightPacket set a specific outgoingInFlightPacket in the store from its index
+func (k Keeper) SetOutgoingInFlightPacket(ctx context.Context, outgoingInFlightPacket types.OutgoingInFlightPacket) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
-	b := k.cdc.MustMarshal(&inFlightPacket)
-	store.Set(types.OutgoingInFlightPacketKey(inFlightPacket.Index), b)
+	b := k.cdc.MustMarshal(&outgoingInFlightPacket)
+	store.Set(types.OutgoingInFlightPacketKey(outgoingInFlightPacket.Index), b)
 }
 
-// GetOutgoingInFlightPacket returns a inFlightPacket from its index
+// GetOutgoingInFlightPacket returns a outgoingInFlightPacket from its index
 func (k Keeper) GetOutgoingInFlightPacket(
 	ctx context.Context,
 	srcPortId string,
@@ -42,7 +42,7 @@ func (k Keeper) GetOutgoingInFlightPacket(
 	return val, true
 }
 
-// RemoveOutgoingInFlightPacket removes a inFlightPacket from the store
+// RemoveOutgoingInFlightPacket removes a outgoingInFlightPacket from the store
 func (k Keeper) RemoveOutgoingInFlightPacket(
 	ctx context.Context,
 	srcPortId string,
@@ -60,7 +60,7 @@ func (k Keeper) RemoveOutgoingInFlightPacket(
 	))
 }
 
-// GetAllOutgoingInFlightPacket returns all inFlightPacket
+// GetAllOutgoingInFlightPacket returns all outgoingInFlightPacket
 func (k Keeper) GetAllOutgoingInFlightPacket(ctx context.Context) (list []types.OutgoingInFlightPacket) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))

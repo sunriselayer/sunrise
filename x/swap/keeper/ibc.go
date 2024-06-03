@@ -187,7 +187,7 @@ func (k Keeper) ProcessSwappedFund(
 
 func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	ctx sdk.Context,
-	ackWaitingIndex types.PacketIndex,
+	incomingIndex types.PacketIndex,
 	sender string,
 	tokenOut sdk.Coin,
 	metadata packetforwardtypes.ForwardMetadata,
@@ -228,7 +228,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 			metadata.Channel,
 			res.Sequence,
 		),
-		AckWaitingIndex:  ackWaitingIndex,
+		AckWaitingIndex:  incomingIndex,
 		RetriesRemaining: int32(retries),
 	}
 
@@ -241,19 +241,19 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	ctx sdk.Context,
 	packet channeltypes.Packet,
 	acknowledgement []byte,
-	inFlightPacket types.OutgoingInFlightPacket,
+	outgoingPacket types.OutgoingInFlightPacket,
 ) error {
-	waitingPacket, found := k.GetIncomingInFlightPacket(ctx, inFlightPacket.AckWaitingIndex.PortId, inFlightPacket.AckWaitingIndex.ChannelId, inFlightPacket.AckWaitingIndex.Sequence)
+	incomingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
 	if found {
-		k.RemoveOutgoingInFlightPacket(ctx, inFlightPacket.Index.PortId, inFlightPacket.Index.ChannelId, inFlightPacket.Index.Sequence)
+		k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
 	} else {
 		return nil
 	}
 
 	// The pattern of waitingPacket.Return == nil is not handled here
-	switch waitingPacket.Return.(type) {
+	switch incomingPacket.Return.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexReturn:
-		waitingPacket.Return = &types.IncomingInFlightPacket_AckReturn{
+		incomingPacket.Return = &types.IncomingInFlightPacket_AckReturn{
 			AckReturn: acknowledgement,
 		}
 		break
@@ -262,9 +262,9 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	}
 
 	// The pattern of waitingPacket.Forward == nil is not handled here
-	switch waitingPacket.Forward.(type) {
+	switch incomingPacket.Forward.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexForward:
-		waitingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
+		incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 			AckForward: acknowledgement,
 		}
 		break
@@ -272,12 +272,12 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		break
 	}
 
-	deleted, err := k.ShouldDeleteCompletedWaitingPacket(ctx, waitingPacket)
+	deleted, err := k.ShouldDeleteCompletedWaitingPacket(ctx, incomingPacket)
 	if err != nil {
 		return err
 	}
 	if !deleted {
-		k.SetIncomingInFlightPacket(ctx, waitingPacket)
+		k.SetIncomingInFlightPacket(ctx, incomingPacket)
 	}
 
 	return nil
@@ -286,12 +286,12 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 	ctx sdk.Context,
 	packet channeltypes.Packet,
-	inFlightPacket types.OutgoingInFlightPacket,
+	outgoingPacket types.OutgoingInFlightPacket,
 ) error {
-	k.RemoveOutgoingInFlightPacket(ctx, inFlightPacket.Index.PortId, inFlightPacket.Index.ChannelId, inFlightPacket.Index.Sequence)
-	inFlightPacket.RetriesRemaining--
+	k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+	outgoingPacket.RetriesRemaining--
 
-	if inFlightPacket.RetriesRemaining > 0 {
+	if outgoingPacket.RetriesRemaining > 0 {
 		// Resend packet
 		_, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.DestinationPort, packet.DestinationChannel)
 		if err != nil {
@@ -311,22 +311,22 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 		}
 
 		// Set the new sequence number
-		inFlightPacket.Index.Sequence = sequence
-		k.SetOutgoingInFlightPacket(ctx, inFlightPacket)
+		outgoingPacket.Index.Sequence = sequence
+		k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
 	} else {
 		// If remaining retry count is zero:
 		// - Returning non error acknowledgement to the origin
 		// - However it contains error acknowledgement of forward / return packet
 		ack := channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrUnknownRequest, "Retry count on timeout exceeds"))
 
-		waitingPacket, found := k.GetIncomingInFlightPacket(ctx, inFlightPacket.AckWaitingIndex.PortId, inFlightPacket.AckWaitingIndex.ChannelId, inFlightPacket.AckWaitingIndex.Sequence)
+		waitingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
 		if !found {
 			return nil
 		}
 
 		switch packetReturn := waitingPacket.Return.(type) {
 		case *types.IncomingInFlightPacket_OutgoingIndexReturn:
-			if packetReturn.OutgoingIndexReturn.Equal(inFlightPacket.Index) {
+			if packetReturn.OutgoingIndexReturn.Equal(outgoingPacket.Index) {
 				waitingPacket.Return = &types.IncomingInFlightPacket_AckReturn{
 					AckReturn: ack.Acknowledgement(),
 				}
@@ -338,7 +338,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		switch packetForward := waitingPacket.Forward.(type) {
 		case *types.IncomingInFlightPacket_OutgoingIndexForward:
-			if packetForward.OutgoingIndexForward.Equal(inFlightPacket.Index) {
+			if packetForward.OutgoingIndexForward.Equal(outgoingPacket.Index) {
 				waitingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 					AckForward: ack.Acknowledgement(),
 				}

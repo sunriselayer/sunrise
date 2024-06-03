@@ -14,7 +14,7 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
-		OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
+		IncomingInFlightPacketList: []types.IncomingInFlightPacket{
 			{
 				Index: types.PacketIndex{
 					PortId:    "0",
@@ -30,7 +30,7 @@ func TestGenesis(t *testing.T) {
 				},
 			},
 		},
-		IncomingInFlightPacketList: []types.IncomingInFlightPacket{
+		OutgoingInFlightPacketList: []types.OutgoingInFlightPacket{
 			{
 				Index: types.PacketIndex{
 					PortId:    "0",

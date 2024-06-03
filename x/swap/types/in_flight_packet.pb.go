@@ -277,7 +277,7 @@ func (*IncomingInFlightPacket) XXX_OneofWrappers() []interface{} {
 
 type OutgoingInFlightPacket struct {
 	Index            PacketIndex `protobuf:"bytes,1,opt,name=index,proto3" json:"index"`
-	AckWaitingIndex  PacketIndex `protobuf:"bytes,2,opt,name=ack_waiting_index,json=ackWaitingIndex,proto3" json:"ack_waiting_index"`
+	AckWaitingIndex  PacketIndex `protobuf:"bytes,2,opt,name=ack_waiting_index,json=incomingIndex,proto3" json:"ack_waiting_index"`
 	RetriesRemaining int32       `protobuf:"varint,3,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
 }
 

@@ -16,18 +16,18 @@ func (k Keeper) OutgoingInFlightPacketAll(ctx context.Context, req *types.QueryA
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var inFlightPackets []types.OutgoingInFlightPacket
+	var outgoingInFlightPackets []types.OutgoingInFlightPacket
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	inFlightPacketStore := prefix.NewStore(store, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
+	outgoingInFlightPacketStore := prefix.NewStore(store, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
 
-	pageRes, err := query.Paginate(inFlightPacketStore, req.Pagination, func(key []byte, value []byte) error {
-		var inFlightPacket types.OutgoingInFlightPacket
-		if err := k.cdc.Unmarshal(value, &inFlightPacket); err != nil {
+	pageRes, err := query.Paginate(outgoingInFlightPacketStore, req.Pagination, func(key []byte, value []byte) error {
+		var outgoingInFlightPacket types.OutgoingInFlightPacket
+		if err := k.cdc.Unmarshal(value, &outgoingInFlightPacket); err != nil {
 			return err
 		}
 
-		inFlightPackets = append(inFlightPackets, inFlightPacket)
+		outgoingInFlightPackets = append(outgoingInFlightPackets, outgoingInFlightPacket)
 		return nil
 	})
 
@@ -35,7 +35,7 @@ func (k Keeper) OutgoingInFlightPacketAll(ctx context.Context, req *types.QueryA
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllOutgoingInFlightPacketResponse{OutgoingInFlightPacket: inFlightPackets, Pagination: pageRes}, nil
+	return &types.QueryAllOutgoingInFlightPacketResponse{OutgoingInFlightPacket: outgoingInFlightPackets, Pagination: pageRes}, nil
 }
 
 func (k Keeper) OutgoingInFlightPacket(ctx context.Context, req *types.QueryGetOutgoingInFlightPacketRequest) (*types.QueryGetOutgoingInFlightPacketResponse, error) {

@@ -19114,6 +19114,15 @@ paths:
 
                   NOTE: All parameters must be supplied.
                 type: object
+                properties:
+                  fee_denom:
+                    type: string
+                  burn_ratio:
+                    type: string
+                  bypass_denoms:
+                    type: array
+                    items:
+                      type: string
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
@@ -19385,6 +19394,9 @@ paths:
             properties:
               sender:
                 type: string
+              pool_id:
+                type: string
+                format: uint64
               lower_tick:
                 type: string
                 format: int64
@@ -19573,7 +19585,9 @@ paths:
                 type: string
                 description: >-
                   authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
+                  x/gov unless
+
+                  overwritten).
               params:
                 description: 'NOTE: All parameters must be supplied.'
                 type: object
@@ -19651,6 +19665,16 @@ paths:
                       type: string
                     tick_params:
                       type: object
+                      properties:
+                        price_ratio:
+                          type: string
+                          title: Basically 1.0001
+                        base_offset:
+                          type: string
+                          title: >-
+                            basically 0 and (-1,0]. In the 1:1 stable pair, -0.5
+                            would work
+                      title: PriceRatio^(Tick - BaseOffSet)
                     current_tick:
                       type: string
                       format: int64
@@ -19787,6 +19811,16 @@ paths:
                     type: string
                   tick_params:
                     type: object
+                    properties:
+                      price_ratio:
+                        type: string
+                        title: Basically 1.0001
+                      base_offset:
+                        type: string
+                        title: >-
+                          basically 0 and (-1,0]. In the 1:1 stable pair, -0.5
+                          would work
+                    title: PriceRatio^(Tick - BaseOffSet)
                   current_tick:
                     type: string
                     format: int64
@@ -20134,14 +20168,14 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /sunriselayer/sunrise/swap/in_flight_packet:
+  /sunriselayer/sunrise/swap/ack_waiting_packet/incoming:
     get:
-      operationId: SunriseSwapQuery_InFlightPacketAll
+      operationId: SunriseSwapQuery_IncomingInFlightPacketAll
       responses:
         '200':
           description: A successful response.
           schema:
-            $ref: '#/definitions/sunrise.swap.QueryAllInFlightPacketResponse'
+            $ref: '#/definitions/sunrise.swap.QueryAllIncomingInFlightPacketResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -20219,15 +20253,227 @@ paths:
           type: boolean
       tags:
         - Query
-  /sunriselayer/sunrise/swap/in_flight_packet/{src_port_id}/{src_channel_id}/{sequence}:
+  /sunriselayer/sunrise/swap/ack_waiting_packet/incoming/{src_port_id}/{src_channel_id}/{sequence}:
     get:
-      summary: Queries a list of InFlightPacket items.
-      operationId: SunriseSwapQuery_InFlightPacket
+      summary: Queries a list of IncomingInFlightPacket items.
+      operationId: SunriseSwapQuery_IncomingInFlightPacket
       responses:
         '200':
           description: A successful response.
           schema:
-            $ref: '#/definitions/sunrise.swap.QueryGetInFlightPacketResponse'
+            $ref: '#/definitions/sunrise.swap.QueryGetIncomingInFlightPacketResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: src_port_id
+          in: path
+          required: true
+          type: string
+        - name: src_channel_id
+          in: path
+          required: true
+          type: string
+        - name: sequence
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /sunriselayer/sunrise/swap/in_flight_packet/outgoing:
+    get:
+      operationId: SunriseSwapQuery_OutgoingInFlightPacketAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              outgoingInFlightPacket:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: object
+                      properties:
+                        port_id:
+                          type: string
+                        channel_id:
+                          type: string
+                        sequence:
+                          type: string
+                          format: uint64
+                    ack_waiting_index:
+                      type: object
+                      properties:
+                        port_id:
+                          type: string
+                        channel_id:
+                          type: string
+                        sequence:
+                          type: string
+                          format: uint64
+                    retries_remaining:
+                      type: integer
+                      format: int32
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /sunriselayer/sunrise/swap/in_flight_packet/outgoing/{src_port_id}/{src_channel_id}/{sequence}:
+    get:
+      summary: Queries a list of OutgoingInFlightPacket items.
+      operationId: SunriseSwapQuery_OutgoingInFlightPacket
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              outgoingInFlightPacket:
+                type: object
+                properties:
+                  index:
+                    type: object
+                    properties:
+                      port_id:
+                        type: string
+                      channel_id:
+                        type: string
+                      sequence:
+                        type: string
+                        format: uint64
+                  ack_waiting_index:
+                    type: object
+                    properties:
+                      port_id:
+                        type: string
+                      channel_id:
+                        type: string
+                      sequence:
+                        type: string
+                        format: uint64
+                  retries_remaining:
+                    type: integer
+                    format: int32
         default:
           description: An unexpected error response.
           schema:
@@ -20396,11 +20642,11 @@ paths:
                 description: 'NOTE: All parameters must be supplied.'
                 type: object
                 properties:
-                  denom_gov_token:
+                  bond_denom:
                     type: string
-                  denom_fee_token:
+                  fee_denom:
                     type: string
-                  max_supply_fee_token:
+                  max_supply_fee:
                     type: string
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
@@ -28142,6 +28388,15 @@ definitions:
 
           NOTE: All parameters must be supplied.
         type: object
+        properties:
+          fee_denom:
+            type: string
+          burn_ratio:
+            type: string
+          bypass_denoms:
+            type: array
+            items:
+              type: string
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.fee.MsgUpdateParamsResponse:
     type: object
@@ -28150,6 +28405,15 @@ definitions:
       MsgUpdateParams message.
   sunrise.fee.Params:
     type: object
+    properties:
+      fee_denom:
+        type: string
+      burn_ratio:
+        type: string
+      bypass_denoms:
+        type: array
+        items:
+          type: string
     description: Params defines the parameters for the module.
   sunrise.liquidityincentive.MsgUpdateParams:
     type: object
@@ -28250,6 +28514,9 @@ definitions:
     properties:
       sender:
         type: string
+      pool_id:
+        type: string
+        format: uint64
       lower_tick:
         type: string
         format: int64
@@ -28343,7 +28610,9 @@ definitions:
         type: string
         description: >-
           authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
+          unless
+
+          overwritten).
       params:
         description: 'NOTE: All parameters must be supplied.'
         type: object
@@ -28457,6 +28726,14 @@ definitions:
         type: string
       tick_params:
         type: object
+        properties:
+          price_ratio:
+            type: string
+            title: Basically 1.0001
+          base_offset:
+            type: string
+            title: basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
+        title: PriceRatio^(Tick - BaseOffSet)
       current_tick:
         type: string
         format: int64
@@ -28502,6 +28779,16 @@ definitions:
               type: string
             tick_params:
               type: object
+              properties:
+                price_ratio:
+                  type: string
+                  title: Basically 1.0001
+                base_offset:
+                  type: string
+                  title: >-
+                    basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would
+                    work
+              title: PriceRatio^(Tick - BaseOffSet)
             current_tick:
               type: string
               format: int64
@@ -28602,6 +28889,16 @@ definitions:
             type: string
           tick_params:
             type: object
+            properties:
+              price_ratio:
+                type: string
+                title: Basically 1.0001
+              base_offset:
+                type: string
+                title: >-
+                  basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would
+                  work
+            title: PriceRatio^(Tick - BaseOffSet)
           current_tick:
             type: string
             format: int64
@@ -28645,6 +28942,14 @@ definitions:
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   sunrise.liquiditypool.TickParams:
     type: object
+    properties:
+      price_ratio:
+        type: string
+        title: Basically 1.0001
+      base_offset:
+        type: string
+        title: basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
+    title: PriceRatio^(Tick - BaseOffSet)
   sunrise.swap.MsgSwapExactAmountIn:
     type: object
     properties:
@@ -28817,43 +29122,107 @@ definitions:
         items:
           $ref: '#/definitions/sunrise.swap.Route'
           type: object
-  sunrise.swap.InFlightPacket:
+  sunrise.swap.IncomingInFlightPacket:
     type: object
     properties:
+      index:
+        type: object
+        properties:
+          port_id:
+            type: string
+          channel_id:
+            type: string
+          sequence:
+            type: string
+            format: uint64
+      data:
+        type: string
+        format: byte
       src_port_id:
         type: string
       src_channel_id:
         type: string
-      sequence:
+      timeout_height:
+        type: string
+      timeout_timestamp:
         type: string
         format: uint64
-      retries_remaining:
-        type: integer
-        format: int32
-      incoming_ack:
+      ack:
         type: string
         format: byte
       result:
         $ref: '#/definitions/sunrise.swap.RouteResult'
-      return_info:
+      interface_fee:
+        type: string
+      outgoing_index_return:
         type: object
         properties:
-          return_port_id:
+          port_id:
             type: string
-          return_channel_id:
+          channel_id:
             type: string
-          remainder_amount_in:
+          sequence:
             type: string
-          forward_ack:
+            format: uint64
+      ack_return:
+        type: string
+        format: byte
+      outgoing_index_forward:
+        type: object
+        properties:
+          port_id:
             type: string
-            format: byte
-  sunrise.swap.QueryAllInFlightPacketResponse:
+          channel_id:
+            type: string
+          sequence:
+            type: string
+            format: uint64
+      ack_forward:
+        type: string
+        format: byte
+  sunrise.swap.OutgoingInFlightPacket:
     type: object
     properties:
-      inFlightPacket:
+      index:
+        type: object
+        properties:
+          port_id:
+            type: string
+          channel_id:
+            type: string
+          sequence:
+            type: string
+            format: uint64
+      ack_waiting_index:
+        type: object
+        properties:
+          port_id:
+            type: string
+          channel_id:
+            type: string
+          sequence:
+            type: string
+            format: uint64
+      retries_remaining:
+        type: integer
+        format: int32
+  sunrise.swap.PacketIndex:
+    type: object
+    properties:
+      port_id:
+        type: string
+      channel_id:
+        type: string
+      sequence:
+        type: string
+        format: uint64
+  sunrise.swap.QueryAllIncomingInFlightPacketResponse:
+    type: object
+    properties:
+      incomingInFlightPacket:
         type: array
         items:
-          $ref: '#/definitions/sunrise.swap.InFlightPacket'
+          $ref: '#/definitions/sunrise.swap.IncomingInFlightPacket'
           type: object
       pagination:
         type: object
@@ -28881,11 +29250,97 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
-  sunrise.swap.QueryGetInFlightPacketResponse:
+  sunrise.swap.QueryAllOutgoingInFlightPacketResponse:
     type: object
     properties:
-      inFlightPacket:
-        $ref: '#/definitions/sunrise.swap.InFlightPacket'
+      outgoingInFlightPacket:
+        type: array
+        items:
+          type: object
+          properties:
+            index:
+              type: object
+              properties:
+                port_id:
+                  type: string
+                channel_id:
+                  type: string
+                sequence:
+                  type: string
+                  format: uint64
+            ack_waiting_index:
+              type: object
+              properties:
+                port_id:
+                  type: string
+                channel_id:
+                  type: string
+                sequence:
+                  type: string
+                  format: uint64
+            retries_remaining:
+              type: integer
+              format: int32
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  sunrise.swap.QueryGetIncomingInFlightPacketResponse:
+    type: object
+    properties:
+      incomingInFlightPacket:
+        $ref: '#/definitions/sunrise.swap.IncomingInFlightPacket'
+  sunrise.swap.QueryGetOutgoingInFlightPacketResponse:
+    type: object
+    properties:
+      outgoingInFlightPacket:
+        type: object
+        properties:
+          index:
+            type: object
+            properties:
+              port_id:
+                type: string
+              channel_id:
+                type: string
+              sequence:
+                type: string
+                format: uint64
+          ack_waiting_index:
+            type: object
+            properties:
+              port_id:
+                type: string
+              channel_id:
+                type: string
+              sequence:
+                type: string
+                format: uint64
+          retries_remaining:
+            type: integer
+            format: int32
   sunrise.swap.QueryParamsResponse:
     type: object
     properties:
@@ -28896,18 +29351,6 @@ definitions:
           interface_fee_rate:
             type: string
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  sunrise.swap.ReturnInfo:
-    type: object
-    properties:
-      return_port_id:
-        type: string
-      return_channel_id:
-        type: string
-      remainder_amount_in:
-        type: string
-      forward_ack:
-        type: string
-        format: byte
   sunrise.tokenconverter.MsgConvert:
     type: object
     properties:
@@ -28934,11 +29377,11 @@ definitions:
         description: 'NOTE: All parameters must be supplied.'
         type: object
         properties:
-          denom_gov_token:
+          bond_denom:
             type: string
-          denom_fee_token:
+          fee_denom:
             type: string
-          max_supply_fee_token:
+          max_supply_fee:
             type: string
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.tokenconverter.MsgUpdateParamsResponse:
@@ -28949,10 +29392,10 @@ definitions:
   sunrise.tokenconverter.Params:
     type: object
     properties:
-      denom_gov_token:
+      bond_denom:
         type: string
-      denom_fee_token:
+      fee_denom:
         type: string
-      max_supply_fee_token:
+      max_supply_fee:
         type: string
     description: Params defines the parameters for the module.
