@@ -39,7 +39,7 @@ func (k Keeper) TransferSwappedToken(
 		Memo: memo,
 	}
 	// forward token to receiver
-	res, err := k.transferKeeper.Transfer(ctx, &msgTransfer)
+	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)
 	if err != nil {
 		return err
 	}

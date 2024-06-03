@@ -24,7 +24,7 @@ type (
 
 		AccountKeeper       types.AccountKeeper
 		BankKeeper          types.BankKeeper
-		transferKeeper      types.TransferKeeper
+		TransferKeeper      types.TransferKeeper
 		liquidityPoolKeeper types.LiquidityPoolKeeper
 
 		IbcKeeperFn func() *ibckeeper.Keeper
@@ -55,6 +55,7 @@ func NewKeeper(
 
 		AccountKeeper:       accountKeeper,
 		BankKeeper:          bankKeeper,
+		TransferKeeper:      transferKeeper,
 		liquidityPoolKeeper: liquidityPoolKeeper,
 		IbcKeeperFn:         ibcKeeperFn,
 	}

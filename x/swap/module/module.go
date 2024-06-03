@@ -181,9 +181,9 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper       types.AccountKeeper
-	BankKeeper          types.BankKeeper
-	TransferKeeper      types.TransferKeeper
+	AccountKeeper types.AccountKeeper
+	BankKeeper    types.BankKeeper
+	// TransferKeeper      types.TransferKeeper
 	LiquidityPoolKeeper types.LiquidityPoolKeeper
 
 	IBCKeeperFn func() *ibckeeper.Keeper `optional:"true"`
@@ -209,7 +209,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority.String(),
 		in.AccountKeeper,
 		in.BankKeeper,
-		in.TransferKeeper,
+		nil, // TransferKeeper is not supported by DepInject
 		in.LiquidityPoolKeeper,
 		in.IBCKeeperFn,
 	)

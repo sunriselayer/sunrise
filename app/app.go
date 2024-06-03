@@ -345,6 +345,10 @@ func New(
 	// Register legacy modules
 	app.registerIBCModules()
 
+	// <sunrise>
+	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
+	// </sunrise>
+
 	// register streaming services
 	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
 		return nil, err
