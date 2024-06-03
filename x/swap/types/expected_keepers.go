@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	lptypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -32,7 +33,7 @@ type TransferKeeper interface {
 	SetTotalEscrowForDenom(ctx sdk.Context, coin sdk.Coin)
 }
 
-// LiquidityPoolKeeper defines the expected interface for the liquiditypool module.
+// LiquidityPoolKeeper defines the expected interface for the liquidity pool module.
 type LiquidityPoolKeeper interface {
 	GetPool(ctx context.Context, id uint64) (val lptypes.Pool, found bool)
 	CalculateResultExactAmountIn(ctx sdk.Context, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string) (amountOut math.Int, err error)
