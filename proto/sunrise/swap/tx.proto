@@ -21,8 +21,8 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc SwapExactAmountIn(MsgSwapExactAmountIn)
       returns (MsgSwapExactAmountInResponse);
-  // rpc SwapExactAmountOut(MsgSwapExactAmountOut)
-  //     returns (MsgSwapExactAmountOutResponse);
+  rpc SwapExactAmountOut(MsgSwapExactAmountOut)
+      returns (MsgSwapExactAmountOutResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -64,8 +64,18 @@ message MsgSwapExactAmountIn {
 }
 
 message MsgSwapExactAmountInResponse {
-  string amount_out = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+  RouteResult result = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string amount_out = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
@@ -94,7 +104,17 @@ message MsgSwapExactAmountOut {
 }
 
 message MsgSwapExactAmountOutResponse {
-  string amount_in = 1 [
+  RouteResult result = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string amount_out = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false,

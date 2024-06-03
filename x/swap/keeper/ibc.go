@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
@@ -13,10 +14,13 @@ import (
 
 func (k Keeper) TransferSwappedToken(
 	ctx context.Context,
-	swapper sdk.AccAddress,
-	token sdk.Coin,
-	incomingAck []byte,
+	sender string,
+	tokenOut sdk.Coin,
 	metadata packetforwardtypes.ForwardMetadata,
+	incomingAck []byte,
+	result types.RouteResult,
+	remainderAmountIn sdkmath.Int,
+	returnMetadata *packetforwardtypes.ForwardMetadata,
 ) error {
 	var memo string
 	if metadata.Next != nil {
@@ -28,8 +32,8 @@ func (k Keeper) TransferSwappedToken(
 	msgTransfer := transfertypes.MsgTransfer{
 		SourcePort:    metadata.Port,
 		SourceChannel: metadata.Channel,
-		Token:         token,
-		Sender:        swapper.String(),
+		Token:         tokenOut,
+		Sender:        sender,
 		Receiver:      metadata.Receiver,
 		// TODO: timeout
 		Memo: memo,
@@ -47,14 +51,20 @@ func (k Keeper) TransferSwappedToken(
 		retries = types.DefaultRetryCount
 	}
 
-	k.SetInFlightPacket(ctx, types.InFlightPacket{
+	val := types.InFlightPacket{
 		SrcPortId:        metadata.Port,
 		SrcChannelId:     metadata.Channel,
 		Sequence:         res.Sequence,
 		RetriesRemaining: int32(retries),
-		AmountOut:        token.Amount,
 		IncomingAck:      incomingAck,
-	})
+		Result:           result,
+	}
+
+	if returnMetadata != nil {
+		val.ReturnInfo = &types.ReturnInfo{}
+	}
+
+	k.SetInFlightPacket(ctx, val)
 
 	return nil
 }

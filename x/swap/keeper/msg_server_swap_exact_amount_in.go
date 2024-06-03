@@ -15,12 +15,14 @@ func (k msgServer) SwapExactAmountIn(goCtx context.Context, msg *types.MsgSwapEx
 		return nil, err
 	}
 
-	amountOut, err := k.Keeper.SwapExactAmountIn(ctx, sender, msg.InterfaceProvider, msg.Route, msg.AmountIn, msg.MinAmountOut)
+	result, interfaceProviderFee, err := k.Keeper.SwapExactAmountIn(ctx, sender, msg.InterfaceProvider, msg.Route, msg.AmountIn, msg.MinAmountOut)
 	if err != nil {
 		return nil, err
 	}
 
 	return &types.MsgSwapExactAmountInResponse{
-		AmountOut: amountOut,
+		Result:               result,
+		InterfaceProviderFee: interfaceProviderFee,
+		AmountOut:            result.TokenOut.Amount.Sub(interfaceProviderFee),
 	}, nil
 }

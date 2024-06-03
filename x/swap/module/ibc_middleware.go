@@ -134,15 +134,16 @@ func (im IBCMiddleware) OnRecvPacket(
 	_ = denomIn
 
 	var (
-		amountIn  sdkmath.Int
-		amountOut sdkmath.Int
-		deferAck  bool = false
+		result            types.RouteResult
+		interfaceFee      sdkmath.Int
+		remainderAmountIn sdkmath.Int
 	)
+
 	if metadata.ExactAmountOut == nil {
 		// Swap exact amount in
-		amountIn = maxAmountIn
+		amountIn := maxAmountIn
 
-		amountOut, err = im.keeper.SwapExactAmountIn(
+		result, interfaceFee, err = im.keeper.SwapExactAmountIn(
 			ctx,
 			swapper,
 			metadata.InterfaceProvider,
@@ -155,74 +156,51 @@ func (im IBCMiddleware) OnRecvPacket(
 		}
 	} else {
 		// Swap exact amount out
-		amountOut = *metadata.ExactAmountOut
+		amountOut := *metadata.ExactAmountOut
 
-		amountIn, err = im.keeper.SwapExactAmountOut(
+		result, interfaceFee, err = im.keeper.SwapExactAmountOut(
 			ctx,
 			swapper,
 			metadata.InterfaceProvider,
 			metadata.Route,
-			amountIn,
+			maxAmountIn,
 			amountOut,
 		)
 		if err != nil {
 			return channeltypes.NewErrorAcknowledgement(err)
 		}
+		amountIn := result.TokenIn.Amount
 
-		remainderAmountIn := maxAmountIn.Sub(amountIn)
-		if remainderAmountIn.IsPositive() {
+		remainderAmountIn = maxAmountIn.Sub(amountIn)
+
+		if remainderAmountIn.IsPositive() && metadata.ReturnAmountIn == nil {
+			// Send from swapper to receiver
 			remainderTokenIn := sdk.NewCoin(denomIn, remainderAmountIn)
-
-			if metadata.ReturnAmountIn == nil {
-				// Send from swapper to receiver
-				err = im.keeper.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiver, sdk.NewCoins(remainderTokenIn))
-				if err != nil {
-					return channeltypes.NewErrorAcknowledgement(err)
-				}
-			} else {
-				// Return the remainder token in
-				err := im.keeper.TransferSwappedToken(
-					ctx,
-					swapper,
-					remainderTokenIn,
-					incomingAck.Acknowledgement(),
-					*metadata.ReturnAmountIn,
-				)
-				if err != nil {
-					return channeltypes.NewErrorAcknowledgement(err)
-				}
-
-				// Important
-				deferAck = true
+			err = im.keeper.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiver, sdk.NewCoins(remainderTokenIn))
+			if err != nil {
+				return channeltypes.NewErrorAcknowledgement(err)
 			}
+
+			remainderAmountIn = sdkmath.ZeroInt()
 		}
 	}
+
+	// TODO: go to keeper and do this after forward packet finished
+	// Return the remainder token in
+	// err := im.keeper.TransferSwappedToken(
+	// 	ctx,
+	// 	swapper,
+	// 	remainderTokenIn,
+	// 	incomingAck.Acknowledgement(),
+	// 	*metadata.ReturnAmountIn,
+	// )
+	// if err != nil {
+	// 	return channeltypes.NewErrorAcknowledgement(err)
+	// }
 
 	denomOut := metadata.Route.DenomOut
+	amountOut := result.TokenOut.Amount.Sub(interfaceFee)
 	tokenOut := sdk.NewCoin(denomOut, amountOut)
-
-	if metadata.Forward != nil {
-		// Forward the swapped token out
-		err := im.keeper.TransferSwappedToken(
-			ctx,
-			swapper,
-			tokenOut,
-			incomingAck.Acknowledgement(),
-			*metadata.Forward,
-		)
-		if err != nil {
-			return channeltypes.NewErrorAcknowledgement(err)
-		}
-
-		// Important
-		deferAck = true
-	}
-
-	if deferAck {
-		// Returning nil ack will prevent WriteAcknowledgement from occurring for forwarded packet.
-		// This is intentional so that the acknowledgement will be written later based on the ack/timeout of the forwarded packet.
-		return nil
-	}
 
 	// Send from swapper to receiver
 	err = im.keeper.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiver, sdk.NewCoins(tokenOut))
@@ -230,8 +208,29 @@ func (im IBCMiddleware) OnRecvPacket(
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
 
+	if metadata.Forward != nil {
+		// Forward the swapped token out
+		err := im.keeper.TransferSwappedToken(
+			ctx,
+			receiver.String(),
+			tokenOut,
+			*metadata.Forward,
+			incomingAck.Acknowledgement(),
+			result,
+			remainderAmountIn,
+			metadata.ReturnAmountIn,
+		)
+		if err != nil {
+			return channeltypes.NewErrorAcknowledgement(err)
+		}
+
+		// Returning nil ack will prevent WriteAcknowledgement from occurring for forwarded packet.
+		// This is intentional so that the acknowledgement will be written later based on the ack/timeout of the forwarded packet.
+		return nil
+	}
+
 	fullAck := types.SwapAcknowledgement{
-		AmountOut:   amountOut,
+		Result:      result,
 		IncomingAck: incomingAck.Acknowledgement(),
 	}
 
@@ -261,7 +260,7 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 	}
 
 	fullAck := types.SwapAcknowledgement{
-		AmountOut:   inflightPacket.AmountOut,
+		Result:      inflightPacket.Result,
 		IncomingAck: inflightPacket.IncomingAck,
 		ForwardAck:  acknowledgement,
 	}
@@ -304,7 +303,7 @@ func (im IBCMiddleware) OnTimeoutPacket(
 		// - However it contains error acknowledgement of forwarding packet
 		forwardAck := channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrUnknownRequest, "Retry count on timeout exceeds"))
 		fullAck := types.SwapAcknowledgement{
-			AmountOut:   inflightPacket.AmountOut,
+			Result:      inflightPacket.Result,
 			IncomingAck: inflightPacket.IncomingAck,
 			ForwardAck:  forwardAck.Acknowledgement(),
 		}

@@ -5,6 +5,8 @@ import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
+import "sunrise/swap/route.proto";
+
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 message InFlightPacket {
@@ -12,14 +14,22 @@ message InFlightPacket {
   string src_channel_id = 2;
   uint64 sequence = 3;
   int32 retries_remaining = 4;
-  string amount_out = 5  [
-    (cosmos_proto.scalar)  = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+  bytes incoming_ack = 5;
+  RouteResult result = 6  [
     (gogoproto.nullable)   = false,
     (amino.dont_omitempty) = true
   ];
-  bytes incoming_ack = 6;
-  string return_port_id = 7;
-  string return_channel_id = 8;
+  ReturnInfo return_info = 7;
 }
 
+message ReturnInfo {
+  string return_port_id = 1;
+  string return_channel_id = 2;
+  string remainder_amount_in = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  bytes forward_ack = 4;
+}

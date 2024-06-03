@@ -19,8 +19,8 @@ type SwapMetadata struct {
 	Route             Route                               `json:"route,omitempty"`
 	MinAmountOut      sdkmath.Int                         `json:"min_amount_out,omitempty"`
 	ExactAmountOut    *sdkmath.Int                        `json:"exact_amount_out,omitempty"`
-	ReturnAmountIn    *packetforwardtypes.ForwardMetadata `json:"return,omitempty"`
 	Forward           *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
+	ReturnAmountIn    *packetforwardtypes.ForwardMetadata `json:"return,omitempty"`
 }
 
 func (m *SwapMetadata) Validate() error {
@@ -44,9 +44,10 @@ func (m *SwapMetadata) Validate() error {
 }
 
 type SwapAcknowledgement struct {
-	AmountOut   sdkmath.Int `json:"amount_out"`
+	Result      RouteResult `json:"result"`
 	IncomingAck []byte      `json:"ibc_ack"`
 	ForwardAck  []byte      `json:"forward_ack,omitempty"`
+	ReturnAck   []byte      `json:"return_ack,omitempty"`
 }
 
 func (a SwapAcknowledgement) Acknowledgement() ([]byte, error) {

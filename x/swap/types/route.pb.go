@@ -7,6 +7,7 @@ import (
 	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
@@ -27,10 +28,144 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type RoutePool struct {
+	PoolId uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (m *RoutePool) Reset()         { *m = RoutePool{} }
+func (m *RoutePool) String() string { return proto.CompactTextString(m) }
+func (*RoutePool) ProtoMessage()    {}
+func (*RoutePool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{0}
+}
+func (m *RoutePool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RoutePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RoutePool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RoutePool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RoutePool.Merge(m, src)
+}
+func (m *RoutePool) XXX_Size() int {
+	return m.Size()
+}
+func (m *RoutePool) XXX_DiscardUnknown() {
+	xxx_messageInfo_RoutePool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RoutePool proto.InternalMessageInfo
+
+func (m *RoutePool) GetPoolId() uint64 {
+	if m != nil {
+		return m.PoolId
+	}
+	return 0
+}
+
+type RouteSeries struct {
+	Routes []Route `protobuf:"bytes,1,rep,name=routes,proto3" json:"routes"`
+}
+
+func (m *RouteSeries) Reset()         { *m = RouteSeries{} }
+func (m *RouteSeries) String() string { return proto.CompactTextString(m) }
+func (*RouteSeries) ProtoMessage()    {}
+func (*RouteSeries) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{1}
+}
+func (m *RouteSeries) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RouteSeries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RouteSeries.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RouteSeries) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteSeries.Merge(m, src)
+}
+func (m *RouteSeries) XXX_Size() int {
+	return m.Size()
+}
+func (m *RouteSeries) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteSeries.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RouteSeries proto.InternalMessageInfo
+
+func (m *RouteSeries) GetRoutes() []Route {
+	if m != nil {
+		return m.Routes
+	}
+	return nil
+}
+
+type RouteParallel struct {
+	Routes  []Route                       `protobuf:"bytes,1,rep,name=routes,proto3" json:"routes"`
+	Weights []cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,rep,name=weights,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"weights"`
+}
+
+func (m *RouteParallel) Reset()         { *m = RouteParallel{} }
+func (m *RouteParallel) String() string { return proto.CompactTextString(m) }
+func (*RouteParallel) ProtoMessage()    {}
+func (*RouteParallel) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{2}
+}
+func (m *RouteParallel) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RouteParallel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RouteParallel.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RouteParallel) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteParallel.Merge(m, src)
+}
+func (m *RouteParallel) XXX_Size() int {
+	return m.Size()
+}
+func (m *RouteParallel) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteParallel.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RouteParallel proto.InternalMessageInfo
+
+func (m *RouteParallel) GetRoutes() []Route {
+	if m != nil {
+		return m.Routes
+	}
+	return nil
+}
+
 type Route struct {
 	DenomIn  string `protobuf:"bytes,1,opt,name=denom_in,json=denomIn,proto3" json:"denom_in,omitempty"`
 	DenomOut string `protobuf:"bytes,2,opt,name=denom_out,json=denomOut,proto3" json:"denom_out,omitempty"`
 	// Types that are valid to be assigned to Strategy:
+	//
 	//	*Route_Pool
 	//	*Route_Series
 	//	*Route_Parallel
@@ -41,7 +176,7 @@ func (m *Route) Reset()         { *m = Route{} }
 func (m *Route) String() string { return proto.CompactTextString(m) }
 func (*Route) ProtoMessage()    {}
 func (*Route) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4f14633a5a6b5862, []int{0}
+	return fileDescriptor_4f14633a5a6b5862, []int{3}
 }
 func (m *Route) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -141,22 +276,22 @@ func (*Route) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-type RoutePool struct {
+type RouteResultPool struct {
 	PoolId uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 }
 
-func (m *RoutePool) Reset()         { *m = RoutePool{} }
-func (m *RoutePool) String() string { return proto.CompactTextString(m) }
-func (*RoutePool) ProtoMessage()    {}
-func (*RoutePool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4f14633a5a6b5862, []int{1}
+func (m *RouteResultPool) Reset()         { *m = RouteResultPool{} }
+func (m *RouteResultPool) String() string { return proto.CompactTextString(m) }
+func (*RouteResultPool) ProtoMessage()    {}
+func (*RouteResultPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{4}
 }
-func (m *RoutePool) XXX_Unmarshal(b []byte) error {
+func (m *RouteResultPool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *RoutePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *RouteResultPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_RoutePool.Marshal(b, m, deterministic)
+		return xxx_messageInfo_RouteResultPool.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -166,41 +301,41 @@ func (m *RoutePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *RoutePool) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RoutePool.Merge(m, src)
+func (m *RouteResultPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteResultPool.Merge(m, src)
 }
-func (m *RoutePool) XXX_Size() int {
+func (m *RouteResultPool) XXX_Size() int {
 	return m.Size()
 }
-func (m *RoutePool) XXX_DiscardUnknown() {
-	xxx_messageInfo_RoutePool.DiscardUnknown(m)
+func (m *RouteResultPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteResultPool.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_RoutePool proto.InternalMessageInfo
+var xxx_messageInfo_RouteResultPool proto.InternalMessageInfo
 
-func (m *RoutePool) GetPoolId() uint64 {
+func (m *RouteResultPool) GetPoolId() uint64 {
 	if m != nil {
 		return m.PoolId
 	}
 	return 0
 }
 
-type RouteSeries struct {
-	Routes []Route `protobuf:"bytes,1,rep,name=routes,proto3" json:"routes"`
+type RouteResultSeries struct {
+	RouteResults []RouteResult `protobuf:"bytes,1,rep,name=route_results,json=routeResults,proto3" json:"route_results"`
 }
 
-func (m *RouteSeries) Reset()         { *m = RouteSeries{} }
-func (m *RouteSeries) String() string { return proto.CompactTextString(m) }
-func (*RouteSeries) ProtoMessage()    {}
-func (*RouteSeries) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4f14633a5a6b5862, []int{2}
+func (m *RouteResultSeries) Reset()         { *m = RouteResultSeries{} }
+func (m *RouteResultSeries) String() string { return proto.CompactTextString(m) }
+func (*RouteResultSeries) ProtoMessage()    {}
+func (*RouteResultSeries) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{5}
 }
-func (m *RouteSeries) XXX_Unmarshal(b []byte) error {
+func (m *RouteResultSeries) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *RouteSeries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *RouteResultSeries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_RouteSeries.Marshal(b, m, deterministic)
+		return xxx_messageInfo_RouteResultSeries.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -210,42 +345,41 @@ func (m *RouteSeries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return b[:n], nil
 	}
 }
-func (m *RouteSeries) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RouteSeries.Merge(m, src)
+func (m *RouteResultSeries) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteResultSeries.Merge(m, src)
 }
-func (m *RouteSeries) XXX_Size() int {
+func (m *RouteResultSeries) XXX_Size() int {
 	return m.Size()
 }
-func (m *RouteSeries) XXX_DiscardUnknown() {
-	xxx_messageInfo_RouteSeries.DiscardUnknown(m)
+func (m *RouteResultSeries) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteResultSeries.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_RouteSeries proto.InternalMessageInfo
+var xxx_messageInfo_RouteResultSeries proto.InternalMessageInfo
 
-func (m *RouteSeries) GetRoutes() []Route {
+func (m *RouteResultSeries) GetRouteResults() []RouteResult {
 	if m != nil {
-		return m.Routes
+		return m.RouteResults
 	}
 	return nil
 }
 
-type RouteParallel struct {
-	Routes  []Route                       `protobuf:"bytes,1,rep,name=routes,proto3" json:"routes"`
-	Weights []cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,rep,name=weights,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"weights"`
+type RouteResultParallel struct {
+	RouteResults []RouteResult `protobuf:"bytes,1,rep,name=route_results,json=routeResults,proto3" json:"route_results"`
 }
 
-func (m *RouteParallel) Reset()         { *m = RouteParallel{} }
-func (m *RouteParallel) String() string { return proto.CompactTextString(m) }
-func (*RouteParallel) ProtoMessage()    {}
-func (*RouteParallel) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4f14633a5a6b5862, []int{3}
+func (m *RouteResultParallel) Reset()         { *m = RouteResultParallel{} }
+func (m *RouteResultParallel) String() string { return proto.CompactTextString(m) }
+func (*RouteResultParallel) ProtoMessage()    {}
+func (*RouteResultParallel) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{6}
 }
-func (m *RouteParallel) XXX_Unmarshal(b []byte) error {
+func (m *RouteResultParallel) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *RouteParallel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *RouteResultParallel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_RouteParallel.Marshal(b, m, deterministic)
+		return xxx_messageInfo_RouteResultParallel.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -255,176 +389,195 @@ func (m *RouteParallel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *RouteParallel) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RouteParallel.Merge(m, src)
+func (m *RouteResultParallel) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteResultParallel.Merge(m, src)
 }
-func (m *RouteParallel) XXX_Size() int {
+func (m *RouteResultParallel) XXX_Size() int {
 	return m.Size()
 }
-func (m *RouteParallel) XXX_DiscardUnknown() {
-	xxx_messageInfo_RouteParallel.DiscardUnknown(m)
+func (m *RouteResultParallel) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteResultParallel.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_RouteParallel proto.InternalMessageInfo
+var xxx_messageInfo_RouteResultParallel proto.InternalMessageInfo
 
-func (m *RouteParallel) GetRoutes() []Route {
+func (m *RouteResultParallel) GetRouteResults() []RouteResult {
 	if m != nil {
-		return m.Routes
+		return m.RouteResults
 	}
 	return nil
+}
+
+type RouteResult struct {
+	TokenIn  types.Coin `protobuf:"bytes,1,opt,name=token_in,json=tokenIn,proto3" json:"token_in"`
+	TokenOut types.Coin `protobuf:"bytes,2,opt,name=token_out,json=tokenOut,proto3" json:"token_out"`
+	// Types that are valid to be assigned to Strategy:
+	//
+	//	*RouteResult_Pool
+	//	*RouteResult_Series
+	//	*RouteResult_Parallel
+	Strategy isRouteResult_Strategy `protobuf_oneof:"strategy"`
+}
+
+func (m *RouteResult) Reset()         { *m = RouteResult{} }
+func (m *RouteResult) String() string { return proto.CompactTextString(m) }
+func (*RouteResult) ProtoMessage()    {}
+func (*RouteResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4f14633a5a6b5862, []int{7}
+}
+func (m *RouteResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RouteResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RouteResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RouteResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteResult.Merge(m, src)
+}
+func (m *RouteResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *RouteResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RouteResult proto.InternalMessageInfo
+
+type isRouteResult_Strategy interface {
+	isRouteResult_Strategy()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type RouteResult_Pool struct {
+	Pool *RouteResultPool `protobuf:"bytes,3,opt,name=pool,proto3,oneof" json:"pool,omitempty"`
+}
+type RouteResult_Series struct {
+	Series *RouteResultSeries `protobuf:"bytes,4,opt,name=series,proto3,oneof" json:"series,omitempty"`
+}
+type RouteResult_Parallel struct {
+	Parallel *RouteResultParallel `protobuf:"bytes,5,opt,name=parallel,proto3,oneof" json:"parallel,omitempty"`
+}
+
+func (*RouteResult_Pool) isRouteResult_Strategy()     {}
+func (*RouteResult_Series) isRouteResult_Strategy()   {}
+func (*RouteResult_Parallel) isRouteResult_Strategy() {}
+
+func (m *RouteResult) GetStrategy() isRouteResult_Strategy {
+	if m != nil {
+		return m.Strategy
+	}
+	return nil
+}
+
+func (m *RouteResult) GetTokenIn() types.Coin {
+	if m != nil {
+		return m.TokenIn
+	}
+	return types.Coin{}
+}
+
+func (m *RouteResult) GetTokenOut() types.Coin {
+	if m != nil {
+		return m.TokenOut
+	}
+	return types.Coin{}
+}
+
+func (m *RouteResult) GetPool() *RouteResultPool {
+	if x, ok := m.GetStrategy().(*RouteResult_Pool); ok {
+		return x.Pool
+	}
+	return nil
+}
+
+func (m *RouteResult) GetSeries() *RouteResultSeries {
+	if x, ok := m.GetStrategy().(*RouteResult_Series); ok {
+		return x.Series
+	}
+	return nil
+}
+
+func (m *RouteResult) GetParallel() *RouteResultParallel {
+	if x, ok := m.GetStrategy().(*RouteResult_Parallel); ok {
+		return x.Parallel
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RouteResult) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*RouteResult_Pool)(nil),
+		(*RouteResult_Series)(nil),
+		(*RouteResult_Parallel)(nil),
+	}
 }
 
 func init() {
-	proto.RegisterType((*Route)(nil), "sunrise.swap.Route")
 	proto.RegisterType((*RoutePool)(nil), "sunrise.swap.RoutePool")
 	proto.RegisterType((*RouteSeries)(nil), "sunrise.swap.RouteSeries")
 	proto.RegisterType((*RouteParallel)(nil), "sunrise.swap.RouteParallel")
+	proto.RegisterType((*Route)(nil), "sunrise.swap.Route")
+	proto.RegisterType((*RouteResultPool)(nil), "sunrise.swap.RouteResultPool")
+	proto.RegisterType((*RouteResultSeries)(nil), "sunrise.swap.RouteResultSeries")
+	proto.RegisterType((*RouteResultParallel)(nil), "sunrise.swap.RouteResultParallel")
+	proto.RegisterType((*RouteResult)(nil), "sunrise.swap.RouteResult")
 }
 
 func init() { proto.RegisterFile("sunrise/swap/route.proto", fileDescriptor_4f14633a5a6b5862) }
 
 var fileDescriptor_4f14633a5a6b5862 = []byte{
-	// 451 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0x4f, 0x8b, 0xd3, 0x40,
-	0x18, 0xc6, 0x33, 0xdb, 0x6e, 0xdb, 0xbc, 0xd5, 0x83, 0xa3, 0xd0, 0x74, 0x0b, 0xd9, 0x52, 0x3c,
-	0x14, 0x71, 0x33, 0xb8, 0x0b, 0x0b, 0x5e, 0xcb, 0x2a, 0x5d, 0x10, 0x5c, 0xe2, 0xcd, 0x4b, 0xc9,
-	0xa6, 0x43, 0x1a, 0x4c, 0xf2, 0x86, 0xcc, 0xc4, 0xb5, 0xdf, 0xc2, 0xab, 0xdf, 0xc0, 0xa3, 0x07,
-	0x3f, 0xc4, 0x1e, 0x17, 0x4f, 0xe2, 0x61, 0x91, 0xf6, 0x20, 0xf8, 0x29, 0x64, 0xfe, 0x74, 0xd9,
-	0x42, 0x4f, 0x5e, 0x92, 0x3c, 0x79, 0x7e, 0xcf, 0x3b, 0xcf, 0x30, 0x03, 0x9e, 0xa8, 0x8b, 0x2a,
-	0x15, 0x9c, 0x89, 0xab, 0xa8, 0x64, 0x15, 0xd6, 0x92, 0x07, 0x65, 0x85, 0x12, 0xe9, 0x03, 0xeb,
-	0x04, 0xca, 0x39, 0x78, 0x14, 0xe5, 0x69, 0x81, 0x4c, 0x3f, 0x0d, 0x70, 0xd0, 0x8b, 0x51, 0xe4,
-	0x28, 0x58, 0x2e, 0x12, 0xf6, 0xf1, 0x85, 0x7a, 0x59, 0xa3, 0x6f, 0x8c, 0x99, 0x56, 0xcc, 0x08,
-	0x6b, 0x3d, 0x49, 0x30, 0x41, 0xf3, 0x5f, 0x7d, 0x6d, 0x02, 0x5b, 0x25, 0xca, 0xa8, 0x8a, 0x72,
-	0x1b, 0x18, 0xfd, 0x25, 0xb0, 0x1f, 0xaa, 0x56, 0xb4, 0x0f, 0x9d, 0x39, 0x2f, 0x30, 0x9f, 0xa5,
-	0x85, 0x47, 0x86, 0x64, 0xec, 0x86, 0x6d, 0xad, 0xcf, 0x0b, 0x3a, 0x00, 0xd7, 0x58, 0x58, 0x4b,
-	0x6f, 0x4f, 0x7b, 0x86, 0x7d, 0x5b, 0x4b, 0x7a, 0x04, 0xcd, 0x12, 0x31, 0xf3, 0x1a, 0x43, 0x32,
-	0xee, 0x1e, 0xf7, 0x82, 0xfb, 0xdb, 0x0a, 0xf4, 0xe8, 0x0b, 0xc4, 0x6c, 0xea, 0x84, 0x1a, 0xa3,
-	0x27, 0xd0, 0x12, 0xbc, 0x4a, 0xb9, 0xf0, 0x9a, 0x3a, 0xd0, 0xdf, 0x11, 0x78, 0xa7, 0x81, 0xa9,
-	0x13, 0x5a, 0x94, 0xbe, 0x84, 0x8e, 0x6a, 0x9d, 0x65, 0x3c, 0xf3, 0xf6, 0x75, 0x6c, 0xb0, 0x6b,
-	0x1d, 0x8b, 0x4c, 0x9d, 0xf0, 0x0e, 0x9f, 0x00, 0x74, 0x84, 0xac, 0x22, 0xc9, 0x93, 0xe5, 0xe8,
-	0x29, 0xb8, 0x77, 0x85, 0x68, 0x0f, 0xda, 0xaa, 0xd0, 0x2c, 0x9d, 0xeb, 0xed, 0x36, 0xc3, 0x96,
-	0x92, 0xe7, 0xf3, 0xd1, 0x2b, 0xe8, 0xde, 0x6b, 0x41, 0x4f, 0xa1, 0xa5, 0x8f, 0x4d, 0x78, 0x64,
-	0xd8, 0x18, 0x77, 0x8f, 0x1f, 0xef, 0x58, 0x79, 0xe2, 0x5e, 0xdf, 0x1e, 0x3a, 0x5f, 0xff, 0x7c,
-	0x7b, 0x46, 0x42, 0x4b, 0x8f, 0xbe, 0x10, 0x78, 0xb8, 0x55, 0xeb, 0x7f, 0x27, 0xd1, 0x0b, 0x68,
-	0x5f, 0xf1, 0x34, 0x59, 0x48, 0xe1, 0xed, 0x0d, 0x1b, 0x63, 0x77, 0x72, 0xaa, 0x98, 0x5f, 0xb7,
-	0x87, 0x03, 0x73, 0xf6, 0x62, 0xfe, 0x21, 0x48, 0x91, 0xe5, 0x91, 0x5c, 0x04, 0x6f, 0x78, 0x12,
-	0xc5, 0xcb, 0x33, 0x1e, 0xff, 0xf8, 0x7e, 0x04, 0xf6, 0x6a, 0x9c, 0xf1, 0xd8, 0x0c, 0xdc, 0x8c,
-	0x99, 0xbc, 0xbe, 0x5e, 0xf9, 0xe4, 0x66, 0xe5, 0x93, 0xdf, 0x2b, 0x9f, 0x7c, 0x5e, 0xfb, 0xce,
-	0xcd, 0xda, 0x77, 0x7e, 0xae, 0x7d, 0xe7, 0xfd, 0xf3, 0x24, 0x95, 0x8b, 0xfa, 0x32, 0x88, 0x31,
-	0x67, 0xb6, 0x5d, 0x16, 0x2d, 0x79, 0xb5, 0x11, 0xec, 0x93, 0xb9, 0x44, 0x72, 0x59, 0x72, 0x71,
-	0xd9, 0xd2, 0x97, 0xe8, 0xe4, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xcd, 0x76, 0xa7, 0x0f, 0xe6,
-	0x02, 0x00, 0x00,
+	// 603 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xb6, 0xdb, 0x34, 0x89, 0xa7, 0xad, 0x50, 0x5d, 0xa4, 0x38, 0x8d, 0x70, 0x82, 0xc5, 0x21,
+	0xaa, 0xa8, 0xad, 0x34, 0x52, 0xa5, 0x22, 0x24, 0xa4, 0x50, 0x50, 0x22, 0x21, 0x51, 0x99, 0x1b,
+	0x07, 0x82, 0xe3, 0xac, 0x1c, 0xab, 0xb6, 0x37, 0xf2, 0xae, 0x5b, 0xf2, 0x16, 0x5c, 0x79, 0x03,
+	0x8e, 0x1c, 0x78, 0x04, 0x0e, 0x3d, 0x56, 0x9c, 0x10, 0x87, 0x0a, 0x25, 0x07, 0x24, 0x9e, 0x02,
+	0xed, 0x8f, 0x21, 0xa5, 0x09, 0x20, 0xc4, 0x25, 0xf1, 0xcc, 0x7c, 0xdf, 0xcc, 0xce, 0xcc, 0xb7,
+	0x0b, 0x06, 0xc9, 0x92, 0x34, 0x24, 0xc8, 0x21, 0x67, 0xde, 0xd8, 0x49, 0x71, 0x46, 0x91, 0x3d,
+	0x4e, 0x31, 0xc5, 0xfa, 0x86, 0x8c, 0xd8, 0x2c, 0xb2, 0xb3, 0xe5, 0xc5, 0x61, 0x82, 0x1d, 0xfe,
+	0x2b, 0x00, 0x3b, 0x15, 0x1f, 0x93, 0x18, 0x13, 0x27, 0x26, 0x81, 0x73, 0xda, 0x62, 0x7f, 0x32,
+	0x50, 0x15, 0x81, 0x3e, 0xb7, 0x1c, 0x61, 0xc8, 0xd0, 0xcd, 0x00, 0x07, 0x58, 0xf8, 0xd9, 0x97,
+	0xf4, 0x9a, 0x32, 0xd3, 0xc0, 0x23, 0xc8, 0x39, 0x6d, 0x0d, 0x10, 0xf5, 0x5a, 0x8e, 0x8f, 0xc3,
+	0x44, 0xc4, 0xad, 0x3b, 0xa0, 0xb9, 0xec, 0x64, 0xc7, 0x18, 0x47, 0x7a, 0x05, 0x4a, 0x63, 0x8c,
+	0xa3, 0x7e, 0x38, 0x34, 0xd4, 0x86, 0xda, 0x2c, 0xb8, 0x45, 0x66, 0xf6, 0x86, 0xd6, 0x23, 0x58,
+	0xe7, 0xa8, 0x67, 0x28, 0x0d, 0x11, 0xd1, 0x0f, 0xa0, 0xc8, 0xdb, 0x21, 0x86, 0xda, 0x58, 0x6d,
+	0xae, 0xef, 0x6f, 0xdb, 0xf3, 0x0d, 0xd9, 0x1c, 0xda, 0xd1, 0xce, 0x2f, 0xeb, 0xca, 0xdb, 0xaf,
+	0xef, 0x76, 0x55, 0x57, 0xa2, 0xad, 0x37, 0x2a, 0x6c, 0x8a, 0x6a, 0x5e, 0xea, 0x45, 0x11, 0x8a,
+	0xfe, 0x35, 0x93, 0x7e, 0x0c, 0xa5, 0x33, 0x14, 0x06, 0x23, 0x4a, 0x8c, 0x95, 0xc6, 0x6a, 0x53,
+	0xeb, 0x1c, 0x30, 0xcc, 0xe7, 0xcb, 0x7a, 0x4d, 0xf4, 0x4b, 0x86, 0x27, 0x76, 0x88, 0x9d, 0xd8,
+	0xa3, 0x23, 0xfb, 0x09, 0x0a, 0x3c, 0x7f, 0x72, 0x84, 0xfc, 0x8f, 0xef, 0xf7, 0x40, 0x8e, 0xec,
+	0x08, 0xf9, 0x22, 0x61, 0x9e, 0xc6, 0xfa, 0xa6, 0xc2, 0x1a, 0x2f, 0xa7, 0x57, 0xa1, 0x3c, 0x44,
+	0x09, 0x8e, 0xfb, 0x61, 0xc2, 0xc7, 0xa0, 0xb9, 0x25, 0x6e, 0xf7, 0x12, 0xbd, 0x06, 0x9a, 0x08,
+	0xe1, 0x8c, 0x1a, 0x2b, 0x3c, 0x26, 0xb0, 0x4f, 0x33, 0xaa, 0xef, 0x41, 0x81, 0x8d, 0xcb, 0x58,
+	0x6d, 0xa8, 0xcd, 0xf5, 0xfd, 0xca, 0x82, 0x4e, 0xd8, 0x90, 0xbb, 0x8a, 0xcb, 0x61, 0x7a, 0x1b,
+	0x8a, 0x84, 0x8f, 0xd3, 0x28, 0x70, 0x42, 0x75, 0x01, 0x41, 0xcc, 0xbb, 0xab, 0xb8, 0x12, 0xaa,
+	0x1f, 0x42, 0x79, 0x2c, 0x67, 0x67, 0xac, 0x71, 0x5a, 0x6d, 0x51, 0x1d, 0x09, 0xe9, 0x2a, 0xee,
+	0x0f, 0x78, 0x07, 0xa0, 0x4c, 0x68, 0xea, 0x51, 0x14, 0x4c, 0xac, 0x5d, 0xb8, 0xc1, 0x81, 0x2e,
+	0x22, 0x59, 0x44, 0x7f, 0xbf, 0xfb, 0x17, 0xb0, 0x35, 0x87, 0x95, 0x0a, 0xe8, 0xc1, 0x26, 0xdf,
+	0x44, 0x3f, 0xe5, 0xde, 0x7c, 0x7d, 0x8b, 0x7a, 0x10, 0xbc, 0xf9, 0x25, 0x6e, 0xa4, 0x3f, 0xfd,
+	0xc4, 0x7a, 0x09, 0xdb, 0xf3, 0x67, 0xc9, 0x95, 0xf1, 0x1f, 0x2b, 0x7c, 0x58, 0x91, 0xf2, 0x15,
+	0x0e, 0xfd, 0x1e, 0x94, 0x29, 0x3e, 0x41, 0x49, 0xbe, 0x60, 0x96, 0x55, 0xea, 0x82, 0x5d, 0x13,
+	0x5b, 0x5e, 0x13, 0xfb, 0x21, 0x0e, 0x93, 0x4e, 0x81, 0x65, 0x75, 0x4b, 0x9c, 0xd0, 0x4b, 0xf4,
+	0xfb, 0xa0, 0x09, 0x6e, 0xae, 0x80, 0xbf, 0x20, 0x8b, 0x6a, 0x4c, 0x22, 0xed, 0x2b, 0x12, 0xb9,
+	0xb5, 0xb4, 0x97, 0x2b, 0x42, 0x39, 0xfc, 0x45, 0x28, 0xf5, 0xa5, 0xb4, 0x6b, 0x72, 0x79, 0x70,
+	0x4d, 0x2e, 0xb7, 0x97, 0xd7, 0xfc, 0x83, 0x68, 0x3a, 0x8f, 0xcf, 0xa7, 0xa6, 0x7a, 0x31, 0x35,
+	0xd5, 0x2f, 0x53, 0x53, 0x7d, 0x3d, 0x33, 0x95, 0x8b, 0x99, 0xa9, 0x7c, 0x9a, 0x99, 0xca, 0xf3,
+	0xbb, 0x41, 0x48, 0x47, 0xd9, 0xc0, 0xf6, 0x71, 0xec, 0xc8, 0xf4, 0x91, 0x37, 0x41, 0x69, 0x6e,
+	0x38, 0xaf, 0xc4, 0x1b, 0x48, 0x27, 0x63, 0x44, 0x06, 0x45, 0xfe, 0xf2, 0xb4, 0xbf, 0x07, 0x00,
+	0x00, 0xff, 0xff, 0x89, 0xd5, 0xff, 0xb9, 0x20, 0x05, 0x00, 0x00,
 }
 
-func (m *Route) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Route) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Route) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Strategy != nil {
-		{
-			size := m.Strategy.Size()
-			i -= size
-			if _, err := m.Strategy.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if len(m.DenomOut) > 0 {
-		i -= len(m.DenomOut)
-		copy(dAtA[i:], m.DenomOut)
-		i = encodeVarintRoute(dAtA, i, uint64(len(m.DenomOut)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.DenomIn) > 0 {
-		i -= len(m.DenomIn)
-		copy(dAtA[i:], m.DenomIn)
-		i = encodeVarintRoute(dAtA, i, uint64(len(m.DenomIn)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Route_Pool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Route_Pool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Pool != nil {
-		{
-			size, err := m.Pool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRoute(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *Route_Series) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Route_Series) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Series != nil {
-		{
-			size, err := m.Series.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRoute(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *Route_Parallel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Route_Parallel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Parallel != nil {
-		{
-			size, err := m.Parallel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRoute(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	return len(dAtA) - i, nil
-}
 func (m *RoutePool) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -541,6 +694,332 @@ func (m *RouteParallel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *Route) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Route) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Strategy != nil {
+		{
+			size := m.Strategy.Size()
+			i -= size
+			if _, err := m.Strategy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.DenomOut) > 0 {
+		i -= len(m.DenomOut)
+		copy(dAtA[i:], m.DenomOut)
+		i = encodeVarintRoute(dAtA, i, uint64(len(m.DenomOut)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.DenomIn) > 0 {
+		i -= len(m.DenomIn)
+		copy(dAtA[i:], m.DenomIn)
+		i = encodeVarintRoute(dAtA, i, uint64(len(m.DenomIn)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Route_Pool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Pool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Pool != nil {
+		{
+			size, err := m.Pool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintRoute(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Route_Series) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Series) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Series != nil {
+		{
+			size, err := m.Series.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintRoute(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Route_Parallel) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Parallel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Parallel != nil {
+		{
+			size, err := m.Parallel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintRoute(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RouteResultPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RouteResultPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResultPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		i = encodeVarintRoute(dAtA, i, uint64(m.PoolId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RouteResultSeries) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RouteResultSeries) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResultSeries) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.RouteResults) > 0 {
+		for iNdEx := len(m.RouteResults) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RouteResults[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintRoute(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RouteResultParallel) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RouteResultParallel) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResultParallel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.RouteResults) > 0 {
+		for iNdEx := len(m.RouteResults) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RouteResults[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintRoute(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RouteResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RouteResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Strategy != nil {
+		{
+			size := m.Strategy.Size()
+			i -= size
+			if _, err := m.Strategy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	{
+		size, err := m.TokenOut.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintRoute(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.TokenIn.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintRoute(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *RouteResult_Pool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResult_Pool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Pool != nil {
+		{
+			size, err := m.Pool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintRoute(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RouteResult_Series) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResult_Series) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Series != nil {
+		{
+			size, err := m.Series.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintRoute(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RouteResult_Parallel) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteResult_Parallel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Parallel != nil {
+		{
+			size, err := m.Parallel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintRoute(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintRoute(dAtA []byte, offset int, v uint64) int {
 	offset -= sovRoute(v)
 	base := offset
@@ -552,6 +1031,54 @@ func encodeVarintRoute(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *RoutePool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		n += 1 + sovRoute(uint64(m.PoolId))
+	}
+	return n
+}
+
+func (m *RouteSeries) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Routes) > 0 {
+		for _, e := range m.Routes {
+			l = e.Size()
+			n += 1 + l + sovRoute(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *RouteParallel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Routes) > 0 {
+		for _, e := range m.Routes {
+			l = e.Size()
+			n += 1 + l + sovRoute(uint64(l))
+		}
+	}
+	if len(m.Weights) > 0 {
+		for _, e := range m.Weights {
+			l = e.Size()
+			n += 1 + l + sovRoute(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *Route) Size() (n int) {
 	if m == nil {
 		return 0
@@ -608,7 +1135,7 @@ func (m *Route_Parallel) Size() (n int) {
 	}
 	return n
 }
-func (m *RoutePool) Size() (n int) {
+func (m *RouteResultPool) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -620,14 +1147,14 @@ func (m *RoutePool) Size() (n int) {
 	return n
 }
 
-func (m *RouteSeries) Size() (n int) {
+func (m *RouteResultSeries) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Routes) > 0 {
-		for _, e := range m.Routes {
+	if len(m.RouteResults) > 0 {
+		for _, e := range m.RouteResults {
 			l = e.Size()
 			n += 1 + l + sovRoute(uint64(l))
 		}
@@ -635,23 +1162,70 @@ func (m *RouteSeries) Size() (n int) {
 	return n
 }
 
-func (m *RouteParallel) Size() (n int) {
+func (m *RouteResultParallel) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Routes) > 0 {
-		for _, e := range m.Routes {
+	if len(m.RouteResults) > 0 {
+		for _, e := range m.RouteResults {
 			l = e.Size()
 			n += 1 + l + sovRoute(uint64(l))
 		}
 	}
-	if len(m.Weights) > 0 {
-		for _, e := range m.Weights {
-			l = e.Size()
-			n += 1 + l + sovRoute(uint64(l))
-		}
+	return n
+}
+
+func (m *RouteResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.TokenIn.Size()
+	n += 1 + l + sovRoute(uint64(l))
+	l = m.TokenOut.Size()
+	n += 1 + l + sovRoute(uint64(l))
+	if m.Strategy != nil {
+		n += m.Strategy.Size()
+	}
+	return n
+}
+
+func (m *RouteResult_Pool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Pool != nil {
+		l = m.Pool.Size()
+		n += 1 + l + sovRoute(uint64(l))
+	}
+	return n
+}
+func (m *RouteResult_Series) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Series != nil {
+		l = m.Series.Size()
+		n += 1 + l + sovRoute(uint64(l))
+	}
+	return n
+}
+func (m *RouteResult_Parallel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Parallel != nil {
+		l = m.Parallel.Size()
+		n += 1 + l + sovRoute(uint64(l))
 	}
 	return n
 }
@@ -661,225 +1235,6 @@ func sovRoute(x uint64) (n int) {
 }
 func sozRoute(x uint64) (n int) {
 	return sovRoute(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Route) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowRoute
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Route: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Route: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenomIn", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRoute
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRoute
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRoute
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DenomIn = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenomOut", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRoute
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRoute
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRoute
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DenomOut = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRoute
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRoute
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRoute
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RoutePool{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Strategy = &Route_Pool{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Series", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRoute
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRoute
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRoute
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RouteSeries{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Strategy = &Route_Series{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parallel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRoute
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRoute
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRoute
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RouteParallel{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Strategy = &Route_Parallel{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipRoute(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthRoute
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *RoutePool) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1132,6 +1487,683 @@ func (m *RouteParallel) Unmarshal(dAtA []byte) error {
 			if err := m.Weights[len(m.Weights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRoute(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Route) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRoute
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Route: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Route: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DenomIn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DenomIn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DenomOut", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DenomOut = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RoutePool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Strategy = &Route_Pool{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Series", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RouteSeries{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Strategy = &Route_Series{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Parallel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RouteParallel{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Strategy = &Route_Parallel{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRoute(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RouteResultPool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRoute
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RouteResultPool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RouteResultPool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+			}
+			m.PoolId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRoute(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RouteResultSeries) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRoute
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RouteResultSeries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RouteResultSeries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteResults", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteResults = append(m.RouteResults, RouteResult{})
+			if err := m.RouteResults[len(m.RouteResults)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRoute(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RouteResultParallel) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRoute
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RouteResultParallel: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RouteResultParallel: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteResults", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteResults = append(m.RouteResults, RouteResult{})
+			if err := m.RouteResults[len(m.RouteResults)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRoute(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RouteResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRoute
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RouteResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RouteResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenIn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.TokenIn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TokenOut", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.TokenOut.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RouteResultPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Strategy = &RouteResult_Pool{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Series", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RouteResultSeries{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Strategy = &RouteResult_Series{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Parallel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRoute
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRoute
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRoute
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RouteResultParallel{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Strategy = &RouteResult_Parallel{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
