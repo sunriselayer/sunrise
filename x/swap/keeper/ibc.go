@@ -1,8 +1,8 @@
 package keeper
 
 import (
-	"context"
 	"encoding/json"
+	"time"
 
 	errors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
@@ -13,9 +13,25 @@ import (
 
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	exported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 )
+
+var (
+	// DefaultTransferPacketTimeoutHeight is the timeout height following IBC defaults
+	DefaultTransferPacketTimeoutHeight = clienttypes.Height{
+		RevisionNumber: 0,
+		RevisionHeight: 0,
+	}
+
+	// DefaultTransferPacketTimeoutTimestamp is the timeout timestamp following IBC defaults
+	DefaultTransferPacketTimeoutTimestamp = time.Duration(transfertypes.DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
+)
+
+func timeoutTimestamp(ctx sdk.Context) uint64 {
+	return uint64(ctx.BlockTime().UnixNano()) + uint64(DefaultTransferPacketTimeoutTimestamp.Nanoseconds())
+}
 
 func (k Keeper) SwapIncomingFund(
 	ctx sdk.Context,
@@ -170,7 +186,7 @@ func (k Keeper) ProcessSwappedFund(
 }
 
 func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
-	ctx context.Context,
+	ctx sdk.Context,
 	ackWaitingIndex types.PacketIndex,
 	sender string,
 	tokenOut sdk.Coin,
@@ -184,13 +200,14 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	}
 
 	msgTransfer := transfertypes.MsgTransfer{
-		SourcePort:    metadata.Port,
-		SourceChannel: metadata.Channel,
-		Token:         tokenOut,
-		Sender:        sender,
-		Receiver:      metadata.Receiver,
-		// TODO: timeout
-		Memo: memo,
+		SourcePort:       metadata.Port,
+		SourceChannel:    metadata.Channel,
+		Token:            tokenOut,
+		Sender:           sender,
+		Receiver:         metadata.Receiver,
+		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
+		TimeoutTimestamp: timeoutTimestamp(ctx),
+		Memo:             memo,
 	}
 	// forward token to receiver
 	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)
@@ -285,8 +302,8 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			chanCap,
 			packet.SourcePort,
 			packet.SourceChannel,
-			nil, // TODO
-			nil, // TODO
+			DefaultTransferPacketTimeoutHeight,
+			timeoutTimestamp(ctx),
 			packet.Data,
 		)
 		if err != nil {
@@ -386,8 +403,8 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 			packet.SrcChannelId,
 			packet.Index.PortId,
 			packet.Index.ChannelId,
-			nil, // TODO
-			nil, // TODO
+			clienttypes.MustParseHeight(packet.TimeoutHeight),
+			packet.TimeoutTimestamp,
 		),
 		channeltypes.NewResultAcknowledgement(bz),
 	); err != nil {
