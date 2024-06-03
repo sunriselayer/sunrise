@@ -9,7 +9,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 )
+
+var _ swaptypes.LiquidityPoolKeeper = Keeper{}
 
 type (
 	Keeper struct {
