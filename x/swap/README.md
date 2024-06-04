@@ -100,4 +100,4 @@ sequenceDiagram
 
 ### Receiver address
 
-After the swapping has been executed, the acknowledgement of "Transfer token X" will be always success even if the next return / forward packet failed. The swapped funds are preserved in the balance of the receiver address.
+After the swapping has been executed, the acknowledgement of "Transfer token X" will be always success even if the next change / forward packet failed. The swapped funds are preserved in the balance of the receiver address.
