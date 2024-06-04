@@ -1,6 +1,14 @@
 # swap
 
-## Metadata
+## MsgSwapExactAmountIn
+
+## MsgSwapExactAmountOut
+
+## ICS20 Middleware
+
+Swap functions also can be executed by ICS20 token transfer packet automatically.
+
+### Metadata
 
 JSON string of marshalled `PacketMetadata` should be inserted in the `memo` field of ICS20 transfer packet.
 
@@ -41,9 +49,9 @@ type ForwardMetadata = {
 
 `ForwardMetadata` is quoted from [Packet Forward Middleware](https://github.com/cosmos/ibc-apps/tree/main/middleware/packet-forward-middleware).
 
-## Sequence diagrams
+### Sequence diagrams
 
-### Neither Return nor Forward
+#### Neither Return nor Forward
 
 ```mermaid
 sequenceDiagram
@@ -54,7 +62,7 @@ sequenceDiagram
     Sunrise ->> Chain A: ack
 ```
 
-### Forward
+#### Forward
 
 ```mermaid
 sequenceDiagram
@@ -69,7 +77,7 @@ sequenceDiagram
     Sunrise ->> Chain A: ack
 ```
 
-### Change and Forward
+#### Change and Forward
 
 If the exact output amount is designated for the swap, the remainder input amount will occur.
 There is a function to automatically refund the remainder input amount.
@@ -90,6 +98,6 @@ sequenceDiagram
     Sunrise ->> Chain A: ack
 ```
 
-## Receiver address
+### Receiver address
 
 After the swapping has been executed, the acknowledgement of "Transfer token X" will be always success even if the next return / forward packet failed. The swapped funds are preserved in the balance of the receiver address.
