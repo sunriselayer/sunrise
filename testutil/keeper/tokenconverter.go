@@ -9,16 +9,19 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	// "github.com/cosmos/cosmos-sdk/codec"
+	// codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	// "github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	// authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	// govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
+
+	"cosmossdk.io/depinject"
+	"github.com/sunriselayer/sunrise/app"
 )
 
 func TokenconverterKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
@@ -29,16 +32,27 @@ func TokenconverterKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	stateStore.MountStoreWithDB(storeKey, storetypes.StoreTypeIAVL, db)
 	require.NoError(t, stateStore.LoadLatestVersion())
 
-	registry := codectypes.NewInterfaceRegistry()
-	cdc := codec.NewProtoCodec(registry)
-	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
+	// registry := codectypes.NewInterfaceRegistry()
+	// cdc := codec.NewProtoCodec(registry)
+	// authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
-	k := keeper.NewKeeper(
-		cdc,
-		runtime.NewKVStoreService(storeKey),
-		log.NewNopLogger(),
-		authority.String(),
-		nil,
+	// k := keeper.NewKeeper(
+	// 	cdc,
+	// 	runtime.NewKVStoreService(storeKey),
+	// 	log.NewNopLogger(),
+	// 	authority.String(),
+	// 	nil,
+	// )
+
+	var k keeper.Keeper
+
+	depinject.Inject(
+		depinject.Configs(
+			app.AppConfig(),
+			depinject.Supply(
+				log.NewNopLogger(),
+			)),
+		&k,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
