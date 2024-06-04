@@ -69,7 +69,7 @@ sequenceDiagram
     Sunrise ->> Chain A: ack
 ```
 
-### Return and Forward
+### Change and Forward
 
 If the exact output amount is designated for the swap, the remainder input amount will occur.
 There is a function to automatically refund the remainder input amount.
@@ -81,7 +81,7 @@ sequenceDiagram
     Sunrise --> Sunrise: recv_packet
     Sunrise ->> Sunrise: Swap token X to token Y
 
-    Sunrise ->> Chain A: Return token X
+    Sunrise ->> Chain A: Change token X
     Sunrise ->> Chain B: Forward token Y
     Chain A --> Chain A: recv_packet
     Chain B --> Chain B: recv_packet
