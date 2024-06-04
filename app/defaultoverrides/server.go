@@ -19,6 +19,6 @@ func DefaultServerConfig() *serverconfig.Config {
 	// snapshots to nodes that state sync
 	cfg.StateSync.SnapshotInterval = 1500
 	cfg.StateSync.SnapshotKeepRecent = 2
-	cfg.MinGasPrices = fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom)
+	cfg.MinGasPrices = fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, "urise")
 	return cfg
 }
