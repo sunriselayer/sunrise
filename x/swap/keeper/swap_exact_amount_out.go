@@ -57,10 +57,9 @@ func (k Keeper) SwapExactAmountOut(
 ) (result types.RouteResult, interfaceFee math.Int, err error) {
 	var (
 		hasInterfaceFee = interfaceProvider != ""
-		totalAmountOut  math.Int
 	)
 
-	result, interfaceFee, err = k.CalculateResultExactAmountOut(ctx, hasInterfaceFee, route, totalAmountOut)
+	result, interfaceFee, err = k.CalculateResultExactAmountOut(ctx, hasInterfaceFee, route, amountOut)
 	if err != nil {
 		return result, interfaceFee, err
 	}

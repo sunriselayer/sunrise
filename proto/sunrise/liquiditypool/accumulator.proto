@@ -1,0 +1,34 @@
+syntax = "proto3";
+package sunrise.liquiditypool;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+message AccumulatorObject {
+  string name = 1;
+  repeated cosmos.base.v1beta1.DecCoin accum_value = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+  string total_shares = 3 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message AccumulatorPosition {
+  string num_shares = 1 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+  repeated cosmos.base.v1beta1.DecCoin accum_value_per_share = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+  repeated cosmos.base.v1beta1.DecCoin unclaimed_rewards_total = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}

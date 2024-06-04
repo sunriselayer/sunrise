@@ -34,16 +34,16 @@ func (k Keeper) CalculateResultExactAmountIn(
 	route types.Route,
 	amountIn math.Int,
 ) (result types.RouteResult, interfaceFee math.Int, err error) {
+	result, err = k.calculateResultRouteExactAmountIn(ctx, route, amountIn)
+	if err != nil {
+		return result, interfaceFee, err
+	}
+
 	var (
 		amountOutGross = result.TokenOut.Amount
 	)
 
 	_, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, amountOutGross)
-
-	result, err = k.calculateResultRouteExactAmountIn(ctx, route, amountIn)
-	if err != nil {
-		return result, interfaceFee, err
-	}
 
 	return result, interfaceFee, nil
 }
@@ -56,6 +56,10 @@ func (k Keeper) SwapExactAmountIn(
 	amountIn math.Int,
 	minAmountOut math.Int,
 ) (result types.RouteResult, interfaceFee math.Int, err error) {
+	result, err = k.swapRouteExactAmountIn(ctx, sender, route, amountIn)
+	if err != nil {
+		return result, interfaceFee, err
+	}
 
 	var (
 		hasInterfaceFee = interfaceProvider != ""
@@ -64,11 +68,6 @@ func (k Keeper) SwapExactAmountIn(
 	)
 
 	amountOutNet, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, amountOutGross)
-
-	result, err = k.swapRouteExactAmountIn(ctx, sender, route, amountIn)
-	if err != nil {
-		return result, interfaceFee, err
-	}
 
 	if hasInterfaceFee {
 		// Validated in ValidateBasic
