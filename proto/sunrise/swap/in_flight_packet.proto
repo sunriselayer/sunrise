@@ -36,9 +36,9 @@ message IncomingInFlightPacket {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  oneof return {
-    PacketIndex outgoing_index_return = 10;
-    bytes ack_return = 11;
+  oneof change {
+    PacketIndex outgoing_index_change = 10;
+    bytes ack_change = 11;
   }
   oneof forward {
     PacketIndex outgoing_index_forward = 12;

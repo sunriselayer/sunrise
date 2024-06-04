@@ -117,7 +117,7 @@ func (k Keeper) ProcessSwappedFund(
 		Ack:          incomingAck.Acknowledgement(),
 		Result:       result,
 		InterfaceFee: interfaceFee,
-		Return:       &types.IncomingInFlightPacket_AckReturn{},  // default value is nil ack
+		Change:       &types.IncomingInFlightPacket_AckChange{},  // default value is nil ack
 		Forward:      &types.IncomingInFlightPacket_AckForward{}, // default value is nil ack
 	}
 
@@ -132,21 +132,21 @@ func (k Keeper) ProcessSwappedFund(
 	if remainderAmountIn.IsPositive() {
 		remainderTokenIn := sdk.NewCoin(result.TokenIn.Denom, remainderAmountIn)
 
-		if swapData.ExactAmountOut.Return != nil {
+		if swapData.ExactAmountOut.Change != nil {
 			// Return the remainder token in
 			returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
 				ctx,
 				waitingPacket.Index,
 				tokenData.Receiver,
 				remainderTokenIn,
-				*swapData.ExactAmountOut.Return,
+				*swapData.ExactAmountOut.Change,
 			)
 			if err != nil {
 				return nil, err
 			}
 
-			waitingPacket.Return = &types.IncomingInFlightPacket_OutgoingIndexReturn{
-				OutgoingIndexReturn: &returnPacket.Index,
+			waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
+				OutgoingIndexChange: &returnPacket.Index,
 			}
 			waiting = true
 		}
@@ -251,13 +251,13 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	}
 
 	// The pattern of waitingPacket.Return == nil is not handled here
-	switch incomingPacket.Return.(type) {
-	case *types.IncomingInFlightPacket_OutgoingIndexReturn:
-		incomingPacket.Return = &types.IncomingInFlightPacket_AckReturn{
-			AckReturn: acknowledgement,
+	switch incomingPacket.Change.(type) {
+	case *types.IncomingInFlightPacket_OutgoingIndexChange:
+		incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
+			AckChange: acknowledgement,
 		}
 		break
-	case *types.IncomingInFlightPacket_AckReturn:
+	case *types.IncomingInFlightPacket_AckChange:
 		break
 	}
 
@@ -316,7 +316,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 	} else {
 		// If remaining retry count is zero:
 		// - Returning non error acknowledgement to the origin
-		// - However it contains error acknowledgement of forward / return packet
+		// - However it contains error acknowledgement of change / forward packet
 		ack := channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrUnknownRequest, "Retry count on timeout exceeds"))
 
 		waitingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
@@ -324,15 +324,15 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			return nil
 		}
 
-		switch packetReturn := waitingPacket.Return.(type) {
-		case *types.IncomingInFlightPacket_OutgoingIndexReturn:
-			if packetReturn.OutgoingIndexReturn.Equal(outgoingPacket.Index) {
-				waitingPacket.Return = &types.IncomingInFlightPacket_AckReturn{
-					AckReturn: ack.Acknowledgement(),
+		switch packetReturn := waitingPacket.Change.(type) {
+		case *types.IncomingInFlightPacket_OutgoingIndexChange:
+			if packetReturn.OutgoingIndexChange.Equal(outgoingPacket.Index) {
+				waitingPacket.Change = &types.IncomingInFlightPacket_AckChange{
+					AckChange: ack.Acknowledgement(),
 				}
 			}
 			break
-		case *types.IncomingInFlightPacket_AckReturn:
+		case *types.IncomingInFlightPacket_AckChange:
 			break
 		}
 
@@ -364,10 +364,10 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 	ctx sdk.Context,
 	packet types.IncomingInFlightPacket,
 ) (deleted bool, err error) {
-	switch packet.Return.(type) {
-	case *types.IncomingInFlightPacket_OutgoingIndexReturn:
+	switch packet.Change.(type) {
+	case *types.IncomingInFlightPacket_OutgoingIndexChange:
 		return false, nil
-	case *types.IncomingInFlightPacket_AckReturn:
+	case *types.IncomingInFlightPacket_AckChange:
 		break
 	}
 
@@ -381,7 +381,7 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 	fullAck := types.SwapAcknowledgement{
 		Result:      packet.Result,
 		IncomingAck: packet.Ack,
-		ReturnAck:   packet.Return.(*types.IncomingInFlightPacket_AckReturn).AckReturn,
+		ChangeAck:   packet.Change.(*types.IncomingInFlightPacket_AckChange).AckChange,
 		ForwardAck:  packet.Forward.(*types.IncomingInFlightPacket_AckForward).AckForward,
 	}
 	bz, err := fullAck.Acknowledgement()

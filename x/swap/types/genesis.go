@@ -26,7 +26,7 @@ func (gs GenesisState) Validate() error {
 	for _, elem := range gs.IncomingInFlightPacketList {
 		index := string(IncomingInFlightPacketKey(elem.Index))
 		if _, ok := incomingPacketIndexMap[index]; ok {
-			return fmt.Errorf("duplicated index for incomingPacket")
+			return fmt.Errorf("duplicated index for incomingInFlightPacket")
 		}
 		incomingPacketIndexMap[index] = struct{}{}
 	}
