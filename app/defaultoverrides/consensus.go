@@ -70,8 +70,8 @@ func DefaultConsensusConfig() *cmtcfg.Config {
 	cfg.Consensus.TimeoutCommit = appconsts.TimeoutCommit
 	cfg.Consensus.SkipTimeoutCommit = false
 
-	cfg.TxIndex.Indexer = "null"
-	cfg.Storage.DiscardABCIResponses = true
+	// cfg.TxIndex.Indexer = "null"
+	// cfg.Storage.DiscardABCIResponses = true
 
 	return cfg
 }
