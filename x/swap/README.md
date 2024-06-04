@@ -22,8 +22,10 @@ type SwapMetadata = {
       };
     }
   | {
-      amount_out: string;
-      return?: ForwardMetadata;
+      exact_amount_out: {
+        amount_out: string;
+        change?: ForwardMetadata;
+      };
     }
 );
 

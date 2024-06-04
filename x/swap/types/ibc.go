@@ -23,7 +23,7 @@ type SwapMetadata struct {
 	} `json:"exact_amount_in,omitempty"`
 	ExactAmountOut *struct {
 		AmountOut sdkmath.Int                         `json:"amount_out"`
-		Return    *packetforwardtypes.ForwardMetadata `json:"return,omitempty"`
+		Change    *packetforwardtypes.ForwardMetadata `json:"change,omitempty"`
 	} `json:"exact_amount_out,omitempty"`
 	Forward *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
 }
@@ -48,8 +48,8 @@ func (m *SwapMetadata) Validate() error {
 	}
 
 	if m.ExactAmountOut != nil {
-		if m.ExactAmountOut.Return != nil {
-			if err := m.ExactAmountOut.Return.Validate(); err != nil {
+		if m.ExactAmountOut.Change != nil {
+			if err := m.ExactAmountOut.Change.Validate(); err != nil {
 				return err
 			}
 		}
@@ -67,7 +67,7 @@ func (m *SwapMetadata) Validate() error {
 type SwapAcknowledgement struct {
 	Result      RouteResult `json:"result"`
 	IncomingAck []byte      `json:"ibc_ack"`
-	ReturnAck   []byte      `json:"return_ack,omitempty"`
+	ChangeAck   []byte      `json:"change_ack,omitempty"`
 	ForwardAck  []byte      `json:"forward_ack,omitempty"`
 }
 

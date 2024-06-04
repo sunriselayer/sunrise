@@ -558,8 +558,8 @@ var (
 	fd_IncomingInFlightPacket_ack                    protoreflect.FieldDescriptor
 	fd_IncomingInFlightPacket_result                 protoreflect.FieldDescriptor
 	fd_IncomingInFlightPacket_interface_fee          protoreflect.FieldDescriptor
-	fd_IncomingInFlightPacket_outgoing_index_return  protoreflect.FieldDescriptor
-	fd_IncomingInFlightPacket_ack_return             protoreflect.FieldDescriptor
+	fd_IncomingInFlightPacket_outgoing_index_change  protoreflect.FieldDescriptor
+	fd_IncomingInFlightPacket_ack_change             protoreflect.FieldDescriptor
 	fd_IncomingInFlightPacket_outgoing_index_forward protoreflect.FieldDescriptor
 	fd_IncomingInFlightPacket_ack_forward            protoreflect.FieldDescriptor
 )
@@ -576,8 +576,8 @@ func init() {
 	fd_IncomingInFlightPacket_ack = md_IncomingInFlightPacket.Fields().ByName("ack")
 	fd_IncomingInFlightPacket_result = md_IncomingInFlightPacket.Fields().ByName("result")
 	fd_IncomingInFlightPacket_interface_fee = md_IncomingInFlightPacket.Fields().ByName("interface_fee")
-	fd_IncomingInFlightPacket_outgoing_index_return = md_IncomingInFlightPacket.Fields().ByName("outgoing_index_return")
-	fd_IncomingInFlightPacket_ack_return = md_IncomingInFlightPacket.Fields().ByName("ack_return")
+	fd_IncomingInFlightPacket_outgoing_index_change = md_IncomingInFlightPacket.Fields().ByName("outgoing_index_change")
+	fd_IncomingInFlightPacket_ack_change = md_IncomingInFlightPacket.Fields().ByName("ack_change")
 	fd_IncomingInFlightPacket_outgoing_index_forward = md_IncomingInFlightPacket.Fields().ByName("outgoing_index_forward")
 	fd_IncomingInFlightPacket_ack_forward = md_IncomingInFlightPacket.Fields().ByName("ack_forward")
 }
@@ -701,18 +701,18 @@ func (x *fastReflection_IncomingInFlightPacket) Range(f func(protoreflect.FieldD
 			return
 		}
 	}
-	if x.Return != nil {
-		switch o := x.Return.(type) {
-		case *IncomingInFlightPacket_OutgoingIndexReturn:
-			v := o.OutgoingIndexReturn
+	if x.Change != nil {
+		switch o := x.Change.(type) {
+		case *IncomingInFlightPacket_OutgoingIndexChange:
+			v := o.OutgoingIndexChange
 			value := protoreflect.ValueOfMessage(v.ProtoReflect())
-			if !f(fd_IncomingInFlightPacket_outgoing_index_return, value) {
+			if !f(fd_IncomingInFlightPacket_outgoing_index_change, value) {
 				return
 			}
-		case *IncomingInFlightPacket_AckReturn:
-			v := o.AckReturn
+		case *IncomingInFlightPacket_AckChange:
+			v := o.AckChange
 			value := protoreflect.ValueOfBytes(v)
-			if !f(fd_IncomingInFlightPacket_ack_return, value) {
+			if !f(fd_IncomingInFlightPacket_ack_change, value) {
 				return
 			}
 		}
@@ -766,18 +766,18 @@ func (x *fastReflection_IncomingInFlightPacket) Has(fd protoreflect.FieldDescrip
 		return x.Result != nil
 	case "sunrise.swap.IncomingInFlightPacket.interface_fee":
 		return x.InterfaceFee != ""
-	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_return":
-		if x.Return == nil {
+	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_change":
+		if x.Change == nil {
 			return false
-		} else if _, ok := x.Return.(*IncomingInFlightPacket_OutgoingIndexReturn); ok {
+		} else if _, ok := x.Change.(*IncomingInFlightPacket_OutgoingIndexChange); ok {
 			return true
 		} else {
 			return false
 		}
-	case "sunrise.swap.IncomingInFlightPacket.ack_return":
-		if x.Return == nil {
+	case "sunrise.swap.IncomingInFlightPacket.ack_change":
+		if x.Change == nil {
 			return false
-		} else if _, ok := x.Return.(*IncomingInFlightPacket_AckReturn); ok {
+		} else if _, ok := x.Change.(*IncomingInFlightPacket_AckChange); ok {
 			return true
 		} else {
 			return false
@@ -832,10 +832,10 @@ func (x *fastReflection_IncomingInFlightPacket) Clear(fd protoreflect.FieldDescr
 		x.Result = nil
 	case "sunrise.swap.IncomingInFlightPacket.interface_fee":
 		x.InterfaceFee = ""
-	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_return":
-		x.Return = nil
-	case "sunrise.swap.IncomingInFlightPacket.ack_return":
-		x.Return = nil
+	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_change":
+		x.Change = nil
+	case "sunrise.swap.IncomingInFlightPacket.ack_change":
+		x.Change = nil
 	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_forward":
 		x.Forward = nil
 	case "sunrise.swap.IncomingInFlightPacket.ack_forward":
@@ -883,19 +883,19 @@ func (x *fastReflection_IncomingInFlightPacket) Get(descriptor protoreflect.Fiel
 	case "sunrise.swap.IncomingInFlightPacket.interface_fee":
 		value := x.InterfaceFee
 		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_return":
-		if x.Return == nil {
+	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_change":
+		if x.Change == nil {
 			return protoreflect.ValueOfMessage((*PacketIndex)(nil).ProtoReflect())
-		} else if v, ok := x.Return.(*IncomingInFlightPacket_OutgoingIndexReturn); ok {
-			return protoreflect.ValueOfMessage(v.OutgoingIndexReturn.ProtoReflect())
+		} else if v, ok := x.Change.(*IncomingInFlightPacket_OutgoingIndexChange); ok {
+			return protoreflect.ValueOfMessage(v.OutgoingIndexChange.ProtoReflect())
 		} else {
 			return protoreflect.ValueOfMessage((*PacketIndex)(nil).ProtoReflect())
 		}
-	case "sunrise.swap.IncomingInFlightPacket.ack_return":
-		if x.Return == nil {
+	case "sunrise.swap.IncomingInFlightPacket.ack_change":
+		if x.Change == nil {
 			return protoreflect.ValueOfBytes(nil)
-		} else if v, ok := x.Return.(*IncomingInFlightPacket_AckReturn); ok {
-			return protoreflect.ValueOfBytes(v.AckReturn)
+		} else if v, ok := x.Change.(*IncomingInFlightPacket_AckChange); ok {
+			return protoreflect.ValueOfBytes(v.AckChange)
 		} else {
 			return protoreflect.ValueOfBytes(nil)
 		}
@@ -953,12 +953,12 @@ func (x *fastReflection_IncomingInFlightPacket) Set(fd protoreflect.FieldDescrip
 		x.Result = value.Message().Interface().(*RouteResult)
 	case "sunrise.swap.IncomingInFlightPacket.interface_fee":
 		x.InterfaceFee = value.Interface().(string)
-	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_return":
+	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_change":
 		cv := value.Message().Interface().(*PacketIndex)
-		x.Return = &IncomingInFlightPacket_OutgoingIndexReturn{OutgoingIndexReturn: cv}
-	case "sunrise.swap.IncomingInFlightPacket.ack_return":
+		x.Change = &IncomingInFlightPacket_OutgoingIndexChange{OutgoingIndexChange: cv}
+	case "sunrise.swap.IncomingInFlightPacket.ack_change":
 		cv := value.Bytes()
-		x.Return = &IncomingInFlightPacket_AckReturn{AckReturn: cv}
+		x.Change = &IncomingInFlightPacket_AckChange{AckChange: cv}
 	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_forward":
 		cv := value.Message().Interface().(*PacketIndex)
 		x.Forward = &IncomingInFlightPacket_OutgoingIndexForward{OutgoingIndexForward: cv}
@@ -995,20 +995,20 @@ func (x *fastReflection_IncomingInFlightPacket) Mutable(fd protoreflect.FieldDes
 			x.Result = new(RouteResult)
 		}
 		return protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_return":
-		if x.Return == nil {
+	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_change":
+		if x.Change == nil {
 			value := &PacketIndex{}
-			oneofValue := &IncomingInFlightPacket_OutgoingIndexReturn{OutgoingIndexReturn: value}
-			x.Return = oneofValue
+			oneofValue := &IncomingInFlightPacket_OutgoingIndexChange{OutgoingIndexChange: value}
+			x.Change = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		switch m := x.Return.(type) {
-		case *IncomingInFlightPacket_OutgoingIndexReturn:
-			return protoreflect.ValueOfMessage(m.OutgoingIndexReturn.ProtoReflect())
+		switch m := x.Change.(type) {
+		case *IncomingInFlightPacket_OutgoingIndexChange:
+			return protoreflect.ValueOfMessage(m.OutgoingIndexChange.ProtoReflect())
 		default:
 			value := &PacketIndex{}
-			oneofValue := &IncomingInFlightPacket_OutgoingIndexReturn{OutgoingIndexReturn: value}
-			x.Return = oneofValue
+			oneofValue := &IncomingInFlightPacket_OutgoingIndexChange{OutgoingIndexChange: value}
+			x.Change = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
 	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_forward":
@@ -1041,8 +1041,8 @@ func (x *fastReflection_IncomingInFlightPacket) Mutable(fd protoreflect.FieldDes
 		panic(fmt.Errorf("field ack of message sunrise.swap.IncomingInFlightPacket is not mutable"))
 	case "sunrise.swap.IncomingInFlightPacket.interface_fee":
 		panic(fmt.Errorf("field interface_fee of message sunrise.swap.IncomingInFlightPacket is not mutable"))
-	case "sunrise.swap.IncomingInFlightPacket.ack_return":
-		panic(fmt.Errorf("field ack_return of message sunrise.swap.IncomingInFlightPacket is not mutable"))
+	case "sunrise.swap.IncomingInFlightPacket.ack_change":
+		panic(fmt.Errorf("field ack_change of message sunrise.swap.IncomingInFlightPacket is not mutable"))
 	case "sunrise.swap.IncomingInFlightPacket.ack_forward":
 		panic(fmt.Errorf("field ack_forward of message sunrise.swap.IncomingInFlightPacket is not mutable"))
 	default:
@@ -1078,10 +1078,10 @@ func (x *fastReflection_IncomingInFlightPacket) NewField(fd protoreflect.FieldDe
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.swap.IncomingInFlightPacket.interface_fee":
 		return protoreflect.ValueOfString("")
-	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_return":
+	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_change":
 		value := &PacketIndex{}
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.IncomingInFlightPacket.ack_return":
+	case "sunrise.swap.IncomingInFlightPacket.ack_change":
 		return protoreflect.ValueOfBytes(nil)
 	case "sunrise.swap.IncomingInFlightPacket.outgoing_index_forward":
 		value := &PacketIndex{}
@@ -1101,15 +1101,15 @@ func (x *fastReflection_IncomingInFlightPacket) NewField(fd protoreflect.FieldDe
 // It panics if the oneof descriptor does not belong to this message.
 func (x *fastReflection_IncomingInFlightPacket) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
-	case "sunrise.swap.IncomingInFlightPacket.return":
-		if x.Return == nil {
+	case "sunrise.swap.IncomingInFlightPacket.change":
+		if x.Change == nil {
 			return nil
 		}
-		switch x.Return.(type) {
-		case *IncomingInFlightPacket_OutgoingIndexReturn:
-			return x.Descriptor().Fields().ByName("outgoing_index_return")
-		case *IncomingInFlightPacket_AckReturn:
-			return x.Descriptor().Fields().ByName("ack_return")
+		switch x.Change.(type) {
+		case *IncomingInFlightPacket_OutgoingIndexChange:
+			return x.Descriptor().Fields().ByName("outgoing_index_change")
+		case *IncomingInFlightPacket_AckChange:
+			return x.Descriptor().Fields().ByName("ack_change")
 		}
 	case "sunrise.swap.IncomingInFlightPacket.forward":
 		if x.Forward == nil {
@@ -1212,18 +1212,18 @@ func (x *fastReflection_IncomingInFlightPacket) ProtoMethods() *protoiface.Metho
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		switch x := x.Return.(type) {
-		case *IncomingInFlightPacket_OutgoingIndexReturn:
+		switch x := x.Change.(type) {
+		case *IncomingInFlightPacket_OutgoingIndexChange:
 			if x == nil {
 				break
 			}
-			l = options.Size(x.OutgoingIndexReturn)
+			l = options.Size(x.OutgoingIndexChange)
 			n += 1 + l + runtime.Sov(uint64(l))
-		case *IncomingInFlightPacket_AckReturn:
+		case *IncomingInFlightPacket_AckChange:
 			if x == nil {
 				break
 			}
-			l = len(x.AckReturn)
+			l = len(x.AckChange)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		switch x := x.Forward.(type) {
@@ -1290,9 +1290,9 @@ func (x *fastReflection_IncomingInFlightPacket) ProtoMethods() *protoiface.Metho
 			i--
 			dAtA[i] = 0x6a
 		}
-		switch x := x.Return.(type) {
-		case *IncomingInFlightPacket_OutgoingIndexReturn:
-			encoded, err := options.Marshal(x.OutgoingIndexReturn)
+		switch x := x.Change.(type) {
+		case *IncomingInFlightPacket_OutgoingIndexChange:
+			encoded, err := options.Marshal(x.OutgoingIndexChange)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1304,10 +1304,10 @@ func (x *fastReflection_IncomingInFlightPacket) ProtoMethods() *protoiface.Metho
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x52
-		case *IncomingInFlightPacket_AckReturn:
-			i -= len(x.AckReturn)
-			copy(dAtA[i:], x.AckReturn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AckReturn)))
+		case *IncomingInFlightPacket_AckChange:
+			i -= len(x.AckChange)
+			copy(dAtA[i:], x.AckChange)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AckChange)))
 			i--
 			dAtA[i] = 0x5a
 		}
@@ -1724,7 +1724,7 @@ func (x *fastReflection_IncomingInFlightPacket) ProtoMethods() *protoiface.Metho
 				iNdEx = postIndex
 			case 10:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutgoingIndexReturn", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutgoingIndexChange", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -1755,11 +1755,11 @@ func (x *fastReflection_IncomingInFlightPacket) ProtoMethods() *protoiface.Metho
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
-				x.Return = &IncomingInFlightPacket_OutgoingIndexReturn{v}
+				x.Change = &IncomingInFlightPacket_OutgoingIndexChange{v}
 				iNdEx = postIndex
 			case 11:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AckReturn", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AckChange", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -1788,7 +1788,7 @@ func (x *fastReflection_IncomingInFlightPacket) ProtoMethods() *protoiface.Metho
 				}
 				v := make([]byte, postIndex-iNdEx)
 				copy(v, dAtA[iNdEx:postIndex])
-				x.Return = &IncomingInFlightPacket_AckReturn{v}
+				x.Change = &IncomingInFlightPacket_AckChange{v}
 				iNdEx = postIndex
 			case 12:
 				if wireType != 2 {
@@ -2533,11 +2533,11 @@ type IncomingInFlightPacket struct {
 	Ack              []byte       `protobuf:"bytes,7,opt,name=ack,proto3" json:"ack,omitempty"`
 	Result           *RouteResult `protobuf:"bytes,8,opt,name=result,proto3" json:"result,omitempty"`
 	InterfaceFee     string       `protobuf:"bytes,9,opt,name=interface_fee,json=interfaceFee,proto3" json:"interface_fee,omitempty"`
-	// Types that are assignable to Return:
+	// Types that are assignable to Change:
 	//
-	//	*IncomingInFlightPacket_OutgoingIndexReturn
-	//	*IncomingInFlightPacket_AckReturn
-	Return isIncomingInFlightPacket_Return `protobuf_oneof:"return"`
+	//	*IncomingInFlightPacket_OutgoingIndexChange
+	//	*IncomingInFlightPacket_AckChange
+	Change isIncomingInFlightPacket_Change `protobuf_oneof:"change"`
 	// Types that are assignable to Forward:
 	//
 	//	*IncomingInFlightPacket_OutgoingIndexForward
@@ -2628,23 +2628,23 @@ func (x *IncomingInFlightPacket) GetInterfaceFee() string {
 	return ""
 }
 
-func (x *IncomingInFlightPacket) GetReturn() isIncomingInFlightPacket_Return {
+func (x *IncomingInFlightPacket) GetChange() isIncomingInFlightPacket_Change {
 	if x != nil {
-		return x.Return
+		return x.Change
 	}
 	return nil
 }
 
-func (x *IncomingInFlightPacket) GetOutgoingIndexReturn() *PacketIndex {
-	if x, ok := x.GetReturn().(*IncomingInFlightPacket_OutgoingIndexReturn); ok {
-		return x.OutgoingIndexReturn
+func (x *IncomingInFlightPacket) GetOutgoingIndexChange() *PacketIndex {
+	if x, ok := x.GetChange().(*IncomingInFlightPacket_OutgoingIndexChange); ok {
+		return x.OutgoingIndexChange
 	}
 	return nil
 }
 
-func (x *IncomingInFlightPacket) GetAckReturn() []byte {
-	if x, ok := x.GetReturn().(*IncomingInFlightPacket_AckReturn); ok {
-		return x.AckReturn
+func (x *IncomingInFlightPacket) GetAckChange() []byte {
+	if x, ok := x.GetChange().(*IncomingInFlightPacket_AckChange); ok {
+		return x.AckChange
 	}
 	return nil
 }
@@ -2670,21 +2670,21 @@ func (x *IncomingInFlightPacket) GetAckForward() []byte {
 	return nil
 }
 
-type isIncomingInFlightPacket_Return interface {
-	isIncomingInFlightPacket_Return()
+type isIncomingInFlightPacket_Change interface {
+	isIncomingInFlightPacket_Change()
 }
 
-type IncomingInFlightPacket_OutgoingIndexReturn struct {
-	OutgoingIndexReturn *PacketIndex `protobuf:"bytes,10,opt,name=outgoing_index_return,json=outgoingIndexReturn,proto3,oneof"`
+type IncomingInFlightPacket_OutgoingIndexChange struct {
+	OutgoingIndexChange *PacketIndex `protobuf:"bytes,10,opt,name=outgoing_index_change,json=outgoingIndexChange,proto3,oneof"`
 }
 
-type IncomingInFlightPacket_AckReturn struct {
-	AckReturn []byte `protobuf:"bytes,11,opt,name=ack_return,json=ackReturn,proto3,oneof"`
+type IncomingInFlightPacket_AckChange struct {
+	AckChange []byte `protobuf:"bytes,11,opt,name=ack_change,json=ackChange,proto3,oneof"`
 }
 
-func (*IncomingInFlightPacket_OutgoingIndexReturn) isIncomingInFlightPacket_Return() {}
+func (*IncomingInFlightPacket_OutgoingIndexChange) isIncomingInFlightPacket_Change() {}
 
-func (*IncomingInFlightPacket_AckReturn) isIncomingInFlightPacket_Return() {}
+func (*IncomingInFlightPacket_AckChange) isIncomingInFlightPacket_Change() {}
 
 type isIncomingInFlightPacket_Forward interface {
 	isIncomingInFlightPacket_Forward()
@@ -2708,7 +2708,7 @@ type OutgoingInFlightPacket struct {
 	unknownFields protoimpl.UnknownFields
 
 	Index            *PacketIndex `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
-	AckWaitingIndex  *PacketIndex `protobuf:"bytes,2,opt,name=ack_waiting_index,json=incomingIndex,proto3" json:"ack_waiting_index,omitempty"`
+	AckWaitingIndex  *PacketIndex `protobuf:"bytes,2,opt,name=ack_waiting_index,json=ackWaitingIndex,proto3" json:"ack_waiting_index,omitempty"`
 	RetriesRemaining int32        `protobuf:"varint,3,opt,name=retries_remaining,json=retriesRemaining,proto3" json:"retries_remaining,omitempty"`
 }
 
@@ -2799,21 +2799,21 @@ var file_sunrise_swap_in_flight_packet_proto_rawDesc = []byte{
 	0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0,
 	0x2a, 0x01, 0x52, 0x0c, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x46, 0x65, 0x65,
 	0x12, 0x4f, 0x0a, 0x15, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x64,
-	0x65, 0x78, 0x5f, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x65, 0x78, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x50,
 	0x61, 0x63, 0x6b, 0x65, 0x74, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x48, 0x00, 0x52, 0x13, 0x6f, 0x75,
-	0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x52, 0x65, 0x74, 0x75, 0x72,
-	0x6e, 0x12, 0x1f, 0x0a, 0x0a, 0x61, 0x63, 0x6b, 0x5f, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x18,
-	0x0b, 0x20, 0x01, 0x28, 0x0c, 0x48, 0x00, 0x52, 0x09, 0x61, 0x63, 0x6b, 0x52, 0x65, 0x74, 0x75,
-	0x72, 0x6e, 0x12, 0x51, 0x0a, 0x16, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x5f, 0x69,
+	0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x43, 0x68, 0x61, 0x6e, 0x67,
+	0x65, 0x12, 0x1f, 0x0a, 0x0a, 0x61, 0x63, 0x6b, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x18,
+	0x0b, 0x20, 0x01, 0x28, 0x0c, 0x48, 0x00, 0x52, 0x09, 0x61, 0x63, 0x6b, 0x43, 0x68, 0x61, 0x6e,
+	0x67, 0x65, 0x12, 0x51, 0x0a, 0x16, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x5f, 0x69,
 	0x6e, 0x64, 0x65, 0x78, 0x5f, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x18, 0x0c, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61,
 	0x70, 0x2e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x48, 0x01, 0x52,
 	0x14, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x46, 0x6f,
 	0x72, 0x77, 0x61, 0x72, 0x64, 0x12, 0x21, 0x0a, 0x0b, 0x61, 0x63, 0x6b, 0x5f, 0x66, 0x6f, 0x72,
 	0x77, 0x61, 0x72, 0x64, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0c, 0x48, 0x01, 0x52, 0x0a, 0x61, 0x63,
-	0x6b, 0x46, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x42, 0x08, 0x0a, 0x06, 0x72, 0x65, 0x74, 0x75,
-	0x72, 0x6e, 0x42, 0x09, 0x0a, 0x07, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x22, 0xd3, 0x01,
+	0x6b, 0x46, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x42, 0x08, 0x0a, 0x06, 0x63, 0x68, 0x61, 0x6e,
+	0x67, 0x65, 0x42, 0x09, 0x0a, 0x07, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x22, 0xd3, 0x01,
 	0x0a, 0x16, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67,
 	0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x3a, 0x0a, 0x05, 0x69, 0x6e, 0x64, 0x65,
 	0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
@@ -2862,7 +2862,7 @@ var file_sunrise_swap_in_flight_packet_proto_goTypes = []interface{}{
 var file_sunrise_swap_in_flight_packet_proto_depIdxs = []int32{
 	0, // 0: sunrise.swap.IncomingInFlightPacket.index:type_name -> sunrise.swap.PacketIndex
 	3, // 1: sunrise.swap.IncomingInFlightPacket.result:type_name -> sunrise.swap.RouteResult
-	0, // 2: sunrise.swap.IncomingInFlightPacket.outgoing_index_return:type_name -> sunrise.swap.PacketIndex
+	0, // 2: sunrise.swap.IncomingInFlightPacket.outgoing_index_change:type_name -> sunrise.swap.PacketIndex
 	0, // 3: sunrise.swap.IncomingInFlightPacket.outgoing_index_forward:type_name -> sunrise.swap.PacketIndex
 	0, // 4: sunrise.swap.OutgoingInFlightPacket.index:type_name -> sunrise.swap.PacketIndex
 	0, // 5: sunrise.swap.OutgoingInFlightPacket.ack_waiting_index:type_name -> sunrise.swap.PacketIndex
@@ -2918,8 +2918,8 @@ func file_sunrise_swap_in_flight_packet_proto_init() {
 		}
 	}
 	file_sunrise_swap_in_flight_packet_proto_msgTypes[1].OneofWrappers = []interface{}{
-		(*IncomingInFlightPacket_OutgoingIndexReturn)(nil),
-		(*IncomingInFlightPacket_AckReturn)(nil),
+		(*IncomingInFlightPacket_OutgoingIndexChange)(nil),
+		(*IncomingInFlightPacket_AckChange)(nil),
 		(*IncomingInFlightPacket_OutgoingIndexForward)(nil),
 		(*IncomingInFlightPacket_AckForward)(nil),
 	}
