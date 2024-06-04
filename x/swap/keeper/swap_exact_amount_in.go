@@ -69,16 +69,20 @@ func (k Keeper) SwapExactAmountIn(
 
 	amountOutNet, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, amountOutGross)
 
+	if amountOutNet.LT(minAmountOut) {
+		return result, interfaceFee, fmt.Errorf("TODO")
+	}
+
 	if hasInterfaceFee {
 		// Validated in ValidateBasic
 		addr := sdk.MustAccAddressFromBech32(interfaceProvider)
+		fee := sdk.NewCoin(result.TokenOut.Denom, interfaceFee)
 
-		// TODO: Deduct interface fee
-		_ = addr
-	}
-
-	if amountOutNet.LT(minAmountOut) {
-		return result, interfaceFee, fmt.Errorf("TODO")
+		if fee.IsPositive() {
+			if err := k.BankKeeper.SendCoins(ctx, sender, addr, sdk.NewCoins(fee)); err != nil {
+				return result, interfaceFee, err
+			}
+		}
 	}
 
 	return result, interfaceFee, nil
