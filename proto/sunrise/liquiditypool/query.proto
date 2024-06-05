@@ -66,6 +66,8 @@ message QueryPoolRequest {
 
 message QueryPoolResponse {
   Pool pool = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin token_base = 2 [ (gogoproto.nullable) = false ];
+  cosmos.base.v1beta1.Coin token_quote = 3 [ (gogoproto.nullable) = false ];
 }
 
 message QueryPoolsRequest {
