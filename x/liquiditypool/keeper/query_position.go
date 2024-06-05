@@ -25,13 +25,13 @@ func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) t
 	}
 
 	return types.PositionInfo{
-		Position:    position,
-		AmountBase:  sdk.NewCoin(pool.DenomBase, actualAmountBase.TruncateInt()),
-		AmountQuote: sdk.NewCoin(pool.DenomQuote, actualAmountQuote.TruncateInt()),
+		Position:   position,
+		TokenBase:  sdk.NewCoin(pool.DenomBase, actualAmountBase.TruncateInt()),
+		TokenQuote: sdk.NewCoin(pool.DenomQuote, actualAmountQuote.TruncateInt()),
 	}
 }
 
-func (k Keeper) PositionAll(ctx context.Context, req *types.QueryAllPositionRequest) (*types.QueryAllPositionResponse, error) {
+func (k Keeper) Positions(ctx context.Context, req *types.QueryPositionsRequest) (*types.QueryPositionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -55,10 +55,10 @@ func (k Keeper) PositionAll(ctx context.Context, req *types.QueryAllPositionRequ
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllPositionResponse{Position: positions, Pagination: pageRes}, nil
+	return &types.QueryPositionsResponse{Positions: positions, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Position(ctx context.Context, req *types.QueryGetPositionRequest) (*types.QueryGetPositionResponse, error) {
+func (k Keeper) Position(ctx context.Context, req *types.QueryPositionRequest) (*types.QueryPositionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -68,10 +68,10 @@ func (k Keeper) Position(ctx context.Context, req *types.QueryGetPositionRequest
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	return &types.QueryGetPositionResponse{Position: k.WrapPositionInfo(ctx, position)}, nil
+	return &types.QueryPositionResponse{Position: k.WrapPositionInfo(ctx, position)}, nil
 }
 
-func (k Keeper) PositionsByPool(ctx context.Context, req *types.QueryPositionsByPoolRequest) (*types.QueryPositionsByPoolResponse, error) {
+func (k Keeper) PoolPositions(ctx context.Context, req *types.QueryPoolPositionsRequest) (*types.QueryPoolPositionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -82,10 +82,10 @@ func (k Keeper) PositionsByPool(ctx context.Context, req *types.QueryPositionsBy
 		positionInfos = append(positionInfos, k.WrapPositionInfo(ctx, position))
 	}
 
-	return &types.QueryPositionsByPoolResponse{Positions: positionInfos}, nil
+	return &types.QueryPoolPositionsResponse{Positions: positionInfos}, nil
 }
 
-func (k Keeper) PositionsByAddress(ctx context.Context, req *types.QueryPositionsByAddressRequest) (*types.QueryPositionsByAddressResponse, error) {
+func (k Keeper) AddressPositions(ctx context.Context, req *types.QueryAddressPositionsRequest) (*types.QueryAddressPositionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -96,10 +96,10 @@ func (k Keeper) PositionsByAddress(ctx context.Context, req *types.QueryPosition
 		positionInfos = append(positionInfos, k.WrapPositionInfo(ctx, position))
 	}
 
-	return &types.QueryPositionsByAddressResponse{Positions: positionInfos}, nil
+	return &types.QueryAddressPositionsResponse{Positions: positionInfos}, nil
 }
 
-func (k Keeper) FeesByPositionId(ctx context.Context, req *types.QueryFeesByPositionIdRequest) (*types.QueryFeesByPositionIdResponse, error) {
+func (k Keeper) PositionFees(ctx context.Context, req *types.QueryPositionFeesRequest) (*types.QueryPositionFeesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -111,5 +111,5 @@ func (k Keeper) FeesByPositionId(ctx context.Context, req *types.QueryFeesByPosi
 	// k.GetFeeAccumulator(c)
 	// TODO:
 
-	return &types.QueryFeesByPositionIdResponse{Fees: sdk.Coins{}}, nil
+	return &types.QueryPositionFeesResponse{Fees: sdk.Coins{}}, nil
 }

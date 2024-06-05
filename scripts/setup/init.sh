@@ -22,9 +22,6 @@ fi
 echo "Initializing $CHAINID_1..."
 $BINARY init test --home $NODE_HOME --chain-id=$CHAINID_1
 
-# change main token
-sed -i -e 's/\bstake\b/'$BINARY_MAIN_TOKEN'/g' $NODE_HOME/config/genesis.json
-
 echo "Adding genesis accounts..."
 echo $VAL_MNEMONIC_1    | $BINARY keys add $VAL1 --home $NODE_HOME --recover --keyring-backend=test
 echo $FAUCET_MNEMONIC_1 | $BINARY keys add $FAUCET --home $NODE_HOME --recover --keyring-backend=test
@@ -33,15 +30,15 @@ echo $USER_MNEMONIC_2 | $BINARY keys add $USER2 --home $NODE_HOME --recover --ke
 echo $USER_MNEMONIC_3 | $BINARY keys add $USER3 --home $NODE_HOME --recover --keyring-backend=test
 echo $USER_MNEMONIC_4 | $BINARY keys add $USER4 --home $NODE_HOME --recover --keyring-backend=test
 
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $VAL1 --keyring-backend test -a) 100000000000$BINARY_MAIN_TOKEN --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_MAIN_TOKEN,100000000000000uglu --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_MAIN_TOKEN,100000000000000uglu --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_MAIN_TOKEN,100000000000000uglu --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_MAIN_TOKEN,100000000000000uglu --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_MAIN_TOKEN,100000000000000uglu --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $VAL1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 
 echo "Creating and collecting gentx..."
-$BINARY genesis gentx $VAL1 7000000000$BINARY_MAIN_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test
+$BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test
 $BINARY genesis collect-gentxs --home $NODE_HOME
 
 echo "Changing defaults config files..."
@@ -59,15 +56,6 @@ fi
 $sed_i '/\[api\]/,+3 s/enable = false/enable = true/' $NODE_HOME/config/app.toml;
 $sed_i 's/mode = "full"/mode = "validator"/' $NODE_HOME/config/config.toml;
 $sed_i "s/enabled-unsafe-cors = false/enabled-unsafe-cors = true/" $NODE_HOME/config/app.toml;
-$sed_i 's/minimum-gas-prices = ""/minimum-gas-prices = "0usr"/' $NODE_HOME/config/app.toml;
-$sed_i 's/stake/usr/g' $NODE_HOME/config/genesis.json;
-
-jq '.app_state.bank.denom_metadata = [
-  {"base" : "usr" , "symbol": "SR"},
-  {"base" : "uglu", "symbol": "GLU"}
-  ]' $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
-
-# for disable bank
-# jq '.app_state.bank.params.default_send_enabled = false' $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+$sed_i 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' $NODE_HOME/config/config.toml;
 
 jq ".app_state.gov.params.voting_period = \"20s\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;

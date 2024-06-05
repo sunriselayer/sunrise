@@ -18,9 +18,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "PoolAll",
-					Use:       "list-pool",
-					Short:     "List all pool",
+					RpcMethod: "Pools",
+					Use:       "list-pools",
+					Short:     "List all pools",
 				},
 				{
 					RpcMethod:      "Pool",
@@ -29,9 +29,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
-					RpcMethod: "PositionAll",
-					Use:       "list-position",
-					Short:     "List all position",
+					RpcMethod: "Positions",
+					Use:       "list-positions",
+					Short:     "List all positions",
 				},
 				{
 					RpcMethod:      "Position",
@@ -40,21 +40,21 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
-					RpcMethod:      "PositionsByPool",
-					Use:            "show-positions-by-pool [pool_id]",
-					Short:          "Show positions by pool id",
+					RpcMethod:      "PoolPositions",
+					Use:            "show-pool-positions [pool_id]",
+					Short:          "List positions by pool id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "pool_id"}},
 				},
 				{
-					RpcMethod:      "PositionsByAddress",
-					Use:            "show-positions-by-address [address]",
-					Short:          "Show positions by address",
+					RpcMethod:      "AddressPositions",
+					Use:            "address-positions [address]",
+					Short:          "List positions by address",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
 				},
 				{
-					RpcMethod:      "FeesByPositionId",
-					Use:            "show-fees-by-position-id [id]",
-					Short:          "Show fees by position id",
+					RpcMethod:      "PositionFees",
+					Use:            "show-position-fees [id]",
+					Short:          "Shows fees in a position by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query

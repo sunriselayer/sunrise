@@ -23,6 +23,7 @@ func (BankModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 			{
 				Denom:    "urise",
 				Exponent: 0,
+				Aliases:  []string{"microRISE", "microrise"},
 			},
 			{
 				Denom:    "rise",
@@ -40,6 +41,7 @@ func (BankModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 			{
 				Denom:    "uvrise",
 				Exponent: 0,
+				Aliases:  []string{"microVRISE", "microvrise"},
 			},
 			{
 				Denom:    "vrise",

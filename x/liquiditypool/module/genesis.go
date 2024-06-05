@@ -34,9 +34,9 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 	genesis.Params = k.GetParams(ctx)
 
-	genesis.PoolList = k.GetAllPool(ctx)
+	genesis.PoolList = k.GetAllPools(ctx)
 	genesis.PoolCount = k.GetPoolCount(ctx)
-	genesis.PositionList = k.GetAllPosition(ctx)
+	genesis.PositionList = k.GetAllPositions(ctx)
 	genesis.PositionCount = k.GetPositionCount(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 

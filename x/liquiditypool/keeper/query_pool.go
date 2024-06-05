@@ -15,13 +15,13 @@ import (
 
 func (k Keeper) WrapPoolInfo(ctx context.Context, pool types.Pool) types.PoolInfo {
 	return types.PoolInfo{
-		Pool:        pool,
-		AmountBase:  sdk.Coin{}, // TODO: need to add liquidity tracker in pool
-		AmountQuote: sdk.Coin{}, // TODO: need to add liquidity tracker in pool
+		Pool:       pool,
+		TokenBase:  sdk.Coin{}, // TODO: need to add liquidity tracker in pool
+		TokenQuote: sdk.Coin{}, // TODO: need to add liquidity tracker in pool
 	}
 }
 
-func (k Keeper) PoolAll(ctx context.Context, req *types.QueryAllPoolRequest) (*types.QueryAllPoolResponse, error) {
+func (k Keeper) Pools(ctx context.Context, req *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -45,10 +45,10 @@ func (k Keeper) PoolAll(ctx context.Context, req *types.QueryAllPoolRequest) (*t
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllPoolResponse{Pool: pools, Pagination: pageRes}, nil
+	return &types.QueryPoolsResponse{Pools: pools, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Pool(ctx context.Context, req *types.QueryGetPoolRequest) (*types.QueryGetPoolResponse, error) {
+func (k Keeper) Pool(ctx context.Context, req *types.QueryPoolRequest) (*types.QueryPoolResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -58,5 +58,5 @@ func (k Keeper) Pool(ctx context.Context, req *types.QueryGetPoolRequest) (*type
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	return &types.QueryGetPoolResponse{Pool: k.WrapPoolInfo(ctx, pool)}, nil
+	return &types.QueryPoolResponse{Pool: k.WrapPoolInfo(ctx, pool)}, nil
 }
