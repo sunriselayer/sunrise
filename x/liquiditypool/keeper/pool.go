@@ -82,8 +82,8 @@ func (k Keeper) RemovePool(ctx context.Context, id uint64) {
 	store.Delete(GetPoolIDBytes(id))
 }
 
-// GetAllPool returns all pool
-func (k Keeper) GetAllPool(ctx context.Context) (list []types.Pool) {
+// GetAllPools returns all pool
+func (k Keeper) GetAllPools(ctx context.Context) (list []types.Pool) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})

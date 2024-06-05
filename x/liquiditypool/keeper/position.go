@@ -82,8 +82,8 @@ func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
 	store.Delete(GetPositionIDBytes(id))
 }
 
-// GetAllPosition returns all position
-func (k Keeper) GetAllPosition(ctx context.Context) (list []types.Position) {
+// GetAllPositions returns all position
+func (k Keeper) GetAllPositions(ctx context.Context) (list []types.Position) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})

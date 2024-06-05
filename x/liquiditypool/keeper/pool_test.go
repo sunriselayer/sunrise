@@ -47,7 +47,7 @@ func TestPoolGetAll(t *testing.T) {
 	items := createNPool(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllPool(ctx)),
+		nullify.Fill(keeper.GetAllPools(ctx)),
 	)
 }
 
