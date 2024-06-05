@@ -22,67 +22,39 @@ service Query {
   }
 
   // Queries a list of Pool items.
-<<<<<<< HEAD
-  rpc Pool(QueryGetPoolRequest) returns (QueryGetPoolResponse) {
+  rpc Pool(QueryPoolRequest) returns (QueryPoolResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/pool/{id}";
+        "/sunriselayer/sunrise/liquiditypool/pools/{id}";
   }
-  rpc PoolAll(QueryAllPoolRequest) returns (QueryAllPoolResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pool";
-=======
-  rpc Pool    (QueryPoolRequest) returns (QueryPoolResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pools/{id}";
-  
-  }
-  rpc Pools (QueryPoolsRequest) returns (QueryPoolsResponse) {
+  rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pools";
-  
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
   }
 
   // Queries a list of Position items.
-<<<<<<< HEAD
-  rpc Position(QueryGetPositionRequest) returns (QueryGetPositionResponse) {
+  rpc Position(QueryPositionRequest) returns (QueryPositionResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/position/{id}";
+        "/sunriselayer/sunrise/liquiditypool/positions/{id}";
   }
-  rpc PositionAll(QueryAllPositionRequest) returns (QueryAllPositionResponse) {
+  rpc Positions(QueryPositionsRequest) returns (QueryPositionsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/position";
+        "/sunriselayer/sunrise/liquiditypool/positions";
   }
-  rpc PositionsByPool(QueryPositionsByPoolRequest)
-      returns (QueryPositionsByPoolResponse) {
+  rpc PoolPositions(QueryPoolPositionsRequest)
+      returns (QueryPoolPositionsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/positions_by_pool/{pool_id}";
+        "/sunriselayer/sunrise/liquiditypool/pools/{pool_id}/positions";
   }
-  rpc PositionsByAddress(QueryPositionsByAddressRequest)
-      returns (QueryPositionsByAddressResponse) {
+  rpc AddressPositions (QueryAddressPositionsRequest) 
+      returns (QueryAddressPositionsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/positions_by_pool/{address}";
+        "/sunriselayer/sunrise/liquiditypool/address/{address}/positions";
   }
 
   // Query fees by position id
-  rpc FeesByPositionId(QueryFeesByPositionIdRequest)
-      returns (QueryFeesByPositionIdResponse) {
+  rpc PositionFees (QueryPositionFeesRequest) 
+      returns (QueryPositionFeesResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/fees_by_position/{id}";
-=======
-  rpc Position    (QueryPositionRequest) returns (QueryPositionResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/positions/{id}";
-  
-  }
-  rpc Positions (QueryPositionsRequest) returns (QueryPositionsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/positions";
-
-  }
-  rpc AddressPositions (QueryAddressPositionsRequest) returns (QueryAddressPositionsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/address/{address}/positions";
-
-  }
-  rpc PositionFees    (QueryPositionFeesRequest) returns (QueryPositionFeesResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/positions/{id}/fees";
-  
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
+      "/sunriselayer/sunrise/liquiditypool/positions/{id}/fees";
   }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -95,111 +67,59 @@ message QueryParamsResponse {
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
-<<<<<<< HEAD
-message QueryGetPoolRequest { uint64 id = 1; }
+message QueryPoolRequest { uint64 id = 1; }
 
 message PoolInfo {
   Pool pool = 1 [ (gogoproto.nullable) = false ];
-  cosmos.base.v1beta1.Coin amount_base = 2 [ (gogoproto.nullable) = false ];
-  cosmos.base.v1beta1.Coin amount_quote = 3 [ (gogoproto.nullable) = false ];
-}
-message QueryGetPoolResponse {
-  PoolInfo pool = 1 [ (gogoproto.nullable) = false ];
-=======
-message QueryPoolRequest {
-  uint64 id = 1;
-}
-
-message QueryPoolResponse {
-  Pool pool = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin token_base = 2 [ (gogoproto.nullable) = false ];
   cosmos.base.v1beta1.Coin token_quote = 3 [ (gogoproto.nullable) = false ];
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
+}
+message QueryPoolResponse {
+  PoolInfo pool = 1 [ (gogoproto.nullable) = false ];
 }
 
 message QueryPoolsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-<<<<<<< HEAD
-message QueryAllPoolResponse {
-  repeated PoolInfo Pool = 1 [ (gogoproto.nullable) = false ];
+message QueryPoolsResponse {
+  repeated PoolInfo pools = 1 [ (gogoproto.nullable) = false ];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryGetPositionRequest { uint64 id = 1; }
+message QueryPositionRequest { uint64 id = 1; }
 message PositionInfo {
   Position position = 1 [ (gogoproto.nullable) = false ];
-  cosmos.base.v1beta1.Coin amount_base = 2 [ (gogoproto.nullable) = false ];
-  cosmos.base.v1beta1.Coin amount_quote = 3 [ (gogoproto.nullable) = false ];
-}
-message QueryGetPositionResponse {
-  PositionInfo position = 1 [ (gogoproto.nullable) = false ];
-=======
-message QueryPoolsResponse {
-  repeated Pool                                   pools       = 1 [(gogoproto.nullable) = false];
-           cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryPositionRequest {
-  uint64 id = 1;
-}
-
-message QueryPositionResponse {
-  Position position = 1 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin token_base = 2 [ (gogoproto.nullable) = false ];
   cosmos.base.v1beta1.Coin token_quote = 3 [ (gogoproto.nullable) = false ];
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
+}
+message QueryPositionResponse {
+  PositionInfo position = 1 [ (gogoproto.nullable) = false ];
 }
 
 message QueryPositionsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-<<<<<<< HEAD
-message QueryAllPositionResponse {
-  repeated PositionInfo Position = 1 [ (gogoproto.nullable) = false ];
+message QueryPositionsResponse {
+  repeated PositionInfo positions = 1 [ (gogoproto.nullable) = false ];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryPositionsByPoolRequest { uint64 pool_id = 1; }
-message QueryPositionsByPoolResponse {
+message QueryPoolPositionsRequest { uint64 pool_id = 1; }
+message QueryPoolPositionsResponse {
   repeated PositionInfo positions = 1 [ (gogoproto.nullable) = false ];
 }
 
-message QueryPositionsByAddressRequest { string address = 1; }
-message QueryPositionsByAddressResponse {
+message QueryAddressPositionsRequest { string address = 1; }
+message QueryAddressPositionsResponse {
   repeated PositionInfo positions = 1 [ (gogoproto.nullable) = false ];
 }
 
-message QueryFeesByPositionIdRequest { uint64 id = 1; }
-message QueryFeesByPositionIdResponse {
+message QueryPositionFeesRequest { uint64 id = 1; }
+message QueryPositionFeesResponse {
   repeated cosmos.base.v1beta1.Coin fees = 1 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-=======
-message QueryPositionsResponse {
-  repeated Position                               positions   = 1 [(gogoproto.nullable) = false];
-           cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryAddressPositionsRequest {
-  string address = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-message QueryAddressPositionsResponse {
-  repeated Position                               positions   = 1 [(gogoproto.nullable) = false];
-           cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryPositionFeesRequest {
-  uint64 id = 1;
-}
-
-message QueryPositionFeesResponse {
-  cosmos.base.v1beta1.Coin fee_base = 1 [ (gogoproto.nullable) = false ];
-  cosmos.base.v1beta1.Coin fee_quote = 2 [ (gogoproto.nullable) = false ];
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 }

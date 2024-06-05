@@ -25,23 +25,13 @@ func TestPositionQuerySingle(t *testing.T) {
 	}{
 		{
 			desc:     "First",
-<<<<<<< HEAD
-			request:  &types.QueryGetPositionRequest{Id: msgs[0].Id},
-			response: &types.QueryGetPositionResponse{Position: types.PositionInfo{Position: msgs[0]}},
-		},
-		{
-			desc:     "Second",
-			request:  &types.QueryGetPositionRequest{Id: msgs[1].Id},
-			response: &types.QueryGetPositionResponse{Position: types.PositionInfo{Position: msgs[1]}},
-=======
 			request:  &types.QueryPositionRequest{Id: msgs[0].Id},
-			response: &types.QueryPositionResponse{Position: msgs[0]},
+			response: &types.QueryPositionResponse{Position: types.PositionInfo{Position: msgs[0]}},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryPositionRequest{Id: msgs[1].Id},
-			response: &types.QueryPositionResponse{Position: msgs[1]},
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
+			response: &types.QueryPositionResponse{Position: types.PositionInfo{Position: msgs[1]}},
 		},
 		{
 			desc:    "KeyNotFound",

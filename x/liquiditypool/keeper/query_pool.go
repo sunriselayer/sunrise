@@ -13,7 +13,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-<<<<<<< HEAD
 func (k Keeper) WrapPoolInfo(ctx context.Context, pool types.Pool) types.PoolInfo {
 	return types.PoolInfo{
 		Pool:        pool,
@@ -23,9 +22,6 @@ func (k Keeper) WrapPoolInfo(ctx context.Context, pool types.Pool) types.PoolInf
 }
 
 func (k Keeper) PoolAll(ctx context.Context, req *types.QueryAllPoolRequest) (*types.QueryAllPoolResponse, error) {
-=======
-func (k Keeper) Pools(ctx context.Context, req *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -49,10 +45,10 @@ func (k Keeper) Pools(ctx context.Context, req *types.QueryPoolsRequest) (*types
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryPoolsResponse{Pools: pools, Pagination: pageRes}, nil
+	return &types.QueryAllPoolResponse{Pool: pools, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Pool(ctx context.Context, req *types.QueryPoolRequest) (*types.QueryPoolResponse, error) {
+func (k Keeper) Pool(ctx context.Context, req *types.QueryGetPoolRequest) (*types.QueryGetPoolResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -62,9 +58,5 @@ func (k Keeper) Pool(ctx context.Context, req *types.QueryPoolRequest) (*types.Q
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-<<<<<<< HEAD
 	return &types.QueryGetPoolResponse{Pool: k.WrapPoolInfo(ctx, pool)}, nil
-=======
-	return &types.QueryPoolResponse{Pool: pool}, nil
->>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 }
