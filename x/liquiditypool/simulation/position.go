@@ -50,13 +50,13 @@ func SimulateMsgIncreaseLiquidity(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		var (
-			simAccount  = simtypes.Account{}
-			position    = types.Position{}
-			msg         = &types.MsgIncreaseLiquidity{}
-			allPosition = k.GetAllPosition(ctx)
-			found       = false
+			simAccount = simtypes.Account{}
+			position   = types.Position{}
+			msg        = &types.MsgIncreaseLiquidity{}
+			Positions  = k.GetAllPositions(ctx)
+			found      = false
 		)
-		for _, obj := range allPosition {
+		for _, obj := range Positions {
 			simAccount, found = FindAccount(accs, obj.Address)
 			if found {
 				position = obj
@@ -94,13 +94,13 @@ func SimulateMsgDecreaseLiquidity(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		var (
-			simAccount  = simtypes.Account{}
-			position    = types.Position{}
-			msg         = &types.MsgDecreaseLiquidity{}
-			allPosition = k.GetAllPosition(ctx)
-			found       = false
+			simAccount = simtypes.Account{}
+			position   = types.Position{}
+			msg        = &types.MsgDecreaseLiquidity{}
+			Positions  = k.GetAllPositions(ctx)
+			found      = false
 		)
-		for _, obj := range allPosition {
+		for _, obj := range Positions {
 			simAccount, found = FindAccount(accs, obj.Address)
 			if found {
 				position = obj

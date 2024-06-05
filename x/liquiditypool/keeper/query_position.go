@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+<<<<<<< HEAD
 func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) types.PositionInfo {
 	pool, found := k.GetPool(ctx, position.PoolId)
 	if !found {
@@ -32,6 +33,9 @@ func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) t
 }
 
 func (k Keeper) PositionAll(ctx context.Context, req *types.QueryAllPositionRequest) (*types.QueryAllPositionResponse, error) {
+=======
+func (k Keeper) Positions(ctx context.Context, req *types.QueryPositionsRequest) (*types.QueryPositionsResponse, error) {
+>>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -55,10 +59,10 @@ func (k Keeper) PositionAll(ctx context.Context, req *types.QueryAllPositionRequ
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllPositionResponse{Position: positions, Pagination: pageRes}, nil
+	return &types.QueryPositionsResponse{Positions: positions, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Position(ctx context.Context, req *types.QueryGetPositionRequest) (*types.QueryGetPositionResponse, error) {
+func (k Keeper) Position(ctx context.Context, req *types.QueryPositionRequest) (*types.QueryPositionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -68,14 +72,22 @@ func (k Keeper) Position(ctx context.Context, req *types.QueryGetPositionRequest
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
+<<<<<<< HEAD
 	return &types.QueryGetPositionResponse{Position: k.WrapPositionInfo(ctx, position)}, nil
 }
 
 func (k Keeper) PositionsByPool(ctx context.Context, req *types.QueryPositionsByPoolRequest) (*types.QueryPositionsByPoolResponse, error) {
+=======
+	return &types.QueryPositionResponse{Position: position}, nil
+}
+
+func (k Keeper) AddressPositions(ctx context.Context, req *types.QueryAddressPositionsRequest) (*types.QueryAddressPositionsResponse, error) {
+>>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+<<<<<<< HEAD
 	positionInfos := []types.PositionInfo{}
 	positions := k.GetPositionsByPool(ctx, req.PoolId)
 	for _, position := range positions {
@@ -86,10 +98,38 @@ func (k Keeper) PositionsByPool(ctx context.Context, req *types.QueryPositionsBy
 }
 
 func (k Keeper) PositionsByAddress(ctx context.Context, req *types.QueryPositionsByAddressRequest) (*types.QueryPositionsByAddressResponse, error) {
+=======
+	var positions []types.Position
+
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	positionStore := prefix.NewStore(store, types.KeyPrefix(types.PositionKey))
+
+	pageRes, err := query.Paginate(positionStore, req.Pagination, func(key []byte, value []byte) error {
+		var position types.Position
+		if err := k.cdc.Unmarshal(value, &position); err != nil {
+			return err
+		}
+
+		if position.Address == req.Address {
+			positions = append(positions, position)
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryAddressPositionsResponse{Positions: positions, Pagination: pageRes}, nil
+}
+
+func (k Keeper) PositionFees(ctx context.Context, req *types.QueryPositionFeesRequest) (*types.QueryPositionFeesResponse, error) {
+>>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+<<<<<<< HEAD
 	positionInfos := []types.PositionInfo{}
 	positions := k.GetPositionsByAddress(ctx, req.Address)
 	for _, position := range positions {
@@ -112,4 +152,9 @@ func (k Keeper) FeesByPositionId(ctx context.Context, req *types.QueryFeesByPosi
 	// TODO:
 
 	return &types.QueryFeesByPositionIdResponse{Fees: sdk.Coins{}}, nil
+=======
+	// todo: implement logic
+
+	return &types.QueryPositionFeesResponse{}, nil
+>>>>>>> 3988f81665ee85f01cc5adb24fcb7beb3e5cb010
 }
