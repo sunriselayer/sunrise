@@ -22,9 +22,6 @@ fi
 echo "Initializing $CHAINID_1..."
 $BINARY init test --home $NODE_HOME --chain-id=$CHAINID_1
 
-# change gov token
-sed -i -e 's/\bstake\b/'$BINARY_GOV_TOKEN'/g' $NODE_HOME/config/genesis.json
-
 echo "Adding genesis accounts..."
 echo $VAL_MNEMONIC_1    | $BINARY keys add $VAL1 --home $NODE_HOME --recover --keyring-backend=test
 echo $FAUCET_MNEMONIC_1 | $BINARY keys add $FAUCET --home $NODE_HOME --recover --keyring-backend=test
@@ -61,64 +58,5 @@ $sed_i 's/mode = "full"/mode = "validator"/' $NODE_HOME/config/config.toml;
 $sed_i "s/enabled-unsafe-cors = false/enabled-unsafe-cors = true/" $NODE_HOME/config/app.toml;
 $sed_i 's/minimum-gas-prices = ""/minimum-gas-prices = "0usr"/' $NODE_HOME/config/app.toml;
 $sed_i 's/stake/usr/g' $NODE_HOME/config/genesis.json;
-
-jq '.app_state.bank.denom_metadata = [{
-    "description": "The non-transferable governance token of the Sunrise blockchain.",
-    "denom_units": [
-      {
-        "denom": "uvrise",
-        "exponent": 0,
-        "aliases": ["microVRISE","microvrise"]
-      },
-      {
-        "denom": "vrise",
-        "exponent": 6
-      }
-    ],
-    "base": "uvrise",
-    "name": "VRISE",
-    "display": "vrise",
-    "symbol": "VRISE"
-  },
-  {
-    "description": "The transferable fee token of the Sunrise blockchain. ",
-    "denom_units": [
-      {
-        "denom": "urise",
-        "exponent": 0,
-        "aliases": ["microRISE","microrise"]
-      },
-      {
-        "denom": "rise",
-        "exponent": 6
-      }
-    ],
-    "base": "urise",
-    "name": "RISE",
-    "display": "rise",
-    "symbol": "RISE",
-  },
-  {
-    "description": "The native token of the Gluon blockchain. ",
-    "denom_units": [
-      {
-        "denom": "uglu",
-        "exponent": 0,
-        "aliases": ["microGLU","microglu"]
-      },
-      {
-        "denom": "glu",
-        "exponent": 6
-      }
-    ],
-    "base": "uglu",
-    "name": "Gluon",
-    "display": "glu",
-    "symbol": "GLU",
-  }
-]' $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
-
-# for disable bank
-# jq '.app_state.bank.params.default_send_enabled = false' $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 
 jq ".app_state.gov.params.voting_period = \"20s\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
