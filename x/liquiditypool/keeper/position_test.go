@@ -47,7 +47,7 @@ func TestPositionGetAll(t *testing.T) {
 	items := createNPosition(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllPosition(ctx)),
+		nullify.Fill(keeper.GetAllPositions(ctx)),
 	)
 }
 

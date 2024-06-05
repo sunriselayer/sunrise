@@ -19,23 +19,23 @@ func TestPoolQuerySingle(t *testing.T) {
 	msgs := createNPool(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
-		request  *types.QueryGetPoolRequest
-		response *types.QueryGetPoolResponse
+		request  *types.QueryPoolRequest
+		response *types.QueryPoolResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetPoolRequest{Id: msgs[0].Id},
-			response: &types.QueryGetPoolResponse{Pool: msgs[0]},
+			request:  &types.QueryPoolRequest{Id: msgs[0].Id},
+			response: &types.QueryPoolResponse{Pool: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetPoolRequest{Id: msgs[1].Id},
-			response: &types.QueryGetPoolResponse{Pool: msgs[1]},
+			request:  &types.QueryPoolRequest{Id: msgs[1].Id},
+			response: &types.QueryPoolResponse{Pool: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetPoolRequest{Id: uint64(len(msgs))},
+			request: &types.QueryPoolRequest{Id: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
@@ -63,8 +63,8 @@ func TestPoolQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
 	msgs := createNPool(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllPoolRequest {
-		return &types.QueryAllPoolRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryPoolsRequest {
+		return &types.QueryPoolsRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -76,12 +76,12 @@ func TestPoolQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.PoolAll(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.Pools(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Pool), step)
+			require.LessOrEqual(t, len(resp.Pools), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.Pool),
+				nullify.Fill(resp.Pools),
 			)
 		}
 	})
@@ -89,27 +89,27 @@ func TestPoolQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.PoolAll(ctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.Pools(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Pool), step)
+			require.LessOrEqual(t, len(resp.Pools), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.Pool),
+				nullify.Fill(resp.Pools),
 			)
 			next = resp.Pagination.NextKey
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.PoolAll(ctx, request(nil, 0, 0, true))
+		resp, err := keeper.Pools(ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
 			nullify.Fill(msgs),
-			nullify.Fill(resp.Pool),
+			nullify.Fill(resp.Pools),
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.PoolAll(ctx, nil)
+		_, err := keeper.Pools(ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }
