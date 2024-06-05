@@ -224,7 +224,10 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 			return math.Int{}, math.Int{}, err
 		}
 		k.RemovePosition(ctx, position.Id)
-		k.resetPool(ctx, pool)
+
+		if !k.PoolHasPosition(ctx, position.PoolId) {
+			k.resetPool(ctx, pool)
+		}
 	}
 
 	if lowerTickEmpty {
@@ -233,7 +236,7 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 	if upperTickEmpty {
 		k.RemoveTickInfo(ctx, position.PoolId, position.UpperTick)
 	}
-	return amountBase, amountQuote, nil
+	return amountBase.Abs(), amountQuote.Abs(), nil
 }
 
 func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecreaseLiquidity) (*types.MsgDecreaseLiquidityResponse, error) {
@@ -312,7 +315,7 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 	}
 	k.SetPosition(ctx, position)
 
-	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(ctx, lowerTick, upperTick, liquidityDelta)
+	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick, upperTick, liquidityDelta)
 	if err != nil {
 		return math.Int{}, math.Int{}, false, false, err
 	}

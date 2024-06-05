@@ -19,11 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName      = "/sunrise.liquiditypool.Query/Params"
-	Query_Pool_FullMethodName        = "/sunrise.liquiditypool.Query/Pool"
-	Query_PoolAll_FullMethodName     = "/sunrise.liquiditypool.Query/PoolAll"
-	Query_Position_FullMethodName    = "/sunrise.liquiditypool.Query/Position"
-	Query_PositionAll_FullMethodName = "/sunrise.liquiditypool.Query/PositionAll"
+	Query_Params_FullMethodName             = "/sunrise.liquiditypool.Query/Params"
+	Query_Pool_FullMethodName               = "/sunrise.liquiditypool.Query/Pool"
+	Query_PoolAll_FullMethodName            = "/sunrise.liquiditypool.Query/PoolAll"
+	Query_Position_FullMethodName           = "/sunrise.liquiditypool.Query/Position"
+	Query_PositionAll_FullMethodName        = "/sunrise.liquiditypool.Query/PositionAll"
+	Query_PositionsByPool_FullMethodName    = "/sunrise.liquiditypool.Query/PositionsByPool"
+	Query_PositionsByAddress_FullMethodName = "/sunrise.liquiditypool.Query/PositionsByAddress"
+	Query_FeesByPositionId_FullMethodName   = "/sunrise.liquiditypool.Query/FeesByPositionId"
 )
 
 // QueryClient is the client API for Query service.
@@ -38,6 +41,10 @@ type QueryClient interface {
 	// Queries a list of Position items.
 	Position(ctx context.Context, in *QueryGetPositionRequest, opts ...grpc.CallOption) (*QueryGetPositionResponse, error)
 	PositionAll(ctx context.Context, in *QueryAllPositionRequest, opts ...grpc.CallOption) (*QueryAllPositionResponse, error)
+	PositionsByPool(ctx context.Context, in *QueryPositionsByPoolRequest, opts ...grpc.CallOption) (*QueryPositionsByPoolResponse, error)
+	PositionsByAddress(ctx context.Context, in *QueryPositionsByAddressRequest, opts ...grpc.CallOption) (*QueryPositionsByAddressResponse, error)
+	// Query fees by position id
+	FeesByPositionId(ctx context.Context, in *QueryFeesByPositionIdRequest, opts ...grpc.CallOption) (*QueryFeesByPositionIdResponse, error)
 }
 
 type queryClient struct {
@@ -93,6 +100,33 @@ func (c *queryClient) PositionAll(ctx context.Context, in *QueryAllPositionReque
 	return out, nil
 }
 
+func (c *queryClient) PositionsByPool(ctx context.Context, in *QueryPositionsByPoolRequest, opts ...grpc.CallOption) (*QueryPositionsByPoolResponse, error) {
+	out := new(QueryPositionsByPoolResponse)
+	err := c.cc.Invoke(ctx, Query_PositionsByPool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PositionsByAddress(ctx context.Context, in *QueryPositionsByAddressRequest, opts ...grpc.CallOption) (*QueryPositionsByAddressResponse, error) {
+	out := new(QueryPositionsByAddressResponse)
+	err := c.cc.Invoke(ctx, Query_PositionsByAddress_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) FeesByPositionId(ctx context.Context, in *QueryFeesByPositionIdRequest, opts ...grpc.CallOption) (*QueryFeesByPositionIdResponse, error) {
+	out := new(QueryFeesByPositionIdResponse)
+	err := c.cc.Invoke(ctx, Query_FeesByPositionId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -105,6 +139,10 @@ type QueryServer interface {
 	// Queries a list of Position items.
 	Position(context.Context, *QueryGetPositionRequest) (*QueryGetPositionResponse, error)
 	PositionAll(context.Context, *QueryAllPositionRequest) (*QueryAllPositionResponse, error)
+	PositionsByPool(context.Context, *QueryPositionsByPoolRequest) (*QueryPositionsByPoolResponse, error)
+	PositionsByAddress(context.Context, *QueryPositionsByAddressRequest) (*QueryPositionsByAddressResponse, error)
+	// Query fees by position id
+	FeesByPositionId(context.Context, *QueryFeesByPositionIdRequest) (*QueryFeesByPositionIdResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -126,6 +164,15 @@ func (UnimplementedQueryServer) Position(context.Context, *QueryGetPositionReque
 }
 func (UnimplementedQueryServer) PositionAll(context.Context, *QueryAllPositionRequest) (*QueryAllPositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PositionAll not implemented")
+}
+func (UnimplementedQueryServer) PositionsByPool(context.Context, *QueryPositionsByPoolRequest) (*QueryPositionsByPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PositionsByPool not implemented")
+}
+func (UnimplementedQueryServer) PositionsByAddress(context.Context, *QueryPositionsByAddressRequest) (*QueryPositionsByAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PositionsByAddress not implemented")
+}
+func (UnimplementedQueryServer) FeesByPositionId(context.Context, *QueryFeesByPositionIdRequest) (*QueryFeesByPositionIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FeesByPositionId not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -230,6 +277,60 @@ func _Query_PositionAll_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_PositionsByPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPositionsByPoolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PositionsByPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PositionsByPool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PositionsByPool(ctx, req.(*QueryPositionsByPoolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PositionsByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPositionsByAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PositionsByAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PositionsByAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PositionsByAddress(ctx, req.(*QueryPositionsByAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_FeesByPositionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryFeesByPositionIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).FeesByPositionId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_FeesByPositionId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).FeesByPositionId(ctx, req.(*QueryFeesByPositionIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -256,6 +357,18 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PositionAll",
 			Handler:    _Query_PositionAll_Handler,
+		},
+		{
+			MethodName: "PositionsByPool",
+			Handler:    _Query_PositionsByPool_Handler,
+		},
+		{
+			MethodName: "PositionsByAddress",
+			Handler:    _Query_PositionsByAddress_Handler,
+		},
+		{
+			MethodName: "FeesByPositionId",
+			Handler:    _Query_FeesByPositionId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

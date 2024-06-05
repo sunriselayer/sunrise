@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -12,12 +13,20 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+func (k Keeper) WrapPoolInfo(ctx context.Context, pool types.Pool) types.PoolInfo {
+	return types.PoolInfo{
+		Pool:        pool,
+		AmountBase:  sdk.Coin{}, // TODO: need to add liquidity tracker in pool
+		AmountQuote: sdk.Coin{}, // TODO: need to add liquidity tracker in pool
+	}
+}
+
 func (k Keeper) PoolAll(ctx context.Context, req *types.QueryAllPoolRequest) (*types.QueryAllPoolResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var pools []types.Pool
+	var pools []types.PoolInfo
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	poolStore := prefix.NewStore(store, types.KeyPrefix(types.PoolKey))
@@ -28,7 +37,7 @@ func (k Keeper) PoolAll(ctx context.Context, req *types.QueryAllPoolRequest) (*t
 			return err
 		}
 
-		pools = append(pools, pool)
+		pools = append(pools, k.WrapPoolInfo(ctx, pool))
 		return nil
 	})
 
@@ -49,5 +58,5 @@ func (k Keeper) Pool(ctx context.Context, req *types.QueryGetPoolRequest) (*type
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	return &types.QueryGetPoolResponse{Pool: pool}, nil
+	return &types.QueryGetPoolResponse{Pool: k.WrapPoolInfo(ctx, pool)}, nil
 }

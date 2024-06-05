@@ -26,12 +26,12 @@ func TestPositionQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetPositionRequest{Id: msgs[0].Id},
-			response: &types.QueryGetPositionResponse{Position: msgs[0]},
+			response: &types.QueryGetPositionResponse{Position: types.PositionInfo{Position: msgs[0]}},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetPositionRequest{Id: msgs[1].Id},
-			response: &types.QueryGetPositionResponse{Position: msgs[1]},
+			response: &types.QueryGetPositionResponse{Position: types.PositionInfo{Position: msgs[1]}},
 		},
 		{
 			desc:    "KeyNotFound",
@@ -51,8 +51,8 @@ func TestPositionQuerySingle(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				require.Equal(t,
-					nullify.Fill(tc.response),
-					nullify.Fill(response),
+					nullify.Fill(tc.response.Position),
+					nullify.Fill(response.Position),
 				)
 			}
 		})

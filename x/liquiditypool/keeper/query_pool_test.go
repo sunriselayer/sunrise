@@ -26,12 +26,12 @@ func TestPoolQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetPoolRequest{Id: msgs[0].Id},
-			response: &types.QueryGetPoolResponse{Pool: msgs[0]},
+			response: &types.QueryGetPoolResponse{Pool: types.PoolInfo{Pool: msgs[0]}},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetPoolRequest{Id: msgs[1].Id},
-			response: &types.QueryGetPoolResponse{Pool: msgs[1]},
+			response: &types.QueryGetPoolResponse{Pool: types.PoolInfo{Pool: msgs[1]}},
 		},
 		{
 			desc:    "KeyNotFound",

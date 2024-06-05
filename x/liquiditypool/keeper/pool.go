@@ -43,11 +43,7 @@ func (k Keeper) AppendPool(ctx context.Context, pool types.Pool) uint64 {
 
 	// Set the ID of the appended value
 	pool.Id = count
-
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
-	appendedValue := k.cdc.MustMarshal(&pool)
-	store.Set(GetPoolIDBytes(pool.Id), appendedValue)
+	k.SetPool(ctx, pool)
 
 	// Update pool count
 	k.SetPoolCount(ctx, count+1)

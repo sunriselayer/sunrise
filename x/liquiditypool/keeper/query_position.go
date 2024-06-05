@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -12,12 +13,30 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) types.PositionInfo {
+	pool, found := k.GetPool(ctx, position.PoolId)
+	if !found {
+		return types.PositionInfo{Position: position}
+	}
+
+	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, position.Liquidity)
+	if err != nil {
+		return types.PositionInfo{Position: position}
+	}
+
+	return types.PositionInfo{
+		Position:    position,
+		AmountBase:  sdk.NewCoin(pool.DenomBase, actualAmountBase.TruncateInt()),
+		AmountQuote: sdk.NewCoin(pool.DenomQuote, actualAmountQuote.TruncateInt()),
+	}
+}
+
 func (k Keeper) PositionAll(ctx context.Context, req *types.QueryAllPositionRequest) (*types.QueryAllPositionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var positions []types.Position
+	var positions []types.PositionInfo
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	positionStore := prefix.NewStore(store, types.KeyPrefix(types.PositionKey))
@@ -28,7 +47,7 @@ func (k Keeper) PositionAll(ctx context.Context, req *types.QueryAllPositionRequ
 			return err
 		}
 
-		positions = append(positions, position)
+		positions = append(positions, k.WrapPositionInfo(ctx, position))
 		return nil
 	})
 
@@ -49,5 +68,48 @@ func (k Keeper) Position(ctx context.Context, req *types.QueryGetPositionRequest
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	return &types.QueryGetPositionResponse{Position: position}, nil
+	return &types.QueryGetPositionResponse{Position: k.WrapPositionInfo(ctx, position)}, nil
+}
+
+func (k Keeper) PositionsByPool(ctx context.Context, req *types.QueryPositionsByPoolRequest) (*types.QueryPositionsByPoolResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	positionInfos := []types.PositionInfo{}
+	positions := k.GetPositionsByPool(ctx, req.PoolId)
+	for _, position := range positions {
+		positionInfos = append(positionInfos, k.WrapPositionInfo(ctx, position))
+	}
+
+	return &types.QueryPositionsByPoolResponse{Positions: positionInfos}, nil
+}
+
+func (k Keeper) PositionsByAddress(ctx context.Context, req *types.QueryPositionsByAddressRequest) (*types.QueryPositionsByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	positionInfos := []types.PositionInfo{}
+	positions := k.GetPositionsByAddress(ctx, req.Address)
+	for _, position := range positions {
+		positionInfos = append(positionInfos, k.WrapPositionInfo(ctx, position))
+	}
+
+	return &types.QueryPositionsByAddressResponse{Positions: positionInfos}, nil
+}
+
+func (k Keeper) FeesByPositionId(ctx context.Context, req *types.QueryFeesByPositionIdRequest) (*types.QueryFeesByPositionIdResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	// position, found := k.GetPosition(ctx, req.Id)
+	// if !found {
+	// 	return nil, sdkerrors.ErrKeyNotFound
+	// }
+	// k.GetFeeAccumulator(c)
+	// TODO:
+
+	return &types.QueryFeesByPositionIdResponse{Fees: sdk.Coins{}}, nil
 }

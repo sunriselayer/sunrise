@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -43,11 +44,7 @@ func (k Keeper) AppendPosition(ctx context.Context, position types.Position) uin
 
 	// Set the ID of the appended value
 	position.Id = count
-
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
-	appendedValue := k.cdc.MustMarshal(&position)
-	store.Set(GetPositionIDBytes(position.Id), appendedValue)
+	k.SetPosition(ctx, position)
 
 	// Update position count
 	k.SetPositionCount(ctx, count+1)
@@ -61,6 +58,13 @@ func (k Keeper) SetPosition(ctx context.Context, position types.Position) {
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
 	b := k.cdc.MustMarshal(&position)
 	store.Set(GetPositionIDBytes(position.Id), b)
+
+	positionKey := sdk.Uint64ToBigEndian(position.Id)
+	store = prefix.NewStore(storeAdapter, types.PositionByPoolPrefix(position.PoolId))
+	store.Set(positionKey, positionKey)
+
+	store = prefix.NewStore(storeAdapter, types.PositionByAddressPrefix(position.Address))
+	store.Set(positionKey, positionKey)
 }
 
 // GetPosition returns a position from its id
@@ -73,6 +77,55 @@ func (k Keeper) GetPosition(ctx context.Context, id uint64) (val types.Position,
 	}
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
+}
+
+func (k Keeper) PoolHasPosition(ctx context.Context, poolId uint64) bool {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.PositionByPoolPrefix(poolId))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		return true
+	}
+	return false
+}
+
+func (k Keeper) GetPositionsByPool(ctx context.Context, poolId uint64) []types.Position {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.PositionByPoolPrefix(poolId))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	positions := []types.Position{}
+	for ; iterator.Valid(); iterator.Next() {
+		id := sdk.BigEndianToUint64(iterator.Value())
+		position, found := k.GetPosition(ctx, id)
+		if found {
+			positions = append(positions, position)
+		}
+	}
+	return positions
+}
+
+func (k Keeper) GetPositionsByAddress(ctx context.Context, addr string) []types.Position {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.PositionByAddressPrefix(addr))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	positions := []types.Position{}
+	for ; iterator.Valid(); iterator.Next() {
+		id := sdk.BigEndianToUint64(iterator.Value())
+		position, found := k.GetPosition(ctx, id)
+		if found {
+			positions = append(positions, position)
+		}
+	}
+	return positions
 }
 
 // RemovePosition removes a position from the store

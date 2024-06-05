@@ -39,6 +39,24 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Shows a position by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
+				{
+					RpcMethod:      "PositionsByPool",
+					Use:            "show-positions-by-pool [pool_id]",
+					Short:          "Show positions by pool id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "pool_id"}},
+				},
+				{
+					RpcMethod:      "PositionsByAddress",
+					Use:            "show-positions-by-address [address]",
+					Short:          "Show positions by address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
+				},
+				{
+					RpcMethod:      "FeesByPositionId",
+					Use:            "show-fees-by-position-id [id]",
+					Short:          "Show fees by position id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
