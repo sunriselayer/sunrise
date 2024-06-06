@@ -5,7 +5,6 @@ import (
 
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -14,10 +13,12 @@ import (
 )
 
 func (k Keeper) WrapPoolInfo(ctx context.Context, pool types.Pool) types.PoolInfo {
+	tokenBase := k.bankKeeper.GetBalance(ctx, pool.GetAddress(), pool.DenomBase)
+	tokenQuote := k.bankKeeper.GetBalance(ctx, pool.GetAddress(), pool.DenomQuote)
 	return types.PoolInfo{
 		Pool:       pool,
-		TokenBase:  sdk.Coin{}, // TODO: need to add liquidity tracker in pool
-		TokenQuote: sdk.Coin{}, // TODO: need to add liquidity tracker in pool
+		TokenBase:  tokenBase,
+		TokenQuote: tokenQuote,
 	}
 }
 
