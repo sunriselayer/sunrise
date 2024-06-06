@@ -442,8 +442,6 @@ func (k Keeper) swapCrossTickLogic(ctx sdk.Context,
 		return swapState, err
 	}
 	if updateAccumulators {
-		// TODO: accumulator logic
-
 		feeGrowth := sdk.DecCoin{Denom: denomIn, Amount: swapState.globalFeeGrowthPerUnitLiquidity}
 		err := k.crossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
 		if err != nil {
