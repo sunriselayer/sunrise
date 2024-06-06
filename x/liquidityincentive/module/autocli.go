@@ -19,6 +19,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "PositionIncentives",
+					Use:            "incentives-by-position-ids [ids]",
+					Short:          "Show incentives by position ids",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "ids"}},
+				},
+				{
+					RpcMethod:      "PositionIncentives",
 					Use:            "incentives-by-position-id [id]",
 					Short:          "Show incentives by position id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
