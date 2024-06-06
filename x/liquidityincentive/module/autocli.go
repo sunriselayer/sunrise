@@ -18,10 +18,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod:      "PositionsIncentives",
-					Use:            "incentives-by-position-ids [ids]",
-					Short:          "Show incentives by position ids",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "ids"}},
+					RpcMethod:      "PositionIncentives",
+					Use:            "incentives-by-position-id [id]",
+					Short:          "Show incentives by position id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod:      "AddressIncentives",
+					Use:            "incentives-by-address [address]",
+					Short:          "Show incentives by position id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
