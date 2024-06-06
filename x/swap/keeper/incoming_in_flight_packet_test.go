@@ -68,6 +68,6 @@ func TestIncomingInFlightPacketGetAll(t *testing.T) {
 	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllIncomingInFlightPacket(ctx)),
+		nullify.Fill(keeper.GetIncomingInFlightPackets(ctx)),
 	)
 }

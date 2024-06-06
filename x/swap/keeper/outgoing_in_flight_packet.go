@@ -17,7 +17,7 @@ func (k Keeper) SetOutgoingInFlightPacket(ctx context.Context, outgoingInFlightP
 	store.Set(types.OutgoingInFlightPacketKey(outgoingInFlightPacket.Index), b)
 }
 
-// GetOutgoingInFlightPacket returns a outgoingInFlightPacket from its index
+// OutgoingInFlightPacket returns a outgoingInFlightPacket from its index
 func (k Keeper) GetOutgoingInFlightPacket(
 	ctx context.Context,
 	srcPortId string,
@@ -60,8 +60,8 @@ func (k Keeper) RemoveOutgoingInFlightPacket(
 	))
 }
 
-// GetAllOutgoingInFlightPacket returns all outgoingInFlightPacket
-func (k Keeper) GetAllOutgoingInFlightPacket(ctx context.Context) (list []types.OutgoingInFlightPacket) {
+// OutgoingInFlightPackets returns all outgoingInFlightPacket
+func (k Keeper) GetOutgoingInFlightPackets(ctx context.Context) (list []types.OutgoingInFlightPacket) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})

@@ -62,8 +62,8 @@ func (k Keeper) RemoveIncomingInFlightPacket(
 	))
 }
 
-// GetAllIncomingInFlightPacket returns all incomingPacket
-func (k Keeper) GetAllIncomingInFlightPacket(ctx context.Context) (list []types.IncomingInFlightPacket) {
+// GetIncomingInFlightPackets returns all incomingPacket
+func (k Keeper) GetIncomingInFlightPackets(ctx context.Context) (list []types.IncomingInFlightPacket) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})

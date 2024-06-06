@@ -22,31 +22,31 @@ func TestIncomingInFlightPacketQuerySingle(t *testing.T) {
 	msgs := createNIncomingInFlightPacket(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
-		request  *types.QueryGetIncomingInFlightPacketRequest
-		response *types.QueryGetIncomingInFlightPacketResponse
+		request  *types.QueryIncomingInFlightPacketRequest
+		response *types.QueryIncomingInFlightPacketResponse
 		err      error
 	}{
 		{
 			desc: "First",
-			request: &types.QueryGetIncomingInFlightPacketRequest{
+			request: &types.QueryIncomingInFlightPacketRequest{
 				SrcPortId:    msgs[0].Index.PortId,
 				SrcChannelId: msgs[0].Index.ChannelId,
 				Sequence:     msgs[0].Index.Sequence,
 			},
-			response: &types.QueryGetIncomingInFlightPacketResponse{IncomingInFlightPacket: msgs[0]},
+			response: &types.QueryIncomingInFlightPacketResponse{Packet: msgs[0]},
 		},
 		{
 			desc: "Second",
-			request: &types.QueryGetIncomingInFlightPacketRequest{
+			request: &types.QueryIncomingInFlightPacketRequest{
 				SrcPortId:    msgs[1].Index.PortId,
 				SrcChannelId: msgs[1].Index.ChannelId,
 				Sequence:     msgs[1].Index.Sequence,
 			},
-			response: &types.QueryGetIncomingInFlightPacketResponse{IncomingInFlightPacket: msgs[1]},
+			response: &types.QueryIncomingInFlightPacketResponse{Packet: msgs[1]},
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.QueryGetIncomingInFlightPacketRequest{
+			request: &types.QueryIncomingInFlightPacketRequest{
 				SrcPortId:    strconv.Itoa(100000),
 				SrcChannelId: strconv.Itoa(100000),
 				Sequence:     uint64(100000),
@@ -78,8 +78,8 @@ func TestIncomingInFlightPacketQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
 	msgs := createNIncomingInFlightPacket(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllIncomingInFlightPacketRequest {
-		return &types.QueryAllIncomingInFlightPacketRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryIncomingInFlightPacketsRequest {
+		return &types.QueryIncomingInFlightPacketsRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -91,12 +91,12 @@ func TestIncomingInFlightPacketQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.IncomingInFlightPacketAll(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.IncomingInFlightPackets(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.IncomingInFlightPacket), step)
+			require.LessOrEqual(t, len(resp.Packets), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.IncomingInFlightPacket),
+				nullify.Fill(resp.Packets),
 			)
 		}
 	})
@@ -104,27 +104,27 @@ func TestIncomingInFlightPacketQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.IncomingInFlightPacketAll(ctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.IncomingInFlightPackets(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.IncomingInFlightPacket), step)
+			require.LessOrEqual(t, len(resp.Packets), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.IncomingInFlightPacket),
+				nullify.Fill(resp.Packets),
 			)
 			next = resp.Pagination.NextKey
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.IncomingInFlightPacketAll(ctx, request(nil, 0, 0, true))
+		resp, err := keeper.IncomingInFlightPackets(ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
 			nullify.Fill(msgs),
-			nullify.Fill(resp.IncomingInFlightPacket),
+			nullify.Fill(resp.Packets),
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.IncomingInFlightPacketAll(ctx, nil)
+		_, err := keeper.IncomingInFlightPackets(ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }
