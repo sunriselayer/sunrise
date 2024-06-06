@@ -10,8 +10,21 @@ import (
 func (k msgServer) CollectFees(goCtx context.Context, msg *types.MsgCollectFees) (*types.MsgCollectFeesResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
 
-	return &types.MsgCollectFeesResponse{}, nil
+	totalCollectedFees := sdk.NewCoins()
+	for _, positionId := range msg.PositionIds {
+		collectedFees, err := k.Keeper.collectFees(ctx, sender, positionId)
+		if err != nil {
+			return nil, err
+		}
+		totalCollectedFees = totalCollectedFees.Add(collectedFees...)
+	}
+
+	return &types.MsgCollectFeesResponse{
+		CollectedFees: totalCollectedFees,
+	}, nil
 }

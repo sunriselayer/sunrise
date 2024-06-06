@@ -104,12 +104,10 @@ func (k Keeper) PositionFees(ctx context.Context, req *types.QueryPositionFeesRe
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	// position, found := k.GetPosition(ctx, req.Id)
-	// if !found {
-	// 	return nil, sdkerrors.ErrKeyNotFound
-	// }
-	// k.GetFeeAccumulator(c)
-	// TODO:
+	collectedFees, err := k.GetClaimableFees(sdk.UnwrapSDKContext(ctx), req.Id)
+	if err != nil {
+		return nil, err
+	}
 
-	return &types.QueryPositionFeesResponse{Fees: sdk.Coins{}}, nil
+	return &types.QueryPositionFeesResponse{Fees: collectedFees}, nil
 }
