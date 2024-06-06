@@ -11,16 +11,16 @@ option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
 // Query defines the gRPC querier service.
 service Query {
   // Parameters queries the parameters of the module.
-  rpc FeeParams(QueryFeeParamsRequest) returns (QueryFeeParamsResponse) {
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sunrise/fee/params";
   }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
-message QueryFeeParamsRequest {}
+message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
-message QueryFeeParamsResponse {
+message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [
     (gogoproto.nullable) = false,
