@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName             = "/sunrise.liquidityincentive.Query/Params"
-	Query_AddressIncentives_FullMethodName  = "/sunrise.liquidityincentive.Query/AddressIncentives"
-	Query_PositionIncentives_FullMethodName = "/sunrise.liquidityincentive.Query/PositionIncentives"
+	Query_Params_FullMethodName              = "/sunrise.liquidityincentive.Query/Params"
+	Query_AddressIncentives_FullMethodName   = "/sunrise.liquidityincentive.Query/AddressIncentives"
+	Query_PositionIncentives_FullMethodName  = "/sunrise.liquidityincentive.Query/PositionIncentives"
+	Query_PositionsIncentives_FullMethodName = "/sunrise.liquidityincentive.Query/PositionsIncentives"
 )
 
 // QueryClient is the client API for Query service.
@@ -32,6 +33,7 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	AddressIncentives(ctx context.Context, in *QueryAddressIncentivesRequest, opts ...grpc.CallOption) (*QueryAddressIncentivesResponse, error)
 	PositionIncentives(ctx context.Context, in *QueryPositionIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionIncentivesResponse, error)
+	PositionsIncentives(ctx context.Context, in *QueryPositionsIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionsIncentivesResponse, error)
 }
 
 type queryClient struct {
@@ -69,6 +71,15 @@ func (c *queryClient) PositionIncentives(ctx context.Context, in *QueryPositionI
 	return out, nil
 }
 
+func (c *queryClient) PositionsIncentives(ctx context.Context, in *QueryPositionsIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionsIncentivesResponse, error) {
+	out := new(QueryPositionsIncentivesResponse)
+	err := c.cc.Invoke(ctx, Query_PositionsIncentives_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -77,6 +88,7 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	AddressIncentives(context.Context, *QueryAddressIncentivesRequest) (*QueryAddressIncentivesResponse, error)
 	PositionIncentives(context.Context, *QueryPositionIncentivesRequest) (*QueryPositionIncentivesResponse, error)
+	PositionsIncentives(context.Context, *QueryPositionsIncentivesRequest) (*QueryPositionsIncentivesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -92,6 +104,9 @@ func (UnimplementedQueryServer) AddressIncentives(context.Context, *QueryAddress
 }
 func (UnimplementedQueryServer) PositionIncentives(context.Context, *QueryPositionIncentivesRequest) (*QueryPositionIncentivesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PositionIncentives not implemented")
+}
+func (UnimplementedQueryServer) PositionsIncentives(context.Context, *QueryPositionsIncentivesRequest) (*QueryPositionsIncentivesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PositionsIncentives not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -160,6 +175,24 @@ func _Query_PositionIncentives_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_PositionsIncentives_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPositionsIncentivesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PositionsIncentives(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PositionsIncentives_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PositionsIncentives(ctx, req.(*QueryPositionsIncentivesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -178,6 +211,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PositionIncentives",
 			Handler:    _Query_PositionIncentives_Handler,
+		},
+		{
+			MethodName: "PositionsIncentives",
+			Handler:    _Query_PositionsIncentives_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
