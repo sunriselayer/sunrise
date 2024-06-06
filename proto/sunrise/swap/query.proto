@@ -16,26 +16,26 @@ service Query {
   
   // Parameters queries the parameters of the module.
   rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/params";
+    option (google.api.http).get = "/sunrise/swap/params";
   
   }
   
   // Queries a list of IncomingInFlightPacket items.
   rpc IncomingInFlightPacket    (QueryGetIncomingInFlightPacketRequest) returns (QueryGetIncomingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/incoming/{src_port_id}/{src_channel_id}/{sequence}";
+    option (google.api.http).get = "/sunrise/swap/ack_waiting_packet/incoming/{src_port_id}/{src_channel_id}/{sequence}";
   
   }
   rpc IncomingInFlightPacketAll (QueryAllIncomingInFlightPacketRequest) returns (QueryAllIncomingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/incoming";
+    option (google.api.http).get = "/sunrise/swap/ack_waiting_packet/incoming";
   }
 
   // Queries a list of OutgoingInFlightPacket items.
   rpc OutgoingInFlightPacket    (QueryGetOutgoingInFlightPacketRequest) returns (QueryGetOutgoingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
+    option (google.api.http).get = "/sunrise/swap/in_flight_packet/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
   
   }
   rpc OutgoingInFlightPacketAll (QueryAllOutgoingInFlightPacketRequest) returns (QueryAllOutgoingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/outgoing";
+    option (google.api.http).get = "/sunrise/swap/in_flight_packet/outgoing";
   
   }
   

@@ -4,7 +4,6 @@ package sunrise.fee;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/fee/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
@@ -12,16 +11,16 @@ option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
 // Query defines the gRPC querier service.
 service Query {
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/fee/params";
+  rpc FeeParams(QueryFeeParamsRequest) returns (QueryFeeParamsResponse) {
+    option (google.api.http).get = "/sunrise/fee/params";
   }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
-message QueryParamsRequest {}
+message QueryFeeParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
-message QueryParamsResponse {
+message QueryFeeParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [
     (gogoproto.nullable) = false,

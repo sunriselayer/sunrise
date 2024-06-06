@@ -17,43 +17,43 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/params";
+    option (google.api.http).get = "/sunrise/liquiditypool/params";
   }
 
   // Queries a list of Pool items.
   rpc Pool(QueryPoolRequest) returns (QueryPoolResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/pools/{id}";
+        "/sunrise/liquiditypool/pools/{id}";
   }
   rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquiditypool/pools";
+    option (google.api.http).get = "/sunrise/liquiditypool/pools";
   }
 
   // Queries a list of Position items.
   rpc Position(QueryPositionRequest) returns (QueryPositionResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/positions/{id}";
+        "/sunrise/liquiditypool/positions/{id}";
   }
   rpc Positions(QueryPositionsRequest) returns (QueryPositionsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/positions";
+        "/sunrise/liquiditypool/positions";
   }
   rpc PoolPositions(QueryPoolPositionsRequest)
       returns (QueryPoolPositionsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/pools/{pool_id}/positions";
+        "/sunrise/liquiditypool/pools/{pool_id}/positions";
   }
   rpc AddressPositions (QueryAddressPositionsRequest) 
       returns (QueryAddressPositionsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquiditypool/address/{address}/positions";
+        "/sunrise/liquiditypool/address/{address}/positions";
   }
 
   // Query fees by position id
   rpc PositionFees (QueryPositionFeesRequest) 
       returns (QueryPositionFeesResponse) {
     option (google.api.http).get =
-      "/sunriselayer/sunrise/liquiditypool/positions/{id}/fees";
+      "/sunrise/liquiditypool/positions/{id}/fees";
   }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
