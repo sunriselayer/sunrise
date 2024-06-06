@@ -6,7 +6,7 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	_ "github.com/cosmos/cosmos-sdk/types/query"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
@@ -114,22 +114,22 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
-type QueryIncentivesByPositionIdsRequest struct {
-	Ids []uint64 `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+type QueryAddressIncentivesRequest struct {
+	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
 
-func (m *QueryIncentivesByPositionIdsRequest) Reset()         { *m = QueryIncentivesByPositionIdsRequest{} }
-func (m *QueryIncentivesByPositionIdsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryIncentivesByPositionIdsRequest) ProtoMessage()    {}
-func (*QueryIncentivesByPositionIdsRequest) Descriptor() ([]byte, []int) {
+func (m *QueryAddressIncentivesRequest) Reset()         { *m = QueryAddressIncentivesRequest{} }
+func (m *QueryAddressIncentivesRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAddressIncentivesRequest) ProtoMessage()    {}
+func (*QueryAddressIncentivesRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ab94b087610c22b5, []int{2}
 }
-func (m *QueryIncentivesByPositionIdsRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryAddressIncentivesRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryIncentivesByPositionIdsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAddressIncentivesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryIncentivesByPositionIdsRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAddressIncentivesRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -139,40 +139,41 @@ func (m *QueryIncentivesByPositionIdsRequest) XXX_Marshal(b []byte, deterministi
 		return b[:n], nil
 	}
 }
-func (m *QueryIncentivesByPositionIdsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryIncentivesByPositionIdsRequest.Merge(m, src)
+func (m *QueryAddressIncentivesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAddressIncentivesRequest.Merge(m, src)
 }
-func (m *QueryIncentivesByPositionIdsRequest) XXX_Size() int {
+func (m *QueryAddressIncentivesRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryIncentivesByPositionIdsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryIncentivesByPositionIdsRequest.DiscardUnknown(m)
+func (m *QueryAddressIncentivesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAddressIncentivesRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryIncentivesByPositionIdsRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryAddressIncentivesRequest proto.InternalMessageInfo
 
-func (m *QueryIncentivesByPositionIdsRequest) GetIds() []uint64 {
+func (m *QueryAddressIncentivesRequest) GetAddress() string {
 	if m != nil {
-		return m.Ids
+		return m.Address
 	}
-	return nil
+	return ""
 }
 
-type QueryIncentivesByPositionIdsResponse struct {
+type QueryAddressIncentivesResponse struct {
+	Amount types.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount"`
 }
 
-func (m *QueryIncentivesByPositionIdsResponse) Reset()         { *m = QueryIncentivesByPositionIdsResponse{} }
-func (m *QueryIncentivesByPositionIdsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryIncentivesByPositionIdsResponse) ProtoMessage()    {}
-func (*QueryIncentivesByPositionIdsResponse) Descriptor() ([]byte, []int) {
+func (m *QueryAddressIncentivesResponse) Reset()         { *m = QueryAddressIncentivesResponse{} }
+func (m *QueryAddressIncentivesResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAddressIncentivesResponse) ProtoMessage()    {}
+func (*QueryAddressIncentivesResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ab94b087610c22b5, []int{3}
 }
-func (m *QueryIncentivesByPositionIdsResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryAddressIncentivesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryIncentivesByPositionIdsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAddressIncentivesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryIncentivesByPositionIdsResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAddressIncentivesResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -182,23 +183,120 @@ func (m *QueryIncentivesByPositionIdsResponse) XXX_Marshal(b []byte, determinist
 		return b[:n], nil
 	}
 }
-func (m *QueryIncentivesByPositionIdsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryIncentivesByPositionIdsResponse.Merge(m, src)
+func (m *QueryAddressIncentivesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAddressIncentivesResponse.Merge(m, src)
 }
-func (m *QueryIncentivesByPositionIdsResponse) XXX_Size() int {
+func (m *QueryAddressIncentivesResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryIncentivesByPositionIdsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryIncentivesByPositionIdsResponse.DiscardUnknown(m)
+func (m *QueryAddressIncentivesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAddressIncentivesResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryIncentivesByPositionIdsResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryAddressIncentivesResponse proto.InternalMessageInfo
+
+func (m *QueryAddressIncentivesResponse) GetAmount() types.Coin {
+	if m != nil {
+		return m.Amount
+	}
+	return types.Coin{}
+}
+
+type QueryPositionIncentivesRequest struct {
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QueryPositionIncentivesRequest) Reset()         { *m = QueryPositionIncentivesRequest{} }
+func (m *QueryPositionIncentivesRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryPositionIncentivesRequest) ProtoMessage()    {}
+func (*QueryPositionIncentivesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab94b087610c22b5, []int{4}
+}
+func (m *QueryPositionIncentivesRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPositionIncentivesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPositionIncentivesRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPositionIncentivesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPositionIncentivesRequest.Merge(m, src)
+}
+func (m *QueryPositionIncentivesRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPositionIncentivesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPositionIncentivesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPositionIncentivesRequest proto.InternalMessageInfo
+
+func (m *QueryPositionIncentivesRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type QueryPositionIncentivesResponse struct {
+	Amount types.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount"`
+}
+
+func (m *QueryPositionIncentivesResponse) Reset()         { *m = QueryPositionIncentivesResponse{} }
+func (m *QueryPositionIncentivesResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryPositionIncentivesResponse) ProtoMessage()    {}
+func (*QueryPositionIncentivesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab94b087610c22b5, []int{5}
+}
+func (m *QueryPositionIncentivesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPositionIncentivesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPositionIncentivesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPositionIncentivesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPositionIncentivesResponse.Merge(m, src)
+}
+func (m *QueryPositionIncentivesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPositionIncentivesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPositionIncentivesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPositionIncentivesResponse proto.InternalMessageInfo
+
+func (m *QueryPositionIncentivesResponse) GetAmount() types.Coin {
+	if m != nil {
+		return m.Amount
+	}
+	return types.Coin{}
+}
 
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "sunrise.liquidityincentive.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "sunrise.liquidityincentive.QueryParamsResponse")
-	proto.RegisterType((*QueryIncentivesByPositionIdsRequest)(nil), "sunrise.liquidityincentive.QueryIncentivesByPositionIdsRequest")
-	proto.RegisterType((*QueryIncentivesByPositionIdsResponse)(nil), "sunrise.liquidityincentive.QueryIncentivesByPositionIdsResponse")
+	proto.RegisterType((*QueryAddressIncentivesRequest)(nil), "sunrise.liquidityincentive.QueryAddressIncentivesRequest")
+	proto.RegisterType((*QueryAddressIncentivesResponse)(nil), "sunrise.liquidityincentive.QueryAddressIncentivesResponse")
+	proto.RegisterType((*QueryPositionIncentivesRequest)(nil), "sunrise.liquidityincentive.QueryPositionIncentivesRequest")
+	proto.RegisterType((*QueryPositionIncentivesResponse)(nil), "sunrise.liquidityincentive.QueryPositionIncentivesResponse")
 }
 
 func init() {
@@ -206,34 +304,39 @@ func init() {
 }
 
 var fileDescriptor_ab94b087610c22b5 = []byte{
-	// 417 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x52, 0xcf, 0x8a, 0xd3, 0x40,
-	0x18, 0xcf, 0x58, 0x2d, 0x38, 0x5e, 0x74, 0x2c, 0x28, 0x41, 0xa2, 0x44, 0xa9, 0xa5, 0x87, 0x0c,
-	0xad, 0x87, 0x82, 0x17, 0xa5, 0xd2, 0x43, 0xf1, 0x52, 0x8b, 0x27, 0x11, 0xca, 0xa4, 0x19, 0xe2,
-	0x40, 0x33, 0x93, 0x66, 0x26, 0xc5, 0x5c, 0x7d, 0x02, 0xc1, 0x8b, 0xe7, 0x3d, 0xed, 0x71, 0x1f,
-	0xa3, 0xc7, 0xc2, 0x5e, 0xf6, 0xb4, 0x2c, 0xed, 0xc2, 0xb2, 0x6f, 0xb1, 0x64, 0x32, 0x5d, 0x58,
-	0xda, 0xa6, 0x65, 0x2f, 0xe1, 0xe3, 0xcb, 0xef, 0xef, 0x97, 0xc0, 0xba, 0x4c, 0x79, 0xc2, 0x24,
-	0xc5, 0x13, 0x36, 0x4d, 0x59, 0xc0, 0x54, 0xc6, 0xf8, 0x98, 0x72, 0xc5, 0x66, 0x14, 0x4f, 0x53,
-	0x9a, 0x64, 0x5e, 0x9c, 0x08, 0x25, 0x90, 0x6d, 0x70, 0xde, 0x26, 0xce, 0x7e, 0x46, 0x22, 0xc6,
-	0x05, 0xd6, 0xcf, 0x02, 0x6e, 0xd7, 0x42, 0x11, 0x0a, 0x3d, 0xe2, 0x7c, 0x32, 0xdb, 0x57, 0xa1,
-	0x10, 0xe1, 0x84, 0x62, 0x12, 0x33, 0x4c, 0x38, 0x17, 0x8a, 0x28, 0x26, 0xb8, 0x34, 0x6f, 0x9b,
-	0x63, 0x21, 0x23, 0x21, 0xb1, 0x4f, 0xa4, 0xf1, 0xc6, 0xb3, 0x96, 0x4f, 0x15, 0x69, 0xe1, 0x98,
-	0x84, 0x8c, 0x6b, 0xb0, 0xc1, 0xbe, 0x2f, 0x89, 0x1d, 0x93, 0x84, 0x44, 0x46, 0xd4, 0xad, 0x41,
-	0xf4, 0x2d, 0x97, 0x1a, 0xe8, 0xe5, 0x90, 0x4e, 0x53, 0x2a, 0x95, 0xfb, 0x13, 0x3e, 0xbf, 0xb3,
-	0x95, 0xb1, 0xe0, 0x92, 0xa2, 0x1e, 0xac, 0x16, 0xe4, 0x97, 0xe0, 0x0d, 0x68, 0x3c, 0x69, 0xbb,
-	0xde, 0xee, 0xd6, 0x5e, 0xc1, 0xed, 0x3e, 0x9e, 0x9f, 0xbf, 0xb6, 0x8e, 0xaf, 0x4e, 0x9a, 0x60,
-	0x68, 0xc8, 0x6e, 0x07, 0xbe, 0xd5, 0xea, 0xfd, 0x35, 0x56, 0x76, 0xb3, 0x81, 0x90, 0x2c, 0xcf,
-	0xdf, 0x0f, 0xd6, 0x21, 0xd0, 0x53, 0x58, 0x61, 0x41, 0x6e, 0x55, 0x69, 0x3c, 0x1c, 0xe6, 0xa3,
-	0x5b, 0x87, 0xef, 0xca, 0x89, 0x45, 0xce, 0xf6, 0xff, 0x0a, 0x7c, 0xa4, 0x81, 0xe8, 0x08, 0xc0,
-	0x6a, 0x11, 0x04, 0x79, 0x65, 0x61, 0x37, 0x6f, 0x60, 0xe3, 0x83, 0xf1, 0x85, 0xab, 0xdb, 0xf9,
-	0x73, 0x7a, 0xf9, 0xef, 0x41, 0x0b, 0x61, 0x6c, 0x88, 0x13, 0x92, 0xd1, 0x04, 0xef, 0xfd, 0x12,
-	0xe8, 0x1a, 0xc0, 0x17, 0x3b, 0x2a, 0xa1, 0x4f, 0x7b, 0x53, 0x94, 0x5f, 0xd1, 0xfe, 0x7c, 0x7f,
-	0x01, 0xd3, 0xeb, 0xab, 0xee, 0xd5, 0x43, 0x5f, 0x0e, 0xee, 0x75, 0x3b, 0xc9, 0x91, 0x9f, 0x8d,
-	0x62, 0xa3, 0x39, 0x62, 0x81, 0xec, 0x7e, 0x9f, 0x2f, 0x1d, 0xb0, 0x58, 0x3a, 0xe0, 0x62, 0xe9,
-	0x80, 0xbf, 0x2b, 0xc7, 0x5a, 0xac, 0x1c, 0xeb, 0x6c, 0xe5, 0x58, 0x3f, 0x3e, 0x86, 0x4c, 0xfd,
-	0x4a, 0x7d, 0x6f, 0x2c, 0xa2, 0xed, 0x46, 0xbf, 0xb7, 0x59, 0xa9, 0x2c, 0xa6, 0xd2, 0xaf, 0xea,
-	0x9f, 0xf9, 0xc3, 0x4d, 0x00, 0x00, 0x00, 0xff, 0xff, 0x5c, 0x02, 0x90, 0xe2, 0xae, 0x03, 0x00,
-	0x00,
+	// 503 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x94, 0xcf, 0x6b, 0x13, 0x41,
+	0x14, 0xc7, 0x33, 0x21, 0x46, 0x3a, 0x82, 0xd0, 0xb1, 0x87, 0xba, 0xe8, 0x56, 0x06, 0x51, 0xe9,
+	0x61, 0xc6, 0x56, 0xa4, 0x36, 0x22, 0x68, 0xc4, 0x83, 0xb7, 0xba, 0x78, 0xb1, 0x78, 0x99, 0x64,
+	0x87, 0x75, 0x20, 0x3b, 0x6f, 0xb3, 0x33, 0x5b, 0x0c, 0xc5, 0x8b, 0x7f, 0x81, 0x20, 0xfe, 0x0f,
+	0x1e, 0xfd, 0x07, 0xbc, 0xf7, 0xd0, 0x43, 0xc1, 0x8b, 0x27, 0x91, 0x44, 0xf0, 0xdf, 0x90, 0x9d,
+	0x9d, 0xf8, 0x83, 0x75, 0x13, 0xa9, 0x97, 0x30, 0x99, 0x79, 0xdf, 0xf7, 0x3e, 0xef, 0xfb, 0x1e,
+	0x8b, 0xaf, 0x99, 0x42, 0xe7, 0xca, 0x48, 0x3e, 0x52, 0xe3, 0x42, 0xc5, 0xca, 0x4e, 0x94, 0x1e,
+	0x4a, 0x6d, 0xd5, 0x81, 0xe4, 0xe3, 0x42, 0xe6, 0x13, 0x96, 0xe5, 0x60, 0x81, 0x04, 0x3e, 0x8e,
+	0xd5, 0xe3, 0x82, 0x55, 0x91, 0x2a, 0x0d, 0xdc, 0xfd, 0x56, 0xe1, 0xc1, 0x5a, 0x02, 0x09, 0xb8,
+	0x23, 0x2f, 0x4f, 0xfe, 0xf6, 0x52, 0x02, 0x90, 0x8c, 0x24, 0x17, 0x99, 0xe2, 0x42, 0x6b, 0xb0,
+	0xc2, 0x2a, 0xd0, 0xc6, 0xbf, 0x86, 0x43, 0x30, 0x29, 0x18, 0x3e, 0x10, 0x46, 0xf2, 0x83, 0xad,
+	0x81, 0xb4, 0x62, 0x8b, 0x0f, 0x41, 0x69, 0xff, 0x7e, 0x7d, 0x01, 0x6a, 0x26, 0x72, 0x91, 0xfa,
+	0x44, 0x74, 0x0d, 0x93, 0x27, 0x25, 0xfa, 0x9e, 0xbb, 0x8c, 0xe4, 0xb8, 0x90, 0xc6, 0xd2, 0xe7,
+	0xf8, 0xc2, 0x1f, 0xb7, 0x26, 0x03, 0x6d, 0x24, 0x79, 0x84, 0xbb, 0x95, 0x78, 0x1d, 0x5d, 0x41,
+	0x37, 0xce, 0x6d, 0x53, 0xd6, 0xdc, 0x29, 0xab, 0xb4, 0xfd, 0x95, 0xa3, 0x2f, 0x1b, 0xad, 0xf7,
+	0xdf, 0x3f, 0x6c, 0xa2, 0xc8, 0x8b, 0xe9, 0x2e, 0xbe, 0xec, 0xb2, 0x3f, 0x88, 0xe3, 0x5c, 0x1a,
+	0xf3, 0x78, 0x2e, 0x99, 0x97, 0x27, 0xeb, 0xf8, 0xac, 0xa8, 0xde, 0x5c, 0xa1, 0x95, 0x68, 0xfe,
+	0x97, 0x3e, 0xc3, 0x61, 0x93, 0xd4, 0x33, 0xee, 0xe0, 0xae, 0x48, 0xa1, 0xd0, 0xd6, 0x33, 0x5e,
+	0x64, 0x95, 0x55, 0xac, 0xb4, 0x8a, 0x79, 0xab, 0xd8, 0x43, 0x50, 0xba, 0xdf, 0x29, 0xd1, 0x22,
+	0x1f, 0x4e, 0x6f, 0xfa, 0xd4, 0x7b, 0x60, 0x54, 0x69, 0x75, 0x1d, 0xeb, 0x3c, 0x6e, 0xab, 0xd8,
+	0xa5, 0xed, 0x44, 0x6d, 0x15, 0xd3, 0x7d, 0xbc, 0xd1, 0xa8, 0xf8, 0x4f, 0x9a, 0xed, 0x8f, 0x1d,
+	0x7c, 0xc6, 0x25, 0x27, 0xef, 0x10, 0xee, 0x56, 0x5e, 0x12, 0xb6, 0xc8, 0xef, 0xfa, 0x18, 0x03,
+	0xfe, 0xcf, 0xf1, 0x15, 0x2e, 0xdd, 0x7c, 0xfd, 0xe9, 0xdb, 0xdb, 0xf6, 0x55, 0x42, 0xf9, 0xd2,
+	0xfd, 0x21, 0xc7, 0x08, 0xaf, 0xd6, 0xc6, 0x40, 0x76, 0x97, 0x96, 0x6c, 0x9a, 0x7a, 0xd0, 0x3b,
+	0x8d, 0xd4, 0x83, 0xdf, 0x77, 0xe0, 0x3d, 0x72, 0x67, 0x11, 0xb8, 0x5f, 0x22, 0x7e, 0xe8, 0x0f,
+	0xaf, 0xb8, 0xfa, 0x05, 0x7e, 0x8c, 0x30, 0xa9, 0x0f, 0x92, 0x2c, 0x87, 0x6a, 0xdc, 0x97, 0xe0,
+	0xee, 0xa9, 0xb4, 0xbe, 0xa3, 0x7b, 0xae, 0xa3, 0x1d, 0x72, 0x7b, 0xe1, 0x28, 0xbc, 0xde, 0xf0,
+	0x43, 0x15, 0xff, 0xde, 0x4e, 0xff, 0xe9, 0xd1, 0x34, 0x44, 0x27, 0xd3, 0x10, 0x7d, 0x9d, 0x86,
+	0xe8, 0xcd, 0x2c, 0x6c, 0x9d, 0xcc, 0xc2, 0xd6, 0xe7, 0x59, 0xd8, 0xda, 0xef, 0x25, 0xca, 0xbe,
+	0x28, 0x06, 0x6c, 0x08, 0xe9, 0x3c, 0xf5, 0x48, 0x4c, 0x64, 0xfe, 0xb3, 0xce, 0xcb, 0xbf, 0x55,
+	0xb2, 0x93, 0x4c, 0x9a, 0x41, 0xd7, 0x7d, 0x34, 0x6e, 0xfd, 0x08, 0x00, 0x00, 0xff, 0xff, 0xc9,
+	0xa6, 0xd2, 0x7b, 0x0a, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -250,7 +353,8 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	IncentivesByPositionIds(ctx context.Context, in *QueryIncentivesByPositionIdsRequest, opts ...grpc.CallOption) (*QueryIncentivesByPositionIdsResponse, error)
+	AddressIncentives(ctx context.Context, in *QueryAddressIncentivesRequest, opts ...grpc.CallOption) (*QueryAddressIncentivesResponse, error)
+	PositionIncentives(ctx context.Context, in *QueryPositionIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionIncentivesResponse, error)
 }
 
 type queryClient struct {
@@ -270,9 +374,18 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) IncentivesByPositionIds(ctx context.Context, in *QueryIncentivesByPositionIdsRequest, opts ...grpc.CallOption) (*QueryIncentivesByPositionIdsResponse, error) {
-	out := new(QueryIncentivesByPositionIdsResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.Query/IncentivesByPositionIds", in, out, opts...)
+func (c *queryClient) AddressIncentives(ctx context.Context, in *QueryAddressIncentivesRequest, opts ...grpc.CallOption) (*QueryAddressIncentivesResponse, error) {
+	out := new(QueryAddressIncentivesResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.Query/AddressIncentives", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PositionIncentives(ctx context.Context, in *QueryPositionIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionIncentivesResponse, error) {
+	out := new(QueryPositionIncentivesResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.Query/PositionIncentives", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -283,7 +396,8 @@ func (c *queryClient) IncentivesByPositionIds(ctx context.Context, in *QueryInce
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	IncentivesByPositionIds(context.Context, *QueryIncentivesByPositionIdsRequest) (*QueryIncentivesByPositionIdsResponse, error)
+	AddressIncentives(context.Context, *QueryAddressIncentivesRequest) (*QueryAddressIncentivesResponse, error)
+	PositionIncentives(context.Context, *QueryPositionIncentivesRequest) (*QueryPositionIncentivesResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -293,8 +407,11 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (*UnimplementedQueryServer) IncentivesByPositionIds(ctx context.Context, req *QueryIncentivesByPositionIdsRequest) (*QueryIncentivesByPositionIdsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IncentivesByPositionIds not implemented")
+func (*UnimplementedQueryServer) AddressIncentives(ctx context.Context, req *QueryAddressIncentivesRequest) (*QueryAddressIncentivesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddressIncentives not implemented")
+}
+func (*UnimplementedQueryServer) PositionIncentives(ctx context.Context, req *QueryPositionIncentivesRequest) (*QueryPositionIncentivesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PositionIncentives not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -319,20 +436,38 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_IncentivesByPositionIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryIncentivesByPositionIdsRequest)
+func _Query_AddressIncentives_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAddressIncentivesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).IncentivesByPositionIds(ctx, in)
+		return srv.(QueryServer).AddressIncentives(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.liquidityincentive.Query/IncentivesByPositionIds",
+		FullMethod: "/sunrise.liquidityincentive.Query/AddressIncentives",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).IncentivesByPositionIds(ctx, req.(*QueryIncentivesByPositionIdsRequest))
+		return srv.(QueryServer).AddressIncentives(ctx, req.(*QueryAddressIncentivesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PositionIncentives_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPositionIncentivesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PositionIncentives(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.liquidityincentive.Query/PositionIncentives",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PositionIncentives(ctx, req.(*QueryPositionIncentivesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -346,8 +481,12 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "IncentivesByPositionIds",
-			Handler:    _Query_IncentivesByPositionIds_Handler,
+			MethodName: "AddressIncentives",
+			Handler:    _Query_AddressIncentives_Handler,
+		},
+		{
+			MethodName: "PositionIncentives",
+			Handler:    _Query_PositionIncentives_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -410,7 +549,7 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryIncentivesByPositionIdsRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryAddressIncentivesRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -420,38 +559,27 @@ func (m *QueryIncentivesByPositionIdsRequest) Marshal() (dAtA []byte, err error)
 	return dAtA[:n], nil
 }
 
-func (m *QueryIncentivesByPositionIdsRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAddressIncentivesRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryIncentivesByPositionIdsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAddressIncentivesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Ids) > 0 {
-		dAtA3 := make([]byte, len(m.Ids)*10)
-		var j2 int
-		for _, num := range m.Ids {
-			for num >= 1<<7 {
-				dAtA3[j2] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j2++
-			}
-			dAtA3[j2] = uint8(num)
-			j2++
-		}
-		i -= j2
-		copy(dAtA[i:], dAtA3[:j2])
-		i = encodeVarintQuery(dAtA, i, uint64(j2))
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Address)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryIncentivesByPositionIdsResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryAddressIncentivesResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -461,16 +589,87 @@ func (m *QueryIncentivesByPositionIdsResponse) Marshal() (dAtA []byte, err error
 	return dAtA[:n], nil
 }
 
-func (m *QueryIncentivesByPositionIdsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAddressIncentivesResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryIncentivesByPositionIdsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAddressIncentivesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	{
+		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPositionIncentivesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPositionIncentivesRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPositionIncentivesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPositionIncentivesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPositionIncentivesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPositionIncentivesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -505,28 +704,50 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryIncentivesByPositionIdsRequest) Size() (n int) {
+func (m *QueryAddressIncentivesRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Ids) > 0 {
-		l = 0
-		for _, e := range m.Ids {
-			l += sovQuery(uint64(e))
-		}
-		n += 1 + sovQuery(uint64(l)) + l
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
 
-func (m *QueryIncentivesByPositionIdsResponse) Size() (n int) {
+func (m *QueryAddressIncentivesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	l = m.Amount.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryPositionIncentivesRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	return n
+}
+
+func (m *QueryPositionIncentivesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Amount.Size()
+	n += 1 + l + sovQuery(uint64(l))
 	return n
 }
 
@@ -669,7 +890,7 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryIncentivesByPositionIdsRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryAddressIncentivesRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -692,87 +913,195 @@ func (m *QueryIncentivesByPositionIdsRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryIncentivesByPositionIdsRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAddressIncentivesRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryIncentivesByPositionIdsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAddressIncentivesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
-			if wireType == 0 {
-				var v uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowQuery
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
 				}
-				m.Ids = append(m.Ids, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowQuery
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthQuery
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthQuery
-				}
-				if postIndex > l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
 				}
-				elementCount = count
-				if elementCount != 0 && len(m.Ids) == 0 {
-					m.Ids = make([]uint64, 0, elementCount)
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAddressIncentivesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAddressIncentivesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAddressIncentivesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
 				}
-				for iNdEx < postIndex {
-					var v uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowQuery
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.Ids = append(m.Ids, v)
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
 				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ids", wireType)
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPositionIncentivesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPositionIncentivesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPositionIncentivesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
 			}
 		default:
 			iNdEx = preIndex
@@ -795,7 +1124,7 @@ func (m *QueryIncentivesByPositionIdsRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryIncentivesByPositionIdsResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryPositionIncentivesResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -818,12 +1147,45 @@ func (m *QueryIncentivesByPositionIdsResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryIncentivesByPositionIdsResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryPositionIncentivesResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryIncentivesByPositionIdsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryPositionIncentivesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
