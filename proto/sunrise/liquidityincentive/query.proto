@@ -19,14 +19,20 @@ service Query {
   rpc AddressIncentives(QueryAddressIncentivesRequest)
       returns (QueryAddressIncentivesResponse) {
     option (google.api.http).get =
-        "/sunrise/liquidityincentive/address/{address}/incentives";
+        "/sunrise/liquidityincentive/incentives/address/{address}";
   }
 
   rpc PositionIncentives(QueryPositionIncentivesRequest)
       returns (QueryPositionIncentivesResponse) {
     option (google.api.http).get =
-        "/sunrise/liquidityincentive/positions/{id}/incentives";
-}
+        "/sunrise/liquidityincentive/incentives/positions/{id}";
+  }
+
+  rpc PositionsIncentives(QueryPositionsIncentivesRequest)
+      returns (QueryPositionsIncentivesResponse) {
+    option (google.api.http).get =
+        "/sunrise/liquidityincentive/incentives/positions";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -46,5 +52,10 @@ message QueryAddressIncentivesResponse {
 
 message QueryPositionIncentivesRequest { uint64 id = 1; }
 message QueryPositionIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryPositionsIncentivesRequest { repeated uint64 ids = 1; }
+message QueryPositionsIncentivesResponse {
   cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
 }
