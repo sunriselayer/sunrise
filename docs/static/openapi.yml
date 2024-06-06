@@ -20549,14 +20549,14 @@ paths:
           format: uint64
       tags:
         - Query
-  /sunrise/swap/ack_waiting_packet/incoming:
+  /sunrise/swap/ack_waiting_packets/incoming:
     get:
-      operationId: SunriseSwapQuery_IncomingInFlightPacketAll
+      operationId: SunriseSwapQuery_IncomingInFlightPackets
       responses:
         '200':
           description: A successful response.
           schema:
-            $ref: '#/definitions/sunrise.swap.QueryAllIncomingInFlightPacketResponse'
+            $ref: '#/definitions/sunrise.swap.QueryIncomingInFlightPacketsResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -20634,7 +20634,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /sunrise/swap/ack_waiting_packet/incoming/{src_port_id}/{src_channel_id}/{sequence}:
+  /sunrise/swap/ack_waiting_packets/incoming/{src_port_id}/{src_channel_id}/{sequence}:
     get:
       summary: Queries a list of IncomingInFlightPacket items.
       operationId: SunriseSwapQuery_IncomingInFlightPacket
@@ -20642,7 +20642,7 @@ paths:
         '200':
           description: A successful response.
           schema:
-            $ref: '#/definitions/sunrise.swap.QueryGetIncomingInFlightPacketResponse'
+            $ref: '#/definitions/sunrise.swap.QueryIncomingInFlightPacketResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -20677,16 +20677,16 @@ paths:
           format: uint64
       tags:
         - Query
-  /sunrise/swap/in_flight_packet/outgoing:
+  /sunrise/swap/in_flight_packets/outgoing:
     get:
-      operationId: SunriseSwapQuery_OutgoingInFlightPacketAll
+      operationId: SunriseSwapQuery_OutgoingInFlightPackets
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              outgoingInFlightPacket:
+              packets:
                 type: array
                 items:
                   type: object
@@ -20819,7 +20819,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /sunrise/swap/in_flight_packet/outgoing/{src_port_id}/{src_channel_id}/{sequence}:
+  /sunrise/swap/in_flight_packets/outgoing/{src_port_id}/{src_channel_id}/{sequence}:
     get:
       summary: Queries a list of OutgoingInFlightPacket items.
       operationId: SunriseSwapQuery_OutgoingInFlightPacket
@@ -20829,7 +20829,7 @@ paths:
           schema:
             type: object
             properties:
-              outgoingInFlightPacket:
+              packet:
                 type: object
                 properties:
                   index:
@@ -29908,6 +29908,7 @@ definitions:
         type: string
         title: basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
     title: PriceRatio^(Tick - BaseOffSet)
+
   sunrise.swap.IncomingInFlightPacket:
     type: object
     properties:
@@ -30008,10 +30009,15 @@ definitions:
       interface_fee_rate:
         type: string
     description: Params defines the parameters for the module.
-  sunrise.swap.QueryAllIncomingInFlightPacketResponse:
+  sunrise.swap.QueryIncomingInFlightPacketResponse:
     type: object
     properties:
-      incomingInFlightPacket:
+      packet:
+        $ref: '#/definitions/sunrise.swap.IncomingInFlightPacket'
+  sunrise.swap.QueryIncomingInFlightPacketsResponse:
+    type: object
+    properties:
+      packets:
         type: array
         items:
           $ref: '#/definitions/sunrise.swap.IncomingInFlightPacket'
@@ -30042,10 +30048,39 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
-  sunrise.swap.QueryAllOutgoingInFlightPacketResponse:
+  sunrise.swap.QueryOutgoingInFlightPacketResponse:
     type: object
     properties:
-      outgoingInFlightPacket:
+      packet:
+        type: object
+        properties:
+          index:
+            type: object
+            properties:
+              port_id:
+                type: string
+              channel_id:
+                type: string
+              sequence:
+                type: string
+                format: uint64
+          ack_waiting_index:
+            type: object
+            properties:
+              port_id:
+                type: string
+              channel_id:
+                type: string
+              sequence:
+                type: string
+                format: uint64
+          retries_remaining:
+            type: integer
+            format: int32
+  sunrise.swap.QueryOutgoingInFlightPacketsResponse:
+    type: object
+    properties:
+      packets:
         type: array
         items:
           type: object
@@ -30099,40 +30134,6 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
-  sunrise.swap.QueryGetIncomingInFlightPacketResponse:
-    type: object
-    properties:
-      incomingInFlightPacket:
-        $ref: '#/definitions/sunrise.swap.IncomingInFlightPacket'
-  sunrise.swap.QueryGetOutgoingInFlightPacketResponse:
-    type: object
-    properties:
-      outgoingInFlightPacket:
-        type: object
-        properties:
-          index:
-            type: object
-            properties:
-              port_id:
-                type: string
-              channel_id:
-                type: string
-              sequence:
-                type: string
-                format: uint64
-          ack_waiting_index:
-            type: object
-            properties:
-              port_id:
-                type: string
-              channel_id:
-                type: string
-              sequence:
-                type: string
-                format: uint64
-          retries_remaining:
-            type: integer
-            format: int32
   sunrise.swap.QueryParamsResponse:
     type: object
     properties:
