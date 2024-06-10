@@ -75,7 +75,9 @@ func (k Keeper) SwapExactAmountIn(
 	sender sdk.AccAddress,
 	pool types.Pool,
 	tokenIn sdk.Coin,
-	denomOut string) (amountOut math.Int, err error) {
+	denomOut string,
+	feeEnabled bool,
+) (amountOut math.Int, err error) {
 	if tokenIn.Denom == denomOut {
 		return math.Int{}, types.ErrDenomDuplication
 	}
@@ -83,7 +85,11 @@ func (k Keeper) SwapExactAmountIn(
 	baseForQuote := getBaseForQuote(tokenIn.Denom, pool.DenomBase)
 
 	priceLimit := GetPriceLimit(baseForQuote)
-	tokenIn, tokenOut, _, err := k.swapOutAmtGivenIn(ctx, sender, pool, tokenIn, denomOut, pool.FeeRate, priceLimit)
+	feeRate := math.LegacyZeroDec()
+	if feeEnabled {
+		feeRate = pool.FeeRate
+	}
+	tokenIn, tokenOut, _, err := k.swapOutAmtGivenIn(ctx, sender, pool, tokenIn, denomOut, feeRate, priceLimit)
 	if err != nil {
 		return math.Int{}, err
 	}
@@ -98,6 +104,7 @@ func (k Keeper) SwapExactAmountOut(
 	pool types.Pool,
 	tokenOut sdk.Coin,
 	denomIn string,
+	feeEnabled bool,
 ) (amountIn math.Int, err error) {
 	if tokenOut.Denom == denomIn {
 		return math.Int{}, types.ErrDenomDuplication
@@ -106,7 +113,11 @@ func (k Keeper) SwapExactAmountOut(
 	baseForQuote := getBaseForQuote(denomIn, pool.DenomBase)
 
 	priceLimit := GetPriceLimit(baseForQuote)
-	tokenIn, tokenOut, _, err := k.swapInAmtGivenOut(ctx, sender, pool, tokenOut, denomIn, pool.FeeRate, priceLimit)
+	feeRate := math.LegacyZeroDec()
+	if feeEnabled {
+		feeRate = pool.FeeRate
+	}
+	tokenIn, tokenOut, _, err := k.swapInAmtGivenOut(ctx, sender, pool, tokenOut, denomIn, feeRate, priceLimit)
 	if err != nil {
 		return math.Int{}, err
 	}
@@ -176,9 +187,14 @@ func (k Keeper) CalculateResultExactAmountIn(
 	pool types.Pool,
 	tokenIn sdk.Coin,
 	denomOut string,
+	feeEnabled bool,
 ) (tokenOut math.Int, err error) {
 	cacheCtx, _ := ctx.CacheContext()
-	swapResult, _, err := k.computeOutAmtGivenIn(cacheCtx, pool.Id, tokenIn, denomOut, pool.FeeRate, unboundedPriceLimit, false)
+	feeRate := math.LegacyZeroDec()
+	if feeEnabled {
+		feeRate = pool.FeeRate
+	}
+	swapResult, _, err := k.computeOutAmtGivenIn(cacheCtx, pool.Id, tokenIn, denomOut, feeRate, unboundedPriceLimit, false)
 	if err != nil {
 		return math.ZeroInt(), err
 	}
@@ -190,9 +206,14 @@ func (k Keeper) CalculateResultExactAmountOut(
 	pool types.Pool,
 	tokenOut sdk.Coin,
 	denomIn string,
+	feeEnabled bool,
 ) (math.Int, error) {
 	cacheCtx, _ := ctx.CacheContext()
-	swapResult, _, err := k.computeInAmtGivenOut(cacheCtx, tokenOut, denomIn, pool.FeeRate, unboundedPriceLimit, pool.Id, false)
+	feeRate := math.LegacyZeroDec()
+	if feeEnabled {
+		feeRate = pool.FeeRate
+	}
+	swapResult, _, err := k.computeInAmtGivenOut(cacheCtx, tokenOut, denomIn, feeRate, unboundedPriceLimit, pool.Id, false)
 	if err != nil {
 		return math.ZeroInt(), err
 	}

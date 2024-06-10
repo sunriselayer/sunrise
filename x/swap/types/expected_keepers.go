@@ -37,10 +37,10 @@ type TransferKeeper interface {
 // LiquidityPoolKeeper defines the expected interface for the liquidity pool module.
 type LiquidityPoolKeeper interface {
 	GetPool(ctx context.Context, id uint64) (val lptypes.Pool, found bool)
-	CalculateResultExactAmountIn(ctx sdk.Context, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string) (amountOut math.Int, err error)
-	CalculateResultExactAmountOut(ctx sdk.Context, pool lptypes.Pool, tokenOut sdk.Coin, denomIn string) (amountIn math.Int, err error)
-	SwapExactAmountIn(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string) (amountOut math.Int, err error)
-	SwapExactAmountOut(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenOut sdk.Coin, denomIn string) (amountIn math.Int, err error)
+	CalculateResultExactAmountIn(ctx sdk.Context, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string, feeEnabled bool) (amountOut math.Int, err error)
+	CalculateResultExactAmountOut(ctx sdk.Context, pool lptypes.Pool, tokenOut sdk.Coin, denomIn string, feeEnabled bool) (amountIn math.Int, err error)
+	SwapExactAmountIn(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string, feeEnabled bool) (amountOut math.Int, err error)
+	SwapExactAmountOut(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenOut sdk.Coin, denomIn string, feeEnabled bool) (amountIn math.Int, err error)
 }
 
 // ParamSubspace defines the expected Subspace interface for parameters.

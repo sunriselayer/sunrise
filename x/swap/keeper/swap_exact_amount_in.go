@@ -130,6 +130,7 @@ func (k Keeper) calculateResultRoutePoolExactAmountIn(
 		pool,
 		tokenIn,
 		denomOut,
+		true,
 	)
 	if err != nil {
 		return math.Int{}, err
@@ -179,6 +180,7 @@ func (k Keeper) swapRoutePoolExactAmountIn(
 		pool,
 		tokenIn,
 		denomOut,
+		true,
 	)
 	if err != nil {
 		return math.Int{}, err
