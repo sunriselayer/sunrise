@@ -13,10 +13,10 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	_, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sdk.AccAddress("sender")
 	for i := 0; i < 1; i++ {
 		resp, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-			Authority:  sender,
+			Authority:  sender.String(),
 			DenomBase:  "base",
 			DenomQuote: "quote",
 			FeeRate:    "0.01",

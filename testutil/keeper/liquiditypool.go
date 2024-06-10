@@ -28,7 +28,7 @@ import (
 func init() {
 	config := sdk.GetConfig()
 	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
-	config.Seal()
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
 }
 
 func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
