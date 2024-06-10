@@ -75,7 +75,10 @@ func (k Keeper) SwapExactAmountIn(
 
 	if hasInterfaceFee {
 		// Validated in ValidateBasic
-		addr := sdk.MustAccAddressFromBech32(interfaceProvider)
+		addr, err := sdk.AccAddressFromBech32(interfaceProvider)
+		if err != nil {
+			return result, interfaceFee, err
+		}
 		fee := sdk.NewCoin(result.TokenOut.Denom, interfaceFee)
 
 		if fee.IsPositive() {
