@@ -3,6 +3,7 @@ package types
 import (
 	"testing"
 
+	"cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/testutil/sample"
@@ -17,13 +18,37 @@ func TestMsgSwapExactAmountOut_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgSwapExactAmountOut{
-				Sender: "invalid_address",
+				Sender:            "invalid_address",
+				InterfaceProvider: sample.AccAddress(),
+				Route: Route{
+					DenomIn:  "base",
+					DenomOut: "quote",
+					Strategy: &Route_Pool{
+						Pool: &RoutePool{
+							PoolId: 1,
+						},
+					},
+				},
+				MaxAmountIn: math.NewInt(1000000),
+				AmountOut:   math.NewInt(1000000),
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgSwapExactAmountOut{
-				Sender: sample.AccAddress(),
+				Sender:            sample.AccAddress(),
+				InterfaceProvider: sample.AccAddress(),
+				Route: Route{
+					DenomIn:  "base",
+					DenomOut: "quote",
+					Strategy: &Route_Pool{
+						Pool: &RoutePool{
+							PoolId: 1,
+						},
+					},
+				},
+				MaxAmountIn: math.NewInt(1000000),
+				AmountOut:   math.NewInt(1000000),
 			},
 		},
 	}
