@@ -19290,45 +19290,9 @@ paths:
           format: uint64
       tags:
         - Query
-  /sunrise/liquidityincentive/params:
+  /sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge:
     get:
-      summary: Parameters queries the parameters of the module.
-      operationId: SunriseLiquidityincentiveQuery_Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
-  /sunriselayer/sunrise/liquidityincentive/gauge:
-    get:
-      operationId: SunriseLiquidityincentiveQuery_GaugeAll
+      operationId: SunriseLiquidityincentiveQuery_Gauges
       responses:
         '200':
           description: A successful response.
@@ -19340,8 +19304,12 @@ paths:
                 items:
                   type: object
                   properties:
-                    index:
+                    previous_epoch_id:
                       type: string
+                      format: uint64
+                    pool_id:
+                      type: string
+                      format: uint64
               pagination:
                 type: object
                 properties:
@@ -19389,6 +19357,11 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
+        - name: previous_epoch_id
+          in: path
+          required: true
+          type: string
+          format: uint64
         - name: pagination.key
           description: |-
             key is a value returned in PageResponse.next_key to begin
@@ -19447,7 +19420,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /sunriselayer/sunrise/liquidityincentive/gauge/{index}:
+  /sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge/{pool_id}:
     get:
       summary: Queries a list of Gauge items.
       operationId: SunriseLiquidityincentiveQuery_Gauge
@@ -19460,8 +19433,12 @@ paths:
               gauge:
                 type: object
                 properties:
-                  index:
+                  previous_epoch_id:
                     type: string
+                    format: uint64
+                  pool_id:
+                    type: string
+                    format: uint64
         default:
           description: An unexpected error response.
           schema:
@@ -19481,10 +19458,52 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: index
+        - name: previous_epoch_id
           in: path
           required: true
           type: string
+          format: uint64
+        - name: pool_id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /sunrise/liquidityincentive/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: SunriseLiquidityincentiveQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
       tags:
         - Query
   /sunrise.liquidityincentive.Msg/UpdateParams:
@@ -19535,12 +19554,46 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
             description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
+  /sunrise.liquidityincentive.Msg/VoteGauge:
+    post:
+      operationId: SunriseLiquidityincentiveMsg_VoteGauge
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
       tags:
         - Msg
   /sunrise.liquiditypool.Msg/CollectFees:
@@ -28046,47 +28099,15 @@ definitions:
   sunrise.liquidityincentive.Gauge:
     type: object
     properties:
-      index:
+      previous_epoch_id:
         type: string
+        format: uint64
+      pool_id:
+        type: string
+        format: uint64
   sunrise.liquidityincentive.Params:
     type: object
     description: Params defines the parameters for the module.
-  sunrise.liquidityincentive.QueryAllGaugeResponse:
-    type: object
-    properties:
-      gauge:
-        type: array
-        items:
-          type: object
-          properties:
-            index:
-              type: string
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-        description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
-
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
   sunrise.liquidityincentive.QueryEpochResponse:
     type: object
     properties:
@@ -28133,14 +28154,58 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
-  sunrise.liquidityincentive.QueryGetGaugeResponse:
+  sunrise.liquidityincentive.QueryGaugeResponse:
     type: object
     properties:
       gauge:
         type: object
         properties:
-          index:
+          previous_epoch_id:
             type: string
+            format: uint64
+          pool_id:
+            type: string
+            format: uint64
+  sunrise.liquidityincentive.QueryGaugesResponse:
+    type: object
+    properties:
+      gauge:
+        type: array
+        items:
+          type: object
+          properties:
+            previous_epoch_id:
+              type: string
+              format: uint64
+            pool_id:
+              type: string
+              format: uint64
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   sunrise.liquidityincentive.QueryParamsResponse:
     type: object
     properties:
@@ -28157,10 +28222,7 @@ definitions:
           authority is the address that controls the module (defaults to x/gov
           unless overwritten).
       params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
+        description: 'NOTE: All parameters must be supplied.'
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   sunrise.liquidityincentive.MsgUpdateParamsResponse:
@@ -28168,6 +28230,13 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
+  sunrise.liquidityincentive.MsgVoteGauge:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.liquidityincentive.MsgVoteGaugeResponse:
+    type: object
   sunrise.liquiditypool.MsgCollectFees:
     type: object
     properties:
