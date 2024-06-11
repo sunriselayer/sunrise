@@ -205,11 +205,93 @@ func (m *MsgVoteGaugeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgVoteGaugeResponse proto.InternalMessageInfo
 
+type MsgCollectIncentiveRewards struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+}
+
+func (m *MsgCollectIncentiveRewards) Reset()         { *m = MsgCollectIncentiveRewards{} }
+func (m *MsgCollectIncentiveRewards) String() string { return proto.CompactTextString(m) }
+func (*MsgCollectIncentiveRewards) ProtoMessage()    {}
+func (*MsgCollectIncentiveRewards) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2a8cffcd57d82c0d, []int{4}
+}
+func (m *MsgCollectIncentiveRewards) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCollectIncentiveRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCollectIncentiveRewards.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCollectIncentiveRewards) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCollectIncentiveRewards.Merge(m, src)
+}
+func (m *MsgCollectIncentiveRewards) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCollectIncentiveRewards) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCollectIncentiveRewards.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCollectIncentiveRewards proto.InternalMessageInfo
+
+func (m *MsgCollectIncentiveRewards) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+type MsgCollectIncentiveRewardsResponse struct {
+}
+
+func (m *MsgCollectIncentiveRewardsResponse) Reset()         { *m = MsgCollectIncentiveRewardsResponse{} }
+func (m *MsgCollectIncentiveRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCollectIncentiveRewardsResponse) ProtoMessage()    {}
+func (*MsgCollectIncentiveRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2a8cffcd57d82c0d, []int{5}
+}
+func (m *MsgCollectIncentiveRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCollectIncentiveRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCollectIncentiveRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCollectIncentiveRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCollectIncentiveRewardsResponse.Merge(m, src)
+}
+func (m *MsgCollectIncentiveRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCollectIncentiveRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCollectIncentiveRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCollectIncentiveRewardsResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.liquidityincentive.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.liquidityincentive.MsgUpdateParamsResponse")
 	proto.RegisterType((*MsgVoteGauge)(nil), "sunrise.liquidityincentive.MsgVoteGauge")
 	proto.RegisterType((*MsgVoteGaugeResponse)(nil), "sunrise.liquidityincentive.MsgVoteGaugeResponse")
+	proto.RegisterType((*MsgCollectIncentiveRewards)(nil), "sunrise.liquidityincentive.MsgCollectIncentiveRewards")
+	proto.RegisterType((*MsgCollectIncentiveRewardsResponse)(nil), "sunrise.liquidityincentive.MsgCollectIncentiveRewardsResponse")
 }
 
 func init() {
@@ -217,7 +299,7 @@ func init() {
 }
 
 var fileDescriptor_2a8cffcd57d82c0d = []byte{
-	// 419 bytes of a gzipped FileDescriptorProto
+	// 471 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x2e, 0x2e, 0xcd, 0x2b,
 	0xca, 0x2c, 0x4e, 0xd5, 0xcf, 0xc9, 0x2c, 0x2c, 0xcd, 0x4c, 0xc9, 0x2c, 0xa9, 0xcc, 0xcc, 0x4b,
 	0x4e, 0xcd, 0x2b, 0xc9, 0x2c, 0x4b, 0xd5, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
@@ -236,15 +318,18 @@ var fileDescriptor_2a8cffcd57d82c0d = []byte{
 	0x4a, 0x2d, 0x2e, 0xc8, 0xcf, 0x2b, 0x4e, 0x55, 0x32, 0xe6, 0xe2, 0xf1, 0x2d, 0x4e, 0x0f, 0xcb,
 	0x2f, 0x49, 0x75, 0x4f, 0x2c, 0x4d, 0x4f, 0x15, 0x12, 0xe3, 0x62, 0x2b, 0x4e, 0xcd, 0x4b, 0x49,
 	0x2d, 0x82, 0xf8, 0x33, 0x08, 0xca, 0xb3, 0xe2, 0x06, 0xb9, 0x01, 0xca, 0x51, 0x12, 0xe3, 0x12,
-	0x41, 0xd6, 0x04, 0x33, 0xcc, 0xe8, 0x39, 0x23, 0x17, 0xb3, 0x6f, 0x71, 0xba, 0x50, 0x01, 0x17,
-	0x0f, 0x4a, 0xf8, 0x69, 0xe3, 0xf3, 0x37, 0x9a, 0xcb, 0xa4, 0x8c, 0x49, 0x50, 0x0c, 0xb3, 0x59,
-	0x28, 0x9d, 0x8b, 0x13, 0xe1, 0x07, 0x0d, 0x02, 0x26, 0xc0, 0x55, 0x4a, 0x19, 0x10, 0xab, 0x12,
-	0x66, 0x91, 0x14, 0x6b, 0x03, 0x28, 0x6a, 0x9c, 0x42, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48,
-	0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1,
-	0x58, 0x8e, 0x21, 0xca, 0x2a, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49, 0x2f, 0x39, 0x3f, 0x57, 0x1f,
-	0x6a, 0x78, 0x4e, 0x62, 0x65, 0x6a, 0x91, 0x3e, 0xde, 0x18, 0x2b, 0xa9, 0x2c, 0x48, 0x2d, 0x4e,
-	0x62, 0x03, 0x27, 0x41, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x60, 0x99, 0x88, 0x26, 0x4b,
-	0x03, 0x00, 0x00,
+	0x41, 0xd6, 0x04, 0x37, 0xcc, 0x91, 0x4b, 0xca, 0xb7, 0x38, 0xdd, 0x39, 0x3f, 0x27, 0x27, 0x35,
+	0xb9, 0xc4, 0x13, 0xe6, 0x9c, 0xa0, 0xd4, 0xf2, 0xc4, 0xa2, 0x94, 0x62, 0xe2, 0x8c, 0x56, 0xe1,
+	0x52, 0xc2, 0x6d, 0x04, 0xcc, 0x22, 0xa3, 0xdf, 0x4c, 0x5c, 0xcc, 0xbe, 0xc5, 0xe9, 0x42, 0x05,
+	0x5c, 0x3c, 0x28, 0x11, 0xa5, 0x8d, 0x2f, 0x80, 0xd1, 0x82, 0x40, 0xca, 0x98, 0x04, 0xc5, 0x30,
+	0x9b, 0x85, 0xd2, 0xb9, 0x38, 0x11, 0x81, 0xa5, 0x41, 0xc0, 0x04, 0xb8, 0x4a, 0x29, 0x03, 0x62,
+	0x55, 0xc2, 0x2d, 0x9a, 0xc8, 0xc8, 0x25, 0x8e, 0x2b, 0x24, 0xcd, 0x08, 0x98, 0x86, 0x43, 0x9f,
+	0x94, 0x1d, 0x79, 0xfa, 0x60, 0x6e, 0x92, 0x62, 0x6d, 0x00, 0xa5, 0x4b, 0xa7, 0x90, 0x13, 0x8f,
+	0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71, 0xc2, 0x63, 0x39, 0x86, 0x0b,
+	0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0xb2, 0x4a, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2,
+	0x4b, 0xce, 0xcf, 0xd5, 0x87, 0x5a, 0x95, 0x93, 0x58, 0x99, 0x5a, 0xa4, 0x8f, 0x37, 0xb9, 0x96,
+	0x54, 0x16, 0xa4, 0x16, 0x27, 0xb1, 0x81, 0xf3, 0x9f, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xac,
+	0x89, 0xae, 0xe9, 0x48, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -263,6 +348,7 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	VoteGauge(ctx context.Context, in *MsgVoteGauge, opts ...grpc.CallOption) (*MsgVoteGaugeResponse, error)
+	CollectIncentiveRewards(ctx context.Context, in *MsgCollectIncentiveRewards, opts ...grpc.CallOption) (*MsgCollectIncentiveRewardsResponse, error)
 }
 
 type msgClient struct {
@@ -291,12 +377,22 @@ func (c *msgClient) VoteGauge(ctx context.Context, in *MsgVoteGauge, opts ...grp
 	return out, nil
 }
 
+func (c *msgClient) CollectIncentiveRewards(ctx context.Context, in *MsgCollectIncentiveRewards, opts ...grpc.CallOption) (*MsgCollectIncentiveRewardsResponse, error) {
+	out := new(MsgCollectIncentiveRewardsResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.Msg/CollectIncentiveRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	VoteGauge(context.Context, *MsgVoteGauge) (*MsgVoteGaugeResponse, error)
+	CollectIncentiveRewards(context.Context, *MsgCollectIncentiveRewards) (*MsgCollectIncentiveRewardsResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -308,6 +404,9 @@ func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateP
 }
 func (*UnimplementedMsgServer) VoteGauge(ctx context.Context, req *MsgVoteGauge) (*MsgVoteGaugeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VoteGauge not implemented")
+}
+func (*UnimplementedMsgServer) CollectIncentiveRewards(ctx context.Context, req *MsgCollectIncentiveRewards) (*MsgCollectIncentiveRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CollectIncentiveRewards not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -350,6 +449,24 @@ func _Msg_VoteGauge_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CollectIncentiveRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCollectIncentiveRewards)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CollectIncentiveRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.liquidityincentive.Msg/CollectIncentiveRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CollectIncentiveRewards(ctx, req.(*MsgCollectIncentiveRewards))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.liquidityincentive.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -361,6 +478,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VoteGauge",
 			Handler:    _Msg_VoteGauge_Handler,
+		},
+		{
+			MethodName: "CollectIncentiveRewards",
+			Handler:    _Msg_CollectIncentiveRewards_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -483,6 +604,59 @@ func (m *MsgVoteGaugeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgCollectIncentiveRewards) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCollectIncentiveRewards) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCollectIncentiveRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCollectIncentiveRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCollectIncentiveRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCollectIncentiveRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -532,6 +706,28 @@ func (m *MsgVoteGauge) Size() (n int) {
 }
 
 func (m *MsgVoteGaugeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgCollectIncentiveRewards) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgCollectIncentiveRewardsResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -820,6 +1016,138 @@ func (m *MsgVoteGaugeResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgVoteGaugeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCollectIncentiveRewards) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCollectIncentiveRewards: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCollectIncentiveRewards: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCollectIncentiveRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCollectIncentiveRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCollectIncentiveRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

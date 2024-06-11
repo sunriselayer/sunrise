@@ -19126,6 +19126,133 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
+  /sunrise.liquidityincentive.Msg/CollectIncentiveRewards:
+    post:
+      operationId: SunriseLiquidityincentiveMsg_CollectIncentiveRewards
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
+  /sunrise.liquidityincentive.Msg/UpdateParams:
+    post:
+      summary: |-
+        UpdateParams defines a (governance) operation for updating the module
+        parameters. The authority defaults to the x/gov module account.
+      operationId: SunriseLiquidityincentiveMsg_UpdateParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            description: >-
+              MsgUpdateParamsResponse defines the response structure for
+              executing a
+
+              MsgUpdateParams message.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          description: MsgUpdateParams is the Msg/UpdateParams request type.
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              authority:
+                type: string
+                description: >-
+                  authority is the address that controls the module (defaults to
+                  x/gov unless overwritten).
+              params:
+                description: 'NOTE: All parameters must be supplied.'
+                type: object
+            description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
+  /sunrise.liquidityincentive.Msg/VoteGauge:
+    post:
+      operationId: SunriseLiquidityincentiveMsg_VoteGauge
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              sender:
+                type: string
+      tags:
+        - Msg
   /sunrise/liquidityincentive/epoch:
     get:
       operationId: SunriseLiquidityincentiveQuery_Epochs
@@ -19506,96 +19633,6 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
-  /sunrise.liquidityincentive.Msg/UpdateParams:
-    post:
-      summary: |-
-        UpdateParams defines a (governance) operation for updating the module
-        parameters. The authority defaults to the x/gov module account.
-      operationId: SunriseLiquidityincentiveMsg_UpdateParams
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            description: >-
-              MsgUpdateParamsResponse defines the response structure for
-              executing a
-
-              MsgUpdateParams message.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          description: MsgUpdateParams is the Msg/UpdateParams request type.
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              authority:
-                type: string
-                description: >-
-                  authority is the address that controls the module (defaults to
-                  x/gov unless overwritten).
-              params:
-                description: 'NOTE: All parameters must be supplied.'
-                type: object
-            description: MsgUpdateParams is the Msg/UpdateParams request type.
-      tags:
-        - Msg
-  /sunrise.liquidityincentive.Msg/VoteGauge:
-    post:
-      operationId: SunriseLiquidityincentiveMsg_VoteGauge
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              sender:
-                type: string
-      tags:
-        - Msg
   /sunrise.liquiditypool.Msg/CollectFees:
     post:
       operationId: SunriseLiquiditypoolMsg_CollectFees
@@ -28013,6 +28050,40 @@ definitions:
         items:
           type: string
     description: Params defines the parameters for the module.
+  sunrise.liquidityincentive.MsgCollectIncentiveRewards:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.liquidityincentive.MsgCollectIncentiveRewardsResponse:
+    type: object
+  sunrise.liquidityincentive.MsgUpdateParams:
+    type: object
+    properties:
+      authority:
+        type: string
+        description: >-
+          authority is the address that controls the module (defaults to x/gov
+          unless overwritten).
+      params:
+        description: 'NOTE: All parameters must be supplied.'
+        type: object
+    description: MsgUpdateParams is the Msg/UpdateParams request type.
+  sunrise.liquidityincentive.MsgUpdateParamsResponse:
+    type: object
+    description: |-
+      MsgUpdateParamsResponse defines the response structure for executing a
+      MsgUpdateParams message.
+  sunrise.liquidityincentive.MsgVoteGauge:
+    type: object
+    properties:
+      sender:
+        type: string
+  sunrise.liquidityincentive.MsgVoteGaugeResponse:
+    type: object
+  sunrise.liquidityincentive.Params:
+    type: object
+    description: Params defines the parameters for the module.
   cosmos.base.query.v1beta1.PageRequest:
     type: object
     properties:
@@ -28105,9 +28176,6 @@ definitions:
       pool_id:
         type: string
         format: uint64
-  sunrise.liquidityincentive.Params:
-    type: object
-    description: Params defines the parameters for the module.
   sunrise.liquidityincentive.QueryEpochResponse:
     type: object
     properties:
@@ -28213,30 +28281,6 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  sunrise.liquidityincentive.MsgUpdateParams:
-    type: object
-    properties:
-      authority:
-        type: string
-        description: >-
-          authority is the address that controls the module (defaults to x/gov
-          unless overwritten).
-      params:
-        description: 'NOTE: All parameters must be supplied.'
-        type: object
-    description: MsgUpdateParams is the Msg/UpdateParams request type.
-  sunrise.liquidityincentive.MsgUpdateParamsResponse:
-    type: object
-    description: |-
-      MsgUpdateParamsResponse defines the response structure for executing a
-      MsgUpdateParams message.
-  sunrise.liquidityincentive.MsgVoteGauge:
-    type: object
-    properties:
-      sender:
-        type: string
-  sunrise.liquidityincentive.MsgVoteGaugeResponse:
-    type: object
   sunrise.liquiditypool.MsgCollectFees:
     type: object
     properties:

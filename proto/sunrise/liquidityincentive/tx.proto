@@ -16,8 +16,9 @@ service Msg {
   
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
-  rpc UpdateParams (MsgUpdateParams) returns (MsgUpdateParamsResponse);
-  rpc VoteGauge    (MsgVoteGauge   ) returns (MsgVoteGaugeResponse   );
+  rpc UpdateParams            (MsgUpdateParams           ) returns (MsgUpdateParamsResponse           );
+  rpc VoteGauge               (MsgVoteGauge              ) returns (MsgVoteGaugeResponse              );
+  rpc CollectIncentiveRewards (MsgCollectIncentiveRewards) returns (MsgCollectIncentiveRewardsResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -43,4 +44,11 @@ message MsgVoteGauge {
 }
 
 message MsgVoteGaugeResponse {}
+
+message MsgCollectIncentiveRewards {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+}
+
+message MsgCollectIncentiveRewardsResponse {}
 
