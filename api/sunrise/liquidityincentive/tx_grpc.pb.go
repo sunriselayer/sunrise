@@ -23,6 +23,7 @@ const (
 	Msg_UpdateParams_FullMethodName            = "/sunrise.liquidityincentive.Msg/UpdateParams"
 	Msg_VoteGauge_FullMethodName               = "/sunrise.liquidityincentive.Msg/VoteGauge"
 	Msg_CollectIncentiveRewards_FullMethodName = "/sunrise.liquidityincentive.Msg/CollectIncentiveRewards"
+	Msg_CollectVoteRewards_FullMethodName      = "/sunrise.liquidityincentive.Msg/CollectVoteRewards"
 )
 
 // MsgClient is the client API for Msg service.
@@ -34,6 +35,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	VoteGauge(ctx context.Context, in *MsgVoteGauge, opts ...grpc.CallOption) (*MsgVoteGaugeResponse, error)
 	CollectIncentiveRewards(ctx context.Context, in *MsgCollectIncentiveRewards, opts ...grpc.CallOption) (*MsgCollectIncentiveRewardsResponse, error)
+	CollectVoteRewards(ctx context.Context, in *MsgCollectVoteRewards, opts ...grpc.CallOption) (*MsgCollectVoteRewardsResponse, error)
 }
 
 type msgClient struct {
@@ -71,6 +73,15 @@ func (c *msgClient) CollectIncentiveRewards(ctx context.Context, in *MsgCollectI
 	return out, nil
 }
 
+func (c *msgClient) CollectVoteRewards(ctx context.Context, in *MsgCollectVoteRewards, opts ...grpc.CallOption) (*MsgCollectVoteRewardsResponse, error) {
+	out := new(MsgCollectVoteRewardsResponse)
+	err := c.cc.Invoke(ctx, Msg_CollectVoteRewards_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -80,6 +91,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	VoteGauge(context.Context, *MsgVoteGauge) (*MsgVoteGaugeResponse, error)
 	CollectIncentiveRewards(context.Context, *MsgCollectIncentiveRewards) (*MsgCollectIncentiveRewardsResponse, error)
+	CollectVoteRewards(context.Context, *MsgCollectVoteRewards) (*MsgCollectVoteRewardsResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -95,6 +107,9 @@ func (UnimplementedMsgServer) VoteGauge(context.Context, *MsgVoteGauge) (*MsgVot
 }
 func (UnimplementedMsgServer) CollectIncentiveRewards(context.Context, *MsgCollectIncentiveRewards) (*MsgCollectIncentiveRewardsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CollectIncentiveRewards not implemented")
+}
+func (UnimplementedMsgServer) CollectVoteRewards(context.Context, *MsgCollectVoteRewards) (*MsgCollectVoteRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CollectVoteRewards not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -163,6 +178,24 @@ func _Msg_CollectIncentiveRewards_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CollectVoteRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCollectVoteRewards)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CollectVoteRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CollectVoteRewards_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CollectVoteRewards(ctx, req.(*MsgCollectVoteRewards))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -181,6 +214,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CollectIncentiveRewards",
 			Handler:    _Msg_CollectIncentiveRewards_Handler,
+		},
+		{
+			MethodName: "CollectVoteRewards",
+			Handler:    _Msg_CollectVoteRewards_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

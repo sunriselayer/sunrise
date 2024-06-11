@@ -19,6 +19,7 @@ service Msg {
   rpc UpdateParams            (MsgUpdateParams           ) returns (MsgUpdateParamsResponse           );
   rpc VoteGauge               (MsgVoteGauge              ) returns (MsgVoteGaugeResponse              );
   rpc CollectIncentiveRewards (MsgCollectIncentiveRewards) returns (MsgCollectIncentiveRewardsResponse);
+  rpc CollectVoteRewards      (MsgCollectVoteRewards     ) returns (MsgCollectVoteRewardsResponse     );
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -51,4 +52,11 @@ message MsgCollectIncentiveRewards {
 }
 
 message MsgCollectIncentiveRewardsResponse {}
+
+message MsgCollectVoteRewards {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+}
+
+message MsgCollectVoteRewardsResponse {}
 

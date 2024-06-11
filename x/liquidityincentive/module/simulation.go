@@ -31,6 +31,10 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgCollectIncentiveRewards int = 100
 
+	opWeightMsgCollectVoteRewards = "op_weight_msg_collect_vote_rewards"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCollectVoteRewards int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -76,6 +80,17 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquidityincentivesimulation.SimulateMsgCollectIncentiveRewards(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
+	var weightMsgCollectVoteRewards int
+	simState.AppParams.GetOrGenerate(opWeightMsgCollectVoteRewards, &weightMsgCollectVoteRewards, nil,
+		func(_ *rand.Rand) {
+			weightMsgCollectVoteRewards = defaultWeightMsgCollectVoteRewards
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCollectVoteRewards,
+		liquidityincentivesimulation.SimulateMsgCollectVoteRewards(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
 	// this line is used by starport scaffolding # simapp/module/operation
 
 	return operations
@@ -97,6 +112,14 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgCollectIncentiveRewards,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				liquidityincentivesimulation.SimulateMsgCollectIncentiveRewards(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgCollectVoteRewards,
+			defaultWeightMsgCollectVoteRewards,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				liquidityincentivesimulation.SimulateMsgCollectVoteRewards(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),
