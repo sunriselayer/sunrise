@@ -22,28 +22,31 @@ func TestGaugeQuerySingle(t *testing.T) {
 	msgs := createNGauge(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
-		request  *types.QueryGetGaugeRequest
-		response *types.QueryGetGaugeResponse
+		request  *types.QueryGaugeRequest
+		response *types.QueryGaugeResponse
 		err      error
 	}{
 		{
 			desc: "First",
-			request: &types.QueryGetGaugeRequest{
-				Index: msgs[0].Index,
+			request: &types.QueryGaugeRequest{
+				PreviousEpochId: msgs[0].PreviousEpochId,
+				PoolId:          msgs[0].PoolId,
 			},
-			response: &types.QueryGetGaugeResponse{Gauge: msgs[0]},
+			response: &types.QueryGaugeResponse{Gauge: msgs[0]},
 		},
 		{
 			desc: "Second",
-			request: &types.QueryGetGaugeRequest{
-				Index: msgs[1].Index,
+			request: &types.QueryGaugeRequest{
+				PreviousEpochId: msgs[1].PreviousEpochId,
+				PoolId:          msgs[1].PoolId,
 			},
-			response: &types.QueryGetGaugeResponse{Gauge: msgs[1]},
+			response: &types.QueryGaugeResponse{Gauge: msgs[1]},
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.QueryGetGaugeRequest{
-				Index: strconv.Itoa(100000),
+			request: &types.QueryGaugeRequest{
+				PreviousEpochId: 100000,
+				PoolId:          100000,
 			},
 			err: status.Error(codes.NotFound, "not found"),
 		},
@@ -72,8 +75,8 @@ func TestGaugeQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
 	msgs := createNGauge(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllGaugeRequest {
-		return &types.QueryAllGaugeRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryGaugesRequest {
+		return &types.QueryGaugesRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -85,7 +88,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.GaugeAll(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.Gauges(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Gauge), step)
 			require.Subset(t,
@@ -98,7 +101,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.GaugeAll(ctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.Gauges(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Gauge), step)
 			require.Subset(t,
@@ -109,7 +112,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.GaugeAll(ctx, request(nil, 0, 0, true))
+		resp, err := keeper.Gauges(ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
@@ -118,7 +121,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.GaugeAll(ctx, nil)
+		_, err := keeper.Gauges(ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }

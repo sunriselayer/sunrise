@@ -8,7 +8,6 @@ package liquidityincentive
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName   = "/sunrise.liquidityincentive.Query/Params"
-	Query_Epoch_FullMethodName    = "/sunrise.liquidityincentive.Query/Epoch"
-	Query_Epochs_FullMethodName   = "/sunrise.liquidityincentive.Query/Epochs"
-	Query_Gauge_FullMethodName    = "/sunrise.liquidityincentive.Query/Gauge"
-	Query_GaugeAll_FullMethodName = "/sunrise.liquidityincentive.Query/GaugeAll"
+	Query_Params_FullMethodName = "/sunrise.liquidityincentive.Query/Params"
+	Query_Epoch_FullMethodName  = "/sunrise.liquidityincentive.Query/Epoch"
+	Query_Epochs_FullMethodName = "/sunrise.liquidityincentive.Query/Epochs"
+	Query_Gauge_FullMethodName  = "/sunrise.liquidityincentive.Query/Gauge"
+	Query_Gauges_FullMethodName = "/sunrise.liquidityincentive.Query/Gauges"
 )
 
 // QueryClient is the client API for Query service.
@@ -37,8 +36,8 @@ type QueryClient interface {
 	Epoch(ctx context.Context, in *QueryEpochRequest, opts ...grpc.CallOption) (*QueryEpochResponse, error)
 	Epochs(ctx context.Context, in *QueryEpochsRequest, opts ...grpc.CallOption) (*QueryEpochsResponse, error)
 	// Queries a list of Gauge items.
-	Gauge(ctx context.Context, in *QueryGetGaugeRequest, opts ...grpc.CallOption) (*QueryGetGaugeResponse, error)
-	GaugeAll(ctx context.Context, in *QueryAllGaugeRequest, opts ...grpc.CallOption) (*QueryAllGaugeResponse, error)
+	Gauge(ctx context.Context, in *QueryGaugeRequest, opts ...grpc.CallOption) (*QueryGaugeResponse, error)
+	Gauges(ctx context.Context, in *QueryGaugesRequest, opts ...grpc.CallOption) (*QueryGaugesResponse, error)
 }
 
 type queryClient struct {
@@ -76,8 +75,8 @@ func (c *queryClient) Epochs(ctx context.Context, in *QueryEpochsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) Gauge(ctx context.Context, in *QueryGetGaugeRequest, opts ...grpc.CallOption) (*QueryGetGaugeResponse, error) {
-	out := new(QueryGetGaugeResponse)
+func (c *queryClient) Gauge(ctx context.Context, in *QueryGaugeRequest, opts ...grpc.CallOption) (*QueryGaugeResponse, error) {
+	out := new(QueryGaugeResponse)
 	err := c.cc.Invoke(ctx, Query_Gauge_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -85,9 +84,9 @@ func (c *queryClient) Gauge(ctx context.Context, in *QueryGetGaugeRequest, opts 
 	return out, nil
 }
 
-func (c *queryClient) GaugeAll(ctx context.Context, in *QueryAllGaugeRequest, opts ...grpc.CallOption) (*QueryAllGaugeResponse, error) {
-	out := new(QueryAllGaugeResponse)
-	err := c.cc.Invoke(ctx, Query_GaugeAll_FullMethodName, in, out, opts...)
+func (c *queryClient) Gauges(ctx context.Context, in *QueryGaugesRequest, opts ...grpc.CallOption) (*QueryGaugesResponse, error) {
+	out := new(QueryGaugesResponse)
+	err := c.cc.Invoke(ctx, Query_Gauges_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -104,8 +103,8 @@ type QueryServer interface {
 	Epoch(context.Context, *QueryEpochRequest) (*QueryEpochResponse, error)
 	Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error)
 	// Queries a list of Gauge items.
-	Gauge(context.Context, *QueryGetGaugeRequest) (*QueryGetGaugeResponse, error)
-	GaugeAll(context.Context, *QueryAllGaugeRequest) (*QueryAllGaugeResponse, error)
+	Gauge(context.Context, *QueryGaugeRequest) (*QueryGaugeResponse, error)
+	Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -122,11 +121,11 @@ func (UnimplementedQueryServer) Epoch(context.Context, *QueryEpochRequest) (*Que
 func (UnimplementedQueryServer) Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Epochs not implemented")
 }
-func (UnimplementedQueryServer) Gauge(context.Context, *QueryGetGaugeRequest) (*QueryGetGaugeResponse, error) {
+func (UnimplementedQueryServer) Gauge(context.Context, *QueryGaugeRequest) (*QueryGaugeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Gauge not implemented")
 }
-func (UnimplementedQueryServer) GaugeAll(context.Context, *QueryAllGaugeRequest) (*QueryAllGaugeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GaugeAll not implemented")
+func (UnimplementedQueryServer) Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Gauges not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -196,7 +195,7 @@ func _Query_Epochs_Handler(srv interface{}, ctx context.Context, dec func(interf
 }
 
 func _Query_Gauge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetGaugeRequest)
+	in := new(QueryGaugeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -208,25 +207,25 @@ func _Query_Gauge_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: Query_Gauge_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Gauge(ctx, req.(*QueryGetGaugeRequest))
+		return srv.(QueryServer).Gauge(ctx, req.(*QueryGaugeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_GaugeAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryAllGaugeRequest)
+func _Query_Gauges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGaugesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).GaugeAll(ctx, in)
+		return srv.(QueryServer).Gauges(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_GaugeAll_FullMethodName,
+		FullMethod: Query_Gauges_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GaugeAll(ctx, req.(*QueryAllGaugeRequest))
+		return srv.(QueryServer).Gauges(ctx, req.(*QueryGaugesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -255,8 +254,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Gauge_Handler,
 		},
 		{
-			MethodName: "GaugeAll",
-			Handler:    _Query_GaugeAll_Handler,
+			MethodName: "Gauges",
+			Handler:    _Query_Gauges_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

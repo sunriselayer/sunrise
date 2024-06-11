@@ -33,10 +33,12 @@ func TestGenesisState_Validate(t *testing.T) {
 				EpochCount: 2,
 				GaugeList: []types.Gauge{
 					{
-						Index: "0",
+						PreviousEpochId: 0,
+						PoolId:          0,
 					},
 					{
-						Index: "1",
+						PreviousEpochId: 1,
+						PoolId:          1,
 					},
 				},
 				// this line is used by starport scaffolding # types/genesis/validField
@@ -74,10 +76,12 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				GaugeList: []types.Gauge{
 					{
-						Index: "0",
+						PreviousEpochId: 0,
+						PoolId:          0,
 					},
 					{
-						Index: "0",
+						PreviousEpochId: 0,
+						PoolId:          0,
 					},
 				},
 			},

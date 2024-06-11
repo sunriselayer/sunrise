@@ -25,10 +25,12 @@ func TestGenesis(t *testing.T) {
 		EpochCount: 2,
 		GaugeList: []types.Gauge{
 			{
-				Index: "0",
+				PreviousEpochId: 0,
+				PoolId:          0,
 			},
 			{
-				Index: "1",
+				PreviousEpochId: 1,
+				PoolId:          1,
 			},
 		},
 		// this line is used by starport scaffolding # genesis/test/state

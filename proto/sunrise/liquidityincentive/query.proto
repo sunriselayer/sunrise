@@ -32,12 +32,12 @@ service Query {
   }
   
   // Queries a list of Gauge items.
-  rpc Gauge    (QueryGetGaugeRequest) returns (QueryGetGaugeResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/gauge/{index}";
+  rpc Gauge    (QueryGaugeRequest) returns (QueryGaugeResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge/{pool_id}";
   
   }
-  rpc GaugeAll (QueryAllGaugeRequest) returns (QueryAllGaugeResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/gauge";
+  rpc Gauges (QueryGaugesRequest) returns (QueryGaugesResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge";
   
   }
 }
@@ -68,19 +68,21 @@ message QueryEpochsResponse {
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-message QueryGetGaugeRequest {
-  string index = 1;
+message QueryGaugeRequest {
+  uint64 previous_epoch_id = 1;
+  uint64 pool_id = 2;
 }
 
-message QueryGetGaugeResponse {
+message QueryGaugeResponse {
   Gauge gauge = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllGaugeRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+message QueryGaugesRequest {
+  uint64 previous_epoch_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-message QueryAllGaugeResponse {
+message QueryGaugesResponse {
   repeated Gauge                                  gauge      = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

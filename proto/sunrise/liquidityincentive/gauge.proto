@@ -4,7 +4,7 @@ package sunrise.liquidityincentive;
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
 message Gauge {
-  string index = 1; 
-  
+  uint64 previous_epoch_id = 1; 
+  uint64 pool_id = 2;
 }
 

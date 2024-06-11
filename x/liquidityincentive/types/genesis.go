@@ -36,7 +36,7 @@ func (gs GenesisState) Validate() error {
 	gaugeIndexMap := make(map[string]struct{})
 
 	for _, elem := range gs.GaugeList {
-		index := string(GaugeKey(elem.Index))
+		index := string(GaugeKey(elem.PreviousEpochId, elem.PoolId))
 		if _, ok := gaugeIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for gauge")
 		}

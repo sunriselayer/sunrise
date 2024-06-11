@@ -18,7 +18,8 @@ var _ = strconv.IntSize
 func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gauge {
 	items := make([]types.Gauge, n)
 	for i := range items {
-		items[i].Index = strconv.Itoa(i)
+		items[i].PreviousEpochId = uint64(i)
+		items[i].PoolId = uint64(i)
 
 		keeper.SetGauge(ctx, items[i])
 	}
@@ -30,7 +31,8 @@ func TestGaugeGet(t *testing.T) {
 	items := createNGauge(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetGauge(ctx,
-			item.Index,
+			item.PreviousEpochId,
+			item.PoolId,
 		)
 		require.True(t, found)
 		require.Equal(t,
@@ -44,10 +46,12 @@ func TestGaugeRemove(t *testing.T) {
 	items := createNGauge(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveGauge(ctx,
-			item.Index,
+			item.PreviousEpochId,
+			item.PoolId,
 		)
 		_, found := keeper.GetGauge(ctx,
-			item.Index,
+			item.PreviousEpochId,
+			item.PoolId,
 		)
 		require.False(t, found)
 	}
