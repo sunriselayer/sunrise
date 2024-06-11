@@ -31,6 +31,14 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				EpochCount: 2,
+				GaugeList: []types.Gauge{
+					{
+						Index: "0",
+					},
+					{
+						Index: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -58,6 +66,20 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				EpochCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated gauge",
+			genState: &types.GenesisState{
+				GaugeList: []types.Gauge{
+					{
+						Index: "0",
+					},
+					{
+						Index: "0",
+					},
+				},
 			},
 			valid: false,
 		},

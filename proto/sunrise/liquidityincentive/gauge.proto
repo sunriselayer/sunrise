@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sunrise.liquidityincentive;
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+message Gauge {
+  string index = 1; 
+  
+}
+

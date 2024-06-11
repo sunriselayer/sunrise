@@ -23,6 +23,14 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		EpochCount: 2,
+		GaugeList: []types.Gauge{
+			{
+				Index: "0",
+			},
+			{
+				Index: "1",
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -36,5 +44,6 @@ func TestGenesis(t *testing.T) {
 
 	require.ElementsMatch(t, genesisState.EpochList, got.EpochList)
 	require.Equal(t, genesisState.EpochCount, got.EpochCount)
+	require.ElementsMatch(t, genesisState.GaugeList, got.GaugeList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

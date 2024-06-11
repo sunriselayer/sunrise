@@ -28,6 +28,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Shows a epoch by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
+				{
+					RpcMethod: "GaugeAll",
+					Use:       "list-gauge",
+					Short:     "List all gauge",
+				},
+				{
+					RpcMethod:      "Gauge",
+					Use:            "show-gauge [id]",
+					Short:          "Shows a gauge",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

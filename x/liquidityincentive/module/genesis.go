@@ -16,6 +16,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// Set epoch count
 	k.SetEpochCount(ctx, genState.EpochCount)
+	// Set all the gauge
+	for _, elem := range genState.GaugeList {
+		k.SetGauge(ctx, elem)
+	}
 	// this line is used by starport scaffolding # genesis/module/init
 	if err := k.SetParams(ctx, genState.Params); err != nil {
 		panic(err)
@@ -29,6 +33,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.EpochList = k.GetAllEpoch(ctx)
 	genesis.EpochCount = k.GetEpochCount(ctx)
+	genesis.GaugeList = k.GetAllGauge(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/liquidityincentive/params.proto";
 import "sunrise/liquidityincentive/epoch.proto";
+import "sunrise/liquidityincentive/gauge.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
@@ -21,12 +22,22 @@ service Query {
   }
   
   // Queries a list of Epoch items.
-  rpc Epoch    (QueryEpochRequest) returns (QueryEpochResponse) {
+  rpc Epoch  (QueryEpochRequest ) returns (QueryEpochResponse ) {
     option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{id}";
   
   }
   rpc Epochs (QueryEpochsRequest) returns (QueryEpochsResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/epoch";
+  
+  }
+  
+  // Queries a list of Gauge items.
+  rpc Gauge    (QueryGetGaugeRequest) returns (QueryGetGaugeResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/gauge/{index}";
+  
+  }
+  rpc GaugeAll (QueryAllGaugeRequest) returns (QueryAllGaugeResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/gauge";
   
   }
 }
@@ -54,6 +65,23 @@ message QueryEpochsRequest {
 
 message QueryEpochsResponse {
   repeated Epoch                                  Epoch      = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetGaugeRequest {
+  string index = 1;
+}
+
+message QueryGetGaugeResponse {
+  Gauge gauge = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllGaugeRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllGaugeResponse {
+  repeated Gauge                                  gauge      = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

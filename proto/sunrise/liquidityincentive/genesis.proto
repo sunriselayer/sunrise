@@ -6,6 +6,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/liquidityincentive/params.proto";
 import "sunrise/liquidityincentive/epoch.proto";
+import "sunrise/liquidityincentive/gauge.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
@@ -16,5 +17,6 @@ message GenesisState {
            Params params     = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
   repeated Epoch  epochList  = 2 [(gogoproto.nullable) = false] ;
            uint64 epochCount = 3;
+  repeated Gauge  gaugeList  = 4 [(gogoproto.nullable) = false] ;
 }
 
