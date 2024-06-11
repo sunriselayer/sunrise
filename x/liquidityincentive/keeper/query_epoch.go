@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) EpochAll(ctx context.Context, req *types.QueryAllEpochRequest) (*types.QueryAllEpochResponse, error) {
+func (k Keeper) Epochs(ctx context.Context, req *types.QueryEpochsRequest) (*types.QueryEpochsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -36,10 +36,10 @@ func (k Keeper) EpochAll(ctx context.Context, req *types.QueryAllEpochRequest) (
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllEpochResponse{Epoch: epochs, Pagination: pageRes}, nil
+	return &types.QueryEpochsResponse{Epoch: epochs, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Epoch(ctx context.Context, req *types.QueryGetEpochRequest) (*types.QueryGetEpochResponse, error) {
+func (k Keeper) Epoch(ctx context.Context, req *types.QueryEpochRequest) (*types.QueryEpochResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -49,5 +49,5 @@ func (k Keeper) Epoch(ctx context.Context, req *types.QueryGetEpochRequest) (*ty
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	return &types.QueryGetEpochResponse{Epoch: epoch}, nil
+	return &types.QueryEpochResponse{Epoch: epoch}, nil
 }

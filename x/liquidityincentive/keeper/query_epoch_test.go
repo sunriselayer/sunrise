@@ -19,23 +19,23 @@ func TestEpochQuerySingle(t *testing.T) {
 	msgs := createNEpoch(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
-		request  *types.QueryGetEpochRequest
-		response *types.QueryGetEpochResponse
+		request  *types.QueryEpochRequest
+		response *types.QueryEpochResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetEpochRequest{Id: msgs[0].Id},
-			response: &types.QueryGetEpochResponse{Epoch: msgs[0]},
+			request:  &types.QueryEpochRequest{Id: msgs[0].Id},
+			response: &types.QueryEpochResponse{Epoch: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetEpochRequest{Id: msgs[1].Id},
-			response: &types.QueryGetEpochResponse{Epoch: msgs[1]},
+			request:  &types.QueryEpochRequest{Id: msgs[1].Id},
+			response: &types.QueryEpochResponse{Epoch: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetEpochRequest{Id: uint64(len(msgs))},
+			request: &types.QueryEpochRequest{Id: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
@@ -63,8 +63,8 @@ func TestEpochQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
 	msgs := createNEpoch(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllEpochRequest {
-		return &types.QueryAllEpochRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryEpochsRequest {
+		return &types.QueryEpochsRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -76,7 +76,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.EpochAll(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.Epochs(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Epoch), step)
 			require.Subset(t,
@@ -89,7 +89,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.EpochAll(ctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.Epochs(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Epoch), step)
 			require.Subset(t,
@@ -100,7 +100,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.EpochAll(ctx, request(nil, 0, 0, true))
+		resp, err := keeper.Epochs(ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
@@ -109,7 +109,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.EpochAll(ctx, nil)
+		_, err := keeper.Epochs(ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }
