@@ -8,7 +8,6 @@ package liquidityincentive
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName   = "/sunrise.liquidityincentive.Query/Params"
-	Query_Epoch_FullMethodName    = "/sunrise.liquidityincentive.Query/Epoch"
-	Query_EpochAll_FullMethodName = "/sunrise.liquidityincentive.Query/EpochAll"
+	Query_Params_FullMethodName = "/sunrise.liquidityincentive.Query/Params"
+	Query_Epoch_FullMethodName  = "/sunrise.liquidityincentive.Query/Epoch"
+	Query_Epochs_FullMethodName = "/sunrise.liquidityincentive.Query/Epochs"
 )
 
 // QueryClient is the client API for Query service.
@@ -32,8 +31,8 @@ type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Queries a list of Epoch items.
-	Epoch(ctx context.Context, in *QueryGetEpochRequest, opts ...grpc.CallOption) (*QueryGetEpochResponse, error)
-	EpochAll(ctx context.Context, in *QueryAllEpochRequest, opts ...grpc.CallOption) (*QueryAllEpochResponse, error)
+	Epoch(ctx context.Context, in *QueryEpochRequest, opts ...grpc.CallOption) (*QueryEpochResponse, error)
+	Epochs(ctx context.Context, in *QueryEpochsRequest, opts ...grpc.CallOption) (*QueryEpochsResponse, error)
 }
 
 type queryClient struct {
@@ -53,8 +52,8 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) Epoch(ctx context.Context, in *QueryGetEpochRequest, opts ...grpc.CallOption) (*QueryGetEpochResponse, error) {
-	out := new(QueryGetEpochResponse)
+func (c *queryClient) Epoch(ctx context.Context, in *QueryEpochRequest, opts ...grpc.CallOption) (*QueryEpochResponse, error) {
+	out := new(QueryEpochResponse)
 	err := c.cc.Invoke(ctx, Query_Epoch_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,9 +61,9 @@ func (c *queryClient) Epoch(ctx context.Context, in *QueryGetEpochRequest, opts 
 	return out, nil
 }
 
-func (c *queryClient) EpochAll(ctx context.Context, in *QueryAllEpochRequest, opts ...grpc.CallOption) (*QueryAllEpochResponse, error) {
-	out := new(QueryAllEpochResponse)
-	err := c.cc.Invoke(ctx, Query_EpochAll_FullMethodName, in, out, opts...)
+func (c *queryClient) Epochs(ctx context.Context, in *QueryEpochsRequest, opts ...grpc.CallOption) (*QueryEpochsResponse, error) {
+	out := new(QueryEpochsResponse)
+	err := c.cc.Invoke(ctx, Query_Epochs_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +77,8 @@ type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Queries a list of Epoch items.
-	Epoch(context.Context, *QueryGetEpochRequest) (*QueryGetEpochResponse, error)
-	EpochAll(context.Context, *QueryAllEpochRequest) (*QueryAllEpochResponse, error)
+	Epoch(context.Context, *QueryEpochRequest) (*QueryEpochResponse, error)
+	Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -90,11 +89,11 @@ type UnimplementedQueryServer struct {
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (UnimplementedQueryServer) Epoch(context.Context, *QueryGetEpochRequest) (*QueryGetEpochResponse, error) {
+func (UnimplementedQueryServer) Epoch(context.Context, *QueryEpochRequest) (*QueryEpochResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Epoch not implemented")
 }
-func (UnimplementedQueryServer) EpochAll(context.Context, *QueryAllEpochRequest) (*QueryAllEpochResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EpochAll not implemented")
+func (UnimplementedQueryServer) Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Epochs not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -128,7 +127,7 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 }
 
 func _Query_Epoch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetEpochRequest)
+	in := new(QueryEpochRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -140,25 +139,25 @@ func _Query_Epoch_Handler(srv interface{}, ctx context.Context, dec func(interfa
 		FullMethod: Query_Epoch_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Epoch(ctx, req.(*QueryGetEpochRequest))
+		return srv.(QueryServer).Epoch(ctx, req.(*QueryEpochRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_EpochAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryAllEpochRequest)
+func _Query_Epochs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEpochsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).EpochAll(ctx, in)
+		return srv.(QueryServer).Epochs(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_EpochAll_FullMethodName,
+		FullMethod: Query_Epochs_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).EpochAll(ctx, req.(*QueryAllEpochRequest))
+		return srv.(QueryServer).Epochs(ctx, req.(*QueryEpochsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -179,8 +178,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Epoch_Handler,
 		},
 		{
-			MethodName: "EpochAll",
-			Handler:    _Query_EpochAll_Handler,
+			MethodName: "Epochs",
+			Handler:    _Query_Epochs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

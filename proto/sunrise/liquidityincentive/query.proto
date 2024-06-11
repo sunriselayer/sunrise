@@ -16,17 +16,17 @@ service Query {
   
   // Parameters queries the parameters of the module.
   rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/params";
+    option (google.api.http).get = "/sunrise/liquidityincentive/params";
   
   }
   
   // Queries a list of Epoch items.
-  rpc Epoch    (QueryGetEpochRequest) returns (QueryGetEpochResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/epoch/{id}";
+  rpc Epoch    (QueryEpochRequest) returns (QueryEpochResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{id}";
   
   }
-  rpc EpochAll (QueryAllEpochRequest) returns (QueryAllEpochResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/epoch";
+  rpc Epochs (QueryEpochsRequest) returns (QueryEpochsResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epoch";
   
   }
 }
@@ -40,19 +40,19 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
 
-message QueryGetEpochRequest {
+message QueryEpochRequest {
   uint64 id = 1;
 }
 
-message QueryGetEpochResponse {
+message QueryEpochResponse {
   Epoch Epoch = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllEpochRequest {
+message QueryEpochsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-message QueryAllEpochResponse {
+message QueryEpochsResponse {
   repeated Epoch                                  Epoch      = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
