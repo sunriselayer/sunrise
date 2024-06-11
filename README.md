@@ -49,9 +49,9 @@ node            |  |                               |  |
 1. Clone this repo
 1. Install the sunrise CLI
 
-    ```shell
-    make install
-    ```
+   ```shell
+   make install
+   ```
 
 ### Prebuilt binary
 
@@ -61,27 +61,27 @@ If you'd rather not install from source, you can download a prebuilt binary from
 1. Download the binary for your platform (e.g. `sunrise_Linux_x86_64.tar.gz`) from the **Assets** section. Tip: if you're not sure what platform you're on, you can run `uname -a` and look for the operating system (e.g. `Linux`, `Darwin`) and architecture (e.g. `x86_64`, `arm64`).
 1. Extract the archive
 
-    ```shell
-    tar -xvf sunrise_Linux_x86_64.tar.gz
-    ```
+   ```shell
+   tar -xvf sunrise_Linux_x86_64.tar.gz
+   ```
 
 1. Verify the extracted binary works
 
-    ```shell
-    ./sunrised --help
-    ```
+   ```shell
+   ./sunrised --help
+   ```
 
 1. [Optional] verify the prebuilt binary checksum. Download `checksums.txt` and then verify the checksum:
 
-    ```shell
-    sha256sum --ignore-missing --check checksums.txt
-    ```
+   ```shell
+   sha256sum --ignore-missing --check checksums.txt
+   ```
 
-    You should see output like this:
+   You should see output like this:
 
-    ```shell
-    sunrise_Linux_x86_64.tar.gz: OK
-    ```
+   ```shell
+   sunrise_Linux_x86_64.tar.gz: OK
+   ```
 
 See <https://docs.sunriselayer.io/node/build-node> for more information.
 
@@ -95,7 +95,7 @@ sunrised --help
 ### Environment variables
 
 | Variable       | Explanation                        | Default value                                            | Required |
-|----------------|------------------------------------|----------------------------------------------------------|----------|
+| -------------- | ---------------------------------- | -------------------------------------------------------- | -------- |
 | `SUNRISE_HOME` | Home directory for the application | User home dir. [Ref](https://pkg.go.dev/os#UserHomeDir). | Optional |
 
 ### Create your own single node devnet
@@ -109,7 +109,7 @@ sunrised tx blob pay-for-blob 0x00010203040506070809 0x48656c6c6f2c20576f726c642
 	--chain-id private \
 	--from validator \
 	--keyring-backend test \
-	--fees 21000usr \
+	--fees 21000uvrise \
 	--yes
 ```
 

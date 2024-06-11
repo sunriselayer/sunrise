@@ -86,14 +86,14 @@ func (s *SignerTestSuite) ConfirmTxTimeout() {
 func (s *SignerTestSuite) TestGasConsumption() {
 	t := s.T()
 
-	usrToSend := int64(1)
-	msg := bank.NewMsgSend(s.signer.Address(), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(appconsts.BondDenom, usrToSend)))
+	uvriseToSend := int64(1)
+	msg := bank.NewMsgSend(s.signer.Address(), testnode.RandomAddress().(sdk.AccAddress), sdk.NewCoins(sdk.NewInt64Coin(appconsts.BondDenom, uvriseToSend)))
 
 	gasPrice := int64(1)
 	gasLimit := uint64(1e6)
 	fee := uint64(1e6) // 1 TIA
 	// Note: gas price * gas limit = fee amount. So by setting gasLimit and fee
-	// to the same value, these options set a gas price of 1usr.
+	// to the same value, these options set a gas price of 1uvrise.
 	options := []user.TxOption{user.SetGasLimit(gasLimit), user.SetFee(fee)}
 
 	balanceBefore := s.queryCurrentBalance(t)
@@ -104,7 +104,7 @@ func (s *SignerTestSuite) TestGasConsumption() {
 	balanceAfter := s.queryCurrentBalance(t)
 
 	// verify that the amount deducted depends on the fee set in the tx.
-	amountDeducted := balanceBefore - balanceAfter - usrToSend
+	amountDeducted := balanceBefore - balanceAfter - uvriseToSend
 	assert.Equal(t, int64(fee), amountDeducted)
 
 	// verify that the amount deducted does not depend on the actual gas used.

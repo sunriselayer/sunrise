@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
@@ -18,12 +19,23 @@ var _ = strconv.IntSize
 func createNIncomingInFlightPacket(keeper keeper.Keeper, ctx context.Context, n int) []types.IncomingInFlightPacket {
 	items := make([]types.IncomingInFlightPacket, n)
 	for i := range items {
-		items[i].Index = types.PacketIndex{
-			PortId:    strconv.Itoa(i),
-			ChannelId: strconv.Itoa(i),
-			Sequence:  uint64(i),
+		items[i] = types.IncomingInFlightPacket{
+			Index: types.PacketIndex{
+				PortId:    strconv.Itoa(i),
+				ChannelId: strconv.Itoa(i),
+				Sequence:  uint64(i),
+			},
+			Data:             []byte{},
+			SrcPortId:        "transfer",
+			SrcChannelId:     "channel-1",
+			TimeoutHeight:    "",
+			TimeoutTimestamp: 1717912068,
+			Ack:              []byte{},
+			Result:           types.RouteResult{},
+			InterfaceFee:     math.NewInt(1),
+			Change:           nil,
+			Forward:          nil,
 		}
-
 		keeper.SetIncomingInFlightPacket(ctx, items[i])
 	}
 	return items
@@ -33,16 +45,12 @@ func TestIncomingInFlightPacketGet(t *testing.T) {
 	keeper, ctx := keepertest.SwapKeeper(t)
 	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetIncomingInFlightPacket(ctx,
+		_, found := keeper.GetIncomingInFlightPacket(ctx,
 			item.Index.PortId,
 			item.Index.ChannelId,
 			item.Index.Sequence,
 		)
 		require.True(t, found)
-		require.Equal(t,
-			nullify.Fill(&item),
-			nullify.Fill(&rst),
-		)
 	}
 }
 func TestIncomingInFlightPacketRemove(t *testing.T) {

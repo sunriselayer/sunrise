@@ -159,6 +159,12 @@ type TestInput struct {
 	LegacyAmino      *codec.LegacyAmino
 }
 
+func init() {
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
+}
+
 // CreateTestEnvWithoutBlobstreamKeysInit creates the keeper testing environment for Blobstream
 func CreateTestEnvWithoutBlobstreamKeysInit(t *testing.T) TestInput {
 	t.Helper()

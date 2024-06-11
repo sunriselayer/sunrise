@@ -27,14 +27,17 @@ func checkTicks(tickLower, tickUpper int64) error {
 }
 
 func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePosition) (*types.MsgCreatePositionResponse, error) {
-	sender := sdk.MustAccAddressFromBech32(msg.Sender)
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	pool, found := k.GetPool(ctx, msg.PoolId)
 	if !found {
 		return nil, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", msg.PoolId)
 	}
 
-	err := checkTicks(msg.LowerTick, msg.UpperTick)
+	err = checkTicks(msg.LowerTick, msg.UpperTick)
 	if err != nil {
 		return nil, errorsmod.Wrapf(types.ErrInvalidTickers, err.Error())
 	}
@@ -142,7 +145,10 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 	k.SetPosition(ctx, position)
 
 	// Remove full position liquidity
-	sender := sdk.MustAccAddressFromBech32(msg.Sender)
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
 	amountBaseWithdrawn, amountQuoteWithdrawn, err := k.Keeper.DecreaseLiquidity(ctx, sender, msg.Id, position.Liquidity)
 	if err != nil {
 		return nil, err
@@ -242,7 +248,10 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecreaseLiquidity) (*types.MsgDecreaseLiquidityResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	sender := sdk.MustAccAddressFromBech32(msg.Sender)
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
 	amountBase, amountQuote, err := k.Keeper.DecreaseLiquidity(ctx, sender, msg.Id, msg.Liquidity)
 	if err != nil {
 		return nil, err

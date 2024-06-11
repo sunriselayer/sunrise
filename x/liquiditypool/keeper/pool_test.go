@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
@@ -14,6 +15,19 @@ import (
 func createNPool(keeper keeper.Keeper, ctx context.Context, n int) []types.Pool {
 	items := make([]types.Pool, n)
 	for i := range items {
+		items[i] = types.Pool{
+			Id:         0,
+			DenomBase:  "base",
+			DenomQuote: "quote",
+			FeeRate:    math.LegacyNewDecWithPrec(1, 2),
+			TickParams: types.TickParams{
+				PriceRatio: math.LegacyNewDecWithPrec(10001, 4),
+				BaseOffset: math.LegacyNewDecWithPrec(5, 1),
+			},
+			CurrentTick:          0,
+			CurrentTickLiquidity: math.LegacyOneDec(),
+			CurrentSqrtPrice:     math.LegacyOneDec(),
+		}
 		items[i].Id = keeper.AppendPool(ctx, items[i])
 	}
 	return items
