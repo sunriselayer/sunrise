@@ -23,7 +23,7 @@ func (BankModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 			{
 				Denom:    "urise",
 				Exponent: 0,
-				Aliases:  []string{"microRISE", "microrise"},
+				Aliases:  []string{"microrise"},
 			},
 			{
 				Denom:    "rise",
@@ -41,7 +41,7 @@ func (BankModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 			{
 				Denom:    "uvrise",
 				Exponent: 0,
-				Aliases:  []string{"microVRISE", "microvrise"},
+				Aliases:  []string{"microvrise"},
 			},
 			{
 				Denom:    "vrise",
@@ -50,8 +50,8 @@ func (BankModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 		},
 		Base:    "uvrise",
 		Display: "vrise",
-		Name:    "Sunrise VRISE",
-		Symbol:  "VRISE",
+		Name:    "Sunrise vRISE",
+		Symbol:  "vRISE",
 	}
 
 	sendEnabledVrise := banktypes.SendEnabled{
