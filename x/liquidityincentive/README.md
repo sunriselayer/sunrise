@@ -43,6 +43,7 @@ Users can vote for a gauge for next epoch. `previous_epoch_id` will be the id of
 ### MsgCollectVoteRewards
 
 Users can claim vote rewards for the past epoch.
+It is from `treasury_tax` in `x/liquiditypool`.
 
 - `epoch_id`
 
