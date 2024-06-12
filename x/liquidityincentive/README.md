@@ -25,3 +25,27 @@ For pool $i$ position $j$,
 - $\text{ClaimAmount}_{ij} = \frac{\text{PositionUnclaimedAccumulation}_{ij}}{\text{PoolUnclaimedAccumulation}_i} \times \text{PoolUnclaimed}_i$
 - $\text{PositionUnclaimedAccumulation}_{ij} \leftarrow 0$
 - $\text{PoolTotalClaimed}_i \leftarrow \text{PoolTotalClaimed}_i - \text{ClaimAmount}_{ij}$
+
+### Epoch
+
+Three epochs concurrently exist in the system.
+
+- Past Epoch: The epoch that has ended.
+- Current Epoch: The epoch that is ongoing.
+- Next Epoch: The epoch that will be started after the current epoch.
+
+### MsgVoteGauge
+
+Users can vote for a gauge for next epoch. `previous_epoch_id` will be the id of current epoch.
+
+- `previous_epoch_id`
+
+### MsgCollectVoteRewards
+
+Users can claim vote rewards for the past epoch.
+
+- `epoch_id`
+
+### MsgCollectIncentiveRewards
+
+- `pool_ids`
