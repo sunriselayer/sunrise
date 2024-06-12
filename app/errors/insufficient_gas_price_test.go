@@ -32,7 +32,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	)
 	account := "test"
 	testApp, kr := testutil.SetupTestAppWithGenesisValSet(defaultoverrides.DefaultConsensusParams().ToProto(), account)
-	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, appconsts.BondDenom))
+	minGasPrice, err := sdk.ParseDecCoins(fmt.Sprintf("%v%s", appconsts.DefaultMinGasPrice, "urise"))
 	require.NoError(t, err)
 	ctx := testApp.NewContext(true).WithMinGasPrices(minGasPrice)
 	addr := testfactory.GetAddress(kr, account)
@@ -41,7 +41,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	signer, err := user.NewSigner(kr, nil, addr, enc.TxConfig, testutil.ChainID, acc.GetAccountNumber(), acc.GetSequence())
 	require.NoError(t, err)
 
-	fee := sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(feeAmount)))
+	fee := sdk.NewCoins(sdk.NewCoin("urise", sdkmath.NewInt(feeAmount)))
 	b, err := blob.NewBlob(apprand.RandomNamespace(), []byte("hello world"), 0)
 	require.NoError(t, err)
 
@@ -57,7 +57,7 @@ func TestInsufficientMinGasPriceIntegration(t *testing.T) {
 	anteHandler := sdk.ChainAnteDecorators(decorator)
 
 	_, err = anteHandler(ctx, sdkTx, false)
-	require.True(t, apperr.IsInsufficientMinGasPrice(err))
+	require.True(t, apperr.IsInsufficientMinGasPrice(err), err)
 	actualGasPrice, err := apperr.ParseInsufficientMinGasPrice(err, gasPrice, gasLimit)
 	require.NoError(t, err)
 	require.Equal(t, appconsts.DefaultMinGasPrice, actualGasPrice, err)
@@ -90,14 +90,14 @@ func TestInsufficientMinGasPriceTable(t *testing.T) {
 		},
 		{
 			name:                         "insufficient fee error",
-			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 10uvrise required: 100uvrise"),
+			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 10urise required: 100urise"),
 			inputGasPrice:                0.01,
 			expectedGasPrice:             0.1,
 			isInsufficientMinGasPriceErr: true,
 		},
 		{
 			name:                         "insufficient fee error with zero gas price",
-			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 0uvrise required: 100uvrise"),
+			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 0urise required: 100urise"),
 			inputGasPrice:                0,
 			inputGasLimit:                100,
 			expectedGasPrice:             1,
@@ -105,7 +105,7 @@ func TestInsufficientMinGasPriceTable(t *testing.T) {
 		},
 		{
 			name:                         "insufficient fee error with zero gas price and zero gas limit",
-			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 0uvrise required: 100uvrise"),
+			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 0urise required: 100urise"),
 			inputGasPrice:                0,
 			inputGasLimit:                0,
 			isInsufficientMinGasPriceErr: true,
@@ -118,13 +118,13 @@ func TestInsufficientMinGasPriceTable(t *testing.T) {
 		},
 		{
 			name:                         "error with zero required gas price",
-			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 10uvrise required: 0uvrise"),
+			err:                          errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 10urise required: 0urise"),
 			isInsufficientMinGasPriceErr: true,
 			expectParsingError:           true,
 		},
 		{
 			name:                         "error with extra wrapping",
-			err:                          errors.Wrap(errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 10uvrise required: 100uvrise"), "extra wrapping"),
+			err:                          errors.Wrap(errors.Wrap(sdkerrors.ErrInsufficientFee, "insufficient fees; got: 10urise required: 100urise"), "extra wrapping"),
 			inputGasPrice:                0.01,
 			expectedGasPrice:             0.1,
 			isInsufficientMinGasPriceErr: true,
