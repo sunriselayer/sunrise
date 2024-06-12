@@ -18,7 +18,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "EpochAll",
+					RpcMethod: "Epochs",
 					Use:       "list-epoch",
 					Short:     "List all epoch",
 				},
@@ -29,15 +29,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
-					RpcMethod: "GaugeAll",
-					Use:       "list-gauge",
-					Short:     "List all gauge",
+					RpcMethod:      "Gauges",
+					Use:            "list-gauge [previous_epoch_id]",
+					Short:          "List all gauge",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
 				},
 				{
 					RpcMethod:      "Gauge",
-					Use:            "show-gauge [id]",
+					Use:            "show-gauge [previous_epoch_id] [pool_id]",
 					Short:          "Shows a gauge",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
 				},
 				{
 					RpcMethod:      "PositionIncentives",
