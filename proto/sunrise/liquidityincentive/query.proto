@@ -24,21 +24,21 @@ service Query {
   
   // Queries a list of Epoch items.
   rpc Epoch  (QueryEpochRequest ) returns (QueryEpochResponse ) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{id}";
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs/{id}";
   
   }
   rpc Epochs (QueryEpochsRequest) returns (QueryEpochsResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/epoch";
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs";
   
   }
   
   // Queries a list of Gauge items.
   rpc Gauge    (QueryGaugeRequest) returns (QueryGaugeResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge/{pool_id}";
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs/{previous_epoch_id}/gauges/{pool_id}";
   
   }
   rpc Gauges (QueryGaugesRequest) returns (QueryGaugesResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge";
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs/{previous_epoch_id}/gauges";
   }
   
   rpc AddressIncentives(QueryAddressIncentivesRequest)

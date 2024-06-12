@@ -830,13 +830,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "liquidityincentive", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Epoch_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"sunrise", "liquidityincentive", "epoch", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Epoch_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"sunrise", "liquidityincentive", "epochs", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Epochs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "liquidityincentive", "epoch"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Epochs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "liquidityincentive", "epochs"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Gauge_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "liquidityincentive", "epoch", "previous_epoch_id", "gauge", "pool_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Gauge_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "liquidityincentive", "epochs", "previous_epoch_id", "gauges", "pool_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Gauges_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"sunrise", "liquidityincentive", "epoch", "previous_epoch_id", "gauge"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Gauges_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"sunrise", "liquidityincentive", "epochs", "previous_epoch_id", "gauges"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_AddressIncentives_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3}, []string{"sunrise", "liquidityincentive", "incentives", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
