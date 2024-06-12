@@ -20,6 +20,10 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Query_Params_FullMethodName              = "/sunrise.liquidityincentive.Query/Params"
+	Query_Epoch_FullMethodName               = "/sunrise.liquidityincentive.Query/Epoch"
+	Query_Epochs_FullMethodName              = "/sunrise.liquidityincentive.Query/Epochs"
+	Query_Gauge_FullMethodName               = "/sunrise.liquidityincentive.Query/Gauge"
+	Query_Gauges_FullMethodName              = "/sunrise.liquidityincentive.Query/Gauges"
 	Query_AddressIncentives_FullMethodName   = "/sunrise.liquidityincentive.Query/AddressIncentives"
 	Query_PositionIncentives_FullMethodName  = "/sunrise.liquidityincentive.Query/PositionIncentives"
 	Query_PositionsIncentives_FullMethodName = "/sunrise.liquidityincentive.Query/PositionsIncentives"
@@ -31,6 +35,12 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// Queries a list of Epoch items.
+	Epoch(ctx context.Context, in *QueryEpochRequest, opts ...grpc.CallOption) (*QueryEpochResponse, error)
+	Epochs(ctx context.Context, in *QueryEpochsRequest, opts ...grpc.CallOption) (*QueryEpochsResponse, error)
+	// Queries a list of Gauge items.
+	Gauge(ctx context.Context, in *QueryGaugeRequest, opts ...grpc.CallOption) (*QueryGaugeResponse, error)
+	Gauges(ctx context.Context, in *QueryGaugesRequest, opts ...grpc.CallOption) (*QueryGaugesResponse, error)
 	AddressIncentives(ctx context.Context, in *QueryAddressIncentivesRequest, opts ...grpc.CallOption) (*QueryAddressIncentivesResponse, error)
 	PositionIncentives(ctx context.Context, in *QueryPositionIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionIncentivesResponse, error)
 	PositionsIncentives(ctx context.Context, in *QueryPositionsIncentivesRequest, opts ...grpc.CallOption) (*QueryPositionsIncentivesResponse, error)
@@ -47,6 +57,42 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	out := new(QueryParamsResponse)
 	err := c.cc.Invoke(ctx, Query_Params_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Epoch(ctx context.Context, in *QueryEpochRequest, opts ...grpc.CallOption) (*QueryEpochResponse, error) {
+	out := new(QueryEpochResponse)
+	err := c.cc.Invoke(ctx, Query_Epoch_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Epochs(ctx context.Context, in *QueryEpochsRequest, opts ...grpc.CallOption) (*QueryEpochsResponse, error) {
+	out := new(QueryEpochsResponse)
+	err := c.cc.Invoke(ctx, Query_Epochs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Gauge(ctx context.Context, in *QueryGaugeRequest, opts ...grpc.CallOption) (*QueryGaugeResponse, error) {
+	out := new(QueryGaugeResponse)
+	err := c.cc.Invoke(ctx, Query_Gauge_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Gauges(ctx context.Context, in *QueryGaugesRequest, opts ...grpc.CallOption) (*QueryGaugesResponse, error) {
+	out := new(QueryGaugesResponse)
+	err := c.cc.Invoke(ctx, Query_Gauges_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,6 +132,12 @@ func (c *queryClient) PositionsIncentives(ctx context.Context, in *QueryPosition
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// Queries a list of Epoch items.
+	Epoch(context.Context, *QueryEpochRequest) (*QueryEpochResponse, error)
+	Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error)
+	// Queries a list of Gauge items.
+	Gauge(context.Context, *QueryGaugeRequest) (*QueryGaugeResponse, error)
+	Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error)
 	AddressIncentives(context.Context, *QueryAddressIncentivesRequest) (*QueryAddressIncentivesResponse, error)
 	PositionIncentives(context.Context, *QueryPositionIncentivesRequest) (*QueryPositionIncentivesResponse, error)
 	PositionsIncentives(context.Context, *QueryPositionsIncentivesRequest) (*QueryPositionsIncentivesResponse, error)
@@ -98,6 +150,18 @@ type UnimplementedQueryServer struct {
 
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (UnimplementedQueryServer) Epoch(context.Context, *QueryEpochRequest) (*QueryEpochResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Epoch not implemented")
+}
+func (UnimplementedQueryServer) Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Epochs not implemented")
+}
+func (UnimplementedQueryServer) Gauge(context.Context, *QueryGaugeRequest) (*QueryGaugeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Gauge not implemented")
+}
+func (UnimplementedQueryServer) Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Gauges not implemented")
 }
 func (UnimplementedQueryServer) AddressIncentives(context.Context, *QueryAddressIncentivesRequest) (*QueryAddressIncentivesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddressIncentives not implemented")
@@ -135,6 +199,78 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Epoch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEpochRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Epoch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Epoch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Epoch(ctx, req.(*QueryEpochRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Epochs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEpochsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Epochs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Epochs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Epochs(ctx, req.(*QueryEpochsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Gauge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGaugeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Gauge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Gauge_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Gauge(ctx, req.(*QueryGaugeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Gauges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGaugesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Gauges(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Gauges_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Gauges(ctx, req.(*QueryGaugesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -203,6 +339,22 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "Epoch",
+			Handler:    _Query_Epoch_Handler,
+		},
+		{
+			MethodName: "Epochs",
+			Handler:    _Query_Epochs_Handler,
+		},
+		{
+			MethodName: "Gauge",
+			Handler:    _Query_Gauge_Handler,
+		},
+		{
+			MethodName: "Gauges",
+			Handler:    _Query_Gauges_Handler,
 		},
 		{
 			MethodName: "AddressIncentives",

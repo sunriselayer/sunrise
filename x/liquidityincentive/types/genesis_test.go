@@ -19,12 +19,73 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
+				EpochList: []types.Epoch{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				EpochCount: 2,
+				GaugeList: []types.Gauge{
+					{
+						PreviousEpochId: 0,
+						PoolId:          0,
+					},
+					{
+						PreviousEpochId: 1,
+						PoolId:          1,
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "duplicated epoch",
+			genState: &types.GenesisState{
+				EpochList: []types.Epoch{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid epoch count",
+			genState: &types.GenesisState{
+				EpochList: []types.Epoch{
+					{
+						Id: 1,
+					},
+				},
+				EpochCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated gauge",
+			genState: &types.GenesisState{
+				GaugeList: []types.Gauge{
+					{
+						PreviousEpochId: 0,
+						PoolId:          0,
+					},
+					{
+						PreviousEpochId: 0,
+						PoolId:          0,
+					},
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}

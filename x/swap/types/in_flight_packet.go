@@ -1,7 +1,5 @@
 package types
 
-import ()
-
 func NewPacketIndex(
 	portId string,
 	channelId string,

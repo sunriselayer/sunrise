@@ -14,15 +14,123 @@ import (
 	sync "sync"
 )
 
+var _ protoreflect.List = (*_GenesisState_2_list)(nil)
+
+type _GenesisState_2_list struct {
+	list *[]*Epoch
+}
+
+func (x *_GenesisState_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Epoch)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Epoch)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_2_list) AppendMutable() protoreflect.Value {
+	v := new(Epoch)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_2_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_2_list) NewElement() protoreflect.Value {
+	v := new(Epoch)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_2_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_4_list)(nil)
+
+type _GenesisState_4_list struct {
+	list *[]*Gauge
+}
+
+func (x *_GenesisState_4_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_4_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Gauge)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_4_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Gauge)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_4_list) AppendMutable() protoreflect.Value {
+	v := new(Gauge)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_4_list) NewElement() protoreflect.Value {
+	v := new(Gauge)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GenesisState        protoreflect.MessageDescriptor
-	fd_GenesisState_params protoreflect.FieldDescriptor
+	md_GenesisState            protoreflect.MessageDescriptor
+	fd_GenesisState_params     protoreflect.FieldDescriptor
+	fd_GenesisState_epochList  protoreflect.FieldDescriptor
+	fd_GenesisState_epochCount protoreflect.FieldDescriptor
+	fd_GenesisState_gaugeList  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquidityincentive_genesis_proto_init()
 	md_GenesisState = File_sunrise_liquidityincentive_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
+	fd_GenesisState_epochList = md_GenesisState.Fields().ByName("epochList")
+	fd_GenesisState_epochCount = md_GenesisState.Fields().ByName("epochCount")
+	fd_GenesisState_gaugeList = md_GenesisState.Fields().ByName("gaugeList")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -96,6 +204,24 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
+	if len(x.EpochList) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.EpochList})
+		if !f(fd_GenesisState_epochList, value) {
+			return
+		}
+	}
+	if x.EpochCount != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.EpochCount)
+		if !f(fd_GenesisState_epochCount, value) {
+			return
+		}
+	}
+	if len(x.GaugeList) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.GaugeList})
+		if !f(fd_GenesisState_gaugeList, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -113,6 +239,12 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.GenesisState.params":
 		return x.Params != nil
+	case "sunrise.liquidityincentive.GenesisState.epochList":
+		return len(x.EpochList) != 0
+	case "sunrise.liquidityincentive.GenesisState.epochCount":
+		return x.EpochCount != uint64(0)
+	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+		return len(x.GaugeList) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -131,6 +263,12 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.GenesisState.params":
 		x.Params = nil
+	case "sunrise.liquidityincentive.GenesisState.epochList":
+		x.EpochList = nil
+	case "sunrise.liquidityincentive.GenesisState.epochCount":
+		x.EpochCount = uint64(0)
+	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+		x.GaugeList = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -150,6 +288,21 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "sunrise.liquidityincentive.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.liquidityincentive.GenesisState.epochList":
+		if len(x.EpochList) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_2_list{})
+		}
+		listValue := &_GenesisState_2_list{list: &x.EpochList}
+		return protoreflect.ValueOfList(listValue)
+	case "sunrise.liquidityincentive.GenesisState.epochCount":
+		value := x.EpochCount
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+		if len(x.GaugeList) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_4_list{})
+		}
+		listValue := &_GenesisState_4_list{list: &x.GaugeList}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -172,6 +325,16 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
+	case "sunrise.liquidityincentive.GenesisState.epochList":
+		lv := value.List()
+		clv := lv.(*_GenesisState_2_list)
+		x.EpochList = *clv.list
+	case "sunrise.liquidityincentive.GenesisState.epochCount":
+		x.EpochCount = value.Uint()
+	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+		lv := value.List()
+		clv := lv.(*_GenesisState_4_list)
+		x.GaugeList = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -197,6 +360,20 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
+	case "sunrise.liquidityincentive.GenesisState.epochList":
+		if x.EpochList == nil {
+			x.EpochList = []*Epoch{}
+		}
+		value := &_GenesisState_2_list{list: &x.EpochList}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+		if x.GaugeList == nil {
+			x.GaugeList = []*Gauge{}
+		}
+		value := &_GenesisState_4_list{list: &x.GaugeList}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquidityincentive.GenesisState.epochCount":
+		panic(fmt.Errorf("field epochCount of message sunrise.liquidityincentive.GenesisState is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -213,6 +390,14 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "sunrise.liquidityincentive.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.liquidityincentive.GenesisState.epochList":
+		list := []*Epoch{}
+		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
+	case "sunrise.liquidityincentive.GenesisState.epochCount":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+		list := []*Gauge{}
+		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -286,6 +471,21 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if len(x.EpochList) > 0 {
+			for _, e := range x.EpochList {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.EpochCount != 0 {
+			n += 1 + runtime.Sov(uint64(x.EpochCount))
+		}
+		if len(x.GaugeList) > 0 {
+			for _, e := range x.GaugeList {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -314,6 +514,43 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.GaugeList) > 0 {
+			for iNdEx := len(x.GaugeList) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.GaugeList[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x22
+			}
+		}
+		if x.EpochCount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.EpochCount))
+			i--
+			dAtA[i] = 0x18
+		}
+		if len(x.EpochList) > 0 {
+			for iNdEx := len(x.EpochList) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.EpochList[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x12
+			}
 		}
 		if x.Params != nil {
 			encoded, err := options.Marshal(x.Params)
@@ -414,6 +651,93 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EpochList", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.EpochList = append(x.EpochList, &Epoch{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.EpochList[len(x.EpochList)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EpochCount", wireType)
+				}
+				x.EpochCount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.EpochCount |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GaugeList", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.GaugeList = append(x.GaugeList, &Gauge{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.GaugeList[len(x.GaugeList)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -469,7 +793,10 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	// params defines all the parameters of the module.
-	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	Params     *Params  `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	EpochList  []*Epoch `protobuf:"bytes,2,rep,name=epochList,proto3" json:"epochList,omitempty"`
+	EpochCount uint64   `protobuf:"varint,3,opt,name=epochCount,proto3" json:"epochCount,omitempty"`
+	GaugeList  []*Gauge `protobuf:"bytes,4,rep,name=gaugeList,proto3" json:"gaugeList,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -499,6 +826,27 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
+func (x *GenesisState) GetEpochList() []*Epoch {
+	if x != nil {
+		return x.EpochList
+	}
+	return nil
+}
+
+func (x *GenesisState) GetEpochCount() uint64 {
+	if x != nil {
+		return x.EpochCount
+	}
+	return 0
+}
+
+func (x *GenesisState) GetGaugeList() []*Gauge {
+	if x != nil {
+		return x.GaugeList
+	}
+	return nil
+}
+
 var File_sunrise_liquidityincentive_genesis_proto protoreflect.FileDescriptor
 
 var file_sunrise_liquidityincentive_genesis_proto_rawDesc = []byte{
@@ -511,27 +859,43 @@ var file_sunrise_liquidityincentive_genesis_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
 	0x27, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
 	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x55, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65,
-	0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x45, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65,
-	0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde,
-	0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42,
-	0xe4, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
-	0x76, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x2b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xa2,
-	0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
-	0x76, 0x65, 0xca, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xe2,
-	0x02, 0x26, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63,
-	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x26, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e,
+	0x74, 0x69, 0x76, 0x65, 0x2f, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x1a, 0x26, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x67, 0x61, 0x75,
+	0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x83, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e,
+	0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x45, 0x0a, 0x06, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8,
+	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x12, 0x45, 0x0a, 0x09, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0x2e, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09, 0x65, 0x70,
+	0x6f, 0x63, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x70, 0x6f, 0x63, 0x68,
+	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x65, 0x70, 0x6f,
+	0x63, 0x68, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x45, 0x0a, 0x09, 0x67, 0x61, 0x75, 0x67, 0x65,
+	0x4c, 0x69, 0x73, 0x74, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e,
+	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x47, 0x61, 0x75, 0x67, 0x65, 0x42, 0x04, 0xc8,
+	0xde, 0x1f, 0x00, 0x52, 0x09, 0x67, 0x61, 0x75, 0x67, 0x65, 0x4c, 0x69, 0x73, 0x74, 0x42, 0xe4,
+	0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
+	0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
+	0x01, 0x5a, 0x2b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xa2, 0x02,
+	0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
+	0x65, 0xca, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xe2, 0x02,
+	0x26, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d,
+	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65,
+	0x6e, 0x74, 0x69, 0x76, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -550,14 +914,18 @@ var file_sunrise_liquidityincentive_genesis_proto_msgTypes = make([]protoimpl.Me
 var file_sunrise_liquidityincentive_genesis_proto_goTypes = []interface{}{
 	(*GenesisState)(nil), // 0: sunrise.liquidityincentive.GenesisState
 	(*Params)(nil),       // 1: sunrise.liquidityincentive.Params
+	(*Epoch)(nil),        // 2: sunrise.liquidityincentive.Epoch
+	(*Gauge)(nil),        // 3: sunrise.liquidityincentive.Gauge
 }
 var file_sunrise_liquidityincentive_genesis_proto_depIdxs = []int32{
 	1, // 0: sunrise.liquidityincentive.GenesisState.params:type_name -> sunrise.liquidityincentive.Params
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 1: sunrise.liquidityincentive.GenesisState.epochList:type_name -> sunrise.liquidityincentive.Epoch
+	3, // 2: sunrise.liquidityincentive.GenesisState.gaugeList:type_name -> sunrise.liquidityincentive.Gauge
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquidityincentive_genesis_proto_init() }
@@ -566,6 +934,8 @@ func file_sunrise_liquidityincentive_genesis_proto_init() {
 		return
 	}
 	file_sunrise_liquidityincentive_params_proto_init()
+	file_sunrise_liquidityincentive_epoch_proto_init()
+	file_sunrise_liquidityincentive_gauge_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_liquidityincentive_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GenesisState); i {

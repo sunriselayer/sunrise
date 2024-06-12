@@ -3,7 +3,8 @@ package liquidityincentive
 
 import (
 	_ "cosmossdk.io/api/amino"
-	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
+	v1beta1 "cosmossdk.io/api/cosmos/base/query/v1beta1"
+	v1beta11 "cosmossdk.io/api/cosmos/base/v1beta1"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
@@ -808,6 +809,3796 @@ func (x *fastReflection_QueryParamsResponse) ProtoMethods() *protoiface.Methods 
 }
 
 var (
+	md_QueryEpochRequest    protoreflect.MessageDescriptor
+	fd_QueryEpochRequest_id protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryEpochRequest = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryEpochRequest")
+	fd_QueryEpochRequest_id = md_QueryEpochRequest.Fields().ByName("id")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryEpochRequest)(nil)
+
+type fastReflection_QueryEpochRequest QueryEpochRequest
+
+func (x *QueryEpochRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEpochRequest)(x)
+}
+
+func (x *QueryEpochRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryEpochRequest_messageType fastReflection_QueryEpochRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEpochRequest_messageType{}
+
+type fastReflection_QueryEpochRequest_messageType struct{}
+
+func (x fastReflection_QueryEpochRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEpochRequest)(nil)
+}
+func (x fastReflection_QueryEpochRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochRequest)
+}
+func (x fastReflection_QueryEpochRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryEpochRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryEpochRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEpochRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryEpochRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryEpochRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryEpochRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryEpochRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_QueryEpochRequest_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryEpochRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochRequest.id":
+		return x.Id != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochRequest.id":
+		x.Id = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryEpochRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochRequest.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochRequest.id":
+		x.Id = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochRequest.id":
+		panic(fmt.Errorf("field id of message sunrise.liquidityincentive.QueryEpochRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryEpochRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochRequest.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryEpochRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryEpochRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryEpochRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryEpochRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryEpochRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryEpochRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryEpochResponse       protoreflect.MessageDescriptor
+	fd_QueryEpochResponse_Epoch protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryEpochResponse = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryEpochResponse")
+	fd_QueryEpochResponse_Epoch = md_QueryEpochResponse.Fields().ByName("Epoch")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryEpochResponse)(nil)
+
+type fastReflection_QueryEpochResponse QueryEpochResponse
+
+func (x *QueryEpochResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEpochResponse)(x)
+}
+
+func (x *QueryEpochResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryEpochResponse_messageType fastReflection_QueryEpochResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEpochResponse_messageType{}
+
+type fastReflection_QueryEpochResponse_messageType struct{}
+
+func (x fastReflection_QueryEpochResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEpochResponse)(nil)
+}
+func (x fastReflection_QueryEpochResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochResponse)
+}
+func (x fastReflection_QueryEpochResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryEpochResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryEpochResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEpochResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryEpochResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryEpochResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryEpochResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryEpochResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Epoch != nil {
+		value := protoreflect.ValueOfMessage(x.Epoch.ProtoReflect())
+		if !f(fd_QueryEpochResponse_Epoch, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryEpochResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochResponse.Epoch":
+		return x.Epoch != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochResponse.Epoch":
+		x.Epoch = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryEpochResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochResponse.Epoch":
+		value := x.Epoch
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochResponse.Epoch":
+		x.Epoch = value.Message().Interface().(*Epoch)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochResponse.Epoch":
+		if x.Epoch == nil {
+			x.Epoch = new(Epoch)
+		}
+		return protoreflect.ValueOfMessage(x.Epoch.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryEpochResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochResponse.Epoch":
+		m := new(Epoch)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryEpochResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryEpochResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryEpochResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryEpochResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryEpochResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryEpochResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Epoch != nil {
+			l = options.Size(x.Epoch)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Epoch != nil {
+			encoded, err := options.Marshal(x.Epoch)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Epoch", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Epoch == nil {
+					x.Epoch = &Epoch{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Epoch); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryEpochsRequest            protoreflect.MessageDescriptor
+	fd_QueryEpochsRequest_pagination protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryEpochsRequest = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryEpochsRequest")
+	fd_QueryEpochsRequest_pagination = md_QueryEpochsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryEpochsRequest)(nil)
+
+type fastReflection_QueryEpochsRequest QueryEpochsRequest
+
+func (x *QueryEpochsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEpochsRequest)(x)
+}
+
+func (x *QueryEpochsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryEpochsRequest_messageType fastReflection_QueryEpochsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEpochsRequest_messageType{}
+
+type fastReflection_QueryEpochsRequest_messageType struct{}
+
+func (x fastReflection_QueryEpochsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEpochsRequest)(nil)
+}
+func (x fastReflection_QueryEpochsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochsRequest)
+}
+func (x fastReflection_QueryEpochsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryEpochsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryEpochsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEpochsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryEpochsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryEpochsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryEpochsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryEpochsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryEpochsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryEpochsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryEpochsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryEpochsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryEpochsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryEpochsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryEpochsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryEpochsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryEpochsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryEpochsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryEpochsResponse_1_list)(nil)
+
+type _QueryEpochsResponse_1_list struct {
+	list *[]*Epoch
+}
+
+func (x *_QueryEpochsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryEpochsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryEpochsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Epoch)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryEpochsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Epoch)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryEpochsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(Epoch)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryEpochsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryEpochsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(Epoch)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryEpochsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryEpochsResponse            protoreflect.MessageDescriptor
+	fd_QueryEpochsResponse_Epoch      protoreflect.FieldDescriptor
+	fd_QueryEpochsResponse_pagination protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryEpochsResponse = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryEpochsResponse")
+	fd_QueryEpochsResponse_Epoch = md_QueryEpochsResponse.Fields().ByName("Epoch")
+	fd_QueryEpochsResponse_pagination = md_QueryEpochsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryEpochsResponse)(nil)
+
+type fastReflection_QueryEpochsResponse QueryEpochsResponse
+
+func (x *QueryEpochsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryEpochsResponse)(x)
+}
+
+func (x *QueryEpochsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryEpochsResponse_messageType fastReflection_QueryEpochsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryEpochsResponse_messageType{}
+
+type fastReflection_QueryEpochsResponse_messageType struct{}
+
+func (x fastReflection_QueryEpochsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryEpochsResponse)(nil)
+}
+func (x fastReflection_QueryEpochsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochsResponse)
+}
+func (x fastReflection_QueryEpochsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryEpochsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryEpochsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryEpochsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryEpochsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryEpochsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryEpochsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryEpochsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryEpochsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryEpochsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Epoch) != 0 {
+		value := protoreflect.ValueOfList(&_QueryEpochsResponse_1_list{list: &x.Epoch})
+		if !f(fd_QueryEpochsResponse_Epoch, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryEpochsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryEpochsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsResponse.Epoch":
+		return len(x.Epoch) != 0
+	case "sunrise.liquidityincentive.QueryEpochsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsResponse.Epoch":
+		x.Epoch = nil
+	case "sunrise.liquidityincentive.QueryEpochsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryEpochsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsResponse.Epoch":
+		if len(x.Epoch) == 0 {
+			return protoreflect.ValueOfList(&_QueryEpochsResponse_1_list{})
+		}
+		listValue := &_QueryEpochsResponse_1_list{list: &x.Epoch}
+		return protoreflect.ValueOfList(listValue)
+	case "sunrise.liquidityincentive.QueryEpochsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsResponse.Epoch":
+		lv := value.List()
+		clv := lv.(*_QueryEpochsResponse_1_list)
+		x.Epoch = *clv.list
+	case "sunrise.liquidityincentive.QueryEpochsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsResponse.Epoch":
+		if x.Epoch == nil {
+			x.Epoch = []*Epoch{}
+		}
+		value := &_QueryEpochsResponse_1_list{list: &x.Epoch}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquidityincentive.QueryEpochsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryEpochsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryEpochsResponse.Epoch":
+		list := []*Epoch{}
+		return protoreflect.ValueOfList(&_QueryEpochsResponse_1_list{list: &list})
+	case "sunrise.liquidityincentive.QueryEpochsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryEpochsResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryEpochsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryEpochsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryEpochsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryEpochsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryEpochsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryEpochsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryEpochsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryEpochsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.Epoch) > 0 {
+			for _, e := range x.Epoch {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Epoch) > 0 {
+			for iNdEx := len(x.Epoch) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Epoch[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryEpochsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryEpochsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Epoch", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Epoch = append(x.Epoch, &Epoch{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Epoch[len(x.Epoch)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryGaugeRequest                   protoreflect.MessageDescriptor
+	fd_QueryGaugeRequest_previous_epoch_id protoreflect.FieldDescriptor
+	fd_QueryGaugeRequest_pool_id           protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryGaugeRequest = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryGaugeRequest")
+	fd_QueryGaugeRequest_previous_epoch_id = md_QueryGaugeRequest.Fields().ByName("previous_epoch_id")
+	fd_QueryGaugeRequest_pool_id = md_QueryGaugeRequest.Fields().ByName("pool_id")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryGaugeRequest)(nil)
+
+type fastReflection_QueryGaugeRequest QueryGaugeRequest
+
+func (x *QueryGaugeRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryGaugeRequest)(x)
+}
+
+func (x *QueryGaugeRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryGaugeRequest_messageType fastReflection_QueryGaugeRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryGaugeRequest_messageType{}
+
+type fastReflection_QueryGaugeRequest_messageType struct{}
+
+func (x fastReflection_QueryGaugeRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryGaugeRequest)(nil)
+}
+func (x fastReflection_QueryGaugeRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugeRequest)
+}
+func (x fastReflection_QueryGaugeRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugeRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryGaugeRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugeRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryGaugeRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryGaugeRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryGaugeRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugeRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryGaugeRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryGaugeRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryGaugeRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.PreviousEpochId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.PreviousEpochId)
+		if !f(fd_QueryGaugeRequest_previous_epoch_id, value) {
+			return
+		}
+	}
+	if x.PoolId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.PoolId)
+		if !f(fd_QueryGaugeRequest_pool_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryGaugeRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeRequest.previous_epoch_id":
+		return x.PreviousEpochId != uint64(0)
+	case "sunrise.liquidityincentive.QueryGaugeRequest.pool_id":
+		return x.PoolId != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeRequest.previous_epoch_id":
+		x.PreviousEpochId = uint64(0)
+	case "sunrise.liquidityincentive.QueryGaugeRequest.pool_id":
+		x.PoolId = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryGaugeRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeRequest.previous_epoch_id":
+		value := x.PreviousEpochId
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquidityincentive.QueryGaugeRequest.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeRequest.previous_epoch_id":
+		x.PreviousEpochId = value.Uint()
+	case "sunrise.liquidityincentive.QueryGaugeRequest.pool_id":
+		x.PoolId = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeRequest.previous_epoch_id":
+		panic(fmt.Errorf("field previous_epoch_id of message sunrise.liquidityincentive.QueryGaugeRequest is not mutable"))
+	case "sunrise.liquidityincentive.QueryGaugeRequest.pool_id":
+		panic(fmt.Errorf("field pool_id of message sunrise.liquidityincentive.QueryGaugeRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryGaugeRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeRequest.previous_epoch_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquidityincentive.QueryGaugeRequest.pool_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryGaugeRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryGaugeRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryGaugeRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryGaugeRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryGaugeRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryGaugeRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.PreviousEpochId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PreviousEpochId))
+		}
+		if x.PoolId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PoolId))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugeRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.PoolId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.PreviousEpochId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PreviousEpochId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugeRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugeRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PreviousEpochId", wireType)
+				}
+				x.PreviousEpochId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PreviousEpochId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				x.PoolId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PoolId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryGaugeResponse       protoreflect.MessageDescriptor
+	fd_QueryGaugeResponse_gauge protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryGaugeResponse = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryGaugeResponse")
+	fd_QueryGaugeResponse_gauge = md_QueryGaugeResponse.Fields().ByName("gauge")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryGaugeResponse)(nil)
+
+type fastReflection_QueryGaugeResponse QueryGaugeResponse
+
+func (x *QueryGaugeResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryGaugeResponse)(x)
+}
+
+func (x *QueryGaugeResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryGaugeResponse_messageType fastReflection_QueryGaugeResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryGaugeResponse_messageType{}
+
+type fastReflection_QueryGaugeResponse_messageType struct{}
+
+func (x fastReflection_QueryGaugeResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryGaugeResponse)(nil)
+}
+func (x fastReflection_QueryGaugeResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugeResponse)
+}
+func (x fastReflection_QueryGaugeResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugeResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryGaugeResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugeResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryGaugeResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryGaugeResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryGaugeResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugeResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryGaugeResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryGaugeResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryGaugeResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Gauge != nil {
+		value := protoreflect.ValueOfMessage(x.Gauge.ProtoReflect())
+		if !f(fd_QueryGaugeResponse_gauge, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryGaugeResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeResponse.gauge":
+		return x.Gauge != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeResponse.gauge":
+		x.Gauge = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryGaugeResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeResponse.gauge":
+		value := x.Gauge
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeResponse.gauge":
+		x.Gauge = value.Message().Interface().(*Gauge)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeResponse.gauge":
+		if x.Gauge == nil {
+			x.Gauge = new(Gauge)
+		}
+		return protoreflect.ValueOfMessage(x.Gauge.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryGaugeResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugeResponse.gauge":
+		m := new(Gauge)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugeResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugeResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryGaugeResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryGaugeResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryGaugeResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugeResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryGaugeResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryGaugeResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryGaugeResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Gauge != nil {
+			l = options.Size(x.Gauge)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugeResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Gauge != nil {
+			encoded, err := options.Marshal(x.Gauge)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugeResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugeResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Gauge", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Gauge == nil {
+					x.Gauge = &Gauge{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Gauge); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryGaugesRequest                   protoreflect.MessageDescriptor
+	fd_QueryGaugesRequest_previous_epoch_id protoreflect.FieldDescriptor
+	fd_QueryGaugesRequest_pagination        protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryGaugesRequest = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryGaugesRequest")
+	fd_QueryGaugesRequest_previous_epoch_id = md_QueryGaugesRequest.Fields().ByName("previous_epoch_id")
+	fd_QueryGaugesRequest_pagination = md_QueryGaugesRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryGaugesRequest)(nil)
+
+type fastReflection_QueryGaugesRequest QueryGaugesRequest
+
+func (x *QueryGaugesRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryGaugesRequest)(x)
+}
+
+func (x *QueryGaugesRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryGaugesRequest_messageType fastReflection_QueryGaugesRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryGaugesRequest_messageType{}
+
+type fastReflection_QueryGaugesRequest_messageType struct{}
+
+func (x fastReflection_QueryGaugesRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryGaugesRequest)(nil)
+}
+func (x fastReflection_QueryGaugesRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugesRequest)
+}
+func (x fastReflection_QueryGaugesRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugesRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryGaugesRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugesRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryGaugesRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryGaugesRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryGaugesRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugesRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryGaugesRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryGaugesRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryGaugesRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.PreviousEpochId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.PreviousEpochId)
+		if !f(fd_QueryGaugesRequest_previous_epoch_id, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryGaugesRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryGaugesRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesRequest.previous_epoch_id":
+		return x.PreviousEpochId != uint64(0)
+	case "sunrise.liquidityincentive.QueryGaugesRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesRequest.previous_epoch_id":
+		x.PreviousEpochId = uint64(0)
+	case "sunrise.liquidityincentive.QueryGaugesRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryGaugesRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesRequest.previous_epoch_id":
+		value := x.PreviousEpochId
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquidityincentive.QueryGaugesRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesRequest.previous_epoch_id":
+		x.PreviousEpochId = value.Uint()
+	case "sunrise.liquidityincentive.QueryGaugesRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "sunrise.liquidityincentive.QueryGaugesRequest.previous_epoch_id":
+		panic(fmt.Errorf("field previous_epoch_id of message sunrise.liquidityincentive.QueryGaugesRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryGaugesRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesRequest.previous_epoch_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquidityincentive.QueryGaugesRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesRequest"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryGaugesRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryGaugesRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryGaugesRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryGaugesRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryGaugesRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryGaugesRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.PreviousEpochId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PreviousEpochId))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugesRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.PreviousEpochId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PreviousEpochId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugesRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugesRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PreviousEpochId", wireType)
+				}
+				x.PreviousEpochId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PreviousEpochId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryGaugesResponse_1_list)(nil)
+
+type _QueryGaugesResponse_1_list struct {
+	list *[]*Gauge
+}
+
+func (x *_QueryGaugesResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryGaugesResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryGaugesResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Gauge)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryGaugesResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Gauge)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryGaugesResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(Gauge)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryGaugesResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryGaugesResponse_1_list) NewElement() protoreflect.Value {
+	v := new(Gauge)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryGaugesResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryGaugesResponse            protoreflect.MessageDescriptor
+	fd_QueryGaugesResponse_gauge      protoreflect.FieldDescriptor
+	fd_QueryGaugesResponse_pagination protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquidityincentive_query_proto_init()
+	md_QueryGaugesResponse = File_sunrise_liquidityincentive_query_proto.Messages().ByName("QueryGaugesResponse")
+	fd_QueryGaugesResponse_gauge = md_QueryGaugesResponse.Fields().ByName("gauge")
+	fd_QueryGaugesResponse_pagination = md_QueryGaugesResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryGaugesResponse)(nil)
+
+type fastReflection_QueryGaugesResponse QueryGaugesResponse
+
+func (x *QueryGaugesResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryGaugesResponse)(x)
+}
+
+func (x *QueryGaugesResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryGaugesResponse_messageType fastReflection_QueryGaugesResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryGaugesResponse_messageType{}
+
+type fastReflection_QueryGaugesResponse_messageType struct{}
+
+func (x fastReflection_QueryGaugesResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryGaugesResponse)(nil)
+}
+func (x fastReflection_QueryGaugesResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugesResponse)
+}
+func (x fastReflection_QueryGaugesResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugesResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryGaugesResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryGaugesResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryGaugesResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryGaugesResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryGaugesResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryGaugesResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryGaugesResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryGaugesResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryGaugesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Gauge) != 0 {
+		value := protoreflect.ValueOfList(&_QueryGaugesResponse_1_list{list: &x.Gauge})
+		if !f(fd_QueryGaugesResponse_gauge, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryGaugesResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryGaugesResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesResponse.gauge":
+		return len(x.Gauge) != 0
+	case "sunrise.liquidityincentive.QueryGaugesResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesResponse.gauge":
+		x.Gauge = nil
+	case "sunrise.liquidityincentive.QueryGaugesResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryGaugesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesResponse.gauge":
+		if len(x.Gauge) == 0 {
+			return protoreflect.ValueOfList(&_QueryGaugesResponse_1_list{})
+		}
+		listValue := &_QueryGaugesResponse_1_list{list: &x.Gauge}
+		return protoreflect.ValueOfList(listValue)
+	case "sunrise.liquidityincentive.QueryGaugesResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesResponse.gauge":
+		lv := value.List()
+		clv := lv.(*_QueryGaugesResponse_1_list)
+		x.Gauge = *clv.list
+	case "sunrise.liquidityincentive.QueryGaugesResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesResponse.gauge":
+		if x.Gauge == nil {
+			x.Gauge = []*Gauge{}
+		}
+		value := &_QueryGaugesResponse_1_list{list: &x.Gauge}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquidityincentive.QueryGaugesResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryGaugesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquidityincentive.QueryGaugesResponse.gauge":
+		list := []*Gauge{}
+		return protoreflect.ValueOfList(&_QueryGaugesResponse_1_list{list: &list})
+	case "sunrise.liquidityincentive.QueryGaugesResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryGaugesResponse"))
+		}
+		panic(fmt.Errorf("message sunrise.liquidityincentive.QueryGaugesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryGaugesResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquidityincentive.QueryGaugesResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryGaugesResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryGaugesResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryGaugesResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryGaugesResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryGaugesResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.Gauge) > 0 {
+			for _, e := range x.Gauge {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugesResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Gauge) > 0 {
+			for iNdEx := len(x.Gauge) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Gauge[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryGaugesResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugesResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryGaugesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Gauge", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Gauge = append(x.Gauge, &Gauge{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Gauge[len(x.Gauge)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryAddressIncentivesRequest         protoreflect.MessageDescriptor
 	fd_QueryAddressIncentivesRequest_address protoreflect.FieldDescriptor
 )
@@ -827,7 +4618,7 @@ func (x *QueryAddressIncentivesRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryAddressIncentivesRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[2]
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1247,7 +5038,7 @@ func (x *QueryAddressIncentivesResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryAddressIncentivesResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[3]
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1384,7 +5175,7 @@ func (x *fastReflection_QueryAddressIncentivesResponse) Get(descriptor protorefl
 func (x *fastReflection_QueryAddressIncentivesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryAddressIncentivesResponse.amount":
-		x.Amount = value.Message().Interface().(*v1beta1.Coin)
+		x.Amount = value.Message().Interface().(*v1beta11.Coin)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryAddressIncentivesResponse"))
@@ -1407,7 +5198,7 @@ func (x *fastReflection_QueryAddressIncentivesResponse) Mutable(fd protoreflect.
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryAddressIncentivesResponse.amount":
 		if x.Amount == nil {
-			x.Amount = new(v1beta1.Coin)
+			x.Amount = new(v1beta11.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.Amount.ProtoReflect())
 	default:
@@ -1424,7 +5215,7 @@ func (x *fastReflection_QueryAddressIncentivesResponse) Mutable(fd protoreflect.
 func (x *fastReflection_QueryAddressIncentivesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryAddressIncentivesResponse.amount":
-		m := new(v1beta1.Coin)
+		m := new(v1beta11.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -1621,7 +5412,7 @@ func (x *fastReflection_QueryAddressIncentivesResponse) ProtoMethods() *protoifa
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Amount == nil {
-					x.Amount = &v1beta1.Coin{}
+					x.Amount = &v1beta11.Coin{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Amount); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -1682,7 +5473,7 @@ func (x *QueryPositionIncentivesRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryPositionIncentivesRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[4]
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2086,7 +5877,7 @@ func (x *QueryPositionIncentivesResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryPositionIncentivesResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[5]
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2223,7 +6014,7 @@ func (x *fastReflection_QueryPositionIncentivesResponse) Get(descriptor protoref
 func (x *fastReflection_QueryPositionIncentivesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryPositionIncentivesResponse.amount":
-		x.Amount = value.Message().Interface().(*v1beta1.Coin)
+		x.Amount = value.Message().Interface().(*v1beta11.Coin)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryPositionIncentivesResponse"))
@@ -2246,7 +6037,7 @@ func (x *fastReflection_QueryPositionIncentivesResponse) Mutable(fd protoreflect
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryPositionIncentivesResponse.amount":
 		if x.Amount == nil {
-			x.Amount = new(v1beta1.Coin)
+			x.Amount = new(v1beta11.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.Amount.ProtoReflect())
 	default:
@@ -2263,7 +6054,7 @@ func (x *fastReflection_QueryPositionIncentivesResponse) Mutable(fd protoreflect
 func (x *fastReflection_QueryPositionIncentivesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryPositionIncentivesResponse.amount":
-		m := new(v1beta1.Coin)
+		m := new(v1beta11.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -2460,7 +6251,7 @@ func (x *fastReflection_QueryPositionIncentivesResponse) ProtoMethods() *protoif
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Amount == nil {
-					x.Amount = &v1beta1.Coin{}
+					x.Amount = &v1beta11.Coin{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Amount); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -2567,7 +6358,7 @@ func (x *QueryPositionsIncentivesRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryPositionsIncentivesRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[6]
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3057,7 +6848,7 @@ func (x *QueryPositionsIncentivesResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryPositionsIncentivesResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[7]
+	mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3194,7 +6985,7 @@ func (x *fastReflection_QueryPositionsIncentivesResponse) Get(descriptor protore
 func (x *fastReflection_QueryPositionsIncentivesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryPositionsIncentivesResponse.amount":
-		x.Amount = value.Message().Interface().(*v1beta1.Coin)
+		x.Amount = value.Message().Interface().(*v1beta11.Coin)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.QueryPositionsIncentivesResponse"))
@@ -3217,7 +7008,7 @@ func (x *fastReflection_QueryPositionsIncentivesResponse) Mutable(fd protoreflec
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryPositionsIncentivesResponse.amount":
 		if x.Amount == nil {
-			x.Amount = new(v1beta1.Coin)
+			x.Amount = new(v1beta11.Coin)
 		}
 		return protoreflect.ValueOfMessage(x.Amount.ProtoReflect())
 	default:
@@ -3234,7 +7025,7 @@ func (x *fastReflection_QueryPositionsIncentivesResponse) Mutable(fd protoreflec
 func (x *fastReflection_QueryPositionsIncentivesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.QueryPositionsIncentivesResponse.amount":
-		m := new(v1beta1.Coin)
+		m := new(v1beta11.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -3431,7 +7222,7 @@ func (x *fastReflection_QueryPositionsIncentivesResponse) ProtoMethods() *protoi
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Amount == nil {
-					x.Amount = &v1beta1.Coin{}
+					x.Amount = &v1beta11.Coin{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Amount); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -3549,6 +7340,318 @@ func (x *QueryParamsResponse) GetParams() *Params {
 	return nil
 }
 
+type QueryEpochRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *QueryEpochRequest) Reset() {
+	*x = QueryEpochRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryEpochRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryEpochRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryEpochRequest.ProtoReflect.Descriptor instead.
+func (*QueryEpochRequest) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *QueryEpochRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type QueryEpochResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Epoch *Epoch `protobuf:"bytes,1,opt,name=Epoch,proto3" json:"Epoch,omitempty"`
+}
+
+func (x *QueryEpochResponse) Reset() {
+	*x = QueryEpochResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryEpochResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryEpochResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryEpochResponse.ProtoReflect.Descriptor instead.
+func (*QueryEpochResponse) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *QueryEpochResponse) GetEpoch() *Epoch {
+	if x != nil {
+		return x.Epoch
+	}
+	return nil
+}
+
+type QueryEpochsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryEpochsRequest) Reset() {
+	*x = QueryEpochsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryEpochsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryEpochsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryEpochsRequest.ProtoReflect.Descriptor instead.
+func (*QueryEpochsRequest) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *QueryEpochsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type QueryEpochsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Epoch      []*Epoch              `protobuf:"bytes,1,rep,name=Epoch,proto3" json:"Epoch,omitempty"`
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryEpochsResponse) Reset() {
+	*x = QueryEpochsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryEpochsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryEpochsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryEpochsResponse.ProtoReflect.Descriptor instead.
+func (*QueryEpochsResponse) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *QueryEpochsResponse) GetEpoch() []*Epoch {
+	if x != nil {
+		return x.Epoch
+	}
+	return nil
+}
+
+func (x *QueryEpochsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type QueryGaugeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PreviousEpochId uint64 `protobuf:"varint,1,opt,name=previous_epoch_id,json=previousEpochId,proto3" json:"previous_epoch_id,omitempty"`
+	PoolId          uint64 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (x *QueryGaugeRequest) Reset() {
+	*x = QueryGaugeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryGaugeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryGaugeRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryGaugeRequest.ProtoReflect.Descriptor instead.
+func (*QueryGaugeRequest) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *QueryGaugeRequest) GetPreviousEpochId() uint64 {
+	if x != nil {
+		return x.PreviousEpochId
+	}
+	return 0
+}
+
+func (x *QueryGaugeRequest) GetPoolId() uint64 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+type QueryGaugeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Gauge *Gauge `protobuf:"bytes,1,opt,name=gauge,proto3" json:"gauge,omitempty"`
+}
+
+func (x *QueryGaugeResponse) Reset() {
+	*x = QueryGaugeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryGaugeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryGaugeResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryGaugeResponse.ProtoReflect.Descriptor instead.
+func (*QueryGaugeResponse) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *QueryGaugeResponse) GetGauge() *Gauge {
+	if x != nil {
+		return x.Gauge
+	}
+	return nil
+}
+
+type QueryGaugesRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PreviousEpochId uint64               `protobuf:"varint,1,opt,name=previous_epoch_id,json=previousEpochId,proto3" json:"previous_epoch_id,omitempty"`
+	Pagination      *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryGaugesRequest) Reset() {
+	*x = QueryGaugesRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryGaugesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryGaugesRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryGaugesRequest.ProtoReflect.Descriptor instead.
+func (*QueryGaugesRequest) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *QueryGaugesRequest) GetPreviousEpochId() uint64 {
+	if x != nil {
+		return x.PreviousEpochId
+	}
+	return 0
+}
+
+func (x *QueryGaugesRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type QueryGaugesResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Gauge      []*Gauge              `protobuf:"bytes,1,rep,name=gauge,proto3" json:"gauge,omitempty"`
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryGaugesResponse) Reset() {
+	*x = QueryGaugesResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryGaugesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryGaugesResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryGaugesResponse.ProtoReflect.Descriptor instead.
+func (*QueryGaugesResponse) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *QueryGaugesResponse) GetGauge() []*Gauge {
+	if x != nil {
+		return x.Gauge
+	}
+	return nil
+}
+
+func (x *QueryGaugesResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
 type QueryAddressIncentivesRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3560,7 +7663,7 @@ type QueryAddressIncentivesRequest struct {
 func (x *QueryAddressIncentivesRequest) Reset() {
 	*x = QueryAddressIncentivesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[2]
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3574,7 +7677,7 @@ func (*QueryAddressIncentivesRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryAddressIncentivesRequest.ProtoReflect.Descriptor instead.
 func (*QueryAddressIncentivesRequest) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{2}
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *QueryAddressIncentivesRequest) GetAddress() string {
@@ -3589,13 +7692,13 @@ type QueryAddressIncentivesResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Amount *v1beta1.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount *v1beta11.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *QueryAddressIncentivesResponse) Reset() {
 	*x = QueryAddressIncentivesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[3]
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3609,10 +7712,10 @@ func (*QueryAddressIncentivesResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryAddressIncentivesResponse.ProtoReflect.Descriptor instead.
 func (*QueryAddressIncentivesResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{3}
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *QueryAddressIncentivesResponse) GetAmount() *v1beta1.Coin {
+func (x *QueryAddressIncentivesResponse) GetAmount() *v1beta11.Coin {
 	if x != nil {
 		return x.Amount
 	}
@@ -3630,7 +7733,7 @@ type QueryPositionIncentivesRequest struct {
 func (x *QueryPositionIncentivesRequest) Reset() {
 	*x = QueryPositionIncentivesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[4]
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3644,7 +7747,7 @@ func (*QueryPositionIncentivesRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryPositionIncentivesRequest.ProtoReflect.Descriptor instead.
 func (*QueryPositionIncentivesRequest) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{4}
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *QueryPositionIncentivesRequest) GetId() uint64 {
@@ -3659,13 +7762,13 @@ type QueryPositionIncentivesResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Amount *v1beta1.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount *v1beta11.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *QueryPositionIncentivesResponse) Reset() {
 	*x = QueryPositionIncentivesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[5]
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3679,10 +7782,10 @@ func (*QueryPositionIncentivesResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryPositionIncentivesResponse.ProtoReflect.Descriptor instead.
 func (*QueryPositionIncentivesResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{5}
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *QueryPositionIncentivesResponse) GetAmount() *v1beta1.Coin {
+func (x *QueryPositionIncentivesResponse) GetAmount() *v1beta11.Coin {
 	if x != nil {
 		return x.Amount
 	}
@@ -3700,7 +7803,7 @@ type QueryPositionsIncentivesRequest struct {
 func (x *QueryPositionsIncentivesRequest) Reset() {
 	*x = QueryPositionsIncentivesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[6]
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3714,7 +7817,7 @@ func (*QueryPositionsIncentivesRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryPositionsIncentivesRequest.ProtoReflect.Descriptor instead.
 func (*QueryPositionsIncentivesRequest) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{6}
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *QueryPositionsIncentivesRequest) GetIds() []uint64 {
@@ -3729,13 +7832,13 @@ type QueryPositionsIncentivesResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Amount *v1beta1.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount *v1beta11.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *QueryPositionsIncentivesResponse) Reset() {
 	*x = QueryPositionsIncentivesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[7]
+		mi := &file_sunrise_liquidityincentive_query_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3749,10 +7852,10 @@ func (*QueryPositionsIncentivesResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryPositionsIncentivesResponse.ProtoReflect.Descriptor instead.
 func (*QueryPositionsIncentivesResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{7}
+	return file_sunrise_liquidityincentive_query_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *QueryPositionsIncentivesResponse) GetAmount() *v1beta1.Coin {
+func (x *QueryPositionsIncentivesResponse) GetAmount() *v1beta11.Coin {
 	if x != nil {
 		return x.Amount
 	}
@@ -3772,108 +7875,211 @@ var file_sunrise_liquidityincentive_query_proto_rawDesc = []byte{
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61,
 	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73,
 	0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
-	0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x27, 0x73, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e,
-	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x14, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x5c, 0x0a, 0x13, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x45, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
-	0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x39, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
-	0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x22, 0x59, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
-	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x30,
-	0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49,
-	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64,
-	0x22, 0x5a, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x2a, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2f, 0x76,
+	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x27, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x1a, 0x26, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x65, 0x70, 0x6f,
+	0x63, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x26, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e,
+	0x74, 0x69, 0x76, 0x65, 0x2f, 0x67, 0x61, 0x75, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x22, 0x14, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x5c, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a,
+	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e,
+	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x22, 0x23, 0x0a, 0x11, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f,
+	0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x53, 0x0a, 0x12, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x3d, 0x0a, 0x05, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x45, 0x70, 0x6f, 0x63,
+	0x68, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x22, 0x5c,
+	0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62,
+	0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x9d, 0x01, 0x0a,
+	0x13, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d, 0x0a, 0x05, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0x2e, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x45, 0x70,
+	0x6f, 0x63, 0x68, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
+	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x58, 0x0a, 0x11,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x61, 0x75, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x2a, 0x0a, 0x11, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f, 0x65, 0x70,
+	0x6f, 0x63, 0x68, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0f, 0x70, 0x72,
+	0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x49, 0x64, 0x12, 0x17, 0x0a,
+	0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
+	0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x22, 0x53, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47,
+	0x61, 0x75, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d, 0x0a, 0x05,
+	0x67, 0x61, 0x75, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x47, 0x61, 0x75, 0x67, 0x65, 0x42, 0x04,
+	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x67, 0x61, 0x75, 0x67, 0x65, 0x22, 0x88, 0x01, 0x0a, 0x12,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x61, 0x75, 0x67, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f, 0x65,
+	0x70, 0x6f, 0x63, 0x68, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0f, 0x70,
+	0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x49, 0x64, 0x12, 0x46,
+	0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50,
+	0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x9d, 0x01, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x47, 0x61, 0x75, 0x67, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d,
+	0x0a, 0x05, 0x67, 0x61, 0x75, 0x67, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e,
+	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x47, 0x61, 0x75, 0x67, 0x65,
+	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x67, 0x61, 0x75, 0x67, 0x65, 0x12, 0x47, 0x0a,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61,
+	0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x39, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x22, 0x59, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
 	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04,
-	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x33, 0x0a, 0x1f,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x49, 0x6e,
-	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x10, 0x0a, 0x03, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x04, 0x52, 0x03, 0x69, 0x64,
-	0x73, 0x22, 0x5b, 0x0a, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
-	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x32, 0x8a,
-	0x06, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x95, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x30, 0x0a, 0x1e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x63,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x5a,
+	0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde,
+	0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x33, 0x0a, 0x1f, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x49, 0x6e, 0x63, 0x65,
+	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x10, 0x0a,
+	0x03, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x04, 0x52, 0x03, 0x69, 0x64, 0x73, 0x22,
+	0x5b, 0x0a, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x37, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04,
+	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x32, 0xa9, 0x0b, 0x0a,
+	0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x95, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x12, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x2a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x24, 0x12, 0x22, 0x2f, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e,
+	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x97,
+	0x01, 0x0a, 0x05, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x12, 0x2d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65,
+	0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e,
+	0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x29, 0x12,
+	0x27, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x65, 0x70, 0x6f,
+	0x63, 0x68, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x95, 0x01, 0x0a, 0x06, 0x45, 0x70, 0x6f,
+	0x63, 0x68, 0x73, 0x12, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
 	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x73, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
 	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x73, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x24, 0x12, 0x22, 0x2f, 0x73,
 	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x12, 0xcc, 0x01, 0x0a, 0x11, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65,
-	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x39, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
-	0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x3a, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e,
-	0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x40, 0x82,
-	0xd3, 0xe4, 0x93, 0x02, 0x3a, 0x12, 0x38, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f,
+	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x73,
+	0x12, 0xb7, 0x01, 0x0a, 0x05, 0x47, 0x61, 0x75, 0x67, 0x65, 0x12, 0x2d, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e,
+	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x61, 0x75,
+	0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x61, 0x75, 0x67,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4f, 0x82, 0xd3, 0xe4, 0x93, 0x02,
+	0x49, 0x12, 0x47, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x65,
+	0x70, 0x6f, 0x63, 0x68, 0x73, 0x2f, 0x7b, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f,
+	0x65, 0x70, 0x6f, 0x63, 0x68, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x67, 0x61, 0x75, 0x67, 0x65, 0x73,
+	0x2f, 0x7b, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0xb0, 0x01, 0x0a, 0x06, 0x47,
+	0x61, 0x75, 0x67, 0x65, 0x73, 0x12, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
 	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
-	0x76, 0x65, 0x2f, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x2f, 0x61, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12,
-	0xcc, 0x01, 0x0a, 0x12, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x63, 0x65,
-	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x3a, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
-	0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x3b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x63,
-	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x3d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x37, 0x12, 0x35, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e,
-	0x74, 0x69, 0x76, 0x65, 0x2f, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x2f,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0xca,
-	0x01, 0x0a, 0x13, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x49, 0x6e, 0x63, 0x65,
-	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x3b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
-	0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x3c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x61, 0x75, 0x67, 0x65, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
+	0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x61, 0x75, 0x67, 0x65, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x45, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x3f, 0x12, 0x3d,
+	0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x65, 0x70, 0x6f, 0x63,
+	0x68, 0x73, 0x2f, 0x7b, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f, 0x65, 0x70, 0x6f,
+	0x63, 0x68, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x67, 0x61, 0x75, 0x67, 0x65, 0x73, 0x12, 0xcc, 0x01,
+	0x0a, 0x11, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
+	0x76, 0x65, 0x73, 0x12, 0x39, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3a,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
+	0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x40, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x3a, 0x12, 0x38, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71,
+	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f,
+	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x2f, 0x61, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xcc, 0x01, 0x0a,
+	0x12, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
+	0x76, 0x65, 0x73, 0x12, 0x3a, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e,
+	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x3b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3d, 0x82, 0xd3,
+	0xe4, 0x93, 0x02, 0x37, 0x12, 0x35, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
+	0x65, 0x2f, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x2f, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0xca, 0x01, 0x0a, 0x13,
+	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
+	0x76, 0x65, 0x73, 0x12, 0x3b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
 	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
 	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x49,
-	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x38, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x32, 0x12, 0x30, 0x2f, 0x73, 0x75, 0x6e, 0x72,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x3c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x49, 0x6e, 0x63, 0x65,
+	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x38,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x32, 0x12, 0x30, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x2f, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x2f, 0x70,
+	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe2, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x42, 0x0a, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2b, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72,
 	0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63,
-	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x73, 0x2f, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe2, 0x01, 0x0a, 0x1e,
-	0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x42, 0x0a,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2b, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa,
-	0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xca, 0x02, 0x1a, 0x53,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xe2, 0x02, 0x26, 0x53, 0x75, 0x6e, 0x72,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x1a, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xca, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72,
 	0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63,
-	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x1b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xe2, 0x02, 0x26, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
+	0x02, 0x1b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3888,37 +8094,65 @@ func file_sunrise_liquidityincentive_query_proto_rawDescGZIP() []byte {
 	return file_sunrise_liquidityincentive_query_proto_rawDescData
 }
 
-var file_sunrise_liquidityincentive_query_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_sunrise_liquidityincentive_query_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_sunrise_liquidityincentive_query_proto_goTypes = []interface{}{
 	(*QueryParamsRequest)(nil),               // 0: sunrise.liquidityincentive.QueryParamsRequest
 	(*QueryParamsResponse)(nil),              // 1: sunrise.liquidityincentive.QueryParamsResponse
-	(*QueryAddressIncentivesRequest)(nil),    // 2: sunrise.liquidityincentive.QueryAddressIncentivesRequest
-	(*QueryAddressIncentivesResponse)(nil),   // 3: sunrise.liquidityincentive.QueryAddressIncentivesResponse
-	(*QueryPositionIncentivesRequest)(nil),   // 4: sunrise.liquidityincentive.QueryPositionIncentivesRequest
-	(*QueryPositionIncentivesResponse)(nil),  // 5: sunrise.liquidityincentive.QueryPositionIncentivesResponse
-	(*QueryPositionsIncentivesRequest)(nil),  // 6: sunrise.liquidityincentive.QueryPositionsIncentivesRequest
-	(*QueryPositionsIncentivesResponse)(nil), // 7: sunrise.liquidityincentive.QueryPositionsIncentivesResponse
-	(*Params)(nil),                           // 8: sunrise.liquidityincentive.Params
-	(*v1beta1.Coin)(nil),                     // 9: cosmos.base.v1beta1.Coin
+	(*QueryEpochRequest)(nil),                // 2: sunrise.liquidityincentive.QueryEpochRequest
+	(*QueryEpochResponse)(nil),               // 3: sunrise.liquidityincentive.QueryEpochResponse
+	(*QueryEpochsRequest)(nil),               // 4: sunrise.liquidityincentive.QueryEpochsRequest
+	(*QueryEpochsResponse)(nil),              // 5: sunrise.liquidityincentive.QueryEpochsResponse
+	(*QueryGaugeRequest)(nil),                // 6: sunrise.liquidityincentive.QueryGaugeRequest
+	(*QueryGaugeResponse)(nil),               // 7: sunrise.liquidityincentive.QueryGaugeResponse
+	(*QueryGaugesRequest)(nil),               // 8: sunrise.liquidityincentive.QueryGaugesRequest
+	(*QueryGaugesResponse)(nil),              // 9: sunrise.liquidityincentive.QueryGaugesResponse
+	(*QueryAddressIncentivesRequest)(nil),    // 10: sunrise.liquidityincentive.QueryAddressIncentivesRequest
+	(*QueryAddressIncentivesResponse)(nil),   // 11: sunrise.liquidityincentive.QueryAddressIncentivesResponse
+	(*QueryPositionIncentivesRequest)(nil),   // 12: sunrise.liquidityincentive.QueryPositionIncentivesRequest
+	(*QueryPositionIncentivesResponse)(nil),  // 13: sunrise.liquidityincentive.QueryPositionIncentivesResponse
+	(*QueryPositionsIncentivesRequest)(nil),  // 14: sunrise.liquidityincentive.QueryPositionsIncentivesRequest
+	(*QueryPositionsIncentivesResponse)(nil), // 15: sunrise.liquidityincentive.QueryPositionsIncentivesResponse
+	(*Params)(nil),                           // 16: sunrise.liquidityincentive.Params
+	(*Epoch)(nil),                            // 17: sunrise.liquidityincentive.Epoch
+	(*v1beta1.PageRequest)(nil),              // 18: cosmos.base.query.v1beta1.PageRequest
+	(*v1beta1.PageResponse)(nil),             // 19: cosmos.base.query.v1beta1.PageResponse
+	(*Gauge)(nil),                            // 20: sunrise.liquidityincentive.Gauge
+	(*v1beta11.Coin)(nil),                    // 21: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_liquidityincentive_query_proto_depIdxs = []int32{
-	8, // 0: sunrise.liquidityincentive.QueryParamsResponse.params:type_name -> sunrise.liquidityincentive.Params
-	9, // 1: sunrise.liquidityincentive.QueryAddressIncentivesResponse.amount:type_name -> cosmos.base.v1beta1.Coin
-	9, // 2: sunrise.liquidityincentive.QueryPositionIncentivesResponse.amount:type_name -> cosmos.base.v1beta1.Coin
-	9, // 3: sunrise.liquidityincentive.QueryPositionsIncentivesResponse.amount:type_name -> cosmos.base.v1beta1.Coin
-	0, // 4: sunrise.liquidityincentive.Query.Params:input_type -> sunrise.liquidityincentive.QueryParamsRequest
-	2, // 5: sunrise.liquidityincentive.Query.AddressIncentives:input_type -> sunrise.liquidityincentive.QueryAddressIncentivesRequest
-	4, // 6: sunrise.liquidityincentive.Query.PositionIncentives:input_type -> sunrise.liquidityincentive.QueryPositionIncentivesRequest
-	6, // 7: sunrise.liquidityincentive.Query.PositionsIncentives:input_type -> sunrise.liquidityincentive.QueryPositionsIncentivesRequest
-	1, // 8: sunrise.liquidityincentive.Query.Params:output_type -> sunrise.liquidityincentive.QueryParamsResponse
-	3, // 9: sunrise.liquidityincentive.Query.AddressIncentives:output_type -> sunrise.liquidityincentive.QueryAddressIncentivesResponse
-	5, // 10: sunrise.liquidityincentive.Query.PositionIncentives:output_type -> sunrise.liquidityincentive.QueryPositionIncentivesResponse
-	7, // 11: sunrise.liquidityincentive.Query.PositionsIncentives:output_type -> sunrise.liquidityincentive.QueryPositionsIncentivesResponse
-	8, // [8:12] is the sub-list for method output_type
-	4, // [4:8] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	16, // 0: sunrise.liquidityincentive.QueryParamsResponse.params:type_name -> sunrise.liquidityincentive.Params
+	17, // 1: sunrise.liquidityincentive.QueryEpochResponse.Epoch:type_name -> sunrise.liquidityincentive.Epoch
+	18, // 2: sunrise.liquidityincentive.QueryEpochsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	17, // 3: sunrise.liquidityincentive.QueryEpochsResponse.Epoch:type_name -> sunrise.liquidityincentive.Epoch
+	19, // 4: sunrise.liquidityincentive.QueryEpochsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	20, // 5: sunrise.liquidityincentive.QueryGaugeResponse.gauge:type_name -> sunrise.liquidityincentive.Gauge
+	18, // 6: sunrise.liquidityincentive.QueryGaugesRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	20, // 7: sunrise.liquidityincentive.QueryGaugesResponse.gauge:type_name -> sunrise.liquidityincentive.Gauge
+	19, // 8: sunrise.liquidityincentive.QueryGaugesResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	21, // 9: sunrise.liquidityincentive.QueryAddressIncentivesResponse.amount:type_name -> cosmos.base.v1beta1.Coin
+	21, // 10: sunrise.liquidityincentive.QueryPositionIncentivesResponse.amount:type_name -> cosmos.base.v1beta1.Coin
+	21, // 11: sunrise.liquidityincentive.QueryPositionsIncentivesResponse.amount:type_name -> cosmos.base.v1beta1.Coin
+	0,  // 12: sunrise.liquidityincentive.Query.Params:input_type -> sunrise.liquidityincentive.QueryParamsRequest
+	2,  // 13: sunrise.liquidityincentive.Query.Epoch:input_type -> sunrise.liquidityincentive.QueryEpochRequest
+	4,  // 14: sunrise.liquidityincentive.Query.Epochs:input_type -> sunrise.liquidityincentive.QueryEpochsRequest
+	6,  // 15: sunrise.liquidityincentive.Query.Gauge:input_type -> sunrise.liquidityincentive.QueryGaugeRequest
+	8,  // 16: sunrise.liquidityincentive.Query.Gauges:input_type -> sunrise.liquidityincentive.QueryGaugesRequest
+	10, // 17: sunrise.liquidityincentive.Query.AddressIncentives:input_type -> sunrise.liquidityincentive.QueryAddressIncentivesRequest
+	12, // 18: sunrise.liquidityincentive.Query.PositionIncentives:input_type -> sunrise.liquidityincentive.QueryPositionIncentivesRequest
+	14, // 19: sunrise.liquidityincentive.Query.PositionsIncentives:input_type -> sunrise.liquidityincentive.QueryPositionsIncentivesRequest
+	1,  // 20: sunrise.liquidityincentive.Query.Params:output_type -> sunrise.liquidityincentive.QueryParamsResponse
+	3,  // 21: sunrise.liquidityincentive.Query.Epoch:output_type -> sunrise.liquidityincentive.QueryEpochResponse
+	5,  // 22: sunrise.liquidityincentive.Query.Epochs:output_type -> sunrise.liquidityincentive.QueryEpochsResponse
+	7,  // 23: sunrise.liquidityincentive.Query.Gauge:output_type -> sunrise.liquidityincentive.QueryGaugeResponse
+	9,  // 24: sunrise.liquidityincentive.Query.Gauges:output_type -> sunrise.liquidityincentive.QueryGaugesResponse
+	11, // 25: sunrise.liquidityincentive.Query.AddressIncentives:output_type -> sunrise.liquidityincentive.QueryAddressIncentivesResponse
+	13, // 26: sunrise.liquidityincentive.Query.PositionIncentives:output_type -> sunrise.liquidityincentive.QueryPositionIncentivesResponse
+	15, // 27: sunrise.liquidityincentive.Query.PositionsIncentives:output_type -> sunrise.liquidityincentive.QueryPositionsIncentivesResponse
+	20, // [20:28] is the sub-list for method output_type
+	12, // [12:20] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquidityincentive_query_proto_init() }
@@ -3927,6 +8161,8 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 		return
 	}
 	file_sunrise_liquidityincentive_params_proto_init()
+	file_sunrise_liquidityincentive_epoch_proto_init()
+	file_sunrise_liquidityincentive_gauge_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_liquidityincentive_query_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryParamsRequest); i {
@@ -3953,7 +8189,7 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			}
 		}
 		file_sunrise_liquidityincentive_query_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryAddressIncentivesRequest); i {
+			switch v := v.(*QueryEpochRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3965,7 +8201,7 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			}
 		}
 		file_sunrise_liquidityincentive_query_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryAddressIncentivesResponse); i {
+			switch v := v.(*QueryEpochResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3977,7 +8213,7 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			}
 		}
 		file_sunrise_liquidityincentive_query_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPositionIncentivesRequest); i {
+			switch v := v.(*QueryEpochsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3989,7 +8225,7 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			}
 		}
 		file_sunrise_liquidityincentive_query_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPositionIncentivesResponse); i {
+			switch v := v.(*QueryEpochsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4001,7 +8237,7 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			}
 		}
 		file_sunrise_liquidityincentive_query_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPositionsIncentivesRequest); i {
+			switch v := v.(*QueryGaugeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4013,6 +8249,102 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			}
 		}
 		file_sunrise_liquidityincentive_query_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryGaugeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryGaugesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryGaugesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryAddressIncentivesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryAddressIncentivesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryPositionIncentivesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryPositionIncentivesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryPositionsIncentivesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sunrise_liquidityincentive_query_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryPositionsIncentivesResponse); i {
 			case 0:
 				return &v.state
@@ -4031,7 +8363,7 @@ func file_sunrise_liquidityincentive_query_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sunrise_liquidityincentive_query_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

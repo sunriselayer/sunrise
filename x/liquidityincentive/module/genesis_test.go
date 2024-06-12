@@ -14,6 +14,25 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
+		EpochList: []types.Epoch{
+			{
+				Id: 0,
+			},
+			{
+				Id: 1,
+			},
+		},
+		EpochCount: 2,
+		GaugeList: []types.Gauge{
+			{
+				PreviousEpochId: 0,
+				PoolId:          0,
+			},
+			{
+				PreviousEpochId: 1,
+				PoolId:          1,
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -25,5 +44,8 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
+	require.ElementsMatch(t, genesisState.EpochList, got.EpochList)
+	require.Equal(t, genesisState.EpochCount, got.EpochCount)
+	require.ElementsMatch(t, genesisState.GaugeList, got.GaugeList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

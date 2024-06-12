@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
-	"github.com/sunriselayer/sunrise/x/fee/module"
+	fee "github.com/sunriselayer/sunrise/x/fee/module"
 	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 

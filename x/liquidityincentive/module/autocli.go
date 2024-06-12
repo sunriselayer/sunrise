@@ -18,6 +18,29 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
+					RpcMethod: "Epochs",
+					Use:       "list-epoch",
+					Short:     "List all epoch",
+				},
+				{
+					RpcMethod:      "Epoch",
+					Use:            "show-epoch [id]",
+					Short:          "Shows a epoch by id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod:      "Gauges",
+					Use:            "list-gauge [previous_epoch_id]",
+					Short:          "List all gauge",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
+				},
+				{
+					RpcMethod:      "Gauge",
+					Use:            "show-gauge [previous_epoch_id] [pool_id]",
+					Short:          "Shows a gauge",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
+				},
+				{
 					RpcMethod:      "PositionIncentives",
 					Use:            "incentives-by-position-ids [ids]",
 					Short:          "Show incentives by position ids",
@@ -45,6 +68,24 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod:      "VoteGauge",
+					Use:            "vote-gauge",
+					Short:          "Send a vote-gauge tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "CollectIncentiveRewards",
+					Use:            "collect-incentive-rewards",
+					Short:          "Send a collect-incentive-rewards tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "CollectVoteRewards",
+					Use:            "collect-vote-rewards",
+					Short:          "Send a collect-vote-rewards tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

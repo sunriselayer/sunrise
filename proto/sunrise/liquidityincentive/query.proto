@@ -1,21 +1,46 @@
 syntax = "proto3";
+
 package sunrise.liquidityincentive;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/liquidityincentive/params.proto";
+import "sunrise/liquidityincentive/epoch.proto";
+import "sunrise/liquidityincentive/gauge.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get =
-        "/sunrise/liquidityincentive/params";
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/params";
+  
   }
+  
+  // Queries a list of Epoch items.
+  rpc Epoch  (QueryEpochRequest ) returns (QueryEpochResponse ) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs/{id}";
+  
+  }
+  rpc Epochs (QueryEpochsRequest) returns (QueryEpochsResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs";
+  
+  }
+  
+  // Queries a list of Gauge items.
+  rpc Gauge    (QueryGaugeRequest) returns (QueryGaugeResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs/{previous_epoch_id}/gauges/{pool_id}";
+  
+  }
+  rpc Gauges (QueryGaugesRequest) returns (QueryGaugesResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/epochs/{previous_epoch_id}/gauges";
+  }
+  
   rpc AddressIncentives(QueryAddressIncentivesRequest)
       returns (QueryAddressIncentivesResponse) {
     option (google.api.http).get =
@@ -34,15 +59,50 @@ service Query {
         "/sunrise/liquidityincentive/incentives/positions";
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
-  Params params = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+}
+
+message QueryEpochRequest {
+  uint64 id = 1;
+}
+
+message QueryEpochResponse {
+  Epoch Epoch = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryEpochsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryEpochsResponse {
+  repeated Epoch                                  Epoch      = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGaugeRequest {
+  uint64 previous_epoch_id = 1;
+  uint64 pool_id = 2;
+}
+
+message QueryGaugeResponse {
+  Gauge gauge = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGaugesRequest {
+  uint64 previous_epoch_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGaugesResponse {
+  repeated Gauge                                  gauge      = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryAddressIncentivesRequest { string address = 1; }

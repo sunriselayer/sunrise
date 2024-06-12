@@ -6,6 +6,7 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/encoding"
 	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
 
 	sdkmath "cosmossdk.io/math"
