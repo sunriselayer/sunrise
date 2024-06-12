@@ -18,7 +18,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "OutgoingInFlightPacketAll",
+					RpcMethod: "OutgoingInFlightPackets",
 					Use:       "list-in-flight-packet",
 					Short:     "List all out-going-in-flight-packet",
 				},
@@ -29,7 +29,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "src_port_id"}, {ProtoField: "src_channel_id"}, {ProtoField: "sequence"}},
 				},
 				{
-					RpcMethod: "IncomingInFlightPacketAll",
+					RpcMethod: "IncomingInFlightPackets",
 					Use:       "list-incoming-in-flight-packet-packet",
 					Short:     "List all incoming-in-flight-packet",
 				},

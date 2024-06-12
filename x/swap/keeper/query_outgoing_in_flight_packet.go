@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) OutgoingInFlightPacketAll(ctx context.Context, req *types.QueryAllOutgoingInFlightPacketRequest) (*types.QueryAllOutgoingInFlightPacketResponse, error) {
+func (k Keeper) OutgoingInFlightPackets(ctx context.Context, req *types.QueryOutgoingInFlightPacketsRequest) (*types.QueryOutgoingInFlightPacketsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -35,10 +35,10 @@ func (k Keeper) OutgoingInFlightPacketAll(ctx context.Context, req *types.QueryA
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllOutgoingInFlightPacketResponse{OutgoingInFlightPacket: outgoingInFlightPackets, Pagination: pageRes}, nil
+	return &types.QueryOutgoingInFlightPacketsResponse{Packets: outgoingInFlightPackets, Pagination: pageRes}, nil
 }
 
-func (k Keeper) OutgoingInFlightPacket(ctx context.Context, req *types.QueryGetOutgoingInFlightPacketRequest) (*types.QueryGetOutgoingInFlightPacketResponse, error) {
+func (k Keeper) OutgoingInFlightPacket(ctx context.Context, req *types.QueryOutgoingInFlightPacketRequest) (*types.QueryOutgoingInFlightPacketResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -53,5 +53,5 @@ func (k Keeper) OutgoingInFlightPacket(ctx context.Context, req *types.QueryGetO
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &types.QueryGetOutgoingInFlightPacketResponse{OutgoingInFlightPacket: val}, nil
+	return &types.QueryOutgoingInFlightPacketResponse{Packet: val}, nil
 }

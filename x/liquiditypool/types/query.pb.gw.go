@@ -788,21 +788,21 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "liquiditypool", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "liquiditypool", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Pool_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunriselayer", "sunrise", "liquiditypool", "pools", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Pool_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"sunrise", "liquiditypool", "pools", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Pools_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "liquiditypool", "pools"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Pools_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "liquiditypool", "pools"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Position_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunriselayer", "sunrise", "liquiditypool", "positions", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Position_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"sunrise", "liquiditypool", "positions", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Positions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "liquiditypool", "positions"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Positions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "liquiditypool", "positions"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_PoolPositions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"sunriselayer", "sunrise", "liquiditypool", "pools", "pool_id", "positions"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_PoolPositions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"sunrise", "liquiditypool", "pools", "pool_id", "positions"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AddressPositions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"sunriselayer", "sunrise", "liquiditypool", "address", "positions"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AddressPositions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"sunrise", "liquiditypool", "address", "positions"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_PositionFees_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"sunriselayer", "sunrise", "liquiditypool", "positions", "id", "fees"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_PositionFees_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"sunrise", "liquiditypool", "positions", "id", "fees"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

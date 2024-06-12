@@ -28,8 +28,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 	genesis.Params = k.GetParams(ctx)
 
-	genesis.IncomingInFlightPacketList = k.GetAllIncomingInFlightPacket(ctx)
-	genesis.OutgoingInFlightPacketList = k.GetAllOutgoingInFlightPacket(ctx)
+	genesis.IncomingInFlightPacketList = k.GetIncomingInFlightPackets(ctx)
+	genesis.OutgoingInFlightPacketList = k.GetOutgoingInFlightPackets(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis
