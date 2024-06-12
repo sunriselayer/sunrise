@@ -5,6 +5,7 @@ package sunrise.liquidityincentive;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/liquidityincentive/params.proto";
 import "sunrise/liquidityincentive/epoch.proto";
@@ -38,7 +39,24 @@ service Query {
   }
   rpc Gauges (QueryGaugesRequest) returns (QueryGaugesResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/epoch/{previous_epoch_id}/gauge";
+  }
   
+  rpc AddressIncentives(QueryAddressIncentivesRequest)
+      returns (QueryAddressIncentivesResponse) {
+    option (google.api.http).get =
+        "/sunrise/liquidityincentive/incentives/address/{address}";
+  }
+
+  rpc PositionIncentives(QueryPositionIncentivesRequest)
+      returns (QueryPositionIncentivesResponse) {
+    option (google.api.http).get =
+        "/sunrise/liquidityincentive/incentives/positions/{id}";
+  }
+
+  rpc PositionsIncentives(QueryPositionsIncentivesRequest)
+      returns (QueryPositionsIncentivesResponse) {
+    option (google.api.http).get =
+        "/sunrise/liquidityincentive/incentives/positions";
   }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -87,3 +105,17 @@ message QueryGaugesResponse {
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+message QueryAddressIncentivesRequest { string address = 1; }
+message QueryAddressIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryPositionIncentivesRequest { uint64 id = 1; }
+message QueryPositionIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryPositionsIncentivesRequest { repeated uint64 ids = 1; }
+message QueryPositionsIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}

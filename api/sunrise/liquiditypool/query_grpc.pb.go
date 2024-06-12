@@ -25,6 +25,7 @@ const (
 	Query_Pools_FullMethodName            = "/sunrise.liquiditypool.Query/Pools"
 	Query_Position_FullMethodName         = "/sunrise.liquiditypool.Query/Position"
 	Query_Positions_FullMethodName        = "/sunrise.liquiditypool.Query/Positions"
+	Query_PoolPositions_FullMethodName    = "/sunrise.liquiditypool.Query/PoolPositions"
 	Query_AddressPositions_FullMethodName = "/sunrise.liquiditypool.Query/AddressPositions"
 	Query_PositionFees_FullMethodName     = "/sunrise.liquiditypool.Query/PositionFees"
 )
@@ -41,7 +42,9 @@ type QueryClient interface {
 	// Queries a list of Position items.
 	Position(ctx context.Context, in *QueryPositionRequest, opts ...grpc.CallOption) (*QueryPositionResponse, error)
 	Positions(ctx context.Context, in *QueryPositionsRequest, opts ...grpc.CallOption) (*QueryPositionsResponse, error)
+	PoolPositions(ctx context.Context, in *QueryPoolPositionsRequest, opts ...grpc.CallOption) (*QueryPoolPositionsResponse, error)
 	AddressPositions(ctx context.Context, in *QueryAddressPositionsRequest, opts ...grpc.CallOption) (*QueryAddressPositionsResponse, error)
+	// Query fees by position id
 	PositionFees(ctx context.Context, in *QueryPositionFeesRequest, opts ...grpc.CallOption) (*QueryPositionFeesResponse, error)
 }
 
@@ -98,6 +101,15 @@ func (c *queryClient) Positions(ctx context.Context, in *QueryPositionsRequest, 
 	return out, nil
 }
 
+func (c *queryClient) PoolPositions(ctx context.Context, in *QueryPoolPositionsRequest, opts ...grpc.CallOption) (*QueryPoolPositionsResponse, error) {
+	out := new(QueryPoolPositionsResponse)
+	err := c.cc.Invoke(ctx, Query_PoolPositions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) AddressPositions(ctx context.Context, in *QueryAddressPositionsRequest, opts ...grpc.CallOption) (*QueryAddressPositionsResponse, error) {
 	out := new(QueryAddressPositionsResponse)
 	err := c.cc.Invoke(ctx, Query_AddressPositions_FullMethodName, in, out, opts...)
@@ -128,7 +140,9 @@ type QueryServer interface {
 	// Queries a list of Position items.
 	Position(context.Context, *QueryPositionRequest) (*QueryPositionResponse, error)
 	Positions(context.Context, *QueryPositionsRequest) (*QueryPositionsResponse, error)
+	PoolPositions(context.Context, *QueryPoolPositionsRequest) (*QueryPoolPositionsResponse, error)
 	AddressPositions(context.Context, *QueryAddressPositionsRequest) (*QueryAddressPositionsResponse, error)
+	// Query fees by position id
 	PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
@@ -151,6 +165,9 @@ func (UnimplementedQueryServer) Position(context.Context, *QueryPositionRequest)
 }
 func (UnimplementedQueryServer) Positions(context.Context, *QueryPositionsRequest) (*QueryPositionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Positions not implemented")
+}
+func (UnimplementedQueryServer) PoolPositions(context.Context, *QueryPoolPositionsRequest) (*QueryPoolPositionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolPositions not implemented")
 }
 func (UnimplementedQueryServer) AddressPositions(context.Context, *QueryAddressPositionsRequest) (*QueryAddressPositionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddressPositions not implemented")
@@ -261,6 +278,24 @@ func _Query_Positions_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_PoolPositions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolPositionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolPositions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolPositions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolPositions(ctx, req.(*QueryPoolPositionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_AddressPositions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryAddressPositionsRequest)
 	if err := dec(in); err != nil {
@@ -323,6 +358,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Positions",
 			Handler:    _Query_Positions_Handler,
+		},
+		{
+			MethodName: "PoolPositions",
+			Handler:    _Query_PoolPositions_Handler,
 		},
 		{
 			MethodName: "AddressPositions",

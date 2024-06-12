@@ -40,6 +40,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
+					RpcMethod:      "PoolPositions",
+					Use:            "show-pool-positions [pool_id]",
+					Short:          "List positions by pool id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "pool_id"}},
+				},
+				{
 					RpcMethod:      "AddressPositions",
 					Use:            "address-positions [address]",
 					Short:          "List positions by address",

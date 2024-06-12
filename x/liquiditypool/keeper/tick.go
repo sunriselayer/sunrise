@@ -45,8 +45,6 @@ func (k Keeper) crossTick(ctx sdk.Context, poolId uint64, tickIndex int64, tickI
 		Add(swapStateFeeGrowth).
 		Sub(tickInfo.FeeGrowth)
 
-	// TODO: consider AccumulatorObject
-
 	k.SetTickInfo(ctx, *tickInfo)
 
 	return nil
@@ -57,15 +55,12 @@ func (k Keeper) newTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 	if !found {
 		return tickStruct, types.ErrPoolNotFound
 	}
-	_ = pool
 
 	// initial fee Growth calculation
 	initialFeeGrowth, err := k.getInitialFeeGrowth(ctx, pool, tickIndex)
 	if err != nil {
 		return tickStruct, err
 	}
-
-	// TODO: get initial update growth
 
 	return types.TickInfo{
 		PoolId:         poolId,

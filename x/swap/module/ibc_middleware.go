@@ -110,9 +110,16 @@ func (im IBCMiddleware) OnRecvPacket(
 	}
 
 	// Swap
-	denomIn := (data.Denom) // TODO: convert ibc denom
-	// TODO: validate converted denomIn is equal to the route DenomIn
-	_ = denomIn
+	denomIn := types.GetDenomForThisChain(
+		packet.DestinationPort,
+		packet.DestinationChannel,
+		packet.SourcePort,
+		packet.SourceChannel,
+		data.Denom,
+	)
+	if metadata.Route.DenomIn != denomIn {
+		return channeltypes.NewErrorAcknowledgement(fmt.Errorf("invalid route: expected %s, got %s", metadata.Route.DenomIn, denomIn))
+	}
 
 	// Settle the incoming fund
 	swapper := im.keeper.AccountKeeper.GetModuleAddress(types.ModuleName)
@@ -128,6 +135,9 @@ func (im IBCMiddleware) OnRecvPacket(
 		data,
 		metadata,
 	)
+	if err != nil {
+		return channeltypes.NewErrorAcknowledgement(err)
+	}
 
 	waitingPacket, err := im.keeper.ProcessSwappedFund(
 		ctx,

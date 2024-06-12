@@ -75,7 +75,10 @@ func (k Keeper) SwapExactAmountIn(
 
 	if hasInterfaceFee {
 		// Validated in ValidateBasic
-		addr := sdk.MustAccAddressFromBech32(interfaceProvider)
+		addr, err := sdk.AccAddressFromBech32(interfaceProvider)
+		if err != nil {
+			return result, interfaceFee, err
+		}
 		fee := sdk.NewCoin(result.TokenOut.Denom, interfaceFee)
 
 		if fee.IsPositive() {
@@ -130,6 +133,7 @@ func (k Keeper) calculateResultRoutePoolExactAmountIn(
 		pool,
 		tokenIn,
 		denomOut,
+		true,
 	)
 	if err != nil {
 		return math.Int{}, err
@@ -179,6 +183,7 @@ func (k Keeper) swapRoutePoolExactAmountIn(
 		pool,
 		tokenIn,
 		denomOut,
+		true,
 	)
 	if err != nil {
 		return math.Int{}, err

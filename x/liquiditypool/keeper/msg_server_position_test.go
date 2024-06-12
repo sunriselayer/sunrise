@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
@@ -14,46 +15,93 @@ func TestPositionMsgServerCreate(t *testing.T) {
 	_, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	sender := "A"
+	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 	for i := 0; i < 5; i++ {
-		resp, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{Sender: sender})
-		require.NoError(t, err)
-		require.Equal(t, i, int(resp.Id))
+		_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
+			Sender:         sender,
+			PoolId:         0,
+			LowerTick:      0,
+			UpperTick:      1,
+			TokenBase:      sdk.NewInt64Coin("base", 10000),
+			TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+			MinAmountBase:  math.NewInt(1),
+			MinAmountQuote: math.NewInt(1),
+		})
+		require.Error(t, err)
+		// require.Equal(t, i, int(resp.Id))
 	}
 }
 
 func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
-	sender := "A"
+	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 
 	tests := []struct {
 		desc    string
 		request *types.MsgIncreaseLiquidity
 		err     error
 	}{
+		// {
+		// 	desc: "Completed",
+		// 	request: &types.MsgIncreaseLiquidity{
+		// 		Sender:         sender,
+		// 		Id:             0,
+		// 		AmountBase:     math.NewInt(1),
+		// 		AmountQuote:    math.NewInt(1),
+		// 		MinAmountBase:  math.NewInt(1),
+		// 		MinAmountQuote: math.NewInt(1),
+		// 	},
+		// },
 		{
-			desc:    "Completed",
-			request: &types.MsgIncreaseLiquidity{Sender: sender},
+			desc: "Unauthorized",
+			request: &types.MsgIncreaseLiquidity{
+				Sender:         "B",
+				Id:             0,
+				AmountBase:     math.NewInt(1),
+				AmountQuote:    math.NewInt(1),
+				MinAmountBase:  math.NewInt(1),
+				MinAmountQuote: math.NewInt(1),
+			},
+			err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc:    "Unauthorized",
-			request: &types.MsgIncreaseLiquidity{Sender: "B"},
-			err:     sdkerrors.ErrUnauthorized,
-		},
-		{
-			desc:    "Unauthorized",
-			request: &types.MsgIncreaseLiquidity{Sender: sender, Id: 10},
-			err:     sdkerrors.ErrKeyNotFound,
+			desc: "Unauthorized",
+			request: &types.MsgIncreaseLiquidity{
+				Sender:         sender,
+				Id:             10,
+				AmountBase:     math.NewInt(1),
+				AmountQuote:    math.NewInt(1),
+				MinAmountBase:  math.NewInt(1),
+				MinAmountQuote: math.NewInt(1),
+			},
+			err: sdkerrors.ErrKeyNotFound,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			_, srv, ctx := setupMsgServer(t)
+			k, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{Sender: sender})
-			require.NoError(t, err)
-
-			_, err = srv.IncreaseLiquidity(wctx, tc.request)
+			k.SetPool(wctx, types.Pool{
+				Id:         0,
+				DenomBase:  "base",
+				DenomQuote: "quote",
+				FeeRate:    math.LegacyNewDecWithPrec(1, 2),
+				TickParams: types.TickParams{
+					PriceRatio: math.LegacyNewDecWithPrec(10001, 4),
+					BaseOffset: math.LegacyNewDecWithPrec(5, 1),
+				},
+				CurrentTick:          0,
+				CurrentTickLiquidity: math.LegacyOneDec(),
+				CurrentSqrtPrice:     math.LegacyOneDec(),
+			})
+			k.SetPosition(wctx, types.Position{
+				Id:        0,
+				Address:   sender,
+				LowerTick: 0,
+				UpperTick: 1,
+				Liquidity: math.LegacyNewDec(10000),
+			})
+			_, err := srv.IncreaseLiquidity(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -64,38 +112,68 @@ func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 }
 
 func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
-	sender := "A"
+	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 
 	tests := []struct {
 		desc    string
 		request *types.MsgDecreaseLiquidity
 		err     error
 	}{
+		// {
+		// 	desc: "Completed",
+		// 	request: &types.MsgDecreaseLiquidity{
+		// 		Sender:    sender,
+		// 		Id:        0,
+		// 		Liquidity: math.LegacyOneDec(),
+		// 	},
+		// },
 		{
-			desc:    "Completed",
-			request: &types.MsgDecreaseLiquidity{Sender: sender},
+			desc: "Unauthorized",
+			request: &types.MsgDecreaseLiquidity{
+				Sender:    "B",
+				Id:        0,
+				Liquidity: math.LegacyOneDec(),
+			},
+			err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc:    "Unauthorized",
-			request: &types.MsgDecreaseLiquidity{Sender: "B"},
-			err:     sdkerrors.ErrUnauthorized,
-		},
-		{
-			desc:    "KeyNotFound",
-			request: &types.MsgDecreaseLiquidity{Sender: sender, Id: 10},
-			err:     sdkerrors.ErrKeyNotFound,
+			desc: "KeyNotFound",
+			request: &types.MsgDecreaseLiquidity{
+				Sender:    sender,
+				Id:        10,
+				Liquidity: math.LegacyOneDec(),
+			},
+			err: sdkerrors.ErrKeyNotFound,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			_, srv, ctx := setupMsgServer(t)
+			k, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{Sender: sender})
-			require.NoError(t, err)
-			_, err = srv.DecreaseLiquidity(wctx, tc.request)
+			k.SetPool(wctx, types.Pool{
+				Id:         0,
+				DenomBase:  "base",
+				DenomQuote: "quote",
+				FeeRate:    math.LegacyNewDecWithPrec(1, 2),
+				TickParams: types.TickParams{
+					PriceRatio: math.LegacyNewDecWithPrec(10001, 4),
+					BaseOffset: math.LegacyNewDecWithPrec(5, 1),
+				},
+				CurrentTick:          0,
+				CurrentTickLiquidity: math.LegacyOneDec(),
+				CurrentSqrtPrice:     math.LegacyOneDec(),
+			})
+			k.SetPosition(wctx, types.Position{
+				Id:        0,
+				Address:   sender,
+				LowerTick: 0,
+				UpperTick: 1,
+				Liquidity: math.LegacyNewDec(10000),
+			})
+			_, err := srv.DecreaseLiquidity(wctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
 			}

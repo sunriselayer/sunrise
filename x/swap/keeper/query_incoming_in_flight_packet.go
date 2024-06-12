@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) IncomingInFlightPacketAll(ctx context.Context, req *types.QueryAllIncomingInFlightPacketRequest) (*types.QueryAllIncomingInFlightPacketResponse, error) {
+func (k Keeper) IncomingInFlightPackets(ctx context.Context, req *types.QueryIncomingInFlightPacketsRequest) (*types.QueryIncomingInFlightPacketsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -35,10 +35,10 @@ func (k Keeper) IncomingInFlightPacketAll(ctx context.Context, req *types.QueryA
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllIncomingInFlightPacketResponse{IncomingInFlightPacket: incomingPackets, Pagination: pageRes}, nil
+	return &types.QueryIncomingInFlightPacketsResponse{Packets: incomingPackets, Pagination: pageRes}, nil
 }
 
-func (k Keeper) IncomingInFlightPacket(ctx context.Context, req *types.QueryGetIncomingInFlightPacketRequest) (*types.QueryGetIncomingInFlightPacketResponse, error) {
+func (k Keeper) IncomingInFlightPacket(ctx context.Context, req *types.QueryIncomingInFlightPacketRequest) (*types.QueryIncomingInFlightPacketResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -51,5 +51,5 @@ func (k Keeper) IncomingInFlightPacket(ctx context.Context, req *types.QueryGetI
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &types.QueryGetIncomingInFlightPacketResponse{IncomingInFlightPacket: val}, nil
+	return &types.QueryIncomingInFlightPacketResponse{Packet: val}, nil
 }

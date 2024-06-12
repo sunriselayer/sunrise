@@ -3,10 +3,12 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	sdkmath "cosmossdk.io/math"
 
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
+	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 )
 
 const DefaultRetryCount uint8 = 3
@@ -78,4 +80,22 @@ func (a SwapAcknowledgement) Acknowledgement() ([]byte, error) {
 	}
 
 	return bz, nil
+}
+
+func GetDenomForThisChain(port, channel, counterpartyPort, counterpartyChannel, denom string) string {
+	counterpartyPrefix := transfertypes.GetDenomPrefix(counterpartyPort, counterpartyChannel)
+	if strings.HasPrefix(denom, counterpartyPrefix) {
+		// unwind denom
+		unwoundDenom := denom[len(counterpartyPrefix):]
+		denomTrace := transfertypes.ParseDenomTrace(unwoundDenom)
+		if denomTrace.Path == "" {
+			// denom is now unwound back to native denom
+			return unwoundDenom
+		}
+		// denom is still IBC denom
+		return denomTrace.IBCDenom()
+	}
+	// append port and channel from this chain to denom
+	prefixedDenom := transfertypes.GetDenomPrefix(port, channel) + denom
+	return transfertypes.ParseDenomTrace(prefixedDenom).IBCDenom()
 }

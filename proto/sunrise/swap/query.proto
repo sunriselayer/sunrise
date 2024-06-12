@@ -16,26 +16,26 @@ service Query {
   
   // Parameters queries the parameters of the module.
   rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/params";
+    option (google.api.http).get = "/sunrise/swap/params";
   
   }
   
   // Queries a list of IncomingInFlightPacket items.
-  rpc IncomingInFlightPacket    (QueryGetIncomingInFlightPacketRequest) returns (QueryGetIncomingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/incoming/{src_port_id}/{src_channel_id}/{sequence}";
+  rpc IncomingInFlightPacket    (QueryIncomingInFlightPacketRequest) returns (QueryIncomingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunrise/swap/ack_waiting_packets/incoming/{src_port_id}/{src_channel_id}/{sequence}";
   
   }
-  rpc IncomingInFlightPacketAll (QueryAllIncomingInFlightPacketRequest) returns (QueryAllIncomingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/ack_waiting_packet/incoming";
+  rpc IncomingInFlightPackets (QueryIncomingInFlightPacketsRequest) returns (QueryIncomingInFlightPacketsResponse) {
+    option (google.api.http).get = "/sunrise/swap/ack_waiting_packets/incoming";
   }
 
   // Queries a list of OutgoingInFlightPacket items.
-  rpc OutgoingInFlightPacket    (QueryGetOutgoingInFlightPacketRequest) returns (QueryGetOutgoingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
+  rpc OutgoingInFlightPacket    (QueryOutgoingInFlightPacketRequest) returns (QueryOutgoingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunrise/swap/in_flight_packets/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
   
   }
-  rpc OutgoingInFlightPacketAll (QueryAllOutgoingInFlightPacketRequest) returns (QueryAllOutgoingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/swap/in_flight_packet/outgoing";
+  rpc OutgoingInFlightPackets (QueryOutgoingInFlightPacketsRequest) returns (QueryOutgoingInFlightPacketsResponse) {
+    option (google.api.http).get = "/sunrise/swap/in_flight_packets/outgoing";
   
   }
   
@@ -50,40 +50,40 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
 
-message QueryGetIncomingInFlightPacketRequest {
+message QueryIncomingInFlightPacketRequest {
   string src_port_id    = 1;
   string src_channel_id = 2;
   uint64 sequence       = 3;
 }
 
-message QueryGetIncomingInFlightPacketResponse {
-  IncomingInFlightPacket incomingInFlightPacket = 1 [(gogoproto.nullable) = false];
+message QueryIncomingInFlightPacketResponse {
+  IncomingInFlightPacket packet = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllIncomingInFlightPacketRequest {
+message QueryIncomingInFlightPacketsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-message QueryAllIncomingInFlightPacketResponse {
-  repeated IncomingInFlightPacket                 incomingInFlightPacket = 1 [(gogoproto.nullable) = false];
+message QueryIncomingInFlightPacketsResponse {
+  repeated IncomingInFlightPacket                 packets = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination       = 2;
 }
 
-message QueryGetOutgoingInFlightPacketRequest {
+message QueryOutgoingInFlightPacketRequest {
   string src_port_id    = 1;
   string src_channel_id = 2;
   uint64 sequence       = 3;
 }
 
-message QueryGetOutgoingInFlightPacketResponse {
-  OutgoingInFlightPacket outgoingInFlightPacket = 1 [(gogoproto.nullable) = false];
+message QueryOutgoingInFlightPacketResponse {
+  OutgoingInFlightPacket packet = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllOutgoingInFlightPacketRequest {
+message QueryOutgoingInFlightPacketsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-message QueryAllOutgoingInFlightPacketResponse {
-  repeated OutgoingInFlightPacket                 outgoingInFlightPacket = 1 [(gogoproto.nullable) = false];
+message QueryOutgoingInFlightPacketsResponse {
+  repeated OutgoingInFlightPacket                 packets = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination     = 2;
 }

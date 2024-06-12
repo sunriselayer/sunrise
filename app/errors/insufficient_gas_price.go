@@ -12,7 +12,7 @@ import (
 var (
 	// This is relatively brittle. It would be better if going below the min gas price
 	// had a specific error type.
-	regexpMinGasPrice = regexp.MustCompile(`insufficient fees; got: \d+usr required: \d+usr`)
+	regexpMinGasPrice = regexp.MustCompile(`insufficient fees; got: \d+urise required: \d+urise`)
 	regexpInt         = regexp.MustCompile(`[0-9]+`)
 )
 

@@ -17,13 +17,16 @@ func TestMsgCollectIncentives_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgCollectIncentives{
-				Sender: "invalid_address",
+				Sender:      "invalid_address",
+				PositionIds: []uint64{1},
 			},
 			err: sdkerrors.ErrInvalidAddress,
-		}, {
+		},
+		{
 			name: "valid address",
 			msg: MsgCollectIncentives{
-				Sender: sample.AccAddress(),
+				Sender:      sample.AccAddress(),
+				PositionIds: []uint64{1},
 			},
 		},
 	}
