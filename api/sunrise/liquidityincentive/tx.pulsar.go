@@ -871,15 +871,68 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 	}
 }
 
+var _ protoreflect.List = (*_MsgVoteGauge_2_list)(nil)
+
+type _MsgVoteGauge_2_list struct {
+	list *[]*PoolWeight
+}
+
+func (x *_MsgVoteGauge_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_MsgVoteGauge_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_MsgVoteGauge_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*PoolWeight)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_MsgVoteGauge_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*PoolWeight)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_MsgVoteGauge_2_list) AppendMutable() protoreflect.Value {
+	v := new(PoolWeight)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgVoteGauge_2_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_MsgVoteGauge_2_list) NewElement() protoreflect.Value {
+	v := new(PoolWeight)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_MsgVoteGauge_2_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_MsgVoteGauge        protoreflect.MessageDescriptor
-	fd_MsgVoteGauge_sender protoreflect.FieldDescriptor
+	md_MsgVoteGauge         protoreflect.MessageDescriptor
+	fd_MsgVoteGauge_sender  protoreflect.FieldDescriptor
+	fd_MsgVoteGauge_weights protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquidityincentive_tx_proto_init()
 	md_MsgVoteGauge = File_sunrise_liquidityincentive_tx_proto.Messages().ByName("MsgVoteGauge")
 	fd_MsgVoteGauge_sender = md_MsgVoteGauge.Fields().ByName("sender")
+	fd_MsgVoteGauge_weights = md_MsgVoteGauge.Fields().ByName("weights")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgVoteGauge)(nil)
@@ -953,6 +1006,12 @@ func (x *fastReflection_MsgVoteGauge) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
+	if len(x.Weights) != 0 {
+		value := protoreflect.ValueOfList(&_MsgVoteGauge_2_list{list: &x.Weights})
+		if !f(fd_MsgVoteGauge_weights, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -970,6 +1029,8 @@ func (x *fastReflection_MsgVoteGauge) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.MsgVoteGauge.sender":
 		return x.Sender != ""
+	case "sunrise.liquidityincentive.MsgVoteGauge.weights":
+		return len(x.Weights) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.MsgVoteGauge"))
@@ -988,6 +1049,8 @@ func (x *fastReflection_MsgVoteGauge) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.MsgVoteGauge.sender":
 		x.Sender = ""
+	case "sunrise.liquidityincentive.MsgVoteGauge.weights":
+		x.Weights = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.MsgVoteGauge"))
@@ -1007,6 +1070,12 @@ func (x *fastReflection_MsgVoteGauge) Get(descriptor protoreflect.FieldDescripto
 	case "sunrise.liquidityincentive.MsgVoteGauge.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
+	case "sunrise.liquidityincentive.MsgVoteGauge.weights":
+		if len(x.Weights) == 0 {
+			return protoreflect.ValueOfList(&_MsgVoteGauge_2_list{})
+		}
+		listValue := &_MsgVoteGauge_2_list{list: &x.Weights}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.MsgVoteGauge"))
@@ -1029,6 +1098,10 @@ func (x *fastReflection_MsgVoteGauge) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.MsgVoteGauge.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.liquidityincentive.MsgVoteGauge.weights":
+		lv := value.List()
+		clv := lv.(*_MsgVoteGauge_2_list)
+		x.Weights = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.MsgVoteGauge"))
@@ -1049,6 +1122,12 @@ func (x *fastReflection_MsgVoteGauge) Set(fd protoreflect.FieldDescriptor, value
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgVoteGauge) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquidityincentive.MsgVoteGauge.weights":
+		if x.Weights == nil {
+			x.Weights = []*PoolWeight{}
+		}
+		value := &_MsgVoteGauge_2_list{list: &x.Weights}
+		return protoreflect.ValueOfList(value)
 	case "sunrise.liquidityincentive.MsgVoteGauge.sender":
 		panic(fmt.Errorf("field sender of message sunrise.liquidityincentive.MsgVoteGauge is not mutable"))
 	default:
@@ -1066,6 +1145,9 @@ func (x *fastReflection_MsgVoteGauge) NewField(fd protoreflect.FieldDescriptor) 
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.MsgVoteGauge.sender":
 		return protoreflect.ValueOfString("")
+	case "sunrise.liquidityincentive.MsgVoteGauge.weights":
+		list := []*PoolWeight{}
+		return protoreflect.ValueOfList(&_MsgVoteGauge_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.MsgVoteGauge"))
@@ -1139,6 +1221,12 @@ func (x *fastReflection_MsgVoteGauge) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if len(x.Weights) > 0 {
+			for _, e := range x.Weights {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1167,6 +1255,22 @@ func (x *fastReflection_MsgVoteGauge) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Weights) > 0 {
+			for iNdEx := len(x.Weights) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Weights[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x12
+			}
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -1255,6 +1359,40 @@ func (x *fastReflection_MsgVoteGauge) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Weights", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Weights = append(x.Weights, &PoolWeight{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Weights[len(x.Weights)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -3218,7 +3356,8 @@ type MsgUpdateParams struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	// authority is the address that controls the module (defaults to x/gov unless
+	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
 	// NOTE: All parameters must be supplied.
 	Params *Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params,omitempty"`
@@ -3291,7 +3430,8 @@ type MsgVoteGauge struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender  string        `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Weights []*PoolWeight `protobuf:"bytes,2,rep,name=weights,proto3" json:"weights,omitempty"`
 }
 
 func (x *MsgVoteGauge) Reset() {
@@ -3319,6 +3459,13 @@ func (x *MsgVoteGauge) GetSender() string {
 		return x.Sender
 	}
 	return ""
+}
+
+func (x *MsgVoteGauge) GetWeights() []*PoolWeight {
+	if x != nil {
+		return x.Weights
+	}
+	return nil
 }
 
 type MsgVoteGaugeResponse struct {
@@ -3484,24 +3631,31 @@ var file_sunrise_liquidityincentive_tx_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x27,
 	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
 	0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xd1, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x36, 0x0a, 0x09, 0x61,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18,
-	0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
-	0x69, 0x74, 0x79, 0x12, 0x45, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0,
-	0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x3f, 0x82, 0xe7, 0xb0, 0x2a,
-	0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x2c, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x4d, 0x73, 0x67, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d,
-	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33, 0x0a, 0x0c, 0x4d, 0x73, 0x67, 0x56, 0x6f, 0x74,
-	0x65, 0x47, 0x61, 0x75, 0x67, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x3a, 0x0b,
+	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x26, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x2f, 0x67, 0x61, 0x75, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
+	0xd1, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
+	0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x45, 0x0a, 0x06, 0x70,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69,
+	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42,
+	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x3a, 0x3f, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
+	0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x2c, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78,
+	0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7b,
+	0x0a, 0x0c, 0x4d, 0x73, 0x67, 0x56, 0x6f, 0x74, 0x65, 0x47, 0x61, 0x75, 0x67, 0x65, 0x12, 0x16,
+	0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x46, 0x0a, 0x07, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74,
+	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e,
+	0x74, 0x69, 0x76, 0x65, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x57, 0x65, 0x69, 0x67, 0x68, 0x74, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x07, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x73, 0x3a, 0x0b,
 	0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x16, 0x0a, 0x14, 0x4d,
 	0x73, 0x67, 0x56, 0x6f, 0x74, 0x65, 0x47, 0x61, 0x75, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x22, 0x41, 0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
@@ -3589,22 +3743,24 @@ var file_sunrise_liquidityincentive_tx_proto_goTypes = []interface{}{
 	(*MsgCollectVoteRewards)(nil),              // 6: sunrise.liquidityincentive.MsgCollectVoteRewards
 	(*MsgCollectVoteRewardsResponse)(nil),      // 7: sunrise.liquidityincentive.MsgCollectVoteRewardsResponse
 	(*Params)(nil),                             // 8: sunrise.liquidityincentive.Params
+	(*PoolWeight)(nil),                         // 9: sunrise.liquidityincentive.PoolWeight
 }
 var file_sunrise_liquidityincentive_tx_proto_depIdxs = []int32{
 	8, // 0: sunrise.liquidityincentive.MsgUpdateParams.params:type_name -> sunrise.liquidityincentive.Params
-	0, // 1: sunrise.liquidityincentive.Msg.UpdateParams:input_type -> sunrise.liquidityincentive.MsgUpdateParams
-	2, // 2: sunrise.liquidityincentive.Msg.VoteGauge:input_type -> sunrise.liquidityincentive.MsgVoteGauge
-	4, // 3: sunrise.liquidityincentive.Msg.CollectIncentiveRewards:input_type -> sunrise.liquidityincentive.MsgCollectIncentiveRewards
-	6, // 4: sunrise.liquidityincentive.Msg.CollectVoteRewards:input_type -> sunrise.liquidityincentive.MsgCollectVoteRewards
-	1, // 5: sunrise.liquidityincentive.Msg.UpdateParams:output_type -> sunrise.liquidityincentive.MsgUpdateParamsResponse
-	3, // 6: sunrise.liquidityincentive.Msg.VoteGauge:output_type -> sunrise.liquidityincentive.MsgVoteGaugeResponse
-	5, // 7: sunrise.liquidityincentive.Msg.CollectIncentiveRewards:output_type -> sunrise.liquidityincentive.MsgCollectIncentiveRewardsResponse
-	7, // 8: sunrise.liquidityincentive.Msg.CollectVoteRewards:output_type -> sunrise.liquidityincentive.MsgCollectVoteRewardsResponse
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	9, // 1: sunrise.liquidityincentive.MsgVoteGauge.weights:type_name -> sunrise.liquidityincentive.PoolWeight
+	0, // 2: sunrise.liquidityincentive.Msg.UpdateParams:input_type -> sunrise.liquidityincentive.MsgUpdateParams
+	2, // 3: sunrise.liquidityincentive.Msg.VoteGauge:input_type -> sunrise.liquidityincentive.MsgVoteGauge
+	4, // 4: sunrise.liquidityincentive.Msg.CollectIncentiveRewards:input_type -> sunrise.liquidityincentive.MsgCollectIncentiveRewards
+	6, // 5: sunrise.liquidityincentive.Msg.CollectVoteRewards:input_type -> sunrise.liquidityincentive.MsgCollectVoteRewards
+	1, // 6: sunrise.liquidityincentive.Msg.UpdateParams:output_type -> sunrise.liquidityincentive.MsgUpdateParamsResponse
+	3, // 7: sunrise.liquidityincentive.Msg.VoteGauge:output_type -> sunrise.liquidityincentive.MsgVoteGaugeResponse
+	5, // 8: sunrise.liquidityincentive.Msg.CollectIncentiveRewards:output_type -> sunrise.liquidityincentive.MsgCollectIncentiveRewardsResponse
+	7, // 9: sunrise.liquidityincentive.Msg.CollectVoteRewards:output_type -> sunrise.liquidityincentive.MsgCollectVoteRewardsResponse
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquidityincentive_tx_proto_init() }
@@ -3613,6 +3769,7 @@ func file_sunrise_liquidityincentive_tx_proto_init() {
 		return
 	}
 	file_sunrise_liquidityincentive_params_proto_init()
+	file_sunrise_liquidityincentive_gauge_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_liquidityincentive_tx_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUpdateParams); i {

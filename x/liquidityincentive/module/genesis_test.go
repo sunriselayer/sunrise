@@ -14,7 +14,7 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
 
-		EpochList: []types.Epoch{
+		Epochs: []types.Epoch{
 			{
 				Id: 0,
 			},
@@ -23,7 +23,7 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		EpochCount: 2,
-		GaugeList: []types.Gauge{
+		Gauges: []types.Gauge{
 			{
 				PreviousEpochId: 0,
 				PoolId:          0,
@@ -44,8 +44,8 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
-	require.ElementsMatch(t, genesisState.EpochList, got.EpochList)
+	require.ElementsMatch(t, genesisState.Epochs, got.Epochs)
 	require.Equal(t, genesisState.EpochCount, got.EpochCount)
-	require.ElementsMatch(t, genesisState.GaugeList, got.GaugeList)
+	require.ElementsMatch(t, genesisState.Gauges, got.Gauges)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

@@ -18,7 +18,7 @@ To minimize the load of reward distribution, the rewards are not distributed to 
 For pool $i$ position $j$,
 
 - $\text{PositionUnclaimedAccumulation}_{ij}$ is the accumulated quote-valued fee rewards for the position.
-- $\text{Incentive} \leftarrow \Delta t \times \text{InflationRate} \times (1 - \text{ValidatorRewardRatio}) \times \text{IncentiveTotalSupply}$
+- $\text{Incentive} \leftarrow \Delta t \times \text{InflationRate} \times (1 - \text{StakingRewardRatio}) \times \text{IncentiveTotalSupply}$
 - $\text{PoolInflated}_i = \text{GaugeWeight}_i \times \text{Incentive}$
 - $\text{PoolUnclaimed}_i = \text{PoolInflated}_i - \text{PoolTotalClaimed}_i$
 - $\text{PoolUnclaimedAccumulation}_i = \sum_j \text{PositionUnclaimedAccumulation}_{ij}$

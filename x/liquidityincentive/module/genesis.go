@@ -10,14 +10,14 @@ import (
 // InitGenesis initializes the module's state from a provided genesis state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// Set all the epoch
-	for _, elem := range genState.EpochList {
+	for _, elem := range genState.Epochs {
 		k.SetEpoch(ctx, elem)
 	}
 
 	// Set epoch count
 	k.SetEpochCount(ctx, genState.EpochCount)
 	// Set all the gauge
-	for _, elem := range genState.GaugeList {
+	for _, elem := range genState.Gauges {
 		k.SetGauge(ctx, elem)
 	}
 	// this line is used by starport scaffolding # genesis/module/init
@@ -31,9 +31,9 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 	genesis.Params = k.GetParams(ctx)
 
-	genesis.EpochList = k.GetAllEpoch(ctx)
+	genesis.Epochs = k.GetAllEpoch(ctx)
 	genesis.EpochCount = k.GetEpochCount(ctx)
-	genesis.GaugeList = k.GetAllGauge(ctx)
+	genesis.Gauges = k.GetAllGauge(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

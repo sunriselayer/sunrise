@@ -21,8 +21,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
-
-				EpochList: []types.Epoch{
+				Epochs: []types.Epoch{
 					{
 						Id: 0,
 					},
@@ -31,7 +30,7 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				EpochCount: 2,
-				GaugeList: []types.Gauge{
+				Gauges: []types.Gauge{
 					{
 						PreviousEpochId: 0,
 						PoolId:          0,
@@ -48,7 +47,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "duplicated epoch",
 			genState: &types.GenesisState{
-				EpochList: []types.Epoch{
+				Epochs: []types.Epoch{
 					{
 						Id: 0,
 					},
@@ -62,7 +61,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "invalid epoch count",
 			genState: &types.GenesisState{
-				EpochList: []types.Epoch{
+				Epochs: []types.Epoch{
 					{
 						Id: 1,
 					},
@@ -74,7 +73,7 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "duplicated gauge",
 			genState: &types.GenesisState{
-				GaugeList: []types.Gauge{
+				Gauges: []types.Gauge{
 					{
 						PreviousEpochId: 0,
 						PoolId:          0,
