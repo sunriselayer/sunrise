@@ -4,7 +4,6 @@ package sunrise.fee;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/fee/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
@@ -13,7 +12,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/fee/params";
+    option (google.api.http).get = "/sunrise/fee/params";
   }
 }
 

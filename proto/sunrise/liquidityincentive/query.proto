@@ -4,7 +4,7 @@ package sunrise.liquidityincentive;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "sunrise/liquidityincentive/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
@@ -14,12 +14,24 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquidityincentive/params";
+        "/sunrise/liquidityincentive/params";
   }
-  rpc IncentivesByPositionIds(QueryIncentivesByPositionIdsRequest)
-      returns (QueryIncentivesByPositionIdsResponse) {
+  rpc AddressIncentives(QueryAddressIncentivesRequest)
+      returns (QueryAddressIncentivesResponse) {
     option (google.api.http).get =
-        "/sunriselayer/sunrise/liquidityincentive/incentives_by_position_ids";
+        "/sunrise/liquidityincentive/incentives/address/{address}";
+  }
+
+  rpc PositionIncentives(QueryPositionIncentivesRequest)
+      returns (QueryPositionIncentivesResponse) {
+    option (google.api.http).get =
+        "/sunrise/liquidityincentive/incentives/positions/{id}";
+  }
+
+  rpc PositionsIncentives(QueryPositionsIncentivesRequest)
+      returns (QueryPositionsIncentivesResponse) {
+    option (google.api.http).get =
+        "/sunrise/liquidityincentive/incentives/positions";
   }
 }
 
@@ -33,5 +45,17 @@ message QueryParamsResponse {
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
-message QueryIncentivesByPositionIdsRequest { repeated uint64 ids = 1; }
-message QueryIncentivesByPositionIdsResponse {}
+message QueryAddressIncentivesRequest { string address = 1; }
+message QueryAddressIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryPositionIncentivesRequest { uint64 id = 1; }
+message QueryPositionIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryPositionsIncentivesRequest { repeated uint64 ids = 1; }
+message QueryPositionsIncentivesResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+}
