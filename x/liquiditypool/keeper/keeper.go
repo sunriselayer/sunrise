@@ -24,8 +24,7 @@ type (
 		// should be the x/gov module account.
 		authority string
 
-		accountKeeper types.AccountKeeper
-		bankKeeper    types.BankKeeper
+		bankKeeper types.BankKeeper
 	}
 )
 
@@ -35,7 +34,6 @@ func NewKeeper(
 	logger log.Logger,
 	authority string,
 
-	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
@@ -48,8 +46,7 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 
-		accountKeeper: accountKeeper,
-		bankKeeper:    bankKeeper,
+		bankKeeper: bankKeeper,
 	}
 }
 

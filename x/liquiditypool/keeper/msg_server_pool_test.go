@@ -10,7 +10,7 @@ import (
 )
 
 func TestPoolMsgServerCreate(t *testing.T) {
-	k, srv, ctx := setupMsgServer(t)
+	k, _, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	sender := sdk.AccAddress("sender")

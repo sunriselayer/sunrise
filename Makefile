@@ -9,6 +9,7 @@ PROJECTNAME=$(shell basename "$(PWD)")
 HTTPS_GIT := https://github.com/sunriselayer/sunrise.git
 PACKAGE_NAME          := github.com/sunriselayer/sunrise
 GOLANG_CROSS_VERSION  ?= v1.21.4
+MOCKS_DIR = $(CURDIR)/test/mocks
 
 # process linker flags
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=surise-app \
@@ -190,3 +191,13 @@ prebuilt-binary:
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		release --clean
 .PHONY: prebuilt-binary
+
+
+#? mocks: Generate mock file
+mocks: $(MOCKS_DIR)
+	@go install github.com/golang/mock/mockgen@v1.6.0
+	sh ./scripts/mockgen.sh
+.PHONY: mocks
+
+$(MOCKS_DIR):
+	mkdir -p $(MOCKS_DIR)

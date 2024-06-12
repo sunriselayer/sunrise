@@ -21,6 +21,7 @@ import (
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
@@ -31,7 +32,7 @@ func init() {
 	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
 }
 
-func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
+func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, bankkeeper.Keeper, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 	bankStoreKey := storetypes.NewKVStoreKey(banktypes.StoreKey)
 	authStoreKey := storetypes.NewKVStoreKey(authtypes.StoreKey)
@@ -47,7 +48,10 @@ func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
-	accountKeeper := authkeeper.NewAccountKeeper(cdc, runtime.NewKVStoreService(authStoreKey), nil, nil, address.NewBech32Codec("sunrise"), "sunrise", authority.String())
+	maccPerms := map[string][]string{
+		minttypes.ModuleName: {authtypes.Minter},
+	}
+	accountKeeper := authkeeper.NewAccountKeeper(cdc, runtime.NewKVStoreService(authStoreKey), authtypes.ProtoBaseAccount, maccPerms, address.NewBech32Codec("sunrise"), "sunrise", authority.String())
 	bankKeeper := bankkeeper.NewBaseKeeper(cdc, runtime.NewKVStoreService(bankStoreKey), accountKeeper, nil, authority.String(), log.NewNopLogger())
 
 	k := keeper.NewKeeper(
@@ -55,7 +59,6 @@ func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
-		accountKeeper,
 		bankKeeper,
 	)
 
@@ -66,5 +69,5 @@ func LiquiditypoolKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		panic(err)
 	}
 
-	return k, ctx
+	return k, bankKeeper, ctx
 }

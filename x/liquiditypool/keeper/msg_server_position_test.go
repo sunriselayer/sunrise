@@ -12,13 +12,29 @@ import (
 )
 
 func TestPositionMsgServerCreate(t *testing.T) {
-	_, srv, ctx := setupMsgServer(t)
+	k, bk, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sdk.AccAddress("sender")
+	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
+		Authority:  sender.String(),
+		DenomBase:  "base",
+		DenomQuote: "quote",
+		FeeRate:    "0.01",
+		PriceRatio: "1.0001",
+		BaseOffset: "0.5",
+	})
+	require.NoError(t, err)
+
+	// TODO: mint coins before position creation_
+	_ = bk
+	// err = bk.MintCoins(ctx, minttypes.ModuleName, sdk.Coins{sdk.NewInt64Coin("base", 10000000), sdk.NewInt64Coin("quote", 10000000)})
+	// require.NoError(t, err)
+
+	// Create positions
 	for i := 0; i < 5; i++ {
 		_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
-			Sender:         sender,
+			Sender:         sender.String(),
 			PoolId:         0,
 			LowerTick:      0,
 			UpperTick:      1,
@@ -28,6 +44,7 @@ func TestPositionMsgServerCreate(t *testing.T) {
 			MinAmountQuote: math.NewInt(1),
 		})
 		require.Error(t, err)
+		_ = k
 		// require.Equal(t, i, int(resp.Id))
 	}
 }
@@ -78,7 +95,7 @@ func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, srv, ctx := setupMsgServer(t)
+			k, _, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
 			k.SetPool(wctx, types.Pool{
@@ -148,7 +165,7 @@ func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, srv, ctx := setupMsgServer(t)
+			k, _, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
 			k.SetPool(wctx, types.Pool{
