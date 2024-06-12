@@ -14,25 +14,15 @@ func (k Keeper) SetGauge(ctx context.Context, gauge types.Gauge) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.GaugeKeyPrefix))
 	b := k.cdc.MustMarshal(&gauge)
-	store.Set(types.GaugeKey(
-		gauge.PreviousEpochId,
-		gauge.PoolId,
-	), b)
+	store.Set(types.GaugeKey(gauge.PreviousEpochId, gauge.PoolId), b)
 }
 
 // GetGauge returns a gauge from its index
-func (k Keeper) GetGauge(
-	ctx context.Context,
-	previousEpochId uint64,
-	poolId uint64,
-) (val types.Gauge, found bool) {
+func (k Keeper) GetGauge(ctx context.Context, previousEpochId uint64, poolId uint64) (val types.Gauge, found bool) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.GaugeKeyPrefix))
 
-	b := store.Get(types.GaugeKey(
-		previousEpochId,
-		poolId,
-	))
+	b := store.Get(types.GaugeKey(previousEpochId, poolId))
 	if b == nil {
 		return val, false
 	}
@@ -42,21 +32,14 @@ func (k Keeper) GetGauge(
 }
 
 // RemoveGauge removes a gauge from the store
-func (k Keeper) RemoveGauge(
-	ctx context.Context,
-	previousEpochId uint64,
-	poolId uint64,
-) {
+func (k Keeper) RemoveGauge(ctx context.Context, previousEpochId uint64, poolId uint64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.GaugeKeyPrefix))
-	store.Delete(types.GaugeKey(
-		previousEpochId,
-		poolId,
-	))
+	store.Delete(types.GaugeKey(previousEpochId, poolId))
 }
 
-// GetAllGauge returns all gauge
-func (k Keeper) GetAllGauge(ctx context.Context) (list []types.Gauge) {
+// GetAllGauge returns all gauges
+func (k Keeper) GetAllGauges(ctx context.Context) (list []types.Gauge) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.GaugeKeyPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})

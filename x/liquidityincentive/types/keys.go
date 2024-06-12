@@ -22,4 +22,5 @@ func KeyPrefix(p string) []byte {
 const (
 	EpochKey      = "Epoch/value/"
 	EpochCountKey = "Epoch/count/"
+	VoteKeyPrefix = "Vote/value"
 )

@@ -30,10 +30,7 @@ func TestGaugeGet(t *testing.T) {
 	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNGauge(keeper, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetGauge(ctx,
-			item.PreviousEpochId,
-			item.PoolId,
-		)
+		rst, found := keeper.GetGauge(ctx, item.PreviousEpochId, item.PoolId)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -45,10 +42,7 @@ func TestGaugeRemove(t *testing.T) {
 	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNGauge(keeper, ctx, 10)
 	for _, item := range items {
-		keeper.RemoveGauge(ctx,
-			item.PreviousEpochId,
-			item.PoolId,
-		)
+		keeper.RemoveGauge(ctx, item.PreviousEpochId, item.PoolId)
 		_, found := keeper.GetGauge(ctx,
 			item.PreviousEpochId,
 			item.PoolId,
@@ -62,6 +56,6 @@ func TestGaugeGetAll(t *testing.T) {
 	items := createNGauge(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllGauge(ctx)),
+		nullify.Fill(keeper.GetAllGauges(ctx)),
 	)
 }

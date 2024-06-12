@@ -10,8 +10,10 @@ import (
 func (k msgServer) VoteGauge(goCtx context.Context, msg *types.MsgVoteGauge) (*types.MsgVoteGaugeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
+	k.SetVote(ctx, types.Vote{
+		Sender:  msg.Sender,
+		Weights: msg.Weights,
+	})
 
 	return &types.MsgVoteGaugeResponse{}, nil
 }
