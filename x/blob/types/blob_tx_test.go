@@ -37,7 +37,6 @@ func TestNewBlob(t *testing.T) {
 }
 
 func TestValidateBlobTx(t *testing.T) {
-	encCfg := encoding.MakeConfig(util.ModuleBasics)
 	signer, err := testnode.NewOfflineSigner()
 	require.NoError(t, err)
 	ns1 := namespace.MustNewV0(bytes.Repeat([]byte{0x01}, namespace.NamespaceVersionZeroIDSize))
@@ -237,6 +236,7 @@ func TestValidateBlobTx(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			encCfg := encoding.MakeConfig(util.ModuleBasics)
 			err := types.ValidateBlobTx(encCfg.TxConfig, tt.getTx())
 			if tt.expectedErr != nil {
 				assert.ErrorIs(t, err, tt.expectedErr, tt.name)

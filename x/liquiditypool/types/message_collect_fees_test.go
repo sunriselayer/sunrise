@@ -17,13 +17,16 @@ func TestMsgCollectFees_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgCollectFees{
-				Sender: "invalid_address",
+				Sender:      "invalid_address",
+				PositionIds: []uint64{1},
 			},
 			err: sdkerrors.ErrInvalidAddress,
-		}, {
+		},
+		{
 			name: "valid address",
 			msg: MsgCollectFees{
-				Sender: sample.AccAddress(),
+				Sender:      sample.AccAddress(),
+				PositionIds: []uint64{1},
 			},
 		},
 	}

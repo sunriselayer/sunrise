@@ -32,7 +32,6 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 	}
 
 	var pool = types.Pool{
-		Id:         0,
 		DenomBase:  msg.DenomBase,
 		DenomQuote: msg.DenomQuote,
 		FeeRate:    feeRate,
@@ -45,7 +44,7 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		CurrentSqrtPrice:     math.LegacyZeroDec(),
 	}
 	id := k.AppendPool(ctx, pool)
-	if err := k.createFeeAccumulator(ctx, pool.Id); err != nil {
+	if err := k.createFeeAccumulator(ctx, id); err != nil {
 		return nil, err
 	}
 

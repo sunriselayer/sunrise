@@ -1,8 +1,8 @@
 package testencoding
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
-
 	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/encoding"
 
@@ -19,6 +19,10 @@ var (
 )
 
 func getModuleBasics() sdkmodule.BasicManager {
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
+
 	var moduleBasics sdkmodule.BasicManager
 	depinject.Inject(
 		depinject.Configs(

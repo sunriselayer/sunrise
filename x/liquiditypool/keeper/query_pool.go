@@ -12,12 +12,22 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+func (k Keeper) WrapPoolInfo(ctx context.Context, pool types.Pool) types.PoolInfo {
+	tokenBase := k.bankKeeper.GetBalance(ctx, pool.GetAddress(), pool.DenomBase)
+	tokenQuote := k.bankKeeper.GetBalance(ctx, pool.GetAddress(), pool.DenomQuote)
+	return types.PoolInfo{
+		Pool:       pool,
+		TokenBase:  tokenBase,
+		TokenQuote: tokenQuote,
+	}
+}
+
 func (k Keeper) Pools(ctx context.Context, req *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var pools []types.Pool
+	var pools []types.PoolInfo
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	poolStore := prefix.NewStore(store, types.KeyPrefix(types.PoolKey))
@@ -28,7 +38,7 @@ func (k Keeper) Pools(ctx context.Context, req *types.QueryPoolsRequest) (*types
 			return err
 		}
 
-		pools = append(pools, pool)
+		pools = append(pools, k.WrapPoolInfo(ctx, pool))
 		return nil
 	})
 
@@ -49,5 +59,5 @@ func (k Keeper) Pool(ctx context.Context, req *types.QueryPoolRequest) (*types.Q
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	return &types.QueryPoolResponse{Pool: pool}, nil
+	return &types.QueryPoolResponse{Pool: k.WrapPoolInfo(ctx, pool)}, nil
 }

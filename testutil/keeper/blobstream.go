@@ -21,6 +21,12 @@ import (
 	"github.com/sunriselayer/sunrise/x/blobstream/types"
 )
 
+func init() {
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
+}
+
 func StreamKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 

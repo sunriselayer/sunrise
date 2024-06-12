@@ -28,7 +28,7 @@ func (p Pool) IsCurrentTickInRange(lowerTick, upperTick int64) bool {
 	return p.CurrentTick >= lowerTick && p.CurrentTick < upperTick
 }
 
-func (p Pool) CalcActualAmounts(ctx sdk.Context, lowerTick, upperTick int64, liquidityDelta math.LegacyDec) (math.LegacyDec, math.LegacyDec, error) {
+func (p Pool) CalcActualAmounts(lowerTick, upperTick int64, liquidityDelta math.LegacyDec) (math.LegacyDec, math.LegacyDec, error) {
 	if liquidityDelta.IsZero() {
 		return math.LegacyDec{}, math.LegacyDec{}, ErrZeroLiquidity
 	}

@@ -2,8 +2,10 @@ package keeper_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
@@ -14,6 +16,14 @@ import (
 func createNPosition(keeper keeper.Keeper, ctx context.Context, n int) []types.Position {
 	items := make([]types.Position, n)
 	for i := range items {
+		items[i] = types.Position{
+			Id:        0,
+			Address:   fmt.Sprintf("%d", i),
+			PoolId:    1,
+			LowerTick: 1,
+			UpperTick: 2,
+			Liquidity: math.LegacyOneDec(),
+		}
 		items[i].Id = keeper.AppendPosition(ctx, items[i])
 	}
 	return items

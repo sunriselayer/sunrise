@@ -13,7 +13,13 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/liquidityincentive/params";
+    option (google.api.http).get =
+        "/sunriselayer/sunrise/liquidityincentive/params";
+  }
+  rpc IncentivesByPositionIds(QueryIncentivesByPositionIdsRequest)
+      returns (QueryIncentivesByPositionIdsResponse) {
+    option (google.api.http).get =
+        "/sunriselayer/sunrise/liquidityincentive/incentives_by_position_ids";
   }
 }
 
@@ -23,8 +29,9 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
+
+message QueryIncentivesByPositionIdsRequest { repeated uint64 ids = 1; }
+message QueryIncentivesByPositionIdsResponse {}

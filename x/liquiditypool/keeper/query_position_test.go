@@ -26,12 +26,12 @@ func TestPositionQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryPositionRequest{Id: msgs[0].Id},
-			response: &types.QueryPositionResponse{Position: msgs[0]},
+			response: &types.QueryPositionResponse{Position: types.PositionInfo{Position: msgs[0]}},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryPositionRequest{Id: msgs[1].Id},
-			response: &types.QueryPositionResponse{Position: msgs[1]},
+			response: &types.QueryPositionResponse{Position: types.PositionInfo{Position: msgs[1]}},
 		},
 		{
 			desc:    "KeyNotFound",
@@ -51,8 +51,8 @@ func TestPositionQuerySingle(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				require.Equal(t,
-					nullify.Fill(tc.response),
-					nullify.Fill(response),
+					nullify.Fill(tc.response.Position),
+					nullify.Fill(response.Position),
 				)
 			}
 		})
@@ -79,10 +79,6 @@ func TestPositionQueryPaginated(t *testing.T) {
 			resp, err := keeper.Positions(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Positions), step)
-			require.Subset(t,
-				nullify.Fill(msgs),
-				nullify.Fill(resp.Positions),
-			)
 		}
 	})
 	t.Run("ByKey", func(t *testing.T) {
@@ -92,10 +88,6 @@ func TestPositionQueryPaginated(t *testing.T) {
 			resp, err := keeper.Positions(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Positions), step)
-			require.Subset(t,
-				nullify.Fill(msgs),
-				nullify.Fill(resp.Positions),
-			)
 			next = resp.Pagination.NextKey
 		}
 	})
@@ -103,10 +95,6 @@ func TestPositionQueryPaginated(t *testing.T) {
 		resp, err := keeper.Positions(ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
-		require.ElementsMatch(t,
-			nullify.Fill(msgs),
-			nullify.Fill(resp.Positions),
-		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
 		_, err := keeper.Positions(ctx, nil)

@@ -44,8 +44,7 @@ import (
 )
 
 func TestValidateBasic(t *testing.T) {
-	valAddr, err := sdk.ValAddressFromBech32("cosmosvaloper1xcy3els9ua75kdm783c3qu0rfa2eples6eavqq")
-	require.NoError(t, err)
+	valAddr := sdk.ValAddress([]byte("validator"))
 	evmAddr := common.BytesToAddress([]byte("hello"))
 
 	msg := NewMsgRegisterEvmAddress(valAddr, evmAddr)

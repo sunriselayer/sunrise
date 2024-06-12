@@ -17,6 +17,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod:      "IncentivesByPositionIds",
+					Use:            "incentives-by-position-ids [ids]",
+					Short:          "Show incentives by position ids",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "ids"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

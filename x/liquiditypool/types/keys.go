@@ -34,8 +34,10 @@ const (
 )
 
 const (
-	PositionKey      = "Position/value/"
-	PositionCountKey = "Position/count/"
+	PositionKey       = "Position/value/"
+	PositionCountKey  = "Position/count/"
+	PositionByPool    = "PositionByPool/"
+	PositionByAddress = "PositionByAddress/"
 )
 
 const (
@@ -105,4 +107,12 @@ func FormatKeyAccumPrefix(accumName string) []byte {
 
 func FormatKeyAccumulatorPositionPrefix(accumName, name string) []byte {
 	return []byte(fmt.Sprintf(KeyAccumulatorPositionPrefix+"%s"+KeySeparator+"%s", accumName, name))
+}
+
+func PositionByPoolPrefix(poolId uint64) []byte {
+	return append([]byte(PositionByPool), sdk.Uint64ToBigEndian(poolId)...)
+}
+
+func PositionByAddressPrefix(addr string) []byte {
+	return append([]byte(PositionByAddress), addr...)
 }
