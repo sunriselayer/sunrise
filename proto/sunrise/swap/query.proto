@@ -101,14 +101,8 @@ message QueryOutgoingInFlightPacketsResponse {
 
 message QueryCalculationSwapExactAmountInRequest {
   bool has_interface_fee = 1;
-  Route route = 3
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-  string amount_in = 4 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Route route = 3;
+  string amount_in = 4;
 }
 
 message QueryCalculationSwapExactAmountInResponse {
@@ -132,14 +126,8 @@ message QueryCalculationSwapExactAmountInResponse {
 
 message QueryCalculationSwapExactAmountOutRequest {
   bool has_interface_fee = 1;
-  Route route = 3
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-  string amount_out = 4 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Route route = 3;
+  string amount_out = 4;
 }
 
 message QueryCalculationSwapExactAmountOutResponse {
