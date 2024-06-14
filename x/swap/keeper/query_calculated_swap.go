@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	sdkmath "cosmossdk.io/math"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -16,7 +17,11 @@ func (k Keeper) CalculationSwapExactAmountIn(goCtx context.Context, req *types.Q
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	result, interfaceProviderFee, err := k.CalculateResultExactAmountIn(ctx, req.HasInterfaceFee, req.Route, req.AmountIn)
+	amountIn, ok := sdkmath.NewIntFromString(req.AmountIn)
+	if !ok {
+		return nil, types.ErrInvalidAmount
+	}
+	result, interfaceProviderFee, err := k.CalculateResultExactAmountIn(ctx, req.HasInterfaceFee, *req.Route, amountIn)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +39,11 @@ func (k Keeper) CalculationSwapExactAmountOut(goCtx context.Context, req *types.
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	result, interfaceProviderFee, err := k.CalculateResultExactAmountOut(ctx, req.HasInterfaceFee, req.Route, req.AmountOut)
+	amountOut, ok := sdkmath.NewIntFromString(req.AmountOut)
+	if !ok {
+		return nil, types.ErrInvalidAmount
+	}
+	result, interfaceProviderFee, err := k.CalculateResultExactAmountOut(ctx, req.HasInterfaceFee, *req.Route, amountOut)
 	if err != nil {
 		return nil, err
 	}
