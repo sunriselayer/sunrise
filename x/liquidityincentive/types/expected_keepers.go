@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // AccountKeeper defines the expected account keeper (noalias)
@@ -20,11 +21,11 @@ type AccountKeeper interface {
 
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
-	GetAllBalances(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
-	GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom string) sdk.Coin
-	SendCoinsFromModuleToModule(ctx sdk.Context, senderModule string, recipientModule string, amt sdk.Coins) error
-	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
-	SendCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
+	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
+	SendCoinsFromModuleToModule(ctx context.Context, senderModule string, recipientModule string, amt sdk.Coins) error
+	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 	// Methods imported from bank should be defined here
 }
 
@@ -47,4 +48,9 @@ type StakingKeeper interface {
 		ctx context.Context, delegator sdk.AccAddress,
 		fn func(index int64, delegation stakingtypes.DelegationI) (stop bool),
 	) error
+}
+
+type LiquidityPoolKeeper interface {
+	GetPool(ctx context.Context, id uint64) (val liquiditypooltypes.Pool, found bool)
+	AllocateIncentive(ctx sdk.Context, poolId uint64, sender sdk.AccAddress, incentiveCoins sdk.Coins) error
 }

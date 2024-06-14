@@ -39,6 +39,9 @@ func LiquidityincentiveKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		log.NewNopLogger(),
 		authority.String(),
 		nil,
+		nil,
+		nil,
+		nil,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
