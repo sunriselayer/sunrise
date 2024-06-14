@@ -516,26 +516,26 @@ func (m *QueryOutgoingInFlightPacketsResponse) GetPagination() *query.PageRespon
 	return nil
 }
 
-type QueryCalculatedSwapExactAmountInRequest struct {
+type QueryCalculationSwapExactAmountInRequest struct {
 	HasInterfaceFee bool                  `protobuf:"varint,1,opt,name=has_interface_fee,json=hasInterfaceFee,proto3" json:"has_interface_fee,omitempty"`
 	Route           Route                 `protobuf:"bytes,3,opt,name=route,proto3" json:"route"`
 	AmountIn        cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=amount_in,json=amountIn,proto3,customtype=cosmossdk.io/math.Int" json:"amount_in"`
 }
 
-func (m *QueryCalculatedSwapExactAmountInRequest) Reset() {
-	*m = QueryCalculatedSwapExactAmountInRequest{}
+func (m *QueryCalculationSwapExactAmountInRequest) Reset() {
+	*m = QueryCalculationSwapExactAmountInRequest{}
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculatedSwapExactAmountInRequest) ProtoMessage()    {}
-func (*QueryCalculatedSwapExactAmountInRequest) Descriptor() ([]byte, []int) {
+func (m *QueryCalculationSwapExactAmountInRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculationSwapExactAmountInRequest) ProtoMessage()    {}
+func (*QueryCalculationSwapExactAmountInRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b10939fa85502f21, []int{10}
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculationSwapExactAmountInRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculationSwapExactAmountInRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculatedSwapExactAmountInRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculationSwapExactAmountInRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -545,52 +545,54 @@ func (m *QueryCalculatedSwapExactAmountInRequest) XXX_Marshal(b []byte, determin
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountInRequest.Merge(m, src)
+func (m *QueryCalculationSwapExactAmountInRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculationSwapExactAmountInRequest.Merge(m, src)
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) XXX_Size() int {
+func (m *QueryCalculationSwapExactAmountInRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountInRequest.DiscardUnknown(m)
+func (m *QueryCalculationSwapExactAmountInRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculationSwapExactAmountInRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculatedSwapExactAmountInRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculationSwapExactAmountInRequest proto.InternalMessageInfo
 
-func (m *QueryCalculatedSwapExactAmountInRequest) GetHasInterfaceFee() bool {
+func (m *QueryCalculationSwapExactAmountInRequest) GetHasInterfaceFee() bool {
 	if m != nil {
 		return m.HasInterfaceFee
 	}
 	return false
 }
 
-func (m *QueryCalculatedSwapExactAmountInRequest) GetRoute() Route {
+func (m *QueryCalculationSwapExactAmountInRequest) GetRoute() Route {
 	if m != nil {
 		return m.Route
 	}
 	return Route{}
 }
 
-type QueryCalculatedSwapExactAmountInResponse struct {
+type QueryCalculationSwapExactAmountInResponse struct {
 	Result               RouteResult           `protobuf:"bytes,1,opt,name=result,proto3" json:"result"`
 	InterfaceProviderFee cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=interface_provider_fee,json=interfaceProviderFee,proto3,customtype=cosmossdk.io/math.Int" json:"interface_provider_fee"`
 	AmountOut            cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=amount_out,json=amountOut,proto3,customtype=cosmossdk.io/math.Int" json:"amount_out"`
 }
 
-func (m *QueryCalculatedSwapExactAmountInResponse) Reset() {
-	*m = QueryCalculatedSwapExactAmountInResponse{}
+func (m *QueryCalculationSwapExactAmountInResponse) Reset() {
+	*m = QueryCalculationSwapExactAmountInResponse{}
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculatedSwapExactAmountInResponse) ProtoMessage()    {}
-func (*QueryCalculatedSwapExactAmountInResponse) Descriptor() ([]byte, []int) {
+func (m *QueryCalculationSwapExactAmountInResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*QueryCalculationSwapExactAmountInResponse) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountInResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b10939fa85502f21, []int{11}
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculationSwapExactAmountInResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculationSwapExactAmountInResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculatedSwapExactAmountInResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculationSwapExactAmountInResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -600,45 +602,47 @@ func (m *QueryCalculatedSwapExactAmountInResponse) XXX_Marshal(b []byte, determi
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountInResponse.Merge(m, src)
+func (m *QueryCalculationSwapExactAmountInResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculationSwapExactAmountInResponse.Merge(m, src)
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) XXX_Size() int {
+func (m *QueryCalculationSwapExactAmountInResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountInResponse.DiscardUnknown(m)
+func (m *QueryCalculationSwapExactAmountInResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculationSwapExactAmountInResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculatedSwapExactAmountInResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculationSwapExactAmountInResponse proto.InternalMessageInfo
 
-func (m *QueryCalculatedSwapExactAmountInResponse) GetResult() RouteResult {
+func (m *QueryCalculationSwapExactAmountInResponse) GetResult() RouteResult {
 	if m != nil {
 		return m.Result
 	}
 	return RouteResult{}
 }
 
-type QueryCalculatedSwapExactAmountOutRequest struct {
+type QueryCalculationSwapExactAmountOutRequest struct {
 	HasInterfaceFee bool                  `protobuf:"varint,1,opt,name=has_interface_fee,json=hasInterfaceFee,proto3" json:"has_interface_fee,omitempty"`
 	Route           Route                 `protobuf:"bytes,3,opt,name=route,proto3" json:"route"`
 	AmountOut       cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=amount_out,json=amountOut,proto3,customtype=cosmossdk.io/math.Int" json:"amount_out"`
 }
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) Reset() {
-	*m = QueryCalculatedSwapExactAmountOutRequest{}
+func (m *QueryCalculationSwapExactAmountOutRequest) Reset() {
+	*m = QueryCalculationSwapExactAmountOutRequest{}
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculatedSwapExactAmountOutRequest) ProtoMessage()    {}
-func (*QueryCalculatedSwapExactAmountOutRequest) Descriptor() ([]byte, []int) {
+func (m *QueryCalculationSwapExactAmountOutRequest) String() string {
+	return proto.CompactTextString(m)
+}
+func (*QueryCalculationSwapExactAmountOutRequest) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountOutRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b10939fa85502f21, []int{12}
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculationSwapExactAmountOutRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculationSwapExactAmountOutRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculatedSwapExactAmountOutRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculationSwapExactAmountOutRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -648,54 +652,54 @@ func (m *QueryCalculatedSwapExactAmountOutRequest) XXX_Marshal(b []byte, determi
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountOutRequest.Merge(m, src)
+func (m *QueryCalculationSwapExactAmountOutRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculationSwapExactAmountOutRequest.Merge(m, src)
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) XXX_Size() int {
+func (m *QueryCalculationSwapExactAmountOutRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountOutRequest.DiscardUnknown(m)
+func (m *QueryCalculationSwapExactAmountOutRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculationSwapExactAmountOutRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculatedSwapExactAmountOutRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculationSwapExactAmountOutRequest proto.InternalMessageInfo
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) GetHasInterfaceFee() bool {
+func (m *QueryCalculationSwapExactAmountOutRequest) GetHasInterfaceFee() bool {
 	if m != nil {
 		return m.HasInterfaceFee
 	}
 	return false
 }
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) GetRoute() Route {
+func (m *QueryCalculationSwapExactAmountOutRequest) GetRoute() Route {
 	if m != nil {
 		return m.Route
 	}
 	return Route{}
 }
 
-type QueryCalculatedSwapExactAmountOutResponse struct {
+type QueryCalculationSwapExactAmountOutResponse struct {
 	Result               RouteResult           `protobuf:"bytes,1,opt,name=result,proto3" json:"result"`
 	InterfaceProviderFee cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=interface_provider_fee,json=interfaceProviderFee,proto3,customtype=cosmossdk.io/math.Int" json:"interface_provider_fee"`
 	AmountIn             cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=amount_in,json=amountIn,proto3,customtype=cosmossdk.io/math.Int" json:"amount_in"`
 }
 
-func (m *QueryCalculatedSwapExactAmountOutResponse) Reset() {
-	*m = QueryCalculatedSwapExactAmountOutResponse{}
+func (m *QueryCalculationSwapExactAmountOutResponse) Reset() {
+	*m = QueryCalculationSwapExactAmountOutResponse{}
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) String() string {
+func (m *QueryCalculationSwapExactAmountOutResponse) String() string {
 	return proto.CompactTextString(m)
 }
-func (*QueryCalculatedSwapExactAmountOutResponse) ProtoMessage() {}
-func (*QueryCalculatedSwapExactAmountOutResponse) Descriptor() ([]byte, []int) {
+func (*QueryCalculationSwapExactAmountOutResponse) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountOutResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b10939fa85502f21, []int{13}
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculationSwapExactAmountOutResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculationSwapExactAmountOutResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculatedSwapExactAmountOutResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculationSwapExactAmountOutResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -705,19 +709,19 @@ func (m *QueryCalculatedSwapExactAmountOutResponse) XXX_Marshal(b []byte, determ
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountOutResponse.Merge(m, src)
+func (m *QueryCalculationSwapExactAmountOutResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculationSwapExactAmountOutResponse.Merge(m, src)
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) XXX_Size() int {
+func (m *QueryCalculationSwapExactAmountOutResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculatedSwapExactAmountOutResponse.DiscardUnknown(m)
+func (m *QueryCalculationSwapExactAmountOutResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculationSwapExactAmountOutResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculatedSwapExactAmountOutResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculationSwapExactAmountOutResponse proto.InternalMessageInfo
 
-func (m *QueryCalculatedSwapExactAmountOutResponse) GetResult() RouteResult {
+func (m *QueryCalculationSwapExactAmountOutResponse) GetResult() RouteResult {
 	if m != nil {
 		return m.Result
 	}
@@ -735,80 +739,80 @@ func init() {
 	proto.RegisterType((*QueryOutgoingInFlightPacketResponse)(nil), "sunrise.swap.QueryOutgoingInFlightPacketResponse")
 	proto.RegisterType((*QueryOutgoingInFlightPacketsRequest)(nil), "sunrise.swap.QueryOutgoingInFlightPacketsRequest")
 	proto.RegisterType((*QueryOutgoingInFlightPacketsResponse)(nil), "sunrise.swap.QueryOutgoingInFlightPacketsResponse")
-	proto.RegisterType((*QueryCalculatedSwapExactAmountInRequest)(nil), "sunrise.swap.QueryCalculatedSwapExactAmountInRequest")
-	proto.RegisterType((*QueryCalculatedSwapExactAmountInResponse)(nil), "sunrise.swap.QueryCalculatedSwapExactAmountInResponse")
-	proto.RegisterType((*QueryCalculatedSwapExactAmountOutRequest)(nil), "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest")
-	proto.RegisterType((*QueryCalculatedSwapExactAmountOutResponse)(nil), "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse")
+	proto.RegisterType((*QueryCalculationSwapExactAmountInRequest)(nil), "sunrise.swap.QueryCalculationSwapExactAmountInRequest")
+	proto.RegisterType((*QueryCalculationSwapExactAmountInResponse)(nil), "sunrise.swap.QueryCalculationSwapExactAmountInResponse")
+	proto.RegisterType((*QueryCalculationSwapExactAmountOutRequest)(nil), "sunrise.swap.QueryCalculationSwapExactAmountOutRequest")
+	proto.RegisterType((*QueryCalculationSwapExactAmountOutResponse)(nil), "sunrise.swap.QueryCalculationSwapExactAmountOutResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/swap/query.proto", fileDescriptor_b10939fa85502f21) }
 
 var fileDescriptor_b10939fa85502f21 = []byte{
 	// 1025 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0x4d, 0x6f, 0x1b, 0x45,
-	0x18, 0xce, 0x38, 0x69, 0x48, 0x26, 0x15, 0xa8, 0x53, 0x93, 0xa6, 0x26, 0x72, 0xc3, 0x36, 0xa2,
-	0xc1, 0x4a, 0x77, 0x13, 0xd3, 0xd2, 0x0b, 0x17, 0x5c, 0x08, 0xf2, 0x01, 0x62, 0x96, 0x8a, 0x43,
-	0x85, 0xb4, 0x9a, 0xac, 0x27, 0xeb, 0x51, 0xec, 0x99, 0xed, 0xce, 0x6c, 0xd3, 0x08, 0xf5, 0xc2,
-	0x81, 0x33, 0x12, 0x7f, 0x00, 0x6e, 0x3d, 0x22, 0x54, 0xfe, 0x00, 0x07, 0xd4, 0x63, 0x05, 0x17,
-	0x28, 0xa2, 0x42, 0x09, 0x12, 0x7f, 0x03, 0xcd, 0x87, 0x9d, 0xac, 0x58, 0xaf, 0xed, 0x06, 0x10,
-	0xbd, 0x44, 0x9e, 0x79, 0xbf, 0x9e, 0xe7, 0x9d, 0x67, 0xe7, 0x9d, 0xc0, 0x25, 0x91, 0xb2, 0x84,
-	0x0a, 0xe2, 0x89, 0x7d, 0x1c, 0x7b, 0x77, 0x52, 0x92, 0x1c, 0xb8, 0x71, 0xc2, 0x25, 0x47, 0x67,
-	0xad, 0xc5, 0x55, 0x96, 0xca, 0x39, 0xdc, 0xa3, 0x8c, 0x7b, 0xfa, 0xaf, 0x71, 0xa8, 0x94, 0x23,
-	0x1e, 0x71, 0xfd, 0xd3, 0x53, 0xbf, 0xec, 0xee, 0x72, 0xc4, 0x79, 0xd4, 0x25, 0x1e, 0x8e, 0xa9,
-	0x87, 0x19, 0xe3, 0x12, 0x4b, 0xca, 0x99, 0xb0, 0xd6, 0x5a, 0xc8, 0x45, 0x8f, 0x0b, 0x6f, 0x07,
-	0x0b, 0x62, 0xaa, 0x79, 0x77, 0x37, 0x77, 0x88, 0xc4, 0x9b, 0x5e, 0x8c, 0x23, 0xca, 0xb4, 0xb3,
-	0xf5, 0xbd, 0x68, 0x7c, 0x03, 0x53, 0xc2, 0x2c, 0xfa, 0xa6, 0x0c, 0xea, 0x18, 0x27, 0xb8, 0xd7,
-	0x37, 0x5d, 0xce, 0x98, 0x28, 0x0b, 0x76, 0xbb, 0x34, 0xea, 0xc8, 0x20, 0xc6, 0xe1, 0x1e, 0x91,
-	0xd6, 0x29, 0xcb, 0x3a, 0xe1, 0xa9, 0x24, 0xc6, 0xe2, 0x94, 0x21, 0xfa, 0x50, 0xc1, 0x6a, 0xe9,
-	0x9c, 0x3e, 0xb9, 0x93, 0x12, 0x21, 0x9d, 0x0f, 0xe0, 0xf9, 0xcc, 0xae, 0x88, 0x39, 0x13, 0x04,
-	0xdd, 0x80, 0xb3, 0xa6, 0xf6, 0x12, 0x58, 0x01, 0x6b, 0x0b, 0xf5, 0xb2, 0x7b, 0xb2, 0x67, 0xae,
-	0xf1, 0x6e, 0xcc, 0x3f, 0x7a, 0x7a, 0x69, 0xea, 0xc1, 0x9f, 0xdf, 0xd4, 0x80, 0x6f, 0xdd, 0x9d,
-	0xcf, 0x01, 0x74, 0x74, 0xc2, 0x26, 0x0b, 0x79, 0x8f, 0xb2, 0xa8, 0xc9, 0xb6, 0x34, 0xcc, 0x96,
-	0x46, 0x69, 0xcb, 0xa2, 0x2a, 0x5c, 0x10, 0x49, 0x18, 0xc4, 0x3c, 0x91, 0x01, 0x6d, 0xeb, 0x22,
-	0xf3, 0xfe, 0xbc, 0x48, 0xc2, 0x16, 0x4f, 0x64, 0xb3, 0x8d, 0x56, 0xe1, 0x8b, 0xca, 0x1e, 0x76,
-	0x30, 0x63, 0xa4, 0xab, 0x5c, 0x4a, 0xda, 0xe5, 0xac, 0x48, 0xc2, 0x9b, 0x66, 0xb3, 0xd9, 0x46,
-	0x15, 0x38, 0x27, 0x54, 0x42, 0x16, 0x92, 0xa5, 0xe9, 0x15, 0xb0, 0x36, 0xe3, 0x0f, 0xd6, 0x0e,
-	0x85, 0x97, 0x0b, 0x71, 0x58, 0xa2, 0x0d, 0x45, 0x54, 0xed, 0x58, 0xa2, 0xab, 0x59, 0xa2, 0xf9,
-	0xd1, 0x8d, 0x19, 0x45, 0xdc, 0xb7, 0x91, 0x4e, 0xaf, 0xb0, 0x54, 0xbf, 0xd5, 0x68, 0x0b, 0xc2,
-	0x63, 0x25, 0xd8, 0x72, 0xaf, 0xb9, 0xf6, 0xf4, 0x95, 0x6c, 0x5c, 0x23, 0x52, 0x2b, 0x1b, 0xb7,
-	0x85, 0x23, 0x62, 0x63, 0xfd, 0x13, 0x91, 0xce, 0x77, 0x00, 0xae, 0x16, 0xd7, 0xb3, 0xdc, 0xde,
-	0x81, 0x2f, 0x18, 0x84, 0xea, 0x14, 0xa7, 0x27, 0x24, 0xd7, 0x0f, 0x45, 0xef, 0x65, 0x60, 0x97,
-	0x34, 0xec, 0x2b, 0x23, 0x61, 0x1b, 0x08, 0x19, 0xdc, 0x03, 0x69, 0x6c, 0xa7, 0x32, 0xe2, 0xff,
-	0x03, 0x69, 0x0c, 0xc3, 0x31, 0x9e, 0x34, 0xf2, 0xa3, 0x87, 0x48, 0x23, 0xdf, 0xf9, 0xdf, 0x93,
-	0xc6, 0xd0, 0x7a, 0x63, 0x4a, 0xa3, 0x90, 0xdc, 0x3f, 0x2f, 0x8d, 0x27, 0x00, 0x5e, 0xd1, 0xb8,
-	0x6f, 0xe2, 0x6e, 0x98, 0x76, 0xb1, 0x24, 0xed, 0x8f, 0xf6, 0x71, 0xfc, 0xee, 0x3d, 0x1c, 0xca,
-	0xb7, 0x7b, 0x3c, 0x65, 0xb2, 0xc9, 0xfa, 0xbd, 0xaa, 0xc1, 0x73, 0x1d, 0x2c, 0x02, 0xca, 0x24,
-	0x49, 0x76, 0x71, 0x48, 0x82, 0x5d, 0x42, 0x74, 0xcb, 0xe6, 0xfc, 0x97, 0x3a, 0x58, 0x34, 0xfb,
-	0xfb, 0x5b, 0x84, 0xa0, 0x6b, 0xf0, 0x8c, 0xbe, 0x02, 0xb5, 0x04, 0x16, 0xea, 0xe7, 0xb3, 0x24,
-	0x7d, 0x65, 0x3a, 0x79, 0x89, 0x19, 0x67, 0xf4, 0x3e, 0x9c, 0xc7, 0xba, 0x68, 0x40, 0xd9, 0xd2,
-	0x8c, 0x12, 0x57, 0x63, 0x43, 0x39, 0x3d, 0x79, 0x7a, 0xe9, 0x65, 0x43, 0x4e, 0xb4, 0xf7, 0x5c,
-	0xca, 0xbd, 0x1e, 0x96, 0x1d, 0xb7, 0xc9, 0xe4, 0x8f, 0x0f, 0xaf, 0x42, 0xcb, 0xba, 0xc9, 0xa4,
-	0xc9, 0x35, 0x87, 0x2d, 0x6e, 0xe7, 0xeb, 0x12, 0x5c, 0x1b, 0x4d, 0xce, 0x1e, 0xcc, 0x5b, 0x70,
-	0x36, 0x21, 0x22, 0xed, 0xf6, 0x45, 0x77, 0x31, 0x07, 0xb2, 0xaf, 0x1d, 0x32, 0xb7, 0xaf, 0x89,
-	0x41, 0xbb, 0x70, 0xf1, 0xb8, 0x2f, 0x71, 0xc2, 0xef, 0xd2, 0x36, 0x49, 0x74, 0x83, 0x4a, 0xcf,
-	0x48, 0xa3, 0x3c, 0xc8, 0xd7, 0xb2, 0xe9, 0x54, 0x5f, 0xb7, 0x21, 0xb4, 0x1d, 0xe2, 0xa9, 0xd4,
-	0xcd, 0x7d, 0x96, 0xdc, 0xb6, 0xcb, 0xdb, 0xa9, 0x74, 0x7e, 0x03, 0xa3, 0x7a, 0xb4, 0x9d, 0xca,
-	0xff, 0x4e, 0x01, 0x59, 0x7e, 0x33, 0xa7, 0xe7, 0xf7, 0x55, 0x09, 0xbe, 0x3e, 0x06, 0xbf, 0xe7,
-	0x4a, 0x04, 0x99, 0xcf, 0x64, 0xfa, 0xb4, 0x9f, 0x49, 0xfd, 0x01, 0x84, 0x67, 0x74, 0x8b, 0xd0,
-	0x1e, 0x9c, 0x35, 0x0f, 0x0c, 0xb4, 0x92, 0x25, 0xfe, 0xf7, 0xf7, 0x4b, 0xe5, 0xd5, 0x02, 0x0f,
-	0xd3, 0x4d, 0x67, 0xf9, 0xb3, 0x9f, 0xfe, 0xf8, 0xb2, 0xb4, 0x88, 0xca, 0x5e, 0xce, 0xdb, 0x0a,
-	0xfd, 0x0a, 0xe0, 0x62, 0xfe, 0x20, 0x44, 0x1b, 0x39, 0xb9, 0x0b, 0x9f, 0x35, 0x95, 0xcd, 0x09,
-	0x22, 0x2c, 0xba, 0x4f, 0x34, 0xba, 0x8f, 0xd1, 0xad, 0x2c, 0x3a, 0x1c, 0xee, 0x05, 0xfb, 0x98,
-	0x4a, 0xca, 0x22, 0xfb, 0xc0, 0x13, 0x1e, 0xb5, 0x99, 0xbc, 0x4f, 0x4f, 0x0c, 0xc8, 0xfb, 0x66,
-	0x75, 0x3c, 0x0e, 0xd5, 0x86, 0x9d, 0x74, 0xf7, 0xd1, 0x43, 0x00, 0x2f, 0x0c, 0x79, 0x26, 0xa0,
-	0xf1, 0xc1, 0x0e, 0xba, 0x5d, 0x9f, 0x24, 0xc4, 0x12, 0xac, 0x6b, 0x82, 0xeb, 0xa8, 0x36, 0x3e,
-	0x41, 0xf4, 0x0b, 0x80, 0x8b, 0xf9, 0x23, 0x28, 0xf7, 0x50, 0x0a, 0x1f, 0x14, 0xb9, 0x87, 0x52,
-	0x3c, 0xfa, 0x9d, 0xdb, 0x1a, 0xf3, 0x2d, 0xe4, 0x7b, 0x85, 0x6f, 0x6e, 0xe1, 0x71, 0x9b, 0x67,
-	0x82, 0x23, 0xf9, 0x16, 0xc0, 0x0b, 0x43, 0xc6, 0x33, 0x1a, 0x1f, 0x6a, 0xe1, 0x91, 0x8c, 0x98,
-	0xfe, 0xce, 0x86, 0xa6, 0x57, 0x43, 0x6b, 0xe3, 0xd2, 0x43, 0xdf, 0x03, 0xf8, 0x4a, 0xc1, 0xf8,
-	0x42, 0xd7, 0x73, 0x50, 0x8c, 0x9e, 0xe5, 0x95, 0x37, 0x27, 0x0d, 0xb3, 0x04, 0xae, 0x69, 0x02,
-	0x2e, 0x5a, 0xcf, 0x12, 0x08, 0xfb, 0xa1, 0x7a, 0x19, 0x10, 0x15, 0x1b, 0x0c, 0xee, 0x28, 0xf4,
-	0x03, 0x80, 0xcb, 0x45, 0xf7, 0x2f, 0x9a, 0x08, 0xce, 0xf1, 0x40, 0xaa, 0xdc, 0x98, 0x38, 0xce,
-	0xf2, 0xb8, 0xae, 0x79, 0x78, 0xe8, 0xea, 0xf8, 0x3c, 0x78, 0x2a, 0x1b, 0x5b, 0x8f, 0x0e, 0xab,
-	0xe0, 0xf1, 0x61, 0x15, 0xfc, 0x7e, 0x58, 0x05, 0x5f, 0x1c, 0x55, 0xa7, 0x1e, 0x1f, 0x55, 0xa7,
-	0x7e, 0x3e, 0xaa, 0x4e, 0xdd, 0x5e, 0x8f, 0xa8, 0xec, 0xa4, 0x3b, 0x6e, 0xc8, 0x7b, 0xfd, 0x94,
-	0x5d, 0x7c, 0x40, 0x92, 0x41, 0xfe, 0x7b, 0xa6, 0x82, 0x3c, 0x88, 0x89, 0xd8, 0x99, 0xd5, 0xff,
-	0x19, 0xbe, 0xf1, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0x43, 0x4e, 0x73, 0x77, 0x2b, 0x0f, 0x00,
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0x4f, 0x6f, 0x1b, 0xc5,
+	0x1b, 0xce, 0x38, 0x69, 0x7e, 0xc9, 0xa4, 0xfa, 0xa1, 0x4e, 0x4d, 0x9a, 0x5a, 0xc1, 0x0d, 0xdb,
+	0x08, 0x82, 0x95, 0xee, 0x26, 0xa6, 0x50, 0x0e, 0x5c, 0x70, 0x21, 0xc8, 0x07, 0x88, 0x59, 0x2a,
+	0x0e, 0x15, 0xd2, 0x6a, 0xb2, 0x9e, 0xac, 0x47, 0xb1, 0x67, 0xb6, 0x3b, 0xb3, 0x4d, 0x23, 0xd4,
+	0x0b, 0x07, 0xce, 0x48, 0x7c, 0x02, 0x38, 0x71, 0x42, 0x08, 0x95, 0x8f, 0x80, 0x54, 0x6e, 0x15,
+	0x5c, 0x80, 0x4a, 0x11, 0x4a, 0x90, 0xf8, 0x1a, 0x68, 0xfe, 0xd8, 0xc9, 0x8a, 0xf5, 0x66, 0xdd,
+	0x02, 0x82, 0x4b, 0xe4, 0x9d, 0xf7, 0xdf, 0xf3, 0xbc, 0xf3, 0xec, 0xbe, 0x6f, 0xe0, 0x92, 0x48,
+	0x59, 0x42, 0x05, 0xf1, 0xc4, 0x3e, 0x8e, 0xbd, 0x3b, 0x29, 0x49, 0x0e, 0xdc, 0x38, 0xe1, 0x92,
+	0xa3, 0xf3, 0xd6, 0xe2, 0x2a, 0x4b, 0xed, 0x02, 0x1e, 0x50, 0xc6, 0x3d, 0xfd, 0xd7, 0x38, 0xd4,
+	0xaa, 0x11, 0x8f, 0xb8, 0xfe, 0xe9, 0xa9, 0x5f, 0xf6, 0x74, 0x39, 0xe2, 0x3c, 0xea, 0x13, 0x0f,
+	0xc7, 0xd4, 0xc3, 0x8c, 0x71, 0x89, 0x25, 0xe5, 0x4c, 0x58, 0x6b, 0x23, 0xe4, 0x62, 0xc0, 0x85,
+	0xb7, 0x83, 0x05, 0x31, 0xd5, 0xbc, 0xbb, 0x9b, 0x3b, 0x44, 0xe2, 0x4d, 0x2f, 0xc6, 0x11, 0x65,
+	0xda, 0xd9, 0xfa, 0x5e, 0x36, 0xbe, 0x81, 0x29, 0x61, 0x1e, 0x86, 0xa6, 0x0c, 0xea, 0x18, 0x27,
+	0x78, 0x30, 0x34, 0x5d, 0xcd, 0x98, 0x28, 0x0b, 0x76, 0xfb, 0x34, 0xea, 0xc9, 0x20, 0xc6, 0xe1,
+	0x1e, 0x91, 0xd6, 0x29, 0xcb, 0x3a, 0xe1, 0xa9, 0x24, 0xc6, 0xe2, 0x54, 0x21, 0x7a, 0x4f, 0xc1,
+	0xea, 0xe8, 0x9c, 0x3e, 0xb9, 0x93, 0x12, 0x21, 0x9d, 0x77, 0xe1, 0xc5, 0xcc, 0xa9, 0x88, 0x39,
+	0x13, 0x04, 0xdd, 0x80, 0xb3, 0xa6, 0xf6, 0x12, 0x58, 0x01, 0x6b, 0x0b, 0xcd, 0xaa, 0x7b, 0xba,
+	0x67, 0xae, 0xf1, 0x6e, 0xcd, 0x3f, 0x3c, 0xbc, 0x32, 0xf5, 0xe5, 0xef, 0x5f, 0x37, 0x80, 0x6f,
+	0xdd, 0x9d, 0x4f, 0x00, 0x74, 0x74, 0xc2, 0x36, 0x0b, 0xf9, 0x80, 0xb2, 0xa8, 0xcd, 0xb6, 0x34,
+	0xcc, 0x8e, 0x46, 0x69, 0xcb, 0xa2, 0x3a, 0x5c, 0x10, 0x49, 0x18, 0xc4, 0x3c, 0x91, 0x01, 0xed,
+	0xea, 0x22, 0xf3, 0xfe, 0xbc, 0x48, 0xc2, 0x0e, 0x4f, 0x64, 0xbb, 0x8b, 0x56, 0xe1, 0xff, 0x95,
+	0x3d, 0xec, 0x61, 0xc6, 0x48, 0x5f, 0xb9, 0x54, 0xb4, 0xcb, 0x79, 0x91, 0x84, 0x37, 0xcd, 0x61,
+	0xbb, 0x8b, 0x6a, 0x70, 0x4e, 0xa8, 0x84, 0x2c, 0x24, 0x4b, 0xd3, 0x2b, 0x60, 0x6d, 0xc6, 0x1f,
+	0x3d, 0x3b, 0x14, 0x5e, 0x2d, 0xc4, 0x61, 0x89, 0xb6, 0x14, 0x51, 0x75, 0x62, 0x89, 0xae, 0x66,
+	0x89, 0xe6, 0x47, 0xb7, 0x66, 0x14, 0x71, 0xdf, 0x46, 0x3a, 0x83, 0xc2, 0x52, 0xc3, 0x56, 0xa3,
+	0x2d, 0x08, 0x4f, 0x94, 0x60, 0xcb, 0xbd, 0xe0, 0xda, 0xdb, 0x57, 0xb2, 0x71, 0x8d, 0x48, 0xad,
+	0x6c, 0xdc, 0x0e, 0x8e, 0x88, 0x8d, 0xf5, 0x4f, 0x45, 0x3a, 0xdf, 0x02, 0xb8, 0x5a, 0x5c, 0xcf,
+	0x72, 0x7b, 0x13, 0xfe, 0xcf, 0x20, 0x54, 0xb7, 0x38, 0x3d, 0x21, 0xb9, 0x61, 0x28, 0x7a, 0x3b,
+	0x03, 0xbb, 0xa2, 0x61, 0xbf, 0x78, 0x26, 0x6c, 0x03, 0x21, 0x83, 0x7b, 0x24, 0x8d, 0xed, 0x54,
+	0x46, 0xfc, 0x5f, 0x20, 0x8d, 0x71, 0x38, 0xca, 0x49, 0x23, 0x3f, 0x7a, 0x8c, 0x34, 0xf2, 0x9d,
+	0xff, 0x3e, 0x69, 0x8c, 0xad, 0x57, 0x52, 0x1a, 0x85, 0xe4, 0xfe, 0x7a, 0x69, 0x3c, 0x06, 0x70,
+	0x4d, 0xe3, 0xbe, 0x89, 0xfb, 0x61, 0xda, 0xd7, 0x87, 0xef, 0xef, 0xe3, 0xf8, 0xad, 0x7b, 0x38,
+	0x94, 0x6f, 0x0c, 0x78, 0xca, 0x64, 0x9b, 0x0d, 0x9b, 0xd5, 0x80, 0x17, 0x7a, 0x58, 0x04, 0x94,
+	0x49, 0x92, 0xec, 0xe2, 0x90, 0x04, 0xbb, 0x84, 0xe8, 0x9e, 0xcd, 0xf9, 0xcf, 0xf4, 0xb0, 0x68,
+	0x0f, 0xcf, 0xb7, 0x08, 0x41, 0xd7, 0xe1, 0x39, 0xfd, 0x0d, 0xd4, 0x1a, 0x58, 0x68, 0x5e, 0xcc,
+	0xb2, 0xf4, 0x95, 0xe9, 0xf4, 0x57, 0xcc, 0x38, 0xa3, 0x77, 0xe0, 0x3c, 0xd6, 0x45, 0x03, 0xca,
+	0x96, 0x66, 0x94, 0xba, 0x5a, 0x1b, 0xca, 0xe9, 0x97, 0xc3, 0x2b, 0xcf, 0x1a, 0x76, 0xa2, 0xbb,
+	0xe7, 0x52, 0xee, 0x0d, 0xb0, 0xec, 0xb9, 0x6d, 0x26, 0x7f, 0x78, 0x70, 0x0d, 0x5a, 0xda, 0x6d,
+	0x26, 0x4d, 0xae, 0x39, 0x6c, 0x71, 0x3b, 0x5f, 0x54, 0xe0, 0x4b, 0x25, 0xd8, 0xd9, 0xab, 0x79,
+	0x1d, 0xce, 0x26, 0x44, 0xa4, 0xfd, 0xa1, 0xec, 0x2e, 0xe7, 0x60, 0xf6, 0xb5, 0x43, 0xe6, 0xfb,
+	0x6b, 0x62, 0xd0, 0x2e, 0x5c, 0x3c, 0x69, 0x4c, 0x9c, 0xf0, 0xbb, 0xb4, 0x4b, 0x12, 0xdd, 0xa1,
+	0xca, 0x13, 0xf2, 0xa8, 0x8e, 0xf2, 0x75, 0x6c, 0x3a, 0xd5, 0xd8, 0x6d, 0x08, 0x6d, 0x8b, 0x78,
+	0x2a, 0x75, 0x77, 0x9f, 0x24, 0xb7, 0x6d, 0xf3, 0x76, 0x2a, 0x9d, 0x43, 0x70, 0x66, 0x93, 0xb6,
+	0x53, 0xf9, 0xcf, 0x69, 0x20, 0x4b, 0x70, 0xe6, 0xe9, 0x09, 0x7e, 0x5e, 0x81, 0x8d, 0x32, 0x04,
+	0xff, 0x53, 0x32, 0xc8, 0xbc, 0x29, 0xd3, 0x4f, 0xfb, 0xa6, 0x34, 0xbf, 0x82, 0xf0, 0x9c, 0xee,
+	0x11, 0xda, 0x83, 0xb3, 0x66, 0xc9, 0x40, 0x2b, 0x59, 0xe2, 0x7f, 0xde, 0x61, 0x6a, 0xcf, 0x17,
+	0x78, 0x98, 0x6e, 0x3a, 0xcb, 0x1f, 0xff, 0xf8, 0xdb, 0x67, 0x95, 0x45, 0x54, 0xf5, 0x72, 0xf6,
+	0x2b, 0xf4, 0x18, 0xc0, 0xc5, 0xfc, 0x61, 0x88, 0x36, 0x72, 0x72, 0x17, 0xae, 0x36, 0xb5, 0xcd,
+	0x09, 0x22, 0x2c, 0xba, 0x0f, 0x35, 0xba, 0x0f, 0xd0, 0xad, 0x2c, 0x3a, 0x1c, 0xee, 0x05, 0xfb,
+	0x98, 0x4a, 0xca, 0x22, 0xbb, 0xe4, 0x09, 0x8f, 0xda, 0x4c, 0xde, 0x47, 0xa7, 0x86, 0xe4, 0x7d,
+	0xf3, 0x74, 0x32, 0x12, 0xd5, 0x81, 0x9d, 0x76, 0xf7, 0xd1, 0x03, 0x00, 0x2f, 0x8d, 0x59, 0x15,
+	0x50, 0x79, 0xb0, 0xa3, 0x6e, 0x37, 0x27, 0x09, 0xb1, 0x04, 0x9b, 0x9a, 0xe0, 0x3a, 0x6a, 0x94,
+	0x27, 0x88, 0x7e, 0x06, 0x70, 0x31, 0x7f, 0x0c, 0xe5, 0x5e, 0x4a, 0xe1, 0x52, 0x91, 0x7b, 0x29,
+	0xc5, 0xe3, 0xdf, 0xb9, 0xad, 0x31, 0xdf, 0x42, 0xbe, 0x57, 0xb8, 0x77, 0x0b, 0x8f, 0xdb, 0x3c,
+	0x13, 0x5c, 0xc9, 0x37, 0x00, 0x5e, 0x1a, 0x33, 0xa2, 0x51, 0x79, 0xa8, 0x85, 0x57, 0x72, 0xc6,
+	0x06, 0xe0, 0x6c, 0x68, 0x7a, 0x0d, 0xb4, 0x56, 0x96, 0x1e, 0xfa, 0x0e, 0xc0, 0xe5, 0xa2, 0x09,
+	0x86, 0x5e, 0xcd, 0x81, 0x51, 0x62, 0xa0, 0xd7, 0x6e, 0x4c, 0x1c, 0x67, 0x39, 0x5c, 0xd7, 0x1c,
+	0x5c, 0xb4, 0x9e, 0xe5, 0x10, 0xda, 0x58, 0xf3, 0x18, 0x10, 0x15, 0x1b, 0x8c, 0x3e, 0x53, 0xe8,
+	0x7b, 0x00, 0x9f, 0x2b, 0xfc, 0x06, 0xa3, 0xc9, 0x00, 0x9d, 0x8c, 0xa5, 0xda, 0x6b, 0x93, 0x07,
+	0x5a, 0x2a, 0xaf, 0x68, 0x2a, 0x1e, 0xba, 0x56, 0x9e, 0x0a, 0x4f, 0x65, 0x6b, 0xeb, 0xe1, 0x51,
+	0x1d, 0x3c, 0x3a, 0xaa, 0x83, 0x5f, 0x8f, 0xea, 0xe0, 0xd3, 0xe3, 0xfa, 0xd4, 0xa3, 0xe3, 0xfa,
+	0xd4, 0x4f, 0xc7, 0xf5, 0xa9, 0xdb, 0xeb, 0x11, 0x95, 0xbd, 0x74, 0xc7, 0x0d, 0xf9, 0x60, 0x98,
+	0xb2, 0x8f, 0x0f, 0x48, 0x32, 0xca, 0x7f, 0xcf, 0x54, 0x90, 0x07, 0x31, 0x11, 0x3b, 0xb3, 0xfa,
+	0x7f, 0xc4, 0x97, 0xff, 0x08, 0x00, 0x00, 0xff, 0xff, 0x6b, 0x76, 0xbc, 0x70, 0x35, 0x0f, 0x00,
 	0x00,
 }
 
@@ -832,9 +836,9 @@ type QueryClient interface {
 	// Queries a list of OutgoingInFlightPacket items.
 	OutgoingInFlightPacket(ctx context.Context, in *QueryOutgoingInFlightPacketRequest, opts ...grpc.CallOption) (*QueryOutgoingInFlightPacketResponse, error)
 	OutgoingInFlightPackets(ctx context.Context, in *QueryOutgoingInFlightPacketsRequest, opts ...grpc.CallOption) (*QueryOutgoingInFlightPacketsResponse, error)
-	// Queries a calculated swap value.
-	CalculatedSwapExactAmountIn(ctx context.Context, in *QueryCalculatedSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountInResponse, error)
-	CalculatedSwapExactAmountOut(ctx context.Context, in *QueryCalculatedSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountOutResponse, error)
+	// Queries a Calculation swap value.
+	CalculationSwapExactAmountIn(ctx context.Context, in *QueryCalculationSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountInResponse, error)
+	CalculationSwapExactAmountOut(ctx context.Context, in *QueryCalculationSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountOutResponse, error)
 }
 
 type queryClient struct {
@@ -890,18 +894,18 @@ func (c *queryClient) OutgoingInFlightPackets(ctx context.Context, in *QueryOutg
 	return out, nil
 }
 
-func (c *queryClient) CalculatedSwapExactAmountIn(ctx context.Context, in *QueryCalculatedSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountInResponse, error) {
-	out := new(QueryCalculatedSwapExactAmountInResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.swap.Query/CalculatedSwapExactAmountIn", in, out, opts...)
+func (c *queryClient) CalculationSwapExactAmountIn(ctx context.Context, in *QueryCalculationSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountInResponse, error) {
+	out := new(QueryCalculationSwapExactAmountInResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.swap.Query/CalculationSwapExactAmountIn", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) CalculatedSwapExactAmountOut(ctx context.Context, in *QueryCalculatedSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountOutResponse, error) {
-	out := new(QueryCalculatedSwapExactAmountOutResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.swap.Query/CalculatedSwapExactAmountOut", in, out, opts...)
+func (c *queryClient) CalculationSwapExactAmountOut(ctx context.Context, in *QueryCalculationSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountOutResponse, error) {
+	out := new(QueryCalculationSwapExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.swap.Query/CalculationSwapExactAmountOut", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -918,9 +922,9 @@ type QueryServer interface {
 	// Queries a list of OutgoingInFlightPacket items.
 	OutgoingInFlightPacket(context.Context, *QueryOutgoingInFlightPacketRequest) (*QueryOutgoingInFlightPacketResponse, error)
 	OutgoingInFlightPackets(context.Context, *QueryOutgoingInFlightPacketsRequest) (*QueryOutgoingInFlightPacketsResponse, error)
-	// Queries a calculated swap value.
-	CalculatedSwapExactAmountIn(context.Context, *QueryCalculatedSwapExactAmountInRequest) (*QueryCalculatedSwapExactAmountInResponse, error)
-	CalculatedSwapExactAmountOut(context.Context, *QueryCalculatedSwapExactAmountOutRequest) (*QueryCalculatedSwapExactAmountOutResponse, error)
+	// Queries a Calculation swap value.
+	CalculationSwapExactAmountIn(context.Context, *QueryCalculationSwapExactAmountInRequest) (*QueryCalculationSwapExactAmountInResponse, error)
+	CalculationSwapExactAmountOut(context.Context, *QueryCalculationSwapExactAmountOutRequest) (*QueryCalculationSwapExactAmountOutResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -942,11 +946,11 @@ func (*UnimplementedQueryServer) OutgoingInFlightPacket(ctx context.Context, req
 func (*UnimplementedQueryServer) OutgoingInFlightPackets(ctx context.Context, req *QueryOutgoingInFlightPacketsRequest) (*QueryOutgoingInFlightPacketsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OutgoingInFlightPackets not implemented")
 }
-func (*UnimplementedQueryServer) CalculatedSwapExactAmountIn(ctx context.Context, req *QueryCalculatedSwapExactAmountInRequest) (*QueryCalculatedSwapExactAmountInResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculatedSwapExactAmountIn not implemented")
+func (*UnimplementedQueryServer) CalculationSwapExactAmountIn(ctx context.Context, req *QueryCalculationSwapExactAmountInRequest) (*QueryCalculationSwapExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculationSwapExactAmountIn not implemented")
 }
-func (*UnimplementedQueryServer) CalculatedSwapExactAmountOut(ctx context.Context, req *QueryCalculatedSwapExactAmountOutRequest) (*QueryCalculatedSwapExactAmountOutResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculatedSwapExactAmountOut not implemented")
+func (*UnimplementedQueryServer) CalculationSwapExactAmountOut(ctx context.Context, req *QueryCalculationSwapExactAmountOutRequest) (*QueryCalculationSwapExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculationSwapExactAmountOut not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -1043,38 +1047,38 @@ func _Query_OutgoingInFlightPackets_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_CalculatedSwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculatedSwapExactAmountInRequest)
+func _Query_CalculationSwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculationSwapExactAmountInRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).CalculatedSwapExactAmountIn(ctx, in)
+		return srv.(QueryServer).CalculationSwapExactAmountIn(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.swap.Query/CalculatedSwapExactAmountIn",
+		FullMethod: "/sunrise.swap.Query/CalculationSwapExactAmountIn",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculatedSwapExactAmountIn(ctx, req.(*QueryCalculatedSwapExactAmountInRequest))
+		return srv.(QueryServer).CalculationSwapExactAmountIn(ctx, req.(*QueryCalculationSwapExactAmountInRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_CalculatedSwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculatedSwapExactAmountOutRequest)
+func _Query_CalculationSwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculationSwapExactAmountOutRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).CalculatedSwapExactAmountOut(ctx, in)
+		return srv.(QueryServer).CalculationSwapExactAmountOut(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.swap.Query/CalculatedSwapExactAmountOut",
+		FullMethod: "/sunrise.swap.Query/CalculationSwapExactAmountOut",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculatedSwapExactAmountOut(ctx, req.(*QueryCalculatedSwapExactAmountOutRequest))
+		return srv.(QueryServer).CalculationSwapExactAmountOut(ctx, req.(*QueryCalculationSwapExactAmountOutRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1104,12 +1108,12 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_OutgoingInFlightPackets_Handler,
 		},
 		{
-			MethodName: "CalculatedSwapExactAmountIn",
-			Handler:    _Query_CalculatedSwapExactAmountIn_Handler,
+			MethodName: "CalculationSwapExactAmountIn",
+			Handler:    _Query_CalculationSwapExactAmountIn_Handler,
 		},
 		{
-			MethodName: "CalculatedSwapExactAmountOut",
-			Handler:    _Query_CalculatedSwapExactAmountOut_Handler,
+			MethodName: "CalculationSwapExactAmountOut",
+			Handler:    _Query_CalculationSwapExactAmountOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1490,7 +1494,7 @@ func (m *QueryOutgoingInFlightPacketsResponse) MarshalToSizedBuffer(dAtA []byte)
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculatedSwapExactAmountInRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculationSwapExactAmountInRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1500,12 +1504,12 @@ func (m *QueryCalculatedSwapExactAmountInRequest) Marshal() (dAtA []byte, err er
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculatedSwapExactAmountInRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountInRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculatedSwapExactAmountInRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountInRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1543,7 +1547,7 @@ func (m *QueryCalculatedSwapExactAmountInRequest) MarshalToSizedBuffer(dAtA []by
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculatedSwapExactAmountInResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculationSwapExactAmountInResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1553,12 +1557,12 @@ func (m *QueryCalculatedSwapExactAmountInResponse) Marshal() (dAtA []byte, err e
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculatedSwapExactAmountInResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountInResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculatedSwapExactAmountInResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountInResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1596,7 +1600,7 @@ func (m *QueryCalculatedSwapExactAmountInResponse) MarshalToSizedBuffer(dAtA []b
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculationSwapExactAmountOutRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1606,12 +1610,12 @@ func (m *QueryCalculatedSwapExactAmountOutRequest) Marshal() (dAtA []byte, err e
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountOutRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountOutRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1649,7 +1653,7 @@ func (m *QueryCalculatedSwapExactAmountOutRequest) MarshalToSizedBuffer(dAtA []b
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculatedSwapExactAmountOutResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculationSwapExactAmountOutResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1659,12 +1663,12 @@ func (m *QueryCalculatedSwapExactAmountOutResponse) Marshal() (dAtA []byte, err 
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculatedSwapExactAmountOutResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountOutResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculatedSwapExactAmountOutResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculationSwapExactAmountOutResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1859,7 +1863,7 @@ func (m *QueryOutgoingInFlightPacketsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculatedSwapExactAmountInRequest) Size() (n int) {
+func (m *QueryCalculationSwapExactAmountInRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1875,7 +1879,7 @@ func (m *QueryCalculatedSwapExactAmountInRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculatedSwapExactAmountInResponse) Size() (n int) {
+func (m *QueryCalculationSwapExactAmountInResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1890,7 +1894,7 @@ func (m *QueryCalculatedSwapExactAmountInResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculatedSwapExactAmountOutRequest) Size() (n int) {
+func (m *QueryCalculationSwapExactAmountOutRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1906,7 +1910,7 @@ func (m *QueryCalculatedSwapExactAmountOutRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculatedSwapExactAmountOutResponse) Size() (n int) {
+func (m *QueryCalculationSwapExactAmountOutResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2904,7 +2908,7 @@ func (m *QueryOutgoingInFlightPacketsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculatedSwapExactAmountInRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculationSwapExactAmountInRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2927,10 +2931,10 @@ func (m *QueryCalculatedSwapExactAmountInRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountInRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountInRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountInRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountInRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3041,7 +3045,7 @@ func (m *QueryCalculatedSwapExactAmountInRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculatedSwapExactAmountInResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculationSwapExactAmountInResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3064,10 +3068,10 @@ func (m *QueryCalculatedSwapExactAmountInResponse) Unmarshal(dAtA []byte) error 
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountInResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountInResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3192,7 +3196,7 @@ func (m *QueryCalculatedSwapExactAmountInResponse) Unmarshal(dAtA []byte) error 
 	}
 	return nil
 }
-func (m *QueryCalculatedSwapExactAmountOutRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculationSwapExactAmountOutRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3215,10 +3219,10 @@ func (m *QueryCalculatedSwapExactAmountOutRequest) Unmarshal(dAtA []byte) error 
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountOutRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountOutRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3329,7 +3333,7 @@ func (m *QueryCalculatedSwapExactAmountOutRequest) Unmarshal(dAtA []byte) error 
 	}
 	return nil
 }
-func (m *QueryCalculatedSwapExactAmountOutResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculationSwapExactAmountOutResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3352,10 +3356,10 @@ func (m *QueryCalculatedSwapExactAmountOutResponse) Unmarshal(dAtA []byte) error
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountOutResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculationSwapExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName                       = "/sunrise.swap.Query/Params"
-	Query_IncomingInFlightPacket_FullMethodName       = "/sunrise.swap.Query/IncomingInFlightPacket"
-	Query_IncomingInFlightPackets_FullMethodName      = "/sunrise.swap.Query/IncomingInFlightPackets"
-	Query_OutgoingInFlightPacket_FullMethodName       = "/sunrise.swap.Query/OutgoingInFlightPacket"
-	Query_OutgoingInFlightPackets_FullMethodName      = "/sunrise.swap.Query/OutgoingInFlightPackets"
-	Query_CalculatedSwapExactAmountIn_FullMethodName  = "/sunrise.swap.Query/CalculatedSwapExactAmountIn"
-	Query_CalculatedSwapExactAmountOut_FullMethodName = "/sunrise.swap.Query/CalculatedSwapExactAmountOut"
+	Query_Params_FullMethodName                        = "/sunrise.swap.Query/Params"
+	Query_IncomingInFlightPacket_FullMethodName        = "/sunrise.swap.Query/IncomingInFlightPacket"
+	Query_IncomingInFlightPackets_FullMethodName       = "/sunrise.swap.Query/IncomingInFlightPackets"
+	Query_OutgoingInFlightPacket_FullMethodName        = "/sunrise.swap.Query/OutgoingInFlightPacket"
+	Query_OutgoingInFlightPackets_FullMethodName       = "/sunrise.swap.Query/OutgoingInFlightPackets"
+	Query_CalculationSwapExactAmountIn_FullMethodName  = "/sunrise.swap.Query/CalculationSwapExactAmountIn"
+	Query_CalculationSwapExactAmountOut_FullMethodName = "/sunrise.swap.Query/CalculationSwapExactAmountOut"
 )
 
 // QueryClient is the client API for Query service.
@@ -40,9 +40,9 @@ type QueryClient interface {
 	// Queries a list of OutgoingInFlightPacket items.
 	OutgoingInFlightPacket(ctx context.Context, in *QueryOutgoingInFlightPacketRequest, opts ...grpc.CallOption) (*QueryOutgoingInFlightPacketResponse, error)
 	OutgoingInFlightPackets(ctx context.Context, in *QueryOutgoingInFlightPacketsRequest, opts ...grpc.CallOption) (*QueryOutgoingInFlightPacketsResponse, error)
-	// Queries a calculated swap value.
-	CalculatedSwapExactAmountIn(ctx context.Context, in *QueryCalculatedSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountInResponse, error)
-	CalculatedSwapExactAmountOut(ctx context.Context, in *QueryCalculatedSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountOutResponse, error)
+	// Queries a Calculation swap value.
+	CalculationSwapExactAmountIn(ctx context.Context, in *QueryCalculationSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountInResponse, error)
+	CalculationSwapExactAmountOut(ctx context.Context, in *QueryCalculationSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountOutResponse, error)
 }
 
 type queryClient struct {
@@ -98,18 +98,18 @@ func (c *queryClient) OutgoingInFlightPackets(ctx context.Context, in *QueryOutg
 	return out, nil
 }
 
-func (c *queryClient) CalculatedSwapExactAmountIn(ctx context.Context, in *QueryCalculatedSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountInResponse, error) {
-	out := new(QueryCalculatedSwapExactAmountInResponse)
-	err := c.cc.Invoke(ctx, Query_CalculatedSwapExactAmountIn_FullMethodName, in, out, opts...)
+func (c *queryClient) CalculationSwapExactAmountIn(ctx context.Context, in *QueryCalculationSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountInResponse, error) {
+	out := new(QueryCalculationSwapExactAmountInResponse)
+	err := c.cc.Invoke(ctx, Query_CalculationSwapExactAmountIn_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) CalculatedSwapExactAmountOut(ctx context.Context, in *QueryCalculatedSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculatedSwapExactAmountOutResponse, error) {
-	out := new(QueryCalculatedSwapExactAmountOutResponse)
-	err := c.cc.Invoke(ctx, Query_CalculatedSwapExactAmountOut_FullMethodName, in, out, opts...)
+func (c *queryClient) CalculationSwapExactAmountOut(ctx context.Context, in *QueryCalculationSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountOutResponse, error) {
+	out := new(QueryCalculationSwapExactAmountOutResponse)
+	err := c.cc.Invoke(ctx, Query_CalculationSwapExactAmountOut_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -128,9 +128,9 @@ type QueryServer interface {
 	// Queries a list of OutgoingInFlightPacket items.
 	OutgoingInFlightPacket(context.Context, *QueryOutgoingInFlightPacketRequest) (*QueryOutgoingInFlightPacketResponse, error)
 	OutgoingInFlightPackets(context.Context, *QueryOutgoingInFlightPacketsRequest) (*QueryOutgoingInFlightPacketsResponse, error)
-	// Queries a calculated swap value.
-	CalculatedSwapExactAmountIn(context.Context, *QueryCalculatedSwapExactAmountInRequest) (*QueryCalculatedSwapExactAmountInResponse, error)
-	CalculatedSwapExactAmountOut(context.Context, *QueryCalculatedSwapExactAmountOutRequest) (*QueryCalculatedSwapExactAmountOutResponse, error)
+	// Queries a Calculation swap value.
+	CalculationSwapExactAmountIn(context.Context, *QueryCalculationSwapExactAmountInRequest) (*QueryCalculationSwapExactAmountInResponse, error)
+	CalculationSwapExactAmountOut(context.Context, *QueryCalculationSwapExactAmountOutRequest) (*QueryCalculationSwapExactAmountOutResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -153,11 +153,11 @@ func (UnimplementedQueryServer) OutgoingInFlightPacket(context.Context, *QueryOu
 func (UnimplementedQueryServer) OutgoingInFlightPackets(context.Context, *QueryOutgoingInFlightPacketsRequest) (*QueryOutgoingInFlightPacketsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OutgoingInFlightPackets not implemented")
 }
-func (UnimplementedQueryServer) CalculatedSwapExactAmountIn(context.Context, *QueryCalculatedSwapExactAmountInRequest) (*QueryCalculatedSwapExactAmountInResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculatedSwapExactAmountIn not implemented")
+func (UnimplementedQueryServer) CalculationSwapExactAmountIn(context.Context, *QueryCalculationSwapExactAmountInRequest) (*QueryCalculationSwapExactAmountInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculationSwapExactAmountIn not implemented")
 }
-func (UnimplementedQueryServer) CalculatedSwapExactAmountOut(context.Context, *QueryCalculatedSwapExactAmountOutRequest) (*QueryCalculatedSwapExactAmountOutResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculatedSwapExactAmountOut not implemented")
+func (UnimplementedQueryServer) CalculationSwapExactAmountOut(context.Context, *QueryCalculationSwapExactAmountOutRequest) (*QueryCalculationSwapExactAmountOutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculationSwapExactAmountOut not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -262,38 +262,38 @@ func _Query_OutgoingInFlightPackets_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_CalculatedSwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculatedSwapExactAmountInRequest)
+func _Query_CalculationSwapExactAmountIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculationSwapExactAmountInRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).CalculatedSwapExactAmountIn(ctx, in)
+		return srv.(QueryServer).CalculationSwapExactAmountIn(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_CalculatedSwapExactAmountIn_FullMethodName,
+		FullMethod: Query_CalculationSwapExactAmountIn_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculatedSwapExactAmountIn(ctx, req.(*QueryCalculatedSwapExactAmountInRequest))
+		return srv.(QueryServer).CalculationSwapExactAmountIn(ctx, req.(*QueryCalculationSwapExactAmountInRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_CalculatedSwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculatedSwapExactAmountOutRequest)
+func _Query_CalculationSwapExactAmountOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculationSwapExactAmountOutRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).CalculatedSwapExactAmountOut(ctx, in)
+		return srv.(QueryServer).CalculationSwapExactAmountOut(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_CalculatedSwapExactAmountOut_FullMethodName,
+		FullMethod: Query_CalculationSwapExactAmountOut_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculatedSwapExactAmountOut(ctx, req.(*QueryCalculatedSwapExactAmountOutRequest))
+		return srv.(QueryServer).CalculationSwapExactAmountOut(ctx, req.(*QueryCalculationSwapExactAmountOutRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -326,12 +326,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_OutgoingInFlightPackets_Handler,
 		},
 		{
-			MethodName: "CalculatedSwapExactAmountIn",
-			Handler:    _Query_CalculatedSwapExactAmountIn_Handler,
+			MethodName: "CalculationSwapExactAmountIn",
+			Handler:    _Query_CalculationSwapExactAmountIn_Handler,
 		},
 		{
-			MethodName: "CalculatedSwapExactAmountOut",
-			Handler:    _Query_CalculatedSwapExactAmountOut_Handler,
+			MethodName: "CalculationSwapExactAmountOut",
+			Handler:    _Query_CalculationSwapExactAmountOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

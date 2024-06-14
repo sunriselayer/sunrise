@@ -4759,29 +4759,29 @@ func (x *fastReflection_QueryOutgoingInFlightPacketsResponse) ProtoMethods() *pr
 }
 
 var (
-	md_QueryCalculatedSwapExactAmountInRequest                   protoreflect.MessageDescriptor
-	fd_QueryCalculatedSwapExactAmountInRequest_has_interface_fee protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountInRequest_route             protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountInRequest_amount_in         protoreflect.FieldDescriptor
+	md_QueryCalculationSwapExactAmountInRequest                   protoreflect.MessageDescriptor
+	fd_QueryCalculationSwapExactAmountInRequest_has_interface_fee protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountInRequest_route             protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountInRequest_amount_in         protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_swap_query_proto_init()
-	md_QueryCalculatedSwapExactAmountInRequest = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculatedSwapExactAmountInRequest")
-	fd_QueryCalculatedSwapExactAmountInRequest_has_interface_fee = md_QueryCalculatedSwapExactAmountInRequest.Fields().ByName("has_interface_fee")
-	fd_QueryCalculatedSwapExactAmountInRequest_route = md_QueryCalculatedSwapExactAmountInRequest.Fields().ByName("route")
-	fd_QueryCalculatedSwapExactAmountInRequest_amount_in = md_QueryCalculatedSwapExactAmountInRequest.Fields().ByName("amount_in")
+	md_QueryCalculationSwapExactAmountInRequest = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculationSwapExactAmountInRequest")
+	fd_QueryCalculationSwapExactAmountInRequest_has_interface_fee = md_QueryCalculationSwapExactAmountInRequest.Fields().ByName("has_interface_fee")
+	fd_QueryCalculationSwapExactAmountInRequest_route = md_QueryCalculationSwapExactAmountInRequest.Fields().ByName("route")
+	fd_QueryCalculationSwapExactAmountInRequest_amount_in = md_QueryCalculationSwapExactAmountInRequest.Fields().ByName("amount_in")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryCalculatedSwapExactAmountInRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryCalculationSwapExactAmountInRequest)(nil)
 
-type fastReflection_QueryCalculatedSwapExactAmountInRequest QueryCalculatedSwapExactAmountInRequest
+type fastReflection_QueryCalculationSwapExactAmountInRequest QueryCalculationSwapExactAmountInRequest
 
-func (x *QueryCalculatedSwapExactAmountInRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountInRequest)(x)
+func (x *QueryCalculationSwapExactAmountInRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountInRequest)(x)
 }
 
-func (x *QueryCalculatedSwapExactAmountInRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryCalculationSwapExactAmountInRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_swap_query_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4793,43 +4793,43 @@ func (x *QueryCalculatedSwapExactAmountInRequest) slowProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType{}
+var _fastReflection_QueryCalculationSwapExactAmountInRequest_messageType fastReflection_QueryCalculationSwapExactAmountInRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryCalculationSwapExactAmountInRequest_messageType{}
 
-type fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType struct{}
+type fastReflection_QueryCalculationSwapExactAmountInRequest_messageType struct{}
 
-func (x fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountInRequest)(nil)
+func (x fastReflection_QueryCalculationSwapExactAmountInRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountInRequest)(nil)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountInRequest)
+func (x fastReflection_QueryCalculationSwapExactAmountInRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountInRequest)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountInRequest
+func (x fastReflection_QueryCalculationSwapExactAmountInRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountInRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountInRequest
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountInRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryCalculatedSwapExactAmountInRequest_messageType
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryCalculationSwapExactAmountInRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountInRequest)
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountInRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryCalculatedSwapExactAmountInRequest)(x)
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryCalculationSwapExactAmountInRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -4837,22 +4837,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Interface() pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.HasInterfaceFee != false {
 		value := protoreflect.ValueOfBool(x.HasInterfaceFee)
-		if !f(fd_QueryCalculatedSwapExactAmountInRequest_has_interface_fee, value) {
+		if !f(fd_QueryCalculationSwapExactAmountInRequest_has_interface_fee, value) {
 			return
 		}
 	}
 	if x.Route != nil {
 		value := protoreflect.ValueOfMessage(x.Route.ProtoReflect())
-		if !f(fd_QueryCalculatedSwapExactAmountInRequest_route, value) {
+		if !f(fd_QueryCalculationSwapExactAmountInRequest_route, value) {
 			return
 		}
 	}
 	if x.AmountIn != "" {
 		value := protoreflect.ValueOfString(x.AmountIn)
-		if !f(fd_QueryCalculatedSwapExactAmountInRequest_amount_in, value) {
+		if !f(fd_QueryCalculationSwapExactAmountInRequest_amount_in, value) {
 			return
 		}
 	}
@@ -4869,19 +4869,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Range(f func(pr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.has_interface_fee":
 		return x.HasInterfaceFee != false
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.route":
 		return x.Route != nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.amount_in":
 		return x.AmountIn != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4891,19 +4891,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Has(fd protoref
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.has_interface_fee":
 		x.HasInterfaceFee = false
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.route":
 		x.Route = nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.amount_in":
 		x.AmountIn = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4913,22 +4913,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Clear(fd protor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.has_interface_fee":
 		value := x.HasInterfaceFee
 		return protoreflect.ValueOfBool(value)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.route":
 		value := x.Route
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.amount_in":
 		value := x.AmountIn
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -4942,19 +4942,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Get(descriptor 
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.has_interface_fee":
 		x.HasInterfaceFee = value.Bool()
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.route":
 		x.Route = value.Message().Interface().(*Route)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.amount_in":
 		x.AmountIn = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4968,52 +4968,52 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Set(fd protoref
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.route":
 		if x.Route == nil {
 			x.Route = new(Route)
 		}
 		return protoreflect.ValueOfMessage(x.Route.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.has_interface_fee":
-		panic(fmt.Errorf("field has_interface_fee of message sunrise.swap.QueryCalculatedSwapExactAmountInRequest is not mutable"))
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.amount_in":
-		panic(fmt.Errorf("field amount_in of message sunrise.swap.QueryCalculatedSwapExactAmountInRequest is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.has_interface_fee":
+		panic(fmt.Errorf("field has_interface_fee of message sunrise.swap.QueryCalculationSwapExactAmountInRequest is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.amount_in":
+		panic(fmt.Errorf("field amount_in of message sunrise.swap.QueryCalculationSwapExactAmountInRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.has_interface_fee":
 		return protoreflect.ValueOfBool(false)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.route":
 		m := new(Route)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInRequest.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInRequest.amount_in":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculatedSwapExactAmountInRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculationSwapExactAmountInRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -5021,7 +5021,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) WhichOneof(d pr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -5032,7 +5032,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) GetUnknown() pr
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -5044,7 +5044,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) SetUnknown(fiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) IsValid() bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -5054,9 +5054,9 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) IsValid() bool 
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryCalculationSwapExactAmountInRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountInRequest)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountInRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5089,7 +5089,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) ProtoMethods() 
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountInRequest)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountInRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5150,7 +5150,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) ProtoMethods() 
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountInRequest)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountInRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5182,10 +5182,10 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) ProtoMethods() 
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountInRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountInRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountInRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountInRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -5312,29 +5312,29 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInRequest) ProtoMethods() 
 }
 
 var (
-	md_QueryCalculatedSwapExactAmountInResponse                        protoreflect.MessageDescriptor
-	fd_QueryCalculatedSwapExactAmountInResponse_result                 protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountInResponse_interface_provider_fee protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountInResponse_amount_out             protoreflect.FieldDescriptor
+	md_QueryCalculationSwapExactAmountInResponse                        protoreflect.MessageDescriptor
+	fd_QueryCalculationSwapExactAmountInResponse_result                 protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountInResponse_interface_provider_fee protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountInResponse_amount_out             protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_swap_query_proto_init()
-	md_QueryCalculatedSwapExactAmountInResponse = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculatedSwapExactAmountInResponse")
-	fd_QueryCalculatedSwapExactAmountInResponse_result = md_QueryCalculatedSwapExactAmountInResponse.Fields().ByName("result")
-	fd_QueryCalculatedSwapExactAmountInResponse_interface_provider_fee = md_QueryCalculatedSwapExactAmountInResponse.Fields().ByName("interface_provider_fee")
-	fd_QueryCalculatedSwapExactAmountInResponse_amount_out = md_QueryCalculatedSwapExactAmountInResponse.Fields().ByName("amount_out")
+	md_QueryCalculationSwapExactAmountInResponse = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculationSwapExactAmountInResponse")
+	fd_QueryCalculationSwapExactAmountInResponse_result = md_QueryCalculationSwapExactAmountInResponse.Fields().ByName("result")
+	fd_QueryCalculationSwapExactAmountInResponse_interface_provider_fee = md_QueryCalculationSwapExactAmountInResponse.Fields().ByName("interface_provider_fee")
+	fd_QueryCalculationSwapExactAmountInResponse_amount_out = md_QueryCalculationSwapExactAmountInResponse.Fields().ByName("amount_out")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryCalculatedSwapExactAmountInResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryCalculationSwapExactAmountInResponse)(nil)
 
-type fastReflection_QueryCalculatedSwapExactAmountInResponse QueryCalculatedSwapExactAmountInResponse
+type fastReflection_QueryCalculationSwapExactAmountInResponse QueryCalculationSwapExactAmountInResponse
 
-func (x *QueryCalculatedSwapExactAmountInResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountInResponse)(x)
+func (x *QueryCalculationSwapExactAmountInResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountInResponse)(x)
 }
 
-func (x *QueryCalculatedSwapExactAmountInResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryCalculationSwapExactAmountInResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_swap_query_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5346,43 +5346,43 @@ func (x *QueryCalculatedSwapExactAmountInResponse) slowProtoReflect() protorefle
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType{}
+var _fastReflection_QueryCalculationSwapExactAmountInResponse_messageType fastReflection_QueryCalculationSwapExactAmountInResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryCalculationSwapExactAmountInResponse_messageType{}
 
-type fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType struct{}
+type fastReflection_QueryCalculationSwapExactAmountInResponse_messageType struct{}
 
-func (x fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountInResponse)(nil)
+func (x fastReflection_QueryCalculationSwapExactAmountInResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountInResponse)(nil)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountInResponse)
+func (x fastReflection_QueryCalculationSwapExactAmountInResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountInResponse)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountInResponse
+func (x fastReflection_QueryCalculationSwapExactAmountInResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountInResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountInResponse
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountInResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryCalculatedSwapExactAmountInResponse_messageType
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryCalculationSwapExactAmountInResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountInResponse)
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountInResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryCalculatedSwapExactAmountInResponse)(x)
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryCalculationSwapExactAmountInResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5390,22 +5390,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Interface() pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Result != nil {
 		value := protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-		if !f(fd_QueryCalculatedSwapExactAmountInResponse_result, value) {
+		if !f(fd_QueryCalculationSwapExactAmountInResponse_result, value) {
 			return
 		}
 	}
 	if x.InterfaceProviderFee != "" {
 		value := protoreflect.ValueOfString(x.InterfaceProviderFee)
-		if !f(fd_QueryCalculatedSwapExactAmountInResponse_interface_provider_fee, value) {
+		if !f(fd_QueryCalculationSwapExactAmountInResponse_interface_provider_fee, value) {
 			return
 		}
 	}
 	if x.AmountOut != "" {
 		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_QueryCalculatedSwapExactAmountInResponse_amount_out, value) {
+		if !f(fd_QueryCalculationSwapExactAmountInResponse_amount_out, value) {
 			return
 		}
 	}
@@ -5422,19 +5422,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Range(f func(p
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.result":
 		return x.Result != nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.interface_provider_fee":
 		return x.InterfaceProviderFee != ""
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.amount_out":
 		return x.AmountOut != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5444,19 +5444,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Has(fd protore
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.result":
 		x.Result = nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.interface_provider_fee":
 		x.InterfaceProviderFee = ""
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.amount_out":
 		x.AmountOut = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5466,22 +5466,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Clear(fd proto
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.result":
 		value := x.Result
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.interface_provider_fee":
 		value := x.InterfaceProviderFee
 		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.amount_out":
 		value := x.AmountOut
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5495,19 +5495,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Get(descriptor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.result":
 		x.Result = value.Message().Interface().(*RouteResult)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.interface_provider_fee":
 		x.InterfaceProviderFee = value.Interface().(string)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.amount_out":
 		x.AmountOut = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5521,52 +5521,52 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Set(fd protore
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.result":
 		if x.Result == nil {
 			x.Result = new(RouteResult)
 		}
 		return protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.interface_provider_fee":
-		panic(fmt.Errorf("field interface_provider_fee of message sunrise.swap.QueryCalculatedSwapExactAmountInResponse is not mutable"))
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.swap.QueryCalculatedSwapExactAmountInResponse is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.interface_provider_fee":
+		panic(fmt.Errorf("field interface_provider_fee of message sunrise.swap.QueryCalculationSwapExactAmountInResponse is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.amount_out":
+		panic(fmt.Errorf("field amount_out of message sunrise.swap.QueryCalculationSwapExactAmountInResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.result":
 		m := new(RouteResult)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.interface_provider_fee":
 		return protoreflect.ValueOfString("")
-	case "sunrise.swap.QueryCalculatedSwapExactAmountInResponse.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountInResponse.amount_out":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountInResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountInResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountInResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountInResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculatedSwapExactAmountInResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculationSwapExactAmountInResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -5574,7 +5574,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) WhichOneof(d p
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -5585,7 +5585,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) GetUnknown() p
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -5597,7 +5597,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) SetUnknown(fie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) IsValid() bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -5607,9 +5607,9 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) IsValid() bool
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryCalculationSwapExactAmountInResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountInResponse)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountInResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5643,7 +5643,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) ProtoMethods()
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountInResponse)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountInResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5701,7 +5701,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) ProtoMethods()
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountInResponse)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountInResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5733,10 +5733,10 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) ProtoMethods()
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountInResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountInResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountInResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -5875,29 +5875,29 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountInResponse) ProtoMethods()
 }
 
 var (
-	md_QueryCalculatedSwapExactAmountOutRequest                   protoreflect.MessageDescriptor
-	fd_QueryCalculatedSwapExactAmountOutRequest_has_interface_fee protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountOutRequest_route             protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountOutRequest_amount_out        protoreflect.FieldDescriptor
+	md_QueryCalculationSwapExactAmountOutRequest                   protoreflect.MessageDescriptor
+	fd_QueryCalculationSwapExactAmountOutRequest_has_interface_fee protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountOutRequest_route             protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountOutRequest_amount_out        protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_swap_query_proto_init()
-	md_QueryCalculatedSwapExactAmountOutRequest = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculatedSwapExactAmountOutRequest")
-	fd_QueryCalculatedSwapExactAmountOutRequest_has_interface_fee = md_QueryCalculatedSwapExactAmountOutRequest.Fields().ByName("has_interface_fee")
-	fd_QueryCalculatedSwapExactAmountOutRequest_route = md_QueryCalculatedSwapExactAmountOutRequest.Fields().ByName("route")
-	fd_QueryCalculatedSwapExactAmountOutRequest_amount_out = md_QueryCalculatedSwapExactAmountOutRequest.Fields().ByName("amount_out")
+	md_QueryCalculationSwapExactAmountOutRequest = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculationSwapExactAmountOutRequest")
+	fd_QueryCalculationSwapExactAmountOutRequest_has_interface_fee = md_QueryCalculationSwapExactAmountOutRequest.Fields().ByName("has_interface_fee")
+	fd_QueryCalculationSwapExactAmountOutRequest_route = md_QueryCalculationSwapExactAmountOutRequest.Fields().ByName("route")
+	fd_QueryCalculationSwapExactAmountOutRequest_amount_out = md_QueryCalculationSwapExactAmountOutRequest.Fields().ByName("amount_out")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryCalculatedSwapExactAmountOutRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryCalculationSwapExactAmountOutRequest)(nil)
 
-type fastReflection_QueryCalculatedSwapExactAmountOutRequest QueryCalculatedSwapExactAmountOutRequest
+type fastReflection_QueryCalculationSwapExactAmountOutRequest QueryCalculationSwapExactAmountOutRequest
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountOutRequest)(x)
+func (x *QueryCalculationSwapExactAmountOutRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountOutRequest)(x)
 }
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryCalculationSwapExactAmountOutRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_swap_query_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5909,43 +5909,43 @@ func (x *QueryCalculatedSwapExactAmountOutRequest) slowProtoReflect() protorefle
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType{}
+var _fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType{}
 
-type fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType struct{}
+type fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType struct{}
 
-func (x fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountOutRequest)(nil)
+func (x fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountOutRequest)(nil)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountOutRequest)
+func (x fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountOutRequest)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountOutRequest
+func (x fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountOutRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountOutRequest
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountOutRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryCalculatedSwapExactAmountOutRequest_messageType
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryCalculationSwapExactAmountOutRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountOutRequest)
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountOutRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryCalculatedSwapExactAmountOutRequest)(x)
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryCalculationSwapExactAmountOutRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5953,22 +5953,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Interface() pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.HasInterfaceFee != false {
 		value := protoreflect.ValueOfBool(x.HasInterfaceFee)
-		if !f(fd_QueryCalculatedSwapExactAmountOutRequest_has_interface_fee, value) {
+		if !f(fd_QueryCalculationSwapExactAmountOutRequest_has_interface_fee, value) {
 			return
 		}
 	}
 	if x.Route != nil {
 		value := protoreflect.ValueOfMessage(x.Route.ProtoReflect())
-		if !f(fd_QueryCalculatedSwapExactAmountOutRequest_route, value) {
+		if !f(fd_QueryCalculationSwapExactAmountOutRequest_route, value) {
 			return
 		}
 	}
 	if x.AmountOut != "" {
 		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_QueryCalculatedSwapExactAmountOutRequest_amount_out, value) {
+		if !f(fd_QueryCalculationSwapExactAmountOutRequest_amount_out, value) {
 			return
 		}
 	}
@@ -5985,19 +5985,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Range(f func(p
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.has_interface_fee":
 		return x.HasInterfaceFee != false
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route":
 		return x.Route != nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.amount_out":
 		return x.AmountOut != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6007,19 +6007,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Has(fd protore
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.has_interface_fee":
 		x.HasInterfaceFee = false
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route":
 		x.Route = nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.amount_out":
 		x.AmountOut = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6029,22 +6029,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Clear(fd proto
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.has_interface_fee":
 		value := x.HasInterfaceFee
 		return protoreflect.ValueOfBool(value)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route":
 		value := x.Route
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.amount_out":
 		value := x.AmountOut
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6058,19 +6058,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Get(descriptor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.has_interface_fee":
 		x.HasInterfaceFee = value.Bool()
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route":
 		x.Route = value.Message().Interface().(*Route)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.amount_out":
 		x.AmountOut = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6084,52 +6084,52 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Set(fd protore
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route":
 		if x.Route == nil {
 			x.Route = new(Route)
 		}
 		return protoreflect.ValueOfMessage(x.Route.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.has_interface_fee":
-		panic(fmt.Errorf("field has_interface_fee of message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest is not mutable"))
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.has_interface_fee":
+		panic(fmt.Errorf("field has_interface_fee of message sunrise.swap.QueryCalculationSwapExactAmountOutRequest is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.amount_out":
+		panic(fmt.Errorf("field amount_out of message sunrise.swap.QueryCalculationSwapExactAmountOutRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.has_interface_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.has_interface_fee":
 		return protoreflect.ValueOfBool(false)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route":
 		m := new(Route)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.amount_out":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutRequest.amount_out":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutRequest"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculatedSwapExactAmountOutRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculationSwapExactAmountOutRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6137,7 +6137,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) WhichOneof(d p
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6148,7 +6148,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) GetUnknown() p
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6160,7 +6160,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) SetUnknown(fie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) IsValid() bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -6170,9 +6170,9 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) IsValid() bool
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountOutRequest)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountOutRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6205,7 +6205,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) ProtoMethods()
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountOutRequest)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountOutRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6266,7 +6266,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) ProtoMethods()
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountOutRequest)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountOutRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6298,10 +6298,10 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) ProtoMethods()
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountOutRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountOutRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6428,29 +6428,29 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutRequest) ProtoMethods()
 }
 
 var (
-	md_QueryCalculatedSwapExactAmountOutResponse                        protoreflect.MessageDescriptor
-	fd_QueryCalculatedSwapExactAmountOutResponse_result                 protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountOutResponse_interface_provider_fee protoreflect.FieldDescriptor
-	fd_QueryCalculatedSwapExactAmountOutResponse_amount_in              protoreflect.FieldDescriptor
+	md_QueryCalculationSwapExactAmountOutResponse                        protoreflect.MessageDescriptor
+	fd_QueryCalculationSwapExactAmountOutResponse_result                 protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountOutResponse_interface_provider_fee protoreflect.FieldDescriptor
+	fd_QueryCalculationSwapExactAmountOutResponse_amount_in              protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_swap_query_proto_init()
-	md_QueryCalculatedSwapExactAmountOutResponse = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculatedSwapExactAmountOutResponse")
-	fd_QueryCalculatedSwapExactAmountOutResponse_result = md_QueryCalculatedSwapExactAmountOutResponse.Fields().ByName("result")
-	fd_QueryCalculatedSwapExactAmountOutResponse_interface_provider_fee = md_QueryCalculatedSwapExactAmountOutResponse.Fields().ByName("interface_provider_fee")
-	fd_QueryCalculatedSwapExactAmountOutResponse_amount_in = md_QueryCalculatedSwapExactAmountOutResponse.Fields().ByName("amount_in")
+	md_QueryCalculationSwapExactAmountOutResponse = File_sunrise_swap_query_proto.Messages().ByName("QueryCalculationSwapExactAmountOutResponse")
+	fd_QueryCalculationSwapExactAmountOutResponse_result = md_QueryCalculationSwapExactAmountOutResponse.Fields().ByName("result")
+	fd_QueryCalculationSwapExactAmountOutResponse_interface_provider_fee = md_QueryCalculationSwapExactAmountOutResponse.Fields().ByName("interface_provider_fee")
+	fd_QueryCalculationSwapExactAmountOutResponse_amount_in = md_QueryCalculationSwapExactAmountOutResponse.Fields().ByName("amount_in")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryCalculatedSwapExactAmountOutResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryCalculationSwapExactAmountOutResponse)(nil)
 
-type fastReflection_QueryCalculatedSwapExactAmountOutResponse QueryCalculatedSwapExactAmountOutResponse
+type fastReflection_QueryCalculationSwapExactAmountOutResponse QueryCalculationSwapExactAmountOutResponse
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountOutResponse)(x)
+func (x *QueryCalculationSwapExactAmountOutResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountOutResponse)(x)
 }
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryCalculationSwapExactAmountOutResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_swap_query_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6462,43 +6462,43 @@ func (x *QueryCalculatedSwapExactAmountOutResponse) slowProtoReflect() protorefl
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType{}
+var _fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType{}
 
-type fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType struct{}
+type fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType struct{}
 
-func (x fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryCalculatedSwapExactAmountOutResponse)(nil)
+func (x fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryCalculationSwapExactAmountOutResponse)(nil)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountOutResponse)
+func (x fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountOutResponse)
 }
-func (x fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountOutResponse
+func (x fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountOutResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryCalculatedSwapExactAmountOutResponse
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryCalculationSwapExactAmountOutResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryCalculatedSwapExactAmountOutResponse_messageType
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryCalculationSwapExactAmountOutResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryCalculatedSwapExactAmountOutResponse)
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryCalculationSwapExactAmountOutResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryCalculatedSwapExactAmountOutResponse)(x)
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryCalculationSwapExactAmountOutResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6506,22 +6506,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Interface() p
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Result != nil {
 		value := protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-		if !f(fd_QueryCalculatedSwapExactAmountOutResponse_result, value) {
+		if !f(fd_QueryCalculationSwapExactAmountOutResponse_result, value) {
 			return
 		}
 	}
 	if x.InterfaceProviderFee != "" {
 		value := protoreflect.ValueOfString(x.InterfaceProviderFee)
-		if !f(fd_QueryCalculatedSwapExactAmountOutResponse_interface_provider_fee, value) {
+		if !f(fd_QueryCalculationSwapExactAmountOutResponse_interface_provider_fee, value) {
 			return
 		}
 	}
 	if x.AmountIn != "" {
 		value := protoreflect.ValueOfString(x.AmountIn)
-		if !f(fd_QueryCalculatedSwapExactAmountOutResponse_amount_in, value) {
+		if !f(fd_QueryCalculationSwapExactAmountOutResponse_amount_in, value) {
 			return
 		}
 	}
@@ -6538,19 +6538,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Range(f func(
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result":
 		return x.Result != nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.interface_provider_fee":
 		return x.InterfaceProviderFee != ""
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.amount_in":
 		return x.AmountIn != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6560,19 +6560,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Has(fd protor
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result":
 		x.Result = nil
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.interface_provider_fee":
 		x.InterfaceProviderFee = ""
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.amount_in":
 		x.AmountIn = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6582,22 +6582,22 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Clear(fd prot
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result":
 		value := x.Result
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.interface_provider_fee":
 		value := x.InterfaceProviderFee
 		return protoreflect.ValueOfString(value)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.amount_in":
 		value := x.AmountIn
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6611,19 +6611,19 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Get(descripto
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result":
 		x.Result = value.Message().Interface().(*RouteResult)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.interface_provider_fee":
 		x.InterfaceProviderFee = value.Interface().(string)
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.amount_in":
 		x.AmountIn = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6637,52 +6637,52 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Set(fd protor
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result":
 		if x.Result == nil {
 			x.Result = new(RouteResult)
 		}
 		return protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.interface_provider_fee":
-		panic(fmt.Errorf("field interface_provider_fee of message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse is not mutable"))
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.amount_in":
-		panic(fmt.Errorf("field amount_in of message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.interface_provider_fee":
+		panic(fmt.Errorf("field interface_provider_fee of message sunrise.swap.QueryCalculationSwapExactAmountOutResponse is not mutable"))
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.amount_in":
+		panic(fmt.Errorf("field amount_in of message sunrise.swap.QueryCalculationSwapExactAmountOutResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result":
 		m := new(RouteResult)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.interface_provider_fee":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.interface_provider_fee":
 		return protoreflect.ValueOfString("")
-	case "sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.amount_in":
+	case "sunrise.swap.QueryCalculationSwapExactAmountOutResponse.amount_in":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.QueryCalculationSwapExactAmountOutResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.swap.QueryCalculatedSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.swap.QueryCalculationSwapExactAmountOutResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculatedSwapExactAmountOutResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.QueryCalculationSwapExactAmountOutResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6690,7 +6690,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) WhichOneof(d 
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6701,7 +6701,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) GetUnknown() 
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6713,7 +6713,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) SetUnknown(fi
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) IsValid() bool {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -6723,9 +6723,9 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) IsValid() boo
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryCalculationSwapExactAmountOutResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountOutResponse)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountOutResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6759,7 +6759,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) ProtoMethods(
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountOutResponse)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountOutResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6817,7 +6817,7 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) ProtoMethods(
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryCalculatedSwapExactAmountOutResponse)
+		x := input.Message.Interface().(*QueryCalculationSwapExactAmountOutResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6849,10 +6849,10 @@ func (x *fastReflection_QueryCalculatedSwapExactAmountOutResponse) ProtoMethods(
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountOutResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculatedSwapExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryCalculationSwapExactAmountOutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -7395,7 +7395,7 @@ func (x *QueryOutgoingInFlightPacketsResponse) GetPagination() *v1beta1.PageResp
 	return nil
 }
 
-type QueryCalculatedSwapExactAmountInRequest struct {
+type QueryCalculationSwapExactAmountInRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -7405,8 +7405,8 @@ type QueryCalculatedSwapExactAmountInRequest struct {
 	AmountIn        string `protobuf:"bytes,4,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
 }
 
-func (x *QueryCalculatedSwapExactAmountInRequest) Reset() {
-	*x = QueryCalculatedSwapExactAmountInRequest{}
+func (x *QueryCalculationSwapExactAmountInRequest) Reset() {
+	*x = QueryCalculationSwapExactAmountInRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_swap_query_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7414,39 +7414,39 @@ func (x *QueryCalculatedSwapExactAmountInRequest) Reset() {
 	}
 }
 
-func (x *QueryCalculatedSwapExactAmountInRequest) String() string {
+func (x *QueryCalculationSwapExactAmountInRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryCalculatedSwapExactAmountInRequest) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountInRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryCalculatedSwapExactAmountInRequest.ProtoReflect.Descriptor instead.
-func (*QueryCalculatedSwapExactAmountInRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryCalculationSwapExactAmountInRequest.ProtoReflect.Descriptor instead.
+func (*QueryCalculationSwapExactAmountInRequest) Descriptor() ([]byte, []int) {
 	return file_sunrise_swap_query_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *QueryCalculatedSwapExactAmountInRequest) GetHasInterfaceFee() bool {
+func (x *QueryCalculationSwapExactAmountInRequest) GetHasInterfaceFee() bool {
 	if x != nil {
 		return x.HasInterfaceFee
 	}
 	return false
 }
 
-func (x *QueryCalculatedSwapExactAmountInRequest) GetRoute() *Route {
+func (x *QueryCalculationSwapExactAmountInRequest) GetRoute() *Route {
 	if x != nil {
 		return x.Route
 	}
 	return nil
 }
 
-func (x *QueryCalculatedSwapExactAmountInRequest) GetAmountIn() string {
+func (x *QueryCalculationSwapExactAmountInRequest) GetAmountIn() string {
 	if x != nil {
 		return x.AmountIn
 	}
 	return ""
 }
 
-type QueryCalculatedSwapExactAmountInResponse struct {
+type QueryCalculationSwapExactAmountInResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -7456,8 +7456,8 @@ type QueryCalculatedSwapExactAmountInResponse struct {
 	AmountOut            string       `protobuf:"bytes,3,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
 }
 
-func (x *QueryCalculatedSwapExactAmountInResponse) Reset() {
-	*x = QueryCalculatedSwapExactAmountInResponse{}
+func (x *QueryCalculationSwapExactAmountInResponse) Reset() {
+	*x = QueryCalculationSwapExactAmountInResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_swap_query_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7465,39 +7465,39 @@ func (x *QueryCalculatedSwapExactAmountInResponse) Reset() {
 	}
 }
 
-func (x *QueryCalculatedSwapExactAmountInResponse) String() string {
+func (x *QueryCalculationSwapExactAmountInResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryCalculatedSwapExactAmountInResponse) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountInResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryCalculatedSwapExactAmountInResponse.ProtoReflect.Descriptor instead.
-func (*QueryCalculatedSwapExactAmountInResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryCalculationSwapExactAmountInResponse.ProtoReflect.Descriptor instead.
+func (*QueryCalculationSwapExactAmountInResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_swap_query_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *QueryCalculatedSwapExactAmountInResponse) GetResult() *RouteResult {
+func (x *QueryCalculationSwapExactAmountInResponse) GetResult() *RouteResult {
 	if x != nil {
 		return x.Result
 	}
 	return nil
 }
 
-func (x *QueryCalculatedSwapExactAmountInResponse) GetInterfaceProviderFee() string {
+func (x *QueryCalculationSwapExactAmountInResponse) GetInterfaceProviderFee() string {
 	if x != nil {
 		return x.InterfaceProviderFee
 	}
 	return ""
 }
 
-func (x *QueryCalculatedSwapExactAmountInResponse) GetAmountOut() string {
+func (x *QueryCalculationSwapExactAmountInResponse) GetAmountOut() string {
 	if x != nil {
 		return x.AmountOut
 	}
 	return ""
 }
 
-type QueryCalculatedSwapExactAmountOutRequest struct {
+type QueryCalculationSwapExactAmountOutRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -7507,8 +7507,8 @@ type QueryCalculatedSwapExactAmountOutRequest struct {
 	AmountOut       string `protobuf:"bytes,4,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
 }
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) Reset() {
-	*x = QueryCalculatedSwapExactAmountOutRequest{}
+func (x *QueryCalculationSwapExactAmountOutRequest) Reset() {
+	*x = QueryCalculationSwapExactAmountOutRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_swap_query_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7516,39 +7516,39 @@ func (x *QueryCalculatedSwapExactAmountOutRequest) Reset() {
 	}
 }
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) String() string {
+func (x *QueryCalculationSwapExactAmountOutRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryCalculatedSwapExactAmountOutRequest) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountOutRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryCalculatedSwapExactAmountOutRequest.ProtoReflect.Descriptor instead.
-func (*QueryCalculatedSwapExactAmountOutRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryCalculationSwapExactAmountOutRequest.ProtoReflect.Descriptor instead.
+func (*QueryCalculationSwapExactAmountOutRequest) Descriptor() ([]byte, []int) {
 	return file_sunrise_swap_query_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) GetHasInterfaceFee() bool {
+func (x *QueryCalculationSwapExactAmountOutRequest) GetHasInterfaceFee() bool {
 	if x != nil {
 		return x.HasInterfaceFee
 	}
 	return false
 }
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) GetRoute() *Route {
+func (x *QueryCalculationSwapExactAmountOutRequest) GetRoute() *Route {
 	if x != nil {
 		return x.Route
 	}
 	return nil
 }
 
-func (x *QueryCalculatedSwapExactAmountOutRequest) GetAmountOut() string {
+func (x *QueryCalculationSwapExactAmountOutRequest) GetAmountOut() string {
 	if x != nil {
 		return x.AmountOut
 	}
 	return ""
 }
 
-type QueryCalculatedSwapExactAmountOutResponse struct {
+type QueryCalculationSwapExactAmountOutResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -7558,8 +7558,8 @@ type QueryCalculatedSwapExactAmountOutResponse struct {
 	AmountIn             string       `protobuf:"bytes,3,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
 }
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) Reset() {
-	*x = QueryCalculatedSwapExactAmountOutResponse{}
+func (x *QueryCalculationSwapExactAmountOutResponse) Reset() {
+	*x = QueryCalculationSwapExactAmountOutResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_swap_query_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -7567,32 +7567,32 @@ func (x *QueryCalculatedSwapExactAmountOutResponse) Reset() {
 	}
 }
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) String() string {
+func (x *QueryCalculationSwapExactAmountOutResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryCalculatedSwapExactAmountOutResponse) ProtoMessage() {}
+func (*QueryCalculationSwapExactAmountOutResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryCalculatedSwapExactAmountOutResponse.ProtoReflect.Descriptor instead.
-func (*QueryCalculatedSwapExactAmountOutResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryCalculationSwapExactAmountOutResponse.ProtoReflect.Descriptor instead.
+func (*QueryCalculationSwapExactAmountOutResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_swap_query_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) GetResult() *RouteResult {
+func (x *QueryCalculationSwapExactAmountOutResponse) GetResult() *RouteResult {
 	if x != nil {
 		return x.Result
 	}
 	return nil
 }
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) GetInterfaceProviderFee() string {
+func (x *QueryCalculationSwapExactAmountOutResponse) GetInterfaceProviderFee() string {
 	if x != nil {
 		return x.InterfaceProviderFee
 	}
 	return ""
 }
 
-func (x *QueryCalculatedSwapExactAmountOutResponse) GetAmountIn() string {
+func (x *QueryCalculationSwapExactAmountOutResponse) GetAmountIn() string {
 	if x != nil {
 		return x.AmountIn
 	}
@@ -7692,164 +7692,164 @@ var file_sunrise_swap_query_proto_rawDesc = []byte{
 	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
 	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
 	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xda, 0x01, 0x0a,
-	0x27, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64,
-	0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49,
-	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x68, 0x61, 0x73, 0x5f,
-	0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x08, 0x52, 0x0f, 0x68, 0x61, 0x73, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63,
-	0x65, 0x46, 0x65, 0x65, 0x12, 0x34, 0x0a, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77,
-	0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7,
-	0xb0, 0x2a, 0x01, 0x52, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x12, 0x4d, 0x0a, 0x09, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
+	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xdb, 0x01, 0x0a,
+	0x28, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x49, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x68, 0x61, 0x73,
+	0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x08, 0x52, 0x0f, 0x68, 0x61, 0x73, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61,
+	0x63, 0x65, 0x46, 0x65, 0x65, 0x12, 0x34, 0x0a, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
+	0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8,
+	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x12, 0x4d, 0x0a, 0x09, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30,
+	0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64,
+	0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d,
+	0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x08, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x22, 0xa2, 0x02, 0x0a, 0x29, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53,
+	0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06,
+	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x66, 0x0a, 0x16, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66,
+	0x61, 0x63, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x5f, 0x66, 0x65, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
+	0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x14, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66,
+	0x61, 0x63, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x46, 0x65, 0x65, 0x12, 0x4f,
+	0x0a, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e,
+	0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8,
+	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x22,
+	0xde, 0x01, 0x0a, 0x29, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2a, 0x0a,
+	0x11, 0x68, 0x61, 0x73, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x66,
+	0x65, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0f, 0x68, 0x61, 0x73, 0x49, 0x6e, 0x74,
+	0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x46, 0x65, 0x65, 0x12, 0x34, 0x0a, 0x05, 0x72, 0x6f, 0x75,
+	0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x42, 0x09, 0xc8,
+	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x12,
+	0x4f, 0x0a, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49,
+	0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74,
+	0x22, 0xa1, 0x02, 0x0a, 0x2a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x3c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52,
+	0x6f, 0x75, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x66, 0x0a,
+	0x16, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69,
+	0x64, 0x65, 0x72, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8,
 	0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b,
 	0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x08, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x22, 0xa1, 0x02, 0x0a, 0x28, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x53, 0x77, 0x61,
-	0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x12, 0x66, 0x0a, 0x16, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63,
-	0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x5f, 0x66, 0x65, 0x65, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e,
-	0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e,
-	0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x14, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63,
-	0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x46, 0x65, 0x65, 0x12, 0x4f, 0x0a, 0x0a,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
-	0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2,
-	0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0,
-	0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x22, 0xdd, 0x01,
-	0x0a, 0x28, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65,
-	0x64, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x4f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2a, 0x0a, 0x11, 0x68, 0x61,
-	0x73, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0f, 0x68, 0x61, 0x73, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66,
-	0x61, 0x63, 0x65, 0x46, 0x65, 0x65, 0x12, 0x34, 0x0a, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
-	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x12, 0x4f, 0x0a, 0x0a,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
-	0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2,
-	0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0,
-	0x2a, 0x01, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x22, 0xa0, 0x02,
-	0x0a, 0x29, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65,
-	0x64, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x4f, 0x75, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3c, 0x0a, 0x06, 0x72,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65,
-	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x66, 0x0a, 0x16, 0x69, 0x6e, 0x74,
-	0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x5f,
-	0x66, 0x65, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda,
-	0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
-	0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x14, 0x69, 0x6e, 0x74,
-	0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x46, 0x65,
-	0x65, 0x12, 0x4d, 0x0a, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e,
-	0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e,
-	0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x08, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e,
-	0x32, 0xa8, 0x0a, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x6b, 0x0a, 0x06, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x12, 0x20, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1c, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x16, 0x12, 0x14, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70,
-	0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0xdb, 0x01, 0x0a, 0x16, 0x49, 0x6e, 0x63, 0x6f,
-	0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x12, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61,
-	0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49,
-	0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5c, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x56, 0x12,
-	0x54, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x61,
-	0x63, 0x6b, 0x5f, 0x77, 0x61, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65,
-	0x74, 0x73, 0x2f, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x2f, 0x7b, 0x73, 0x72, 0x63,
-	0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x7b, 0x73, 0x72, 0x63, 0x5f, 0x63,
-	0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x7b, 0x73, 0x65, 0x71, 0x75,
-	0x65, 0x6e, 0x63, 0x65, 0x7d, 0x12, 0xb4, 0x01, 0x0a, 0x17, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69,
+	0x14, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64,
+	0x65, 0x72, 0x46, 0x65, 0x65, 0x12, 0x4d, 0x0a, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f,
+	0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde,
+	0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d,
+	0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x08, 0x61, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x49, 0x6e, 0x32, 0xae, 0x0a, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x6b,
+	0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x20, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1c, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x16, 0x12, 0x14, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f,
+	0x73, 0x77, 0x61, 0x70, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0xdb, 0x01, 0x0a, 0x16,
+	0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74,
+	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63, 0x6f, 0x6d,
+	0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63,
+	0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63,
+	0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5c, 0x82, 0xd3, 0xe4,
+	0x93, 0x02, 0x56, 0x12, 0x54, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77,
+	0x61, 0x70, 0x2f, 0x61, 0x63, 0x6b, 0x5f, 0x77, 0x61, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x70,
+	0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x2f, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x2f,
+	0x7b, 0x73, 0x72, 0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x7b, 0x73,
+	0x72, 0x63, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x7b,
+	0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x7d, 0x12, 0xb4, 0x01, 0x0a, 0x17, 0x49, 0x6e,
+	0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61,
+	0x63, 0x6b, 0x65, 0x74, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69,
 	0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74,
-	0x73, 0x12, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e,
-	0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x32, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2c,
-	0x12, 0x2a, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f,
-	0x61, 0x63, 0x6b, 0x5f, 0x77, 0x61, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x70, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x73, 0x2f, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x12, 0xd9, 0x01, 0x0a,
-	0x16, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68,
-	0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x67,
-	0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75,
-	0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61,
-	0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5a, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x54, 0x12, 0x52, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73,
-	0x77, 0x61, 0x70, 0x2f, 0x69, 0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61,
-	0x63, 0x6b, 0x65, 0x74, 0x73, 0x2f, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x2f, 0x7b,
-	0x73, 0x72, 0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x7b, 0x73, 0x72,
-	0x63, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x7b, 0x73,
-	0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x7d, 0x12, 0xb2, 0x01, 0x0a, 0x17, 0x4f, 0x75, 0x74,
-	0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63,
-	0x6b, 0x65, 0x74, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x67,
-	0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x30, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x2a, 0x12, 0x28, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77,
-	0x61, 0x70, 0x2f, 0x69, 0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61, 0x63,
-	0x6b, 0x65, 0x74, 0x73, 0x2f, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x12, 0xc2, 0x01,
-	0x0a, 0x1b, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x53, 0x77, 0x61, 0x70,
-	0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x35, 0x2e,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x53, 0x77, 0x61, 0x70,
-	0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61,
-	0x74, 0x65, 0x64, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x34, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x2e, 0x12, 0x2c, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73,
-	0x77, 0x61, 0x70, 0x2f, 0x63, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x2f, 0x73, 0x77,
-	0x61, 0x70, 0x5f, 0x65, 0x78, 0x61, 0x63, 0x74, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f,
-	0x69, 0x6e, 0x12, 0xc6, 0x01, 0x0a, 0x1c, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65,
-	0x64, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x4f, 0x75, 0x74, 0x12, 0x36, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77,
-	0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74,
-	0x65, 0x64, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e,
-	0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x73, 0x75,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x49, 0x6e, 0x63,
+	0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63,
+	0x6b, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x32, 0x82, 0xd3,
+	0xe4, 0x93, 0x02, 0x2c, 0x12, 0x2a, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73,
+	0x77, 0x61, 0x70, 0x2f, 0x61, 0x63, 0x6b, 0x5f, 0x77, 0x61, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x5f,
+	0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x2f, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67,
+	0x12, 0xd9, 0x01, 0x0a, 0x16, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46,
+	0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x30, 0x2e, 0x73, 0x75,
 	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78,
-	0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x35, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2f, 0x12, 0x2d, 0x2f, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x63, 0x61, 0x6c, 0x63,
-	0x75, 0x6c, 0x61, 0x74, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x5f, 0x65, 0x78, 0x61, 0x63, 0x74,
-	0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x42, 0x8e, 0x01, 0x0a, 0x10,
-	0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70,
-	0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03,
-	0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77,
-	0x61, 0x70, 0xca, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61,
-	0x70, 0xe2, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74,
+	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e,
+	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67,
+	0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x5a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x54, 0x12, 0x52, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x69, 0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68,
+	0x74, 0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x2f, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69,
+	0x6e, 0x67, 0x2f, 0x7b, 0x73, 0x72, 0x63, 0x5f, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x69, 0x64, 0x7d,
+	0x2f, 0x7b, 0x73, 0x72, 0x63, 0x5f, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x5f, 0x69, 0x64,
+	0x7d, 0x2f, 0x7b, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x7d, 0x12, 0xb2, 0x01, 0x0a,
+	0x17, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68,
+	0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74,
+	0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63,
+	0x6b, 0x65, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74,
+	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x30, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2a, 0x12, 0x28, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x69, 0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68, 0x74,
+	0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x2f, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e,
+	0x67, 0x12, 0xc5, 0x01, 0x0a, 0x1c, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x49, 0x6e, 0x12, 0x36, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61,
+	0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x49, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43,
+	0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78,
+	0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x34, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2e, 0x12, 0x2c, 0x2f, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x63, 0x61, 0x6c, 0x63, 0x75,
+	0x6c, 0x61, 0x74, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x5f, 0x65, 0x78, 0x61, 0x63, 0x74, 0x5f,
+	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x12, 0xc9, 0x01, 0x0a, 0x1d, 0x43, 0x61,
+	0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61,
+	0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x37, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45,
+	0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x38, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
+	0x77, 0x61, 0x70, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x35,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x2f, 0x12, 0x2d, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x63, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x2f,
+	0x73, 0x77, 0x61, 0x70, 0x5f, 0x65, 0x78, 0x61, 0x63, 0x74, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x5f, 0x6f, 0x75, 0x74, 0x42, 0x8e, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca, 0x02, 0x0c, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02, 0x18, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -7866,20 +7866,20 @@ func file_sunrise_swap_query_proto_rawDescGZIP() []byte {
 
 var file_sunrise_swap_query_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_sunrise_swap_query_proto_goTypes = []interface{}{
-	(*QueryParamsRequest)(nil),                        // 0: sunrise.swap.QueryParamsRequest
-	(*QueryParamsResponse)(nil),                       // 1: sunrise.swap.QueryParamsResponse
-	(*QueryIncomingInFlightPacketRequest)(nil),        // 2: sunrise.swap.QueryIncomingInFlightPacketRequest
-	(*QueryIncomingInFlightPacketResponse)(nil),       // 3: sunrise.swap.QueryIncomingInFlightPacketResponse
-	(*QueryIncomingInFlightPacketsRequest)(nil),       // 4: sunrise.swap.QueryIncomingInFlightPacketsRequest
-	(*QueryIncomingInFlightPacketsResponse)(nil),      // 5: sunrise.swap.QueryIncomingInFlightPacketsResponse
-	(*QueryOutgoingInFlightPacketRequest)(nil),        // 6: sunrise.swap.QueryOutgoingInFlightPacketRequest
-	(*QueryOutgoingInFlightPacketResponse)(nil),       // 7: sunrise.swap.QueryOutgoingInFlightPacketResponse
-	(*QueryOutgoingInFlightPacketsRequest)(nil),       // 8: sunrise.swap.QueryOutgoingInFlightPacketsRequest
-	(*QueryOutgoingInFlightPacketsResponse)(nil),      // 9: sunrise.swap.QueryOutgoingInFlightPacketsResponse
-	(*QueryCalculatedSwapExactAmountInRequest)(nil),   // 10: sunrise.swap.QueryCalculatedSwapExactAmountInRequest
-	(*QueryCalculatedSwapExactAmountInResponse)(nil),  // 11: sunrise.swap.QueryCalculatedSwapExactAmountInResponse
-	(*QueryCalculatedSwapExactAmountOutRequest)(nil),  // 12: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest
-	(*QueryCalculatedSwapExactAmountOutResponse)(nil), // 13: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse
+	(*QueryParamsRequest)(nil),                         // 0: sunrise.swap.QueryParamsRequest
+	(*QueryParamsResponse)(nil),                        // 1: sunrise.swap.QueryParamsResponse
+	(*QueryIncomingInFlightPacketRequest)(nil),         // 2: sunrise.swap.QueryIncomingInFlightPacketRequest
+	(*QueryIncomingInFlightPacketResponse)(nil),        // 3: sunrise.swap.QueryIncomingInFlightPacketResponse
+	(*QueryIncomingInFlightPacketsRequest)(nil),        // 4: sunrise.swap.QueryIncomingInFlightPacketsRequest
+	(*QueryIncomingInFlightPacketsResponse)(nil),       // 5: sunrise.swap.QueryIncomingInFlightPacketsResponse
+	(*QueryOutgoingInFlightPacketRequest)(nil),         // 6: sunrise.swap.QueryOutgoingInFlightPacketRequest
+	(*QueryOutgoingInFlightPacketResponse)(nil),        // 7: sunrise.swap.QueryOutgoingInFlightPacketResponse
+	(*QueryOutgoingInFlightPacketsRequest)(nil),        // 8: sunrise.swap.QueryOutgoingInFlightPacketsRequest
+	(*QueryOutgoingInFlightPacketsResponse)(nil),       // 9: sunrise.swap.QueryOutgoingInFlightPacketsResponse
+	(*QueryCalculationSwapExactAmountInRequest)(nil),   // 10: sunrise.swap.QueryCalculationSwapExactAmountInRequest
+	(*QueryCalculationSwapExactAmountInResponse)(nil),  // 11: sunrise.swap.QueryCalculationSwapExactAmountInResponse
+	(*QueryCalculationSwapExactAmountOutRequest)(nil),  // 12: sunrise.swap.QueryCalculationSwapExactAmountOutRequest
+	(*QueryCalculationSwapExactAmountOutResponse)(nil), // 13: sunrise.swap.QueryCalculationSwapExactAmountOutResponse
 	(*Params)(nil),                 // 14: sunrise.swap.Params
 	(*IncomingInFlightPacket)(nil), // 15: sunrise.swap.IncomingInFlightPacket
 	(*v1beta1.PageRequest)(nil),    // 16: cosmos.base.query.v1beta1.PageRequest
@@ -7898,24 +7898,24 @@ var file_sunrise_swap_query_proto_depIdxs = []int32{
 	16, // 6: sunrise.swap.QueryOutgoingInFlightPacketsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
 	18, // 7: sunrise.swap.QueryOutgoingInFlightPacketsResponse.packets:type_name -> sunrise.swap.OutgoingInFlightPacket
 	17, // 8: sunrise.swap.QueryOutgoingInFlightPacketsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	19, // 9: sunrise.swap.QueryCalculatedSwapExactAmountInRequest.route:type_name -> sunrise.swap.Route
-	20, // 10: sunrise.swap.QueryCalculatedSwapExactAmountInResponse.result:type_name -> sunrise.swap.RouteResult
-	19, // 11: sunrise.swap.QueryCalculatedSwapExactAmountOutRequest.route:type_name -> sunrise.swap.Route
-	20, // 12: sunrise.swap.QueryCalculatedSwapExactAmountOutResponse.result:type_name -> sunrise.swap.RouteResult
+	19, // 9: sunrise.swap.QueryCalculationSwapExactAmountInRequest.route:type_name -> sunrise.swap.Route
+	20, // 10: sunrise.swap.QueryCalculationSwapExactAmountInResponse.result:type_name -> sunrise.swap.RouteResult
+	19, // 11: sunrise.swap.QueryCalculationSwapExactAmountOutRequest.route:type_name -> sunrise.swap.Route
+	20, // 12: sunrise.swap.QueryCalculationSwapExactAmountOutResponse.result:type_name -> sunrise.swap.RouteResult
 	0,  // 13: sunrise.swap.Query.Params:input_type -> sunrise.swap.QueryParamsRequest
 	2,  // 14: sunrise.swap.Query.IncomingInFlightPacket:input_type -> sunrise.swap.QueryIncomingInFlightPacketRequest
 	4,  // 15: sunrise.swap.Query.IncomingInFlightPackets:input_type -> sunrise.swap.QueryIncomingInFlightPacketsRequest
 	6,  // 16: sunrise.swap.Query.OutgoingInFlightPacket:input_type -> sunrise.swap.QueryOutgoingInFlightPacketRequest
 	8,  // 17: sunrise.swap.Query.OutgoingInFlightPackets:input_type -> sunrise.swap.QueryOutgoingInFlightPacketsRequest
-	10, // 18: sunrise.swap.Query.CalculatedSwapExactAmountIn:input_type -> sunrise.swap.QueryCalculatedSwapExactAmountInRequest
-	12, // 19: sunrise.swap.Query.CalculatedSwapExactAmountOut:input_type -> sunrise.swap.QueryCalculatedSwapExactAmountOutRequest
+	10, // 18: sunrise.swap.Query.CalculationSwapExactAmountIn:input_type -> sunrise.swap.QueryCalculationSwapExactAmountInRequest
+	12, // 19: sunrise.swap.Query.CalculationSwapExactAmountOut:input_type -> sunrise.swap.QueryCalculationSwapExactAmountOutRequest
 	1,  // 20: sunrise.swap.Query.Params:output_type -> sunrise.swap.QueryParamsResponse
 	3,  // 21: sunrise.swap.Query.IncomingInFlightPacket:output_type -> sunrise.swap.QueryIncomingInFlightPacketResponse
 	5,  // 22: sunrise.swap.Query.IncomingInFlightPackets:output_type -> sunrise.swap.QueryIncomingInFlightPacketsResponse
 	7,  // 23: sunrise.swap.Query.OutgoingInFlightPacket:output_type -> sunrise.swap.QueryOutgoingInFlightPacketResponse
 	9,  // 24: sunrise.swap.Query.OutgoingInFlightPackets:output_type -> sunrise.swap.QueryOutgoingInFlightPacketsResponse
-	11, // 25: sunrise.swap.Query.CalculatedSwapExactAmountIn:output_type -> sunrise.swap.QueryCalculatedSwapExactAmountInResponse
-	13, // 26: sunrise.swap.Query.CalculatedSwapExactAmountOut:output_type -> sunrise.swap.QueryCalculatedSwapExactAmountOutResponse
+	11, // 25: sunrise.swap.Query.CalculationSwapExactAmountIn:output_type -> sunrise.swap.QueryCalculationSwapExactAmountInResponse
+	13, // 26: sunrise.swap.Query.CalculationSwapExactAmountOut:output_type -> sunrise.swap.QueryCalculationSwapExactAmountOutResponse
 	20, // [20:27] is the sub-list for method output_type
 	13, // [13:20] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name
@@ -8053,7 +8053,7 @@ func file_sunrise_swap_query_proto_init() {
 			}
 		}
 		file_sunrise_swap_query_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryCalculatedSwapExactAmountInRequest); i {
+			switch v := v.(*QueryCalculationSwapExactAmountInRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8065,7 +8065,7 @@ func file_sunrise_swap_query_proto_init() {
 			}
 		}
 		file_sunrise_swap_query_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryCalculatedSwapExactAmountInResponse); i {
+			switch v := v.(*QueryCalculationSwapExactAmountInResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8077,7 +8077,7 @@ func file_sunrise_swap_query_proto_init() {
 			}
 		}
 		file_sunrise_swap_query_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryCalculatedSwapExactAmountOutRequest); i {
+			switch v := v.(*QueryCalculationSwapExactAmountOutRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8089,7 +8089,7 @@ func file_sunrise_swap_query_proto_init() {
 			}
 		}
 		file_sunrise_swap_query_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryCalculatedSwapExactAmountOutResponse); i {
+			switch v := v.(*QueryCalculationSwapExactAmountOutResponse); i {
 			case 0:
 				return &v.state
 			case 1:

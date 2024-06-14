@@ -10,7 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-func (k Keeper) CalculatedSwapExactAmountIn(goCtx context.Context, req *types.QueryCalculatedSwapExactAmountInRequest) (*types.QueryCalculatedSwapExactAmountInResponse, error) {
+func (k Keeper) CalculationSwapExactAmountIn(goCtx context.Context, req *types.QueryCalculationSwapExactAmountInRequest) (*types.QueryCalculationSwapExactAmountInResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -21,14 +21,14 @@ func (k Keeper) CalculatedSwapExactAmountIn(goCtx context.Context, req *types.Qu
 		return nil, err
 	}
 
-	return &types.QueryCalculatedSwapExactAmountInResponse{
+	return &types.QueryCalculationSwapExactAmountInResponse{
 		Result:               result,
 		InterfaceProviderFee: interfaceProviderFee,
 		AmountOut:            result.TokenOut.Amount.Sub(interfaceProviderFee),
 	}, nil
 }
 
-func (k Keeper) CalculatedSwapExactAmountOut(goCtx context.Context, req *types.QueryCalculatedSwapExactAmountOutRequest) (*types.QueryCalculatedSwapExactAmountOutResponse, error) {
+func (k Keeper) CalculationSwapExactAmountOut(goCtx context.Context, req *types.QueryCalculationSwapExactAmountOutRequest) (*types.QueryCalculationSwapExactAmountOutResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -39,7 +39,7 @@ func (k Keeper) CalculatedSwapExactAmountOut(goCtx context.Context, req *types.Q
 		return nil, err
 	}
 
-	return &types.QueryCalculatedSwapExactAmountOutResponse{
+	return &types.QueryCalculationSwapExactAmountOutResponse{
 		Result:               result,
 		InterfaceProviderFee: interfaceProviderFee,
 		AmountIn:             result.TokenIn.Amount,
