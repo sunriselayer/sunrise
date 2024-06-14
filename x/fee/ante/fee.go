@@ -11,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	feekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
-	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 )
 
 // TxFeeChecker check if the provided fee is enough and returns the effective fee and tx priority,
@@ -141,34 +140,8 @@ func DeductFees(bankKeeper BankKeeper, ctx sdk.Context, acc sdk.AccountI, fees s
 	}
 
 	// <sunrise>
-	params := feeKeeper.GetParams(ctx)
-	for _, fee := range fees {
-		// skip if fee is not the fee denom
-		if fee.Denom != params.FeeDenom {
-			continue
-		}
-		burnAmount := params.BurnRatio.MulInt(fee.Amount).TruncateInt()
-
-		// skip if burn amount is zero
-		if burnAmount.IsZero() {
-			continue
-		}
-
-		burnCoins := sdk.NewCoins(sdk.NewCoin(fee.Denom, burnAmount))
-
-		// burn coins from the fee module account
-		err := bankKeeper.SendCoinsFromModuleToModule(ctx,
-			types.FeeCollectorName,
-			feetypes.ModuleName,
-			burnCoins,
-		)
-		if err != nil {
-			return errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, err.Error())
-		}
-
-		if err := bankKeeper.BurnCoins(ctx, feetypes.ModuleName, burnCoins); err != nil {
-			return err
-		}
+	if err := feeKeeper.Burn(ctx, fees); err != nil {
+		return err
 	}
 	// </sunrise>
 

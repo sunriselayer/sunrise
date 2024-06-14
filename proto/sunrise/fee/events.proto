@@ -1,0 +1,16 @@
+syntax = "proto3";
+package sunrise.fee;
+
+import "gogoproto/gogo.proto";
+
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
+
+message EventFeeBurnt {
+  repeated cosmos.base.v1beta1.Coin fees = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
