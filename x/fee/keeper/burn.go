@@ -23,7 +23,8 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 			continue
 		}
 
-		burnCoins := sdk.NewCoins(sdk.NewCoin(fee.Denom, burnAmount))
+		burnCoin := sdk.NewCoin(fee.Denom, burnAmount)
+		burnCoins := sdk.NewCoins(burnCoin)
 
 		// burn coins from the fee module account
 		err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
@@ -39,7 +40,11 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 			return err
 		}
 
-		// TODO: emit typed event
+		if err := ctx.EventManager().EmitTypedEvent(&types.EventFeeBurnt{
+			Fees: burnCoins,
+		}); err != nil {
+			return err
+		}
 	}
 
 	return nil
