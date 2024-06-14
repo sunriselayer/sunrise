@@ -6,8 +6,10 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
 import "sunrise/swap/params.proto";
 import "sunrise/swap/in_flight_packet.proto";
+import "sunrise/swap/route.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
@@ -37,6 +39,15 @@ service Query {
   rpc OutgoingInFlightPackets (QueryOutgoingInFlightPacketsRequest) returns (QueryOutgoingInFlightPacketsResponse) {
     option (google.api.http).get = "/sunrise/swap/in_flight_packets/outgoing";
   
+  }
+
+  // Queries a calculated swap value.
+  rpc CalculatedSwapExactAmountIn    (QueryCalculatedSwapExactAmountInRequest) returns (QueryCalculatedSwapExactAmountInResponse) {
+    option (google.api.http).get = "/sunrise/swap/calculate/swap_exact_amount_in";
+  
+  }
+  rpc CalculatedSwapExactAmountOut    (QueryCalculatedSwapExactAmountOutRequest) returns (QueryCalculatedSwapExactAmountOutResponse) {
+    option (google.api.http).get = "/sunrise/swap/calculate/swap_exact_amount_out";
   }
   
 }
@@ -86,4 +97,66 @@ message QueryOutgoingInFlightPacketsRequest {
 message QueryOutgoingInFlightPacketsResponse {
   repeated OutgoingInFlightPacket                 packets = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination     = 2;
+}
+
+message QueryCalculatedSwapExactAmountInRequest {
+  bool has_interface_fee = 1;
+  Route route = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  string amount_in = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QueryCalculatedSwapExactAmountInResponse {
+  RouteResult result = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string amount_out = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QueryCalculatedSwapExactAmountOutRequest {
+  bool has_interface_fee = 1;
+  Route route = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  string amount_out = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QueryCalculatedSwapExactAmountOutResponse {
+  RouteResult result = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  string amount_in = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
 }
