@@ -41,12 +41,12 @@ service Query {
   
   }
 
-  // Queries a calculated swap value.
-  rpc CalculatedSwapExactAmountIn    (QueryCalculatedSwapExactAmountInRequest) returns (QueryCalculatedSwapExactAmountInResponse) {
+  // Queries a Calculation swap value.
+  rpc CalculationSwapExactAmountIn    (QueryCalculationSwapExactAmountInRequest) returns (QueryCalculationSwapExactAmountInResponse) {
     option (google.api.http).get = "/sunrise/swap/calculate/swap_exact_amount_in";
   
   }
-  rpc CalculatedSwapExactAmountOut    (QueryCalculatedSwapExactAmountOutRequest) returns (QueryCalculatedSwapExactAmountOutResponse) {
+  rpc CalculationSwapExactAmountOut    (QueryCalculationSwapExactAmountOutRequest) returns (QueryCalculationSwapExactAmountOutResponse) {
     option (google.api.http).get = "/sunrise/swap/calculate/swap_exact_amount_out";
   }
   
@@ -99,7 +99,7 @@ message QueryOutgoingInFlightPacketsResponse {
            cosmos.base.query.v1beta1.PageResponse pagination     = 2;
 }
 
-message QueryCalculatedSwapExactAmountInRequest {
+message QueryCalculationSwapExactAmountInRequest {
   bool has_interface_fee = 1;
   Route route = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
@@ -111,7 +111,7 @@ message QueryCalculatedSwapExactAmountInRequest {
   ];
 }
 
-message QueryCalculatedSwapExactAmountInResponse {
+message QueryCalculationSwapExactAmountInResponse {
   RouteResult result = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
@@ -130,7 +130,7 @@ message QueryCalculatedSwapExactAmountInResponse {
   ];
 }
 
-message QueryCalculatedSwapExactAmountOutRequest {
+message QueryCalculationSwapExactAmountOutRequest {
   bool has_interface_fee = 1;
   Route route = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
@@ -142,7 +142,7 @@ message QueryCalculatedSwapExactAmountOutRequest {
   ];
 }
 
-message QueryCalculatedSwapExactAmountOutResponse {
+message QueryCalculationSwapExactAmountOutResponse {
   RouteResult result = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
