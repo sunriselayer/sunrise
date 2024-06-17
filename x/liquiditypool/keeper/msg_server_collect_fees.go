@@ -7,7 +7,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func (k msgServer) CollectFees(goCtx context.Context, msg *types.MsgCollectFees) (*types.MsgCollectFeesResponse, error) {
+func (k msgServer) ClaimRewards(goCtx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -24,7 +24,7 @@ func (k msgServer) CollectFees(goCtx context.Context, msg *types.MsgCollectFees)
 		totalCollectedFees = totalCollectedFees.Add(collectedFees...)
 	}
 
-	return &types.MsgCollectFeesResponse{
+	return &types.MsgClaimRewardsResponse{
 		CollectedFees: totalCollectedFees,
 	}, nil
 }

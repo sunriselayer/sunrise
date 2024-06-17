@@ -10,7 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func SimulateMsgCollectFees(
+func SimulateMsgClaimRewards(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -18,12 +18,12 @@ func SimulateMsgCollectFees(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-		msg := &types.MsgCollectFees{
+		msg := &types.MsgClaimRewards{
 			Sender: simAccount.Address.String(),
 		}
 
-		// TODO: Handling the CollectFees simulation
+		// TODO: Handling the MsgClaimRewards simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "CollectFees simulation not implemented"), nil, nil
+		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "MsgClaimRewards simulation not implemented"), nil, nil
 	}
 }
