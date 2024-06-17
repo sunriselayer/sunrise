@@ -491,6 +491,9 @@ func (k Keeper) updatePoolForSwap(
 	feeRatesRoundedUp := sdk.NewCoin(swapDetails.TokenIn.Denom, totalFees.Ceil().TruncateInt())
 
 	swapDetails.TokenIn.Amount = swapDetails.TokenIn.Amount.Sub(feeRatesRoundedUp.Amount)
+	if err := k.bankKeeper.IsSendEnabledCoins(ctx, swapDetails.TokenIn); err != nil {
+		return err
+	}
 
 	err := k.bankKeeper.SendCoins(ctx, swapDetails.Sender, pool.GetAddress(), sdk.Coins{swapDetails.TokenIn})
 	if err != nil {
@@ -502,6 +505,10 @@ func (k Keeper) updatePoolForSwap(
 		if err != nil {
 			return err
 		}
+	}
+
+	if err := k.bankKeeper.IsSendEnabledCoins(ctx, swapDetails.TokenOut); err != nil {
+		return err
 	}
 
 	err = k.bankKeeper.SendCoins(ctx, pool.GetAddress(), swapDetails.Sender, sdk.Coins{swapDetails.TokenOut})
