@@ -43,11 +43,11 @@ service Query {
 
   // Queries a Calculation swap value.
   rpc CalculationSwapExactAmountIn    (QueryCalculationSwapExactAmountInRequest) returns (QueryCalculationSwapExactAmountInResponse) {
-    option (google.api.http).get = "/sunrise/swap/calculate/swap_exact_amount_in";
+    option (google.api.http).get = "/sunrise/swap/calculations/swap_exact_amount_in";
   
   }
   rpc CalculationSwapExactAmountOut    (QueryCalculationSwapExactAmountOutRequest) returns (QueryCalculationSwapExactAmountOutResponse) {
-    option (google.api.http).get = "/sunrise/swap/calculate/swap_exact_amount_out";
+    option (google.api.http).get = "/sunrise/swap/calculations/swap_exact_amount_out";
   }
   
 }
