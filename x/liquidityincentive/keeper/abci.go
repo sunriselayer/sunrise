@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	appconsts "github.com/sunriselayer/sunrise/pkg/appconsts"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -32,39 +33,58 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 	}
 
 	params := k.GetParams(ctx)
-	k.SetEpoch(ctx, types.Epoch{
+	epoch := types.Epoch{
 		Id:         epochId,
 		StartBlock: ctx.BlockHeight(),
 		EndBlock:   ctx.BlockHeight() + params.EpochBlocks,
 		Gauges:     gauges,
-	})
+	}
+	k.SetEpoch(ctx, epoch)
 	return nil
 }
 
 // BeginBlocker sets the proposer for determining distribution during endblock
 // and distribute rewards for the previous block.
-func (k Keeper) BeginBlocker(ctx sdk.Context) error {
+func (k Keeper) EndBlocker(ctx sdk.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
 
 	// Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
 	lastEpoch, found := k.GetLastEpoch(ctx)
 	if !found {
-		k.CreateEpoch(ctx, 0, 1)
-	} else if lastEpoch.EndBlock >= ctx.BlockHeight() {
-		k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
-		// TODO: remove old epoch
+		err := k.CreateEpoch(ctx, 0, 1)
+		if err != nil {
+			ctx.Logger().Error("epoch creation error", err)
+			return nil
+		}
+	} else if ctx.BlockHeight() >= lastEpoch.EndBlock {
+		err := k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
+		if err != nil {
+			ctx.Logger().Error("epoch creation error", err)
+			return nil
+		}
+		// remove old epoch and gauges
+		epochs := k.GetAllEpoch(ctx)
+		if len(epochs) > 2 {
+			epoch := epochs[0]
+			k.RemoveEpoch(ctx, epoch.Id)
+			for _, gauge := range epoch.Gauges {
+				k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
+			}
+		}
 	}
 	return nil
 }
 
 // EndBlocker called every block, process inflation, update validator set.
-func (k Keeper) EndBlocker(ctx sdk.Context) error {
+func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := k.authKeeper.GetModuleAccount(ctx, authtypes.FeeCollectorName)
 	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector.GetAddress())
-	feesDec := sdk.NewDecCoinsFromCoins(fees...)
+	vRiseAmount := fees.AmountOf(appconsts.BondDenom)
+	amount := sdk.NewCoin(appconsts.BondDenom, vRiseAmount)
+	feesDec := sdk.NewDecCoinsFromCoins(amount)
 
 	params := k.GetParams(ctx)
 	incentiveFeesDec := feesDec.MulDecTruncate(math.LegacyOneDec().Sub(params.StakingRewardRatio))
@@ -83,7 +103,8 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 		return nil
 	}
 	for _, weight := range lastEpoch.Gauges {
-		allocationDec := incentiveFeesDec.MulDecTruncate(weight.Ratio.Quo(totalWeight))
+		ratio := weight.Ratio.Quo(totalWeight)
+		allocationDec := incentiveFeesDec.MulDecTruncate(ratio)
 		allocation, _ := allocationDec.TruncateDecimal()
 
 		err := k.liquidityPoolKeeper.AllocateIncentive(
