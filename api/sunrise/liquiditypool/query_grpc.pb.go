@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName           = "/sunrise.liquiditypool.Query/Params"
-	Query_Pool_FullMethodName             = "/sunrise.liquiditypool.Query/Pool"
-	Query_Pools_FullMethodName            = "/sunrise.liquiditypool.Query/Pools"
-	Query_Position_FullMethodName         = "/sunrise.liquiditypool.Query/Position"
-	Query_Positions_FullMethodName        = "/sunrise.liquiditypool.Query/Positions"
-	Query_PoolPositions_FullMethodName    = "/sunrise.liquiditypool.Query/PoolPositions"
-	Query_AddressPositions_FullMethodName = "/sunrise.liquiditypool.Query/AddressPositions"
-	Query_PositionFees_FullMethodName     = "/sunrise.liquiditypool.Query/PositionFees"
+	Query_Params_FullMethodName                       = "/sunrise.liquiditypool.Query/Params"
+	Query_Pool_FullMethodName                         = "/sunrise.liquiditypool.Query/Pool"
+	Query_Pools_FullMethodName                        = "/sunrise.liquiditypool.Query/Pools"
+	Query_Position_FullMethodName                     = "/sunrise.liquiditypool.Query/Position"
+	Query_Positions_FullMethodName                    = "/sunrise.liquiditypool.Query/Positions"
+	Query_PoolPositions_FullMethodName                = "/sunrise.liquiditypool.Query/PoolPositions"
+	Query_AddressPositions_FullMethodName             = "/sunrise.liquiditypool.Query/AddressPositions"
+	Query_PositionFees_FullMethodName                 = "/sunrise.liquiditypool.Query/PositionFees"
+	Query_CalculationIncreaseLiquidity_FullMethodName = "/sunrise.liquiditypool.Query/CalculationIncreaseLiquidity"
 )
 
 // QueryClient is the client API for Query service.
@@ -45,6 +46,7 @@ type QueryClient interface {
 	AddressPositions(ctx context.Context, in *QueryAddressPositionsRequest, opts ...grpc.CallOption) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(ctx context.Context, in *QueryPositionFeesRequest, opts ...grpc.CallOption) (*QueryPositionFeesResponse, error)
+	CalculationIncreaseLiquidity(ctx context.Context, in *QueryCalculationIncreaseLiquidityRequest, opts ...grpc.CallOption) (*QueryCalculationIncreaseLiquidityResponse, error)
 }
 
 type queryClient struct {
@@ -127,6 +129,15 @@ func (c *queryClient) PositionFees(ctx context.Context, in *QueryPositionFeesReq
 	return out, nil
 }
 
+func (c *queryClient) CalculationIncreaseLiquidity(ctx context.Context, in *QueryCalculationIncreaseLiquidityRequest, opts ...grpc.CallOption) (*QueryCalculationIncreaseLiquidityResponse, error) {
+	out := new(QueryCalculationIncreaseLiquidityResponse)
+	err := c.cc.Invoke(ctx, Query_CalculationIncreaseLiquidity_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -143,6 +154,7 @@ type QueryServer interface {
 	AddressPositions(context.Context, *QueryAddressPositionsRequest) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error)
+	CalculationIncreaseLiquidity(context.Context, *QueryCalculationIncreaseLiquidityRequest) (*QueryCalculationIncreaseLiquidityResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -173,6 +185,9 @@ func (UnimplementedQueryServer) AddressPositions(context.Context, *QueryAddressP
 }
 func (UnimplementedQueryServer) PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PositionFees not implemented")
+}
+func (UnimplementedQueryServer) CalculationIncreaseLiquidity(context.Context, *QueryCalculationIncreaseLiquidityRequest) (*QueryCalculationIncreaseLiquidityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculationIncreaseLiquidity not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -331,6 +346,24 @@ func _Query_PositionFees_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_CalculationIncreaseLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculationIncreaseLiquidityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CalculationIncreaseLiquidity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CalculationIncreaseLiquidity_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CalculationIncreaseLiquidity(ctx, req.(*QueryCalculationIncreaseLiquidityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -369,6 +402,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PositionFees",
 			Handler:    _Query_PositionFees_Handler,
+		},
+		{
+			MethodName: "CalculationIncreaseLiquidity",
+			Handler:    _Query_CalculationIncreaseLiquidity_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

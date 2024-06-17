@@ -753,9 +753,9 @@ var (
 
 	pattern_Query_OutgoingInFlightPackets_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "in_flight_packets", "outgoing"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculationSwapExactAmountIn_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "calculate", "swap_exact_amount_in"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculationSwapExactAmountIn_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "calculations", "swap_exact_amount_in"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculationSwapExactAmountOut_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "calculate", "swap_exact_amount_out"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculationSwapExactAmountOut_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "calculations", "swap_exact_amount_out"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

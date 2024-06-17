@@ -55,6 +55,13 @@ service Query {
     option (google.api.http).get =
       "/sunrise/liquiditypool/positions/{id}/fees";
   }
+
+  // 
+  rpc CalculationIncreaseLiquidity (QueryCalculationIncreaseLiquidityRequest) 
+      returns (QueryCalculationIncreaseLiquidityResponse) {
+    option (google.api.http).get =
+      "/sunrise/liquiditypool/positions/{id}/calculations/increase_liquidity";
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -119,6 +126,17 @@ message QueryPositionFeesRequest { uint64 id = 1; }
 message QueryPositionFeesResponse {
   repeated cosmos.base.v1beta1.Coin fees = 1 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryCalculationIncreaseLiquidityRequest { 
+  uint64 id = 1;
+  string amount_in = 2;
+  string denom_in = 3;
+}
+message QueryCalculationIncreaseLiquidityResponse {
+  cosmos.base.v1beta1.Coin token_required = 1 [
     (gogoproto.nullable) = false
   ];
 }
