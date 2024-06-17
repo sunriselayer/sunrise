@@ -45,11 +45,11 @@ func (k Keeper) CalculationIncreaseLiquidity(ctx context.Context, req *types.Que
 	amountInDec := math.LegacyNewDecFromInt(amountIn)
 	if req.DenomIn == pool.DenomBase {
 		return &types.QueryCalculationIncreaseLiquidityResponse{
-			TokenRequired: sdk.NewCoin(pool.DenomQuote, amountInDec.Mul(actualAmountBase).Quo(actualAmountQuote).TruncateInt()),
+			TokenRequired: sdk.NewCoin(pool.DenomQuote, amountInDec.Mul(actualAmountQuote).Quo(actualAmountBase).TruncateInt()),
 		}, nil
 	} else if req.DenomIn == pool.DenomQuote {
 		return &types.QueryCalculationIncreaseLiquidityResponse{
-			TokenRequired: sdk.NewCoin(pool.DenomBase, amountInDec.Mul(actualAmountQuote).Quo(actualAmountBase).TruncateInt()),
+			TokenRequired: sdk.NewCoin(pool.DenomBase, amountInDec.Mul(actualAmountBase).Quo(actualAmountQuote).TruncateInt()),
 		}, nil
 	} else {
 		return nil, types.ErrInvalidInDenom
