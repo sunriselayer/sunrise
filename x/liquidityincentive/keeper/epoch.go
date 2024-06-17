@@ -85,7 +85,7 @@ func (k Keeper) RemoveEpoch(ctx context.Context, id uint64) {
 func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+	iterator := storetypes.KVStoreReversePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 

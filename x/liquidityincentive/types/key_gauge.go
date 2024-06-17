@@ -24,7 +24,7 @@ func GaugeKeyPrefixByPreviousEpochId(previousEpochId uint64) []byte {
 
 // GaugeKey returns the store key to retrieve a Gauge from the index fields
 func GaugeKey(previousEpochId uint64, poolId uint64) []byte {
-	var key []byte
+	key := GaugeKeyPrefixByPreviousEpochId(previousEpochId)
 
 	poolIdBytes := make([]byte, 8)
 	binary.BigEndian.PutUint64(poolIdBytes, poolId)
