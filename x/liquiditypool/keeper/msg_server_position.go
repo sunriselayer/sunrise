@@ -225,7 +225,9 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 	if err := k.bankKeeper.IsSendEnabledCoins(ctx, coins...); err != nil {
 		return math.Int{}, math.Int{}, err
 	}
-	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
+
+	// refund the liquidity to the sender
+	err = k.bankKeeper.SendCoins(ctx, pool.GetAddress(), sender, coins)
 	if err != nil {
 		return math.Int{}, math.Int{}, err
 	}
