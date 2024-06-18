@@ -109,6 +109,9 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 	// Transfer amounts to the pool
 	coins := sdk.Coins{sdk.NewCoin(msg.TokenBase.Denom, amountBase)}
 	coins = coins.Add(sdk.NewCoin(msg.TokenQuote.Denom, amountQuote))
+	if err := k.bankKeeper.IsSendEnabledCoins(ctx, coins...); err != nil {
+		return nil, err
+	}
 	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
 	if err != nil {
 		return nil, err
@@ -219,6 +222,10 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 
 	coins := sdk.Coins{sdk.NewCoin(pool.DenomBase, amountBase.Abs())}
 	coins = coins.Add(sdk.NewCoin(pool.DenomQuote, amountQuote.Abs()))
+	if err := k.bankKeeper.IsSendEnabledCoins(ctx, coins...); err != nil {
+		return math.Int{}, math.Int{}, err
+	}
+
 	// refund the liquidity to the sender
 	err = k.bankKeeper.SendCoins(ctx, pool.GetAddress(), sender, coins)
 	if err != nil {

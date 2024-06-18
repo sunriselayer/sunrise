@@ -27,10 +27,6 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgVoteGauge int = 100
 
-	opWeightMsgCollectIncentiveRewards = "op_weight_msg_collect_incentive_rewards"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgCollectIncentiveRewards int = 100
-
 	opWeightMsgCollectVoteRewards = "op_weight_msg_collect_vote_rewards"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgCollectVoteRewards int = 100
@@ -69,17 +65,6 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		liquidityincentivesimulation.SimulateMsgVoteGauge(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgCollectIncentiveRewards int
-	simState.AppParams.GetOrGenerate(opWeightMsgCollectIncentiveRewards, &weightMsgCollectIncentiveRewards, nil,
-		func(_ *rand.Rand) {
-			weightMsgCollectIncentiveRewards = defaultWeightMsgCollectIncentiveRewards
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgCollectIncentiveRewards,
-		liquidityincentivesimulation.SimulateMsgCollectIncentiveRewards(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
 	var weightMsgCollectVoteRewards int
 	simState.AppParams.GetOrGenerate(opWeightMsgCollectVoteRewards, &weightMsgCollectVoteRewards, nil,
 		func(_ *rand.Rand) {
@@ -104,14 +89,6 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			defaultWeightMsgVoteGauge,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
 				liquidityincentivesimulation.SimulateMsgVoteGauge(am.accountKeeper, am.bankKeeper, am.keeper)
-				return nil
-			},
-		),
-		simulation.NewWeightedProposalMsg(
-			opWeightMsgCollectIncentiveRewards,
-			defaultWeightMsgCollectIncentiveRewards,
-			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquidityincentivesimulation.SimulateMsgCollectIncentiveRewards(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

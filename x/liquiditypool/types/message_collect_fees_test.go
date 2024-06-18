@@ -11,12 +11,12 @@ import (
 func TestMsgCollectFees_ValidateBasic(t *testing.T) {
 	tests := []struct {
 		name string
-		msg  MsgCollectFees
+		msg  MsgClaimRewards
 		err  error
 	}{
 		{
 			name: "invalid address",
-			msg: MsgCollectFees{
+			msg: MsgClaimRewards{
 				Sender:      "invalid_address",
 				PositionIds: []uint64{1},
 			},
@@ -24,7 +24,7 @@ func TestMsgCollectFees_ValidateBasic(t *testing.T) {
 		},
 		{
 			name: "valid address",
-			msg: MsgCollectFees{
+			msg: MsgClaimRewards{
 				Sender:      sample.AccAddress(),
 				PositionIds: []uint64{1},
 			},

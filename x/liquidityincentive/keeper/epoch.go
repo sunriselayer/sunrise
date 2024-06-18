@@ -37,10 +37,7 @@ func (k Keeper) SetEpochCount(ctx context.Context, count uint64) {
 }
 
 // AppendEpoch appends a epoch in the store with a new id and update the count
-func (k Keeper) AppendEpoch(
-	ctx context.Context,
-	epoch types.Epoch,
-) uint64 {
+func (k Keeper) AppendEpoch(ctx context.Context, epoch types.Epoch) uint64 {
 	// Create the epoch
 	count := k.GetEpochCount(ctx)
 
@@ -83,6 +80,21 @@ func (k Keeper) RemoveEpoch(ctx context.Context, id uint64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
 	store.Delete(GetEpochIDBytes(id))
+}
+
+func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
+	iterator := storetypes.KVStoreReversePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		k.cdc.MustUnmarshal(iterator.Value(), &epoch)
+		return epoch, true
+	}
+
+	return types.Epoch{}, false
 }
 
 // GetAllEpoch returns all epoch

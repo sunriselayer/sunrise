@@ -24,8 +24,7 @@ const (
 	Msg_CreatePosition_FullMethodName    = "/sunrise.liquiditypool.Msg/CreatePosition"
 	Msg_IncreaseLiquidity_FullMethodName = "/sunrise.liquiditypool.Msg/IncreaseLiquidity"
 	Msg_DecreaseLiquidity_FullMethodName = "/sunrise.liquiditypool.Msg/DecreaseLiquidity"
-	Msg_CollectFees_FullMethodName       = "/sunrise.liquiditypool.Msg/CollectFees"
-	Msg_CollectIncentives_FullMethodName = "/sunrise.liquiditypool.Msg/CollectIncentives"
+	Msg_ClaimRewards_FullMethodName      = "/sunrise.liquiditypool.Msg/ClaimRewards"
 )
 
 // MsgClient is the client API for Msg service.
@@ -39,8 +38,7 @@ type MsgClient interface {
 	CreatePosition(ctx context.Context, in *MsgCreatePosition, opts ...grpc.CallOption) (*MsgCreatePositionResponse, error)
 	IncreaseLiquidity(ctx context.Context, in *MsgIncreaseLiquidity, opts ...grpc.CallOption) (*MsgIncreaseLiquidityResponse, error)
 	DecreaseLiquidity(ctx context.Context, in *MsgDecreaseLiquidity, opts ...grpc.CallOption) (*MsgDecreaseLiquidityResponse, error)
-	CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error)
-	CollectIncentives(ctx context.Context, in *MsgCollectIncentives, opts ...grpc.CallOption) (*MsgCollectIncentivesResponse, error)
+	ClaimRewards(ctx context.Context, in *MsgClaimRewards, opts ...grpc.CallOption) (*MsgClaimRewardsResponse, error)
 }
 
 type msgClient struct {
@@ -96,18 +94,9 @@ func (c *msgClient) DecreaseLiquidity(ctx context.Context, in *MsgDecreaseLiquid
 	return out, nil
 }
 
-func (c *msgClient) CollectFees(ctx context.Context, in *MsgCollectFees, opts ...grpc.CallOption) (*MsgCollectFeesResponse, error) {
-	out := new(MsgCollectFeesResponse)
-	err := c.cc.Invoke(ctx, Msg_CollectFees_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) CollectIncentives(ctx context.Context, in *MsgCollectIncentives, opts ...grpc.CallOption) (*MsgCollectIncentivesResponse, error) {
-	out := new(MsgCollectIncentivesResponse)
-	err := c.cc.Invoke(ctx, Msg_CollectIncentives_FullMethodName, in, out, opts...)
+func (c *msgClient) ClaimRewards(ctx context.Context, in *MsgClaimRewards, opts ...grpc.CallOption) (*MsgClaimRewardsResponse, error) {
+	out := new(MsgClaimRewardsResponse)
+	err := c.cc.Invoke(ctx, Msg_ClaimRewards_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +114,7 @@ type MsgServer interface {
 	CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error)
 	IncreaseLiquidity(context.Context, *MsgIncreaseLiquidity) (*MsgIncreaseLiquidityResponse, error)
 	DecreaseLiquidity(context.Context, *MsgDecreaseLiquidity) (*MsgDecreaseLiquidityResponse, error)
-	CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error)
-	CollectIncentives(context.Context, *MsgCollectIncentives) (*MsgCollectIncentivesResponse, error)
+	ClaimRewards(context.Context, *MsgClaimRewards) (*MsgClaimRewardsResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -149,11 +137,8 @@ func (UnimplementedMsgServer) IncreaseLiquidity(context.Context, *MsgIncreaseLiq
 func (UnimplementedMsgServer) DecreaseLiquidity(context.Context, *MsgDecreaseLiquidity) (*MsgDecreaseLiquidityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecreaseLiquidity not implemented")
 }
-func (UnimplementedMsgServer) CollectFees(context.Context, *MsgCollectFees) (*MsgCollectFeesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CollectFees not implemented")
-}
-func (UnimplementedMsgServer) CollectIncentives(context.Context, *MsgCollectIncentives) (*MsgCollectIncentivesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CollectIncentives not implemented")
+func (UnimplementedMsgServer) ClaimRewards(context.Context, *MsgClaimRewards) (*MsgClaimRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ClaimRewards not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -258,38 +243,20 @@ func _Msg_DecreaseLiquidity_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_CollectFees_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCollectFees)
+func _Msg_ClaimRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgClaimRewards)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).CollectFees(ctx, in)
+		return srv.(MsgServer).ClaimRewards(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_CollectFees_FullMethodName,
+		FullMethod: Msg_ClaimRewards_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CollectFees(ctx, req.(*MsgCollectFees))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_CollectIncentives_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCollectIncentives)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).CollectIncentives(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_CollectIncentives_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CollectIncentives(ctx, req.(*MsgCollectIncentives))
+		return srv.(MsgServer).ClaimRewards(ctx, req.(*MsgClaimRewards))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -322,12 +289,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_DecreaseLiquidity_Handler,
 		},
 		{
-			MethodName: "CollectFees",
-			Handler:    _Msg_CollectFees_Handler,
-		},
-		{
-			MethodName: "CollectIncentives",
-			Handler:    _Msg_CollectIncentives_Handler,
+			MethodName: "ClaimRewards",
+			Handler:    _Msg_ClaimRewards_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

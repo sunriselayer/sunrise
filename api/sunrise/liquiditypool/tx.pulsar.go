@@ -5686,74 +5686,74 @@ func (x *fastReflection_MsgDecreaseLiquidityResponse) ProtoMethods() *protoiface
 	}
 }
 
-var _ protoreflect.List = (*_MsgCollectFees_2_list)(nil)
+var _ protoreflect.List = (*_MsgClaimRewards_2_list)(nil)
 
-type _MsgCollectFees_2_list struct {
+type _MsgClaimRewards_2_list struct {
 	list *[]uint64
 }
 
-func (x *_MsgCollectFees_2_list) Len() int {
+func (x *_MsgClaimRewards_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgCollectFees_2_list) Get(i int) protoreflect.Value {
+func (x *_MsgClaimRewards_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfUint64((*x.list)[i])
 }
 
-func (x *_MsgCollectFees_2_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgClaimRewards_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgCollectFees_2_list) Append(value protoreflect.Value) {
+func (x *_MsgClaimRewards_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgCollectFees_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgCollectFees at list field PositionIds as it is not of Message kind"))
+func (x *_MsgClaimRewards_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message MsgClaimRewards at list field PositionIds as it is not of Message kind"))
 }
 
-func (x *_MsgCollectFees_2_list) Truncate(n int) {
+func (x *_MsgClaimRewards_2_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgCollectFees_2_list) NewElement() protoreflect.Value {
+func (x *_MsgClaimRewards_2_list) NewElement() protoreflect.Value {
 	v := uint64(0)
 	return protoreflect.ValueOfUint64(v)
 }
 
-func (x *_MsgCollectFees_2_list) IsValid() bool {
+func (x *_MsgClaimRewards_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgCollectFees              protoreflect.MessageDescriptor
-	fd_MsgCollectFees_sender       protoreflect.FieldDescriptor
-	fd_MsgCollectFees_position_ids protoreflect.FieldDescriptor
+	md_MsgClaimRewards              protoreflect.MessageDescriptor
+	fd_MsgClaimRewards_sender       protoreflect.FieldDescriptor
+	fd_MsgClaimRewards_position_ids protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgCollectFees = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectFees")
-	fd_MsgCollectFees_sender = md_MsgCollectFees.Fields().ByName("sender")
-	fd_MsgCollectFees_position_ids = md_MsgCollectFees.Fields().ByName("position_ids")
+	md_MsgClaimRewards = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgClaimRewards")
+	fd_MsgClaimRewards_sender = md_MsgClaimRewards.Fields().ByName("sender")
+	fd_MsgClaimRewards_position_ids = md_MsgClaimRewards.Fields().ByName("position_ids")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgCollectFees)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgClaimRewards)(nil)
 
-type fastReflection_MsgCollectFees MsgCollectFees
+type fastReflection_MsgClaimRewards MsgClaimRewards
 
-func (x *MsgCollectFees) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCollectFees)(x)
+func (x *MsgClaimRewards) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgClaimRewards)(x)
 }
 
-func (x *MsgCollectFees) slowProtoReflect() protoreflect.Message {
+func (x *MsgClaimRewards) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5765,43 +5765,43 @@ func (x *MsgCollectFees) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgCollectFees_messageType fastReflection_MsgCollectFees_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCollectFees_messageType{}
+var _fastReflection_MsgClaimRewards_messageType fastReflection_MsgClaimRewards_messageType
+var _ protoreflect.MessageType = fastReflection_MsgClaimRewards_messageType{}
 
-type fastReflection_MsgCollectFees_messageType struct{}
+type fastReflection_MsgClaimRewards_messageType struct{}
 
-func (x fastReflection_MsgCollectFees_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCollectFees)(nil)
+func (x fastReflection_MsgClaimRewards_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgClaimRewards)(nil)
 }
-func (x fastReflection_MsgCollectFees_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectFees)
+func (x fastReflection_MsgClaimRewards_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgClaimRewards)
 }
-func (x fastReflection_MsgCollectFees_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectFees
+func (x fastReflection_MsgClaimRewards_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgClaimRewards
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgCollectFees) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectFees
+func (x *fastReflection_MsgClaimRewards) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgClaimRewards
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCollectFees) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCollectFees_messageType
+func (x *fastReflection_MsgClaimRewards) Type() protoreflect.MessageType {
+	return _fastReflection_MsgClaimRewards_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCollectFees) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectFees)
+func (x *fastReflection_MsgClaimRewards) New() protoreflect.Message {
+	return new(fastReflection_MsgClaimRewards)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCollectFees) Interface() protoreflect.ProtoMessage {
-	return (*MsgCollectFees)(x)
+func (x *fastReflection_MsgClaimRewards) Interface() protoreflect.ProtoMessage {
+	return (*MsgClaimRewards)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5809,16 +5809,16 @@ func (x *fastReflection_MsgCollectFees) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgCollectFees) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgClaimRewards) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgCollectFees_sender, value) {
+		if !f(fd_MsgClaimRewards_sender, value) {
 			return
 		}
 	}
 	if len(x.PositionIds) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCollectFees_2_list{list: &x.PositionIds})
-		if !f(fd_MsgCollectFees_position_ids, value) {
+		value := protoreflect.ValueOfList(&_MsgClaimRewards_2_list{list: &x.PositionIds})
+		if !f(fd_MsgClaimRewards_position_ids, value) {
 			return
 		}
 	}
@@ -5835,17 +5835,17 @@ func (x *fastReflection_MsgCollectFees) Range(f func(protoreflect.FieldDescripto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCollectFees) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgClaimRewards) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFees.sender":
+	case "sunrise.liquiditypool.MsgClaimRewards.sender":
 		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+	case "sunrise.liquiditypool.MsgClaimRewards.position_ids":
 		return len(x.PositionIds) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewards"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewards does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5855,17 +5855,17 @@ func (x *fastReflection_MsgCollectFees) Has(fd protoreflect.FieldDescriptor) boo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFees) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgClaimRewards) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFees.sender":
+	case "sunrise.liquiditypool.MsgClaimRewards.sender":
 		x.Sender = ""
-	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+	case "sunrise.liquiditypool.MsgClaimRewards.position_ids":
 		x.PositionIds = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewards"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewards does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5875,22 +5875,22 @@ func (x *fastReflection_MsgCollectFees) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCollectFees) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgClaimRewards) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFees.sender":
+	case "sunrise.liquiditypool.MsgClaimRewards.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+	case "sunrise.liquiditypool.MsgClaimRewards.position_ids":
 		if len(x.PositionIds) == 0 {
-			return protoreflect.ValueOfList(&_MsgCollectFees_2_list{})
+			return protoreflect.ValueOfList(&_MsgClaimRewards_2_list{})
 		}
-		listValue := &_MsgCollectFees_2_list{list: &x.PositionIds}
+		listValue := &_MsgClaimRewards_2_list{list: &x.PositionIds}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewards"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFees does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewards does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5904,19 +5904,19 @@ func (x *fastReflection_MsgCollectFees) Get(descriptor protoreflect.FieldDescrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFees) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgClaimRewards) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFees.sender":
+	case "sunrise.liquiditypool.MsgClaimRewards.sender":
 		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+	case "sunrise.liquiditypool.MsgClaimRewards.position_ids":
 		lv := value.List()
-		clv := lv.(*_MsgCollectFees_2_list)
+		clv := lv.(*_MsgClaimRewards_2_list)
 		x.PositionIds = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewards"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewards does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5930,49 +5930,49 @@ func (x *fastReflection_MsgCollectFees) Set(fd protoreflect.FieldDescriptor, val
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFees) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgClaimRewards) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+	case "sunrise.liquiditypool.MsgClaimRewards.position_ids":
 		if x.PositionIds == nil {
 			x.PositionIds = []uint64{}
 		}
-		value := &_MsgCollectFees_2_list{list: &x.PositionIds}
+		value := &_MsgClaimRewards_2_list{list: &x.PositionIds}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.liquiditypool.MsgCollectFees.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCollectFees is not mutable"))
+	case "sunrise.liquiditypool.MsgClaimRewards.sender":
+		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgClaimRewards is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewards"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewards does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCollectFees) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgClaimRewards) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFees.sender":
+	case "sunrise.liquiditypool.MsgClaimRewards.sender":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgCollectFees.position_ids":
+	case "sunrise.liquiditypool.MsgClaimRewards.position_ids":
 		list := []uint64{}
-		return protoreflect.ValueOfList(&_MsgCollectFees_2_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgClaimRewards_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewards"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewards does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCollectFees) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgClaimRewards) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgCollectFees", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgClaimRewards", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -5980,7 +5980,7 @@ func (x *fastReflection_MsgCollectFees) WhichOneof(d protoreflect.OneofDescripto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCollectFees) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgClaimRewards) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -5991,7 +5991,7 @@ func (x *fastReflection_MsgCollectFees) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFees) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgClaimRewards) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6003,7 +6003,7 @@ func (x *fastReflection_MsgCollectFees) SetUnknown(fields protoreflect.RawFields
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCollectFees) IsValid() bool {
+func (x *fastReflection_MsgClaimRewards) IsValid() bool {
 	return x != nil
 }
 
@@ -6013,9 +6013,9 @@ func (x *fastReflection_MsgCollectFees) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgClaimRewards) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCollectFees)
+		x := input.Message.Interface().(*MsgClaimRewards)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6048,7 +6048,7 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectFees)
+		x := input.Message.Interface().(*MsgClaimRewards)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6105,7 +6105,7 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectFees)
+		x := input.Message.Interface().(*MsgClaimRewards)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6137,10 +6137,10 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectFees: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgClaimRewards: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectFees: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgClaimRewards: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6286,77 +6286,77 @@ func (x *fastReflection_MsgCollectFees) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_MsgCollectFeesResponse_1_list)(nil)
+var _ protoreflect.List = (*_MsgClaimRewardsResponse_1_list)(nil)
 
-type _MsgCollectFeesResponse_1_list struct {
+type _MsgClaimRewardsResponse_1_list struct {
 	list *[]*v1beta1.Coin
 }
 
-func (x *_MsgCollectFeesResponse_1_list) Len() int {
+func (x *_MsgClaimRewardsResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgCollectFeesResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_MsgClaimRewardsResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_MsgCollectFeesResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgClaimRewardsResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgCollectFeesResponse_1_list) Append(value protoreflect.Value) {
+func (x *_MsgClaimRewardsResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgCollectFeesResponse_1_list) AppendMutable() protoreflect.Value {
+func (x *_MsgClaimRewardsResponse_1_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_MsgCollectFeesResponse_1_list) Truncate(n int) {
+func (x *_MsgClaimRewardsResponse_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgCollectFeesResponse_1_list) NewElement() protoreflect.Value {
+func (x *_MsgClaimRewardsResponse_1_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_MsgCollectFeesResponse_1_list) IsValid() bool {
+func (x *_MsgClaimRewardsResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgCollectFeesResponse                protoreflect.MessageDescriptor
-	fd_MsgCollectFeesResponse_collected_fees protoreflect.FieldDescriptor
+	md_MsgClaimRewardsResponse                protoreflect.MessageDescriptor
+	fd_MsgClaimRewardsResponse_collected_fees protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgCollectFeesResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectFeesResponse")
-	fd_MsgCollectFeesResponse_collected_fees = md_MsgCollectFeesResponse.Fields().ByName("collected_fees")
+	md_MsgClaimRewardsResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgClaimRewardsResponse")
+	fd_MsgClaimRewardsResponse_collected_fees = md_MsgClaimRewardsResponse.Fields().ByName("collected_fees")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgCollectFeesResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgClaimRewardsResponse)(nil)
 
-type fastReflection_MsgCollectFeesResponse MsgCollectFeesResponse
+type fastReflection_MsgClaimRewardsResponse MsgClaimRewardsResponse
 
-func (x *MsgCollectFeesResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCollectFeesResponse)(x)
+func (x *MsgClaimRewardsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgClaimRewardsResponse)(x)
 }
 
-func (x *MsgCollectFeesResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgClaimRewardsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -6368,43 +6368,43 @@ func (x *MsgCollectFeesResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgCollectFeesResponse_messageType fastReflection_MsgCollectFeesResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCollectFeesResponse_messageType{}
+var _fastReflection_MsgClaimRewardsResponse_messageType fastReflection_MsgClaimRewardsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgClaimRewardsResponse_messageType{}
 
-type fastReflection_MsgCollectFeesResponse_messageType struct{}
+type fastReflection_MsgClaimRewardsResponse_messageType struct{}
 
-func (x fastReflection_MsgCollectFeesResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCollectFeesResponse)(nil)
+func (x fastReflection_MsgClaimRewardsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgClaimRewardsResponse)(nil)
 }
-func (x fastReflection_MsgCollectFeesResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectFeesResponse)
+func (x fastReflection_MsgClaimRewardsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgClaimRewardsResponse)
 }
-func (x fastReflection_MsgCollectFeesResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectFeesResponse
+func (x fastReflection_MsgClaimRewardsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgClaimRewardsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgCollectFeesResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectFeesResponse
+func (x *fastReflection_MsgClaimRewardsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgClaimRewardsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCollectFeesResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCollectFeesResponse_messageType
+func (x *fastReflection_MsgClaimRewardsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgClaimRewardsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCollectFeesResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectFeesResponse)
+func (x *fastReflection_MsgClaimRewardsResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgClaimRewardsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCollectFeesResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgCollectFeesResponse)(x)
+func (x *fastReflection_MsgClaimRewardsResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgClaimRewardsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -6412,10 +6412,10 @@ func (x *fastReflection_MsgCollectFeesResponse) Interface() protoreflect.ProtoMe
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgCollectFeesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgClaimRewardsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.CollectedFees) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCollectFeesResponse_1_list{list: &x.CollectedFees})
-		if !f(fd_MsgCollectFeesResponse_collected_fees, value) {
+		value := protoreflect.ValueOfList(&_MsgClaimRewardsResponse_1_list{list: &x.CollectedFees})
+		if !f(fd_MsgClaimRewardsResponse_collected_fees, value) {
 			return
 		}
 	}
@@ -6432,15 +6432,15 @@ func (x *fastReflection_MsgCollectFeesResponse) Range(f func(protoreflect.FieldD
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCollectFeesResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgClaimRewardsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+	case "sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees":
 		return len(x.CollectedFees) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewardsResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFeesResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewardsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6450,15 +6450,15 @@ func (x *fastReflection_MsgCollectFeesResponse) Has(fd protoreflect.FieldDescrip
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFeesResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgClaimRewardsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+	case "sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees":
 		x.CollectedFees = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewardsResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFeesResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewardsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6468,19 +6468,19 @@ func (x *fastReflection_MsgCollectFeesResponse) Clear(fd protoreflect.FieldDescr
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCollectFeesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgClaimRewardsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+	case "sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees":
 		if len(x.CollectedFees) == 0 {
-			return protoreflect.ValueOfList(&_MsgCollectFeesResponse_1_list{})
+			return protoreflect.ValueOfList(&_MsgClaimRewardsResponse_1_list{})
 		}
-		listValue := &_MsgCollectFeesResponse_1_list{list: &x.CollectedFees}
+		listValue := &_MsgClaimRewardsResponse_1_list{list: &x.CollectedFees}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewardsResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFeesResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewardsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -6494,17 +6494,17 @@ func (x *fastReflection_MsgCollectFeesResponse) Get(descriptor protoreflect.Fiel
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFeesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgClaimRewardsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+	case "sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees":
 		lv := value.List()
-		clv := lv.(*_MsgCollectFeesResponse_1_list)
+		clv := lv.(*_MsgClaimRewardsResponse_1_list)
 		x.CollectedFees = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewardsResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFeesResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewardsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6518,45 +6518,45 @@ func (x *fastReflection_MsgCollectFeesResponse) Set(fd protoreflect.FieldDescrip
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFeesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgClaimRewardsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+	case "sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees":
 		if x.CollectedFees == nil {
 			x.CollectedFees = []*v1beta1.Coin{}
 		}
-		value := &_MsgCollectFeesResponse_1_list{list: &x.CollectedFees}
+		value := &_MsgClaimRewardsResponse_1_list{list: &x.CollectedFees}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewardsResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFeesResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewardsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCollectFeesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgClaimRewardsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees":
+	case "sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees":
 		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_MsgCollectFeesResponse_1_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgClaimRewardsResponse_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectFeesResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgClaimRewardsResponse"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectFeesResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.MsgClaimRewardsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCollectFeesResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgClaimRewardsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgCollectFeesResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgClaimRewardsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6564,7 +6564,7 @@ func (x *fastReflection_MsgCollectFeesResponse) WhichOneof(d protoreflect.OneofD
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCollectFeesResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgClaimRewardsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6575,7 +6575,7 @@ func (x *fastReflection_MsgCollectFeesResponse) GetUnknown() protoreflect.RawFie
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectFeesResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgClaimRewardsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6587,7 +6587,7 @@ func (x *fastReflection_MsgCollectFeesResponse) SetUnknown(fields protoreflect.R
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCollectFeesResponse) IsValid() bool {
+func (x *fastReflection_MsgClaimRewardsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -6597,9 +6597,9 @@ func (x *fastReflection_MsgCollectFeesResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgClaimRewardsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCollectFeesResponse)
+		x := input.Message.Interface().(*MsgClaimRewardsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6627,7 +6627,7 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectFeesResponse)
+		x := input.Message.Interface().(*MsgClaimRewardsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6673,7 +6673,7 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectFeesResponse)
+		x := input.Message.Interface().(*MsgClaimRewardsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6705,10 +6705,10 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectFeesResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgClaimRewardsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectFeesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgClaimRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -6742,1100 +6742,6 @@ func (x *fastReflection_MsgCollectFeesResponse) ProtoMethods() *protoiface.Metho
 				}
 				x.CollectedFees = append(x.CollectedFees, &v1beta1.Coin{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CollectedFees[len(x.CollectedFees)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var _ protoreflect.List = (*_MsgCollectIncentives_2_list)(nil)
-
-type _MsgCollectIncentives_2_list struct {
-	list *[]uint64
-}
-
-func (x *_MsgCollectIncentives_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_MsgCollectIncentives_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfUint64((*x.list)[i])
-}
-
-func (x *_MsgCollectIncentives_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := valueUnwrapped
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_MsgCollectIncentives_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := valueUnwrapped
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_MsgCollectIncentives_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message MsgCollectIncentives at list field PositionIds as it is not of Message kind"))
-}
-
-func (x *_MsgCollectIncentives_2_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_MsgCollectIncentives_2_list) NewElement() protoreflect.Value {
-	v := uint64(0)
-	return protoreflect.ValueOfUint64(v)
-}
-
-func (x *_MsgCollectIncentives_2_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_MsgCollectIncentives              protoreflect.MessageDescriptor
-	fd_MsgCollectIncentives_sender       protoreflect.FieldDescriptor
-	fd_MsgCollectIncentives_position_ids protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgCollectIncentives = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectIncentives")
-	fd_MsgCollectIncentives_sender = md_MsgCollectIncentives.Fields().ByName("sender")
-	fd_MsgCollectIncentives_position_ids = md_MsgCollectIncentives.Fields().ByName("position_ids")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgCollectIncentives)(nil)
-
-type fastReflection_MsgCollectIncentives MsgCollectIncentives
-
-func (x *MsgCollectIncentives) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCollectIncentives)(x)
-}
-
-func (x *MsgCollectIncentives) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[12]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgCollectIncentives_messageType fastReflection_MsgCollectIncentives_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCollectIncentives_messageType{}
-
-type fastReflection_MsgCollectIncentives_messageType struct{}
-
-func (x fastReflection_MsgCollectIncentives_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCollectIncentives)(nil)
-}
-func (x fastReflection_MsgCollectIncentives_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectIncentives)
-}
-func (x fastReflection_MsgCollectIncentives_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectIncentives
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgCollectIncentives) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectIncentives
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCollectIncentives) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCollectIncentives_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCollectIncentives) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectIncentives)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCollectIncentives) Interface() protoreflect.ProtoMessage {
-	return (*MsgCollectIncentives)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgCollectIncentives) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Sender != "" {
-		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgCollectIncentives_sender, value) {
-			return
-		}
-	}
-	if len(x.PositionIds) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCollectIncentives_2_list{list: &x.PositionIds})
-		if !f(fd_MsgCollectIncentives_position_ids, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCollectIncentives) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
-		return x.Sender != ""
-	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
-		return len(x.PositionIds) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentives does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentives) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
-		x.Sender = ""
-	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
-		x.PositionIds = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentives does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCollectIncentives) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
-		value := x.Sender
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
-		if len(x.PositionIds) == 0 {
-			return protoreflect.ValueOfList(&_MsgCollectIncentives_2_list{})
-		}
-		listValue := &_MsgCollectIncentives_2_list{list: &x.PositionIds}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentives does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentives) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
-		x.Sender = value.Interface().(string)
-	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
-		lv := value.List()
-		clv := lv.(*_MsgCollectIncentives_2_list)
-		x.PositionIds = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentives does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentives) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
-		if x.PositionIds == nil {
-			x.PositionIds = []uint64{}
-		}
-		value := &_MsgCollectIncentives_2_list{list: &x.PositionIds}
-		return protoreflect.ValueOfList(value)
-	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
-		panic(fmt.Errorf("field sender of message sunrise.liquiditypool.MsgCollectIncentives is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentives does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCollectIncentives) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentives.sender":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.MsgCollectIncentives.position_ids":
-		list := []uint64{}
-		return protoreflect.ValueOfList(&_MsgCollectIncentives_2_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentives"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentives does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCollectIncentives) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgCollectIncentives", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCollectIncentives) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentives) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCollectIncentives) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCollectIncentives) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCollectIncentives)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.Sender)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if len(x.PositionIds) > 0 {
-			l = 0
-			for _, e := range x.PositionIds {
-				l += runtime.Sov(uint64(e))
-			}
-			n += 1 + runtime.Sov(uint64(l)) + l
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectIncentives)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.PositionIds) > 0 {
-			var pksize2 int
-			for _, num := range x.PositionIds {
-				pksize2 += runtime.Sov(uint64(num))
-			}
-			i -= pksize2
-			j1 := i
-			for _, num := range x.PositionIds {
-				for num >= 1<<7 {
-					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
-					num >>= 7
-					j1++
-				}
-				dAtA[j1] = uint8(num)
-				j1++
-			}
-			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
-			i--
-			dAtA[i] = 0x12
-		}
-		if len(x.Sender) > 0 {
-			i -= len(x.Sender)
-			copy(dAtA[i:], x.Sender)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectIncentives)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectIncentives: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectIncentives: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Sender = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType == 0 {
-					var v uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					x.PositionIds = append(x.PositionIds, v)
-				} else if wireType == 2 {
-					var packedLen int
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						packedLen |= int(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					if packedLen < 0 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-					}
-					postIndex := iNdEx + packedLen
-					if postIndex < 0 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-					}
-					if postIndex > l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					var elementCount int
-					var count int
-					for _, integer := range dAtA[iNdEx:postIndex] {
-						if integer < 128 {
-							count++
-						}
-					}
-					elementCount = count
-					if elementCount != 0 && len(x.PositionIds) == 0 {
-						x.PositionIds = make([]uint64, 0, elementCount)
-					}
-					for iNdEx < postIndex {
-						var v uint64
-						for shift := uint(0); ; shift += 7 {
-							if shift >= 64 {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-							}
-							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-							}
-							b := dAtA[iNdEx]
-							iNdEx++
-							v |= uint64(b&0x7F) << shift
-							if b < 0x80 {
-								break
-							}
-						}
-						x.PositionIds = append(x.PositionIds, v)
-					}
-				} else {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PositionIds", wireType)
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var _ protoreflect.List = (*_MsgCollectIncentivesResponse_1_list)(nil)
-
-type _MsgCollectIncentivesResponse_1_list struct {
-	list *[]*v1beta1.Coin
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) AppendMutable() protoreflect.Value {
-	v := new(v1beta1.Coin)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) NewElement() protoreflect.Value {
-	v := new(v1beta1.Coin)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_MsgCollectIncentivesResponse_1_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_MsgCollectIncentivesResponse                      protoreflect.MessageDescriptor
-	fd_MsgCollectIncentivesResponse_collected_incentives protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_tx_proto_init()
-	md_MsgCollectIncentivesResponse = File_sunrise_liquiditypool_tx_proto.Messages().ByName("MsgCollectIncentivesResponse")
-	fd_MsgCollectIncentivesResponse_collected_incentives = md_MsgCollectIncentivesResponse.Fields().ByName("collected_incentives")
-}
-
-var _ protoreflect.Message = (*fastReflection_MsgCollectIncentivesResponse)(nil)
-
-type fastReflection_MsgCollectIncentivesResponse MsgCollectIncentivesResponse
-
-func (x *MsgCollectIncentivesResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgCollectIncentivesResponse)(x)
-}
-
-func (x *MsgCollectIncentivesResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[13]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_MsgCollectIncentivesResponse_messageType fastReflection_MsgCollectIncentivesResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgCollectIncentivesResponse_messageType{}
-
-type fastReflection_MsgCollectIncentivesResponse_messageType struct{}
-
-func (x fastReflection_MsgCollectIncentivesResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgCollectIncentivesResponse)(nil)
-}
-func (x fastReflection_MsgCollectIncentivesResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectIncentivesResponse)
-}
-func (x fastReflection_MsgCollectIncentivesResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectIncentivesResponse
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_MsgCollectIncentivesResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgCollectIncentivesResponse
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgCollectIncentivesResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgCollectIncentivesResponse_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgCollectIncentivesResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgCollectIncentivesResponse)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgCollectIncentivesResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgCollectIncentivesResponse)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_MsgCollectIncentivesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.CollectedIncentives) != 0 {
-		value := protoreflect.ValueOfList(&_MsgCollectIncentivesResponse_1_list{list: &x.CollectedIncentives})
-		if !f(fd_MsgCollectIncentivesResponse_collected_incentives, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgCollectIncentivesResponse) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
-		return len(x.CollectedIncentives) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentivesResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentivesResponse) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
-		x.CollectedIncentives = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentivesResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgCollectIncentivesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
-		if len(x.CollectedIncentives) == 0 {
-			return protoreflect.ValueOfList(&_MsgCollectIncentivesResponse_1_list{})
-		}
-		listValue := &_MsgCollectIncentivesResponse_1_list{list: &x.CollectedIncentives}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentivesResponse does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentivesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
-		lv := value.List()
-		clv := lv.(*_MsgCollectIncentivesResponse_1_list)
-		x.CollectedIncentives = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentivesResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentivesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
-		if x.CollectedIncentives == nil {
-			x.CollectedIncentives = []*v1beta1.Coin{}
-		}
-		value := &_MsgCollectIncentivesResponse_1_list{list: &x.CollectedIncentives}
-		return protoreflect.ValueOfList(value)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentivesResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgCollectIncentivesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives":
-		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_MsgCollectIncentivesResponse_1_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.MsgCollectIncentivesResponse"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.MsgCollectIncentivesResponse does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgCollectIncentivesResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.MsgCollectIncentivesResponse", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgCollectIncentivesResponse) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgCollectIncentivesResponse) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_MsgCollectIncentivesResponse) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgCollectIncentivesResponse) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgCollectIncentivesResponse)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if len(x.CollectedIncentives) > 0 {
-			for _, e := range x.CollectedIncentives {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectIncentivesResponse)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.CollectedIncentives) > 0 {
-			for iNdEx := len(x.CollectedIncentives) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.CollectedIncentives[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0xa
-			}
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgCollectIncentivesResponse)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectIncentivesResponse: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCollectIncentivesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollectedIncentives", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.CollectedIncentives = append(x.CollectedIncentives, &v1beta1.Coin{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CollectedIncentives[len(x.CollectedIncentives)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -8436,7 +7342,7 @@ func (x *MsgDecreaseLiquidityResponse) GetAmountQuote() string {
 	return ""
 }
 
-type MsgCollectFees struct {
+type MsgClaimRewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -8445,8 +7351,8 @@ type MsgCollectFees struct {
 	PositionIds []uint64 `protobuf:"varint,2,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`
 }
 
-func (x *MsgCollectFees) Reset() {
-	*x = MsgCollectFees{}
+func (x *MsgClaimRewards) Reset() {
+	*x = MsgClaimRewards{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -8454,32 +7360,32 @@ func (x *MsgCollectFees) Reset() {
 	}
 }
 
-func (x *MsgCollectFees) String() string {
+func (x *MsgClaimRewards) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgCollectFees) ProtoMessage() {}
+func (*MsgClaimRewards) ProtoMessage() {}
 
-// Deprecated: Use MsgCollectFees.ProtoReflect.Descriptor instead.
-func (*MsgCollectFees) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgClaimRewards.ProtoReflect.Descriptor instead.
+func (*MsgClaimRewards) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *MsgCollectFees) GetSender() string {
+func (x *MsgClaimRewards) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgCollectFees) GetPositionIds() []uint64 {
+func (x *MsgClaimRewards) GetPositionIds() []uint64 {
 	if x != nil {
 		return x.PositionIds
 	}
 	return nil
 }
 
-type MsgCollectFeesResponse struct {
+type MsgClaimRewardsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -8487,8 +7393,8 @@ type MsgCollectFeesResponse struct {
 	CollectedFees []*v1beta1.Coin `protobuf:"bytes,1,rep,name=collected_fees,json=collectedFees,proto3" json:"collected_fees,omitempty"`
 }
 
-func (x *MsgCollectFeesResponse) Reset() {
-	*x = MsgCollectFeesResponse{}
+func (x *MsgClaimRewardsResponse) Reset() {
+	*x = MsgClaimRewardsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -8496,98 +7402,20 @@ func (x *MsgCollectFeesResponse) Reset() {
 	}
 }
 
-func (x *MsgCollectFeesResponse) String() string {
+func (x *MsgClaimRewardsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgCollectFeesResponse) ProtoMessage() {}
+func (*MsgClaimRewardsResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgCollectFeesResponse.ProtoReflect.Descriptor instead.
-func (*MsgCollectFeesResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgClaimRewardsResponse.ProtoReflect.Descriptor instead.
+func (*MsgClaimRewardsResponse) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *MsgCollectFeesResponse) GetCollectedFees() []*v1beta1.Coin {
+func (x *MsgClaimRewardsResponse) GetCollectedFees() []*v1beta1.Coin {
 	if x != nil {
 		return x.CollectedFees
-	}
-	return nil
-}
-
-type MsgCollectIncentives struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Sender      string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	PositionIds []uint64 `protobuf:"varint,2,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"`
-}
-
-func (x *MsgCollectIncentives) Reset() {
-	*x = MsgCollectIncentives{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[12]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgCollectIncentives) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgCollectIncentives) ProtoMessage() {}
-
-// Deprecated: Use MsgCollectIncentives.ProtoReflect.Descriptor instead.
-func (*MsgCollectIncentives) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *MsgCollectIncentives) GetSender() string {
-	if x != nil {
-		return x.Sender
-	}
-	return ""
-}
-
-func (x *MsgCollectIncentives) GetPositionIds() []uint64 {
-	if x != nil {
-		return x.PositionIds
-	}
-	return nil
-}
-
-type MsgCollectIncentivesResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	CollectedIncentives []*v1beta1.Coin `protobuf:"bytes,1,rep,name=collected_incentives,json=collectedIncentives,proto3" json:"collected_incentives,omitempty"`
-}
-
-func (x *MsgCollectIncentivesResponse) Reset() {
-	*x = MsgCollectIncentivesResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_tx_proto_msgTypes[13]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MsgCollectIncentivesResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MsgCollectIncentivesResponse) ProtoMessage() {}
-
-// Deprecated: Use MsgCollectIncentivesResponse.ProtoReflect.Descriptor instead.
-func (*MsgCollectIncentivesResponse) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_tx_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *MsgCollectIncentivesResponse) GetCollectedIncentives() []*v1beta1.Coin {
-	if x != nil {
-		return x.CollectedIncentives
 	}
 	return nil
 }
@@ -8755,102 +7583,78 @@ var file_sunrise_liquiditypool_tx_proto_rawDesc = []byte{
 	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e,
 	0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e,
 	0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x51, 0x75,
-	0x6f, 0x74, 0x65, 0x22, 0x72, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
-	0x74, 0x46, 0x65, 0x65, 0x73, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x0b, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a,
-	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x8c, 0x01, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x43,
-	0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x72, 0x0a, 0x0e, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f,
-	0x66, 0x65, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
-	0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65,
-	0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x0d, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74,
-	0x65, 0x64, 0x46, 0x65, 0x65, 0x73, 0x22, 0x78, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c,
-	0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x30,
-	0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18,
-	0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
-	0x12, 0x21, 0x0a, 0x0c, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x73,
-	0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
-	0x49, 0x64, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
-	0x22, 0x9e, 0x01, 0x0a, 0x1c, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49,
-	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x7e, 0x0a, 0x14, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x69,
-	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
-	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
-	0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b,
-	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x13, 0x63, 0x6f,
-	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x73, 0x32, 0x8e, 0x06, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x66, 0x0a, 0x0c, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x26, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x60, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12,
-	0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73,
-	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x1a,
-	0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x75, 0x0a, 0x11, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x2b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x6f, 0x74, 0x65, 0x22, 0x73, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
+	0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x04, 0x52, 0x0b,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x73, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x8d, 0x01, 0x0a, 0x17, 0x4d, 0x73, 0x67,
+	0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x0e, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65,
+	0x64, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f,
+	0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79,
+	0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x0d, 0x63, 0x6f, 0x6c, 0x6c, 0x65,
+	0x63, 0x74, 0x65, 0x64, 0x46, 0x65, 0x65, 0x73, 0x32, 0x9a, 0x05, 0x0a, 0x03, 0x4d, 0x73, 0x67,
+	0x12, 0x66, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x12, 0x26, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2e, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c,
+	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x60, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
 	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d,
-	0x73, 0x67, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x49,
-	0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x75, 0x0a, 0x11, 0x44, 0x65, 0x63, 0x72,
+	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f,
+	0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x30, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d,
+	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x75, 0x0a, 0x11, 0x49, 0x6e, 0x63, 0x72,
 	0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x2b, 0x2e,
 	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73,
+	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73,
 	0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e,
 	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
-	0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69,
+	0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69,
 	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x63, 0x0a, 0x0b, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x12, 0x25,
-	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
-	0x74, 0x46, 0x65, 0x65, 0x73, 0x1a, 0x2d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73,
-	0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x75, 0x0a, 0x11, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49,
-	0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x2b, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65,
-	0x6e, 0x74, 0x69, 0x76, 0x65, 0x73, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x75, 0x0a, 0x11, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x12, 0x2b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67,
+	0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x1a, 0x33, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x63,
+	0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0c, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x26, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
 	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d,
-	0x73, 0x67, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x49, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69,
-	0x76, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
-	0x2a, 0x01, 0x42, 0xc1, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c,
-	0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x1a, 0x2e,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05,
+	0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xc1, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
+	0x6f, 0x6f, 0x6c, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -8865,7 +7669,7 @@ func file_sunrise_liquiditypool_tx_proto_rawDescGZIP() []byte {
 	return file_sunrise_liquiditypool_tx_proto_rawDescData
 }
 
-var file_sunrise_liquiditypool_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_sunrise_liquiditypool_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_sunrise_liquiditypool_tx_proto_goTypes = []interface{}{
 	(*MsgUpdateParams)(nil),              // 0: sunrise.liquiditypool.MsgUpdateParams
 	(*MsgUpdateParamsResponse)(nil),      // 1: sunrise.liquiditypool.MsgUpdateParamsResponse
@@ -8877,38 +7681,33 @@ var file_sunrise_liquiditypool_tx_proto_goTypes = []interface{}{
 	(*MsgIncreaseLiquidityResponse)(nil), // 7: sunrise.liquiditypool.MsgIncreaseLiquidityResponse
 	(*MsgDecreaseLiquidity)(nil),         // 8: sunrise.liquiditypool.MsgDecreaseLiquidity
 	(*MsgDecreaseLiquidityResponse)(nil), // 9: sunrise.liquiditypool.MsgDecreaseLiquidityResponse
-	(*MsgCollectFees)(nil),               // 10: sunrise.liquiditypool.MsgCollectFees
-	(*MsgCollectFeesResponse)(nil),       // 11: sunrise.liquiditypool.MsgCollectFeesResponse
-	(*MsgCollectIncentives)(nil),         // 12: sunrise.liquiditypool.MsgCollectIncentives
-	(*MsgCollectIncentivesResponse)(nil), // 13: sunrise.liquiditypool.MsgCollectIncentivesResponse
-	(*Params)(nil),                       // 14: sunrise.liquiditypool.Params
-	(*v1beta1.Coin)(nil),                 // 15: cosmos.base.v1beta1.Coin
+	(*MsgClaimRewards)(nil),              // 10: sunrise.liquiditypool.MsgClaimRewards
+	(*MsgClaimRewardsResponse)(nil),      // 11: sunrise.liquiditypool.MsgClaimRewardsResponse
+	(*Params)(nil),                       // 12: sunrise.liquiditypool.Params
+	(*v1beta1.Coin)(nil),                 // 13: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_liquiditypool_tx_proto_depIdxs = []int32{
-	14, // 0: sunrise.liquiditypool.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.Params
-	15, // 1: sunrise.liquiditypool.MsgCreatePosition.token_base:type_name -> cosmos.base.v1beta1.Coin
-	15, // 2: sunrise.liquiditypool.MsgCreatePosition.token_quote:type_name -> cosmos.base.v1beta1.Coin
-	15, // 3: sunrise.liquiditypool.MsgCollectFeesResponse.collected_fees:type_name -> cosmos.base.v1beta1.Coin
-	15, // 4: sunrise.liquiditypool.MsgCollectIncentivesResponse.collected_incentives:type_name -> cosmos.base.v1beta1.Coin
-	0,  // 5: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
-	2,  // 6: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
-	4,  // 7: sunrise.liquiditypool.Msg.CreatePosition:input_type -> sunrise.liquiditypool.MsgCreatePosition
-	6,  // 8: sunrise.liquiditypool.Msg.IncreaseLiquidity:input_type -> sunrise.liquiditypool.MsgIncreaseLiquidity
-	8,  // 9: sunrise.liquiditypool.Msg.DecreaseLiquidity:input_type -> sunrise.liquiditypool.MsgDecreaseLiquidity
-	10, // 10: sunrise.liquiditypool.Msg.CollectFees:input_type -> sunrise.liquiditypool.MsgCollectFees
-	12, // 11: sunrise.liquiditypool.Msg.CollectIncentives:input_type -> sunrise.liquiditypool.MsgCollectIncentives
-	1,  // 12: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
-	3,  // 13: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
-	5,  // 14: sunrise.liquiditypool.Msg.CreatePosition:output_type -> sunrise.liquiditypool.MsgCreatePositionResponse
-	7,  // 15: sunrise.liquiditypool.Msg.IncreaseLiquidity:output_type -> sunrise.liquiditypool.MsgIncreaseLiquidityResponse
-	9,  // 16: sunrise.liquiditypool.Msg.DecreaseLiquidity:output_type -> sunrise.liquiditypool.MsgDecreaseLiquidityResponse
-	11, // 17: sunrise.liquiditypool.Msg.CollectFees:output_type -> sunrise.liquiditypool.MsgCollectFeesResponse
-	13, // 18: sunrise.liquiditypool.Msg.CollectIncentives:output_type -> sunrise.liquiditypool.MsgCollectIncentivesResponse
-	12, // [12:19] is the sub-list for method output_type
-	5,  // [5:12] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	12, // 0: sunrise.liquiditypool.MsgUpdateParams.params:type_name -> sunrise.liquiditypool.Params
+	13, // 1: sunrise.liquiditypool.MsgCreatePosition.token_base:type_name -> cosmos.base.v1beta1.Coin
+	13, // 2: sunrise.liquiditypool.MsgCreatePosition.token_quote:type_name -> cosmos.base.v1beta1.Coin
+	13, // 3: sunrise.liquiditypool.MsgClaimRewardsResponse.collected_fees:type_name -> cosmos.base.v1beta1.Coin
+	0,  // 4: sunrise.liquiditypool.Msg.UpdateParams:input_type -> sunrise.liquiditypool.MsgUpdateParams
+	2,  // 5: sunrise.liquiditypool.Msg.CreatePool:input_type -> sunrise.liquiditypool.MsgCreatePool
+	4,  // 6: sunrise.liquiditypool.Msg.CreatePosition:input_type -> sunrise.liquiditypool.MsgCreatePosition
+	6,  // 7: sunrise.liquiditypool.Msg.IncreaseLiquidity:input_type -> sunrise.liquiditypool.MsgIncreaseLiquidity
+	8,  // 8: sunrise.liquiditypool.Msg.DecreaseLiquidity:input_type -> sunrise.liquiditypool.MsgDecreaseLiquidity
+	10, // 9: sunrise.liquiditypool.Msg.ClaimRewards:input_type -> sunrise.liquiditypool.MsgClaimRewards
+	1,  // 10: sunrise.liquiditypool.Msg.UpdateParams:output_type -> sunrise.liquiditypool.MsgUpdateParamsResponse
+	3,  // 11: sunrise.liquiditypool.Msg.CreatePool:output_type -> sunrise.liquiditypool.MsgCreatePoolResponse
+	5,  // 12: sunrise.liquiditypool.Msg.CreatePosition:output_type -> sunrise.liquiditypool.MsgCreatePositionResponse
+	7,  // 13: sunrise.liquiditypool.Msg.IncreaseLiquidity:output_type -> sunrise.liquiditypool.MsgIncreaseLiquidityResponse
+	9,  // 14: sunrise.liquiditypool.Msg.DecreaseLiquidity:output_type -> sunrise.liquiditypool.MsgDecreaseLiquidityResponse
+	11, // 15: sunrise.liquiditypool.Msg.ClaimRewards:output_type -> sunrise.liquiditypool.MsgClaimRewardsResponse
+	10, // [10:16] is the sub-list for method output_type
+	4,  // [4:10] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquiditypool_tx_proto_init() }
@@ -9039,7 +7838,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_tx_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCollectFees); i {
+			switch v := v.(*MsgClaimRewards); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9051,31 +7850,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_tx_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCollectFeesResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_liquiditypool_tx_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCollectIncentives); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_sunrise_liquiditypool_tx_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgCollectIncentivesResponse); i {
+			switch v := v.(*MsgClaimRewardsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9093,7 +7868,7 @@ func file_sunrise_liquiditypool_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sunrise_liquiditypool_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

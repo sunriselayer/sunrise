@@ -19,8 +19,6 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc VoteGauge(MsgVoteGauge) returns (MsgVoteGaugeResponse);
-  rpc CollectIncentiveRewards(MsgCollectIncentiveRewards)
-      returns (MsgCollectIncentiveRewardsResponse);
   rpc CollectVoteRewards(MsgCollectVoteRewards)
       returns (MsgCollectVoteRewardsResponse);
 }
@@ -51,13 +49,6 @@ message MsgVoteGauge {
 }
 
 message MsgVoteGaugeResponse {}
-
-message MsgCollectIncentiveRewards {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
-}
-
-message MsgCollectIncentiveRewardsResponse {}
 
 message MsgCollectVoteRewards {
   option (cosmos.msg.v1.signer) = "sender";
