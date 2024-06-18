@@ -77,6 +77,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryGaugesRequest {
 		return &types.QueryGaugesRequest{
+			PreviousEpochId: 1,
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
