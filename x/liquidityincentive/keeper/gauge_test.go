@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
@@ -18,8 +19,9 @@ var _ = strconv.IntSize
 func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gauge {
 	items := make([]types.Gauge, n)
 	for i := range items {
-		items[i].PreviousEpochId = uint64(i)
+		items[i].PreviousEpochId = 1
 		items[i].PoolId = uint64(i)
+		items[i].Ratio = math.LegacyOneDec()
 
 		keeper.SetGauge(ctx, items[i])
 	}

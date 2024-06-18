@@ -14,12 +14,8 @@ func (k Keeper) AllocateIncentive(ctx sdk.Context, poolId uint64, sender sdk.Acc
 	if err != nil {
 		return err
 	}
-	feeGrowth := sdk.NewDecCoinsFromCoins(incentiveCoins...)
+	feeGrowth := sdk.NewDecCoinsFromCoins(incentiveCoins...).QuoDecTruncate(pool.CurrentTickLiquidity)
 	k.AddToAccumulator(ctx, feeAccumulator, feeGrowth)
-
-	if err := k.bankKeeper.IsSendEnabledCoins(ctx, incentiveCoins...); err != nil {
-		return err
-	}
 
 	return k.bankKeeper.SendCoins(ctx, sender, pool.GetFeesAddress(), incentiveCoins)
 }
