@@ -57,3 +57,5 @@ func TestEpochCount(t *testing.T) {
 	count := uint64(len(items))
 	require.Equal(t, count, keeper.GetEpochCount(ctx))
 }
+
+// TODO: add test for GetLastEpoch

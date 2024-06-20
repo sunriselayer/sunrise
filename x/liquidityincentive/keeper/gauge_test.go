@@ -61,3 +61,5 @@ func TestGaugeGetAll(t *testing.T) {
 		nullify.Fill(keeper.GetAllGauges(ctx)),
 	)
 }
+
+// TODO: add test for GetAllGaugeByPreviousEpochId
