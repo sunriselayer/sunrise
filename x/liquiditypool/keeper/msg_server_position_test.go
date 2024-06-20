@@ -6,13 +6,14 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestPositionMsgServerCreate(t *testing.T) {
-	k, bk, srv, ctx := setupMsgServer(t)
+	_, bk, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	sender := sdk.AccAddress("sender")
@@ -26,10 +27,8 @@ func TestPositionMsgServerCreate(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	// TODO: mint coins before position creation_
-	_ = bk
-	// err = bk.MintCoins(ctx, minttypes.ModuleName, sdk.Coins{sdk.NewInt64Coin("base", 10000000), sdk.NewInt64Coin("quote", 10000000)})
-	// require.NoError(t, err)
+	bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 	// Create positions
 	for i := 0; i < 5; i++ {
@@ -40,12 +39,10 @@ func TestPositionMsgServerCreate(t *testing.T) {
 			UpperTick:      1,
 			TokenBase:      sdk.NewInt64Coin("base", 10000),
 			TokenQuote:     sdk.NewInt64Coin("quote", 10000),
-			MinAmountBase:  math.NewInt(1),
-			MinAmountQuote: math.NewInt(1),
+			MinAmountBase:  math.NewInt(0),
+			MinAmountQuote: math.NewInt(0),
 		})
-		require.Error(t, err)
-		_ = k
-		// require.Equal(t, i, int(resp.Id))
+		require.NoError(t, err)
 	}
 }
 
@@ -57,17 +54,17 @@ func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 		request *types.MsgIncreaseLiquidity
 		err     error
 	}{
-		// {
-		// 	desc: "Completed",
-		// 	request: &types.MsgIncreaseLiquidity{
-		// 		Sender:         sender,
-		// 		Id:             0,
-		// 		AmountBase:     math.NewInt(1),
-		// 		AmountQuote:    math.NewInt(1),
-		// 		MinAmountBase:  math.NewInt(1),
-		// 		MinAmountQuote: math.NewInt(1),
-		// 	},
-		// },
+		{
+			desc: "Completed",
+			request: &types.MsgIncreaseLiquidity{
+				Sender:         sender,
+				Id:             0,
+				AmountBase:     math.NewInt(1),
+				AmountQuote:    math.NewInt(1),
+				MinAmountBase:  math.NewInt(0),
+				MinAmountQuote: math.NewInt(0),
+			},
+		},
 		{
 			desc: "Unauthorized",
 			request: &types.MsgIncreaseLiquidity{
@@ -75,8 +72,8 @@ func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 				Id:             0,
 				AmountBase:     math.NewInt(1),
 				AmountQuote:    math.NewInt(1),
-				MinAmountBase:  math.NewInt(1),
-				MinAmountQuote: math.NewInt(1),
+				MinAmountBase:  math.NewInt(0),
+				MinAmountQuote: math.NewInt(0),
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
@@ -87,38 +84,43 @@ func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 				Id:             10,
 				AmountBase:     math.NewInt(1),
 				AmountQuote:    math.NewInt(1),
-				MinAmountBase:  math.NewInt(1),
-				MinAmountQuote: math.NewInt(1),
+				MinAmountBase:  math.NewInt(0),
+				MinAmountQuote: math.NewInt(0),
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, _, srv, ctx := setupMsgServer(t)
+			_, bk, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			k.SetPool(wctx, types.Pool{
-				Id:         0,
+			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+
+			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
+				Authority:  sender,
 				DenomBase:  "base",
 				DenomQuote: "quote",
-				FeeRate:    math.LegacyNewDecWithPrec(1, 2),
-				TickParams: types.TickParams{
-					PriceRatio: math.LegacyNewDecWithPrec(10001, 4),
-					BaseOffset: math.LegacyNewDecWithPrec(5, 1),
-				},
-				CurrentTick:          0,
-				CurrentTickLiquidity: math.LegacyOneDec(),
-				CurrentSqrtPrice:     math.LegacyOneDec(),
+				FeeRate:    "0.01",
+				PriceRatio: "1.0001",
+				BaseOffset: "0.5",
 			})
-			k.SetPosition(wctx, types.Position{
-				Id:        0,
-				Address:   sender,
-				LowerTick: 0,
-				UpperTick: 1,
-				Liquidity: math.LegacyNewDec(10000),
+			require.NoError(t, err)
+
+			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
+				Sender:         sender,
+				PoolId:         0,
+				LowerTick:      0,
+				UpperTick:      1,
+				TokenBase:      sdk.NewInt64Coin("base", 10000),
+				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+				MinAmountBase:  math.NewInt(0),
+				MinAmountQuote: math.NewInt(0),
 			})
-			_, err := srv.IncreaseLiquidity(wctx, tc.request)
+			require.NoError(t, err)
+
+			_, err = srv.IncreaseLiquidity(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -136,14 +138,14 @@ func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
 		request *types.MsgDecreaseLiquidity
 		err     error
 	}{
-		// {
-		// 	desc: "Completed",
-		// 	request: &types.MsgDecreaseLiquidity{
-		// 		Sender:    sender,
-		// 		Id:        0,
-		// 		Liquidity: math.LegacyOneDec(),
-		// 	},
-		// },
+		{
+			desc: "Completed",
+			request: &types.MsgDecreaseLiquidity{
+				Sender:    sender,
+				Id:        0,
+				Liquidity: math.LegacyOneDec(),
+			},
+		},
 		{
 			desc: "Unauthorized",
 			request: &types.MsgDecreaseLiquidity{
@@ -165,30 +167,35 @@ func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, _, srv, ctx := setupMsgServer(t)
+			_, bk, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			k.SetPool(wctx, types.Pool{
-				Id:         0,
+			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+
+			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
+				Authority:  sender,
 				DenomBase:  "base",
 				DenomQuote: "quote",
-				FeeRate:    math.LegacyNewDecWithPrec(1, 2),
-				TickParams: types.TickParams{
-					PriceRatio: math.LegacyNewDecWithPrec(10001, 4),
-					BaseOffset: math.LegacyNewDecWithPrec(5, 1),
-				},
-				CurrentTick:          0,
-				CurrentTickLiquidity: math.LegacyOneDec(),
-				CurrentSqrtPrice:     math.LegacyOneDec(),
+				FeeRate:    "0.01",
+				PriceRatio: "1.0001",
+				BaseOffset: "0.5",
 			})
-			k.SetPosition(wctx, types.Position{
-				Id:        0,
-				Address:   sender,
-				LowerTick: 0,
-				UpperTick: 1,
-				Liquidity: math.LegacyNewDec(10000),
+			require.NoError(t, err)
+
+			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
+				Sender:         sender,
+				PoolId:         0,
+				LowerTick:      0,
+				UpperTick:      1,
+				TokenBase:      sdk.NewInt64Coin("base", 10000),
+				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+				MinAmountBase:  math.NewInt(0),
+				MinAmountQuote: math.NewInt(0),
 			})
-			_, err := srv.DecreaseLiquidity(wctx, tc.request)
+			require.NoError(t, err)
+
+			_, err = srv.DecreaseLiquidity(wctx, tc.request)
 			if tc.err != nil {
 				require.Error(t, err)
 			} else {

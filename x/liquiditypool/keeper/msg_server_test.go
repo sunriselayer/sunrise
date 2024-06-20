@@ -6,13 +6,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/testutil"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func setupMsgServer(t testing.TB) (keeper.Keeper, bankkeeper.Keeper, types.MsgServer, context.Context) {
+func setupMsgServer(t *testing.T) (keeper.Keeper, *testutil.MockBankKeeper, types.MsgServer, context.Context) {
 	k, bk, ctx := keepertest.LiquiditypoolKeeper(t)
 	return k, bk, keeper.NewMsgServerImpl(k), ctx
 }
