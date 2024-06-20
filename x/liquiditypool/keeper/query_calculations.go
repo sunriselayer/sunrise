@@ -46,7 +46,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 
 	liquidityDelta := math.LegacyZeroDec()
 	if req.Denom == pool.DenomBase {
-		liquidityDelta = types.LiquidityBase(amount, sqrtPriceLowerTick, sqrtPriceUpperTick)
+		liquidityDelta = types.LiquidityBase(amount, pool.CurrentSqrtPrice, sqrtPriceUpperTick)
 		_, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)
 		if err != nil {
 			return nil, err
@@ -55,7 +55,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 			Amount: sdk.NewCoin(pool.DenomQuote, actualAmountQuote.TruncateInt()),
 		}, nil
 	} else if req.Denom == pool.DenomQuote {
-		liquidityDelta = types.LiquidityQuote(amount, sqrtPriceLowerTick, sqrtPriceUpperTick)
+		liquidityDelta = types.LiquidityQuote(amount, pool.CurrentSqrtPrice, sqrtPriceLowerTick)
 		actualAmountBase, _, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)
 		if err != nil {
 			return nil, err
