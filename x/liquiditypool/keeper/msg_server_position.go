@@ -100,10 +100,10 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 
 	// Check if the actual amounts are greater than or equal to minimum amounts
 	if amountBase.LT(msg.MinAmountBase) {
-		return nil, types.ErrInsufficientAmountPut
+		return nil, errorsmod.Wrapf(types.ErrInsufficientAmountPut, "min_base_amount; expected %s, got %s", amountBase, msg.MinAmountBase)
 	}
 	if amountQuote.LT(msg.MinAmountQuote) {
-		return nil, types.ErrInsufficientAmountPut
+		return nil, errorsmod.Wrapf(types.ErrInsufficientAmountPut, "min_quote_amount; expected %s, got %s", amountQuote, msg.MinAmountQuote)
 	}
 
 	// Transfer amounts to the pool
