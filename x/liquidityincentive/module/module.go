@@ -145,14 +145,16 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block.
 // The begin block implementation is optional.
-func (am AppModule) BeginBlock(_ context.Context) error {
-	return nil
+func (am AppModule) BeginBlock(goCtx context.Context) error {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	return am.keeper.BeginBlocker(ctx)
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block.
 // The end block implementation is optional.
-func (am AppModule) EndBlock(_ context.Context) error {
-	return nil
+func (am AppModule) EndBlock(goCtx context.Context) error {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	return am.keeper.EndBlocker(ctx)
 }
 
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.
@@ -180,8 +182,10 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper types.AccountKeeper
-	BankKeeper    types.BankKeeper
+	AccountKeeper       types.AccountKeeper
+	BankKeeper          types.BankKeeper
+	StakingKeeper       types.StakingKeeper
+	LiquidityPoolKeeper types.LiquidityPoolKeeper
 }
 
 type ModuleOutputs struct {
@@ -202,7 +206,10 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
+		in.AccountKeeper,
 		in.BankKeeper,
+		in.StakingKeeper,
+		in.LiquidityPoolKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,

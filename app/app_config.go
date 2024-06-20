@@ -145,26 +145,23 @@ var (
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
-		// cosmos sdk modules
 		minttypes.ModuleName,
+		liquidityincentivemoduletypes.ModuleName,
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
 		stakingtypes.ModuleName,
 		authz.ModuleName,
 		genutiltypes.ModuleName,
-		// ibc modules
 		capabilitytypes.ModuleName,
 		ibcexported.ModuleName,
 		ibctransfertypes.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers

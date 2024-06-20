@@ -12,11 +12,12 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 // GenesisState defines the liquidityincentive module's genesis state.
 message GenesisState {
-  
-  // params defines all the parameters of the module.
-           Params params     = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
-  repeated Epoch  epochList  = 2 [(gogoproto.nullable) = false] ;
-           uint64 epochCount = 3;
-  repeated Gauge  gaugeList  = 4 [(gogoproto.nullable) = false] ;
-}
 
+  // params defines all the parameters of the module.
+  Params params = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated Epoch epochs = 2 [ (gogoproto.nullable) = false ];
+  uint64 epochCount = 3;
+  repeated Gauge gauges = 4 [ (gogoproto.nullable) = false ];
+  repeated Vote votes = 5 [ (gogoproto.nullable) = false ];
+}

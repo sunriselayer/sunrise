@@ -6,16 +6,16 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-var _ sdk.Msg = &MsgCollectFees{}
+var _ sdk.Msg = &MsgClaimRewards{}
 
-func NewMsgCollectFees(sender string, positionIds []uint64) *MsgCollectFees {
-	return &MsgCollectFees{
+func NewMsgClaimRewards(sender string, positionIds []uint64) *MsgClaimRewards {
+	return &MsgClaimRewards{
 		Sender:      sender,
 		PositionIds: positionIds,
 	}
 }
 
-func (msg *MsgCollectFees) ValidateBasic() error {
+func (msg *MsgClaimRewards) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)

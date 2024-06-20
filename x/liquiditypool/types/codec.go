@@ -15,12 +15,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgCreatePosition{},
 		&MsgIncreaseLiquidity{},
 		&MsgDecreaseLiquidity{},
-	)
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgCollectFees{},
-	)
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgCollectIncentives{},
+		&MsgClaimRewards{},
 	)
 	// this line is used by starport scaffolding # 3
 

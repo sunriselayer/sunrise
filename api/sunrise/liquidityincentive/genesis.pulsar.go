@@ -116,21 +116,74 @@ func (x *_GenesisState_4_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_GenesisState_5_list)(nil)
+
+type _GenesisState_5_list struct {
+	list *[]*Vote
+}
+
+func (x *_GenesisState_5_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_5_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Vote)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_5_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Vote)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_5_list) AppendMutable() protoreflect.Value {
+	v := new(Vote)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_5_list) NewElement() protoreflect.Value {
+	v := new(Vote)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
 	md_GenesisState            protoreflect.MessageDescriptor
 	fd_GenesisState_params     protoreflect.FieldDescriptor
-	fd_GenesisState_epochList  protoreflect.FieldDescriptor
+	fd_GenesisState_epochs     protoreflect.FieldDescriptor
 	fd_GenesisState_epochCount protoreflect.FieldDescriptor
-	fd_GenesisState_gaugeList  protoreflect.FieldDescriptor
+	fd_GenesisState_gauges     protoreflect.FieldDescriptor
+	fd_GenesisState_votes      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquidityincentive_genesis_proto_init()
 	md_GenesisState = File_sunrise_liquidityincentive_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_epochList = md_GenesisState.Fields().ByName("epochList")
+	fd_GenesisState_epochs = md_GenesisState.Fields().ByName("epochs")
 	fd_GenesisState_epochCount = md_GenesisState.Fields().ByName("epochCount")
-	fd_GenesisState_gaugeList = md_GenesisState.Fields().ByName("gaugeList")
+	fd_GenesisState_gauges = md_GenesisState.Fields().ByName("gauges")
+	fd_GenesisState_votes = md_GenesisState.Fields().ByName("votes")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -204,9 +257,9 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.EpochList) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.EpochList})
-		if !f(fd_GenesisState_epochList, value) {
+	if len(x.Epochs) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.Epochs})
+		if !f(fd_GenesisState_epochs, value) {
 			return
 		}
 	}
@@ -216,9 +269,15 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.GaugeList) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.GaugeList})
-		if !f(fd_GenesisState_gaugeList, value) {
+	if len(x.Gauges) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.Gauges})
+		if !f(fd_GenesisState_gauges, value) {
+			return
+		}
+	}
+	if len(x.Votes) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_5_list{list: &x.Votes})
+		if !f(fd_GenesisState_votes, value) {
 			return
 		}
 	}
@@ -239,12 +298,14 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.GenesisState.params":
 		return x.Params != nil
-	case "sunrise.liquidityincentive.GenesisState.epochList":
-		return len(x.EpochList) != 0
+	case "sunrise.liquidityincentive.GenesisState.epochs":
+		return len(x.Epochs) != 0
 	case "sunrise.liquidityincentive.GenesisState.epochCount":
 		return x.EpochCount != uint64(0)
-	case "sunrise.liquidityincentive.GenesisState.gaugeList":
-		return len(x.GaugeList) != 0
+	case "sunrise.liquidityincentive.GenesisState.gauges":
+		return len(x.Gauges) != 0
+	case "sunrise.liquidityincentive.GenesisState.votes":
+		return len(x.Votes) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -263,12 +324,14 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.GenesisState.params":
 		x.Params = nil
-	case "sunrise.liquidityincentive.GenesisState.epochList":
-		x.EpochList = nil
+	case "sunrise.liquidityincentive.GenesisState.epochs":
+		x.Epochs = nil
 	case "sunrise.liquidityincentive.GenesisState.epochCount":
 		x.EpochCount = uint64(0)
-	case "sunrise.liquidityincentive.GenesisState.gaugeList":
-		x.GaugeList = nil
+	case "sunrise.liquidityincentive.GenesisState.gauges":
+		x.Gauges = nil
+	case "sunrise.liquidityincentive.GenesisState.votes":
+		x.Votes = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -288,20 +351,26 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "sunrise.liquidityincentive.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.liquidityincentive.GenesisState.epochList":
-		if len(x.EpochList) == 0 {
+	case "sunrise.liquidityincentive.GenesisState.epochs":
+		if len(x.Epochs) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_2_list{})
 		}
-		listValue := &_GenesisState_2_list{list: &x.EpochList}
+		listValue := &_GenesisState_2_list{list: &x.Epochs}
 		return protoreflect.ValueOfList(listValue)
 	case "sunrise.liquidityincentive.GenesisState.epochCount":
 		value := x.EpochCount
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquidityincentive.GenesisState.gaugeList":
-		if len(x.GaugeList) == 0 {
+	case "sunrise.liquidityincentive.GenesisState.gauges":
+		if len(x.Gauges) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_4_list{})
 		}
-		listValue := &_GenesisState_4_list{list: &x.GaugeList}
+		listValue := &_GenesisState_4_list{list: &x.Gauges}
+		return protoreflect.ValueOfList(listValue)
+	case "sunrise.liquidityincentive.GenesisState.votes":
+		if len(x.Votes) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_5_list{})
+		}
+		listValue := &_GenesisState_5_list{list: &x.Votes}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -325,16 +394,20 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "sunrise.liquidityincentive.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "sunrise.liquidityincentive.GenesisState.epochList":
+	case "sunrise.liquidityincentive.GenesisState.epochs":
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
-		x.EpochList = *clv.list
+		x.Epochs = *clv.list
 	case "sunrise.liquidityincentive.GenesisState.epochCount":
 		x.EpochCount = value.Uint()
-	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+	case "sunrise.liquidityincentive.GenesisState.gauges":
 		lv := value.List()
 		clv := lv.(*_GenesisState_4_list)
-		x.GaugeList = *clv.list
+		x.Gauges = *clv.list
+	case "sunrise.liquidityincentive.GenesisState.votes":
+		lv := value.List()
+		clv := lv.(*_GenesisState_5_list)
+		x.Votes = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -360,17 +433,23 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "sunrise.liquidityincentive.GenesisState.epochList":
-		if x.EpochList == nil {
-			x.EpochList = []*Epoch{}
+	case "sunrise.liquidityincentive.GenesisState.epochs":
+		if x.Epochs == nil {
+			x.Epochs = []*Epoch{}
 		}
-		value := &_GenesisState_2_list{list: &x.EpochList}
+		value := &_GenesisState_2_list{list: &x.Epochs}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.liquidityincentive.GenesisState.gaugeList":
-		if x.GaugeList == nil {
-			x.GaugeList = []*Gauge{}
+	case "sunrise.liquidityincentive.GenesisState.gauges":
+		if x.Gauges == nil {
+			x.Gauges = []*Gauge{}
 		}
-		value := &_GenesisState_4_list{list: &x.GaugeList}
+		value := &_GenesisState_4_list{list: &x.Gauges}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquidityincentive.GenesisState.votes":
+		if x.Votes == nil {
+			x.Votes = []*Vote{}
+		}
+		value := &_GenesisState_5_list{list: &x.Votes}
 		return protoreflect.ValueOfList(value)
 	case "sunrise.liquidityincentive.GenesisState.epochCount":
 		panic(fmt.Errorf("field epochCount of message sunrise.liquidityincentive.GenesisState is not mutable"))
@@ -390,14 +469,17 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "sunrise.liquidityincentive.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.liquidityincentive.GenesisState.epochList":
+	case "sunrise.liquidityincentive.GenesisState.epochs":
 		list := []*Epoch{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
 	case "sunrise.liquidityincentive.GenesisState.epochCount":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquidityincentive.GenesisState.gaugeList":
+	case "sunrise.liquidityincentive.GenesisState.gauges":
 		list := []*Gauge{}
 		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
+	case "sunrise.liquidityincentive.GenesisState.votes":
+		list := []*Vote{}
+		return protoreflect.ValueOfList(&_GenesisState_5_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquidityincentive.GenesisState"))
@@ -471,8 +553,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.EpochList) > 0 {
-			for _, e := range x.EpochList {
+		if len(x.Epochs) > 0 {
+			for _, e := range x.Epochs {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -480,8 +562,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.EpochCount != 0 {
 			n += 1 + runtime.Sov(uint64(x.EpochCount))
 		}
-		if len(x.GaugeList) > 0 {
-			for _, e := range x.GaugeList {
+		if len(x.Gauges) > 0 {
+			for _, e := range x.Gauges {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.Votes) > 0 {
+			for _, e := range x.Votes {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -515,9 +603,25 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.GaugeList) > 0 {
-			for iNdEx := len(x.GaugeList) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.GaugeList[iNdEx])
+		if len(x.Votes) > 0 {
+			for iNdEx := len(x.Votes) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Votes[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x2a
+			}
+		}
+		if len(x.Gauges) > 0 {
+			for iNdEx := len(x.Gauges) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Gauges[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -536,9 +640,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x18
 		}
-		if len(x.EpochList) > 0 {
-			for iNdEx := len(x.EpochList) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.EpochList[iNdEx])
+		if len(x.Epochs) > 0 {
+			for iNdEx := len(x.Epochs) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Epochs[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -653,7 +757,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EpochList", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Epochs", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -680,8 +784,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.EpochList = append(x.EpochList, &Epoch{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.EpochList[len(x.EpochList)-1]); err != nil {
+				x.Epochs = append(x.Epochs, &Epoch{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Epochs[len(x.Epochs)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -706,7 +810,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				}
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GaugeList", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Gauges", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -733,8 +837,42 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.GaugeList = append(x.GaugeList, &Gauge{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.GaugeList[len(x.GaugeList)-1]); err != nil {
+				x.Gauges = append(x.Gauges, &Gauge{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Gauges[len(x.Gauges)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Votes", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Votes = append(x.Votes, &Vote{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Votes[len(x.Votes)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -794,9 +932,10 @@ type GenesisState struct {
 
 	// params defines all the parameters of the module.
 	Params     *Params  `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	EpochList  []*Epoch `protobuf:"bytes,2,rep,name=epochList,proto3" json:"epochList,omitempty"`
+	Epochs     []*Epoch `protobuf:"bytes,2,rep,name=epochs,proto3" json:"epochs,omitempty"`
 	EpochCount uint64   `protobuf:"varint,3,opt,name=epochCount,proto3" json:"epochCount,omitempty"`
-	GaugeList  []*Gauge `protobuf:"bytes,4,rep,name=gaugeList,proto3" json:"gaugeList,omitempty"`
+	Gauges     []*Gauge `protobuf:"bytes,4,rep,name=gauges,proto3" json:"gauges,omitempty"`
+	Votes      []*Vote  `protobuf:"bytes,5,rep,name=votes,proto3" json:"votes,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -826,9 +965,9 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetEpochList() []*Epoch {
+func (x *GenesisState) GetEpochs() []*Epoch {
 	if x != nil {
-		return x.EpochList
+		return x.Epochs
 	}
 	return nil
 }
@@ -840,9 +979,16 @@ func (x *GenesisState) GetEpochCount() uint64 {
 	return 0
 }
 
-func (x *GenesisState) GetGaugeList() []*Gauge {
+func (x *GenesisState) GetGauges() []*Gauge {
 	if x != nil {
-		return x.GaugeList
+		return x.Gauges
+	}
+	return nil
+}
+
+func (x *GenesisState) GetVotes() []*Vote {
+	if x != nil {
+		return x.Votes
 	}
 	return nil
 }
@@ -864,38 +1010,41 @@ var file_sunrise_liquidityincentive_genesis_proto_rawDesc = []byte{
 	0x74, 0x69, 0x76, 0x65, 0x2f, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x26, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
 	0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2f, 0x67, 0x61, 0x75,
-	0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x83, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e,
+	0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb5, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e,
 	0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x45, 0x0a, 0x06, 0x70, 0x61, 0x72,
 	0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72,
 	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63,
 	0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8,
 	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x12, 0x45, 0x0a, 0x09, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
+	0x12, 0x3f, 0x0a, 0x06, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x45, 0x70,
+	0x6f, 0x63, 0x68, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x65, 0x70, 0x6f, 0x63, 0x68,
+	0x73, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x3f, 0x0a, 0x06, 0x67, 0x61, 0x75, 0x67, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x47,
+	0x61, 0x75, 0x67, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x67, 0x61, 0x75, 0x67,
+	0x65, 0x73, 0x12, 0x3c, 0x0a, 0x05, 0x76, 0x6f, 0x74, 0x65, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x20, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x56,
+	0x6f, 0x74, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x76, 0x6f, 0x74, 0x65, 0x73,
+	0x42, 0xe4, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74,
+	0x6f, 0x50, 0x01, 0x5a, 0x2b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69,
 	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
-	0x2e, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09, 0x65, 0x70,
-	0x6f, 0x63, 0x68, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x70, 0x6f, 0x63, 0x68,
-	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x65, 0x70, 0x6f,
-	0x63, 0x68, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x45, 0x0a, 0x09, 0x67, 0x61, 0x75, 0x67, 0x65,
-	0x4c, 0x69, 0x73, 0x74, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e,
-	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x2e, 0x47, 0x61, 0x75, 0x67, 0x65, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x09, 0x67, 0x61, 0x75, 0x67, 0x65, 0x4c, 0x69, 0x73, 0x74, 0x42, 0xe4,
-	0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
-	0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x2b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xa2, 0x02,
-	0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76,
-	0x65, 0xca, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0xe2, 0x02,
-	0x26, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65,
-	0x6e, 0x74, 0x69, 0x76, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74,
+	0x69, 0x76, 0x65, 0xca, 0x02, 0x1a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65,
+	0xe2, 0x02, 0x26, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x69, 0x6e, 0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x69, 0x6e,
+	0x63, 0x65, 0x6e, 0x74, 0x69, 0x76, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -916,16 +1065,18 @@ var file_sunrise_liquidityincentive_genesis_proto_goTypes = []interface{}{
 	(*Params)(nil),       // 1: sunrise.liquidityincentive.Params
 	(*Epoch)(nil),        // 2: sunrise.liquidityincentive.Epoch
 	(*Gauge)(nil),        // 3: sunrise.liquidityincentive.Gauge
+	(*Vote)(nil),         // 4: sunrise.liquidityincentive.Vote
 }
 var file_sunrise_liquidityincentive_genesis_proto_depIdxs = []int32{
 	1, // 0: sunrise.liquidityincentive.GenesisState.params:type_name -> sunrise.liquidityincentive.Params
-	2, // 1: sunrise.liquidityincentive.GenesisState.epochList:type_name -> sunrise.liquidityincentive.Epoch
-	3, // 2: sunrise.liquidityincentive.GenesisState.gaugeList:type_name -> sunrise.liquidityincentive.Gauge
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	2, // 1: sunrise.liquidityincentive.GenesisState.epochs:type_name -> sunrise.liquidityincentive.Epoch
+	3, // 2: sunrise.liquidityincentive.GenesisState.gauges:type_name -> sunrise.liquidityincentive.Gauge
+	4, // 3: sunrise.liquidityincentive.GenesisState.votes:type_name -> sunrise.liquidityincentive.Vote
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquidityincentive_genesis_proto_init() }

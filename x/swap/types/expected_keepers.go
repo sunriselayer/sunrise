@@ -20,10 +20,10 @@ type AccountKeeper interface {
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
-	// Methods imported from bank should be defined here
-
+	IsSendEnabledCoins(ctx context.Context, coins ...sdk.Coin) error
 	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	// Methods imported from bank should be defined here
 }
 
 // TransferKeeper defines the expected interface for the IBC Transfer module.

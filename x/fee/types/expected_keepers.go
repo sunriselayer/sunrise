@@ -16,6 +16,9 @@ type AccountKeeper interface {
 type BankKeeper interface {
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
 	// Methods imported from bank should be defined here
+
+	SendCoinsFromModuleToModule(ctx context.Context, senderModule, recipientModule string, amt sdk.Coins) error
+	BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
 }
 
 // ParamSubspace defines the expected Subspace interface for parameters.

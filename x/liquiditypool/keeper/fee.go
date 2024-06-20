@@ -217,7 +217,6 @@ func (k Keeper) updateAccumAndClaimRewards(ctx context.Context, accumulator type
 	}
 
 	hasPosition := k.HasPosition(ctx, accumulator.Name, positionKey)
-
 	if hasPosition {
 		currentGrowthInsideForPosition, _ := accumulator.AccumValue.SafeSub(growthOutside)
 		err := k.SetPositionIntervalAccumulation(ctx, accumulator.Name, positionKey, currentGrowthInsideForPosition)

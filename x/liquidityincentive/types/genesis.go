@@ -10,8 +10,8 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		EpochList: []Epoch{},
-		GaugeList: []Gauge{},
+		Epochs: []Epoch{},
+		Gauges: []Gauge{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -23,7 +23,7 @@ func (gs GenesisState) Validate() error {
 	// Check for duplicated ID in epoch
 	epochIdMap := make(map[uint64]bool)
 	epochCount := gs.GetEpochCount()
-	for _, elem := range gs.EpochList {
+	for _, elem := range gs.Epochs {
 		if _, ok := epochIdMap[elem.Id]; ok {
 			return fmt.Errorf("duplicated id for epoch")
 		}
@@ -35,7 +35,7 @@ func (gs GenesisState) Validate() error {
 	// Check for duplicated index in gauge
 	gaugeIndexMap := make(map[string]struct{})
 
-	for _, elem := range gs.GaugeList {
+	for _, elem := range gs.Gauges {
 		index := string(GaugeKey(elem.PreviousEpochId, elem.PoolId))
 		if _, ok := gaugeIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for gauge")

@@ -8,14 +8,16 @@ accounts:
   coins:
   - 10000token
   - 100000000stake
-client:
-  openapi:
-    path: docs/static/openapi.yml
 faucet:
   name: bob
   coins:
   - 5token
   - 100000stake
+client:
+  typescript:
+    path: ts-client
+  openapi:
+    path: docs/static/openapi.yml
 validators:
 - name: alice
   bonded: 100000000stake

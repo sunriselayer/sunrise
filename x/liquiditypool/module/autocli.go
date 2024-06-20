@@ -115,17 +115,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod:      "CollectFees",
-					Use:            "collect-fees",
-					Short:          "Send a collect-fees tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						// {ProtoField: "position_ids"},
-					},
-				},
-				{
-					RpcMethod:      "CollectIncentives",
-					Use:            "collect-incentives",
-					Short:          "Send a collect-incentives tx",
+					RpcMethod:      "ClaimRewards",
+					Use:            "claim-rewards",
+					Short:          "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						// {ProtoField: "position_ids"},
 					},
