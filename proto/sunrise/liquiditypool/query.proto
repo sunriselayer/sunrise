@@ -56,14 +56,14 @@ service Query {
       "/sunrise/liquiditypool/positions/{id}/fees";
   }
 
-  // Query calculation of create position
+  // Query calculation another amount of create position
   rpc CalculationCreatePosition (QueryCalculationCreatePositionRequest) 
       returns (QueryCalculationCreatePositionResponse) {
     option (google.api.http).get =
       "/sunrise/liquiditypool/pools/{pool_id}/calculations/create_position";
   }  
 
-  // Query calculation of increase liquidity
+  // Query calculation another amount of increase liquidity
   rpc CalculationIncreaseLiquidity (QueryCalculationIncreaseLiquidityRequest) 
       returns (QueryCalculationIncreaseLiquidityResponse) {
     option (google.api.http).get =
