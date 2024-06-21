@@ -117,6 +117,7 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 		return nil, err
 	}
 
+	position, _ = k.GetPosition(ctx, positionId)
 	return &types.MsgCreatePositionResponse{
 		Id:          positionId,
 		AmountBase:  amountBase,

@@ -12,7 +12,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func TestPositionMsgServerCreate(t *testing.T) {
+func TestMsgServerCreatePosition(t *testing.T) {
 	_, bk, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
@@ -30,23 +30,59 @@ func TestPositionMsgServerCreate(t *testing.T) {
 	bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
-	// Create positions
-	for i := 0; i < 5; i++ {
-		_, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
-			Sender:         sender.String(),
-			PoolId:         0,
-			LowerTick:      0,
-			UpperTick:      1,
-			TokenBase:      sdk.NewInt64Coin("base", 10000),
-			TokenQuote:     sdk.NewInt64Coin("quote", 10000),
-			MinAmountBase:  math.NewInt(0),
-			MinAmountQuote: math.NewInt(0),
-		})
-		require.NoError(t, err)
-	}
+	// Create 1st position
+	resp, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
+		Sender:         sender.String(),
+		PoolId:         0,
+		LowerTick:      0,
+		UpperTick:      1,
+		TokenBase:      sdk.NewInt64Coin("base", 10000),
+		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		MinAmountBase:  math.NewInt(0),
+		MinAmountQuote: math.NewInt(0),
+	})
+	require.NoError(t, err)
+	require.Equal(t, resp.Id, uint64(0))
+	require.Equal(t, resp.AmountBase.String(), "10001")
+	require.Equal(t, resp.AmountQuote.String(), "0")
+	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
+
+	// Create 2nd position with same tick
+	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
+		Sender:         sender.String(),
+		PoolId:         0,
+		LowerTick:      0,
+		UpperTick:      1,
+		TokenBase:      sdk.NewInt64Coin("base", 10000),
+		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		MinAmountBase:  math.NewInt(0),
+		MinAmountQuote: math.NewInt(0),
+	})
+	require.NoError(t, err)
+	require.Equal(t, resp.Id, uint64(1))
+	require.Equal(t, resp.AmountBase.String(), "10001")
+	require.Equal(t, resp.AmountQuote.String(), "0")
+	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
+
+	// Create 3rd position with different tick
+	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
+		Sender:         sender.String(),
+		PoolId:         0,
+		LowerTick:      -10,
+		UpperTick:      10,
+		TokenBase:      sdk.NewInt64Coin("base", 10000),
+		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		MinAmountBase:  math.NewInt(0),
+		MinAmountQuote: math.NewInt(0),
+	})
+	require.NoError(t, err)
+	require.Equal(t, resp.Id, uint64(2))
+	require.Equal(t, resp.AmountBase.String(), "10000")
+	require.Equal(t, resp.AmountQuote.String(), "9048")
+	require.Equal(t, resp.Liquidity.String(), "19053571.850177307210510444")
 }
 
-func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
+func TestMsgServerIncreaseLiquidity(t *testing.T) {
 	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 
 	tests := []struct {
@@ -130,7 +166,7 @@ func TestPositionMsgServerIncreaseLiquidity(t *testing.T) {
 	}
 }
 
-func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
+func TestMsgServerDecreaseLiquidity(t *testing.T) {
 	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 
 	tests := []struct {
