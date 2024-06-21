@@ -184,6 +184,7 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 	}
 
 	return &types.MsgIncreaseLiquidityResponse{
+		PositionId:  res.Id,
 		AmountBase:  res.AmountBase,
 		AmountQuote: res.AmountQuote,
 	}, nil
