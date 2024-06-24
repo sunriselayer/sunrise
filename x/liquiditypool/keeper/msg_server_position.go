@@ -260,7 +260,11 @@ func (k msgServer) DecreaseLiquidity(goCtx context.Context, msg *types.MsgDecrea
 	if err != nil {
 		return nil, err
 	}
-	amountBase, amountQuote, err := k.Keeper.DecreaseLiquidity(ctx, sender, msg.Id, msg.Liquidity)
+	liquidity, err := math.LegacyNewDecFromStr(msg.Liquidity)
+	if err != nil {
+		return nil, err
+	}
+	amountBase, amountQuote, err := k.Keeper.DecreaseLiquidity(ctx, sender, msg.Id, liquidity)
 	if err != nil {
 		return nil, err
 	}
