@@ -132,7 +132,7 @@ func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    "B",
 				Id:        0,
-				Liquidity: math.LegacyOneDec(),
+				Liquidity: "1",
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
@@ -141,7 +141,7 @@ func TestPositionMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    sender,
 				Id:        10,
-				Liquidity: math.LegacyOneDec(),
+				Liquidity: "1",
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},

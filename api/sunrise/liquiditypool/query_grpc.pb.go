@@ -47,9 +47,9 @@ type QueryClient interface {
 	AddressPositions(ctx context.Context, in *QueryAddressPositionsRequest, opts ...grpc.CallOption) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(ctx context.Context, in *QueryPositionFeesRequest, opts ...grpc.CallOption) (*QueryPositionFeesResponse, error)
-	// Query calculation of create position
+	// Query calculation another amount of create position
 	CalculationCreatePosition(ctx context.Context, in *QueryCalculationCreatePositionRequest, opts ...grpc.CallOption) (*QueryCalculationCreatePositionResponse, error)
-	// Query calculation of increase liquidity
+	// Query calculation another amount of increase liquidity
 	CalculationIncreaseLiquidity(ctx context.Context, in *QueryCalculationIncreaseLiquidityRequest, opts ...grpc.CallOption) (*QueryCalculationIncreaseLiquidityResponse, error)
 }
 
@@ -167,9 +167,9 @@ type QueryServer interface {
 	AddressPositions(context.Context, *QueryAddressPositionsRequest) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error)
-	// Query calculation of create position
+	// Query calculation another amount of create position
 	CalculationCreatePosition(context.Context, *QueryCalculationCreatePositionRequest) (*QueryCalculationCreatePositionResponse, error)
-	// Query calculation of increase liquidity
+	// Query calculation another amount of increase liquidity
 	CalculationIncreaseLiquidity(context.Context, *QueryCalculationIncreaseLiquidityRequest) (*QueryCalculationIncreaseLiquidityResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
