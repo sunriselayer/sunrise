@@ -52,6 +52,14 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
+	"github.com/skip-mev/block-sdk/v2/abci"
+	"github.com/skip-mev/block-sdk/v2/abci/checktx"
+	"github.com/skip-mev/block-sdk/v2/block"
+	"github.com/skip-mev/block-sdk/v2/block/base"
+	"github.com/skip-mev/block-sdk/v2/block/service"
+	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
+	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
+	"github.com/sunriselayer/sunrise/app/ante"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
@@ -123,6 +131,7 @@ type App struct {
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 	CircuitBreakerKeeper  circuitkeeper.Keeper
+	auctionkeeper         auctionkeeper.Keeper
 
 	// IBC
 	IBCKeeper           *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
@@ -149,6 +158,10 @@ type App struct {
 
 	// simulation manager
 	sm *module.SimulationManager
+
+	// custom structure for skip-mev protection
+	mevLane        *mevlane.MEVLane
+	checkTxHandler checktx.CheckTx
 }
 
 func init() {
@@ -357,6 +370,88 @@ func New(
 
 	/****  Module Options ****/
 
+	// ---------------------------------------------------------------------------- //
+	// ------------------------- Begin `Skip MEV` Code ---------------------------- //
+	// ---------------------------------------------------------------------------- //
+	// STEP 1-3: Create the Block SDK lanes.
+	mevLane, freeLane, defaultLane := CreateLanes(app)
+
+	// STEP 4: Construct a mempool based off the lanes. Note that the order of the lanes
+	// matters. Blocks are constructed from the top lane to the bottom lane. The top lane
+	// is the first lane in the array and the bottom lane is the last lane in the array.
+	mempool, err := block.NewLanedMempool(
+		app.Logger(),
+		[]block.Lane{mevLane, freeLane, defaultLane},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	// The application's mempool is now powered by the Block SDK!
+	app.App.SetMempool(mempool)
+
+	// STEP 5: Create a global ante handler that will be called on each transaction when
+	// proposals are being built and verified. Note that this step must be done before
+	// setting the ante handler on the lanes.
+	anteHandler := ante.NewAnteHandler(
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.FeeGrantKeeper,
+		app.BlobKeeper,
+		app.FeeKeeper,
+		app.txConfig.SignModeHandler(),
+		ante.DefaultSigVerificationGasConsumer,
+		app.IBCKeeper,
+		app.auctionkeeper,
+		app.mevLane,
+		app.txConfig.TxEncoder(),
+	)
+	// Set the ante handler on the lanes.
+	opt := []base.LaneOption{
+		base.WithAnteHandler(anteHandler),
+	}
+	mevLane.WithOptions(
+		opt...,
+	)
+	freeLane.WithOptions(
+		opt...,
+	)
+	defaultLane.WithOptions(
+		opt...,
+	)
+
+	app.mevLane = mevLane
+
+	// Step 6: Create the proposal handler and set it on the app. Now the application
+	// will build and verify proposals using the Block SDK!
+	proposalHandler := abci.NewProposalHandler(
+		app.Logger(),
+		app.txConfig.TxDecoder(),
+		app.txConfig.TxEncoder(),
+		mempool,
+	)
+	app.App.SetPrepareProposal(proposalHandler.PrepareProposalHandler())
+	app.App.SetProcessProposal(proposalHandler.ProcessProposalHandler())
+
+	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
+	// use the MEV lane.
+	mevCheckTx := checktx.NewMEVCheckTxHandler(
+		app.App,
+		app.txConfig.TxDecoder(),
+		mevLane,
+		anteHandler,
+		app.App.CheckTx,
+	)
+	checkTxHandler := checktx.NewMempoolParityCheckTx(
+		app.Logger(), mempool,
+		app.txConfig.TxDecoder(), mevCheckTx.CheckTx(),
+	)
+
+	app.SetCheckTx(checkTxHandler.CheckTx())
+	// ---------------------------------------------------------------------------- //
+	// ------------------------- End `Skip MEV` Code ------------------------------ //
+	// ---------------------------------------------------------------------------- //
+
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 
 	// add test gRPC service for testing gRPC queries in isolation
@@ -452,7 +547,12 @@ func (app *App) SimulationManager() *module.SimulationManager {
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
 func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+	// Register the base app API routes.
 	app.App.RegisterAPIRoutes(apiSvr, apiConfig)
+
+	// Register the Block SDK mempool API routes.
+	service.RegisterGRPCGatewayRoutes(apiSvr.ClientCtx, apiSvr.GRPCGatewayRouter)
+
 	// register swagger API in app.go so that other applications can override easily
 	if err := server.RegisterSwaggerAPI(apiSvr.ClientCtx, apiSvr.Router, apiConfig.Swagger); err != nil {
 		panic(err)
@@ -460,6 +560,19 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 
 	// register app's OpenAPI routes.
 	docs.RegisterOpenAPIService(Name, apiSvr.Router)
+}
+
+// RegisterTxService implements the Application.RegisterTxService method.
+func (app *App) RegisterTxService(clientCtx client.Context) {
+	// Register the base app transaction service.
+	app.App.RegisterTxService(clientCtx)
+
+	// Register the Block SDK mempool transaction service.
+	mempool, ok := app.App.Mempool().(block.Mempool)
+	if !ok {
+		panic("mempool is not a block.Mempool")
+	}
+	service.RegisterMempoolService(app.GRPCQueryRouter(), mempool)
 }
 
 // GetIBCKeeper returns the IBC keeper.

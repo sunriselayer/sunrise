@@ -12,6 +12,8 @@ import (
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
+	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
+	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	feeante "github.com/sunriselayer/sunrise/x/fee/ante"
 )
 
@@ -24,6 +26,9 @@ func NewAnteHandler(
 	signModeHandler *signing.HandlerMap,
 	sigGasConsumer ante.SignatureVerificationGasConsumer,
 	channelKeeper *ibckeeper.Keeper,
+	auctionkeeper auctionkeeper.Keeper,
+	MEVLane auctionante.MEVLane,
+	TxEncoder sdk.TxEncoder,
 ) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
 		// Wraps the panic with the string format of the transaction
@@ -69,6 +74,7 @@ func NewAnteHandler(
 		ante.NewIncrementSequenceDecorator(accountKeeper),
 		// Ensure that the tx is not a IBC packet or update message that has already been processed.
 		ibcante.NewRedundantRelayDecorator(channelKeeper),
+		auctionante.NewAuctionDecorator(auctionkeeper, TxEncoder, MEVLane),
 	)
 }
 

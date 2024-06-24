@@ -5,6 +5,7 @@ import (
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/skip-mev/block-sdk/v2/abci/checktx"
 	"github.com/sunriselayer/sunrise/pkg/blob"
 	blobtypes "github.com/sunriselayer/sunrise/x/blob/types"
 )
@@ -31,7 +32,7 @@ func (app *App) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error)
 			return sdkerrors.ResponseCheckTxWithEvents(blobtypes.ErrNoBlobs, 0, 0, []abci.Event{}, false), blobtypes.ErrNoBlobs
 		}
 		// don't do anything special if we have a normal transaction
-		return app.BaseApp.CheckTx(req)
+		return app.checkTxHandler(req)
 	}
 
 	switch req.Type {
@@ -47,5 +48,10 @@ func (app *App) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error)
 	}
 
 	req.Tx = btx.Tx
-	return app.BaseApp.CheckTx(req)
+	return app.checkTxHandler(req)
+}
+
+// SetCheckTx sets the checkTxHandler for the app.
+func (app *App) SetCheckTx(handler checktx.CheckTx) {
+	app.checkTxHandler = handler
 }
