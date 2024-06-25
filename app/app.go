@@ -403,7 +403,7 @@ func New(
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
 		app.auctionkeeper,
-		app.mevLane,
+		mevLane,
 		app.txConfig.TxEncoder(),
 	)
 	// Set the ante handler on the lanes.
