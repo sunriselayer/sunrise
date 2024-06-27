@@ -156,6 +156,8 @@ func (route *Route) InspectRoute(
 		}, nil
 
 	case *Route_Series:
+		// save the original amount
+		amountOrigin := amountExact
 		results := make([]RouteResult, len(strategy.Series.Routes))
 		for i := range strategy.Series.Routes {
 			var r *Route
@@ -172,12 +174,12 @@ func (route *Route) InspectRoute(
 
 			amountExact = aResult
 		}
-		// No needs to do
-		// amountResult = amountExact
+		// The last amountExact become the destination amount
+		amountDest := amountExact
 
-		tokenIn, tokenOut := generateResult(route.DenomIn, route.DenomOut, amountExact, amountResult)
+		tokenIn, tokenOut := generateResult(route.DenomIn, route.DenomOut, amountOrigin, amountDest)
 
-		return amountResult, RouteResult{
+		return amountDest, RouteResult{
 			TokenIn:  tokenIn,
 			TokenOut: tokenOut,
 			Strategy: &RouteResult_Series{
