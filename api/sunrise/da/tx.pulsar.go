@@ -872,14 +872,22 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgPublishData        protoreflect.MessageDescriptor
-	fd_MsgPublishData_sender protoreflect.FieldDescriptor
+	md_MsgPublishData                protoreflect.MessageDescriptor
+	fd_MsgPublishData_sender         protoreflect.FieldDescriptor
+	fd_MsgPublishData_metadata_uri   protoreflect.FieldDescriptor
+	fd_MsgPublishData_share_size     protoreflect.FieldDescriptor
+	fd_MsgPublishData_share_count    protoreflect.FieldDescriptor
+	fd_MsgPublishData_proof_metadata protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_da_tx_proto_init()
 	md_MsgPublishData = File_sunrise_da_tx_proto.Messages().ByName("MsgPublishData")
 	fd_MsgPublishData_sender = md_MsgPublishData.Fields().ByName("sender")
+	fd_MsgPublishData_metadata_uri = md_MsgPublishData.Fields().ByName("metadata_uri")
+	fd_MsgPublishData_share_size = md_MsgPublishData.Fields().ByName("share_size")
+	fd_MsgPublishData_share_count = md_MsgPublishData.Fields().ByName("share_count")
+	fd_MsgPublishData_proof_metadata = md_MsgPublishData.Fields().ByName("proof_metadata")
 }
 
 var _ protoreflect.Message = (*fastReflection_MsgPublishData)(nil)
@@ -953,6 +961,30 @@ func (x *fastReflection_MsgPublishData) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
+	if x.MetadataUri != "" {
+		value := protoreflect.ValueOfString(x.MetadataUri)
+		if !f(fd_MsgPublishData_metadata_uri, value) {
+			return
+		}
+	}
+	if x.ShareSize != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ShareSize)
+		if !f(fd_MsgPublishData_share_size, value) {
+			return
+		}
+	}
+	if x.ShareCount != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ShareCount)
+		if !f(fd_MsgPublishData_share_count, value) {
+			return
+		}
+	}
+	if len(x.ProofMetadata) != 0 {
+		value := protoreflect.ValueOfBytes(x.ProofMetadata)
+		if !f(fd_MsgPublishData_proof_metadata, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -970,6 +1002,14 @@ func (x *fastReflection_MsgPublishData) Has(fd protoreflect.FieldDescriptor) boo
 	switch fd.FullName() {
 	case "sunrise.da.MsgPublishData.sender":
 		return x.Sender != ""
+	case "sunrise.da.MsgPublishData.metadata_uri":
+		return x.MetadataUri != ""
+	case "sunrise.da.MsgPublishData.share_size":
+		return x.ShareSize != uint32(0)
+	case "sunrise.da.MsgPublishData.share_count":
+		return x.ShareCount != uint32(0)
+	case "sunrise.da.MsgPublishData.proof_metadata":
+		return len(x.ProofMetadata) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.MsgPublishData"))
@@ -988,6 +1028,14 @@ func (x *fastReflection_MsgPublishData) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.da.MsgPublishData.sender":
 		x.Sender = ""
+	case "sunrise.da.MsgPublishData.metadata_uri":
+		x.MetadataUri = ""
+	case "sunrise.da.MsgPublishData.share_size":
+		x.ShareSize = uint32(0)
+	case "sunrise.da.MsgPublishData.share_count":
+		x.ShareCount = uint32(0)
+	case "sunrise.da.MsgPublishData.proof_metadata":
+		x.ProofMetadata = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.MsgPublishData"))
@@ -1007,6 +1055,18 @@ func (x *fastReflection_MsgPublishData) Get(descriptor protoreflect.FieldDescrip
 	case "sunrise.da.MsgPublishData.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
+	case "sunrise.da.MsgPublishData.metadata_uri":
+		value := x.MetadataUri
+		return protoreflect.ValueOfString(value)
+	case "sunrise.da.MsgPublishData.share_size":
+		value := x.ShareSize
+		return protoreflect.ValueOfUint32(value)
+	case "sunrise.da.MsgPublishData.share_count":
+		value := x.ShareCount
+		return protoreflect.ValueOfUint32(value)
+	case "sunrise.da.MsgPublishData.proof_metadata":
+		value := x.ProofMetadata
+		return protoreflect.ValueOfBytes(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.MsgPublishData"))
@@ -1029,6 +1089,14 @@ func (x *fastReflection_MsgPublishData) Set(fd protoreflect.FieldDescriptor, val
 	switch fd.FullName() {
 	case "sunrise.da.MsgPublishData.sender":
 		x.Sender = value.Interface().(string)
+	case "sunrise.da.MsgPublishData.metadata_uri":
+		x.MetadataUri = value.Interface().(string)
+	case "sunrise.da.MsgPublishData.share_size":
+		x.ShareSize = uint32(value.Uint())
+	case "sunrise.da.MsgPublishData.share_count":
+		x.ShareCount = uint32(value.Uint())
+	case "sunrise.da.MsgPublishData.proof_metadata":
+		x.ProofMetadata = value.Bytes()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.MsgPublishData"))
@@ -1051,6 +1119,14 @@ func (x *fastReflection_MsgPublishData) Mutable(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "sunrise.da.MsgPublishData.sender":
 		panic(fmt.Errorf("field sender of message sunrise.da.MsgPublishData is not mutable"))
+	case "sunrise.da.MsgPublishData.metadata_uri":
+		panic(fmt.Errorf("field metadata_uri of message sunrise.da.MsgPublishData is not mutable"))
+	case "sunrise.da.MsgPublishData.share_size":
+		panic(fmt.Errorf("field share_size of message sunrise.da.MsgPublishData is not mutable"))
+	case "sunrise.da.MsgPublishData.share_count":
+		panic(fmt.Errorf("field share_count of message sunrise.da.MsgPublishData is not mutable"))
+	case "sunrise.da.MsgPublishData.proof_metadata":
+		panic(fmt.Errorf("field proof_metadata of message sunrise.da.MsgPublishData is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.MsgPublishData"))
@@ -1066,6 +1142,14 @@ func (x *fastReflection_MsgPublishData) NewField(fd protoreflect.FieldDescriptor
 	switch fd.FullName() {
 	case "sunrise.da.MsgPublishData.sender":
 		return protoreflect.ValueOfString("")
+	case "sunrise.da.MsgPublishData.metadata_uri":
+		return protoreflect.ValueOfString("")
+	case "sunrise.da.MsgPublishData.share_size":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "sunrise.da.MsgPublishData.share_count":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "sunrise.da.MsgPublishData.proof_metadata":
+		return protoreflect.ValueOfBytes(nil)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.MsgPublishData"))
@@ -1139,6 +1223,20 @@ func (x *fastReflection_MsgPublishData) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		l = len(x.MetadataUri)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.ShareSize != 0 {
+			n += 1 + runtime.Sov(uint64(x.ShareSize))
+		}
+		if x.ShareCount != 0 {
+			n += 1 + runtime.Sov(uint64(x.ShareCount))
+		}
+		l = len(x.ProofMetadata)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1167,6 +1265,30 @@ func (x *fastReflection_MsgPublishData) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.ProofMetadata) > 0 {
+			i -= len(x.ProofMetadata)
+			copy(dAtA[i:], x.ProofMetadata)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ProofMetadata)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if x.ShareCount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ShareCount))
+			i--
+			dAtA[i] = 0x20
+		}
+		if x.ShareSize != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ShareSize))
+			i--
+			dAtA[i] = 0x18
+		}
+		if len(x.MetadataUri) > 0 {
+			i -= len(x.MetadataUri)
+			copy(dAtA[i:], x.MetadataUri)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MetadataUri)))
+			i--
+			dAtA[i] = 0x12
 		}
 		if len(x.Sender) > 0 {
 			i -= len(x.Sender)
@@ -1255,6 +1377,110 @@ func (x *fastReflection_MsgPublishData) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MetadataUri", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.MetadataUri = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShareSize", wireType)
+				}
+				x.ShareSize = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ShareSize |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShareCount", wireType)
+				}
+				x.ShareCount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ShareCount |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProofMetadata", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ProofMetadata = append(x.ProofMetadata[:0], dAtA[iNdEx:postIndex]...)
+				if x.ProofMetadata == nil {
+					x.ProofMetadata = []byte{}
+				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -1739,7 +1965,11 @@ type MsgPublishData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender        string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	MetadataUri   string `protobuf:"bytes,2,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
+	ShareSize     uint32 `protobuf:"varint,3,opt,name=share_size,json=shareSize,proto3" json:"share_size,omitempty"`
+	ShareCount    uint32 `protobuf:"varint,4,opt,name=share_count,json=shareCount,proto3" json:"share_count,omitempty"`
+	ProofMetadata []byte `protobuf:"bytes,5,opt,name=proof_metadata,json=proofMetadata,proto3" json:"proof_metadata,omitempty"`
 }
 
 func (x *MsgPublishData) Reset() {
@@ -1767,6 +1997,34 @@ func (x *MsgPublishData) GetSender() string {
 		return x.Sender
 	}
 	return ""
+}
+
+func (x *MsgPublishData) GetMetadataUri() string {
+	if x != nil {
+		return x.MetadataUri
+	}
+	return ""
+}
+
+func (x *MsgPublishData) GetShareSize() uint32 {
+	if x != nil {
+		return x.ShareSize
+	}
+	return 0
+}
+
+func (x *MsgPublishData) GetShareCount() uint32 {
+	if x != nil {
+		return x.ShareCount
+	}
+	return 0
+}
+
+func (x *MsgPublishData) GetProofMetadata() []byte {
+	if x != nil {
+		return x.ProofMetadata
+	}
+	return nil
 }
 
 type MsgPublishDataResponse struct {
@@ -1820,31 +2078,40 @@ var file_sunrise_da_tx_proto_rawDesc = []byte{
 	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64, 0x61, 0x2f, 0x4d, 0x73, 0x67, 0x55,
 	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d,
 	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x35, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x50, 0x75, 0x62,
-	0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64,
-	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72,
-	0x3a, 0x0b, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x18, 0x0a,
-	0x16, 0x4d, 0x73, 0x67, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xad, 0x01, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12,
-	0x50, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
-	0x1b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x23, 0x2e, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x4d, 0x0a, 0x0b, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61,
-	0x12, 0x1a, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73,
-	0x67, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x1a, 0x22, 0x2e, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67, 0x50, 0x75, 0x62,
-	0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x7f, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e,
-	0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64,
-	0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44,
-	0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xbf, 0x01, 0x0a, 0x0e, 0x4d, 0x73, 0x67, 0x50, 0x75,
+	0x62, 0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e,
+	0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x12, 0x21, 0x0a, 0x0c, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x75, 0x72,
+	0x69, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0x55, 0x72, 0x69, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x68, 0x61, 0x72, 0x65, 0x5f, 0x73, 0x69,
+	0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x68, 0x61, 0x72, 0x65, 0x53,
+	0x69, 0x7a, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x68, 0x61, 0x72, 0x65, 0x5f, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x73, 0x68, 0x61, 0x72, 0x65, 0x43,
+	0x6f, 0x75, 0x6e, 0x74, 0x12, 0x25, 0x0a, 0x0e, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x5f, 0x6d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0d, 0x70, 0x72,
+	0x6f, 0x6f, 0x66, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x3a, 0x0b, 0x82, 0xe7, 0xb0,
+	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x18, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x50,
+	0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x32, 0xad, 0x01, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x50, 0x0a, 0x0c, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1b, 0x2e, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x23, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4d, 0x0a, 0x0b,
+	0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1a, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67, 0x50, 0x75, 0x62, 0x6c,
+	0x69, 0x73, 0x68, 0x44, 0x61, 0x74, 0x61, 0x1a, 0x22, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x64, 0x61, 0x2e, 0x4d, 0x73, 0x67, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x44,
+	0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0,
+	0x2a, 0x01, 0x42, 0x7f, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x64, 0x61, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53,
+	0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca,
+	0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
+	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a,
+	0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
