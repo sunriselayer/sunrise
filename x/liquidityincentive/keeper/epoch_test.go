@@ -58,4 +58,13 @@ func TestEpochCount(t *testing.T) {
 	require.Equal(t, count, keeper.GetEpochCount(ctx))
 }
 
-// TODO: add test for GetLastEpoch
+func TestGetLastEpoch(t *testing.T) {
+	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	items := createNEpoch(keeper, ctx, 10)
+	got, found := keeper.GetLastEpoch(ctx)
+	require.True(t, found)
+	require.Equal(t,
+		nullify.Fill(&items[len(items)-1]),
+		nullify.Fill(&got),
+	)
+}

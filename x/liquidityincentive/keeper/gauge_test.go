@@ -62,4 +62,15 @@ func TestGaugeGetAll(t *testing.T) {
 	)
 }
 
-// TODO: add test for GetAllGaugeByPreviousEpochId
+func TestGetAllGaugeByPreviousEpochId(t *testing.T) {
+	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	items := createNGauge(keeper, ctx, 10)
+	require.ElementsMatch(t,
+		nullify.Fill(items),
+		nullify.Fill(keeper.GetAllGaugeByPreviousEpochId(ctx, 1)),
+	)
+	require.Len(t,
+		keeper.GetAllGaugeByPreviousEpochId(ctx, 2),
+		0,
+	)
+}
