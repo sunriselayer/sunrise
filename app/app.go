@@ -147,8 +147,7 @@ type App struct {
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
 	// Third party module keepers
-	auctionkeeper auctionkeeper.Keeper
-
+	AuctionKeeper            auctionkeeper.Keeper
 	BlobKeeper               blobmodulekeeper.Keeper
 	StreamKeeper             streammodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
@@ -312,6 +311,8 @@ func New(
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
 
+		// Third party module keepers
+		&app.AuctionKeeper,
 		&app.BlobKeeper,
 		&app.StreamKeeper,
 		&app.TokenconverterKeeper,
@@ -404,7 +405,7 @@ func New(
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
-		app.auctionkeeper,
+		app.AuctionKeeper,
 		mevLane,
 		app.txConfig.TxEncoder(),
 	)

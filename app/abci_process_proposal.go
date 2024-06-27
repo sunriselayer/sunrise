@@ -56,7 +56,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
-		app.auctionkeeper,
+		app.AuctionKeeper,
 		app.mevLane,
 		app.txConfig.TxEncoder(),
 	)

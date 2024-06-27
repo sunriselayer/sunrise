@@ -61,7 +61,7 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
-		app.auctionkeeper,
+		app.AuctionKeeper,
 		app.mevLane,
 		app.txConfig.TxEncoder(),
 	)
