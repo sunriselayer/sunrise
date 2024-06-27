@@ -71,6 +71,9 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
+	auctionmodulev1 "github.com/skip-mev/block-sdk/v2/api/sdk/auction/module/v1"
+	_ "github.com/skip-mev/block-sdk/v2/x/auction" // import for side-effects
+	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
 	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/module/v1"
 	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
 	feemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/fee/module"
@@ -136,6 +139,8 @@ var (
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
+		// thirdparty modules
+		auctiontypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -216,6 +221,7 @@ var (
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
+		{Account: auctiontypes.ModuleName, Permissions: []string{}},
 	}
 
 	// blocked account addresses
@@ -382,6 +388,10 @@ var (
 			{
 				Name:   feemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feemodulev1.Module{}),
+			},
+			{
+				Name:   auctiontypes.ModuleName,
+				Config: appconfig.WrapAny(&auctionmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
