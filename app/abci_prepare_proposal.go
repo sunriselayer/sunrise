@@ -36,6 +36,11 @@ func (app *App) NewProposalContext(header cmtproto.Header) sdk.Context {
 func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 	defer telemetry.MeasureSince(time.Now(), "prepare_proposal")
 
+	res, err := app.BaseApp.PrepareProposal(req)
+	if err != nil {
+		panic(err)
+	}
+
 	// create a context using a branch of the state and loaded using the
 	// proposal height and chain-id
 	sdkCtx := app.NewProposalContext(cmtproto.Header{
@@ -56,6 +61,9 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
+		app.AuctionKeeper,
+		app.mevLane,
+		app.txConfig.TxEncoder(),
 	)
 
 	var txs [][]byte
@@ -74,7 +82,7 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 	if app.LastBlockHeight() == 0 {
 		txs = make([][]byte, 0)
 	} else {
-		txs = FilterTxs(app.Logger(), sdkCtx, handler, app.txConfig, req.Txs)
+		txs = FilterTxs(app.Logger(), sdkCtx, handler, app.txConfig, res.Txs)
 	}
 
 	// build the square from the set of valid and prioritised transactions.

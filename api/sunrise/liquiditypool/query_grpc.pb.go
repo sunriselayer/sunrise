@@ -27,6 +27,7 @@ const (
 	Query_PoolPositions_FullMethodName                = "/sunrise.liquiditypool.Query/PoolPositions"
 	Query_AddressPositions_FullMethodName             = "/sunrise.liquiditypool.Query/AddressPositions"
 	Query_PositionFees_FullMethodName                 = "/sunrise.liquiditypool.Query/PositionFees"
+	Query_CalculationCreatePosition_FullMethodName    = "/sunrise.liquiditypool.Query/CalculationCreatePosition"
 	Query_CalculationIncreaseLiquidity_FullMethodName = "/sunrise.liquiditypool.Query/CalculationIncreaseLiquidity"
 )
 
@@ -46,6 +47,9 @@ type QueryClient interface {
 	AddressPositions(ctx context.Context, in *QueryAddressPositionsRequest, opts ...grpc.CallOption) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(ctx context.Context, in *QueryPositionFeesRequest, opts ...grpc.CallOption) (*QueryPositionFeesResponse, error)
+	// Query calculation another amount of create position
+	CalculationCreatePosition(ctx context.Context, in *QueryCalculationCreatePositionRequest, opts ...grpc.CallOption) (*QueryCalculationCreatePositionResponse, error)
+	// Query calculation another amount of increase liquidity
 	CalculationIncreaseLiquidity(ctx context.Context, in *QueryCalculationIncreaseLiquidityRequest, opts ...grpc.CallOption) (*QueryCalculationIncreaseLiquidityResponse, error)
 }
 
@@ -129,6 +133,15 @@ func (c *queryClient) PositionFees(ctx context.Context, in *QueryPositionFeesReq
 	return out, nil
 }
 
+func (c *queryClient) CalculationCreatePosition(ctx context.Context, in *QueryCalculationCreatePositionRequest, opts ...grpc.CallOption) (*QueryCalculationCreatePositionResponse, error) {
+	out := new(QueryCalculationCreatePositionResponse)
+	err := c.cc.Invoke(ctx, Query_CalculationCreatePosition_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) CalculationIncreaseLiquidity(ctx context.Context, in *QueryCalculationIncreaseLiquidityRequest, opts ...grpc.CallOption) (*QueryCalculationIncreaseLiquidityResponse, error) {
 	out := new(QueryCalculationIncreaseLiquidityResponse)
 	err := c.cc.Invoke(ctx, Query_CalculationIncreaseLiquidity_FullMethodName, in, out, opts...)
@@ -154,6 +167,9 @@ type QueryServer interface {
 	AddressPositions(context.Context, *QueryAddressPositionsRequest) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error)
+	// Query calculation another amount of create position
+	CalculationCreatePosition(context.Context, *QueryCalculationCreatePositionRequest) (*QueryCalculationCreatePositionResponse, error)
+	// Query calculation another amount of increase liquidity
 	CalculationIncreaseLiquidity(context.Context, *QueryCalculationIncreaseLiquidityRequest) (*QueryCalculationIncreaseLiquidityResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
@@ -185,6 +201,9 @@ func (UnimplementedQueryServer) AddressPositions(context.Context, *QueryAddressP
 }
 func (UnimplementedQueryServer) PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PositionFees not implemented")
+}
+func (UnimplementedQueryServer) CalculationCreatePosition(context.Context, *QueryCalculationCreatePositionRequest) (*QueryCalculationCreatePositionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculationCreatePosition not implemented")
 }
 func (UnimplementedQueryServer) CalculationIncreaseLiquidity(context.Context, *QueryCalculationIncreaseLiquidityRequest) (*QueryCalculationIncreaseLiquidityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CalculationIncreaseLiquidity not implemented")
@@ -346,6 +365,24 @@ func _Query_PositionFees_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_CalculationCreatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculationCreatePositionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CalculationCreatePosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CalculationCreatePosition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CalculationCreatePosition(ctx, req.(*QueryCalculationCreatePositionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_CalculationIncreaseLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryCalculationIncreaseLiquidityRequest)
 	if err := dec(in); err != nil {
@@ -402,6 +439,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PositionFees",
 			Handler:    _Query_PositionFees_Handler,
+		},
+		{
+			MethodName: "CalculationCreatePosition",
+			Handler:    _Query_CalculationCreatePosition_Handler,
 		},
 		{
 			MethodName: "CalculationIncreaseLiquidity",

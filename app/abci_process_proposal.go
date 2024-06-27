@@ -38,6 +38,11 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		}
 	}()
 
+	res, err := app.BaseApp.ProcessProposal(req)
+	if err != nil {
+		return res, err
+	}
+
 	// Create the anteHander that are used to check the validity of
 	// transactions. All transactions need to be equally validated here
 	// so that the nonce number is always correctly incremented (which
@@ -51,6 +56,9 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
+		app.AuctionKeeper,
+		app.mevLane,
+		app.txConfig.TxEncoder(),
 	)
 	sdkCtx := app.NewProposalContext(cmtproto.Header{
 		ChainID: app.ChainID(),

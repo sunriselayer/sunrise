@@ -56,7 +56,14 @@ service Query {
       "/sunrise/liquiditypool/positions/{id}/fees";
   }
 
-  // 
+  // Query calculation another amount of create position
+  rpc CalculationCreatePosition (QueryCalculationCreatePositionRequest) 
+      returns (QueryCalculationCreatePositionResponse) {
+    option (google.api.http).get =
+      "/sunrise/liquiditypool/pools/{pool_id}/calculations/create_position";
+  }  
+
+  // Query calculation another amount of increase liquidity
   rpc CalculationIncreaseLiquidity (QueryCalculationIncreaseLiquidityRequest) 
       returns (QueryCalculationIncreaseLiquidityResponse) {
     option (google.api.http).get =
@@ -126,6 +133,19 @@ message QueryPositionFeesRequest { uint64 id = 1; }
 message QueryPositionFeesResponse {
   repeated cosmos.base.v1beta1.Coin fees = 1 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message QueryCalculationCreatePositionRequest { 
+  uint64 pool_id = 1;
+  string lower_tick = 2;
+  string upper_tick = 3;
+  string amount = 4;
+  string denom = 5;
+}
+message QueryCalculationCreatePositionResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [
     (gogoproto.nullable) = false
   ];
 }

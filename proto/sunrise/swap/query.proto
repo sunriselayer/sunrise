@@ -43,11 +43,17 @@ service Query {
 
   // Queries a Calculation swap value.
   rpc CalculationSwapExactAmountIn    (QueryCalculationSwapExactAmountInRequest) returns (QueryCalculationSwapExactAmountInResponse) {
-    option (google.api.http).get = "/sunrise/swap/calculations/swap_exact_amount_in";
+    option (google.api.http) = {
+      post: "/sunrise/swap/calculations/swap_exact_amount_in"
+      body: "*"
+    };
   
   }
   rpc CalculationSwapExactAmountOut    (QueryCalculationSwapExactAmountOutRequest) returns (QueryCalculationSwapExactAmountOutResponse) {
-    option (google.api.http).get = "/sunrise/swap/calculations/swap_exact_amount_out";
+    option (google.api.http) = {
+      post: "/sunrise/swap/calculations/swap_exact_amount_out"
+      body: "*"
+    };
   }
   
 }
@@ -101,8 +107,8 @@ message QueryOutgoingInFlightPacketsResponse {
 
 message QueryCalculationSwapExactAmountInRequest {
   bool has_interface_fee = 1;
-  Route route = 3;
-  string amount_in = 4;
+  Route route = 2;
+  string amount_in = 3;
 }
 
 message QueryCalculationSwapExactAmountInResponse {
@@ -126,8 +132,8 @@ message QueryCalculationSwapExactAmountInResponse {
 
 message QueryCalculationSwapExactAmountOutRequest {
   bool has_interface_fee = 1;
-  Route route = 3;
-  string amount_out = 4;
+  Route route = 2;
+  string amount_out = 3;
 }
 
 message QueryCalculationSwapExactAmountOutResponse {

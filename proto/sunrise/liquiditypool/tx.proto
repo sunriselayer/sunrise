@@ -154,12 +154,7 @@ message MsgDecreaseLiquidity {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   uint64 id = 2;
-  string liquidity = 3 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  string liquidity = 3;
 }
 
 message MsgDecreaseLiquidityResponse {
