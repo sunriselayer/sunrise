@@ -44,7 +44,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 		return nil, err
 	}
 
-	liquidityDelta := math.LegacyZeroDec()
+	var liquidityDelta math.LegacyDec
 	if req.Denom == pool.DenomBase {
 		liquidityDelta = types.LiquidityBase(amount, pool.CurrentSqrtPrice, sqrtPriceUpperTick)
 		_, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)

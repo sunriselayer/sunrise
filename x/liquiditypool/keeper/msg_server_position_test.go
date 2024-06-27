@@ -209,7 +209,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    sender,
 				Id:        0,
-				Liquidity: resp.Liquidity,
+				Liquidity: resp.Liquidity.String(),
 			},
 		},
 		{
@@ -217,7 +217,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    "B",
 				Id:        0,
-				Liquidity: resp.Liquidity,
+				Liquidity: resp.Liquidity.String(),
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
@@ -226,7 +226,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    sender,
 				Id:        10,
-				Liquidity: resp.Liquidity,
+				Liquidity: resp.Liquidity.String(),
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},
