@@ -136,7 +136,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 		})
 	}
 	sort.SliceStable(weightsArr, func(i, j int) bool {
-		return weightsArr[i].PoolId > weightsArr[j].PoolId
+		return weightsArr[i].PoolId < weightsArr[j].PoolId
 	})
 
 	return weightsArr, nil

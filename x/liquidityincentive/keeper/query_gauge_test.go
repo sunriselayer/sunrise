@@ -18,7 +18,7 @@ import (
 var _ = strconv.IntSize
 
 func TestGaugeQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	msgs := createNGauge(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
@@ -72,7 +72,7 @@ func TestGaugeQuerySingle(t *testing.T) {
 }
 
 func TestGaugeQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	msgs := createNGauge(keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryGaugesRequest {

@@ -17,11 +17,20 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/golang/mock/gomock"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
+	liquidityincentivetestutil "github.com/sunriselayer/sunrise/x/liquidityincentive/testutil"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func LiquidityincentiveKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
+type LiquidityIncentiveMocks struct {
+	AcctKeeper          *liquidityincentivetestutil.MockAccountKeeper
+	BankKeeper          *liquidityincentivetestutil.MockBankKeeper
+	StakingKeeper       *liquidityincentivetestutil.MockStakingKeeper
+	LiquiditypoolKeeper *liquidityincentivetestutil.MockLiquidityPoolKeeper
+}
+
+func LiquidityincentiveKeeper(t testing.TB) (keeper.Keeper, LiquidityIncentiveMocks, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -33,15 +42,24 @@ func LiquidityincentiveKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
+	// gomock initializations
+	ctrl := gomock.NewController(t)
+	m := LiquidityIncentiveMocks{
+		AcctKeeper:          liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:          liquidityincentivetestutil.NewMockBankKeeper(ctrl),
+		StakingKeeper:       liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
+		LiquiditypoolKeeper: liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
+	}
+
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
-		nil,
-		nil,
-		nil,
-		nil,
+		m.AcctKeeper,
+		m.BankKeeper,
+		m.StakingKeeper,
+		m.LiquiditypoolKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
@@ -51,5 +69,5 @@ func LiquidityincentiveKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		panic(err)
 	}
 
-	return k, ctx
+	return k, m, ctx
 }

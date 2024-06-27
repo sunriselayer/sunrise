@@ -29,7 +29,7 @@ func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gaug
 }
 
 func TestGaugeGet(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNGauge(keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetGauge(ctx, item.PreviousEpochId, item.PoolId)
@@ -41,7 +41,7 @@ func TestGaugeGet(t *testing.T) {
 	}
 }
 func TestGaugeRemove(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNGauge(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveGauge(ctx, item.PreviousEpochId, item.PoolId)
@@ -54,7 +54,7 @@ func TestGaugeRemove(t *testing.T) {
 }
 
 func TestGaugeGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNGauge(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
@@ -63,7 +63,7 @@ func TestGaugeGetAll(t *testing.T) {
 }
 
 func TestGetAllGaugeByPreviousEpochId(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNGauge(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),

@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetParams(t *testing.T) {
-	k, ctx := keepertest.LiquidityincentiveKeeper(t)
+	k, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	params := types.DefaultParams()
 
 	require.NoError(t, k.SetParams(ctx, params))
