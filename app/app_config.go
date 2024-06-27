@@ -131,6 +131,8 @@ var (
 		group.ModuleName,
 		consensusparamtypes.ModuleName,
 		circuittypes.ModuleName,
+		// thirdparty modules
+		auctiontypes.ModuleName,
 		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
@@ -139,8 +141,6 @@ var (
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		// thirdparty modules
-		auctiontypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -362,6 +362,10 @@ var (
 				Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
 			},
 			{
+				Name:   auctiontypes.ModuleName,
+				Config: appconfig.WrapAny(&auctionmodulev1.Module{}),
+			},
+			{
 				Name:   blobmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&blobmodulev1.Module{}),
 			},
@@ -388,10 +392,6 @@ var (
 			{
 				Name:   feemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feemodulev1.Module{}),
-			},
-			{
-				Name:   auctiontypes.ModuleName,
-				Config: appconfig.WrapAny(&auctionmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
