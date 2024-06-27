@@ -77,6 +77,7 @@ import (
 
 	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/module/v1"
 	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
+	damodulev1 "github.com/sunriselayer/sunrise/api/sunrise/da/module"
 	feemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/fee/module"
 	liquidityincentivemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquidityincentive/module"
 	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module"
@@ -86,6 +87,8 @@ import (
 	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
 	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
 	streammoduletypes "github.com/sunriselayer/sunrise/x/blobstream/types"
+	_ "github.com/sunriselayer/sunrise/x/da/module" // import for side-effects
+	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module" // import for side-effects
 	feemoduletypes "github.com/sunriselayer/sunrise/x/fee/types"
 	_ "github.com/sunriselayer/sunrise/x/liquidityincentive/module" // import for side-effects
@@ -96,10 +99,7 @@ import (
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
-	damodulev1 "github.com/sunriselayer/sunrise/api/sunrise/da/module"
-_ "github.com/sunriselayer/sunrise/x/da/module" // import for side-effects
-damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
-// this line is used by starport scaffolding # stargate/app/moduleImport
+	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 var (
@@ -140,13 +140,13 @@ var (
 		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/initGenesis
+		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -170,12 +170,12 @@ var (
 		ibcfeetypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/beginBlockers
+		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
 	endBlockers = []string{
@@ -195,13 +195,13 @@ var (
 		// chain modules
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/endBlockers
+		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
 	preBlockers = []string{
@@ -248,6 +248,7 @@ var (
 		// icatypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
+		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
@@ -384,6 +385,10 @@ var (
 				Config: appconfig.WrapAny(&streammodulev1.Module{}),
 			},
 			{
+				Name:   damoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&damodulev1.Module{}),
+			},
+			{
 				Name:   tokenconvertermoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&tokenconvertermodulev1.Module{}),
 			},
@@ -403,11 +408,7 @@ var (
 				Name:   feemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feemodulev1.Module{}),
 			},
-			{
-				Name:   damoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&damodulev1.Module{}),
-			},
-// this line is used by starport scaffolding # stargate/app/moduleConfig
+			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
