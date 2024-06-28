@@ -50,11 +50,9 @@ func TestPdp(t *testing.T) {
 	}
 	shardCountHalf := 6
 
-	p := big.NewInt(0)
-	p.SetString("2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1", 0)
-	q := big.NewInt(0)
-	q.SetString("2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1", 0)
-	g := big.NewInt(2)
+	p := big.NewInt(727)
+	q := big.NewInt(11)
+	g := big.NewInt(716)
 	public := pdp.Public{
 		P: *p,
 		Q: *q,
@@ -81,11 +79,9 @@ func TestPdp(t *testing.T) {
 }
 
 func TestGroupOrder(t *testing.T) {
-	p := big.NewInt(0)
-	p.SetString("2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1", 0)
-	q := big.NewInt(0)
-	q.SetString("2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1", 0)
-	g := big.NewInt(2)
+	p := big.NewInt(727)
+	q := big.NewInt(11)
+	g := big.NewInt(716)
 
 	// Calculate g^q mod p
 	result := new(big.Int).Exp(g, q, p)

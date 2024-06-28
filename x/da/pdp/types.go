@@ -12,7 +12,12 @@ type Public struct {
 }
 
 func (public *Public) Validate() error {
-	r := new(big.Int).Exp(&public.G, &public.Q, &public.P).Cmp(big.NewInt(1))
+	println(public.P.String())
+	println(public.Q.String())
+	println(public.G.String())
+	v := new(big.Int).Exp(&public.G, &public.Q, &public.P)
+	r := v.Cmp(big.NewInt(1))
+	println(v.String())
 
 	if r != 0 {
 		return fmt.Errorf("It is required to satisfy g^q = 1 mod p")
