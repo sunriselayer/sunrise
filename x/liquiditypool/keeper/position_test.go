@@ -30,7 +30,7 @@ func createNPosition(keeper keeper.Keeper, ctx context.Context, n int) []types.P
 }
 
 func TestPositionGet(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPosition(keeper, ctx, 10)
 	for _, item := range items {
 		got, found := keeper.GetPosition(ctx, item.Id)
@@ -43,7 +43,7 @@ func TestPositionGet(t *testing.T) {
 }
 
 func TestPositionRemove(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPosition(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemovePosition(ctx, item.Id)
@@ -53,7 +53,7 @@ func TestPositionRemove(t *testing.T) {
 }
 
 func TestPositionGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPosition(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
@@ -62,7 +62,7 @@ func TestPositionGetAll(t *testing.T) {
 }
 
 func TestPositionCount(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPosition(keeper, ctx, 10)
 	count := uint64(len(items))
 	require.Equal(t, count, keeper.GetPositionCount(ctx))

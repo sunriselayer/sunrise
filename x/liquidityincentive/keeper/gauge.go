@@ -52,7 +52,7 @@ func (k Keeper) GetAllGauges(ctx context.Context) (list []types.Gauge) {
 	return
 }
 
-// GetAllGauge returns all gauge
+// GetAllGaugeByPreviousEpochId returns all gauges by previous epoch id
 func (k Keeper) GetAllGaugeByPreviousEpochId(ctx context.Context, previousEpochId uint64) (list []types.Gauge) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.GaugeKeyPrefixByPreviousEpochId(previousEpochId))

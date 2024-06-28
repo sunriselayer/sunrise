@@ -117,6 +117,7 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 		return nil, err
 	}
 
+	position, _ = k.GetPosition(ctx, positionId)
 	return &types.MsgCreatePositionResponse{
 		Id:          positionId,
 		AmountBase:  amountBase,
@@ -183,6 +184,7 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 	}
 
 	return &types.MsgIncreaseLiquidityResponse{
+		PositionId:  res.Id,
 		AmountBase:  res.AmountBase,
 		AmountQuote: res.AmountQuote,
 	}, nil

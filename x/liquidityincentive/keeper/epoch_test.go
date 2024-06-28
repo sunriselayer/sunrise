@@ -20,7 +20,7 @@ func createNEpoch(keeper keeper.Keeper, ctx context.Context, n int) []types.Epoc
 }
 
 func TestEpochGet(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNEpoch(keeper, ctx, 10)
 	for _, item := range items {
 		got, found := keeper.GetEpoch(ctx, item.Id)
@@ -33,7 +33,7 @@ func TestEpochGet(t *testing.T) {
 }
 
 func TestEpochRemove(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNEpoch(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveEpoch(ctx, item.Id)
@@ -43,7 +43,7 @@ func TestEpochRemove(t *testing.T) {
 }
 
 func TestEpochGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNEpoch(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
@@ -52,8 +52,19 @@ func TestEpochGetAll(t *testing.T) {
 }
 
 func TestEpochCount(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNEpoch(keeper, ctx, 10)
 	count := uint64(len(items))
 	require.Equal(t, count, keeper.GetEpochCount(ctx))
+}
+
+func TestGetLastEpoch(t *testing.T) {
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
+	items := createNEpoch(keeper, ctx, 10)
+	got, found := keeper.GetLastEpoch(ctx)
+	require.True(t, found)
+	require.Equal(t,
+		nullify.Fill(&items[len(items)-1]),
+		nullify.Fill(&got),
+	)
 }

@@ -3,8 +3,10 @@ package keeper_test
 import (
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -15,7 +17,10 @@ import (
 )
 
 func TestPoolQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, bk, ctx := keepertest.LiquiditypoolKeeper(t)
+
+	bk.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).Return(sdk.Coin{}).AnyTimes()
+
 	msgs := createNPool(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
@@ -60,7 +65,10 @@ func TestPoolQuerySingle(t *testing.T) {
 }
 
 func TestPoolQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, bk, ctx := keepertest.LiquiditypoolKeeper(t)
+
+	bk.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).Return(sdk.Coin{}).AnyTimes()
+
 	msgs := createNPool(keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryPoolsRequest {
