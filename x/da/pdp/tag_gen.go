@@ -17,8 +17,8 @@ func TagGen(blob []byte, public Public, shardCountHalf int) (shardSize uint64, s
 	hash256 := sha3.New256()
 	t := big.NewInt(0)
 
-	for _, share := range shards {
-		hash := hash256.Sum(share)
+	for _, shard := range shards {
+		hash := hash256.Sum(shard)
 
 		t = t.Add(t, new(big.Int).SetBytes(hash))
 		t = t.Mod(t, &public.Q)
@@ -42,19 +42,19 @@ func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 	if mod != 0 {
 		length += shardCountHalf - mod
 	}
-	shareSizeInt := length / shardCountHalf
-	shardSize = uint64(shareSizeInt)
+	shardSizeInt := length / shardCountHalf
+	shardSize = uint64(shardSizeInt)
 
 	for i := 0; i < shardCountHalf-1; i++ {
-		shards[i] = make([]byte, shareSizeInt)
-		copy(shards[i], blob[i*shareSizeInt:(i+1)*shareSizeInt])
+		shards[i] = make([]byte, shardSizeInt)
+		copy(shards[i], blob[i*shardSizeInt:(i+1)*shardSizeInt])
 	}
 	i := shardCountHalf - 1
-	shards[i] = make([]byte, shareSizeInt)
-	copy(shards[i], blob[i*shareSizeInt:])
+	shards[i] = make([]byte, shardSizeInt)
+	copy(shards[i], blob[i*shardSizeInt:])
 
 	for i := 0; i < shardCountHalf; i++ {
-		shards[shardCountHalf+i] = make([]byte, shareSizeInt)
+		shards[shardCountHalf+i] = make([]byte, shardSizeInt)
 	}
 
 	err = encoder.Encode(shards)
