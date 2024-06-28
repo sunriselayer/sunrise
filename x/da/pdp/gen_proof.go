@@ -8,7 +8,11 @@ import (
 	mrand "math/rand"
 )
 
-func GenProof(public Public, t big.Int, c1 int64, permutedShards [][]byte) Proof {
+func GenProof(public Public, t big.Int, c1 big.Int, permutedShards [][]byte) Proof {
+	if err := public.Validate(); err != nil {
+		panic(err)
+	}
+
 	hash256 := sha3.New256()
 	tBar := big.NewInt(0)
 
@@ -28,11 +32,10 @@ func GenProof(public Public, t big.Int, c1 int64, permutedShards [][]byte) Proof
 	}
 	r := new(big.Int).SetBytes(buf)
 
-	c1Big := big.NewInt(c1)
 	x := new(big.Int).Exp(&public.G, r, &public.P)
 
-	tSub := new(big.Int).Sub(&t, tBar)
-	y := r.Add(r, tSub.Mul(tSub, c1Big))
+	tSub := t.Sub(&t, tBar)
+	y := r.Add(r, tSub.Mul(tSub, &c1))
 	y = y.Mod(y, &public.Q)
 
 	return Proof{
