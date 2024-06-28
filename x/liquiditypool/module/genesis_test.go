@@ -35,7 +35,7 @@ func TestGenesis(t *testing.T) {
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, ctx := keepertest.LiquiditypoolKeeper(t)
+	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	liquiditypool.InitGenesis(ctx, k, genesisState)
 	got := liquiditypool.ExportGenesis(ctx, k)
 	require.NotNil(t, got)

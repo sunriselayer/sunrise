@@ -15,7 +15,7 @@ import (
 )
 
 func TestPositionQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	msgs := createNPosition(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
@@ -60,7 +60,7 @@ func TestPositionQuerySingle(t *testing.T) {
 }
 
 func TestPositionQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	msgs := createNPosition(keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryPositionsRequest {

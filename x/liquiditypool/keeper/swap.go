@@ -82,7 +82,7 @@ func (k Keeper) SwapExactAmountIn(
 		return math.Int{}, types.ErrDenomDuplication
 	}
 
-	baseForQuote := getBaseForQuote(tokenIn.Denom, pool.DenomBase)
+	baseForQuote := isBaseForQuote(tokenIn.Denom, pool.DenomBase)
 
 	priceLimit := GetPriceLimit(baseForQuote)
 	feeRate := math.LegacyZeroDec()
@@ -110,7 +110,7 @@ func (k Keeper) SwapExactAmountOut(
 		return math.Int{}, types.ErrDenomDuplication
 	}
 
-	baseForQuote := getBaseForQuote(denomIn, pool.DenomBase)
+	baseForQuote := isBaseForQuote(denomIn, pool.DenomBase)
 
 	priceLimit := GetPriceLimit(baseForQuote)
 	feeRate := math.LegacyZeroDec()
@@ -526,7 +526,7 @@ func (k Keeper) updatePoolForSwap(
 	return err
 }
 
-func getBaseForQuote(inDenom, assetBase string) bool {
+func isBaseForQuote(inDenom, assetBase string) bool {
 	return inDenom == assetBase
 }
 
@@ -545,7 +545,7 @@ func checkDenomValidity(inDenom, outDenom, assetBase, assetQuote string) error {
 }
 
 func (k Keeper) setupSwapHelper(p types.Pool, feeRate math.LegacyDec, denomIn string, priceLimit math.LegacyDec) (strategy SwapHelper, sqrtPriceLimit math.LegacyDec, err error) {
-	baseForQuote := getBaseForQuote(denomIn, p.DenomBase)
+	baseForQuote := isBaseForQuote(denomIn, p.DenomBase)
 
 	// take provided price limit and turn into a sqrt price limit
 	sqrtPriceLimit, err = GetSqrtPriceLimit(priceLimit, baseForQuote)

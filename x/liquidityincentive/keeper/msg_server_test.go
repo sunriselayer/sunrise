@@ -11,13 +11,13 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, context.Context) {
-	k, ctx := keepertest.LiquidityincentiveKeeper(t)
-	return k, keeper.NewMsgServerImpl(k), ctx
+func setupMsgServer(t testing.TB) (keeper.Keeper, keepertest.LiquidityIncentiveMocks, types.MsgServer, context.Context) {
+	k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+	return k, mocks, keeper.NewMsgServerImpl(k), ctx
 }
 
 func TestMsgServer(t *testing.T) {
-	k, ms, ctx := setupMsgServer(t)
+	k, _, ms, ctx := setupMsgServer(t)
 	require.NotNil(t, ms)
 	require.NotNil(t, ctx)
 	require.NotEmpty(t, k)

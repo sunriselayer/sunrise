@@ -43,8 +43,6 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 	return nil
 }
 
-// BeginBlocker sets the proposer for determining distribution during endblock
-// and distribute rewards for the previous block.
 func (k Keeper) EndBlocker(ctx sdk.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
 
@@ -75,13 +73,12 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 	return nil
 }
 
-// EndBlocker called every block, process inflation, update validator set.
 func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
-	feeCollector := k.authKeeper.GetModuleAccount(ctx, authtypes.FeeCollectorName)
-	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector.GetAddress())
+	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
+	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector)
 	vRiseAmount := fees.AmountOf(appconsts.BondDenom)
 	amount := sdk.NewCoin(appconsts.BondDenom, vRiseAmount)
 	feesDec := sdk.NewDecCoinsFromCoins(amount)
@@ -106,15 +103,16 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		ratio := weight.Ratio.Quo(totalWeight)
 		allocationDec := incentiveFeesDec.MulDecTruncate(ratio)
 		allocation, _ := allocationDec.TruncateDecimal()
-
-		err := k.liquidityPoolKeeper.AllocateIncentive(
-			ctx,
-			weight.PoolId,
-			authtypes.NewModuleAddress(authtypes.FeeCollectorName),
-			allocation,
-		)
-		if err != nil {
-			return err
+		if allocation.IsAllPositive() {
+			err := k.liquidityPoolKeeper.AllocateIncentive(
+				ctx,
+				weight.PoolId,
+				authtypes.NewModuleAddress(authtypes.FeeCollectorName),
+				allocation,
+			)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

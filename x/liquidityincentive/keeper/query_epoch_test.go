@@ -15,7 +15,7 @@ import (
 )
 
 func TestEpochQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	msgs := createNEpoch(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
@@ -60,7 +60,7 @@ func TestEpochQuerySingle(t *testing.T) {
 }
 
 func TestEpochQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	msgs := createNEpoch(keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryEpochsRequest {

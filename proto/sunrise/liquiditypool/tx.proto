@@ -135,13 +135,14 @@ message MsgIncreaseLiquidity {
 }
 
 message MsgIncreaseLiquidityResponse {
-  string amount_base = 1 [
+  uint64 position_id = 1;
+  string amount_base = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
-  string amount_quote = 2 [
+  string amount_quote = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false,

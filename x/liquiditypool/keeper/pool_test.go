@@ -34,7 +34,7 @@ func createNPool(keeper keeper.Keeper, ctx context.Context, n int) []types.Pool 
 }
 
 func TestPoolGet(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPool(keeper, ctx, 10)
 	for _, item := range items {
 		got, found := keeper.GetPool(ctx, item.Id)
@@ -47,7 +47,7 @@ func TestPoolGet(t *testing.T) {
 }
 
 func TestPoolRemove(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPool(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemovePool(ctx, item.Id)
@@ -57,7 +57,7 @@ func TestPoolRemove(t *testing.T) {
 }
 
 func TestPoolGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPool(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
@@ -66,7 +66,7 @@ func TestPoolGetAll(t *testing.T) {
 }
 
 func TestPoolCount(t *testing.T) {
-	keeper, ctx := keepertest.LiquiditypoolKeeper(t)
+	keeper, _, ctx := keepertest.LiquiditypoolKeeper(t)
 	items := createNPool(keeper, ctx, 10)
 	count := uint64(len(items))
 	require.Equal(t, count, keeper.GetPoolCount(ctx))

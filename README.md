@@ -109,7 +109,7 @@ sunrised tx blob pay-for-blob 0x00010203040506070809 0x48656c6c6f2c20576f726c642
 	--chain-id private \
 	--from validator \
 	--keyring-backend test \
-	--fees 21000uvrise \
+	--fees 21000urise \
 	--yes
 ```
 

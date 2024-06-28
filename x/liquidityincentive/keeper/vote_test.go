@@ -35,7 +35,7 @@ func createNVote(keeper keeper.Keeper, ctx context.Context, n int) []types.Vote 
 }
 
 func TestVoteGet(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNVote(keeper, ctx, 10)
 	for i, item := range items {
 		address := sdk.AccAddress(fmt.Sprintf("sender%d", i)).String()
@@ -48,7 +48,7 @@ func TestVoteGet(t *testing.T) {
 	}
 }
 func TestVoteRemove(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNVote(keeper, ctx, 10)
 	for i := range items {
 		address := sdk.AccAddress(fmt.Sprintf("sender%d", i)).String()
@@ -59,7 +59,7 @@ func TestVoteRemove(t *testing.T) {
 }
 
 func TestVoteGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNVote(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
