@@ -17,7 +17,7 @@ type Proof struct {
 }
 
 type Metadata struct {
-	ShareSize  uint64
-	ShareCount int
-	Uris       []string
+	ShardSize  uint64
+	ShardCount int
+	ShardUris  []string
 }

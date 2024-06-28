@@ -8,12 +8,12 @@ import (
 	mrand "math/rand"
 )
 
-func GenProof(public Public, t big.Int, c1 int64, permutedShares [][]byte) Proof {
+func GenProof(public Public, t big.Int, c1 int64, permutedShards [][]byte) Proof {
 	hash256 := sha3.New256()
 	tBar := big.NewInt(0)
 
-	for _, share := range permutedShares {
-		hash := hash256.Sum(share)
+	for _, shard := range permutedShards {
+		hash := hash256.Sum(shard)
 
 		tBar = tBar.Add(tBar, new(big.Int).SetBytes(hash))
 		tBar = tBar.Mod(tBar, &public.Q)
@@ -42,14 +42,14 @@ func GenProof(public Public, t big.Int, c1 int64, permutedShares [][]byte) Proof
 	}
 }
 
-func RandomPermutation(shareCount int, k int64, c2 int) []int {
+func RandomPermutation(shardCount int, k int64, c2 int) []int {
 	source := mrand.NewSource(k)
 	rand := mrand.New(source)
 
 	ret := make([]int, c2)
 
 	for i := range ret {
-		ret[i] = rand.Intn(shareCount)
+		ret[i] = rand.Intn(shardCount)
 	}
 
 	return ret
