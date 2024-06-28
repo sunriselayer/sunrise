@@ -8,7 +8,7 @@ import (
 )
 
 func TagGen(blob []byte, public Public) (t *big.Int, shardSize uint64, shardCount int) {
-	shardSize, shardCount, shards := erasureCode(blob, 6)
+	shardSize, shardCount, shards := ErasureCode(blob, 6)
 
 	hash256 := sha3.New256()
 	t = big.NewInt(0)
@@ -23,13 +23,14 @@ func TagGen(blob []byte, public Public) (t *big.Int, shardSize uint64, shardCoun
 	return t, shardSize, shardCount
 }
 
-func erasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount int, shards [][]byte) {
+func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount int, shards [][]byte) {
 	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
 	if err != nil {
 		panic(err)
 	}
 
-	shards = make([][]byte, shardCountHalf*2)
+	shardCount = shardCountHalf * 2
+	shards = make([][]byte, shardCount)
 
 	length := len(blob)
 	mod := length % shardCountHalf
@@ -46,6 +47,10 @@ func erasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 	i := shardCountHalf - 1
 	shards[i] = make([]byte, shareSizeInt)
 	copy(shards[i], blob[i*shareSizeInt:])
+
+	for i := 0; i < shardCountHalf; i++ {
+		shards[shardCountHalf+i] = make([]byte, shareSizeInt)
+	}
 
 	err = encoder.Encode(shards)
 	if err != nil {
