@@ -9,14 +9,13 @@ func CheckProof(public Public, t big.Int, c1 big.Int, proof Proof) bool {
 		panic(err)
 	}
 
-	tLarge := new(big.Int).Exp(&public.G, new(big.Int).Neg(&t), &public.P)
-
-	tPrime := new(big.Int).Mul(tLarge, &proof.TLargeBar)
-	tPrime = tPrime.Mod(tPrime, &public.P)
+	tSub := t.Sub(&proof.TBar, &t)
+	tPrime := tSub.Exp(&public.G, tSub, &public.P)
 
 	gPowY := new(big.Int).Exp(&public.G, &proof.Y, &public.P)
-	tBarPowC1 := new(big.Int).Exp(tPrime, &c1, &public.P)
-	x := new(big.Int).Mul(gPowY, tBarPowC1)
+	tPrimePowC1 := tPrime.Exp(tPrime, &c1, &public.P)
+	x := gPowY.Mul(gPowY, tPrimePowC1)
+	x = x.Mod(x, &public.P)
 
 	return proof.X.Cmp(x) == 0
 }

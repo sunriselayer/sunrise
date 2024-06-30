@@ -9,6 +9,17 @@ import (
 )
 
 func GenProof(public Public, t big.Int, c1 big.Int, permutedShards [][]byte) Proof {
+	buf := make([]byte, 32)
+	_, err := io.ReadFull(rand.Reader, buf)
+	if err != nil {
+		panic(err)
+	}
+	r := new(big.Int).SetBytes(buf)
+
+	return GenProofWithRandom(public, t, c1, permutedShards, *r)
+}
+
+func GenProofWithRandom(public Public, t big.Int, c1 big.Int, permutedShards [][]byte, r big.Int) Proof {
 	if err := public.Validate(); err != nil {
 		panic(err)
 	}
@@ -23,25 +34,16 @@ func GenProof(public Public, t big.Int, c1 big.Int, permutedShards [][]byte) Pro
 		tBar = tBar.Mod(tBar, &public.Q)
 	}
 
-	tLargeBar := new(big.Int).Exp(&public.G, tBar, &public.P)
-
-	buf := make([]byte, 32)
-	_, err := io.ReadFull(rand.Reader, buf)
-	if err != nil {
-		panic(err)
-	}
-	r := new(big.Int).SetBytes(buf)
-
-	x := new(big.Int).Exp(&public.G, r, &public.P)
+	x := new(big.Int).Exp(&public.G, &r, &public.P)
 
 	tSub := t.Sub(&t, tBar)
-	y := r.Add(r, tSub.Mul(tSub, &c1))
+	y := r.Add(&r, tSub.Mul(tSub, &c1))
 	y = y.Mod(y, &public.Q)
 
 	return Proof{
-		X:         *x,
-		Y:         *y,
-		TLargeBar: *tLargeBar,
+		X:    *x,
+		Y:    *y,
+		TBar: *tBar,
 	}
 }
 

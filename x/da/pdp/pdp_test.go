@@ -41,6 +41,29 @@ func TestErasureCode(t *testing.T) {
 	assert.Equal(t, true, valid)
 }
 
+func TestPermutation(t *testing.T) {
+	dataLen := 60
+	data := make([]byte, dataLen)
+
+	for i := range data {
+		data[i] = byte(i & 0xff)
+	}
+	shardCountHalf := 6
+
+	_, shardCount, shards := pdp.ErasureCode(data, shardCountHalf)
+
+	c2 := 6
+	k := int64(20)
+	perm := pdp.RandomPermutation(shardCount, k, c2)
+	for i := range perm {
+		println(perm[i])
+	}
+	permShards := make([][]byte, c2)
+	for i := range permShards {
+		permShards[i] = shards[perm[i]]
+	}
+}
+
 func TestPdp(t *testing.T) {
 	dataLen := 60
 	data := make([]byte, dataLen)
@@ -71,7 +94,12 @@ func TestPdp(t *testing.T) {
 		permShards[i] = shards[perm[i]]
 	}
 
-	proof := pdp.GenProof(public, tag, *c1, permShards)
+	proof := pdp.GenProofWithRandom(public,
+		*new(big.Int).Set(&tag),
+		*new(big.Int).Set(c1),
+		permShards,
+		*big.NewInt(100),
+	)
 
 	valid := pdp.CheckProof(public, tag, *c1, proof)
 

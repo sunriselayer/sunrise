@@ -23,9 +23,9 @@ func (public *Public) Validate() error {
 }
 
 type Proof struct {
-	X         big.Int
-	Y         big.Int
-	TLargeBar big.Int
+	X    big.Int
+	Y    big.Int
+	TBar big.Int
 }
 
 type Metadata struct {
