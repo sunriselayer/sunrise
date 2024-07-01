@@ -18,16 +18,27 @@ func TestClaimRewards(t *testing.T) {
 	tests := []struct {
 		desc       string
 		request    *types.MsgClaimRewards
+		allocation sdk.Coins
 		expRewards sdk.Coins
 		err        error
 	}{
 		{
-			desc: "Positive rewards",
+			desc: "Single token rewards",
 			request: &types.MsgClaimRewards{
 				Sender:      sender,
 				PositionIds: []uint64{0},
 			},
+			allocation: sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
 			expRewards: sdk.Coins{sdk.NewInt64Coin("xyz", 999)},
+		},
+		{
+			desc: "Multiple token rewards",
+			request: &types.MsgClaimRewards{
+				Sender:      sender,
+				PositionIds: []uint64{0},
+			},
+			allocation: sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
+			expRewards: sdk.Coins{sdk.NewInt64Coin("uvw", 999), sdk.NewInt64Coin("xyz", 999)},
 		},
 		{
 			desc: "Empty rewards",
@@ -89,7 +100,7 @@ func TestClaimRewards(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			err = k.AllocateIncentive(wctx, 0, senderAcc, sdk.Coins{sdk.NewInt64Coin("xyz", 1000)})
+			err = k.AllocateIncentive(wctx, 0, senderAcc, tc.allocation)
 			require.NoError(t, err)
 
 			resp, err := srv.ClaimRewards(wctx, tc.request)
@@ -102,26 +113,3 @@ func TestClaimRewards(t *testing.T) {
 		})
 	}
 }
-
-// // TODO: add test for ClaimRewards
-// func (k msgServer) ClaimRewards(goCtx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
-// 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-// 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	totalCollectedFees := sdk.NewCoins()
-// 	for _, positionId := range msg.PositionIds {
-// 		collectedFees, err := k.Keeper.collectFees(ctx, sender, positionId)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		totalCollectedFees = totalCollectedFees.Add(collectedFees...)
-// 	}
-
-// 	return &types.MsgClaimRewardsResponse{
-// 		CollectedFees: totalCollectedFees,
-// 	}, nil
-// }
