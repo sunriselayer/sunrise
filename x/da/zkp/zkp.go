@@ -11,8 +11,9 @@ import (
 
 // Circuit defines our ZKP circuit
 type Circuit struct {
-	Shares    []frontend.Variable `gnark:",private"` // h_i values
-	HShares   []frontend.Variable `gnark:",public"`  // H(h_i) values
+	Indices   []frontend.Variable `gnark:",public"`  // indices
+	Shares    []frontend.Variable `gnark:",private"` // H(s_i) values
+	HShares   []frontend.Variable `gnark:",public"`  // H^2(s_i) values
 	Threshold frontend.Variable   `gnark:",public"`  // threshold
 }
 
@@ -23,10 +24,11 @@ func (circuit *Circuit) Define(api frontend.API) error {
 	}
 
 	// Verify hashes of shares
-	for i := 0; i < len(circuit.Shares); i++ {
+	for i, j := range circuit.Indices {
 		mimcHash.Write(circuit.Shares[i])
 		h := mimcHash.Sum()
-		api.AssertIsEqual(h, circuit.HShares[i])
+		j, _ := j.(int)
+		api.AssertIsEqual(h, circuit.HShares[j])
 	}
 
 	// Verify that the number of shares used is at least the threshold
@@ -35,24 +37,8 @@ func (circuit *Circuit) Define(api frontend.API) error {
 	return nil
 }
 
-func reconstructSecret(api frontend.API, shares []frontend.Variable, x []frontend.Variable) frontend.Variable {
-	secret := frontend.Variable(0)
-	for i := 0; i < len(shares); i++ {
-		li := frontend.Variable(1)
-		for j := 0; j < len(shares); j++ {
-			if i != j {
-				numerator := x[j]
-				denominator := api.Sub(x[j], x[i])
-				li = api.Mul(li, api.Div(numerator, denominator))
-			}
-		}
-		secret = api.Add(secret, api.Mul(shares[i], li))
-	}
-	return secret
-}
-
-func proveAndVerify(circuit Circuit) error {
-	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), frontend.WithNbConstraint(1000000), &circuit)
+func ProveAndVerify(circuit Circuit) error {
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), nil, &circuit) // TODO: nil
 	if err != nil {
 		return fmt.Errorf("compile error: %v", err)
 	}
