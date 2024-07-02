@@ -42,7 +42,7 @@ func createNIncomingInFlightPacket(keeper keeper.Keeper, ctx context.Context, n 
 }
 
 func TestIncomingInFlightPacketGet(t *testing.T) {
-	keeper, ctx := keepertest.SwapKeeper(t)
+	keeper, _, ctx := keepertest.SwapKeeper(t)
 	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
 		_, found := keeper.GetIncomingInFlightPacket(ctx,
@@ -54,7 +54,7 @@ func TestIncomingInFlightPacketGet(t *testing.T) {
 	}
 }
 func TestIncomingInFlightPacketRemove(t *testing.T) {
-	keeper, ctx := keepertest.SwapKeeper(t)
+	keeper, _, ctx := keepertest.SwapKeeper(t)
 	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	for _, item := range items {
 		keeper.RemoveIncomingInFlightPacket(ctx,
@@ -72,7 +72,7 @@ func TestIncomingInFlightPacketRemove(t *testing.T) {
 }
 
 func TestIncomingInFlightPacketGetAll(t *testing.T) {
-	keeper, ctx := keepertest.SwapKeeper(t)
+	keeper, _, ctx := keepertest.SwapKeeper(t)
 	items := createNIncomingInFlightPacket(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
