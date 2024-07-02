@@ -1,4 +1,4 @@
-package secretsharing
+package zkp
 
 import (
 	"fmt"
@@ -11,11 +11,9 @@ import (
 
 // Circuit defines our ZKP circuit
 type Circuit struct {
-	Shares  []frontend.Variable `gnark:",private"` // h_i values
-	X       []frontend.Variable `gnark:",private"` // x_i values
-	Secret  frontend.Variable   `gnark:",private"` // reconstructed secret (a_0)
-	HShares []frontend.Variable `gnark:",public"`  // H(h_i) values
-	T       frontend.Variable   `gnark:",public"`  // threshold
+	Shares    []frontend.Variable `gnark:",private"` // h_i values
+	HShares   []frontend.Variable `gnark:",public"`  // H(h_i) values
+	Threshold frontend.Variable   `gnark:",public"`  // threshold
 }
 
 func (circuit *Circuit) Define(api frontend.API) error {
@@ -31,14 +29,8 @@ func (circuit *Circuit) Define(api frontend.API) error {
 		api.AssertIsEqual(h, circuit.HShares[i])
 	}
 
-	// Lagrange interpolation to reconstruct the secret
-	secret := reconstructSecret(api, circuit.Shares, circuit.X)
-
-	// Verify the reconstructed secret
-	api.AssertIsEqual(secret, circuit.Secret)
-
 	// Verify that the number of shares used is at least the threshold
-	api.AssertIsLessOrEqual(circuit.T, frontend.Variable(len(circuit.Shares)))
+	api.AssertIsLessOrEqual(circuit.Threshold, frontend.Variable(len(circuit.Shares)))
 
 	return nil
 }
