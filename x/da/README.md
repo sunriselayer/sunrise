@@ -15,16 +15,48 @@ This system verifies the possession of data shard hash `H(s_i)` without exposing
 
 ### Zero-Knowledge Proof System
 
-#### 4.1 Public Inputs
+#### Public Inputs
 
 - $\{H^2(s_i)\}_{i=1}^n$
 - $t$: Threshold
 
-#### 4.2 Private Inputs
+#### Private Inputs
 
 - $\{H(s_i)\}_{i=1}^t$
 
-#### 4.3 ZKP Circuit Constraints
+#### ZKP Circuit Constraints
 
 Hash Verification:
 For each $i$, verify $H^2(s_i) = H^2(s_i)_{public}$
+
+## Msgs
+
+### MsgPublishData
+
+```protobuf
+message MsgPublishData {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1;
+  string metadata_uri = 2;
+  repeated bytes shard_double_hashes = 3;
+}
+```
+
+## Metadata
+
+The metadata that is preserved as a JSON in the `metadata_uri` has a schema below
+
+```protobuf
+message Metadata {
+  uint64 shard_size = 1;
+  uint64 shard_count = 2;
+  repeated string shard_uris = 3;
+}
+```
+
+## URI
+
+Supported URIs are below
+
+- `ipfs://`: IPFS
+- `ar://`: Arweave

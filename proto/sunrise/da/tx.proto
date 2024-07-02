@@ -41,9 +41,7 @@ message MsgPublishData {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1;
   string metadata_uri = 2;
-  uint32 share_size = 3;
-  uint32 share_count = 4;
-  bytes proof_metadata = 5;
+  repeated bytes shard_double_hashes = 3;
 }
 
 message MsgPublishDataResponse {}
