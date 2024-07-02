@@ -22,12 +22,13 @@ This system verifies the possession of data shard hash `H(s_i)` without exposing
 
 #### Private Inputs
 
-- $\{H(s_i)\}_{i=1}^t$
+- $I$: Index set of shards
+- $\{H(s_i)\}_{i \in I}$
 
 #### ZKP Circuit Constraints
 
-Hash Verification:
-For each $i$, verify $H^2(s_i) = H^2(s_i)_{public}$
+- For each $i$, verify $H^2(s_i) = H^2(s_i)_{public}$
+- $t \le |I|$
 
 ## Msgs
 
