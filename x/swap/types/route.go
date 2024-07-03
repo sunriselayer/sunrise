@@ -156,6 +156,7 @@ func (route *Route) InspectRoute(
 		}, nil
 
 	case *Route_Series:
+		amountExactBuffer := amountExact
 		results := make([]RouteResult, len(strategy.Series.Routes))
 		for i := range strategy.Series.Routes {
 			var r *Route
@@ -164,15 +165,15 @@ func (route *Route) InspectRoute(
 			} else {
 				r = &strategy.Series.Routes[len(strategy.Series.Routes)-1-i]
 			}
-			aResult, rResult, err := r.InspectRoute(amountExact, inspectRoutePool, generateResult, reverse)
+			amountResultBuffer, routeResultBuffer, err := r.InspectRoute(amountExactBuffer, inspectRoutePool, generateResult, reverse)
 			if err != nil {
 				return math.Int{}, RouteResult{}, err
 			}
-			results[i] = rResult
+			results[i] = routeResultBuffer
 
-			amountExact = aResult
+			amountExactBuffer = amountResultBuffer
 		}
-		amountResult = amountExact
+		amountResult = amountExactBuffer
 
 		tokenIn, tokenOut := generateResult(route.DenomIn, route.DenomOut, amountExact, amountResult)
 
@@ -210,12 +211,12 @@ func (route *Route) InspectRoute(
 
 		// Execute the inspections
 		for i, r := range strategy.Parallel.Routes {
-			aResult, rResult, err := r.InspectRoute(amountsExact[i], inspectRoutePool, generateResult, reverse)
+			amountResultBuffer, routeResultBuffer, err := r.InspectRoute(amountsExact[i], inspectRoutePool, generateResult, reverse)
 			if err != nil {
 				return math.Int{}, RouteResult{}, err
 			}
-			amountResult = amountResult.Add(aResult)
-			results[i] = rResult
+			amountResult = amountResult.Add(amountResultBuffer)
+			results[i] = routeResultBuffer
 		}
 
 		tokenIn, tokenOut := generateResult(route.DenomIn, route.DenomOut, amountExact, amountResult)
