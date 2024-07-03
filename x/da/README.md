@@ -4,9 +4,9 @@
 
 ### Terms and Notation
 
-- $n$: Total number of shards
+- $n$: Total number of erasure coded shards
 - $t$: Threshold (minimum number of shards required to prove the possession)
-- $s_i$: The $i$-th shard
+- $s_i$: The $i$-th erasure coded data shard
 - $H$: The hash function
 
 ### Overview
