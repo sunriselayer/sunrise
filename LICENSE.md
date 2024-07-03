@@ -9,7 +9,7 @@ Parameters
 
 Licensor:             CAUCHYE ASIA PTE. LTD.
 
-Licensed Work:        x/liquidityincentive
+Licensed Work:        Sunrise
                       The Licensed Work is (c) 2024 CAUCHYE ASIA PTE. LTD.
 
 Additional Use Grant: Non-commercial testnet building
