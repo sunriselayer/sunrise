@@ -24,13 +24,13 @@ func TestAllocateIncentive(t *testing.T) {
 	}{
 		{
 			desc:            "Single token allocation",
-			poolId:          0,
+			poolId:          1,
 			allocation:      sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
 			expAccumulation: "0.000052483597714026xyz",
 		},
 		{
 			desc:            "Multiple tokens allocation",
-			poolId:          0,
+			poolId:          1,
 			allocation:      sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
 			expAccumulation: "0.000052483597714026uvw,0.000052483597714026xyz",
 		},
@@ -43,7 +43,7 @@ func TestAllocateIncentive(t *testing.T) {
 		},
 		{
 			desc:            "Not available position",
-			poolId:          1,
+			poolId:          2,
 			allocation:      sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
 			expAccumulation: "",
 			err:             types.ErrEmptyLiquidity,
@@ -81,7 +81,7 @@ func TestAllocateIncentive(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender,
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),

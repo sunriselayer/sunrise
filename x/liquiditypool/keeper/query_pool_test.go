@@ -40,7 +40,7 @@ func TestPoolQuerySingle(t *testing.T) {
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryPoolRequest{Id: uint64(len(msgs))},
+			request: &types.QueryPoolRequest{Id: uint64(len(msgs) + 1)},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{

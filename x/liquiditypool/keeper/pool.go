@@ -42,13 +42,13 @@ func (k Keeper) AppendPool(ctx context.Context, pool types.Pool) uint64 {
 	count := k.GetPoolCount(ctx)
 
 	// Set the ID of the appended value
-	pool.Id = count
+	pool.Id = count + 1
 	k.SetPool(ctx, pool)
 
 	// Update pool count
 	k.SetPoolCount(ctx, count+1)
 
-	return count
+	return count + 1
 }
 
 // SetPool set a specific pool in the store

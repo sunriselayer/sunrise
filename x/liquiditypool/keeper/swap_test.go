@@ -117,7 +117,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 1000000),
@@ -127,7 +127,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found := k.GetPool(ctx, 1)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountIn(wctx, sender, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
@@ -136,7 +136,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found := k.GetPool(ctx, 1)
 				require.True(t, found)
 				require.Equal(t, amountOut.String(), tc.expAmountOut.String())
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
@@ -193,7 +193,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 100000),
@@ -205,7 +205,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -50,
 				UpperTick:      50,
 				TokenBase:      sdk.NewInt64Coin("base", 100000),
@@ -215,7 +215,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found := k.GetPool(ctx, 1)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountIn(wctx, sender, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
@@ -225,7 +225,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, amountOut.String(), tc.expAmountOut.String())
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found := k.GetPool(ctx, 1)
 				require.True(t, found)
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
 			}
@@ -321,7 +321,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 1000000),
@@ -331,7 +331,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found := k.GetPool(ctx, 1)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountOut(wctx, sender, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -340,7 +340,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found := k.GetPool(ctx, 1)
 				require.True(t, found)
 				require.Equal(t, amountOut.String(), tc.expAmountIn.String())
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
@@ -397,7 +397,7 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 100000),
@@ -409,7 +409,7 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -50,
 				UpperTick:      50,
 				TokenBase:      sdk.NewInt64Coin("base", 100000),
@@ -419,7 +419,7 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found := k.GetPool(ctx, 1)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountOut(wctx, sender, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -429,7 +429,7 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, amountOut.String(), tc.expAmountIn.String())
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found := k.GetPool(ctx, 1)
 				require.True(t, found)
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
 			}
