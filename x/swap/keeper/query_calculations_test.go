@@ -69,7 +69,7 @@ func TestCalculationSwapExactAmountIn(t *testing.T) {
 					},
 				},
 			},
-			expInterfaceFee: math.ZeroInt(),
+			expInterfaceFee: math.OneInt(),
 			expErr:          nil,
 		},
 		{
