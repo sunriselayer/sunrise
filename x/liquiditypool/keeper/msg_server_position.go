@@ -284,19 +284,18 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 	}
 
 	// Calculate the spot price and sqrt price
-	initialSpotPrice := amountQuoteDesired.ToLegacyDec().Quo(amountBaseDesired.ToLegacyDec())
-	initialCurrentSqrtPrice, err := initialSpotPrice.ApproxSqrt()
+	initialSqrtPrice, err := types.GetSqrtPriceFromQuoteBase(amountQuoteDesired, amountBaseDesired)
 	if err != nil {
 		return err
 	}
 
 	// Calculate the initial tick from the initial spot price
-	initialTick, err := types.CalculateSqrtPriceToTick(initialCurrentSqrtPrice, pool.TickParams)
+	initialTick, err := types.CalculateSqrtPriceToTick(initialSqrtPrice, pool.TickParams)
 	if err != nil {
 		return err
 	}
 
-	pool.CurrentSqrtPrice = initialCurrentSqrtPrice
+	pool.CurrentSqrtPrice = initialSqrtPrice
 	pool.CurrentTick = initialTick
 	k.SetPool(ctx, pool)
 
