@@ -112,4 +112,24 @@ func TestTickToPrice_ZeroBaseOffset(t *testing.T) {
 	require.Equal(t, tickPriceMultiplied.String(), "999000549780071479.506172441398977632")
 }
 
-// TODO: add test for GetSqrtPriceFromQuoteBase
+func TestGetSqrtPriceFromQuoteBase(t *testing.T) {
+	sqrtPrice, err := GetSqrtPriceFromQuoteBase(math.NewInt(10000), math.NewInt(100))
+	require.NoError(t, err)
+	require.Equal(t, sqrtPrice.String(), "10.000000000000000000")
+
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(400), math.NewInt(100))
+	require.NoError(t, err)
+	require.Equal(t, sqrtPrice.String(), "2.000000000000000000")
+
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), math.NewInt(100))
+	require.NoError(t, err)
+	require.Equal(t, sqrtPrice.String(), "0.100000000000000000")
+
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.RoundInt())
+	require.NoError(t, err)
+	require.Equal(t, sqrtPrice.String(), "0.000000001000000000")
+
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.Mul(Multiplier).RoundInt())
+	require.NoError(t, err)
+	require.Equal(t, sqrtPrice.String(), "0.000000000000000001")
+}
