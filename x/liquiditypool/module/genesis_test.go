@@ -13,8 +13,7 @@ import (
 func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params: types.DefaultParams(),
-
-		PoolList: []types.Pool{
+		Pools: []types.Pool{
 			{
 				Id: 0,
 			},
@@ -23,7 +22,7 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		PoolCount: 2,
-		PositionList: []types.Position{
+		Positions: []types.Position{
 			{
 				Id: 0,
 			},
@@ -43,9 +42,9 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(&genesisState)
 	nullify.Fill(got)
 
-	require.ElementsMatch(t, genesisState.PoolList, got.PoolList)
+	require.ElementsMatch(t, genesisState.Pools, got.Pools)
 	require.Equal(t, genesisState.PoolCount, got.PoolCount)
-	require.ElementsMatch(t, genesisState.PositionList, got.PositionList)
+	require.ElementsMatch(t, genesisState.Positions, got.Positions)
 	require.Equal(t, genesisState.PositionCount, got.PositionCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

@@ -62,7 +62,7 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	}
 	liquiditypoolGenesis := types.GenesisState{
 		Params: types.DefaultParams(),
-		PoolList: []types.Pool{
+		Pools: []types.Pool{
 			{
 				Id: 0,
 			},
@@ -71,7 +71,7 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 			},
 		},
 		PoolCount: 2,
-		PositionList: []types.Position{
+		Positions: []types.Position{
 			{
 				Id:      0,
 				Address: sample.AccAddress(),

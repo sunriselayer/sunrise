@@ -116,23 +116,129 @@ func (x *_GenesisState_4_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_GenesisState_6_list)(nil)
+
+type _GenesisState_6_list struct {
+	list *[]*AccumulatorObject
+}
+
+func (x *_GenesisState_6_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_6_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_6_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*AccumulatorObject)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_6_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*AccumulatorObject)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_6_list) AppendMutable() protoreflect.Value {
+	v := new(AccumulatorObject)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_6_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_6_list) NewElement() protoreflect.Value {
+	v := new(AccumulatorObject)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_6_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_7_list)(nil)
+
+type _GenesisState_7_list struct {
+	list *[]*AccumulatorPosition
+}
+
+func (x *_GenesisState_7_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_7_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_7_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*AccumulatorPosition)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_7_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*AccumulatorPosition)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_7_list) AppendMutable() protoreflect.Value {
+	v := new(AccumulatorPosition)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_7_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_7_list) NewElement() protoreflect.Value {
+	v := new(AccumulatorPosition)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_7_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GenesisState               protoreflect.MessageDescriptor
-	fd_GenesisState_params        protoreflect.FieldDescriptor
-	fd_GenesisState_poolList      protoreflect.FieldDescriptor
-	fd_GenesisState_poolCount     protoreflect.FieldDescriptor
-	fd_GenesisState_positionList  protoreflect.FieldDescriptor
-	fd_GenesisState_positionCount protoreflect.FieldDescriptor
+	md_GenesisState                      protoreflect.MessageDescriptor
+	fd_GenesisState_params               protoreflect.FieldDescriptor
+	fd_GenesisState_pools                protoreflect.FieldDescriptor
+	fd_GenesisState_poolCount            protoreflect.FieldDescriptor
+	fd_GenesisState_positions            protoreflect.FieldDescriptor
+	fd_GenesisState_positionCount        protoreflect.FieldDescriptor
+	fd_GenesisState_accumulators         protoreflect.FieldDescriptor
+	fd_GenesisState_accumulatorPositions protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_genesis_proto_init()
 	md_GenesisState = File_sunrise_liquiditypool_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_poolList = md_GenesisState.Fields().ByName("poolList")
+	fd_GenesisState_pools = md_GenesisState.Fields().ByName("pools")
 	fd_GenesisState_poolCount = md_GenesisState.Fields().ByName("poolCount")
-	fd_GenesisState_positionList = md_GenesisState.Fields().ByName("positionList")
+	fd_GenesisState_positions = md_GenesisState.Fields().ByName("positions")
 	fd_GenesisState_positionCount = md_GenesisState.Fields().ByName("positionCount")
+	fd_GenesisState_accumulators = md_GenesisState.Fields().ByName("accumulators")
+	fd_GenesisState_accumulatorPositions = md_GenesisState.Fields().ByName("accumulatorPositions")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -206,9 +312,9 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.PoolList) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.PoolList})
-		if !f(fd_GenesisState_poolList, value) {
+	if len(x.Pools) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.Pools})
+		if !f(fd_GenesisState_pools, value) {
 			return
 		}
 	}
@@ -218,15 +324,27 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.PositionList) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.PositionList})
-		if !f(fd_GenesisState_positionList, value) {
+	if len(x.Positions) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.Positions})
+		if !f(fd_GenesisState_positions, value) {
 			return
 		}
 	}
 	if x.PositionCount != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.PositionCount)
 		if !f(fd_GenesisState_positionCount, value) {
+			return
+		}
+	}
+	if len(x.Accumulators) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_6_list{list: &x.Accumulators})
+		if !f(fd_GenesisState_accumulators, value) {
+			return
+		}
+	}
+	if len(x.AccumulatorPositions) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_7_list{list: &x.AccumulatorPositions})
+		if !f(fd_GenesisState_accumulatorPositions, value) {
 			return
 		}
 	}
@@ -247,14 +365,18 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.GenesisState.params":
 		return x.Params != nil
-	case "sunrise.liquiditypool.GenesisState.poolList":
-		return len(x.PoolList) != 0
+	case "sunrise.liquiditypool.GenesisState.pools":
+		return len(x.Pools) != 0
 	case "sunrise.liquiditypool.GenesisState.poolCount":
 		return x.PoolCount != uint64(0)
-	case "sunrise.liquiditypool.GenesisState.positionList":
-		return len(x.PositionList) != 0
+	case "sunrise.liquiditypool.GenesisState.positions":
+		return len(x.Positions) != 0
 	case "sunrise.liquiditypool.GenesisState.positionCount":
 		return x.PositionCount != uint64(0)
+	case "sunrise.liquiditypool.GenesisState.accumulators":
+		return len(x.Accumulators) != 0
+	case "sunrise.liquiditypool.GenesisState.accumulatorPositions":
+		return len(x.AccumulatorPositions) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.GenesisState"))
@@ -273,14 +395,18 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.GenesisState.params":
 		x.Params = nil
-	case "sunrise.liquiditypool.GenesisState.poolList":
-		x.PoolList = nil
+	case "sunrise.liquiditypool.GenesisState.pools":
+		x.Pools = nil
 	case "sunrise.liquiditypool.GenesisState.poolCount":
 		x.PoolCount = uint64(0)
-	case "sunrise.liquiditypool.GenesisState.positionList":
-		x.PositionList = nil
+	case "sunrise.liquiditypool.GenesisState.positions":
+		x.Positions = nil
 	case "sunrise.liquiditypool.GenesisState.positionCount":
 		x.PositionCount = uint64(0)
+	case "sunrise.liquiditypool.GenesisState.accumulators":
+		x.Accumulators = nil
+	case "sunrise.liquiditypool.GenesisState.accumulatorPositions":
+		x.AccumulatorPositions = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.GenesisState"))
@@ -300,24 +426,36 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "sunrise.liquiditypool.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.liquiditypool.GenesisState.poolList":
-		if len(x.PoolList) == 0 {
+	case "sunrise.liquiditypool.GenesisState.pools":
+		if len(x.Pools) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_2_list{})
 		}
-		listValue := &_GenesisState_2_list{list: &x.PoolList}
+		listValue := &_GenesisState_2_list{list: &x.Pools}
 		return protoreflect.ValueOfList(listValue)
 	case "sunrise.liquiditypool.GenesisState.poolCount":
 		value := x.PoolCount
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.GenesisState.positionList":
-		if len(x.PositionList) == 0 {
+	case "sunrise.liquiditypool.GenesisState.positions":
+		if len(x.Positions) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_4_list{})
 		}
-		listValue := &_GenesisState_4_list{list: &x.PositionList}
+		listValue := &_GenesisState_4_list{list: &x.Positions}
 		return protoreflect.ValueOfList(listValue)
 	case "sunrise.liquiditypool.GenesisState.positionCount":
 		value := x.PositionCount
 		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.GenesisState.accumulators":
+		if len(x.Accumulators) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_6_list{})
+		}
+		listValue := &_GenesisState_6_list{list: &x.Accumulators}
+		return protoreflect.ValueOfList(listValue)
+	case "sunrise.liquiditypool.GenesisState.accumulatorPositions":
+		if len(x.AccumulatorPositions) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_7_list{})
+		}
+		listValue := &_GenesisState_7_list{list: &x.AccumulatorPositions}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.GenesisState"))
@@ -340,18 +478,26 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "sunrise.liquiditypool.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "sunrise.liquiditypool.GenesisState.poolList":
+	case "sunrise.liquiditypool.GenesisState.pools":
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
-		x.PoolList = *clv.list
+		x.Pools = *clv.list
 	case "sunrise.liquiditypool.GenesisState.poolCount":
 		x.PoolCount = value.Uint()
-	case "sunrise.liquiditypool.GenesisState.positionList":
+	case "sunrise.liquiditypool.GenesisState.positions":
 		lv := value.List()
 		clv := lv.(*_GenesisState_4_list)
-		x.PositionList = *clv.list
+		x.Positions = *clv.list
 	case "sunrise.liquiditypool.GenesisState.positionCount":
 		x.PositionCount = value.Uint()
+	case "sunrise.liquiditypool.GenesisState.accumulators":
+		lv := value.List()
+		clv := lv.(*_GenesisState_6_list)
+		x.Accumulators = *clv.list
+	case "sunrise.liquiditypool.GenesisState.accumulatorPositions":
+		lv := value.List()
+		clv := lv.(*_GenesisState_7_list)
+		x.AccumulatorPositions = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.GenesisState"))
@@ -377,17 +523,29 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "sunrise.liquiditypool.GenesisState.poolList":
-		if x.PoolList == nil {
-			x.PoolList = []*Pool{}
+	case "sunrise.liquiditypool.GenesisState.pools":
+		if x.Pools == nil {
+			x.Pools = []*Pool{}
 		}
-		value := &_GenesisState_2_list{list: &x.PoolList}
+		value := &_GenesisState_2_list{list: &x.Pools}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.liquiditypool.GenesisState.positionList":
-		if x.PositionList == nil {
-			x.PositionList = []*Position{}
+	case "sunrise.liquiditypool.GenesisState.positions":
+		if x.Positions == nil {
+			x.Positions = []*Position{}
 		}
-		value := &_GenesisState_4_list{list: &x.PositionList}
+		value := &_GenesisState_4_list{list: &x.Positions}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquiditypool.GenesisState.accumulators":
+		if x.Accumulators == nil {
+			x.Accumulators = []*AccumulatorObject{}
+		}
+		value := &_GenesisState_6_list{list: &x.Accumulators}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquiditypool.GenesisState.accumulatorPositions":
+		if x.AccumulatorPositions == nil {
+			x.AccumulatorPositions = []*AccumulatorPosition{}
+		}
+		value := &_GenesisState_7_list{list: &x.AccumulatorPositions}
 		return protoreflect.ValueOfList(value)
 	case "sunrise.liquiditypool.GenesisState.poolCount":
 		panic(fmt.Errorf("field poolCount of message sunrise.liquiditypool.GenesisState is not mutable"))
@@ -409,16 +567,22 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "sunrise.liquiditypool.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.liquiditypool.GenesisState.poolList":
+	case "sunrise.liquiditypool.GenesisState.pools":
 		list := []*Pool{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
 	case "sunrise.liquiditypool.GenesisState.poolCount":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.GenesisState.positionList":
+	case "sunrise.liquiditypool.GenesisState.positions":
 		list := []*Position{}
 		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
 	case "sunrise.liquiditypool.GenesisState.positionCount":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.GenesisState.accumulators":
+		list := []*AccumulatorObject{}
+		return protoreflect.ValueOfList(&_GenesisState_6_list{list: &list})
+	case "sunrise.liquiditypool.GenesisState.accumulatorPositions":
+		list := []*AccumulatorPosition{}
+		return protoreflect.ValueOfList(&_GenesisState_7_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.GenesisState"))
@@ -492,8 +656,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.PoolList) > 0 {
-			for _, e := range x.PoolList {
+		if len(x.Pools) > 0 {
+			for _, e := range x.Pools {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -501,14 +665,26 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.PoolCount != 0 {
 			n += 1 + runtime.Sov(uint64(x.PoolCount))
 		}
-		if len(x.PositionList) > 0 {
-			for _, e := range x.PositionList {
+		if len(x.Positions) > 0 {
+			for _, e := range x.Positions {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
 		if x.PositionCount != 0 {
 			n += 1 + runtime.Sov(uint64(x.PositionCount))
+		}
+		if len(x.Accumulators) > 0 {
+			for _, e := range x.Accumulators {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.AccumulatorPositions) > 0 {
+			for _, e := range x.AccumulatorPositions {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -539,14 +715,46 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if len(x.AccumulatorPositions) > 0 {
+			for iNdEx := len(x.AccumulatorPositions) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.AccumulatorPositions[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x3a
+			}
+		}
+		if len(x.Accumulators) > 0 {
+			for iNdEx := len(x.Accumulators) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Accumulators[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x32
+			}
+		}
 		if x.PositionCount != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.PositionCount))
 			i--
 			dAtA[i] = 0x28
 		}
-		if len(x.PositionList) > 0 {
-			for iNdEx := len(x.PositionList) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.PositionList[iNdEx])
+		if len(x.Positions) > 0 {
+			for iNdEx := len(x.Positions) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Positions[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -565,9 +773,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x18
 		}
-		if len(x.PoolList) > 0 {
-			for iNdEx := len(x.PoolList) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.PoolList[iNdEx])
+		if len(x.Pools) > 0 {
+			for iNdEx := len(x.Pools) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Pools[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -682,7 +890,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolList", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pools", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -709,8 +917,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PoolList = append(x.PoolList, &Pool{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolList[len(x.PoolList)-1]); err != nil {
+				x.Pools = append(x.Pools, &Pool{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pools[len(x.Pools)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -735,7 +943,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				}
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PositionList", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Positions", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -762,8 +970,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PositionList = append(x.PositionList, &Position{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PositionList[len(x.PositionList)-1]); err != nil {
+				x.Positions = append(x.Positions, &Position{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Positions[len(x.Positions)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -786,6 +994,74 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Accumulators", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Accumulators = append(x.Accumulators, &AccumulatorObject{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Accumulators[len(x.Accumulators)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AccumulatorPositions", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AccumulatorPositions = append(x.AccumulatorPositions, &AccumulatorPosition{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.AccumulatorPositions[len(x.AccumulatorPositions)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -841,11 +1117,13 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	// params defines all the parameters of the module.
-	Params        *Params     `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	PoolList      []*Pool     `protobuf:"bytes,2,rep,name=poolList,proto3" json:"poolList,omitempty"`
-	PoolCount     uint64      `protobuf:"varint,3,opt,name=poolCount,proto3" json:"poolCount,omitempty"`
-	PositionList  []*Position `protobuf:"bytes,4,rep,name=positionList,proto3" json:"positionList,omitempty"`
-	PositionCount uint64      `protobuf:"varint,5,opt,name=positionCount,proto3" json:"positionCount,omitempty"`
+	Params               *Params                `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	Pools                []*Pool                `protobuf:"bytes,2,rep,name=pools,proto3" json:"pools,omitempty"`
+	PoolCount            uint64                 `protobuf:"varint,3,opt,name=poolCount,proto3" json:"poolCount,omitempty"`
+	Positions            []*Position            `protobuf:"bytes,4,rep,name=positions,proto3" json:"positions,omitempty"`
+	PositionCount        uint64                 `protobuf:"varint,5,opt,name=positionCount,proto3" json:"positionCount,omitempty"`
+	Accumulators         []*AccumulatorObject   `protobuf:"bytes,6,rep,name=accumulators,proto3" json:"accumulators,omitempty"`
+	AccumulatorPositions []*AccumulatorPosition `protobuf:"bytes,7,rep,name=accumulatorPositions,proto3" json:"accumulatorPositions,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -875,9 +1153,9 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetPoolList() []*Pool {
+func (x *GenesisState) GetPools() []*Pool {
 	if x != nil {
-		return x.PoolList
+		return x.Pools
 	}
 	return nil
 }
@@ -889,9 +1167,9 @@ func (x *GenesisState) GetPoolCount() uint64 {
 	return 0
 }
 
-func (x *GenesisState) GetPositionList() []*Position {
+func (x *GenesisState) GetPositions() []*Position {
 	if x != nil {
-		return x.PositionList
+		return x.Positions
 	}
 	return nil
 }
@@ -901,6 +1179,20 @@ func (x *GenesisState) GetPositionCount() uint64 {
 		return x.PositionCount
 	}
 	return 0
+}
+
+func (x *GenesisState) GetAccumulators() []*AccumulatorObject {
+	if x != nil {
+		return x.Accumulators
+	}
+	return nil
+}
+
+func (x *GenesisState) GetAccumulatorPositions() []*AccumulatorPosition {
+	if x != nil {
+		return x.AccumulatorPositions
+	}
+	return nil
 }
 
 var File_sunrise_liquiditypool_genesis_proto protoreflect.FileDescriptor
@@ -919,38 +1211,51 @@ var file_sunrise_liquiditypool_genesis_proto_rawDesc = []byte{
 	0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x24, 0x73, 0x75, 0x6e,
 	0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
 	0x6f, 0x6c, 0x2f, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0x9e, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61,
-	0x74, 0x65, 0x12, 0x40, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x12, 0x3d, 0x0a, 0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x4c, 0x69, 0x73, 0x74,
-	0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x50,
-	0x6f, 0x6f, 0x6c, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x4c,
-	0x69, 0x73, 0x74, 0x12, 0x1c, 0x0a, 0x09, 0x70, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x70, 0x6f, 0x6f, 0x6c, 0x43, 0x6f, 0x75, 0x6e,
-	0x74, 0x12, 0x49, 0x0a, 0x0c, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x69, 0x73,
-	0x74, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x6f, 0x1a, 0x27, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c,
+	0x61, 0x74, 0x6f, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xcc, 0x03, 0x0a, 0x0c, 0x47,
+	0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x40, 0x0a, 0x06, 0x70,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
+	0x6f, 0x6f, 0x6c, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x37, 0x0a,
+	0x05, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
+	0x05, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x70, 0x6f, 0x6f, 0x6c, 0x43, 0x6f,
+	0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x70, 0x6f, 0x6f, 0x6c, 0x43,
+	0x6f, 0x75, 0x6e, 0x74, 0x12, 0x43, 0x0a, 0x09, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
 	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e,
-	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x24, 0x0a, 0x0d,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x0d, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x75,
-	0x6e, 0x74, 0x42, 0xc6, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c,
-	0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02,
-	0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02,
-	0x21, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x09,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x24, 0x0a, 0x0d, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x0d, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12,
+	0x52, 0x0a, 0x0c, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18,
+	0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x41, 0x63,
+	0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74,
+	0x6f, 0x72, 0x73, 0x12, 0x64, 0x0a, 0x14, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74,
+	0x6f, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x2a, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2e, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75,
+	0x6c, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8,
+	0xde, 0x1f, 0x00, 0x52, 0x14, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72,
+	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xc6, 0x01, 0x0a, 0x19, 0x63, 0x6f,
+	0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73,
+	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2,
+	0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
+	0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -967,20 +1272,24 @@ func file_sunrise_liquiditypool_genesis_proto_rawDescGZIP() []byte {
 
 var file_sunrise_liquiditypool_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_liquiditypool_genesis_proto_goTypes = []interface{}{
-	(*GenesisState)(nil), // 0: sunrise.liquiditypool.GenesisState
-	(*Params)(nil),       // 1: sunrise.liquiditypool.Params
-	(*Pool)(nil),         // 2: sunrise.liquiditypool.Pool
-	(*Position)(nil),     // 3: sunrise.liquiditypool.Position
+	(*GenesisState)(nil),        // 0: sunrise.liquiditypool.GenesisState
+	(*Params)(nil),              // 1: sunrise.liquiditypool.Params
+	(*Pool)(nil),                // 2: sunrise.liquiditypool.Pool
+	(*Position)(nil),            // 3: sunrise.liquiditypool.Position
+	(*AccumulatorObject)(nil),   // 4: sunrise.liquiditypool.AccumulatorObject
+	(*AccumulatorPosition)(nil), // 5: sunrise.liquiditypool.AccumulatorPosition
 }
 var file_sunrise_liquiditypool_genesis_proto_depIdxs = []int32{
 	1, // 0: sunrise.liquiditypool.GenesisState.params:type_name -> sunrise.liquiditypool.Params
-	2, // 1: sunrise.liquiditypool.GenesisState.poolList:type_name -> sunrise.liquiditypool.Pool
-	3, // 2: sunrise.liquiditypool.GenesisState.positionList:type_name -> sunrise.liquiditypool.Position
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	2, // 1: sunrise.liquiditypool.GenesisState.pools:type_name -> sunrise.liquiditypool.Pool
+	3, // 2: sunrise.liquiditypool.GenesisState.positions:type_name -> sunrise.liquiditypool.Position
+	4, // 3: sunrise.liquiditypool.GenesisState.accumulators:type_name -> sunrise.liquiditypool.AccumulatorObject
+	5, // 4: sunrise.liquiditypool.GenesisState.accumulatorPositions:type_name -> sunrise.liquiditypool.AccumulatorPosition
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquiditypool_genesis_proto_init() }
@@ -991,6 +1300,7 @@ func file_sunrise_liquiditypool_genesis_proto_init() {
 	file_sunrise_liquiditypool_params_proto_init()
 	file_sunrise_liquiditypool_pool_proto_init()
 	file_sunrise_liquiditypool_position_proto_init()
+	file_sunrise_liquiditypool_accumulator_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_liquiditypool_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GenesisState); i {
