@@ -636,110 +636,112 @@ func (x *fastReflection_AccumulatorObject) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_AccumulatorPosition_2_list)(nil)
+var _ protoreflect.List = (*_AccumulatorPosition_4_list)(nil)
 
-type _AccumulatorPosition_2_list struct {
+type _AccumulatorPosition_4_list struct {
 	list *[]*v1beta1.DecCoin
 }
 
-func (x *_AccumulatorPosition_2_list) Len() int {
+func (x *_AccumulatorPosition_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_AccumulatorPosition_2_list) Get(i int) protoreflect.Value {
+func (x *_AccumulatorPosition_4_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_AccumulatorPosition_2_list) Set(i int, value protoreflect.Value) {
+func (x *_AccumulatorPosition_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.DecCoin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_AccumulatorPosition_2_list) Append(value protoreflect.Value) {
+func (x *_AccumulatorPosition_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.DecCoin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_AccumulatorPosition_2_list) AppendMutable() protoreflect.Value {
+func (x *_AccumulatorPosition_4_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.DecCoin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_AccumulatorPosition_2_list) Truncate(n int) {
+func (x *_AccumulatorPosition_4_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_AccumulatorPosition_2_list) NewElement() protoreflect.Value {
+func (x *_AccumulatorPosition_4_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.DecCoin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_AccumulatorPosition_2_list) IsValid() bool {
+func (x *_AccumulatorPosition_4_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_AccumulatorPosition_3_list)(nil)
+var _ protoreflect.List = (*_AccumulatorPosition_5_list)(nil)
 
-type _AccumulatorPosition_3_list struct {
+type _AccumulatorPosition_5_list struct {
 	list *[]*v1beta1.DecCoin
 }
 
-func (x *_AccumulatorPosition_3_list) Len() int {
+func (x *_AccumulatorPosition_5_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_AccumulatorPosition_3_list) Get(i int) protoreflect.Value {
+func (x *_AccumulatorPosition_5_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_AccumulatorPosition_3_list) Set(i int, value protoreflect.Value) {
+func (x *_AccumulatorPosition_5_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.DecCoin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_AccumulatorPosition_3_list) Append(value protoreflect.Value) {
+func (x *_AccumulatorPosition_5_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.DecCoin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_AccumulatorPosition_3_list) AppendMutable() protoreflect.Value {
+func (x *_AccumulatorPosition_5_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.DecCoin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_AccumulatorPosition_3_list) Truncate(n int) {
+func (x *_AccumulatorPosition_5_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_AccumulatorPosition_3_list) NewElement() protoreflect.Value {
+func (x *_AccumulatorPosition_5_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.DecCoin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_AccumulatorPosition_3_list) IsValid() bool {
+func (x *_AccumulatorPosition_5_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
 	md_AccumulatorPosition                         protoreflect.MessageDescriptor
+	fd_AccumulatorPosition_name                    protoreflect.FieldDescriptor
+	fd_AccumulatorPosition_index                   protoreflect.FieldDescriptor
 	fd_AccumulatorPosition_num_shares              protoreflect.FieldDescriptor
 	fd_AccumulatorPosition_accum_value_per_share   protoreflect.FieldDescriptor
 	fd_AccumulatorPosition_unclaimed_rewards_total protoreflect.FieldDescriptor
@@ -748,6 +750,8 @@ var (
 func init() {
 	file_sunrise_liquiditypool_accumulator_proto_init()
 	md_AccumulatorPosition = File_sunrise_liquiditypool_accumulator_proto.Messages().ByName("AccumulatorPosition")
+	fd_AccumulatorPosition_name = md_AccumulatorPosition.Fields().ByName("name")
+	fd_AccumulatorPosition_index = md_AccumulatorPosition.Fields().ByName("index")
 	fd_AccumulatorPosition_num_shares = md_AccumulatorPosition.Fields().ByName("num_shares")
 	fd_AccumulatorPosition_accum_value_per_share = md_AccumulatorPosition.Fields().ByName("accum_value_per_share")
 	fd_AccumulatorPosition_unclaimed_rewards_total = md_AccumulatorPosition.Fields().ByName("unclaimed_rewards_total")
@@ -818,6 +822,18 @@ func (x *fastReflection_AccumulatorPosition) Interface() protoreflect.ProtoMessa
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_AccumulatorPosition) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Name != "" {
+		value := protoreflect.ValueOfString(x.Name)
+		if !f(fd_AccumulatorPosition_name, value) {
+			return
+		}
+	}
+	if x.Index != "" {
+		value := protoreflect.ValueOfString(x.Index)
+		if !f(fd_AccumulatorPosition_index, value) {
+			return
+		}
+	}
 	if x.NumShares != "" {
 		value := protoreflect.ValueOfString(x.NumShares)
 		if !f(fd_AccumulatorPosition_num_shares, value) {
@@ -825,13 +841,13 @@ func (x *fastReflection_AccumulatorPosition) Range(f func(protoreflect.FieldDesc
 		}
 	}
 	if len(x.AccumValuePerShare) != 0 {
-		value := protoreflect.ValueOfList(&_AccumulatorPosition_2_list{list: &x.AccumValuePerShare})
+		value := protoreflect.ValueOfList(&_AccumulatorPosition_4_list{list: &x.AccumValuePerShare})
 		if !f(fd_AccumulatorPosition_accum_value_per_share, value) {
 			return
 		}
 	}
 	if len(x.UnclaimedRewardsTotal) != 0 {
-		value := protoreflect.ValueOfList(&_AccumulatorPosition_3_list{list: &x.UnclaimedRewardsTotal})
+		value := protoreflect.ValueOfList(&_AccumulatorPosition_5_list{list: &x.UnclaimedRewardsTotal})
 		if !f(fd_AccumulatorPosition_unclaimed_rewards_total, value) {
 			return
 		}
@@ -851,6 +867,10 @@ func (x *fastReflection_AccumulatorPosition) Range(f func(protoreflect.FieldDesc
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_AccumulatorPosition) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.AccumulatorPosition.name":
+		return x.Name != ""
+	case "sunrise.liquiditypool.AccumulatorPosition.index":
+		return x.Index != ""
 	case "sunrise.liquiditypool.AccumulatorPosition.num_shares":
 		return x.NumShares != ""
 	case "sunrise.liquiditypool.AccumulatorPosition.accum_value_per_share":
@@ -873,6 +893,10 @@ func (x *fastReflection_AccumulatorPosition) Has(fd protoreflect.FieldDescriptor
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_AccumulatorPosition) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.AccumulatorPosition.name":
+		x.Name = ""
+	case "sunrise.liquiditypool.AccumulatorPosition.index":
+		x.Index = ""
 	case "sunrise.liquiditypool.AccumulatorPosition.num_shares":
 		x.NumShares = ""
 	case "sunrise.liquiditypool.AccumulatorPosition.accum_value_per_share":
@@ -895,20 +919,26 @@ func (x *fastReflection_AccumulatorPosition) Clear(fd protoreflect.FieldDescript
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_AccumulatorPosition) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.liquiditypool.AccumulatorPosition.name":
+		value := x.Name
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.AccumulatorPosition.index":
+		value := x.Index
+		return protoreflect.ValueOfString(value)
 	case "sunrise.liquiditypool.AccumulatorPosition.num_shares":
 		value := x.NumShares
 		return protoreflect.ValueOfString(value)
 	case "sunrise.liquiditypool.AccumulatorPosition.accum_value_per_share":
 		if len(x.AccumValuePerShare) == 0 {
-			return protoreflect.ValueOfList(&_AccumulatorPosition_2_list{})
+			return protoreflect.ValueOfList(&_AccumulatorPosition_4_list{})
 		}
-		listValue := &_AccumulatorPosition_2_list{list: &x.AccumValuePerShare}
+		listValue := &_AccumulatorPosition_4_list{list: &x.AccumValuePerShare}
 		return protoreflect.ValueOfList(listValue)
 	case "sunrise.liquiditypool.AccumulatorPosition.unclaimed_rewards_total":
 		if len(x.UnclaimedRewardsTotal) == 0 {
-			return protoreflect.ValueOfList(&_AccumulatorPosition_3_list{})
+			return protoreflect.ValueOfList(&_AccumulatorPosition_5_list{})
 		}
-		listValue := &_AccumulatorPosition_3_list{list: &x.UnclaimedRewardsTotal}
+		listValue := &_AccumulatorPosition_5_list{list: &x.UnclaimedRewardsTotal}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -930,15 +960,19 @@ func (x *fastReflection_AccumulatorPosition) Get(descriptor protoreflect.FieldDe
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_AccumulatorPosition) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.AccumulatorPosition.name":
+		x.Name = value.Interface().(string)
+	case "sunrise.liquiditypool.AccumulatorPosition.index":
+		x.Index = value.Interface().(string)
 	case "sunrise.liquiditypool.AccumulatorPosition.num_shares":
 		x.NumShares = value.Interface().(string)
 	case "sunrise.liquiditypool.AccumulatorPosition.accum_value_per_share":
 		lv := value.List()
-		clv := lv.(*_AccumulatorPosition_2_list)
+		clv := lv.(*_AccumulatorPosition_4_list)
 		x.AccumValuePerShare = *clv.list
 	case "sunrise.liquiditypool.AccumulatorPosition.unclaimed_rewards_total":
 		lv := value.List()
-		clv := lv.(*_AccumulatorPosition_3_list)
+		clv := lv.(*_AccumulatorPosition_5_list)
 		x.UnclaimedRewardsTotal = *clv.list
 	default:
 		if fd.IsExtension() {
@@ -964,14 +998,18 @@ func (x *fastReflection_AccumulatorPosition) Mutable(fd protoreflect.FieldDescri
 		if x.AccumValuePerShare == nil {
 			x.AccumValuePerShare = []*v1beta1.DecCoin{}
 		}
-		value := &_AccumulatorPosition_2_list{list: &x.AccumValuePerShare}
+		value := &_AccumulatorPosition_4_list{list: &x.AccumValuePerShare}
 		return protoreflect.ValueOfList(value)
 	case "sunrise.liquiditypool.AccumulatorPosition.unclaimed_rewards_total":
 		if x.UnclaimedRewardsTotal == nil {
 			x.UnclaimedRewardsTotal = []*v1beta1.DecCoin{}
 		}
-		value := &_AccumulatorPosition_3_list{list: &x.UnclaimedRewardsTotal}
+		value := &_AccumulatorPosition_5_list{list: &x.UnclaimedRewardsTotal}
 		return protoreflect.ValueOfList(value)
+	case "sunrise.liquiditypool.AccumulatorPosition.name":
+		panic(fmt.Errorf("field name of message sunrise.liquiditypool.AccumulatorPosition is not mutable"))
+	case "sunrise.liquiditypool.AccumulatorPosition.index":
+		panic(fmt.Errorf("field index of message sunrise.liquiditypool.AccumulatorPosition is not mutable"))
 	case "sunrise.liquiditypool.AccumulatorPosition.num_shares":
 		panic(fmt.Errorf("field num_shares of message sunrise.liquiditypool.AccumulatorPosition is not mutable"))
 	default:
@@ -987,14 +1025,18 @@ func (x *fastReflection_AccumulatorPosition) Mutable(fd protoreflect.FieldDescri
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_AccumulatorPosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.AccumulatorPosition.name":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.AccumulatorPosition.index":
+		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.AccumulatorPosition.num_shares":
 		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.AccumulatorPosition.accum_value_per_share":
 		list := []*v1beta1.DecCoin{}
-		return protoreflect.ValueOfList(&_AccumulatorPosition_2_list{list: &list})
+		return protoreflect.ValueOfList(&_AccumulatorPosition_4_list{list: &list})
 	case "sunrise.liquiditypool.AccumulatorPosition.unclaimed_rewards_total":
 		list := []*v1beta1.DecCoin{}
-		return protoreflect.ValueOfList(&_AccumulatorPosition_3_list{list: &list})
+		return protoreflect.ValueOfList(&_AccumulatorPosition_5_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.AccumulatorPosition"))
@@ -1064,6 +1106,14 @@ func (x *fastReflection_AccumulatorPosition) ProtoMethods() *protoiface.Methods 
 		var n int
 		var l int
 		_ = l
+		l = len(x.Name)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Index)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		l = len(x.NumShares)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -1122,7 +1172,7 @@ func (x *fastReflection_AccumulatorPosition) ProtoMethods() *protoiface.Methods 
 				copy(dAtA[i:], encoded)
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
-				dAtA[i] = 0x1a
+				dAtA[i] = 0x2a
 			}
 		}
 		if len(x.AccumValuePerShare) > 0 {
@@ -1138,13 +1188,27 @@ func (x *fastReflection_AccumulatorPosition) ProtoMethods() *protoiface.Methods 
 				copy(dAtA[i:], encoded)
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
-				dAtA[i] = 0x12
+				dAtA[i] = 0x22
 			}
 		}
 		if len(x.NumShares) > 0 {
 			i -= len(x.NumShares)
 			copy(dAtA[i:], x.NumShares)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.NumShares)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Index) > 0 {
+			i -= len(x.Index)
+			copy(dAtA[i:], x.Index)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Index)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Name) > 0 {
+			i -= len(x.Name)
+			copy(dAtA[i:], x.Name)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Name)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -1199,6 +1263,70 @@ func (x *fastReflection_AccumulatorPosition) ProtoMethods() *protoiface.Methods 
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Name = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Index = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NumShares", wireType)
 				}
 				var stringLen uint64
@@ -1229,7 +1357,7 @@ func (x *fastReflection_AccumulatorPosition) ProtoMethods() *protoiface.Methods 
 				}
 				x.NumShares = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 2:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AccumValuePerShare", wireType)
 				}
@@ -1263,7 +1391,7 @@ func (x *fastReflection_AccumulatorPosition) ProtoMethods() *protoiface.Methods 
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 3:
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnclaimedRewardsTotal", wireType)
 				}
@@ -1401,9 +1529,11 @@ type AccumulatorPosition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	NumShares             string             `protobuf:"bytes,1,opt,name=num_shares,json=numShares,proto3" json:"num_shares,omitempty"`
-	AccumValuePerShare    []*v1beta1.DecCoin `protobuf:"bytes,2,rep,name=accum_value_per_share,json=accumValuePerShare,proto3" json:"accum_value_per_share,omitempty"`
-	UnclaimedRewardsTotal []*v1beta1.DecCoin `protobuf:"bytes,3,rep,name=unclaimed_rewards_total,json=unclaimedRewardsTotal,proto3" json:"unclaimed_rewards_total,omitempty"`
+	Name                  string             `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Index                 string             `protobuf:"bytes,2,opt,name=index,proto3" json:"index,omitempty"`
+	NumShares             string             `protobuf:"bytes,3,opt,name=num_shares,json=numShares,proto3" json:"num_shares,omitempty"`
+	AccumValuePerShare    []*v1beta1.DecCoin `protobuf:"bytes,4,rep,name=accum_value_per_share,json=accumValuePerShare,proto3" json:"accum_value_per_share,omitempty"`
+	UnclaimedRewardsTotal []*v1beta1.DecCoin `protobuf:"bytes,5,rep,name=unclaimed_rewards_total,json=unclaimedRewardsTotal,proto3" json:"unclaimed_rewards_total,omitempty"`
 }
 
 func (x *AccumulatorPosition) Reset() {
@@ -1424,6 +1554,20 @@ func (*AccumulatorPosition) ProtoMessage() {}
 // Deprecated: Use AccumulatorPosition.ProtoReflect.Descriptor instead.
 func (*AccumulatorPosition) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_accumulator_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AccumulatorPosition) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AccumulatorPosition) GetIndex() string {
+	if x != nil {
+		return x.Index
+	}
+	return ""
 }
 
 func (x *AccumulatorPosition) GetNumShares() string {
@@ -1471,43 +1615,46 @@ var file_sunrise_liquiditypool_accumulator_proto_rawDesc = []byte{
 	0x61, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00,
 	0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
 	0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52,
-	0x0b, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x53, 0x68, 0x61, 0x72, 0x65, 0x73, 0x22, 0xec, 0x02, 0x0a,
+	0x0b, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x53, 0x68, 0x61, 0x72, 0x65, 0x73, 0x22, 0x96, 0x03, 0x0a,
 	0x13, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x73, 0x69,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x42, 0x0a, 0x0a, 0x6e, 0x75, 0x6d, 0x5f, 0x73, 0x68, 0x61, 0x72,
-	0x65, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde,
-	0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d,
-	0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x09, 0x6e,
-	0x75, 0x6d, 0x53, 0x68, 0x61, 0x72, 0x65, 0x73, 0x12, 0x84, 0x01, 0x0a, 0x15, 0x61, 0x63, 0x63,
-	0x75, 0x6d, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x5f, 0x70, 0x65, 0x72, 0x5f, 0x73, 0x68, 0x61,
-	0x72, 0x65, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44,
-	0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x33, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x2b,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70,
-	0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x12, 0x61, 0x63, 0x63,
-	0x75, 0x6d, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x50, 0x65, 0x72, 0x53, 0x68, 0x61, 0x72, 0x65, 0x12,
-	0x89, 0x01, 0x0a, 0x17, 0x75, 0x6e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x5f, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x03, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
-	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42,
-	0x33, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43,
-	0x6f, 0x69, 0x6e, 0x73, 0x52, 0x15, 0x75, 0x6e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x52,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x42, 0xca, 0x01, 0x0a, 0x19,
-	0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x42, 0x10, 0x41, 0x63, 0x63, 0x75, 0x6d,
-	0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
-	0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x64, 0x65,
+	0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x12, 0x42,
+	0x0a, 0x0a, 0x6e, 0x75, 0x6d, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65,
+	0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x09, 0x6e, 0x75, 0x6d, 0x53, 0x68, 0x61, 0x72,
+	0x65, 0x73, 0x12, 0x84, 0x01, 0x0a, 0x15, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x5f, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x5f, 0x70, 0x65, 0x72, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x18, 0x04, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e,
+	0x42, 0x33, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63,
+	0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x12, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x56, 0x61, 0x6c, 0x75,
+	0x65, 0x50, 0x65, 0x72, 0x53, 0x68, 0x61, 0x72, 0x65, 0x12, 0x89, 0x01, 0x0a, 0x17, 0x75, 0x6e,
+	0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f,
+	0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x33, 0xc8, 0xde, 0x1f, 0x00, 0xaa,
+	0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f,
+	0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x15,
+	0x75, 0x6e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
+	0x54, 0x6f, 0x74, 0x61, 0x6c, 0x42, 0xca, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70,
+	0x6f, 0x6f, 0x6c, 0x42, 0x10, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72,
+	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2,
+	0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
+	0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f,
+	0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

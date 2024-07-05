@@ -33,24 +33,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	// Create 1st position
 	resp, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
 		Sender:         sender.String(),
-		PoolId:         0,
-		LowerTick:      0,
-		UpperTick:      1,
-		TokenBase:      sdk.NewInt64Coin("base", 10000),
-		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
-		MinAmountBase:  math.NewInt(0),
-		MinAmountQuote: math.NewInt(0),
-	})
-	require.NoError(t, err)
-	require.Equal(t, resp.Id, uint64(0))
-	require.Equal(t, resp.AmountBase.String(), "10001")
-	require.Equal(t, resp.AmountQuote.String(), "0")
-	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
-
-	// Create 2nd position with same tick
-	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
-		Sender:         sender.String(),
-		PoolId:         0,
+		PoolId:         1,
 		LowerTick:      0,
 		UpperTick:      1,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
@@ -64,10 +47,27 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	require.Equal(t, resp.AmountQuote.String(), "0")
 	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
 
+	// Create 2nd position with same tick
+	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
+		Sender:         sender.String(),
+		PoolId:         1,
+		LowerTick:      0,
+		UpperTick:      1,
+		TokenBase:      sdk.NewInt64Coin("base", 10000),
+		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		MinAmountBase:  math.NewInt(0),
+		MinAmountQuote: math.NewInt(0),
+	})
+	require.NoError(t, err)
+	require.Equal(t, resp.Id, uint64(2))
+	require.Equal(t, resp.AmountBase.String(), "10001")
+	require.Equal(t, resp.AmountQuote.String(), "0")
+	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
+
 	// Create 3rd position with different tick
 	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 		Sender:         sender.String(),
-		PoolId:         0,
+		PoolId:         1,
 		LowerTick:      -10,
 		UpperTick:      10,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
@@ -76,7 +76,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 		MinAmountQuote: math.NewInt(0),
 	})
 	require.NoError(t, err)
-	require.Equal(t, resp.Id, uint64(2))
+	require.Equal(t, resp.Id, uint64(3))
 	require.Equal(t, resp.AmountBase.String(), "10000")
 	require.Equal(t, resp.AmountQuote.String(), "9048")
 	require.Equal(t, resp.Liquidity.String(), "19053571.850177307210510444")
@@ -94,7 +94,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 			desc: "Completed",
 			request: &types.MsgIncreaseLiquidity{
 				Sender:         sender,
-				Id:             0,
+				Id:             1,
 				AmountBase:     math.NewInt(100000),
 				AmountQuote:    math.NewInt(100000),
 				MinAmountBase:  math.NewInt(0),
@@ -105,7 +105,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 			desc: "Unauthorized",
 			request: &types.MsgIncreaseLiquidity{
 				Sender:         "B",
-				Id:             0,
+				Id:             1,
 				AmountBase:     math.NewInt(100000),
 				AmountQuote:    math.NewInt(100000),
 				MinAmountBase:  math.NewInt(0),
@@ -146,7 +146,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender,
-				PoolId:         0,
+				PoolId:         1,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
@@ -163,7 +163,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, resp.AmountBase.String(), "110000")
 				require.Equal(t, resp.AmountQuote.String(), "99527")
-				require.Equal(t, resp.PositionId, uint64(1))
+				require.Equal(t, resp.PositionId, uint64(2))
 			}
 		})
 	}
@@ -189,7 +189,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 
 	resp, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
 		Sender:         sender,
-		PoolId:         0,
+		PoolId:         1,
 		LowerTick:      -10,
 		UpperTick:      10,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
@@ -208,7 +208,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			desc: "Successful deduction",
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    sender,
-				Id:        0,
+				Id:        1,
 				Liquidity: resp.Liquidity.String(),
 			},
 		},
@@ -216,7 +216,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			desc: "Unauthorized",
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    "B",
-				Id:        0,
+				Id:        1,
 				Liquidity: resp.Liquidity.String(),
 			},
 			err: sdkerrors.ErrUnauthorized,

@@ -43,13 +43,13 @@ func (k Keeper) AppendPosition(ctx context.Context, position types.Position) uin
 	count := k.GetPositionCount(ctx)
 
 	// Set the ID of the appended value
-	position.Id = count
+	position.Id = count + 1
 	k.SetPosition(ctx, position)
 
 	// Update position count
 	k.SetPositionCount(ctx, count+1)
 
-	return count
+	return count + 1
 }
 
 // SetPosition set a specific position in the store

@@ -19,15 +19,17 @@ message AccumulatorObject {
 }
 
 message AccumulatorPosition {
-  string num_shares = 1 [
+  string name = 1;
+  string index = 2;
+  string num_shares = 3 [
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
-  repeated cosmos.base.v1beta1.DecCoin accum_value_per_share = 2 [
+  repeated cosmos.base.v1beta1.DecCoin accum_value_per_share = 4 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
-  repeated cosmos.base.v1beta1.DecCoin unclaimed_rewards_total = 3 [
+  repeated cosmos.base.v1beta1.DecCoin unclaimed_rewards_total = 5 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];

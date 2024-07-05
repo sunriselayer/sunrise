@@ -5,11 +5,14 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 
 	"cosmossdk.io/math"
+	"cosmossdk.io/store/prefix"
+	storetypes "cosmossdk.io/store/types"
 )
 
 func (k Keeper) InitAccumulator(ctx context.Context, accumName string) error {
@@ -48,6 +51,22 @@ func (k Keeper) GetAccumulator(ctx context.Context, accumName string) (types.Acc
 	return accumulator, nil
 }
 
+func (k Keeper) GetAllAccumulators(ctx context.Context) (list []types.AccumulatorObject) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.KeyAccumPrefix))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.AccumulatorObject
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
+		list = append(list, val)
+	}
+
+	return
+}
+
 func (k Keeper) SetAccumulator(ctx context.Context, accumulator types.AccumulatorObject) error {
 	bz, err := proto.Marshal(&accumulator)
 	if err != nil {
@@ -84,8 +103,26 @@ func (k Keeper) GetAccumulatorPosition(ctx context.Context, accumName, name stri
 	return position, nil
 }
 
+func (k Keeper) GetAllAccumulatorPositions(ctx context.Context) (list []types.AccumulatorPosition) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.KeyAccumulatorPositionPrefix))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.AccumulatorPosition
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
+		list = append(list, val)
+	}
+
+	return
+}
+
 func (k Keeper) SetAccumulatorPosition(ctx context.Context, accumName string, accumulatorValuePerShare sdk.DecCoins, index string, numShareUnits math.LegacyDec, unclaimedRewardsTotal sdk.DecCoins) {
 	position := types.AccumulatorPosition{
+		Name:                  accumName,
+		Index:                 index,
 		NumShares:             numShareUnits,
 		AccumValuePerShare:    accumulatorValuePerShare,
 		UnclaimedRewardsTotal: unclaimedRewardsTotal,

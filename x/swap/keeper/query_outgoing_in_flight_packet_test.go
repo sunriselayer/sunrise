@@ -18,7 +18,7 @@ import (
 var _ = strconv.IntSize
 
 func TestOutgoingInFlightPacketQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.SwapKeeper(t)
+	keeper, _, ctx := keepertest.SwapKeeper(t)
 	msgs := createNOutgoingInFlightPacket(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
@@ -75,7 +75,7 @@ func TestOutgoingInFlightPacketQuerySingle(t *testing.T) {
 }
 
 func TestOutgoingInFlightPacketQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.SwapKeeper(t)
+	keeper, _, ctx := keepertest.SwapKeeper(t)
 	msgs := createNOutgoingInFlightPacket(keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryOutgoingInFlightPacketsRequest {
