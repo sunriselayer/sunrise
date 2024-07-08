@@ -23,7 +23,7 @@ func TestPoolMsgServerCreate(t *testing.T) {
 		BaseOffset: "0.5",
 	})
 	require.NoError(t, err)
-	require.Equal(t, uint64(1), resp.Id)
+	require.Equal(t, uint64(0), resp.Id)
 
 	// check created pool and status
 	pool, found := k.GetPool(ctx, resp.Id)

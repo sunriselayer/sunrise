@@ -35,7 +35,7 @@ func TestPositionQuerySingle(t *testing.T) {
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryPositionRequest{Id: uint64(len(msgs) + 1)},
+			request: &types.QueryPositionRequest{Id: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
