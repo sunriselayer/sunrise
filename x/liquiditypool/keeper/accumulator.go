@@ -15,9 +15,9 @@ import (
 	storetypes "cosmossdk.io/store/types"
 )
 
-func (k Keeper) InitAccumulator(ctx context.Context, accumName string) error {
+func (k Keeper) InitAccumulator(ctx context.Context, name string) error {
 	store := k.storeService.OpenKVStore(ctx)
-	hasKey, err := store.Has(types.FormatKeyAccumPrefix(accumName))
+	hasKey, err := store.Has(types.FormatKeyAccumPrefix(name))
 	if err != nil {
 		return err
 	}
@@ -26,16 +26,16 @@ func (k Keeper) InitAccumulator(ctx context.Context, accumName string) error {
 	}
 
 	return k.SetAccumulator(ctx, types.AccumulatorObject{
-		Name:        accumName,
+		Name:        name,
 		AccumValue:  sdk.NewDecCoins(),
 		TotalShares: math.LegacyZeroDec(),
 	})
 }
 
-func (k Keeper) GetAccumulator(ctx context.Context, accumName string) (types.AccumulatorObject, error) {
+func (k Keeper) GetAccumulator(ctx context.Context, name string) (types.AccumulatorObject, error) {
 	accumulator := types.AccumulatorObject{}
 	store := k.storeService.OpenKVStore(ctx)
-	bz, err := store.Get(types.FormatKeyAccumPrefix(accumName))
+	bz, err := store.Get(types.FormatKeyAccumPrefix(name))
 	if err != nil {
 		return types.AccumulatorObject{}, err
 	}
