@@ -26,7 +26,7 @@ func TestClaimRewards(t *testing.T) {
 			desc: "Single token rewards",
 			request: &types.MsgClaimRewards{
 				Sender:      sender,
-				PositionIds: []uint64{1},
+				PositionIds: []uint64{0},
 			},
 			allocation: sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
 			expRewards: sdk.Coins{sdk.NewInt64Coin("xyz", 999)},
@@ -35,7 +35,7 @@ func TestClaimRewards(t *testing.T) {
 			desc: "Multiple token rewards",
 			request: &types.MsgClaimRewards{
 				Sender:      sender,
-				PositionIds: []uint64{1},
+				PositionIds: []uint64{0},
 			},
 			allocation: sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
 			expRewards: sdk.Coins{sdk.NewInt64Coin("uvw", 999), sdk.NewInt64Coin("xyz", 999)},
@@ -44,7 +44,7 @@ func TestClaimRewards(t *testing.T) {
 			desc: "Empty rewards",
 			request: &types.MsgClaimRewards{
 				Sender:      sender,
-				PositionIds: []uint64{2},
+				PositionIds: []uint64{1},
 			},
 			expRewards: sdk.Coins{},
 		},
@@ -52,7 +52,7 @@ func TestClaimRewards(t *testing.T) {
 			desc: "Not available position",
 			request: &types.MsgClaimRewards{
 				Sender:      sender,
-				PositionIds: []uint64{4},
+				PositionIds: []uint64{3},
 			},
 			expRewards: sdk.Coins{},
 			err:        types.ErrPositionNotFound,
@@ -78,7 +78,7 @@ func TestClaimRewards(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender,
-				PoolId:         1,
+				PoolId:         0,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
@@ -90,7 +90,7 @@ func TestClaimRewards(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender,
-				PoolId:         1,
+				PoolId:         0,
 				LowerTick:      100,
 				UpperTick:      200,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
@@ -100,7 +100,7 @@ func TestClaimRewards(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			err = k.AllocateIncentive(wctx, 1, senderAcc, tc.allocation)
+			err = k.AllocateIncentive(wctx, 0, senderAcc, tc.allocation)
 			require.NoError(t, err)
 
 			resp, err := srv.ClaimRewards(wctx, tc.request)
