@@ -220,7 +220,7 @@ func (k Keeper) CalculateResultExactAmountOut(
 	return swapResult.AmountIn, nil
 }
 
-func (k Keeper) getPoolAndAccum(
+func (k Keeper) GetValidatedPoolAndAccumulator(
 	ctx sdk.Context,
 	poolId uint64,
 	denomIn string,
@@ -265,7 +265,7 @@ func (k Keeper) computeOutAmtGivenIn(
 	multipliedPriceLimit math.LegacyDec,
 	updateAccumulators bool,
 ) (swapResult SwapResult, poolUpdates PoolUpdates, err error) {
-	p, feeAccumulator, err := k.getPoolAndAccum(ctx, poolId, minTokenIn.Denom, denomOut)
+	p, feeAccumulator, err := k.GetValidatedPoolAndAccumulator(ctx, poolId, minTokenIn.Denom, denomOut)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
@@ -362,7 +362,7 @@ func (k Keeper) computeInAmtGivenOut(
 	poolId uint64,
 	updateAccumulators bool,
 ) (swapResult SwapResult, poolUpdates PoolUpdates, err error) {
-	p, feeAccumulator, err := k.getPoolAndAccum(ctx, poolId, denomIn, desiredTokenOut.Denom)
+	p, feeAccumulator, err := k.GetValidatedPoolAndAccumulator(ctx, poolId, denomIn, desiredTokenOut.Denom)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}

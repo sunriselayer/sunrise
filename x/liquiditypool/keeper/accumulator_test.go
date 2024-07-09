@@ -11,9 +11,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-// TODO: add test for UpdatePositionIntervalAccumulation
-// TODO: add test for SetPositionIntervalAccumulation
-
 func TestAccumulatorStore(t *testing.T) {
 	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
 
