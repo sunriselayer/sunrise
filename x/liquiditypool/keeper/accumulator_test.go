@@ -9,8 +9,6 @@ import (
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 )
 
-// TODO: add test for NewPosition
-// TODO: add test for NewPositionIntervalAccumulation
 // TODO: add test for AddToPosition
 // TODO: add test for AddToPositionIntervalAccumulation
 // TODO: add test for RemoveFromPosition
@@ -114,4 +112,34 @@ func TestAccumulatorPositionStore(t *testing.T) {
 
 	positions := k.GetAllAccumulatorPositions(ctx)
 	require.Len(t, positions, 3)
+}
+
+func TestNewPositionIntervalAccumulation(t *testing.T) {
+	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	// when accumulator does not exist
+	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
+	err := k.NewPositionIntervalAccumulation(ctx, "accumulator", "index", math.LegacyOneDec(), accmulatorValuePerShare)
+	require.Error(t, err)
+
+	// when accumulator exists
+	err = k.InitAccumulator(ctx, "accumulator")
+	require.NoError(t, err)
+	err = k.NewPositionIntervalAccumulation(ctx, "accumulator", "index", math.LegacyOneDec(), accmulatorValuePerShare)
+	require.NoError(t, err)
+
+	// check accumulator change
+	accumulator, err := k.GetAccumulator(ctx, "accumulator")
+	require.NoError(t, err)
+	require.Equal(t, accumulator.Name, "accumulator")
+	require.Equal(t, accumulator.AccumValue.String(), "")
+	require.Equal(t, accumulator.TotalShares.String(), "1.000000000000000000")
+
+	// check accumulator position change
+	position, err := k.GetAccumulatorPosition(ctx, "accumulator", "index")
+	require.NoError(t, err)
+	require.Equal(t, position.Name, "accumulator")
+	require.Equal(t, position.Index, "index")
+	require.Equal(t, position.NumShares.String(), "1.000000000000000000")
+	require.Equal(t, position.AccumValuePerShare.String(), "1.000000000000000000denom")
+	require.Equal(t, position.UnclaimedRewardsTotal.String(), "")
 }

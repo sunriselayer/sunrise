@@ -138,14 +138,6 @@ func (k Keeper) SetAccumulatorPosition(ctx context.Context, accumName string, ac
 	}
 }
 
-func (k Keeper) NewPosition(ctx context.Context, accumName, name string, numShareUnits math.LegacyDec) error {
-	accumulator, err := k.GetAccumulator(ctx, accumName)
-	if err != nil {
-		return err
-	}
-	return k.NewPositionIntervalAccumulation(ctx, accumName, name, numShareUnits, accumulator.AccumValue)
-}
-
 func (k Keeper) NewPositionIntervalAccumulation(ctx context.Context, accumName, name string, numShareUnits math.LegacyDec, intervalAccumulationPerShare sdk.DecCoins) error {
 	k.SetAccumulatorPosition(ctx, accumName, intervalAccumulationPerShare, name, numShareUnits, sdk.NewDecCoins())
 
