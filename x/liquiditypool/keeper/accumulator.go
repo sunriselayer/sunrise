@@ -154,14 +154,6 @@ func (k Keeper) NewPositionIntervalAccumulation(ctx context.Context, accumName, 
 	return k.SetAccumulator(ctx, accumulator)
 }
 
-func (k Keeper) AddToPosition(ctx context.Context, accumName, name string, newShares math.LegacyDec) error {
-	accumulator, err := k.GetAccumulator(ctx, accumName)
-	if err != nil {
-		return err
-	}
-	return k.AddToPositionIntervalAccumulation(ctx, accumName, name, newShares, accumulator.AccumValue)
-}
-
 func (k Keeper) AddToPositionIntervalAccumulation(ctx context.Context, accumName, name string, newShares math.LegacyDec, intervalAccumulationPerShare sdk.DecCoins) error {
 	if !newShares.IsPositive() {
 		return errors.New("Adding non-positive number of shares to position")
@@ -193,14 +185,6 @@ func (k Keeper) AddToPositionIntervalAccumulation(ctx context.Context, accumName
 	}
 	accumulator.TotalShares = accumulator.TotalShares.Add(newShares)
 	return k.SetAccumulator(ctx, accumulator)
-}
-
-func (k Keeper) RemoveFromPosition(ctx context.Context, accumName, name string, numSharesToRemove math.LegacyDec) error {
-	accumulator, err := k.GetAccumulator(ctx, accumName)
-	if err != nil {
-		return err
-	}
-	return k.RemoveFromPositionIntervalAccumulation(ctx, accumName, name, numSharesToRemove, accumulator.AccumValue)
 }
 
 func (k Keeper) RemoveFromPositionIntervalAccumulation(ctx context.Context, accumName, name string, numSharesToRemove math.LegacyDec, intervalAccumulationPerShare sdk.DecCoins) error {
@@ -342,24 +326,17 @@ func (k Keeper) ClaimRewards(ctx context.Context, accumName, positionName string
 	return truncatedRewardsTotal, dust, nil
 }
 
-func (k Keeper) AddToUnclaimedRewards(ctx context.Context, accumName, positionName string, rewardsToAddTotal sdk.DecCoins) error {
-	position, err := k.GetAccumulatorPosition(ctx, accumName, positionName)
-	if err != nil {
-		return err
-	}
-
-	if rewardsToAddTotal.IsAnyNegative() {
-		return types.ErrNegRewardAddition
-	}
-
-	k.SetAccumulatorPosition(ctx, accumName, position.AccumValuePerShare, positionName, position.NumShares, position.UnclaimedRewardsTotal.Add(rewardsToAddTotal...))
-
-	return nil
-}
-
 func GetTotalRewards(accumulator types.AccumulatorObject, position types.AccumulatorPosition) sdk.DecCoins {
 	totalRewards := position.UnclaimedRewardsTotal
 
+	if !position.NumShares.IsPositive() {
+		return sdk.DecCoins{}
+	}
+	for _, coin := range position.AccumValuePerShare {
+		if accumulator.AccumValue.AmountOf(coin.Denom).LT(coin.Amount) {
+			return sdk.DecCoins{}
+		}
+	}
 	accumRewards := accumulator.AccumValue.Sub(position.AccumValuePerShare).MulDec(position.NumShares)
 	totalRewards = totalRewards.Add(accumRewards...)
 
