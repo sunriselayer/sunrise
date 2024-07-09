@@ -19,7 +19,6 @@ import (
 // TODO: add test for SetPositionIntervalAccumulation
 // TODO: add test for DeletePosition
 // TODO: add test for deletePosition
-// TODO: add test for GetAccumulatorPositionSize
 // TODO: add test for ClaimRewards
 // TODO: add test for AddToUnclaimedRewards
 // TODO: add test for GetTotalRewards
@@ -74,6 +73,8 @@ func TestAccumulatorPositionStore(t *testing.T) {
 	require.Error(t, err)
 	hasPosition := k.HasPosition(ctx, "accumulator", "index")
 	require.False(t, hasPosition)
+	_, err = k.GetAccumulatorPositionSize(ctx, "accumulator2", "index")
+	require.Error(t, err)
 
 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	unclaimedRewardsTotal := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(2)))
@@ -103,6 +104,10 @@ func TestAccumulatorPositionStore(t *testing.T) {
 	require.Equal(t, position.NumShares.String(), "1.000000000000000000")
 	require.Equal(t, position.AccumValuePerShare.String(), "1.000000000000000000denom")
 	require.Equal(t, position.UnclaimedRewardsTotal.String(), "2.000000000000000000denom")
+
+	positionSize, err := k.GetAccumulatorPositionSize(ctx, "accumulator2", "index")
+	require.NoError(t, err)
+	require.Equal(t, positionSize.String(), "1.000000000000000000")
 
 	hasPosition = k.HasPosition(ctx, "accumulator2", "index")
 	require.True(t, hasPosition)
