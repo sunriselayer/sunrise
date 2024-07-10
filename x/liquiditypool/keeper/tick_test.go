@@ -107,42 +107,42 @@ func TestUpsertTick(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	tickEmpty, err := k.UpsertTick(ctx, 1, 0, math.LegacyNewDec(10), true)
+	tickEmpty, err := k.UpsertTick(ctx, 0, 0, math.LegacyNewDec(10), true)
 	require.NoError(t, err)
 	require.False(t, tickEmpty)
 
 	// Check state change in tickInfo
-	tickInfo, err := k.GetTickInfo(ctx, 1, 0)
+	tickInfo, err := k.GetTickInfo(ctx, 0, 0)
 	require.NoError(t, err)
-	require.Equal(t, tickInfo.PoolId, uint64(1))
+	require.Equal(t, tickInfo.PoolId, uint64(0))
 	require.Equal(t, tickInfo.TickIndex, int64(0))
 	require.Equal(t, tickInfo.FeeGrowth.String(), "")
 	require.Equal(t, tickInfo.LiquidityGross.String(), "10.000000000000000000")
 	require.Equal(t, tickInfo.LiquidityNet.String(), "-10.000000000000000000")
 
 	// Tick's available
-	tickEmpty, err = k.UpsertTick(ctx, 1, 0, math.LegacyNewDec(10), false)
+	tickEmpty, err = k.UpsertTick(ctx, 0, 0, math.LegacyNewDec(10), false)
 	require.NoError(t, err)
 	require.False(t, tickEmpty)
 
 	// Check state change in tickInfo
-	tickInfo, err = k.GetTickInfo(ctx, 1, 0)
+	tickInfo, err = k.GetTickInfo(ctx, 0, 0)
 	require.NoError(t, err)
-	require.Equal(t, tickInfo.PoolId, uint64(1))
+	require.Equal(t, tickInfo.PoolId, uint64(0))
 	require.Equal(t, tickInfo.TickIndex, int64(0))
 	require.Equal(t, tickInfo.FeeGrowth.String(), "")
 	require.Equal(t, tickInfo.LiquidityGross.String(), "20.000000000000000000")
 	require.Equal(t, tickInfo.LiquidityNet.String(), "0.000000000000000000")
 
 	// Negative deltaLiquidity
-	tickEmpty, err = k.UpsertTick(ctx, 1, 0, math.LegacyNewDec(-20), false)
+	tickEmpty, err = k.UpsertTick(ctx, 0, 0, math.LegacyNewDec(-20), false)
 	require.NoError(t, err)
 	require.False(t, tickEmpty)
 
 	// Check state change in tickInfo
-	tickInfo, err = k.GetTickInfo(ctx, 1, 0)
+	tickInfo, err = k.GetTickInfo(ctx, 0, 0)
 	require.NoError(t, err)
-	require.Equal(t, tickInfo.PoolId, uint64(1))
+	require.Equal(t, tickInfo.PoolId, uint64(0))
 	require.Equal(t, tickInfo.TickIndex, int64(0))
 	require.Equal(t, tickInfo.FeeGrowth.String(), "")
 	require.Equal(t, tickInfo.LiquidityGross.String(), "0.000000000000000000")
@@ -150,7 +150,6 @@ func TestUpsertTick(t *testing.T) {
 }
 
 func TestNewTickInfo(t *testing.T) {
-
 	k, bk, srv, ctx := setupMsgServer(t)
 
 	// When pool does not exist
@@ -174,24 +173,24 @@ func TestNewTickInfo(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	tickInfo, err := k.NewTickInfo(ctx, 1, 0)
+	tickInfo, err := k.NewTickInfo(ctx, 0, 0)
 	require.NoError(t, err)
-	require.Equal(t, tickInfo.PoolId, uint64(1))
+	require.Equal(t, tickInfo.PoolId, uint64(0))
 	require.Equal(t, tickInfo.TickIndex, int64(0))
 	require.Equal(t, tickInfo.FeeGrowth.String(), "")
 	require.Equal(t, tickInfo.LiquidityGross.String(), "0.000000000000000000")
 	require.Equal(t, tickInfo.LiquidityNet.String(), "0.000000000000000000")
 
 	// When pool accumulator has positive accumulation value
-	accumulator, err := k.GetFeeAccumulator(ctx, 1)
+	accumulator, err := k.GetFeeAccumulator(ctx, 0)
 	require.NoError(t, err)
 	accumulator.AccumValue = sdk.DecCoins{sdk.NewInt64DecCoin("denom", 100)}
 	err = k.SetAccumulator(ctx, accumulator)
 	require.NoError(t, err)
 
-	tickInfo, err = k.NewTickInfo(ctx, 1, 0)
+	tickInfo, err = k.NewTickInfo(ctx, 0, 0)
 	require.NoError(t, err)
-	require.Equal(t, tickInfo.PoolId, uint64(1))
+	require.Equal(t, tickInfo.PoolId, uint64(0))
 	require.Equal(t, tickInfo.TickIndex, int64(0))
 	require.Equal(t, tickInfo.FeeGrowth.String(), "100.000000000000000000denom")
 	require.Equal(t, tickInfo.LiquidityGross.String(), "0.000000000000000000")

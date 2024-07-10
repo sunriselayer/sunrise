@@ -561,7 +561,7 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         1,
+				PoolId:         0,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 1000000),
@@ -571,7 +571,7 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 1)
+			pool, found := k.GetPool(ctx, 0)
 			require.True(t, found)
 
 			amountIn, err := k.CalculateResultExactAmountOut(wctx, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -673,7 +673,7 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
-				PoolId:         1,
+				PoolId:         0,
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 1000000),
@@ -683,7 +683,7 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 1)
+			pool, found := k.GetPool(ctx, 0)
 			require.True(t, found)
 
 			amountOut, err := k.CalculateResultExactAmountIn(wctx, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
