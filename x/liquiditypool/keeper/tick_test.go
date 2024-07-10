@@ -8,6 +8,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -197,5 +198,57 @@ func TestNewTickInfo(t *testing.T) {
 	require.Equal(t, tickInfo.LiquidityNet.String(), "0.000000000000000000")
 }
 
-// TODO: add test for crossTick
-// TODO: add test for ParseTickFromBz
+func TestDecodeTickBytes(t *testing.T) {
+	// When tick bytes' empty
+	_, err := keeper.DecodeTickBytes([]byte{})
+	require.Error(t, err)
+
+	// When tick bytes' invalid
+	_, err = keeper.DecodeTickBytes([]byte{0x1})
+	require.Error(t, err)
+
+	// Valid tick bytes
+	tickInfo := types.TickInfo{
+		PoolId:         1,
+		TickIndex:      0,
+		LiquidityGross: math.LegacyOneDec(),
+		LiquidityNet:   math.LegacyOneDec(),
+		FeeGrowth:      sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1))),
+	}
+	bz, err := tickInfo.Marshal()
+	require.NoError(t, err)
+
+	decoded, err := keeper.DecodeTickBytes(bz)
+	require.NoError(t, err)
+	require.Equal(t, tickInfo, decoded)
+}
+
+func TestCrossTick(t *testing.T) {
+	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	oneDecCoins := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
+	twoDecCoins := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(2)))
+	threeDecCoins := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(3)))
+
+	// When tickInfo's empty
+	err := k.CrossTick(ctx, 1, 0, nil, oneDecCoins[0], twoDecCoins)
+	require.Error(t, err)
+
+	// When tickInfo's valid
+	err = k.CrossTick(ctx, 1, 0, &types.TickInfo{
+		PoolId:         1,
+		TickIndex:      0,
+		LiquidityGross: math.LegacyOneDec(),
+		LiquidityNet:   math.LegacyOneDec(),
+		FeeGrowth:      twoDecCoins,
+	}, oneDecCoins[0], threeDecCoins)
+	require.NoError(t, err)
+
+	// check TickInfo update
+	tickInfo, err := k.GetTickInfo(ctx, 1, 0)
+	require.NoError(t, err)
+	require.Equal(t, tickInfo.PoolId, uint64(1))
+	require.Equal(t, tickInfo.TickIndex, int64(0))
+	require.Equal(t, tickInfo.FeeGrowth.String(), "2.000000000000000000denom")
+	require.Equal(t, tickInfo.LiquidityGross.String(), "1.000000000000000000")
+	require.Equal(t, tickInfo.LiquidityNet.String(), "1.000000000000000000")
+}

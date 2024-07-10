@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"errors"
 
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
@@ -36,7 +35,7 @@ func (k Keeper) UpsertTick(ctx context.Context, poolId uint64, tickIndex int64, 
 	return tickIsEmpty, nil
 }
 
-func (k Keeper) crossTick(ctx sdk.Context, poolId uint64, tickIndex int64, tickInfo *types.TickInfo, swapStateFeeGrowth sdk.DecCoin, feeAccumValue sdk.DecCoins) (err error) {
+func (k Keeper) CrossTick(ctx sdk.Context, poolId uint64, tickIndex int64, tickInfo *types.TickInfo, swapStateFeeGrowth sdk.DecCoin, feeAccumValue sdk.DecCoins) (err error) {
 	if tickInfo == nil {
 		return types.ErrNextTickInfoNil
 	}
@@ -124,9 +123,9 @@ func (k Keeper) GetAllTickInfos(ctx context.Context) (list []types.TickInfo) {
 	return
 }
 
-func ParseTickFromBz(bz []byte) (tick types.TickInfo, err error) {
+func DecodeTickBytes(bz []byte) (tick types.TickInfo, err error) {
 	if len(bz) == 0 {
-		return types.TickInfo{}, errors.New("tick not found")
+		return types.TickInfo{}, types.ErrTickNotFound
 	}
 	err = proto.Unmarshal(bz, &tick)
 	return tick, err
