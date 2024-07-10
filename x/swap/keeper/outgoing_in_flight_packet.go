@@ -27,13 +27,7 @@ func (k Keeper) GetOutgoingInFlightPacket(
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
 
-	b := store.Get(types.OutgoingInFlightPacketKey(
-		types.NewPacketIndex(
-			srcPortId,
-			srcChannelId,
-			sequence,
-		),
-	))
+	b := store.Get(types.OutgoingInFlightPacketKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence)))
 	if b == nil {
 		return val, false
 	}
@@ -51,13 +45,7 @@ func (k Keeper) RemoveOutgoingInFlightPacket(
 ) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.OutgoingInFlightPacketKeyPrefix))
-	store.Delete(types.OutgoingInFlightPacketKey(
-		types.NewPacketIndex(
-			srcPortId,
-			srcChannelId,
-			sequence,
-		),
-	))
+	store.Delete(types.OutgoingInFlightPacketKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence)))
 }
 
 // OutgoingInFlightPackets returns all outgoingInFlightPacket

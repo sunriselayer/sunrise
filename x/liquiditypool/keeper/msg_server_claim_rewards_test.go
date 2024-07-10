@@ -11,7 +11,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func TestClaimRewards(t *testing.T) {
+func TestMsgServerClaimRewards(t *testing.T) {
 	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 	senderAcc := sdk.MustAccAddressFromBech32(sender)
 

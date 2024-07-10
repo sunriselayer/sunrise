@@ -220,7 +220,7 @@ func (k Keeper) CalculateResultExactAmountOut(
 	return swapResult.AmountIn, nil
 }
 
-func (k Keeper) getPoolAndAccum(
+func (k Keeper) GetValidatedPoolAndAccumulator(
 	ctx sdk.Context,
 	poolId uint64,
 	denomIn string,
@@ -265,7 +265,7 @@ func (k Keeper) computeOutAmtGivenIn(
 	multipliedPriceLimit math.LegacyDec,
 	updateAccumulators bool,
 ) (swapResult SwapResult, poolUpdates PoolUpdates, err error) {
-	p, feeAccumulator, err := k.getPoolAndAccum(ctx, poolId, minTokenIn.Denom, denomOut)
+	p, feeAccumulator, err := k.GetValidatedPoolAndAccumulator(ctx, poolId, minTokenIn.Denom, denomOut)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
@@ -362,7 +362,7 @@ func (k Keeper) computeInAmtGivenOut(
 	poolId uint64,
 	updateAccumulators bool,
 ) (swapResult SwapResult, poolUpdates PoolUpdates, err error) {
-	p, feeAccumulator, err := k.getPoolAndAccum(ctx, poolId, denomIn, desiredTokenOut.Denom)
+	p, feeAccumulator, err := k.GetValidatedPoolAndAccumulator(ctx, poolId, denomIn, desiredTokenOut.Denom)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
@@ -458,13 +458,13 @@ func (k Keeper) swapCrossTickLogic(ctx sdk.Context,
 	denomIn string,
 	updateAccumulators bool,
 ) (SwapState, error) {
-	nextInitializedTickInfo, err := ParseTickFromBz(nextTickIter.Value())
+	nextInitializedTickInfo, err := DecodeTickBytes(nextTickIter.Value())
 	if err != nil {
 		return swapState, err
 	}
 	if updateAccumulators {
 		feeGrowth := sdk.DecCoin{Denom: denomIn, Amount: swapState.globalFeeGrowthPerUnitLiquidity}
-		err := k.crossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
+		err := k.CrossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
 		if err != nil {
 			return swapState, err
 		}
@@ -652,7 +652,7 @@ func (k Keeper) ComputeMaxInAmtGivenMaxTicksCrossed(
 		totalTokenOut = totalTokenOut.Add(amountOut)
 
 		if nextInitializedTickSqrtPrice.Equal(computedSqrtPrice) {
-			nextInitializedTickInfo, err := ParseTickFromBz(nextInitTickIter.Value())
+			nextInitializedTickInfo, err := DecodeTickBytes(nextInitTickIter.Value())
 			if err != nil {
 				return sdk.Coin{}, sdk.Coin{}, err
 			}

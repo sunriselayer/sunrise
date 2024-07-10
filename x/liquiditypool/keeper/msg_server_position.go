@@ -310,12 +310,12 @@ func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) {
 }
 
 func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddress, lowerTick, upperTick int64, liquidityDelta math.LegacyDec, positionId uint64) (amountBase math.Int, amountQuote math.Int, lowerTickEmpty bool, upperTickEmpty bool, err error) {
-	lowerTickIsEmpty, err := k.initOrUpdateTick(ctx, poolId, lowerTick, liquidityDelta, false)
+	lowerTickIsEmpty, err := k.UpsertTick(ctx, poolId, lowerTick, liquidityDelta, false)
 	if err != nil {
 		return math.Int{}, math.Int{}, false, false, err
 	}
 
-	upperTickIsEmpty, err := k.initOrUpdateTick(ctx, poolId, upperTick, liquidityDelta, true)
+	upperTickIsEmpty, err := k.UpsertTick(ctx, poolId, upperTick, liquidityDelta, true)
 	if err != nil {
 		return math.Int{}, math.Int{}, false, false, err
 	}
