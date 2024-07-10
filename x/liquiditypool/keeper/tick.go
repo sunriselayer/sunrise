@@ -12,7 +12,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func (k Keeper) initOrUpdateTick(ctx sdk.Context, poolId uint64, tickIndex int64, liquidityDelta math.LegacyDec, upper bool) (tickIsEmpty bool, err error) {
+func (k Keeper) UpsertTick(ctx context.Context, poolId uint64, tickIndex int64, liquidityDelta math.LegacyDec, upper bool) (tickIsEmpty bool, err error) {
 	tickInfo, err := k.GetTickInfo(ctx, poolId, tickIndex)
 	if err != nil {
 		return false, err
@@ -50,16 +50,16 @@ func (k Keeper) crossTick(ctx sdk.Context, poolId uint64, tickIndex int64, tickI
 	return nil
 }
 
-func (k Keeper) newTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (tickStruct types.TickInfo, err error) {
+func (k Keeper) NewTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (tickInfo types.TickInfo, err error) {
 	pool, found := k.GetPool(ctx, poolId)
 	if !found {
-		return tickStruct, types.ErrPoolNotFound
+		return tickInfo, types.ErrPoolNotFound
 	}
 
 	// initial fee Growth calculation
 	initialFeeGrowth, err := k.getInitialFeeGrowth(ctx, pool, tickIndex)
 	if err != nil {
-		return tickStruct, err
+		return tickInfo, err
 	}
 
 	return types.TickInfo{
@@ -83,7 +83,7 @@ func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	b := storeAdapter.Get(types.GetTickInfoIDBytes(poolId, tickIndex))
 	if b == nil {
-		return k.newTickInfo(ctx, poolId, tickIndex)
+		return k.NewTickInfo(ctx, poolId, tickIndex)
 	}
 	k.cdc.MustUnmarshal(b, &val)
 	return val, nil
