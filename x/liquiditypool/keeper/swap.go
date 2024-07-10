@@ -458,13 +458,13 @@ func (k Keeper) swapCrossTickLogic(ctx sdk.Context,
 	denomIn string,
 	updateAccumulators bool,
 ) (SwapState, error) {
-	nextInitializedTickInfo, err := ParseTickFromBz(nextTickIter.Value())
+	nextInitializedTickInfo, err := DecodeTickBytes(nextTickIter.Value())
 	if err != nil {
 		return swapState, err
 	}
 	if updateAccumulators {
 		feeGrowth := sdk.DecCoin{Denom: denomIn, Amount: swapState.globalFeeGrowthPerUnitLiquidity}
-		err := k.crossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
+		err := k.CrossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
 		if err != nil {
 			return swapState, err
 		}
@@ -652,7 +652,7 @@ func (k Keeper) ComputeMaxInAmtGivenMaxTicksCrossed(
 		totalTokenOut = totalTokenOut.Add(amountOut)
 
 		if nextInitializedTickSqrtPrice.Equal(computedSqrtPrice) {
-			nextInitializedTickInfo, err := ParseTickFromBz(nextInitTickIter.Value())
+			nextInitializedTickInfo, err := DecodeTickBytes(nextInitTickIter.Value())
 			if err != nil {
 				return sdk.Coin{}, sdk.Coin{}, err
 			}
