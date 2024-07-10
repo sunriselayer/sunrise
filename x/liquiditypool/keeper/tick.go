@@ -111,7 +111,7 @@ func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (l
 
 func (k Keeper) GetAllTickInfos(ctx context.Context) (list []types.TickInfo) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	iterator := storetypes.KVStorePrefixIterator(storeAdapter, []byte{})
+	iterator := storetypes.KVStorePrefixIterator(storeAdapter, []byte(types.TickInfoKey))
 
 	defer iterator.Close()
 
