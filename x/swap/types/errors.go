@@ -16,4 +16,5 @@ var (
 	ErrHigherThanMaxInAmount      = sdkerrors.Register(ModuleName, 1105, "higher than maximum in amount")
 	ErrUnexpectedAmountInMismatch = sdkerrors.Register(ModuleName, 1106, "unexpected amount in mismatch")
 	UnknownStrategyType           = sdkerrors.Register(ModuleName, 1107, "unknown strategy type")
+	TooManyStrategyTypes          = sdkerrors.Register(ModuleName, 1108, "too many strategy types")
 )

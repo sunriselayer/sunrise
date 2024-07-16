@@ -23,10 +23,8 @@ func TestMsgSwapExactAmountOut_ValidateBasic(t *testing.T) {
 				Route: Route{
 					DenomIn:  "base",
 					DenomOut: "quote",
-					Strategy: &Route_Pool{
-						Pool: &RoutePool{
-							PoolId: 1,
-						},
+					Pool: &RoutePool{
+						PoolId: 1,
 					},
 				},
 				MaxAmountIn: math.NewInt(1000000),
@@ -41,10 +39,8 @@ func TestMsgSwapExactAmountOut_ValidateBasic(t *testing.T) {
 				Route: Route{
 					DenomIn:  "base",
 					DenomOut: "quote",
-					Strategy: &Route_Pool{
-						Pool: &RoutePool{
-							PoolId: 1,
-						},
+					Pool: &RoutePool{
+						PoolId: 1,
 					},
 				},
 				MaxAmountIn: math.NewInt(1000000),

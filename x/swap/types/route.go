@@ -27,11 +27,25 @@ func (route *Route) Validate() error {
 }
 
 func (route *Route) validateRecursive() error {
-	switch strategy := route.Strategy.(type) {
-	case *Route_Pool:
+	activeStrategies := 0
+	if route.Pool != nil {
+		activeStrategies++
+	}
+	if route.Series != nil {
+		activeStrategies++
+	}
+	if route.Parallel != nil {
+		activeStrategies++
+	}
+	if activeStrategies == 0 {
+		return UnknownStrategyType
+	} else if activeStrategies > 1 {
+		return TooManyStrategyTypes
+	}
+	if route.Pool != nil {
 		return nil
-	case *Route_Series:
-		series := strategy.Series
+	} else if route.Series != nil {
+		series := route.Series
 
 		if len(series.Routes) == 0 {
 			return fmt.Errorf("empty series")
@@ -54,8 +68,8 @@ func (route *Route) validateRecursive() error {
 		}
 
 		return nil
-	case *Route_Parallel:
-		parallel := strategy.Parallel
+	} else {
+		parallel := route.Parallel
 
 		if len(parallel.Routes) == 0 {
 			return fmt.Errorf("empty parallel")
@@ -83,31 +97,25 @@ func (route *Route) validateRecursive() error {
 				return fmt.Errorf("non-positive weight: %s", parallel.Weights[i])
 			}
 		}
-
 		return nil
 	}
-
-	return UnknownStrategyType
 }
 
 func (route *Route) mustNotReusePool(poolIds map[uint64]bool) {
-	switch strategy := route.Strategy.(type) {
-	case *Route_Pool:
-		poolId := strategy.Pool.PoolId
+	if route.Pool != nil {
+		poolId := route.Pool.PoolId
 		if poolIds[poolId] {
 			panic(fmt.Sprintf("reused pool: %d", poolId))
 		}
 		poolIds[poolId] = true
-
-	case *Route_Series:
-		series := strategy.Series
+	} else if route.Series != nil {
+		series := route.Series
 
 		for _, r := range series.Routes {
 			r.mustNotReusePool(poolIds)
 		}
-
-	case *Route_Parallel:
-		parallel := strategy.Parallel
+	} else {
+		parallel := route.Parallel
 
 		for _, r := range parallel.Routes {
 			r.mustNotReusePool(poolIds)
@@ -131,12 +139,11 @@ func (route *Route) InspectRoute(
 	) (tokenIn sdk.Coin, tokenOut sdk.Coin),
 	reverse bool,
 ) (amountResult math.Int, routeResult RouteResult, err error) {
-	switch strategy := route.Strategy.(type) {
-	case *Route_Pool:
+	if route.Pool != nil {
 		amountResult, err := inspectRoutePool(
 			route.DenomIn,
 			route.DenomOut,
-			*strategy.Pool,
+			*route.Pool,
 			amountExact,
 		)
 		if err != nil {
@@ -150,20 +157,20 @@ func (route *Route) InspectRoute(
 			TokenOut: tokenOut,
 			Strategy: &RouteResult_Pool{
 				Pool: &RouteResultPool{
-					PoolId: strategy.Pool.PoolId,
+					PoolId: route.Pool.PoolId,
 				},
 			},
 		}, nil
 
-	case *Route_Series:
+	} else if route.Series != nil {
 		amountExactBuffer := amountExact
-		results := make([]RouteResult, len(strategy.Series.Routes))
-		for i := range strategy.Series.Routes {
+		results := make([]RouteResult, len(route.Series.Routes))
+		for i := range route.Series.Routes {
 			var r *Route
 			if !reverse {
-				r = &strategy.Series.Routes[i]
+				r = &route.Series.Routes[i]
 			} else {
-				r = &strategy.Series.Routes[len(strategy.Series.Routes)-1-i]
+				r = &route.Series.Routes[len(route.Series.Routes)-1-i]
 			}
 			amountResultBuffer, routeResultBuffer, err := r.InspectRoute(amountExactBuffer, inspectRoutePool, generateResult, reverse)
 			if err != nil {
@@ -187,19 +194,19 @@ func (route *Route) InspectRoute(
 			},
 		}, nil
 
-	case *Route_Parallel:
+	} else {
 		// Calculate the sum of the weights
 		weightSum := math.LegacyZeroDec()
-		for _, w := range strategy.Parallel.Weights {
+		for _, w := range route.Parallel.Weights {
 			weightSum.AddMut(w)
 		}
 
 		// Calculate the amount of input for each route
-		amountsExact := make([]math.Int, len(strategy.Parallel.Routes))
+		amountsExact := make([]math.Int, len(route.Parallel.Routes))
 		amountsExactSum := math.ZeroInt()
-		length := len(strategy.Parallel.Weights)
+		length := len(route.Parallel.Weights)
 
-		for i, w := range strategy.Parallel.Weights[:length-1] {
+		for i, w := range route.Parallel.Weights[:length-1] {
 			amountsExact[i] = w.MulInt(amountExact).Quo(weightSum).TruncateInt()
 		}
 		// For avoiding rounding errors
@@ -207,10 +214,10 @@ func (route *Route) InspectRoute(
 
 		// Preparations for the results
 		amountResult = math.ZeroInt()
-		results := make([]RouteResult, len(strategy.Parallel.Routes))
+		results := make([]RouteResult, len(route.Parallel.Routes))
 
 		// Execute the inspections
-		for i, r := range strategy.Parallel.Routes {
+		for i, r := range route.Parallel.Routes {
 			amountResultBuffer, routeResultBuffer, err := r.InspectRoute(amountsExact[i], inspectRoutePool, generateResult, reverse)
 			if err != nil {
 				return math.Int{}, RouteResult{}, err
@@ -231,6 +238,4 @@ func (route *Route) InspectRoute(
 			},
 		}, nil
 	}
-
-	return amountResult, routeResult, UnknownStrategyType
 }

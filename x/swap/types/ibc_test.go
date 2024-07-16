@@ -88,7 +88,7 @@ func TestEncodePacketMetadata_ExactAmountInSeries(t *testing.T) {
 	metadataJson, err := json.Marshal(packetMetadata)
 	require.NoError(t, err)
 
-	require.Equal(t, string(metadataJson), `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut2","series":{"routes":[{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":1}},{"denom_in":"tokenOut","denom_out":"tokenOut2","pool":{"pool_id":2}}}]},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2}}}`)
+	require.Equal(t, string(metadataJson), `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut2","series":{"routes":[{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":1}},{"denom_in":"tokenOut","denom_out":"tokenOut2","pool":{"pool_id":2}}]}},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2}}}`)
 
 	metadata := PacketMetadata{}
 	err = json.Unmarshal(metadataJson, &metadata)
