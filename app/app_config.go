@@ -245,7 +245,7 @@ var (
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
-		swapmoduletypes.ModuleName,
+		// swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
 	}
 

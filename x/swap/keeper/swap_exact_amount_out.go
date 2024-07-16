@@ -22,7 +22,7 @@ func (k Keeper) calculateInterfaceFeeExactAmountOut(
 	amountOutGross = math.LegacyNewDecFromInt(amountOutNet).Quo(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
 	interfaceFee = amountOutGross.Sub(amountOutNet)
 
-	return amountOutNet, interfaceFee
+	return amountOutGross, interfaceFee
 }
 
 func (k Keeper) CalculateResultExactAmountOut(

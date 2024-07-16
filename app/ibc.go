@@ -143,7 +143,7 @@ func (app *App) registerIBCModules() {
 	// Create IBC modules with ibcfee middleware
 	// transferIBCModule := ibcfee.NewIBCMiddleware(ibctransfer.NewIBCModule(app.TransferKeeper), app.IBCFeeKeeper)
 	transferIBCModuleIbcFee := ibcfee.NewIBCMiddleware(ibctransfer.NewIBCModule(app.TransferKeeper), app.IBCFeeKeeper)
-	transferIBCModule := swapmodule.NewIBCMiddleware(transferIBCModuleIbcFee, app.SwapKeeper)
+	transferIBCModule := swapmodule.NewIBCMiddleware(transferIBCModuleIbcFee, &app.SwapKeeper)
 
 	// integration point for custom authentication modules
 	var noAuthzModule porttypes.IBCModule
