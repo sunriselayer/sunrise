@@ -20,7 +20,7 @@ type PacketMetadata = {
 
 type SwapMetadata = {
   interface_provider: string;
-  route: Route;
+  route: SwapRoute;
 
   forward?: ForwardMetadata;
 } & (
@@ -45,6 +45,18 @@ type ForwardMetadata = {
   retries: number;
   next?: PacketMetadata;
 };
+
+// Different from Route; note the strategy field
+type SwapRoute = {
+  denom_in: string;
+  denom_out: string;
+  strategy: {
+    // same as Route
+    pool?: RoutePool;
+    series?: RouteSeries;
+    parallel: RouteParallel;
+  }
+}
 ```
 
 `ForwardMetadata` is quoted from [Packet Forward Middleware](https://github.com/cosmos/ibc-apps/tree/main/middleware/packet-forward-middleware).
