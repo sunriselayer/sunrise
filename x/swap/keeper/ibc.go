@@ -60,7 +60,7 @@ func (k Keeper) SwapIncomingFund(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			swapData.Route,
+			*swapData.Route.GetRoute(),
 			amountIn,
 			minAmountOut,
 		)
@@ -75,7 +75,7 @@ func (k Keeper) SwapIncomingFund(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			swapData.Route,
+			*swapData.Route.GetRoute(),
 			maxAmountIn,
 			amountOut,
 		)
@@ -110,15 +110,17 @@ func (k Keeper) ProcessSwappedFund(
 	incomingAck exported.Acknowledgement,
 ) (waitingPacket *types.IncomingInFlightPacket, err error) {
 	waitingPacket = &types.IncomingInFlightPacket{
-		Index:        types.NewPacketIndex(incomingPacket.DestinationPort, incomingPacket.DestinationChannel, incomingPacket.Sequence),
-		Data:         incomingPacket.Data,
-		SrcPortId:    incomingPacket.SourcePort,
-		SrcChannelId: incomingPacket.SourceChannel,
-		Ack:          incomingAck.Acknowledgement(),
-		Result:       result,
-		InterfaceFee: interfaceFee,
-		Change:       &types.IncomingInFlightPacket_AckChange{},  // default value is nil ack
-		Forward:      &types.IncomingInFlightPacket_AckForward{}, // default value is nil ack
+		Index:            types.NewPacketIndex(incomingPacket.DestinationPort, incomingPacket.DestinationChannel, incomingPacket.Sequence),
+		Data:             incomingPacket.Data,
+		SrcPortId:        incomingPacket.SourcePort,
+		SrcChannelId:     incomingPacket.SourceChannel,
+		TimeoutHeight:    incomingPacket.TimeoutHeight.String(),
+		TimeoutTimestamp: incomingPacket.TimeoutTimestamp,
+		Ack:              incomingAck.Acknowledgement(),
+		Result:           result,
+		InterfaceFee:     interfaceFee,
+		Change:           &types.IncomingInFlightPacket_AckChange{},  // default value is nil ack
+		Forward:          &types.IncomingInFlightPacket_AckForward{}, // default value is nil ack
 	}
 
 	maxAmountIn, ok := sdkmath.NewIntFromString(tokenData.Amount)
@@ -378,11 +380,22 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		break
 	}
 
+	var changeAck []byte = nil
+	var forwardAck []byte = nil
+
+	if packet.Change != nil {
+		changeAck = packet.Change.(*types.IncomingInFlightPacket_AckChange).AckChange
+	}
+
+	if packet.Forward != nil {
+		forwardAck = packet.Forward.(*types.IncomingInFlightPacket_AckForward).AckForward
+	}
+
 	fullAck := types.SwapAcknowledgement{
 		Result:      packet.Result,
 		IncomingAck: packet.Ack,
-		ChangeAck:   packet.Change.(*types.IncomingInFlightPacket_AckChange).AckChange,
-		ForwardAck:  packet.Forward.(*types.IncomingInFlightPacket_AckForward).AckForward,
+		ChangeAck:   changeAck,
+		ForwardAck:  forwardAck,
 	}
 	bz, err := fullAck.Acknowledgement()
 	if err != nil {

@@ -240,12 +240,12 @@ var (
 		// ibctransfertypes.ModuleName,
 		// ibcfeetypes.ModuleName,
 		// icatypes.ModuleName,
+		// swapmoduletypes.ModuleName,
 		blobmoduletypes.ModuleName,
 		streammoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
-		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
 	}
 
