@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_UpdateParams_FullMethodName = "/sunrise.blob.v1.Msg/UpdateParams"
 	Msg_PayForBlobs_FullMethodName  = "/sunrise.blob.v1.Msg/PayForBlobs"
+	Msg_PublishData_FullMethodName  = "/sunrise.blob.v1.Msg/PublishData"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,6 +32,7 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	PayForBlobs(ctx context.Context, in *MsgPayForBlobs, opts ...grpc.CallOption) (*MsgPayForBlobsResponse, error)
+	PublishData(ctx context.Context, in *MsgPublishData, opts ...grpc.CallOption) (*MsgPublishDataResponse, error)
 }
 
 type msgClient struct {
@@ -59,6 +61,15 @@ func (c *msgClient) PayForBlobs(ctx context.Context, in *MsgPayForBlobs, opts ..
 	return out, nil
 }
 
+func (c *msgClient) PublishData(ctx context.Context, in *MsgPublishData, opts ...grpc.CallOption) (*MsgPublishDataResponse, error) {
+	out := new(MsgPublishDataResponse)
+	err := c.cc.Invoke(ctx, Msg_PublishData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -67,6 +78,7 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	PayForBlobs(context.Context, *MsgPayForBlobs) (*MsgPayForBlobsResponse, error)
+	PublishData(context.Context, *MsgPublishData) (*MsgPublishDataResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -79,6 +91,9 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) PayForBlobs(context.Context, *MsgPayForBlobs) (*MsgPayForBlobsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PayForBlobs not implemented")
+}
+func (UnimplementedMsgServer) PublishData(context.Context, *MsgPublishData) (*MsgPublishDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PublishData not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -129,6 +144,24 @@ func _Msg_PayForBlobs_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_PublishData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgPublishData)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).PublishData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_PublishData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).PublishData(ctx, req.(*MsgPublishData))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +176,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PayForBlobs",
 			Handler:    _Msg_PayForBlobs_Handler,
+		},
+		{
+			MethodName: "PublishData",
+			Handler:    _Msg_PublishData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

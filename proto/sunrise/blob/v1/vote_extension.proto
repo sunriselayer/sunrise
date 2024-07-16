@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sunrise.blob.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/blob/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/blob/types";
+
+// Metadata to be used off-chain
+message Metadata {
+  uint64 shard_size = 1;
+  uint64 shard_count = 2;
+  repeated string shard_uris = 3;
+}
+
+message PublishedData {
+  bytes recovered_data_hash = 1;
+  string metadata_uri = 2;
+  repeated bytes shard_double_hashes = 3;
+}
+
+message VoteExtension { repeated PublishedData data = 1; }
