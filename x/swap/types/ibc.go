@@ -26,42 +26,21 @@ type ExactAmountOut struct {
 	Change    *packetforwardtypes.ForwardMetadata `json:"change,omitempty"`
 }
 
-type SwapStrategy struct {
+type SwapRoute struct {
+	DenomIn  string         `json:"denom_in,omitempty"`
+	DenomOut string         `json:"denom_out,omitempty"`
 	Pool     *RoutePool     `json:"pool,omitempty"`
 	Series   *RouteSeries   `json:"series,omitempty"`
 	Parallel *RouteParallel `json:"parallel,omitempty"`
-}
-
-func (m SwapStrategy) GetStrategy() isRoute_Strategy {
-	if m.Pool != nil {
-		return &Route_Pool{
-			Pool: m.Pool,
-		}
-	}
-	if m.Series != nil {
-		return &Route_Series{
-			Series: m.Series,
-		}
-	}
-	if m.Parallel != nil {
-		return &Route_Parallel{
-			Parallel: m.Parallel,
-		}
-	}
-	return nil
-}
-
-type SwapRoute struct {
-	DenomIn  string       `json:"denom_in,omitempty"`
-	DenomOut string       `json:"denom_out,omitempty"`
-	Strategy SwapStrategy `json:"strategy,omitempty"`
 }
 
 func (m SwapRoute) GetRoute() *Route {
 	return &Route{
 		DenomIn:  m.DenomIn,
 		DenomOut: m.DenomOut,
-		Strategy: m.Strategy.GetStrategy(),
+		Pool:     m.Pool,
+		Series:   m.Series,
+		Parallel: m.Parallel,
 	}
 }
 
