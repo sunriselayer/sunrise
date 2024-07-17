@@ -5,76 +5,24 @@ import (
 	"fmt"
 	"strings"
 
-	sdkmath "cosmossdk.io/math"
-
-	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
+	host "github.com/cosmos/ibc-go/v8/modules/core/24-host"
 )
 
 const DefaultRetryCount uint8 = 3
 
-type PacketMetadata struct {
-	Swap *SwapMetadata `json:"swap"`
-}
-
-type ExactAmountIn struct {
-	MinAmountOut sdkmath.Int `json:"min_amount_out,omitempty"`
-}
-
-type ExactAmountOut struct {
-	AmountOut sdkmath.Int                         `json:"amount_out"`
-	Change    *packetforwardtypes.ForwardMetadata `json:"change,omitempty"`
-}
-
-type SwapStrategy struct {
-	Pool     *RoutePool     `json:"pool,omitempty"`
-	Series   *RouteSeries   `json:"series,omitempty"`
-	Parallel *RouteParallel `json:"parallel,omitempty"`
-}
-
-func (m SwapStrategy) GetStrategy() isRoute_Strategy {
-	if m.Pool != nil {
-		return &Route_Pool{
-			Pool: m.Pool,
-		}
+func (m *ForwardMetadata) Validate() error {
+	if m.Receiver == "" {
+		return fmt.Errorf("failed to validate metadata. receiver cannot be empty")
 	}
-	if m.Series != nil {
-		return &Route_Series{
-			Series: m.Series,
-		}
+	if err := host.PortIdentifierValidator(m.Port); err != nil {
+		return fmt.Errorf("failed to validate metadata: %w", err)
 	}
-	if m.Parallel != nil {
-		return &Route_Parallel{
-			Parallel: m.Parallel,
-		}
+	if err := host.ChannelIdentifierValidator(m.Channel); err != nil {
+		return fmt.Errorf("failed to validate metadata: %w", err)
 	}
+
 	return nil
-}
-
-type SwapRoute struct {
-	DenomIn  string       `json:"denom_in,omitempty"`
-	DenomOut string       `json:"denom_out,omitempty"`
-	Strategy SwapStrategy `json:"strategy,omitempty"`
-}
-
-func (m SwapRoute) GetRoute() *Route {
-	return &Route{
-		DenomIn:  m.DenomIn,
-		DenomOut: m.DenomOut,
-		Strategy: m.Strategy.GetStrategy(),
-	}
-}
-
-func (m SwapRoute) Validate() error {
-	return m.GetRoute().Validate()
-}
-
-type SwapMetadata struct {
-	InterfaceProvider string                              `json:"interface_provider,omitempty"`
-	Route             SwapRoute                           `json:"route,omitempty"`
-	ExactAmountIn     *ExactAmountIn                      `json:"exact_amount_in,omitempty"`
-	ExactAmountOut    *ExactAmountOut                     `json:"exact_amount_out,omitempty"`
-	Forward           *packetforwardtypes.ForwardMetadata `json:"forward,omitempty"`
 }
 
 func (m *SwapMetadata) Validate() error {
