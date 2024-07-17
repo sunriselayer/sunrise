@@ -7,7 +7,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/swap/route.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/struct.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
@@ -19,11 +19,13 @@ message ForwardMetadata {
   string receiver = 1;
   string port = 2;
   string channel = 3;
-  google.protobuf.Duration timeout = 4;
+  google.protobuf.Duration timeout = 4 [
+    (gogoproto.nullable) = false, (gogoproto.stdduration) = true
+  ];
   uint32 retries = 5; 
 
-  // Using Google's Struct to handle the flexible JSON object
-  google.protobuf.Struct next = 6; 
+  // Using Google's Any to handle the flexible JSON object
+  google.protobuf.Any next = 6;
 }
 
 message ExactAmountIn {
