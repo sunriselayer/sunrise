@@ -2221,16 +2221,20 @@ func (x *fastReflection_SwapMetadata) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if x.ExactAmountIn != nil {
-		value := protoreflect.ValueOfMessage(x.ExactAmountIn.ProtoReflect())
-		if !f(fd_SwapMetadata_exact_amount_in, value) {
-			return
-		}
-	}
-	if x.ExactAmountOut != nil {
-		value := protoreflect.ValueOfMessage(x.ExactAmountOut.ProtoReflect())
-		if !f(fd_SwapMetadata_exact_amount_out, value) {
-			return
+	if x.SwapType != nil {
+		switch o := x.SwapType.(type) {
+		case *SwapMetadata_ExactAmountIn:
+			v := o.ExactAmountIn
+			value := protoreflect.ValueOfMessage(v.ProtoReflect())
+			if !f(fd_SwapMetadata_exact_amount_in, value) {
+				return
+			}
+		case *SwapMetadata_ExactAmountOut:
+			v := o.ExactAmountOut
+			value := protoreflect.ValueOfMessage(v.ProtoReflect())
+			if !f(fd_SwapMetadata_exact_amount_out, value) {
+				return
+			}
 		}
 	}
 	if x.Forward != nil {
@@ -2259,9 +2263,21 @@ func (x *fastReflection_SwapMetadata) Has(fd protoreflect.FieldDescriptor) bool 
 	case "sunrise.swap.SwapMetadata.route":
 		return x.Route != nil
 	case "sunrise.swap.SwapMetadata.exact_amount_in":
-		return x.ExactAmountIn != nil
+		if x.SwapType == nil {
+			return false
+		} else if _, ok := x.SwapType.(*SwapMetadata_ExactAmountIn); ok {
+			return true
+		} else {
+			return false
+		}
 	case "sunrise.swap.SwapMetadata.exact_amount_out":
-		return x.ExactAmountOut != nil
+		if x.SwapType == nil {
+			return false
+		} else if _, ok := x.SwapType.(*SwapMetadata_ExactAmountOut); ok {
+			return true
+		} else {
+			return false
+		}
 	case "sunrise.swap.SwapMetadata.forward":
 		return x.Forward != nil
 	default:
@@ -2285,9 +2301,9 @@ func (x *fastReflection_SwapMetadata) Clear(fd protoreflect.FieldDescriptor) {
 	case "sunrise.swap.SwapMetadata.route":
 		x.Route = nil
 	case "sunrise.swap.SwapMetadata.exact_amount_in":
-		x.ExactAmountIn = nil
+		x.SwapType = nil
 	case "sunrise.swap.SwapMetadata.exact_amount_out":
-		x.ExactAmountOut = nil
+		x.SwapType = nil
 	case "sunrise.swap.SwapMetadata.forward":
 		x.Forward = nil
 	default:
@@ -2313,11 +2329,21 @@ func (x *fastReflection_SwapMetadata) Get(descriptor protoreflect.FieldDescripto
 		value := x.Route
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.swap.SwapMetadata.exact_amount_in":
-		value := x.ExactAmountIn
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
+		if x.SwapType == nil {
+			return protoreflect.ValueOfMessage((*ExactAmountIn)(nil).ProtoReflect())
+		} else if v, ok := x.SwapType.(*SwapMetadata_ExactAmountIn); ok {
+			return protoreflect.ValueOfMessage(v.ExactAmountIn.ProtoReflect())
+		} else {
+			return protoreflect.ValueOfMessage((*ExactAmountIn)(nil).ProtoReflect())
+		}
 	case "sunrise.swap.SwapMetadata.exact_amount_out":
-		value := x.ExactAmountOut
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
+		if x.SwapType == nil {
+			return protoreflect.ValueOfMessage((*ExactAmountOut)(nil).ProtoReflect())
+		} else if v, ok := x.SwapType.(*SwapMetadata_ExactAmountOut); ok {
+			return protoreflect.ValueOfMessage(v.ExactAmountOut.ProtoReflect())
+		} else {
+			return protoreflect.ValueOfMessage((*ExactAmountOut)(nil).ProtoReflect())
+		}
 	case "sunrise.swap.SwapMetadata.forward":
 		value := x.Forward
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -2346,9 +2372,11 @@ func (x *fastReflection_SwapMetadata) Set(fd protoreflect.FieldDescriptor, value
 	case "sunrise.swap.SwapMetadata.route":
 		x.Route = value.Message().Interface().(*Route)
 	case "sunrise.swap.SwapMetadata.exact_amount_in":
-		x.ExactAmountIn = value.Message().Interface().(*ExactAmountIn)
+		cv := value.Message().Interface().(*ExactAmountIn)
+		x.SwapType = &SwapMetadata_ExactAmountIn{ExactAmountIn: cv}
 	case "sunrise.swap.SwapMetadata.exact_amount_out":
-		x.ExactAmountOut = value.Message().Interface().(*ExactAmountOut)
+		cv := value.Message().Interface().(*ExactAmountOut)
+		x.SwapType = &SwapMetadata_ExactAmountOut{ExactAmountOut: cv}
 	case "sunrise.swap.SwapMetadata.forward":
 		x.Forward = value.Message().Interface().(*ForwardMetadata)
 	default:
@@ -2377,15 +2405,37 @@ func (x *fastReflection_SwapMetadata) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		return protoreflect.ValueOfMessage(x.Route.ProtoReflect())
 	case "sunrise.swap.SwapMetadata.exact_amount_in":
-		if x.ExactAmountIn == nil {
-			x.ExactAmountIn = new(ExactAmountIn)
+		if x.SwapType == nil {
+			value := &ExactAmountIn{}
+			oneofValue := &SwapMetadata_ExactAmountIn{ExactAmountIn: value}
+			x.SwapType = oneofValue
+			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		return protoreflect.ValueOfMessage(x.ExactAmountIn.ProtoReflect())
+		switch m := x.SwapType.(type) {
+		case *SwapMetadata_ExactAmountIn:
+			return protoreflect.ValueOfMessage(m.ExactAmountIn.ProtoReflect())
+		default:
+			value := &ExactAmountIn{}
+			oneofValue := &SwapMetadata_ExactAmountIn{ExactAmountIn: value}
+			x.SwapType = oneofValue
+			return protoreflect.ValueOfMessage(value.ProtoReflect())
+		}
 	case "sunrise.swap.SwapMetadata.exact_amount_out":
-		if x.ExactAmountOut == nil {
-			x.ExactAmountOut = new(ExactAmountOut)
+		if x.SwapType == nil {
+			value := &ExactAmountOut{}
+			oneofValue := &SwapMetadata_ExactAmountOut{ExactAmountOut: value}
+			x.SwapType = oneofValue
+			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		return protoreflect.ValueOfMessage(x.ExactAmountOut.ProtoReflect())
+		switch m := x.SwapType.(type) {
+		case *SwapMetadata_ExactAmountOut:
+			return protoreflect.ValueOfMessage(m.ExactAmountOut.ProtoReflect())
+		default:
+			value := &ExactAmountOut{}
+			oneofValue := &SwapMetadata_ExactAmountOut{ExactAmountOut: value}
+			x.SwapType = oneofValue
+			return protoreflect.ValueOfMessage(value.ProtoReflect())
+		}
 	case "sunrise.swap.SwapMetadata.forward":
 		if x.Forward == nil {
 			x.Forward = new(ForwardMetadata)
@@ -2412,11 +2462,11 @@ func (x *fastReflection_SwapMetadata) NewField(fd protoreflect.FieldDescriptor) 
 		m := new(Route)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.swap.SwapMetadata.exact_amount_in":
-		m := new(ExactAmountIn)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
+		value := &ExactAmountIn{}
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.swap.SwapMetadata.exact_amount_out":
-		m := new(ExactAmountOut)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
+		value := &ExactAmountOut{}
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.swap.SwapMetadata.forward":
 		m := new(ForwardMetadata)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -2433,6 +2483,16 @@ func (x *fastReflection_SwapMetadata) NewField(fd protoreflect.FieldDescriptor) 
 // It panics if the oneof descriptor does not belong to this message.
 func (x *fastReflection_SwapMetadata) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
+	case "sunrise.swap.SwapMetadata.swap_type":
+		if x.SwapType == nil {
+			return nil
+		}
+		switch x.SwapType.(type) {
+		case *SwapMetadata_ExactAmountIn:
+			return x.Descriptor().Fields().ByName("exact_amount_in")
+		case *SwapMetadata_ExactAmountOut:
+			return x.Descriptor().Fields().ByName("exact_amount_out")
+		}
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in sunrise.swap.SwapMetadata", d.FullName()))
 	}
@@ -2497,11 +2557,17 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Route)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.ExactAmountIn != nil {
+		switch x := x.SwapType.(type) {
+		case *SwapMetadata_ExactAmountIn:
+			if x == nil {
+				break
+			}
 			l = options.Size(x.ExactAmountIn)
 			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.ExactAmountOut != nil {
+		case *SwapMetadata_ExactAmountOut:
+			if x == nil {
+				break
+			}
 			l = options.Size(x.ExactAmountOut)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -2538,8 +2604,9 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Forward != nil {
-			encoded, err := options.Marshal(x.Forward)
+		switch x := x.SwapType.(type) {
+		case *SwapMetadata_ExactAmountIn:
+			encoded, err := options.Marshal(x.ExactAmountIn)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2550,9 +2617,8 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x2a
-		}
-		if x.ExactAmountOut != nil {
+			dAtA[i] = 0x1a
+		case *SwapMetadata_ExactAmountOut:
 			encoded, err := options.Marshal(x.ExactAmountOut)
 			if err != nil {
 				return protoiface.MarshalOutput{
@@ -2566,8 +2632,8 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x22
 		}
-		if x.ExactAmountIn != nil {
-			encoded, err := options.Marshal(x.ExactAmountIn)
+		if x.Forward != nil {
+			encoded, err := options.Marshal(x.Forward)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2578,7 +2644,7 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x2a
 		}
 		if x.Route != nil {
 			encoded, err := options.Marshal(x.Route)
@@ -2747,12 +2813,11 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.ExactAmountIn == nil {
-					x.ExactAmountIn = &ExactAmountIn{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ExactAmountIn); err != nil {
+				v := &ExactAmountIn{}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
+				x.SwapType = &SwapMetadata_ExactAmountIn{v}
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
@@ -2783,12 +2848,11 @@ func (x *fastReflection_SwapMetadata) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.ExactAmountOut == nil {
-					x.ExactAmountOut = &ExactAmountOut{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ExactAmountOut); err != nil {
+				v := &ExactAmountOut{}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
+				x.SwapType = &SwapMetadata_ExactAmountOut{v}
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -3068,11 +3132,14 @@ type SwapMetadata struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	InterfaceProvider string           `protobuf:"bytes,1,opt,name=interface_provider,json=interfaceProvider,proto3" json:"interface_provider,omitempty"`
-	Route             *Route           `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
-	ExactAmountIn     *ExactAmountIn   `protobuf:"bytes,3,opt,name=exact_amount_in,json=exactAmountIn,proto3" json:"exact_amount_in,omitempty"`
-	ExactAmountOut    *ExactAmountOut  `protobuf:"bytes,4,opt,name=exact_amount_out,json=exactAmountOut,proto3" json:"exact_amount_out,omitempty"`
-	Forward           *ForwardMetadata `protobuf:"bytes,5,opt,name=forward,proto3" json:"forward,omitempty"`
+	InterfaceProvider string `protobuf:"bytes,1,opt,name=interface_provider,json=interfaceProvider,proto3" json:"interface_provider,omitempty"`
+	Route             *Route `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
+	// Types that are assignable to SwapType:
+	//
+	//	*SwapMetadata_ExactAmountIn
+	//	*SwapMetadata_ExactAmountOut
+	SwapType isSwapMetadata_SwapType `protobuf_oneof:"swap_type"`
+	Forward  *ForwardMetadata        `protobuf:"bytes,5,opt,name=forward,proto3" json:"forward,omitempty"`
 }
 
 func (x *SwapMetadata) Reset() {
@@ -3109,15 +3176,22 @@ func (x *SwapMetadata) GetRoute() *Route {
 	return nil
 }
 
-func (x *SwapMetadata) GetExactAmountIn() *ExactAmountIn {
+func (x *SwapMetadata) GetSwapType() isSwapMetadata_SwapType {
 	if x != nil {
+		return x.SwapType
+	}
+	return nil
+}
+
+func (x *SwapMetadata) GetExactAmountIn() *ExactAmountIn {
+	if x, ok := x.GetSwapType().(*SwapMetadata_ExactAmountIn); ok {
 		return x.ExactAmountIn
 	}
 	return nil
 }
 
 func (x *SwapMetadata) GetExactAmountOut() *ExactAmountOut {
-	if x != nil {
+	if x, ok := x.GetSwapType().(*SwapMetadata_ExactAmountOut); ok {
 		return x.ExactAmountOut
 	}
 	return nil
@@ -3129,6 +3203,22 @@ func (x *SwapMetadata) GetForward() *ForwardMetadata {
 	}
 	return nil
 }
+
+type isSwapMetadata_SwapType interface {
+	isSwapMetadata_SwapType()
+}
+
+type SwapMetadata_ExactAmountIn struct {
+	ExactAmountIn *ExactAmountIn `protobuf:"bytes,3,opt,name=exact_amount_in,json=exactAmountIn,proto3,oneof"`
+}
+
+type SwapMetadata_ExactAmountOut struct {
+	ExactAmountOut *ExactAmountOut `protobuf:"bytes,4,opt,name=exact_amount_out,json=exactAmountOut,proto3,oneof"`
+}
+
+func (*SwapMetadata_ExactAmountIn) isSwapMetadata_SwapType() {}
+
+func (*SwapMetadata_ExactAmountOut) isSwapMetadata_SwapType() {}
 
 var File_sunrise_swap_metadata_proto protoreflect.FileDescriptor
 
@@ -3179,36 +3269,37 @@ var file_sunrise_swap_metadata_proto_rawDesc = []byte{
 	0x74, 0x4f, 0x75, 0x74, 0x12, 0x35, 0x0a, 0x06, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
 	0x77, 0x61, 0x70, 0x2e, 0x46, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0x52, 0x06, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x22, 0xae, 0x02, 0x0a, 0x0c,
+	0x61, 0x74, 0x61, 0x52, 0x06, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x22, 0xbf, 0x02, 0x0a, 0x0c,
 	0x53, 0x77, 0x61, 0x70, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x2d, 0x0a, 0x12,
 	0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64,
 	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x11, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66,
 	0x61, 0x63, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x12, 0x29, 0x0a, 0x05, 0x72,
 	0x6f, 0x75, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x73, 0x75, 0x6e,
 	0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x52, 0x6f, 0x75, 0x74, 0x65, 0x52,
-	0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x12, 0x43, 0x0a, 0x0f, 0x65, 0x78, 0x61, 0x63, 0x74, 0x5f,
+	0x05, 0x72, 0x6f, 0x75, 0x74, 0x65, 0x12, 0x45, 0x0a, 0x0f, 0x65, 0x78, 0x61, 0x63, 0x74, 0x5f,
 	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x1b, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x45,
-	0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x52, 0x0d, 0x65, 0x78,
-	0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x46, 0x0a, 0x10, 0x65,
-	0x78, 0x61, 0x63, 0x74, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18,
-	0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e,
-	0x73, 0x77, 0x61, 0x70, 0x2e, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x4f, 0x75, 0x74, 0x52, 0x0e, 0x65, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x4f, 0x75, 0x74, 0x12, 0x37, 0x0a, 0x07, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x18, 0x05,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x46, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0x52, 0x07, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x42, 0x91, 0x01, 0x0a,
-	0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61,
-	0x70, 0x42, 0x0d, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61,
-	0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
-	0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x48, 0x00, 0x52, 0x0d,
+	0x65, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x48, 0x0a,
+	0x10, 0x65, 0x78, 0x61, 0x63, 0x74, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75,
+	0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x4f, 0x75, 0x74, 0x48, 0x00, 0x52, 0x0e, 0x65, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x37, 0x0a, 0x07, 0x66, 0x6f, 0x72, 0x77, 0x61,
+	0x72, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x46, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64, 0x4d,
+	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x52, 0x07, 0x66, 0x6f, 0x72, 0x77, 0x61, 0x72, 0x64,
+	0x42, 0x0b, 0x0a, 0x09, 0x73, 0x77, 0x61, 0x70, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x42, 0x91, 0x01,
+	0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77,
+	0x61, 0x70, 0x42, 0x0d, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x74,
+	0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77,
+	0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58, 0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61,
+	0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3317,6 +3408,10 @@ func file_sunrise_swap_metadata_proto_init() {
 				return nil
 			}
 		}
+	}
+	file_sunrise_swap_metadata_proto_msgTypes[4].OneofWrappers = []interface{}{
+		(*SwapMetadata_ExactAmountIn)(nil),
+		(*SwapMetadata_ExactAmountOut)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
