@@ -49,6 +49,38 @@ func TestEncodePacketMetadata_ExactAmountIn(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestEncodePacketMetadataNoForward_ExactAmountIn(t *testing.T) {
+	packetMetadata := PacketMetadata{
+		Swap: &SwapMetadata{
+			InterfaceProvider: "sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y",
+			Route: &Route{
+				DenomIn:  "tokenIn",
+				DenomOut: "tokenOut",
+				Strategy: &Route_Pool{
+					Pool: &RoutePool{
+						PoolId: 1,
+					},
+				},
+			},
+			SwapType: &SwapMetadata_ExactAmountIn{
+				ExactAmountIn: &ExactAmountIn{
+					MinAmountOut: sdkmath.OneInt(),
+				},
+			},
+		},
+	}
+
+	m := jsonpb.Marshaler{OrigName: true}
+	js, err := m.MarshalToString(&packetMetadata)
+	require.NoError(t, err)
+
+	require.Equal(t, js, `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"}}}`)
+
+	metadata := &PacketMetadata{}
+	err = jsonpb.Unmarshal(strings.NewReader(js), metadata)
+	require.NoError(t, err)
+}
+
 func TestEncodePacketMetadata_ExactAmountInSeries(t *testing.T) {
 	retries := uint32(2)
 	packetMetadata := PacketMetadata{
