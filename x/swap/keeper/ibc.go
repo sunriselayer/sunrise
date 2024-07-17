@@ -1,13 +1,14 @@
 package keeper
 
 import (
-	"encoding/json"
+	"strings"
 	"time"
 
 	errors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/gogo/protobuf/jsonpb"
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
@@ -195,7 +196,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 ) (packet types.OutgoingInFlightPacket, err error) {
 	var memo string
 	if metadata.Next != nil {
-		if err := json.Unmarshal([]byte(memo), &metadata.Next); err != nil {
+		if err := jsonpb.Unmarshal(strings.NewReader(memo), metadata.Next); err != nil {
 			return packet, err
 		}
 	}
