@@ -50,7 +50,9 @@ message ExactAmountOut {
 message SwapMetadata {
   string interface_provider = 1;
   Route route = 2;
-  ExactAmountIn exact_amount_in = 3;
-  ExactAmountOut exact_amount_out = 4;
+  oneof swap_type {
+    ExactAmountIn exact_amount_in = 3;
+    ExactAmountOut exact_amount_out = 4;
+  }
   ForwardMetadata forward = 5;
 }
