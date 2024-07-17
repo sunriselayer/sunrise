@@ -11,7 +11,6 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
-	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
@@ -60,7 +59,7 @@ func (k Keeper) SwapIncomingFund(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			*swapData.Route.GetRoute(),
+			*swapData.Route,
 			amountIn,
 			minAmountOut,
 		)
@@ -75,7 +74,7 @@ func (k Keeper) SwapIncomingFund(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			*swapData.Route.GetRoute(),
+			*swapData.Route,
 			maxAmountIn,
 			amountOut,
 		)
@@ -192,7 +191,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	incomingIndex types.PacketIndex,
 	sender string,
 	tokenOut sdk.Coin,
-	metadata packetforwardtypes.ForwardMetadata,
+	metadata types.ForwardMetadata,
 ) (packet types.OutgoingInFlightPacket, err error) {
 	var memo string
 	if metadata.Next != nil {
@@ -218,8 +217,8 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	}
 
 	var retries uint8
-	if metadata.Retries != nil {
-		retries = *metadata.Retries
+	if metadata.Retries == 0 {
+		retries = uint8(metadata.Retries)
 	} else {
 		retries = types.DefaultRetryCount
 	}
