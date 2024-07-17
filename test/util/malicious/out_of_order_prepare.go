@@ -31,6 +31,9 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 		a.GetTxConfig().SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
 		a.IBCKeeper,
+		a.AuctionKeeper,
+		a.MevLane,
+		a.GetTxConfig().TxEncoder(),
 	)
 
 	txs := app.FilterTxs(a.Logger(), sdkCtx, handler, a.GetTxConfig(), req.Txs)

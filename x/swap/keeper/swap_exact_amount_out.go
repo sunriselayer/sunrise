@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	lptypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -24,7 +22,7 @@ func (k Keeper) calculateInterfaceFeeExactAmountOut(
 	amountOutGross = math.LegacyNewDecFromInt(amountOutNet).Quo(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
 	interfaceFee = amountOutGross.Sub(amountOutNet)
 
-	return amountOutNet, interfaceFee
+	return amountOutGross, interfaceFee
 }
 
 func (k Keeper) CalculateResultExactAmountOut(
@@ -69,7 +67,7 @@ func (k Keeper) SwapExactAmountOut(
 	}
 
 	if result.TokenIn.Amount.GT(maxAmountIn) {
-		return result, interfaceFee, fmt.Errorf("TODO")
+		return result, interfaceFee, types.ErrHigherThanMaxInAmount
 	}
 
 	if hasInterfaceFee {
@@ -161,7 +159,7 @@ func (k Keeper) swapRouteExactAmountOut(
 		}
 
 		if !amountIn.Equal(result.TokenIn.Amount) {
-			return fmt.Errorf("TODO")
+			return types.ErrUnexpectedAmountInMismatch
 		}
 
 		return nil
@@ -185,7 +183,7 @@ func (k Keeper) swapRouteExactAmountOut(
 		return nil
 	}
 
-	return fmt.Errorf("TODO")
+	return types.UnknownStrategyType
 }
 
 func (k Keeper) swapRoutePoolExactAmountOut(

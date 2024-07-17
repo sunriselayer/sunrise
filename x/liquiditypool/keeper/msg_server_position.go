@@ -284,19 +284,18 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 	}
 
 	// Calculate the spot price and sqrt price
-	initialSpotPrice := amountQuoteDesired.ToLegacyDec().Quo(amountBaseDesired.ToLegacyDec())
-	initialCurrentSqrtPrice, err := initialSpotPrice.ApproxSqrt()
+	initialSqrtPrice, err := types.GetSqrtPriceFromQuoteBase(amountQuoteDesired, amountBaseDesired)
 	if err != nil {
 		return err
 	}
 
 	// Calculate the initial tick from the initial spot price
-	initialTick, err := types.CalculateSqrtPriceToTick(initialCurrentSqrtPrice, pool.TickParams)
+	initialTick, err := types.CalculateSqrtPriceToTick(initialSqrtPrice, pool.TickParams)
 	if err != nil {
 		return err
 	}
 
-	pool.CurrentSqrtPrice = initialCurrentSqrtPrice
+	pool.CurrentSqrtPrice = initialSqrtPrice
 	pool.CurrentTick = initialTick
 	k.SetPool(ctx, pool)
 
@@ -311,12 +310,12 @@ func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) {
 }
 
 func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddress, lowerTick, upperTick int64, liquidityDelta math.LegacyDec, positionId uint64) (amountBase math.Int, amountQuote math.Int, lowerTickEmpty bool, upperTickEmpty bool, err error) {
-	lowerTickIsEmpty, err := k.initOrUpdateTick(ctx, poolId, lowerTick, liquidityDelta, false)
+	lowerTickIsEmpty, err := k.UpsertTick(ctx, poolId, lowerTick, liquidityDelta, false)
 	if err != nil {
 		return math.Int{}, math.Int{}, false, false, err
 	}
 
-	upperTickIsEmpty, err := k.initOrUpdateTick(ctx, poolId, upperTick, liquidityDelta, true)
+	upperTickIsEmpty, err := k.UpsertTick(ctx, poolId, upperTick, liquidityDelta, true)
 	if err != nil {
 		return math.Int{}, math.Int{}, false, false, err
 	}

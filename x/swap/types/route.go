@@ -87,7 +87,7 @@ func (route *Route) validateRecursive() error {
 		return nil
 	}
 
-	return fmt.Errorf("unknown strategy: %s", route.Strategy)
+	return UnknownStrategyType
 }
 
 func (route *Route) mustNotReusePool(poolIds map[uint64]bool) {
@@ -232,5 +232,5 @@ func (route *Route) InspectRoute(
 		}, nil
 	}
 
-	return amountResult, routeResult, fmt.Errorf("unknown strategy: %s", route.Strategy)
+	return amountResult, routeResult, UnknownStrategyType
 }

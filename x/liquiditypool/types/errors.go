@@ -48,4 +48,5 @@ var (
 	ErrZeroShares               = sdkerrors.Register(ModuleName, 1137, "zero shares")
 	ErrAccumDoesNotExist        = sdkerrors.Register(ModuleName, 1138, "accumulator does not exist")
 	ErrNegRewardAddition        = sdkerrors.Register(ModuleName, 1139, "negative reward addition")
+	ErrTickNotFound             = sdkerrors.Register(ModuleName, 1140, "tick not found")
 )

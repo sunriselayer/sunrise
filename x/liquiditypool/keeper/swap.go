@@ -84,12 +84,12 @@ func (k Keeper) SwapExactAmountIn(
 
 	baseForQuote := isBaseForQuote(tokenIn.Denom, pool.DenomBase)
 
-	priceLimit := GetPriceLimit(baseForQuote)
+	multipliedPriceLimit := GetMultipliedPriceLimit(baseForQuote)
 	feeRate := math.LegacyZeroDec()
 	if feeEnabled {
 		feeRate = pool.FeeRate
 	}
-	tokenIn, tokenOut, _, err := k.swapOutAmtGivenIn(ctx, sender, pool, tokenIn, denomOut, feeRate, priceLimit)
+	tokenIn, tokenOut, _, err := k.swapOutAmtGivenIn(ctx, sender, pool, tokenIn, denomOut, feeRate, multipliedPriceLimit)
 	if err != nil {
 		return math.Int{}, err
 	}
@@ -112,12 +112,12 @@ func (k Keeper) SwapExactAmountOut(
 
 	baseForQuote := isBaseForQuote(denomIn, pool.DenomBase)
 
-	priceLimit := GetPriceLimit(baseForQuote)
+	multipliedPriceLimit := GetMultipliedPriceLimit(baseForQuote)
 	feeRate := math.LegacyZeroDec()
 	if feeEnabled {
 		feeRate = pool.FeeRate
 	}
-	tokenIn, tokenOut, _, err := k.swapInAmtGivenOut(ctx, sender, pool, tokenOut, denomIn, feeRate, priceLimit)
+	tokenIn, tokenOut, _, err := k.swapInAmtGivenOut(ctx, sender, pool, tokenOut, denomIn, feeRate, multipliedPriceLimit)
 	if err != nil {
 		return math.Int{}, err
 	}
@@ -133,9 +133,9 @@ func (k Keeper) swapOutAmtGivenIn(
 	tokenIn sdk.Coin,
 	denomOut string,
 	feeRate math.LegacyDec,
-	priceLimit math.LegacyDec,
+	multipliedPriceLimit math.LegacyDec,
 ) (calcTokenIn, calcTokenOut sdk.Coin, poolUpdates PoolUpdates, err error) {
-	swapResult, poolUpdates, err := k.computeOutAmtGivenIn(ctx, pool.GetId(), tokenIn, denomOut, feeRate, priceLimit, true)
+	swapResult, poolUpdates, err := k.computeOutAmtGivenIn(ctx, pool.GetId(), tokenIn, denomOut, feeRate, multipliedPriceLimit, true)
 	if err != nil {
 		return sdk.Coin{}, sdk.Coin{}, PoolUpdates{}, err
 	}
@@ -160,9 +160,9 @@ func (k *Keeper) swapInAmtGivenOut(
 	desiredTokenOut sdk.Coin,
 	denomIn string,
 	feeRate math.LegacyDec,
-	priceLimit math.LegacyDec,
+	multipliedPriceLimit math.LegacyDec,
 ) (calcTokenIn, calcTokenOut sdk.Coin, poolUpdates PoolUpdates, err error) {
-	swapResult, poolUpdates, err := k.computeInAmtGivenOut(ctx, desiredTokenOut, denomIn, feeRate, priceLimit, pool.GetId(), true)
+	swapResult, poolUpdates, err := k.computeInAmtGivenOut(ctx, desiredTokenOut, denomIn, feeRate, multipliedPriceLimit, pool.GetId(), true)
 	if err != nil {
 		return sdk.Coin{}, sdk.Coin{}, PoolUpdates{}, err
 	}
@@ -220,7 +220,7 @@ func (k Keeper) CalculateResultExactAmountOut(
 	return swapResult.AmountIn, nil
 }
 
-func (k Keeper) getPoolAndAccum(
+func (k Keeper) GetValidatedPoolAndAccumulator(
 	ctx sdk.Context,
 	poolId uint64,
 	denomIn string,
@@ -262,15 +262,15 @@ func (k Keeper) computeOutAmtGivenIn(
 	minTokenIn sdk.Coin,
 	denomOut string,
 	feeRate math.LegacyDec,
-	priceLimit math.LegacyDec,
+	multipliedPriceLimit math.LegacyDec,
 	updateAccumulators bool,
 ) (swapResult SwapResult, poolUpdates PoolUpdates, err error) {
-	p, feeAccumulator, err := k.getPoolAndAccum(ctx, poolId, minTokenIn.Denom, denomOut)
+	p, feeAccumulator, err := k.GetValidatedPoolAndAccumulator(ctx, poolId, minTokenIn.Denom, denomOut)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
 
-	swapHelper, sqrtPriceLimit, err := k.setupSwapHelper(p, feeRate, minTokenIn.Denom, priceLimit)
+	swapHelper, sqrtPriceLimit, err := k.setupSwapHelper(p, feeRate, minTokenIn.Denom, multipliedPriceLimit)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
@@ -358,16 +358,16 @@ func (k Keeper) computeInAmtGivenOut(
 	desiredTokenOut sdk.Coin,
 	denomIn string,
 	feeRate math.LegacyDec,
-	priceLimit math.LegacyDec,
+	multipliedPriceLimit math.LegacyDec,
 	poolId uint64,
 	updateAccumulators bool,
 ) (swapResult SwapResult, poolUpdates PoolUpdates, err error) {
-	p, feeAccumulator, err := k.getPoolAndAccum(ctx, poolId, denomIn, desiredTokenOut.Denom)
+	p, feeAccumulator, err := k.GetValidatedPoolAndAccumulator(ctx, poolId, denomIn, desiredTokenOut.Denom)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
 
-	swapHelper, sqrtPriceLimit, err := k.setupSwapHelper(p, feeRate, denomIn, priceLimit)
+	swapHelper, sqrtPriceLimit, err := k.setupSwapHelper(p, feeRate, denomIn, multipliedPriceLimit)
 	if err != nil {
 		return SwapResult{}, PoolUpdates{}, err
 	}
@@ -458,13 +458,13 @@ func (k Keeper) swapCrossTickLogic(ctx sdk.Context,
 	denomIn string,
 	updateAccumulators bool,
 ) (SwapState, error) {
-	nextInitializedTickInfo, err := ParseTickFromBz(nextTickIter.Value())
+	nextInitializedTickInfo, err := DecodeTickBytes(nextTickIter.Value())
 	if err != nil {
 		return swapState, err
 	}
 	if updateAccumulators {
 		feeGrowth := sdk.DecCoin{Denom: denomIn, Amount: swapState.globalFeeGrowthPerUnitLiquidity}
-		err := k.crossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
+		err := k.CrossTick(ctx, p.Id, nextInitializedTick, &nextInitializedTickInfo, feeGrowth, feeAccumulator.AccumValue)
 		if err != nil {
 			return swapState, err
 		}
@@ -544,11 +544,11 @@ func checkDenomValidity(inDenom, outDenom, assetBase, assetQuote string) error {
 	return nil
 }
 
-func (k Keeper) setupSwapHelper(p types.Pool, feeRate math.LegacyDec, denomIn string, priceLimit math.LegacyDec) (strategy SwapHelper, sqrtPriceLimit math.LegacyDec, err error) {
+func (k Keeper) setupSwapHelper(p types.Pool, feeRate math.LegacyDec, denomIn string, multipliedPriceLimit math.LegacyDec) (strategy SwapHelper, sqrtPriceLimit math.LegacyDec, err error) {
 	baseForQuote := isBaseForQuote(denomIn, p.DenomBase)
 
 	// take provided price limit and turn into a sqrt price limit
-	sqrtPriceLimit, err = GetSqrtPriceLimit(priceLimit, baseForQuote)
+	sqrtPriceLimit, err = GetSqrtPriceLimit(multipliedPriceLimit, baseForQuote)
 	if err != nil {
 		return strategy, math.LegacyDec{}, err
 	}
@@ -652,7 +652,7 @@ func (k Keeper) ComputeMaxInAmtGivenMaxTicksCrossed(
 		totalTokenOut = totalTokenOut.Add(amountOut)
 
 		if nextInitializedTickSqrtPrice.Equal(computedSqrtPrice) {
-			nextInitializedTickInfo, err := ParseTickFromBz(nextInitTickIter.Value())
+			nextInitializedTickInfo, err := DecodeTickBytes(nextInitTickIter.Value())
 			if err != nil {
 				return sdk.Coin{}, sdk.Coin{}, err
 			}

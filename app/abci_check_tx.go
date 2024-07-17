@@ -32,7 +32,7 @@ func (app *App) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error)
 			return sdkerrors.ResponseCheckTxWithEvents(blobtypes.ErrNoBlobs, 0, 0, []abci.Event{}, false), blobtypes.ErrNoBlobs
 		}
 		// don't do anything special if we have a normal transaction
-		return app.checkTxHandler(req)
+		return app.CheckTxHandler(req)
 	}
 
 	switch req.Type {
@@ -48,10 +48,10 @@ func (app *App) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error)
 	}
 
 	req.Tx = btx.Tx
-	return app.checkTxHandler(req)
+	return app.CheckTxHandler(req)
 }
 
-// SetCheckTx sets the checkTxHandler for the app.
+// SetCheckTx sets the CheckTxHandler for the app.
 func (app *App) SetCheckTx(handler checktx.CheckTx) {
-	app.checkTxHandler = handler
+	app.CheckTxHandler = handler
 }

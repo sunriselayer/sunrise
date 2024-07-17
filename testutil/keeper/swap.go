@@ -15,13 +15,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
+	swaptestutil "github.com/sunriselayer/sunrise/x/swap/testutil"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-func SwapKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
+type SwapMocks struct {
+	AcctKeeper          *swaptestutil.MockAccountKeeper
+	BankKeeper          *swaptestutil.MockBankKeeper
+	TransferKeeper      *swaptestutil.MockTransferKeeper
+	LiquiditypoolKeeper *swaptestutil.MockLiquidityPoolKeeper
+}
+
+func SwapKeeper(t testing.TB) (keeper.Keeper, SwapMocks, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -33,15 +42,23 @@ func SwapKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
+	ctrl := gomock.NewController(t)
+	m := SwapMocks{
+		AcctKeeper:          swaptestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:          swaptestutil.NewMockBankKeeper(ctrl),
+		TransferKeeper:      swaptestutil.NewMockTransferKeeper(ctrl),
+		LiquiditypoolKeeper: swaptestutil.NewMockLiquidityPoolKeeper(ctrl),
+	}
+
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
-		nil,
-		nil,
-		nil,
-		nil,
+		m.AcctKeeper,
+		m.BankKeeper,
+		m.TransferKeeper,
+		m.LiquiditypoolKeeper,
 		nil,
 	)
 
@@ -52,5 +69,5 @@ func SwapKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		panic(err)
 	}
 
-	return k, ctx
+	return k, m, ctx
 }

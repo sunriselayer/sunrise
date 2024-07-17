@@ -111,7 +111,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 				allocation,
 			)
 			if err != nil {
-				return err
+				ctx.Logger().Error("failure in incentive allocation", "error", err)
 			}
 		}
 	}

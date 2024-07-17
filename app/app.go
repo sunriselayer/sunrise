@@ -164,8 +164,8 @@ type App struct {
 	sm *module.SimulationManager
 
 	// custom structure for skip-mev protection
-	mevLane        *mevlane.MEVLane
-	checkTxHandler checktx.CheckTx
+	MevLane        *mevlane.MEVLane
+	CheckTxHandler checktx.CheckTx
 }
 
 func init() {
@@ -428,7 +428,7 @@ func New(
 		opt...,
 	)
 
-	app.mevLane = mevLane
+	app.MevLane = mevLane
 
 	// Step 6: Create the proposal handler and set it on the app. Now the application
 	// will build and verify proposals using the Block SDK!

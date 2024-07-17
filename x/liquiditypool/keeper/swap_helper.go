@@ -30,30 +30,31 @@ func New(baseForQuote bool, sqrtPriceLimit math.LegacyDec, feeRate math.LegacyDe
 	return &quoteForBaseHelper{sqrtPriceLimit: sqrtPriceLimit, feeRate: feeRate}
 }
 
-func GetPriceLimit(baseForQuote bool) math.LegacyDec {
+func GetMultipliedPriceLimit(baseForQuote bool) math.LegacyDec {
 	if baseForQuote {
-		return types.MinSpotPrice
+		return types.MinMultipliedSpotPrice
 	}
-	return types.MaxSpotPrice
+	return types.MaxMultipliedSpotPrice
 }
 
-func GetSqrtPriceLimit(priceLimit math.LegacyDec, baseForQuote bool) (math.LegacyDec, error) {
-	if priceLimit.IsZero() {
+func GetSqrtPriceLimit(multipliedPriceLimit math.LegacyDec, baseForQuote bool) (math.LegacyDec, error) {
+	if multipliedPriceLimit.IsZero() {
 		if baseForQuote {
 			return types.MinSqrtPrice, nil
 		}
 		return types.MaxSqrtPrice, nil
 	}
 
-	if priceLimit.LT(types.MinSpotPrice) || priceLimit.GT(types.MaxSpotPrice) {
+	if multipliedPriceLimit.LT(types.MinMultipliedSpotPrice) || multipliedPriceLimit.GT(types.MaxMultipliedSpotPrice) {
 		return math.LegacyDec{}, types.ErrPriceOutOfBound
 	}
 
-	sqrtPriceLimit, err := priceLimit.ApproxSqrt()
+	sqrtPriceLimitMultiplied, err := multipliedPriceLimit.ApproxSqrt()
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
 
+	sqrtPriceLimit := sqrtPriceLimitMultiplied.Quo(types.MultiplierSqrt)
 	return sqrtPriceLimit, nil
 }
 

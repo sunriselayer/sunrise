@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
@@ -70,7 +68,7 @@ func (k Keeper) SwapExactAmountIn(
 	amountOutNet, interfaceFee = k.calculateInterfaceFeeExactAmountIn(ctx, hasInterfaceFee, amountOutGross)
 
 	if amountOutNet.LT(minAmountOut) {
-		return result, interfaceFee, fmt.Errorf("TODO")
+		return result, interfaceFee, types.ErrLowerThanMinOutAmount
 	}
 
 	if hasInterfaceFee {

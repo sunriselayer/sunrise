@@ -18,13 +18,13 @@ import (
 
 type IBCMiddleware struct {
 	porttypes.IBCModule
-	keeper keeper.Keeper
+	keeper *keeper.Keeper
 }
 
 // NewIBCMiddleware creates a new IBCMiddleware given the keeper and underlying application.
 func NewIBCMiddleware(
 	app porttypes.IBCModule,
-	k keeper.Keeper,
+	k *keeper.Keeper,
 ) IBCMiddleware {
 	return IBCMiddleware{
 		IBCModule: app,
@@ -197,9 +197,7 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 		return err
 	}
 
-	im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
-
-	return nil
+	return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
 }
 
 // OnTimeoutPacket implements the IBCModule interface.

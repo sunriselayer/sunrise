@@ -23,64 +23,65 @@ func TicksToSqrtPrice(lowerTick, upperTick int64, tickParams TickParams) (math.L
 }
 
 func TickToSqrtPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, error) {
-	priceDec, err := TickToPrice(tickIndex, tickParams)
+	priceMultiplied, err := TickToMultipliedPrice(tickIndex, tickParams)
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
 
-	sqrtPrice, err := priceDec.ApproxSqrt()
+	sqrtPriceMultiplied, err := priceMultiplied.ApproxSqrt()
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
+	sqrtPrice := sqrtPriceMultiplied.Quo(MultiplierSqrt)
 	return sqrtPrice, nil
 }
 
-func TickToPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, error) {
+func TickToMultipliedPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, error) {
 	offsetPrice := Pow(tickParams.PriceRatio, tickParams.BaseOffset)
 	if tickIndex == 0 {
-		return offsetPrice, nil
+		return offsetPrice.Mul(Multiplier), nil
 	}
 
 	if tickIndex == TICK_MIN {
-		return MinSpotPrice, nil
+		return MinMultipliedSpotPrice, nil
 	}
 
-	var price math.LegacyDec
+	var multipliedPrice math.LegacyDec
 	if tickIndex > 0 {
-		price = Pow(tickParams.PriceRatio, math.LegacyNewDec(tickIndex))
+		multipliedPrice = Multiplier.Mul(Pow(tickParams.PriceRatio, math.LegacyNewDec(tickIndex)))
 	} else {
-		price = math.LegacyOneDec().Quo(Pow(tickParams.PriceRatio, math.LegacyNewDec(-tickIndex)))
+		multipliedPrice = Multiplier.Quo(Pow(tickParams.PriceRatio, math.LegacyNewDec(-tickIndex)))
 	}
 
-	price = price.Mul(offsetPrice)
+	multipliedPrice = multipliedPrice.Mul(offsetPrice)
 
-	if price.GT(MaxSpotPrice) || price.LT(MinSpotPrice) {
+	if multipliedPrice.GT(MaxMultipliedSpotPrice) || multipliedPrice.LT(MinMultipliedSpotPrice) {
 		return math.LegacyDec{}, ErrPriceOutOfBound
 	}
-	return price, nil
+	return multipliedPrice, nil
 }
 
-func CalculatePriceToTick(price math.LegacyDec, tickParams TickParams) (tickIndex int64, err error) {
-	if price.IsNegative() {
+func CalculateMultipliedPriceToTick(multipliedPrice math.LegacyDec, tickParams TickParams) (tickIndex int64, err error) {
+	if multipliedPrice.IsNegative() {
 		return 0, fmt.Errorf("price must be greater than zero")
 	}
-	if price.GT(MaxSpotPrice) || price.LT(MinSpotPrice) {
+	if multipliedPrice.GT(MaxMultipliedSpotPrice) || multipliedPrice.LT(MinMultipliedSpotPrice) {
 		return 0, ErrPriceOutOfBound
 	}
-	offsetPrice := Pow(tickParams.PriceRatio, tickParams.BaseOffset)
-	if price.Equal(offsetPrice) {
+	multipliedOffsetPrice := Multiplier.Mul(Pow(tickParams.PriceRatio, tickParams.BaseOffset))
+	if multipliedPrice.Equal(multipliedOffsetPrice) {
 		return 0, nil
 	}
 
 	tickIndex = 0
-	if price.GT(offsetPrice) {
-		for price.GT(offsetPrice) {
-			price = price.Quo(tickParams.PriceRatio)
+	if multipliedPrice.GT(multipliedOffsetPrice) {
+		for multipliedPrice.GT(multipliedOffsetPrice) {
+			multipliedPrice = multipliedPrice.Quo(tickParams.PriceRatio)
 			tickIndex++
 		}
 	} else {
-		for price.LT(offsetPrice) {
-			price = price.Mul(tickParams.PriceRatio)
+		for multipliedPrice.LT(multipliedOffsetPrice) {
+			multipliedPrice = multipliedPrice.Mul(tickParams.PriceRatio)
 			tickIndex--
 		}
 	}
@@ -89,9 +90,8 @@ func CalculatePriceToTick(price math.LegacyDec, tickParams TickParams) (tickInde
 }
 
 func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec, tickParams TickParams) (tickIndex int64, err error) {
-	price := sqrtPrice.Mul(sqrtPrice)
-
-	tick, err := CalculatePriceToTick(price, tickParams)
+	multipliedPrice := Multiplier.Mul(sqrtPrice).Mul(sqrtPrice)
+	tick, err := CalculateMultipliedPriceToTick(multipliedPrice, tickParams)
 	if err != nil {
 		return 0, err
 	}
@@ -146,4 +146,14 @@ func CalculateSqrtPriceToTick(sqrtPrice math.LegacyDec, tickParams TickParams) (
 	}
 
 	return tick - 1, nil
+}
+
+func GetSqrtPriceFromQuoteBase(quoteAmount math.Int, baseAmount math.Int) (math.LegacyDec, error) {
+	spotPriceMultiplied := quoteAmount.ToLegacyDec().Mul(Multiplier).Quo(baseAmount.ToLegacyDec())
+	sqrtPriceMultiplied, err := spotPriceMultiplied.ApproxSqrt()
+	if err != nil {
+		return math.LegacyZeroDec(), err
+	}
+	sqrtPrice := sqrtPriceMultiplied.Quo(MultiplierSqrt)
+	return sqrtPrice, err
 }

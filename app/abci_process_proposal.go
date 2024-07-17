@@ -57,7 +57,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		ante.DefaultSigVerificationGasConsumer,
 		app.IBCKeeper,
 		app.AuctionKeeper,
-		app.mevLane,
+		app.MevLane,
 		app.txConfig.TxEncoder(),
 	)
 	sdkCtx := app.NewProposalContext(cmtproto.Header{
