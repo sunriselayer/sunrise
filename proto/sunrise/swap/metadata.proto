@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sunrise.swap;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/swap/route.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+message PacketMetadata {
+  SwapMetadata swap = 1;
+}
+
+message ForwardMetadata {
+  string receiver = 1;
+  string port = 2;
+  string channel = 3;
+  google.protobuf.Duration timeout = 4;
+  uint32 retries = 5; 
+
+  // Using Google's Struct to handle the flexible JSON object
+  google.protobuf.Struct next = 6; 
+}
+
+message ExactAmountIn {
+  string min_amount_out = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message ExactAmountOut {
+  string amount_out = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  ForwardMetadata change = 2;
+}
+
+message SwapMetadata {
+  string interface_provider = 1;
+  Route route = 2;
+  ExactAmountIn exact_amount_in = 3;
+  ExactAmountOut exact_amount_out = 4;
+  ForwardMetadata forward = 5;
+}
