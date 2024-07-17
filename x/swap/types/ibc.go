@@ -31,7 +31,7 @@ func (m *SwapMetadata) Validate() error {
 	}
 	switch swapType := m.SwapType.(type) {
 	case *SwapMetadata_ExactAmountIn:
-		if swapType.ExactAmountIn.MinAmountOut.IsPositive() {
+		if !swapType.ExactAmountIn.MinAmountOut.IsPositive() {
 			return fmt.Errorf("min amount out must be positive")
 		}
 
