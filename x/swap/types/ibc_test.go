@@ -23,10 +23,11 @@ func TestEncodePacketMetadata_ExactAmountIn(t *testing.T) {
 					},
 				},
 			},
-			ExactAmountIn: &ExactAmountIn{
-				MinAmountOut: sdkmath.OneInt(),
+			SwapType: &SwapMetadata_ExactAmountIn{
+				ExactAmountIn: &ExactAmountIn{
+					MinAmountOut: sdkmath.OneInt(),
+				},
 			},
-			ExactAmountOut: nil,
 			Forward: &ForwardMetadata{
 				Receiver: "cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9",
 				Port:     "transfer",
@@ -78,10 +79,10 @@ func TestEncodePacketMetadata_ExactAmountInSeries(t *testing.T) {
 					},
 				},
 			},
-			ExactAmountIn: &ExactAmountIn{
-				MinAmountOut: sdkmath.OneInt(),
-			},
-			ExactAmountOut: nil,
+			SwapType: &SwapMetadata_ExactAmountIn{
+				ExactAmountIn: &ExactAmountIn{
+					MinAmountOut: sdkmath.OneInt(),
+				}},
 			Forward: &ForwardMetadata{
 				Receiver: "cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9",
 				Port:     "transfer",
@@ -117,17 +118,17 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 					},
 				},
 			},
-			ExactAmountIn: nil,
-			ExactAmountOut: &ExactAmountOut{
-				AmountOut: sdkmath.NewInt(1000),
-				Change: &ForwardMetadata{
-					Receiver: "cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9",
-					Port:     "transfer",
-					Channel:  "channel-2",
-					Retries:  retries,
-					Next:     nil,
-				},
-			},
+			SwapType: &SwapMetadata_ExactAmountOut{
+				ExactAmountOut: &ExactAmountOut{
+					AmountOut: sdkmath.NewInt(1000),
+					Change: &ForwardMetadata{
+						Receiver: "cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9",
+						Port:     "transfer",
+						Channel:  "channel-2",
+						Retries:  retries,
+						Next:     nil,
+					},
+				}},
 			Forward: &ForwardMetadata{
 				Receiver: "cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9",
 				Port:     "transfer",

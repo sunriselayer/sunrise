@@ -29,24 +29,15 @@ func (m *SwapMetadata) Validate() error {
 	if err := m.Route.Validate(); err != nil {
 		return err
 	}
-
-	if m.ExactAmountIn != nil && m.ExactAmountOut != nil {
-		return fmt.Errorf("cannot have both exact_amount_in and exact_amount_out")
-	}
-
-	if m.ExactAmountIn == nil && m.ExactAmountOut == nil {
-		return fmt.Errorf("must have either exact_amount_in or exact_amount_out")
-	}
-
-	if m.ExactAmountIn != nil {
-		if !m.ExactAmountIn.MinAmountOut.IsPositive() {
-			return fmt.Errorf("min_amount_out must be positive")
+	switch swapType := m.SwapType.(type) {
+	case *SwapMetadata_ExactAmountIn:
+		if swapType.ExactAmountIn.MinAmountOut.IsPositive() {
+			return fmt.Errorf("min amount out must be positive")
 		}
-	}
 
-	if m.ExactAmountOut != nil {
-		if m.ExactAmountOut.Change != nil {
-			if err := m.ExactAmountOut.Change.Validate(); err != nil {
+	case *SwapMetadata_ExactAmountOut:
+		if swapType.ExactAmountOut.Change != nil {
+			if err := swapType.ExactAmountOut.Change.Validate(); err != nil {
 				return err
 			}
 		}

@@ -51,10 +51,11 @@ func (k Keeper) SwapIncomingFund(
 		return result, interfaceFee, err
 	}
 
-	if swapData.ExactAmountIn != nil {
+	switch swapType := swapData.SwapType.(type) {
+	case *types.SwapMetadata_ExactAmountIn:
 		// Swap exact amount in
 		amountIn := maxAmountIn
-		minAmountOut := swapData.ExactAmountIn.MinAmountOut
+		minAmountOut := swapType.ExactAmountIn.MinAmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountIn(
 			ctx,
@@ -67,9 +68,9 @@ func (k Keeper) SwapIncomingFund(
 		if err != nil {
 			return types.RouteResult{}, sdkmath.Int{}, err
 		}
-	} else {
+	case *types.SwapMetadata_ExactAmountOut:
 		// Swap exact amount out
-		amountOut := swapData.ExactAmountOut.AmountOut
+		amountOut := swapType.ExactAmountOut.AmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountOut(
 			ctx,
@@ -134,23 +135,26 @@ func (k Keeper) ProcessSwappedFund(
 	if remainderAmountIn.IsPositive() {
 		remainderTokenIn := sdk.NewCoin(result.TokenIn.Denom, remainderAmountIn)
 
-		if swapData.ExactAmountOut.Change != nil {
-			// Return the remainder token in
-			returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
-				ctx,
-				waitingPacket.Index,
-				tokenData.Receiver,
-				remainderTokenIn,
-				*swapData.ExactAmountOut.Change,
-			)
-			if err != nil {
-				return nil, err
-			}
+		switch swapType := swapData.SwapType.(type) {
+		case *types.SwapMetadata_ExactAmountOut:
+			if swapType.ExactAmountOut.Change != nil {
+				// Return the remainder token in
+				returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
+					ctx,
+					waitingPacket.Index,
+					tokenData.Receiver,
+					remainderTokenIn,
+					*swapType.ExactAmountOut.Change,
+				)
+				if err != nil {
+					return nil, err
+				}
 
-			waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
-				OutgoingIndexChange: &returnPacket.Index,
+				waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
+					OutgoingIndexChange: &returnPacket.Index,
+				}
+				waiting = true
 			}
-			waiting = true
 		}
 	}
 
