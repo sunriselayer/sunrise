@@ -6,14 +6,20 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/da/params.proto";
+import "sunrise/da/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Parameters queries the parameters of the module.
+  // Params queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/da/params";
+  }
+  // PublishedData queries published data
+  rpc PublishedData(QueryPublishedDataRequest)
+      returns (QueryPublishedDataResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/da/published_data";
   }
 }
 
@@ -23,8 +29,16 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// QueryPublishedDataRequest is request type for the Query/PublishedData RPC
+// method.
+message QueryPublishedDataRequest {}
+
+// QueryPublishedDataResponse is response type for the Query/PublishedData RPC
+// method.
+message QueryPublishedDataResponse {
+  repeated PublishedData data = 1 [ (gogoproto.nullable) = false ];
 }

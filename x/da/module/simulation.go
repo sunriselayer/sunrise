@@ -23,7 +23,7 @@ var (
 )
 
 const (
-    opWeightMsgPublishData = "op_weight_msg_publish_data"
+	opWeightMsgPublishData = "op_weight_msg_publish_data"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgPublishData int = 100
 
@@ -37,7 +37,7 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 		accs[i] = acc.Address.String()
 	}
 	daGenesis := types.GenesisState{
-		Params:	types.DefaultParams(),
+		Params: types.DefaultParams(),
 		// this line is used by starport scaffolding # simapp/module/genesisState
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&daGenesis)
@@ -69,14 +69,14 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 // ProposalMsgs returns msgs used for governance proposals for simulations.
 func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
-	    simulation.NewWeightedProposalMsg(
-	opWeightMsgPublishData,
-	defaultWeightMsgPublishData,
-	func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-		dasimulation.SimulateMsgPublishData(am.accountKeeper, am.bankKeeper, am.keeper)
-		return nil
-	},
-),
-// this line is used by starport scaffolding # simapp/module/OpMsg
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgPublishData,
+			defaultWeightMsgPublishData,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				dasimulation.SimulateMsgPublishData(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		// this line is used by starport scaffolding # simapp/module/OpMsg
 	}
 }

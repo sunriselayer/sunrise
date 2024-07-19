@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sunrise.da;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/da/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+message PublishedData {
+  bytes recovered_data_hash = 1;
+  string metadata_uri = 2;
+  repeated bytes shard_double_hashes = 3;
+}
