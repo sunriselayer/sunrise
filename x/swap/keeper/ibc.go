@@ -1,17 +1,17 @@
 package keeper
 
 import (
-	"encoding/json"
+	"strings"
 	"time"
 
 	errors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/gogo/protobuf/jsonpb"
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
-	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
@@ -51,31 +51,32 @@ func (k Keeper) SwapIncomingFund(
 		return result, interfaceFee, err
 	}
 
-	if swapData.ExactAmountIn != nil {
+	switch amountStrategy := swapData.AmountStrategy.(type) {
+	case *types.SwapMetadata_ExactAmountIn:
 		// Swap exact amount in
 		amountIn := maxAmountIn
-		minAmountOut := swapData.ExactAmountIn.MinAmountOut
+		minAmountOut := amountStrategy.ExactAmountIn.MinAmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountIn(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			*swapData.Route.GetRoute(),
+			*swapData.Route,
 			amountIn,
 			minAmountOut,
 		)
 		if err != nil {
 			return types.RouteResult{}, sdkmath.Int{}, err
 		}
-	} else {
+	case *types.SwapMetadata_ExactAmountOut:
 		// Swap exact amount out
-		amountOut := swapData.ExactAmountOut.AmountOut
+		amountOut := amountStrategy.ExactAmountOut.AmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountOut(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			*swapData.Route.GetRoute(),
+			*swapData.Route,
 			maxAmountIn,
 			amountOut,
 		)
@@ -134,23 +135,26 @@ func (k Keeper) ProcessSwappedFund(
 	if remainderAmountIn.IsPositive() {
 		remainderTokenIn := sdk.NewCoin(result.TokenIn.Denom, remainderAmountIn)
 
-		if swapData.ExactAmountOut.Change != nil {
-			// Return the remainder token in
-			returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
-				ctx,
-				waitingPacket.Index,
-				tokenData.Receiver,
-				remainderTokenIn,
-				*swapData.ExactAmountOut.Change,
-			)
-			if err != nil {
-				return nil, err
-			}
+		switch amountStrategy := swapData.AmountStrategy.(type) {
+		case *types.SwapMetadata_ExactAmountOut:
+			if amountStrategy.ExactAmountOut.Change != nil {
+				// Return the remainder token in
+				returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
+					ctx,
+					waitingPacket.Index,
+					tokenData.Receiver,
+					remainderTokenIn,
+					*amountStrategy.ExactAmountOut.Change,
+				)
+				if err != nil {
+					return nil, err
+				}
 
-			waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
-				OutgoingIndexChange: &returnPacket.Index,
+				waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
+					OutgoingIndexChange: &returnPacket.Index,
+				}
+				waiting = true
 			}
-			waiting = true
 		}
 	}
 
@@ -192,11 +196,11 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	incomingIndex types.PacketIndex,
 	sender string,
 	tokenOut sdk.Coin,
-	metadata packetforwardtypes.ForwardMetadata,
+	metadata types.ForwardMetadata,
 ) (packet types.OutgoingInFlightPacket, err error) {
 	var memo string
 	if metadata.Next != nil {
-		if err := json.Unmarshal([]byte(memo), &metadata.Next); err != nil {
+		if err := jsonpb.Unmarshal(strings.NewReader(memo), metadata.Next); err != nil {
 			return packet, err
 		}
 	}
@@ -218,8 +222,8 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	}
 
 	var retries uint8
-	if metadata.Retries != nil {
-		retries = *metadata.Retries
+	if metadata.Retries == 0 {
+		retries = uint8(metadata.Retries)
 	} else {
 		retries = types.DefaultRetryCount
 	}

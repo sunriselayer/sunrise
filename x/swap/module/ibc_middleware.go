@@ -3,12 +3,14 @@ package swap
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	exported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+	"github.com/gogo/protobuf/jsonpb"
 
 	// packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 
@@ -98,7 +100,7 @@ func (im IBCMiddleware) OnRecvPacket(
 	}
 
 	m := &types.PacketMetadata{}
-	err = json.Unmarshal([]byte(data.Memo), m)
+	err = jsonpb.Unmarshal(strings.NewReader(data.Memo), m)
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(fmt.Errorf("error parsing swap metadata: %w", err))
 	}
