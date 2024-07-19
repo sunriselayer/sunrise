@@ -23,7 +23,7 @@ func TestEncodePacketMetadata_ExactAmountIn(t *testing.T) {
 					},
 				},
 			},
-			SwapType: &SwapMetadata_ExactAmountIn{
+			AmountStrategy: &SwapMetadata_ExactAmountIn{
 				ExactAmountIn: &ExactAmountIn{
 					MinAmountOut: sdkmath.OneInt(),
 				},
@@ -62,7 +62,7 @@ func TestEncodePacketMetadataNoForward_ExactAmountIn(t *testing.T) {
 					},
 				},
 			},
-			SwapType: &SwapMetadata_ExactAmountIn{
+			AmountStrategy: &SwapMetadata_ExactAmountIn{
 				ExactAmountIn: &ExactAmountIn{
 					MinAmountOut: sdkmath.OneInt(),
 				},
@@ -111,7 +111,7 @@ func TestEncodePacketMetadata_ExactAmountInSeries(t *testing.T) {
 					},
 				},
 			},
-			SwapType: &SwapMetadata_ExactAmountIn{
+			AmountStrategy: &SwapMetadata_ExactAmountIn{
 				ExactAmountIn: &ExactAmountIn{
 					MinAmountOut: sdkmath.OneInt(),
 				}},
@@ -150,7 +150,7 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 					},
 				},
 			},
-			SwapType: &SwapMetadata_ExactAmountOut{
+			AmountStrategy: &SwapMetadata_ExactAmountOut{
 				ExactAmountOut: &ExactAmountOut{
 					AmountOut: sdkmath.NewInt(1000),
 					Change: &ForwardMetadata{

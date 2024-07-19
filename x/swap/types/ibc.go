@@ -29,15 +29,15 @@ func (m *SwapMetadata) Validate() error {
 	if err := m.Route.Validate(); err != nil {
 		return err
 	}
-	switch swapType := m.SwapType.(type) {
+	switch amountStrategy := m.AmountStrategy.(type) {
 	case *SwapMetadata_ExactAmountIn:
-		if !swapType.ExactAmountIn.MinAmountOut.IsPositive() {
+		if !amountStrategy.ExactAmountIn.MinAmountOut.IsPositive() {
 			return fmt.Errorf("min amount out must be positive")
 		}
 
 	case *SwapMetadata_ExactAmountOut:
-		if swapType.ExactAmountOut.Change != nil {
-			if err := swapType.ExactAmountOut.Change.Validate(); err != nil {
+		if amountStrategy.ExactAmountOut.Change != nil {
+			if err := amountStrategy.ExactAmountOut.Change.Validate(); err != nil {
 				return err
 			}
 		}

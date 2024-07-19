@@ -51,11 +51,11 @@ func (k Keeper) SwapIncomingFund(
 		return result, interfaceFee, err
 	}
 
-	switch swapType := swapData.SwapType.(type) {
+	switch amountStrategy := swapData.AmountStrategy.(type) {
 	case *types.SwapMetadata_ExactAmountIn:
 		// Swap exact amount in
 		amountIn := maxAmountIn
-		minAmountOut := swapType.ExactAmountIn.MinAmountOut
+		minAmountOut := amountStrategy.ExactAmountIn.MinAmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountIn(
 			ctx,
@@ -70,7 +70,7 @@ func (k Keeper) SwapIncomingFund(
 		}
 	case *types.SwapMetadata_ExactAmountOut:
 		// Swap exact amount out
-		amountOut := swapType.ExactAmountOut.AmountOut
+		amountOut := amountStrategy.ExactAmountOut.AmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountOut(
 			ctx,
@@ -135,16 +135,16 @@ func (k Keeper) ProcessSwappedFund(
 	if remainderAmountIn.IsPositive() {
 		remainderTokenIn := sdk.NewCoin(result.TokenIn.Denom, remainderAmountIn)
 
-		switch swapType := swapData.SwapType.(type) {
+		switch amountStrategy := swapData.AmountStrategy.(type) {
 		case *types.SwapMetadata_ExactAmountOut:
-			if swapType.ExactAmountOut.Change != nil {
+			if amountStrategy.ExactAmountOut.Change != nil {
 				// Return the remainder token in
 				returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
 					ctx,
 					waitingPacket.Index,
 					tokenData.Receiver,
 					remainderTokenIn,
-					*swapType.ExactAmountOut.Change,
+					*amountStrategy.ExactAmountOut.Change,
 				)
 				if err != nil {
 					return nil, err
