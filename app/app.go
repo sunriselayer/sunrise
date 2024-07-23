@@ -78,6 +78,7 @@ import (
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunriselayer/sunrise/docs"
@@ -432,14 +433,23 @@ func New(
 
 	// Step 6: Create the proposal handler and set it on the app. Now the application
 	// will build and verify proposals using the Block SDK!
-	proposalHandler := abci.NewProposalHandler(
+	blockSdkProposalHandler := abci.NewProposalHandler(
 		app.Logger(),
 		app.txConfig.TxDecoder(),
 		app.txConfig.TxEncoder(),
 		mempool,
 	)
-	app.App.SetPrepareProposal(proposalHandler.PrepareProposalHandler())
-	app.App.SetProcessProposal(proposalHandler.ProcessProposalHandler())
+
+	propHandler := NewProposalHandler(
+		logger,
+		app.DaKeeper,
+		app.StakingKeeper,
+		app.ModuleManager,
+		blockSdkProposalHandler,
+	)
+	app.BaseApp.SetPrepareProposal(propHandler.PrepareProposal())
+	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal())
+	app.BaseApp.SetPreBlocker(propHandler.PreBlocker)
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
 	// use the MEV lane.
@@ -459,6 +469,11 @@ func New(
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
 	// ---------------------------------------------------------------------------- //
+
+	// Vote extension
+	voteExtHandler := NewVoteExtHandler(app.DaKeeper)
+	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(app.txConfig.TxDecoder(), anteHandler))
+	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler())
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 
