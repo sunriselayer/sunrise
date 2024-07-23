@@ -83,7 +83,7 @@ If you'd rather not install from source, you can download a prebuilt binary from
    sunrise_Linux_x86_64.tar.gz: OK
    ```
 
-See <https://docs.sunriselayer.io/node/build-node> for more information.
+See <https://docs.sunriselayer.io/run-a-gluon-node/nodes> for more information.
 
 ## Usage
 
