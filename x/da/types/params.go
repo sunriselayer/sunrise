@@ -1,6 +1,7 @@
 package types
 
 import (
+	"cosmossdk.io/math"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
@@ -12,13 +13,23 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params instance
-func NewParams() Params {
-	return Params{}
+func NewParams(voteThreshold math.LegacyDec, slashEpoch uint64, epochMaxFault uint64, slashFraction math.LegacyDec) Params {
+	return Params{
+		VoteThreshold: voteThreshold,
+		SlashEpoch:    slashEpoch,
+		EpochMaxFault: epochMaxFault,
+		SlashFraction: slashFraction,
+	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
-	return NewParams()
+	return NewParams(
+		math.LegacyNewDecWithPrec(67, 2), // 67%
+		120960,                           // 1 week
+		34560,                            // 2 days
+		math.LegacyNewDecWithPrec(1, 3),  // 0.1%
+	)
 }
 
 // ParamSetPairs get the params.ParamSet

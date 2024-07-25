@@ -10,7 +10,6 @@ import (
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
-	"cosmossdk.io/math"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -208,19 +207,27 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeB
 			}
 		}
 	}
+
 	for _, txBytes := range req.Txs {
-		var voteExt types.VoteExtension
-		if err := voteExt.Unmarshal(txBytes); err != nil {
+		var voteExtTx VoteExtensionTx
+		if err := json.Unmarshal(txBytes, &voteExtTx); err != nil {
 			continue
 		}
 
-		for _, pd := range voteExt.Data {
+		for _, pd := range voteExtTx.VotedData {
 			if err := h.keeper.SetPublishedData(ctx, *pd); err != nil {
 				panic(err)
 			}
 		}
 
-		// TODO: handle validators misbehaving vote extension
+		for _, valAddr := range voteExtTx.FaultValidators {
+			h.keeper.SetFaultCounter(ctx, valAddr, h.keeper.GetFaultCounter(ctx, valAddr)+1)
+		}
+
+		params := h.keeper.GetParams(ctx)
+		if ctx.BlockHeight()%int64(params.SlashEpoch) == 0 {
+			h.keeper.HandleSlashEpoch(ctx)
+		}
 	}
 
 	return &sdk.ResponsePreBlock{ConsensusParamsChanged: paramsChanged}, nil
@@ -397,6 +404,7 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		}
 	}
 
+	params := h.keeper.GetParams(ctx)
 	faultValidators := map[string]sdk.ValAddress{}
 	dataVotesMap := h.GetDataVotesMapByHash(commitInfo, valPowerMap, valConsAddrMap)
 	for dataHash, dataVote := range dataVotesMap {
@@ -406,8 +414,7 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		}
 
 		totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, h.stakingKeeper.PowerReduction(ctx))
-		voteThreshold := math.LegacyNewDecWithPrec(67, 2) // 67%
-		thresholdPower := voteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
+		thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 
 		publishedData, aboveThreshold := GetAboveThresholdVotedData(dataVote, thresholdPower, valPowerMap, faultValidators)
 		if !aboveThreshold {

@@ -15,12 +15,20 @@ import (
 )
 
 var (
-	md_Params protoreflect.MessageDescriptor
+	md_Params                 protoreflect.MessageDescriptor
+	fd_Params_vote_threshold  protoreflect.FieldDescriptor
+	fd_Params_slash_epoch     protoreflect.FieldDescriptor
+	fd_Params_epoch_max_fault protoreflect.FieldDescriptor
+	fd_Params_slash_fraction  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_da_params_proto_init()
 	md_Params = File_sunrise_da_params_proto.Messages().ByName("Params")
+	fd_Params_vote_threshold = md_Params.Fields().ByName("vote_threshold")
+	fd_Params_slash_epoch = md_Params.Fields().ByName("slash_epoch")
+	fd_Params_epoch_max_fault = md_Params.Fields().ByName("epoch_max_fault")
+	fd_Params_slash_fraction = md_Params.Fields().ByName("slash_fraction")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -88,6 +96,30 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.VoteThreshold != "" {
+		value := protoreflect.ValueOfString(x.VoteThreshold)
+		if !f(fd_Params_vote_threshold, value) {
+			return
+		}
+	}
+	if x.SlashEpoch != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.SlashEpoch)
+		if !f(fd_Params_slash_epoch, value) {
+			return
+		}
+	}
+	if x.EpochMaxFault != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.EpochMaxFault)
+		if !f(fd_Params_epoch_max_fault, value) {
+			return
+		}
+	}
+	if x.SlashFraction != "" {
+		value := protoreflect.ValueOfString(x.SlashFraction)
+		if !f(fd_Params_slash_fraction, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -103,6 +135,14 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sunrise.da.Params.vote_threshold":
+		return x.VoteThreshold != ""
+	case "sunrise.da.Params.slash_epoch":
+		return x.SlashEpoch != uint64(0)
+	case "sunrise.da.Params.epoch_max_fault":
+		return x.EpochMaxFault != uint64(0)
+	case "sunrise.da.Params.slash_fraction":
+		return x.SlashFraction != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -119,6 +159,14 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sunrise.da.Params.vote_threshold":
+		x.VoteThreshold = ""
+	case "sunrise.da.Params.slash_epoch":
+		x.SlashEpoch = uint64(0)
+	case "sunrise.da.Params.epoch_max_fault":
+		x.EpochMaxFault = uint64(0)
+	case "sunrise.da.Params.slash_fraction":
+		x.SlashFraction = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -135,6 +183,18 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sunrise.da.Params.vote_threshold":
+		value := x.VoteThreshold
+		return protoreflect.ValueOfString(value)
+	case "sunrise.da.Params.slash_epoch":
+		value := x.SlashEpoch
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.da.Params.epoch_max_fault":
+		value := x.EpochMaxFault
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.da.Params.slash_fraction":
+		value := x.SlashFraction
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -155,6 +215,14 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sunrise.da.Params.vote_threshold":
+		x.VoteThreshold = value.Interface().(string)
+	case "sunrise.da.Params.slash_epoch":
+		x.SlashEpoch = value.Uint()
+	case "sunrise.da.Params.epoch_max_fault":
+		x.EpochMaxFault = value.Uint()
+	case "sunrise.da.Params.slash_fraction":
+		x.SlashFraction = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -175,6 +243,14 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.da.Params.vote_threshold":
+		panic(fmt.Errorf("field vote_threshold of message sunrise.da.Params is not mutable"))
+	case "sunrise.da.Params.slash_epoch":
+		panic(fmt.Errorf("field slash_epoch of message sunrise.da.Params is not mutable"))
+	case "sunrise.da.Params.epoch_max_fault":
+		panic(fmt.Errorf("field epoch_max_fault of message sunrise.da.Params is not mutable"))
+	case "sunrise.da.Params.slash_fraction":
+		panic(fmt.Errorf("field slash_fraction of message sunrise.da.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -188,6 +264,14 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.da.Params.vote_threshold":
+		return protoreflect.ValueOfString("")
+	case "sunrise.da.Params.slash_epoch":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.da.Params.epoch_max_fault":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.da.Params.slash_fraction":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -257,6 +341,20 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		l = len(x.VoteThreshold)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.SlashEpoch != 0 {
+			n += 1 + runtime.Sov(uint64(x.SlashEpoch))
+		}
+		if x.EpochMaxFault != 0 {
+			n += 1 + runtime.Sov(uint64(x.EpochMaxFault))
+		}
+		l = len(x.SlashFraction)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -285,6 +383,30 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.SlashFraction) > 0 {
+			i -= len(x.SlashFraction)
+			copy(dAtA[i:], x.SlashFraction)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SlashFraction)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if x.EpochMaxFault != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.EpochMaxFault))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.SlashEpoch != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.SlashEpoch))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.VoteThreshold) > 0 {
+			i -= len(x.VoteThreshold)
+			copy(dAtA[i:], x.VoteThreshold)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.VoteThreshold)))
+			i--
+			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -335,6 +457,108 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VoteThreshold", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.VoteThreshold = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SlashEpoch", wireType)
+				}
+				x.SlashEpoch = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.SlashEpoch |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EpochMaxFault", wireType)
+				}
+				x.EpochMaxFault = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.EpochMaxFault |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SlashFraction", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SlashFraction = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -388,6 +612,11 @@ type Params struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	VoteThreshold string `protobuf:"bytes,1,opt,name=vote_threshold,json=voteThreshold,proto3" json:"vote_threshold,omitempty"`
+	SlashEpoch    uint64 `protobuf:"varint,2,opt,name=slash_epoch,json=slashEpoch,proto3" json:"slash_epoch,omitempty"`
+	EpochMaxFault uint64 `protobuf:"varint,3,opt,name=epoch_max_fault,json=epochMaxFault,proto3" json:"epoch_max_fault,omitempty"`
+	SlashFraction string `protobuf:"bytes,4,opt,name=slash_fraction,json=slashFraction,proto3" json:"slash_fraction,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -410,6 +639,34 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_sunrise_da_params_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Params) GetVoteThreshold() string {
+	if x != nil {
+		return x.VoteThreshold
+	}
+	return ""
+}
+
+func (x *Params) GetSlashEpoch() uint64 {
+	if x != nil {
+		return x.SlashEpoch
+	}
+	return 0
+}
+
+func (x *Params) GetEpochMaxFault() uint64 {
+	if x != nil {
+		return x.EpochMaxFault
+	}
+	return 0
+}
+
+func (x *Params) GetSlashFraction() string {
+	if x != nil {
+		return x.SlashFraction
+	}
+	return ""
+}
+
 var File_sunrise_da_params_proto protoreflect.FileDescriptor
 
 var file_sunrise_da_params_proto_rawDesc = []byte{
@@ -417,19 +674,33 @@ var file_sunrise_da_params_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0a, 0x73, 0x75, 0x6e, 0x72, 0x69,
 	0x73, 0x65, 0x2e, 0x64, 0x61, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69,
 	0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x26,
-	0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x1c, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7,
-	0xb0, 0x2a, 0x13, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64, 0x61, 0x2f,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x83, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
-	0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
-	0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x87,
+	0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x0e, 0x76, 0x6f, 0x74,
+	0x65, 0x5f, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67,
+	0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x0d, 0x76, 0x6f, 0x74, 0x65, 0x54, 0x68, 0x72, 0x65,
+	0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x6c, 0x61, 0x73, 0x68, 0x5f, 0x65,
+	0x70, 0x6f, 0x63, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x73, 0x6c, 0x61, 0x73,
+	0x68, 0x45, 0x70, 0x6f, 0x63, 0x68, 0x12, 0x26, 0x0a, 0x0f, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x5f,
+	0x6d, 0x61, 0x78, 0x5f, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x0d, 0x65, 0x70, 0x6f, 0x63, 0x68, 0x4d, 0x61, 0x78, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x4a,
+	0x0a, 0x0e, 0x73, 0x6c, 0x61, 0x73, 0x68, 0x5f, 0x66, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
+	0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x0d, 0x73, 0x6c, 0x61,
+	0x73, 0x68, 0x46, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x3a, 0x1c, 0xe8, 0xa0, 0x1f, 0x01,
+	0x8a, 0xe7, 0xb0, 0x2a, 0x13, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64,
+	0x61, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x83, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d,
+	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0b, 0x50, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

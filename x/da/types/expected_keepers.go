@@ -3,7 +3,9 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // AccountKeeper defines the expected interface for the Account module.
@@ -22,4 +24,16 @@ type BankKeeper interface {
 type ParamSubspace interface {
 	Get(context.Context, []byte, interface{})
 	Set(context.Context, []byte, interface{})
+}
+
+// StakingKeeper is expected keeper for slashing module
+type SlashingKeeper interface {
+	Slash(context.Context, sdk.ConsAddress, math.LegacyDec, int64, int64) error
+	Jail(context.Context, sdk.ConsAddress) error
+}
+
+// StakingKeeper is expected keeper for staking module
+type StakingKeeper interface {
+	Validator(ctx context.Context, address sdk.ValAddress) (stakingtypes.ValidatorI, error)
+	PowerReduction(ctx context.Context) (res math.Int)
 }

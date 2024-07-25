@@ -1,5 +1,10 @@
 package types
 
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/address"
+)
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "da"
@@ -15,6 +20,7 @@ var (
 	ParamsKey = []byte("p_da")
 
 	PublishedDataKeyPrefix = []byte("published_data/")
+	FaultCounterKeyPrefix  = []byte("fault_counter/")
 )
 
 func KeyPrefix(p string) []byte {
@@ -23,4 +29,8 @@ func KeyPrefix(p string) []byte {
 
 func PublishedDataKey(dataHash []byte) []byte {
 	return append(PublishedDataKeyPrefix, dataHash...)
+}
+
+func GetFaultCounterKey(val sdk.ValAddress) []byte {
+	return append(FaultCounterKeyPrefix, address.MustLengthPrefix(val)...)
 }
