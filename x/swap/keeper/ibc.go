@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -166,7 +165,6 @@ func (k Keeper) ProcessSwappedFund(
 		tokenOutNet := sdk.NewCoin(result.TokenOut.Denom, amountOutNet)
 
 		// Forward the swapped token out
-		fmt.Println("=================Forward the swapped token out==================", tokenOutNet)
 		forwardPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
 			ctx,
 			waitingPacket.Index,
@@ -217,7 +215,6 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		TimeoutTimestamp: timeoutTimestamp(ctx, metadata.Timeout),
 		Memo:             memo,
 	}
-	fmt.Println("=============MsgTransfer================", msgTransfer)
 	// forward token to receiver
 	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)
 	if err != nil {
