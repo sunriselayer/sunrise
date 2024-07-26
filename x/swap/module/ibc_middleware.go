@@ -108,7 +108,6 @@ func (im IBCMiddleware) OnRecvPacket(
 	}
 
 	metadata := *m.Swap
-	fmt.Println("------------------metadata----------------", metadata)
 
 	if err := metadata.Validate(); err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
@@ -144,8 +143,6 @@ func (im IBCMiddleware) OnRecvPacket(
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
 
-	fmt.Println("===================swap result====================", result)
-
 	waitingPacket, err := im.keeper.ProcessSwappedFund(
 		ctx,
 		packet,
@@ -156,8 +153,6 @@ func (im IBCMiddleware) OnRecvPacket(
 		interfaceFee,
 		incomingAck,
 	)
-
-	fmt.Println("===================waiting packet====================", waitingPacket)
 
 	if err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
