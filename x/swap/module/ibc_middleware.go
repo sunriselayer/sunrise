@@ -96,12 +96,14 @@ func (im IBCMiddleware) OnRecvPacket(
 	d := make(map[string]interface{})
 	err := json.Unmarshal([]byte(data.Memo), &d)
 	if err != nil || d["swap"] == nil {
+		fmt.Println("-------------JSON Unmarshal error----------------", err, d["swap"])
 		return im.IBCModule.OnRecvPacket(ctx, packet, relayer)
 	}
 
 	m := &types.PacketMetadata{}
 	err = jsonpb.Unmarshal(strings.NewReader(data.Memo), m)
 	if err != nil {
+		fmt.Println("============JSONPB Unmarshal error=============", err)
 		return channeltypes.NewErrorAcknowledgement(fmt.Errorf("error parsing swap metadata: %w", err))
 	}
 
