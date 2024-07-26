@@ -223,9 +223,9 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 
 	var retries uint8
 	if metadata.Retries == 0 {
-		retries = uint8(metadata.Retries)
-	} else {
 		retries = types.DefaultRetryCount
+	} else {
+		retries = uint8(metadata.Retries)
 	}
 
 	packet = types.OutgoingInFlightPacket{
