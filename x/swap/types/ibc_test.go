@@ -3,6 +3,7 @@ package types
 import (
 	"strings"
 	"testing"
+	time "time"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/gogo/protobuf/jsonpb"
@@ -166,6 +167,7 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 				Port:     "transfer",
 				Channel:  "channel-2",
 				Retries:  retries,
+				Timeout:  time.Duration(time.Hour),
 				Next:     nil,
 			},
 		},
@@ -175,7 +177,7 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 	js, err := m.MarshalToString(&packetMetadata)
 	require.NoError(t, err)
 
-	require.Equal(t, js, `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_out":{"amount_out":"1000","change":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2}},"forward":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2}}}`)
+	require.Equal(t, js, `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_out":{"amount_out":"1000","change":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2}},"forward":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","timeout":"3600s","retries":2}}}`)
 
 	metadata := &PacketMetadata{}
 	err = jsonpb.Unmarshal(strings.NewReader(js), metadata)
