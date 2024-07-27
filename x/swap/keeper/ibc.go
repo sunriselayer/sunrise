@@ -29,8 +29,8 @@ var (
 	DefaultTransferPacketTimeoutTimestamp = time.Duration(transfertypes.DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
 )
 
-func timeoutTimestamp(ctx sdk.Context) uint64 {
-	return uint64(ctx.BlockTime().UnixNano()) + uint64(DefaultTransferPacketTimeoutTimestamp.Nanoseconds())
+func timeoutTimestamp(ctx sdk.Context, duration time.Duration) uint64 {
+	return uint64(ctx.BlockTime().UnixNano()) + uint64(duration.Nanoseconds())
 }
 
 func (k Keeper) SwapIncomingFund(
@@ -212,7 +212,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		Sender:           sender,
 		Receiver:         metadata.Receiver,
 		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
-		TimeoutTimestamp: timeoutTimestamp(ctx),
+		TimeoutTimestamp: timeoutTimestamp(ctx, metadata.Timeout),
 		Memo:             memo,
 	}
 	// forward token to receiver
@@ -223,9 +223,9 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 
 	var retries uint8
 	if metadata.Retries == 0 {
-		retries = uint8(metadata.Retries)
-	} else {
 		retries = types.DefaultRetryCount
+	} else {
+		retries = uint8(metadata.Retries)
 	}
 
 	packet = types.OutgoingInFlightPacket{
@@ -309,7 +309,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			packet.SourcePort,
 			packet.SourceChannel,
 			DefaultTransferPacketTimeoutHeight,
-			timeoutTimestamp(ctx),
+			timeoutTimestamp(ctx, DefaultTransferPacketTimeoutTimestamp),
 			packet.Data,
 		)
 		if err != nil {
