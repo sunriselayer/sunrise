@@ -1,14 +1,12 @@
 package keeper
 
 import (
-	"strings"
 	"time"
 
 	errors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/gogo/protobuf/jsonpb"
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
@@ -198,12 +196,6 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	tokenOut sdk.Coin,
 	metadata types.ForwardMetadata,
 ) (packet types.OutgoingInFlightPacket, err error) {
-	var memo string
-	if metadata.Next != nil {
-		if err := jsonpb.Unmarshal(strings.NewReader(memo), metadata.Next); err != nil {
-			return packet, err
-		}
-	}
 
 	msgTransfer := transfertypes.MsgTransfer{
 		SourcePort:       metadata.Port,
@@ -213,7 +205,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		Receiver:         metadata.Receiver,
 		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
 		TimeoutTimestamp: timeoutTimestamp(ctx, metadata.Timeout),
-		Memo:             memo,
+		Memo:             metadata.Memo,
 	}
 	// forward token to receiver
 	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)

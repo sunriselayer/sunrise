@@ -34,7 +34,6 @@ func TestEncodePacketMetadata_ExactAmountIn(t *testing.T) {
 				Port:     "transfer",
 				Channel:  "channel-2",
 				Retries:  retries,
-				Next:     nil,
 			},
 		},
 	}
@@ -121,7 +120,6 @@ func TestEncodePacketMetadata_ExactAmountInSeries(t *testing.T) {
 				Port:     "transfer",
 				Channel:  "channel-2",
 				Retries:  retries,
-				Next:     nil,
 			},
 		},
 	}
@@ -159,7 +157,6 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 						Port:     "transfer",
 						Channel:  "channel-2",
 						Retries:  retries,
-						Next:     nil,
 					},
 				}},
 			Forward: &ForwardMetadata{
@@ -168,7 +165,6 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 				Channel:  "channel-2",
 				Retries:  retries,
 				Timeout:  time.Duration(time.Hour),
-				Next:     nil,
 			},
 		},
 	}
