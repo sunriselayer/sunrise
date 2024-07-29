@@ -46,11 +46,12 @@ node            |  |                               |  |
 ### Source
 
 1. [Install Go](https://go.dev/doc/install) 1.22.2
+1. [Install Ignite CLI](https://docs.ignite.com/welcome/install) v28.3.0
 1. Clone this repo
 1. Install the sunrise CLI
 
    ```shell
-   make install
+   ignite chain build
    ```
 
 ### Prebuilt binary
@@ -134,21 +135,21 @@ This repo attempts to conform to [conventional commits](https://www.conventional
 ### Helpful Commands
 
 ```sh
-# Get more info on make commands.
-make help
-
-# Build the sunrised binary into the ./build directory.
-make build
+# Get more info on ignite commands.
+ignite help
 
 # Build and install the sunrised binary into the $GOPATH/bin directory.
-make install
-
-# Run tests
-make test
-
-# Format code with linters (this assumes golangci-lint and markdownlint are installed)
-make fmt
+ignite chain build
 
 # Regenerate Protobuf files (this assumes Docker is running)
-make proto-gen
+ignite generate proto-go
+
+# Regenerate OpenAPI spec file (this assumes Docker is running)
+ignite generate openapi
+
+# Generate TypeScript frontend client files (this assumes Docker is running)
+ignite generate ts-client
+
+# Run tests
+go test ./...
 ```
