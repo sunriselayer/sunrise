@@ -459,7 +459,7 @@ var (
 	fd_ForwardMetadata_channel  protoreflect.FieldDescriptor
 	fd_ForwardMetadata_timeout  protoreflect.FieldDescriptor
 	fd_ForwardMetadata_retries  protoreflect.FieldDescriptor
-	fd_ForwardMetadata_memo     protoreflect.FieldDescriptor
+	fd_ForwardMetadata_next     protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -470,7 +470,7 @@ func init() {
 	fd_ForwardMetadata_channel = md_ForwardMetadata.Fields().ByName("channel")
 	fd_ForwardMetadata_timeout = md_ForwardMetadata.Fields().ByName("timeout")
 	fd_ForwardMetadata_retries = md_ForwardMetadata.Fields().ByName("retries")
-	fd_ForwardMetadata_memo = md_ForwardMetadata.Fields().ByName("memo")
+	fd_ForwardMetadata_next = md_ForwardMetadata.Fields().ByName("next")
 }
 
 var _ protoreflect.Message = (*fastReflection_ForwardMetadata)(nil)
@@ -568,9 +568,9 @@ func (x *fastReflection_ForwardMetadata) Range(f func(protoreflect.FieldDescript
 			return
 		}
 	}
-	if x.Memo != "" {
-		value := protoreflect.ValueOfString(x.Memo)
-		if !f(fd_ForwardMetadata_memo, value) {
+	if x.Next != "" {
+		value := protoreflect.ValueOfString(x.Next)
+		if !f(fd_ForwardMetadata_next, value) {
 			return
 		}
 	}
@@ -599,8 +599,8 @@ func (x *fastReflection_ForwardMetadata) Has(fd protoreflect.FieldDescriptor) bo
 		return x.Timeout != nil
 	case "sunrise.swap.ForwardMetadata.retries":
 		return x.Retries != uint32(0)
-	case "sunrise.swap.ForwardMetadata.memo":
-		return x.Memo != ""
+	case "sunrise.swap.ForwardMetadata.next":
+		return x.Next != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ForwardMetadata"))
@@ -627,8 +627,8 @@ func (x *fastReflection_ForwardMetadata) Clear(fd protoreflect.FieldDescriptor) 
 		x.Timeout = nil
 	case "sunrise.swap.ForwardMetadata.retries":
 		x.Retries = uint32(0)
-	case "sunrise.swap.ForwardMetadata.memo":
-		x.Memo = ""
+	case "sunrise.swap.ForwardMetadata.next":
+		x.Next = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ForwardMetadata"))
@@ -660,8 +660,8 @@ func (x *fastReflection_ForwardMetadata) Get(descriptor protoreflect.FieldDescri
 	case "sunrise.swap.ForwardMetadata.retries":
 		value := x.Retries
 		return protoreflect.ValueOfUint32(value)
-	case "sunrise.swap.ForwardMetadata.memo":
-		value := x.Memo
+	case "sunrise.swap.ForwardMetadata.next":
+		value := x.Next
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -693,8 +693,8 @@ func (x *fastReflection_ForwardMetadata) Set(fd protoreflect.FieldDescriptor, va
 		x.Timeout = value.Message().Interface().(*durationpb.Duration)
 	case "sunrise.swap.ForwardMetadata.retries":
 		x.Retries = uint32(value.Uint())
-	case "sunrise.swap.ForwardMetadata.memo":
-		x.Memo = value.Interface().(string)
+	case "sunrise.swap.ForwardMetadata.next":
+		x.Next = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ForwardMetadata"))
@@ -728,8 +728,8 @@ func (x *fastReflection_ForwardMetadata) Mutable(fd protoreflect.FieldDescriptor
 		panic(fmt.Errorf("field channel of message sunrise.swap.ForwardMetadata is not mutable"))
 	case "sunrise.swap.ForwardMetadata.retries":
 		panic(fmt.Errorf("field retries of message sunrise.swap.ForwardMetadata is not mutable"))
-	case "sunrise.swap.ForwardMetadata.memo":
-		panic(fmt.Errorf("field memo of message sunrise.swap.ForwardMetadata is not mutable"))
+	case "sunrise.swap.ForwardMetadata.next":
+		panic(fmt.Errorf("field next of message sunrise.swap.ForwardMetadata is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.ForwardMetadata"))
@@ -754,7 +754,7 @@ func (x *fastReflection_ForwardMetadata) NewField(fd protoreflect.FieldDescripto
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.swap.ForwardMetadata.retries":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "sunrise.swap.ForwardMetadata.memo":
+	case "sunrise.swap.ForwardMetadata.next":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -844,7 +844,7 @@ func (x *fastReflection_ForwardMetadata) ProtoMethods() *protoiface.Methods {
 		if x.Retries != 0 {
 			n += 1 + runtime.Sov(uint64(x.Retries))
 		}
-		l = len(x.Memo)
+		l = len(x.Next)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -877,10 +877,10 @@ func (x *fastReflection_ForwardMetadata) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Memo) > 0 {
-			i -= len(x.Memo)
-			copy(dAtA[i:], x.Memo)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Memo)))
+		if len(x.Next) > 0 {
+			i -= len(x.Next)
+			copy(dAtA[i:], x.Next)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Next)))
 			i--
 			dAtA[i] = 0x32
 		}
@@ -1126,7 +1126,7 @@ func (x *fastReflection_ForwardMetadata) ProtoMethods() *protoiface.Methods {
 				}
 			case 6:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Memo", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Next", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1154,7 +1154,7 @@ func (x *fastReflection_ForwardMetadata) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Memo = string(dAtA[iNdEx:postIndex])
+				x.Next = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -2968,7 +2968,7 @@ type ForwardMetadata struct {
 	Channel  string               `protobuf:"bytes,3,opt,name=channel,proto3" json:"channel,omitempty"`
 	Timeout  *durationpb.Duration `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	Retries  uint32               `protobuf:"varint,5,opt,name=retries,proto3" json:"retries,omitempty"`
-	Memo     string               `protobuf:"bytes,6,opt,name=memo,proto3" json:"memo,omitempty"`
+	Next     string               `protobuf:"bytes,6,opt,name=next,proto3" json:"next,omitempty"`
 }
 
 func (x *ForwardMetadata) Reset() {
@@ -3026,9 +3026,9 @@ func (x *ForwardMetadata) GetRetries() uint32 {
 	return 0
 }
 
-func (x *ForwardMetadata) GetMemo() string {
+func (x *ForwardMetadata) GetNext() string {
 	if x != nil {
-		return x.Memo
+		return x.Next
 	}
 	return ""
 }
@@ -3235,8 +3235,8 @@ var file_sunrise_swap_metadata_proto_rawDesc = []byte{
 	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x07, 0x74, 0x69, 0x6d, 0x65,
 	0x6f, 0x75, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73, 0x18, 0x05,
 	0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x72, 0x65, 0x74, 0x72, 0x69, 0x65, 0x73, 0x12, 0x12, 0x0a,
-	0x04, 0x6d, 0x65, 0x6d, 0x6f, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6d, 0x65, 0x6d,
-	0x6f, 0x22, 0x67, 0x0a, 0x0d, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x04, 0x6e, 0x65, 0x78, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x65, 0x78,
+	0x74, 0x22, 0x67, 0x0a, 0x0d, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
 	0x49, 0x6e, 0x12, 0x56, 0x0a, 0x0e, 0x6d, 0x69, 0x6e, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
 	0x5f, 0x6f, 0x75, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
 	0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
