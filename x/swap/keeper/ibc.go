@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"strings"
 	"time"
 
 	errors "cosmossdk.io/errors"
@@ -200,7 +199,9 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 ) (packet types.OutgoingInFlightPacket, err error) {
 	var memo string
 	if metadata.Next != nil {
-		if err := jsonpb.Unmarshal(strings.NewReader(memo), metadata.Next); err != nil {
+		m := jsonpb.Marshaler{OrigName: true}
+		memo, err = m.MarshalToString(metadata.Next)
+		if err != nil {
 			return packet, err
 		}
 	}
