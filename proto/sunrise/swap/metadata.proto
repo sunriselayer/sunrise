@@ -23,7 +23,7 @@ message ForwardMetadata {
     (gogoproto.nullable) = false, (gogoproto.stdduration) = true
   ];
   uint32 retries = 5;
-  string memo = 6;
+  string next = 6;
 }
 
 message ExactAmountIn {
