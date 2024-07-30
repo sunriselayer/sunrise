@@ -205,7 +205,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		Receiver:         metadata.Receiver,
 		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
 		TimeoutTimestamp: timeoutTimestamp(ctx, metadata.Timeout),
-		Memo:             metadata.Memo,
+		Memo:             metadata.Next,
 	}
 	// forward token to receiver
 	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)
