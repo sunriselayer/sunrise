@@ -34,6 +34,7 @@ func TestEncodePacketMetadata_ExactAmountIn(t *testing.T) {
 				Port:     "transfer",
 				Channel:  "channel-2",
 				Retries:  retries,
+				Next:     "{\"wasm\":{\"contract\":\"neutron13lw4uyaxc09d3qvgunc8crtxcvwd8pn5xzx2xzlw53nsfgq3y8ps4q2dr5\",\"msg\":{\"send_to_evm\":{\"destination_chain\":\"ethereum-sepolia\",\"destination_contract\":\"0x8ef2c2b9825a52c44bff05b4dd7b72899ccbd4e4\",\"recipient\":\"0x4793755541ae9f950a68fc7fc2b3bd2cc9397b9a\"}}}}",
 			},
 		},
 	}
@@ -42,11 +43,12 @@ func TestEncodePacketMetadata_ExactAmountIn(t *testing.T) {
 	js, err := m.MarshalToString(&packetMetadata)
 	require.NoError(t, err)
 
-	require.Equal(t, js, `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2}}}`)
+	require.Equal(t, js, `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"cosmos1qnk2n4nlkpw9xfqntladh74w6ujtulwn7j8za9","port":"transfer","channel":"channel-2","retries":2,"next":"{\"wasm\":{\"contract\":\"neutron13lw4uyaxc09d3qvgunc8crtxcvwd8pn5xzx2xzlw53nsfgq3y8ps4q2dr5\",\"msg\":{\"send_to_evm\":{\"destination_chain\":\"ethereum-sepolia\",\"destination_contract\":\"0x8ef2c2b9825a52c44bff05b4dd7b72899ccbd4e4\",\"recipient\":\"0x4793755541ae9f950a68fc7fc2b3bd2cc9397b9a\"}}}}"}}}`)
 
 	metadata := &PacketMetadata{}
 	err = jsonpb.Unmarshal(strings.NewReader(js), metadata)
 	require.NoError(t, err)
+	require.Equal(t, metadata, &packetMetadata)
 }
 
 func TestEncodePacketMetadataNoForward_ExactAmountIn(t *testing.T) {
