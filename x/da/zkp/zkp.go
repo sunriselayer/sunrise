@@ -1,20 +1,23 @@
 package zkp
 
 import (
+	"bytes"
 	"fmt"
 
 	"github.com/consensys/gnark-crypto/ecc"
+	native_mimc "github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
 	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/frontend"
+	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/std/hash/mimc"
 )
 
 // Circuit defines our ZKP circuit
 type Circuit struct {
-	Indices   []frontend.Variable `gnark:",public"`  // indices
-	Shares    []frontend.Variable `gnark:",private"` // H(s_i) values
-	HShares   []frontend.Variable `gnark:",public"`  // H^2(s_i) values
-	Threshold frontend.Variable   `gnark:",public"`  // threshold
+	Indices           []frontend.Variable `gnark:",public"`  // indices
+	ShardHashes       []frontend.Variable `gnark:",private"` // H(s_i) values
+	ShardDoubleHashes []frontend.Variable `gnark:",public"`  // H^2(s_i) values
+	Threshold         frontend.Variable   `gnark:",public"`  // threshold
 }
 
 func (circuit *Circuit) Define(api frontend.API) error {
@@ -25,20 +28,20 @@ func (circuit *Circuit) Define(api frontend.API) error {
 
 	// Verify hashes of shares
 	for i, j := range circuit.Indices {
-		mimcHash.Write(circuit.Shares[i])
+		mimcHash.Write(circuit.ShardHashes[i])
 		h := mimcHash.Sum()
 		j, _ := j.(int)
-		api.AssertIsEqual(h, circuit.HShares[j])
+		api.AssertIsEqual(h, circuit.ShardDoubleHashes[j])
 	}
 
 	// Verify that the number of shares used is at least the threshold
-	api.AssertIsLessOrEqual(circuit.Threshold, frontend.Variable(len(circuit.Shares)))
+	api.AssertIsLessOrEqual(circuit.Threshold, frontend.Variable(len(circuit.ShardHashes)))
 
 	return nil
 }
 
-func ProveAndVerify(circuit Circuit) error {
-	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), nil, &circuit) // TODO: nil
+func ProveAndVerify(assignment Circuit) error {
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, Hollow(&assignment))
 	if err != nil {
 		return fmt.Errorf("compile error: %v", err)
 	}
@@ -48,7 +51,7 @@ func ProveAndVerify(circuit Circuit) error {
 		return fmt.Errorf("setup error: %v", err)
 	}
 
-	witness, err := frontend.NewWitness(&circuit, ecc.BN254.ScalarField())
+	witness, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
 	if err != nil {
 		return fmt.Errorf("witness creation error: %v", err)
 	}
@@ -68,5 +71,41 @@ func ProveAndVerify(circuit Circuit) error {
 		return fmt.Errorf("verification failed: %v", err)
 	}
 
+	return nil
+}
+
+func VerifyDataZKP(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]byte, threshold int) error {
+	indicesFrontend := []frontend.Variable{}
+	shardHashesFrontend := []frontend.Variable{}
+	shardDoubleHashesFrontend := []frontend.Variable{}
+	for _, shardHash := range shardHashes {
+		shardHashesFrontend = append(shardHashesFrontend, shardHash)
+	}
+
+	for _, shardDoubleHash := range shardDoubleHashes {
+		shardDoubleHashesFrontend = append(shardDoubleHashesFrontend, shardDoubleHash)
+	}
+
+	for _, indice := range indices {
+		indicesFrontend = append(indicesFrontend, indice)
+	}
+
+	return ProveAndVerify(Circuit{
+		Indices:           indicesFrontend,
+		ShardHashes:       shardHashesFrontend,
+		ShardDoubleHashes: shardDoubleHashesFrontend,
+		Threshold:         threshold,
+	})
+}
+
+func VerifyData(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]byte, threshold int) error {
+	for i, j := range indices {
+		m := native_mimc.NewMiMC()
+		m.Write(shardHashes[i])
+		h := m.Sum(nil)
+		if !bytes.Equal(h, shardDoubleHashes[j]) {
+			return fmt.Errorf("hash mismatch for (%d, %d)", i, j)
+		}
+	}
 	return nil
 }

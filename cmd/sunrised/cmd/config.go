@@ -47,6 +47,7 @@ func initAppConfig() (string, interface{}) {
 	// The following code snippet is just for reference.
 	type CustomAppConfig struct {
 		serverconfig.Config `mapstructure:",squash"`
+		DA                  app.DAConfig `mapstructure:"da"`
 	}
 
 	// Optionally allow the chain developer to overwrite the SDK's default
@@ -70,9 +71,17 @@ func initAppConfig() (string, interface{}) {
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
+		DA: app.DAConfig{
+			ShardHashesAPI: "http://localhost:8080/api/uploaded_data",
+		},
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate
+	customAppTemplate := serverconfig.DefaultConfigTemplate + `
+[da]
+# API to query DA v2 uploaded data shard hashes
+shard_hashes_api = "http://localhost:8080/api/uploaded_data"
+`
+
 	// Edit the default template file
 	//
 	// customAppTemplate := serverconfig.DefaultConfigTemplate + `

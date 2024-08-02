@@ -472,8 +472,14 @@ func New(
 
 	// Vote extension
 	voteExtHandler := NewVoteExtHandler(app.DaKeeper)
-	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(app.txConfig.TxDecoder(), anteHandler))
-	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler())
+
+	daConfig, err := ReadDAConfig(appOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
+	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 

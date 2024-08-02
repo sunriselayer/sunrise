@@ -1,24 +1,103 @@
 package app
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"math/rand/v2"
+	"net/http"
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	blocksdkabci "github.com/skip-mev/block-sdk/v2/abci"
+	"github.com/spf13/cast"
 	"github.com/sunriselayer/sunrise/x/da/keeper"
+	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
+	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
+
+const flagDAShardHashesAPI = "da.shard_hashes_api"
+
+type DAConfig struct {
+	ShardHashesAPI string `mapstructure:"shard_hashes_api"`
+}
+
+type DAShardHashesResponse struct {
+	ShardHashes []string `json:"shard_hashes"`
+}
+
+// ReadOracleConfig reads the wasm specifig configuration
+func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
+	cfg := DAConfig{}
+	var err error
+	if v := opts.Get(flagDAShardHashesAPI); v != nil {
+		if cfg.ShardHashesAPI, err = cast.ToStringE(v); err != nil {
+			return cfg, err
+		}
+	}
+
+	return cfg, nil
+}
+
+func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64) ([]int64, [][]byte, error) {
+	indices := getRandomIndices(n, threshold, uint64(time.Now().Unix()), 1024)
+	res, err := http.Get(daConfig.ShardHashesAPI + "?metadata_uri=" + metadataUri + "&indices=" + strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
+	if err != nil {
+		return nil, nil, err
+	}
+	defer res.Body.Close()
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	daShardHashes := DAShardHashesResponse{}
+	err = json.Unmarshal(resBody, &daShardHashes)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	shares := [][]byte{}
+	for _, shareEncoded := range daShardHashes.ShardHashes {
+		share, err := base64.StdEncoding.DecodeString(shareEncoded)
+		if err != nil {
+			continue
+		}
+		shares = append(shares, share)
+	}
+	return indices, shares, nil
+}
+
+func getRandomIndices(n, threshold int64, seed1, seed2 uint64) []int64 {
+	arr := []int64{}
+	for i := int64(0); i < n; i++ {
+		arr = append(arr, i)
+	}
+
+	s3 := rand.NewPCG(seed1, seed2)
+	r3 := rand.New(s3)
+
+	r3.Shuffle(int(n), func(i, j int) {
+		arr[i], arr[j] = arr[j], arr[i]
+	})
+
+	// Return the first threshold elements from the shuffled array
+	return arr[:threshold]
+}
 
 type VoteExtHandler struct {
 	Keeper keeper.Keeper
@@ -30,10 +109,11 @@ func NewVoteExtHandler(keeper keeper.Keeper) *VoteExtHandler {
 	}
 }
 
-func (h *VoteExtHandler) ExtendVoteHandler(dec sdk.TxDecoder, handler sdk.AnteHandler) sdk.ExtendVoteHandler {
+func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder, handler sdk.AnteHandler, daKeeper damodulekeeper.Keeper) sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 		voteExt := types.VoteExtension{
-			Data: []*types.PublishedData{},
+			Data:   []*types.PublishedData{},
+			Shares: []*types.DataShares{},
 		}
 
 		txs := req.Txs
@@ -52,16 +132,32 @@ func (h *VoteExtHandler) ExtendVoteHandler(dec sdk.TxDecoder, handler sdk.AnteHa
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
+					params := daKeeper.GetParams(ctx)
+					threshold := params.ZkpThreshold.MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+
+					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold)
+					if err != nil {
+						continue
+					}
+
+					// filter zkp verified data
+					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
+					if err != nil {
+						continue
+					}
+
 					voteExt.Data = append(voteExt.Data, &types.PublishedData{
 						RecoveredDataHash: msg.RecoveredDataHash,
 						MetadataUri:       msg.MetadataUri,
 						ShardDoubleHashes: msg.ShardDoubleHashes,
 					})
+					voteExt.Shares = append(voteExt.Shares, &types.DataShares{
+						Indices: indices,
+						Shares:  shares,
+					})
 				}
 			}
 		}
-
-		// TODO: filter ones stored correctly using zkp
 
 		bz, err := voteExt.Marshal()
 		if err != nil {
@@ -72,7 +168,7 @@ func (h *VoteExtHandler) ExtendVoteHandler(dec sdk.TxDecoder, handler sdk.AnteHa
 	}
 }
 
-func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHandler {
+func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper damodulekeeper.Keeper) sdk.VerifyVoteExtensionHandler {
 	return func(ctx sdk.Context, req *abci.RequestVerifyVoteExtension) (*abci.ResponseVerifyVoteExtension, error) {
 		var voteExt types.VoteExtension
 
@@ -85,7 +181,15 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteExtensionHan
 			return nil, fmt.Errorf("failed to unmarshal vote extension: %w", err)
 		}
 
-		// TODO: check vote extension data with zkp
+		// check vote extension data with zkp
+		params := daKeeper.GetParams(ctx)
+		for i, data := range voteExt.Data {
+			threshold := params.ZkpThreshold.MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
+			err = zkp.VerifyData(voteExt.Shares[i].Indices, voteExt.Shares[i].Shares, data.ShardDoubleHashes, int(threshold))
+			if err != nil {
+				return nil, err
+			}
+		}
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 	}

@@ -15,3 +15,8 @@ message PublishedData {
   string metadata_uri = 2;
   repeated bytes shard_double_hashes = 3;
 }
+
+message DataShares {
+  repeated int64 indices = 1;
+  repeated bytes shares = 2;
+}
