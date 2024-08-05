@@ -27,8 +27,8 @@ func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
 
-func PublishedDataKey(dataHash []byte) []byte {
-	return append(PublishedDataKeyPrefix, dataHash...)
+func PublishedDataKey(metadataUri string) []byte {
+	return append(PublishedDataKeyPrefix, metadataUri...)
 }
 
 func GetFaultCounterKey(val sdk.ValAddress) []byte {

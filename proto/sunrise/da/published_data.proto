@@ -11,9 +11,10 @@ import "sunrise/da/params.proto";
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
 message PublishedData {
-  bytes recovered_data_hash = 1;
-  string metadata_uri = 2;
-  repeated bytes shard_double_hashes = 3;
+  string metadata_uri = 1;
+  repeated bytes shard_double_hashes = 2;
+  uint64 uploaded_time = 3;
+  string status = 4; // TODO: to be replaced with enum
 }
 
 message DataShares {

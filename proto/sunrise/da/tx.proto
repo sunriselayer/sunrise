@@ -18,6 +18,9 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc PublishData(MsgPublishData) returns (MsgPublishDataResponse);
+  rpc ChallengeForFraud(MsgChallengeForFraud)
+      returns (MsgChallengeForFraudResponse);
+  rpc SubmitProof(MsgSubmitProof) returns (MsgSubmitProofResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -42,9 +45,23 @@ message MsgUpdateParamsResponse {}
 message MsgPublishData {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1;
-  bytes recovered_data_hash = 2;
-  string metadata_uri = 3;
-  repeated bytes shard_double_hashes = 4;
+  string metadata_uri = 2;
+  repeated bytes shard_double_hashes = 3;
 }
 
 message MsgPublishDataResponse {}
+
+message MsgChallengeForFraud {
+  string sender = 1;
+  string metadata_uri = 2;
+}
+message MsgChallengeForFraudResponse {}
+
+message MsgSubmitProof {
+  string sender = 1;
+  string metadata_uri = 2;
+  // TODO: replace indices and shard hashes to proof
+  repeated uint64 indices = 3;
+  repeated bytes shard_hashes = 4;
+}
+message MsgSubmitProofResponse {}

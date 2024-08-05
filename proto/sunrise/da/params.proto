@@ -3,6 +3,7 @@ package sunrise.da;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
@@ -23,6 +24,14 @@ message Params {
   ];
   string zkp_threshold = 5 [
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+  uint64 min_shard_count = 6;
+  uint64 max_shard_size = 7;
+  uint64 challenge_period = 8;
+  uint64 proof_period = 9;
+  repeated cosmos.base.v1beta1.Coin challenge_collateral = 10 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
 }

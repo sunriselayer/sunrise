@@ -10,9 +10,9 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetPublishedData(ctx context.Context, dataHash []byte) (data types.PublishedData) {
+func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData) {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	bz := store.Get(types.PublishedDataKey(dataHash))
+	bz := store.Get(types.PublishedDataKey(metadataUri))
 	if bz == nil {
 		return data
 	}
@@ -28,13 +28,13 @@ func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) 
 	if err != nil {
 		return err
 	}
-	store.Set(types.PublishedDataKey(data.RecoveredDataHash), bz)
+	store.Set(types.PublishedDataKey(data.MetadataUri), bz)
 	return nil
 }
 
-func (k Keeper) DeletePublishedData(ctx sdk.Context, dataHash []byte) {
+func (k Keeper) DeletePublishedData(ctx sdk.Context, metadataUri string) {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store.Delete(types.PublishedDataKey(dataHash))
+	store.Delete(types.PublishedDataKey(metadataUri))
 }
 
 func (k Keeper) GetAllPublishedData(ctx sdk.Context) []types.PublishedData {
