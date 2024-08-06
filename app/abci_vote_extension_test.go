@@ -13,22 +13,18 @@ import (
 
 func TestConfirmVotedData(t *testing.T) {
 	data1 := types.PublishedData{
-		RecoveredDataHash: []byte("data1"),
 		MetadataUri:       "metadata/data1",
 		ShardDoubleHashes: [][]byte{[]byte("data1")},
 	}
 	data2 := types.PublishedData{
-		RecoveredDataHash: []byte("data2"),
 		MetadataUri:       "metadata/data2",
 		ShardDoubleHashes: [][]byte{[]byte("data2")},
 	}
 	data2v := types.PublishedData{
-		RecoveredDataHash: []byte("data2"),
 		MetadataUri:       "metadata/data2v",
 		ShardDoubleHashes: [][]byte{[]byte("data2v")},
 	}
 	data3 := types.PublishedData{
-		RecoveredDataHash: []byte("data3"),
 		MetadataUri:       "metadata/data3",
 		ShardDoubleHashes: [][]byte{[]byte("data3")},
 	}
@@ -39,62 +35,62 @@ func TestConfirmVotedData(t *testing.T) {
 	}{
 		{
 			expected: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			actual: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			expEqual: true,
 		},
 		{
 			expected: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			actual: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2v,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2v,
 			},
 			expEqual: false,
 		},
 		{
 			expected: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			actual: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
-				string(data3.RecoveredDataHash): &data3,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
+				data3.MetadataUri: &data3,
 			},
 			expEqual: false,
 		},
 		{
 			expected: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
-				string(data3.RecoveredDataHash): &data3,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
+				data3.MetadataUri: &data3,
 			},
 			actual: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			expEqual: false,
 		},
 		{
 			expected: nil,
 			actual: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			expEqual: false,
 		},
 		{
 			expected: map[string]*types.PublishedData{
-				string(data1.RecoveredDataHash): &data1,
-				string(data2.RecoveredDataHash): &data2,
+				data1.MetadataUri: &data1,
+				data2.MetadataUri: &data2,
 			},
 			actual:   nil,
 			expEqual: false,

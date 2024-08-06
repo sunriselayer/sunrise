@@ -100,13 +100,34 @@ func getRandomIndices(n, threshold int64, seed1, seed2 uint64) []int64 {
 }
 
 type VoteExtHandler struct {
-	Keeper keeper.Keeper
+	Keeper        keeper.Keeper
+	stakingKeeper *stakingkeeper.Keeper
 }
 
-func NewVoteExtHandler(keeper keeper.Keeper) *VoteExtHandler {
+func NewVoteExtHandler(
+	keeper keeper.Keeper,
+	stakingKeeper *stakingkeeper.Keeper,
+) *VoteExtHandler {
 	return &VoteExtHandler{
-		Keeper: keeper,
+		Keeper:        keeper,
+		stakingKeeper: stakingKeeper,
 	}
+}
+
+func (h *VoteExtHandler) NumberOfActiveValidators(ctx sdk.Context) int64 {
+	iterator, err := h.stakingKeeper.ValidatorsPowerStoreIterator(ctx)
+	if err != nil {
+		return 0
+	}
+
+	defer iterator.Close()
+
+	numValidators := int64(0)
+	for ; iterator.Valid(); iterator.Next() {
+		// valAddr := sdk.ValAddress(iterator.Value())
+		numValidators++
+	}
+	return numValidators
 }
 
 func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder, handler sdk.AnteHandler, daKeeper damodulekeeper.Keeper) sdk.ExtendVoteHandler {
@@ -128,12 +149,13 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 				continue
 			}
 
+			params := daKeeper.GetParams(ctx)
+			numValidators := h.NumberOfActiveValidators(ctx)
 			msgs := sdkTx.GetMsgs()
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
-					params := daKeeper.GetParams(ctx)
-					threshold := params.ZkpThreshold.MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					threshold := params.ReplificationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
 
 					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold)
 					if err != nil {
@@ -147,7 +169,6 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 					}
 
 					voteExt.Data = append(voteExt.Data, &types.PublishedData{
-						RecoveredDataHash: msg.RecoveredDataHash,
 						MetadataUri:       msg.MetadataUri,
 						ShardDoubleHashes: msg.ShardDoubleHashes,
 					})
@@ -183,8 +204,9 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper 
 
 		// check vote extension data with zkp
 		params := daKeeper.GetParams(ctx)
+		numValidators := h.NumberOfActiveValidators(ctx)
 		for i, data := range voteExt.Data {
-			threshold := params.ZkpThreshold.MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
+			threshold := params.ReplificationFactor.QuoInt64(numValidators).MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
 			err = zkp.VerifyData(voteExt.Shares[i].Indices, voteExt.Shares[i].Shares, data.ShardDoubleHashes, int(threshold))
 			if err != nil {
 				return nil, err
@@ -385,7 +407,7 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 					Voter: valAddr,
 					Power: valPower.Power,
 				}
-				dataVotesMap[string(data.RecoveredDataHash)] = append(dataVotesMap[string(data.RecoveredDataHash)], dataVote)
+				dataVotesMap[data.MetadataUri] = append(dataVotesMap[data.MetadataUri], dataVote)
 			}
 		}
 	}

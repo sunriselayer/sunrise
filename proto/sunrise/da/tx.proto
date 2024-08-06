@@ -52,12 +52,16 @@ message MsgPublishData {
 message MsgPublishDataResponse {}
 
 message MsgChallengeForFraud {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   string metadata_uri = 2;
 }
 message MsgChallengeForFraudResponse {}
 
 message MsgSubmitProof {
+  option (cosmos.msg.v1.signer) = "sender";
+
   string sender = 1;
   string metadata_uri = 2;
   // TODO: replace indices and shard hashes to proof

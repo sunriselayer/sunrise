@@ -8,6 +8,8 @@ import (
 
 func TestErasureCode(t *testing.T) {
 	blob := []byte("erasurecode_testblob_erasurecode_testblob_erasurecode_testblob_erasurecode_testblob_erasurecode_testblob_erasurecode_testblob")
+	require.Len(t, blob, 125)
+
 	shardCountHalf := int(3)
 	shardSize, shardCount, shards := ErasureCode(blob, shardCountHalf)
 	require.Equal(t, shardCount, int(shardCountHalf*2))
@@ -19,4 +21,8 @@ func TestErasureCode(t *testing.T) {
 	require.Len(t, shards[3], int(shardSize))
 	require.Len(t, shards[4], int(shardSize))
 	require.Len(t, shards[5], int(shardSize))
+
+	decoded, err := JoinShards(shards, len(blob))
+	require.NoError(t, err)
+	require.Equal(t, string(decoded), string(blob))
 }

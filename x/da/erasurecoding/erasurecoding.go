@@ -1,6 +1,9 @@
 package erasurecoding
 
 import (
+	"bufio"
+	"bytes"
+
 	"github.com/klauspost/reedsolomon"
 )
 
@@ -39,4 +42,26 @@ func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 	}
 
 	return
+}
+
+func JoinShards(shards [][]byte, blobSize int) (blob []byte, err error) {
+	shardCountHalf := len(shards) / 2
+	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
+	if err != nil {
+		return nil, err
+	}
+
+	var b bytes.Buffer
+	bufWrite := bufio.NewWriter(&b)
+	err = encoder.Join(bufWrite, shards, blobSize)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bufWrite.Flush()
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
 }

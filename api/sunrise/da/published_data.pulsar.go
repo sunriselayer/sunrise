@@ -11,6 +11,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
@@ -66,7 +67,7 @@ var (
 	md_PublishedData                     protoreflect.MessageDescriptor
 	fd_PublishedData_metadata_uri        protoreflect.FieldDescriptor
 	fd_PublishedData_shard_double_hashes protoreflect.FieldDescriptor
-	fd_PublishedData_uploaded_time       protoreflect.FieldDescriptor
+	fd_PublishedData_timestamp           protoreflect.FieldDescriptor
 	fd_PublishedData_status              protoreflect.FieldDescriptor
 )
 
@@ -75,7 +76,7 @@ func init() {
 	md_PublishedData = File_sunrise_da_published_data_proto.Messages().ByName("PublishedData")
 	fd_PublishedData_metadata_uri = md_PublishedData.Fields().ByName("metadata_uri")
 	fd_PublishedData_shard_double_hashes = md_PublishedData.Fields().ByName("shard_double_hashes")
-	fd_PublishedData_uploaded_time = md_PublishedData.Fields().ByName("uploaded_time")
+	fd_PublishedData_timestamp = md_PublishedData.Fields().ByName("timestamp")
 	fd_PublishedData_status = md_PublishedData.Fields().ByName("status")
 }
 
@@ -156,9 +157,9 @@ func (x *fastReflection_PublishedData) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
-	if x.UploadedTime != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.UploadedTime)
-		if !f(fd_PublishedData_uploaded_time, value) {
+	if x.Timestamp != nil {
+		value := protoreflect.ValueOfMessage(x.Timestamp.ProtoReflect())
+		if !f(fd_PublishedData_timestamp, value) {
 			return
 		}
 	}
@@ -187,8 +188,8 @@ func (x *fastReflection_PublishedData) Has(fd protoreflect.FieldDescriptor) bool
 		return x.MetadataUri != ""
 	case "sunrise.da.PublishedData.shard_double_hashes":
 		return len(x.ShardDoubleHashes) != 0
-	case "sunrise.da.PublishedData.uploaded_time":
-		return x.UploadedTime != uint64(0)
+	case "sunrise.da.PublishedData.timestamp":
+		return x.Timestamp != nil
 	case "sunrise.da.PublishedData.status":
 		return x.Status != ""
 	default:
@@ -211,8 +212,8 @@ func (x *fastReflection_PublishedData) Clear(fd protoreflect.FieldDescriptor) {
 		x.MetadataUri = ""
 	case "sunrise.da.PublishedData.shard_double_hashes":
 		x.ShardDoubleHashes = nil
-	case "sunrise.da.PublishedData.uploaded_time":
-		x.UploadedTime = uint64(0)
+	case "sunrise.da.PublishedData.timestamp":
+		x.Timestamp = nil
 	case "sunrise.da.PublishedData.status":
 		x.Status = ""
 	default:
@@ -240,9 +241,9 @@ func (x *fastReflection_PublishedData) Get(descriptor protoreflect.FieldDescript
 		}
 		listValue := &_PublishedData_2_list{list: &x.ShardDoubleHashes}
 		return protoreflect.ValueOfList(listValue)
-	case "sunrise.da.PublishedData.uploaded_time":
-		value := x.UploadedTime
-		return protoreflect.ValueOfUint64(value)
+	case "sunrise.da.PublishedData.timestamp":
+		value := x.Timestamp
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.da.PublishedData.status":
 		value := x.Status
 		return protoreflect.ValueOfString(value)
@@ -272,8 +273,8 @@ func (x *fastReflection_PublishedData) Set(fd protoreflect.FieldDescriptor, valu
 		lv := value.List()
 		clv := lv.(*_PublishedData_2_list)
 		x.ShardDoubleHashes = *clv.list
-	case "sunrise.da.PublishedData.uploaded_time":
-		x.UploadedTime = value.Uint()
+	case "sunrise.da.PublishedData.timestamp":
+		x.Timestamp = value.Message().Interface().(*timestamppb.Timestamp)
 	case "sunrise.da.PublishedData.status":
 		x.Status = value.Interface().(string)
 	default:
@@ -302,10 +303,13 @@ func (x *fastReflection_PublishedData) Mutable(fd protoreflect.FieldDescriptor) 
 		}
 		value := &_PublishedData_2_list{list: &x.ShardDoubleHashes}
 		return protoreflect.ValueOfList(value)
+	case "sunrise.da.PublishedData.timestamp":
+		if x.Timestamp == nil {
+			x.Timestamp = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.Timestamp.ProtoReflect())
 	case "sunrise.da.PublishedData.metadata_uri":
 		panic(fmt.Errorf("field metadata_uri of message sunrise.da.PublishedData is not mutable"))
-	case "sunrise.da.PublishedData.uploaded_time":
-		panic(fmt.Errorf("field uploaded_time of message sunrise.da.PublishedData is not mutable"))
 	case "sunrise.da.PublishedData.status":
 		panic(fmt.Errorf("field status of message sunrise.da.PublishedData is not mutable"))
 	default:
@@ -326,8 +330,9 @@ func (x *fastReflection_PublishedData) NewField(fd protoreflect.FieldDescriptor)
 	case "sunrise.da.PublishedData.shard_double_hashes":
 		list := [][]byte{}
 		return protoreflect.ValueOfList(&_PublishedData_2_list{list: &list})
-	case "sunrise.da.PublishedData.uploaded_time":
-		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.da.PublishedData.timestamp":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.da.PublishedData.status":
 		return protoreflect.ValueOfString("")
 	default:
@@ -409,8 +414,9 @@ func (x *fastReflection_PublishedData) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if x.UploadedTime != 0 {
-			n += 1 + runtime.Sov(uint64(x.UploadedTime))
+		if x.Timestamp != nil {
+			l = options.Size(x.Timestamp)
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		l = len(x.Status)
 		if l > 0 {
@@ -452,10 +458,19 @@ func (x *fastReflection_PublishedData) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x22
 		}
-		if x.UploadedTime != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.UploadedTime))
+		if x.Timestamp != nil {
+			encoded, err := options.Marshal(x.Timestamp)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x18
+			dAtA[i] = 0x1a
 		}
 		if len(x.ShardDoubleHashes) > 0 {
 			for iNdEx := len(x.ShardDoubleHashes) - 1; iNdEx >= 0; iNdEx-- {
@@ -587,10 +602,10 @@ func (x *fastReflection_PublishedData) ProtoMethods() *protoiface.Methods {
 				copy(x.ShardDoubleHashes[len(x.ShardDoubleHashes)-1], dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UploadedTime", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
 				}
-				x.UploadedTime = 0
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -600,11 +615,28 @@ func (x *fastReflection_PublishedData) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.UploadedTime |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Timestamp == nil {
+					x.Timestamp = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Timestamp); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
@@ -1351,10 +1383,10 @@ type PublishedData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MetadataUri       string   `protobuf:"bytes,1,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
-	ShardDoubleHashes [][]byte `protobuf:"bytes,2,rep,name=shard_double_hashes,json=shardDoubleHashes,proto3" json:"shard_double_hashes,omitempty"`
-	UploadedTime      uint64   `protobuf:"varint,3,opt,name=uploaded_time,json=uploadedTime,proto3" json:"uploaded_time,omitempty"`
-	Status            string   `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"` // TODO: to be replaced with enum
+	MetadataUri       string                 `protobuf:"bytes,1,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
+	ShardDoubleHashes [][]byte               `protobuf:"bytes,2,rep,name=shard_double_hashes,json=shardDoubleHashes,proto3" json:"shard_double_hashes,omitempty"`
+	Timestamp         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Status            string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"` // TODO: to be replaced with enum
 }
 
 func (x *PublishedData) Reset() {
@@ -1391,11 +1423,11 @@ func (x *PublishedData) GetShardDoubleHashes() [][]byte {
 	return nil
 }
 
-func (x *PublishedData) GetUploadedTime() uint64 {
+func (x *PublishedData) GetTimestamp() *timestamppb.Timestamp {
 	if x != nil {
-		return x.UploadedTime
+		return x.Timestamp
 	}
-	return 0
+	return nil
 }
 
 func (x *PublishedData) GetStatus() string {
@@ -1453,23 +1485,27 @@ var File_sunrise_da_published_data_proto protoreflect.FileDescriptor
 var file_sunrise_da_published_data_proto_rawDesc = []byte{
 	0x0a, 0x1f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0x2f, 0x70, 0x75, 0x62,
 	0x6c, 0x69, 0x73, 0x68, 0x65, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x12, 0x0a, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x1a, 0x11, 0x61,
-	0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x1a, 0x17, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x6d, 0x73, 0x67, 0x2f, 0x76, 0x31, 0x2f,
-	0x6d, 0x73, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
-	0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x9f, 0x01, 0x0a, 0x0d, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65,
-	0x64, 0x44, 0x61, 0x74, 0x61, 0x12, 0x21, 0x0a, 0x0c, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
-	0x61, 0x5f, 0x75, 0x72, 0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6d, 0x65, 0x74,
-	0x61, 0x64, 0x61, 0x74, 0x61, 0x55, 0x72, 0x69, 0x12, 0x2e, 0x0a, 0x13, 0x73, 0x68, 0x61, 0x72,
-	0x64, 0x5f, 0x64, 0x6f, 0x75, 0x62, 0x6c, 0x65, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x65, 0x73, 0x18,
-	0x02, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x11, 0x73, 0x68, 0x61, 0x72, 0x64, 0x44, 0x6f, 0x75, 0x62,
-	0x6c, 0x65, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x75, 0x70, 0x6c, 0x6f,
-	0x61, 0x64, 0x65, 0x64, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x0c, 0x75, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x65, 0x64, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x16, 0x0a,
+	0x6f, 0x12, 0x0a, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x1a, 0x1f, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x11,
+	0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x1a, 0x17, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x6d, 0x73, 0x67, 0x2f, 0x76, 0x31,
+	0x2f, 0x6d, 0x73, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0xbe, 0x01, 0x0a, 0x0d, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68,
+	0x65, 0x64, 0x44, 0x61, 0x74, 0x61, 0x12, 0x21, 0x0a, 0x0c, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0x5f, 0x75, 0x72, 0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x55, 0x72, 0x69, 0x12, 0x2e, 0x0a, 0x13, 0x73, 0x68, 0x61,
+	0x72, 0x64, 0x5f, 0x64, 0x6f, 0x75, 0x62, 0x6c, 0x65, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x65, 0x73,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x11, 0x73, 0x68, 0x61, 0x72, 0x64, 0x44, 0x6f, 0x75,
+	0x62, 0x6c, 0x65, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x12, 0x42, 0x0a, 0x09, 0x74, 0x69, 0x6d,
+	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf,
+	0x1f, 0x01, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x12, 0x16, 0x0a,
 	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73,
 	0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x3e, 0x0a, 0x0a, 0x44, 0x61, 0x74, 0x61, 0x53, 0x68, 0x61,
 	0x72, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x69, 0x6e, 0x64, 0x69, 0x63, 0x65, 0x73, 0x18, 0x01,
@@ -1501,15 +1537,17 @@ func file_sunrise_da_published_data_proto_rawDescGZIP() []byte {
 
 var file_sunrise_da_published_data_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_sunrise_da_published_data_proto_goTypes = []interface{}{
-	(*PublishedData)(nil), // 0: sunrise.da.PublishedData
-	(*DataShares)(nil),    // 1: sunrise.da.DataShares
+	(*PublishedData)(nil),         // 0: sunrise.da.PublishedData
+	(*DataShares)(nil),            // 1: sunrise.da.DataShares
+	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
 }
 var file_sunrise_da_published_data_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: sunrise.da.PublishedData.timestamp:type_name -> google.protobuf.Timestamp
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_da_published_data_proto_init() }

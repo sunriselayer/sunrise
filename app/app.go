@@ -471,7 +471,7 @@ func New(
 	// ---------------------------------------------------------------------------- //
 
 	// Vote extension
-	voteExtHandler := NewVoteExtHandler(app.DaKeeper)
+	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
 
 	daConfig, err := ReadDAConfig(appOpts)
 	if err != nil {

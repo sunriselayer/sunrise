@@ -10,6 +10,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
@@ -72,7 +73,7 @@ var (
 	fd_Params_slash_epoch          protoreflect.FieldDescriptor
 	fd_Params_epoch_max_fault      protoreflect.FieldDescriptor
 	fd_Params_slash_fraction       protoreflect.FieldDescriptor
-	fd_Params_zkp_threshold        protoreflect.FieldDescriptor
+	fd_Params_replification_factor protoreflect.FieldDescriptor
 	fd_Params_min_shard_count      protoreflect.FieldDescriptor
 	fd_Params_max_shard_size       protoreflect.FieldDescriptor
 	fd_Params_challenge_period     protoreflect.FieldDescriptor
@@ -87,7 +88,7 @@ func init() {
 	fd_Params_slash_epoch = md_Params.Fields().ByName("slash_epoch")
 	fd_Params_epoch_max_fault = md_Params.Fields().ByName("epoch_max_fault")
 	fd_Params_slash_fraction = md_Params.Fields().ByName("slash_fraction")
-	fd_Params_zkp_threshold = md_Params.Fields().ByName("zkp_threshold")
+	fd_Params_replification_factor = md_Params.Fields().ByName("replification_factor")
 	fd_Params_min_shard_count = md_Params.Fields().ByName("min_shard_count")
 	fd_Params_max_shard_size = md_Params.Fields().ByName("max_shard_size")
 	fd_Params_challenge_period = md_Params.Fields().ByName("challenge_period")
@@ -184,9 +185,9 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.ZkpThreshold != "" {
-		value := protoreflect.ValueOfString(x.ZkpThreshold)
-		if !f(fd_Params_zkp_threshold, value) {
+	if x.ReplificationFactor != "" {
+		value := protoreflect.ValueOfString(x.ReplificationFactor)
+		if !f(fd_Params_replification_factor, value) {
 			return
 		}
 	}
@@ -202,14 +203,14 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.ChallengePeriod != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.ChallengePeriod)
+	if x.ChallengePeriod != nil {
+		value := protoreflect.ValueOfMessage(x.ChallengePeriod.ProtoReflect())
 		if !f(fd_Params_challenge_period, value) {
 			return
 		}
 	}
-	if x.ProofPeriod != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.ProofPeriod)
+	if x.ProofPeriod != nil {
+		value := protoreflect.ValueOfMessage(x.ProofPeriod.ProtoReflect())
 		if !f(fd_Params_proof_period, value) {
 			return
 		}
@@ -243,16 +244,16 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.EpochMaxFault != uint64(0)
 	case "sunrise.da.Params.slash_fraction":
 		return x.SlashFraction != ""
-	case "sunrise.da.Params.zkp_threshold":
-		return x.ZkpThreshold != ""
+	case "sunrise.da.Params.replification_factor":
+		return x.ReplificationFactor != ""
 	case "sunrise.da.Params.min_shard_count":
 		return x.MinShardCount != uint64(0)
 	case "sunrise.da.Params.max_shard_size":
 		return x.MaxShardSize != uint64(0)
 	case "sunrise.da.Params.challenge_period":
-		return x.ChallengePeriod != uint64(0)
+		return x.ChallengePeriod != nil
 	case "sunrise.da.Params.proof_period":
-		return x.ProofPeriod != uint64(0)
+		return x.ProofPeriod != nil
 	case "sunrise.da.Params.challenge_collateral":
 		return len(x.ChallengeCollateral) != 0
 	default:
@@ -279,16 +280,16 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.EpochMaxFault = uint64(0)
 	case "sunrise.da.Params.slash_fraction":
 		x.SlashFraction = ""
-	case "sunrise.da.Params.zkp_threshold":
-		x.ZkpThreshold = ""
+	case "sunrise.da.Params.replification_factor":
+		x.ReplificationFactor = ""
 	case "sunrise.da.Params.min_shard_count":
 		x.MinShardCount = uint64(0)
 	case "sunrise.da.Params.max_shard_size":
 		x.MaxShardSize = uint64(0)
 	case "sunrise.da.Params.challenge_period":
-		x.ChallengePeriod = uint64(0)
+		x.ChallengePeriod = nil
 	case "sunrise.da.Params.proof_period":
-		x.ProofPeriod = uint64(0)
+		x.ProofPeriod = nil
 	case "sunrise.da.Params.challenge_collateral":
 		x.ChallengeCollateral = nil
 	default:
@@ -319,8 +320,8 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "sunrise.da.Params.slash_fraction":
 		value := x.SlashFraction
 		return protoreflect.ValueOfString(value)
-	case "sunrise.da.Params.zkp_threshold":
-		value := x.ZkpThreshold
+	case "sunrise.da.Params.replification_factor":
+		value := x.ReplificationFactor
 		return protoreflect.ValueOfString(value)
 	case "sunrise.da.Params.min_shard_count":
 		value := x.MinShardCount
@@ -330,10 +331,10 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 		return protoreflect.ValueOfUint64(value)
 	case "sunrise.da.Params.challenge_period":
 		value := x.ChallengePeriod
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.da.Params.proof_period":
 		value := x.ProofPeriod
-		return protoreflect.ValueOfUint64(value)
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.da.Params.challenge_collateral":
 		if len(x.ChallengeCollateral) == 0 {
 			return protoreflect.ValueOfList(&_Params_10_list{})
@@ -368,16 +369,16 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.EpochMaxFault = value.Uint()
 	case "sunrise.da.Params.slash_fraction":
 		x.SlashFraction = value.Interface().(string)
-	case "sunrise.da.Params.zkp_threshold":
-		x.ZkpThreshold = value.Interface().(string)
+	case "sunrise.da.Params.replification_factor":
+		x.ReplificationFactor = value.Interface().(string)
 	case "sunrise.da.Params.min_shard_count":
 		x.MinShardCount = value.Uint()
 	case "sunrise.da.Params.max_shard_size":
 		x.MaxShardSize = value.Uint()
 	case "sunrise.da.Params.challenge_period":
-		x.ChallengePeriod = value.Uint()
+		x.ChallengePeriod = value.Message().Interface().(*durationpb.Duration)
 	case "sunrise.da.Params.proof_period":
-		x.ProofPeriod = value.Uint()
+		x.ProofPeriod = value.Message().Interface().(*durationpb.Duration)
 	case "sunrise.da.Params.challenge_collateral":
 		lv := value.List()
 		clv := lv.(*_Params_10_list)
@@ -402,6 +403,16 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.da.Params.challenge_period":
+		if x.ChallengePeriod == nil {
+			x.ChallengePeriod = new(durationpb.Duration)
+		}
+		return protoreflect.ValueOfMessage(x.ChallengePeriod.ProtoReflect())
+	case "sunrise.da.Params.proof_period":
+		if x.ProofPeriod == nil {
+			x.ProofPeriod = new(durationpb.Duration)
+		}
+		return protoreflect.ValueOfMessage(x.ProofPeriod.ProtoReflect())
 	case "sunrise.da.Params.challenge_collateral":
 		if x.ChallengeCollateral == nil {
 			x.ChallengeCollateral = []*v1beta1.Coin{}
@@ -416,16 +427,12 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		panic(fmt.Errorf("field epoch_max_fault of message sunrise.da.Params is not mutable"))
 	case "sunrise.da.Params.slash_fraction":
 		panic(fmt.Errorf("field slash_fraction of message sunrise.da.Params is not mutable"))
-	case "sunrise.da.Params.zkp_threshold":
-		panic(fmt.Errorf("field zkp_threshold of message sunrise.da.Params is not mutable"))
+	case "sunrise.da.Params.replification_factor":
+		panic(fmt.Errorf("field replification_factor of message sunrise.da.Params is not mutable"))
 	case "sunrise.da.Params.min_shard_count":
 		panic(fmt.Errorf("field min_shard_count of message sunrise.da.Params is not mutable"))
 	case "sunrise.da.Params.max_shard_size":
 		panic(fmt.Errorf("field max_shard_size of message sunrise.da.Params is not mutable"))
-	case "sunrise.da.Params.challenge_period":
-		panic(fmt.Errorf("field challenge_period of message sunrise.da.Params is not mutable"))
-	case "sunrise.da.Params.proof_period":
-		panic(fmt.Errorf("field proof_period of message sunrise.da.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -447,16 +454,18 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "sunrise.da.Params.slash_fraction":
 		return protoreflect.ValueOfString("")
-	case "sunrise.da.Params.zkp_threshold":
+	case "sunrise.da.Params.replification_factor":
 		return protoreflect.ValueOfString("")
 	case "sunrise.da.Params.min_shard_count":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "sunrise.da.Params.max_shard_size":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "sunrise.da.Params.challenge_period":
-		return protoreflect.ValueOfUint64(uint64(0))
+		m := new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.da.Params.proof_period":
-		return protoreflect.ValueOfUint64(uint64(0))
+		m := new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.da.Params.challenge_collateral":
 		list := []*v1beta1.Coin{}
 		return protoreflect.ValueOfList(&_Params_10_list{list: &list})
@@ -543,7 +552,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.ZkpThreshold)
+		l = len(x.ReplificationFactor)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -553,11 +562,13 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.MaxShardSize != 0 {
 			n += 1 + runtime.Sov(uint64(x.MaxShardSize))
 		}
-		if x.ChallengePeriod != 0 {
-			n += 1 + runtime.Sov(uint64(x.ChallengePeriod))
+		if x.ChallengePeriod != nil {
+			l = options.Size(x.ChallengePeriod)
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.ProofPeriod != 0 {
-			n += 1 + runtime.Sov(uint64(x.ProofPeriod))
+		if x.ProofPeriod != nil {
+			l = options.Size(x.ProofPeriod)
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.ChallengeCollateral) > 0 {
 			for _, e := range x.ChallengeCollateral {
@@ -610,15 +621,33 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x52
 			}
 		}
-		if x.ProofPeriod != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ProofPeriod))
+		if x.ProofPeriod != nil {
+			encoded, err := options.Marshal(x.ProofPeriod)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x48
+			dAtA[i] = 0x4a
 		}
-		if x.ChallengePeriod != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ChallengePeriod))
+		if x.ChallengePeriod != nil {
+			encoded, err := options.Marshal(x.ChallengePeriod)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x40
+			dAtA[i] = 0x42
 		}
 		if x.MaxShardSize != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxShardSize))
@@ -630,10 +659,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x30
 		}
-		if len(x.ZkpThreshold) > 0 {
-			i -= len(x.ZkpThreshold)
-			copy(dAtA[i:], x.ZkpThreshold)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ZkpThreshold)))
+		if len(x.ReplificationFactor) > 0 {
+			i -= len(x.ReplificationFactor)
+			copy(dAtA[i:], x.ReplificationFactor)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ReplificationFactor)))
 			i--
 			dAtA[i] = 0x2a
 		}
@@ -814,7 +843,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ZkpThreshold", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ReplificationFactor", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -842,7 +871,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ZkpThreshold = string(dAtA[iNdEx:postIndex])
+				x.ReplificationFactor = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 6:
 				if wireType != 0 {
@@ -883,10 +912,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 				}
 			case 8:
-				if wireType != 0 {
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ChallengePeriod", wireType)
 				}
-				x.ChallengePeriod = 0
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -896,16 +925,33 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.ChallengePeriod |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.ChallengePeriod == nil {
+					x.ChallengePeriod = &durationpb.Duration{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ChallengePeriod); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			case 9:
-				if wireType != 0 {
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProofPeriod", wireType)
 				}
-				x.ProofPeriod = 0
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -915,11 +961,28 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.ProofPeriod |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.ProofPeriod == nil {
+					x.ProofPeriod = &durationpb.Duration{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ProofPeriod); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			case 10:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ChallengeCollateral", wireType)
@@ -1008,16 +1071,16 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	VoteThreshold       string          `protobuf:"bytes,1,opt,name=vote_threshold,json=voteThreshold,proto3" json:"vote_threshold,omitempty"`
-	SlashEpoch          uint64          `protobuf:"varint,2,opt,name=slash_epoch,json=slashEpoch,proto3" json:"slash_epoch,omitempty"`
-	EpochMaxFault       uint64          `protobuf:"varint,3,opt,name=epoch_max_fault,json=epochMaxFault,proto3" json:"epoch_max_fault,omitempty"`
-	SlashFraction       string          `protobuf:"bytes,4,opt,name=slash_fraction,json=slashFraction,proto3" json:"slash_fraction,omitempty"`
-	ZkpThreshold        string          `protobuf:"bytes,5,opt,name=zkp_threshold,json=zkpThreshold,proto3" json:"zkp_threshold,omitempty"`
-	MinShardCount       uint64          `protobuf:"varint,6,opt,name=min_shard_count,json=minShardCount,proto3" json:"min_shard_count,omitempty"`
-	MaxShardSize        uint64          `protobuf:"varint,7,opt,name=max_shard_size,json=maxShardSize,proto3" json:"max_shard_size,omitempty"`
-	ChallengePeriod     uint64          `protobuf:"varint,8,opt,name=challenge_period,json=challengePeriod,proto3" json:"challenge_period,omitempty"`
-	ProofPeriod         uint64          `protobuf:"varint,9,opt,name=proof_period,json=proofPeriod,proto3" json:"proof_period,omitempty"`
-	ChallengeCollateral []*v1beta1.Coin `protobuf:"bytes,10,rep,name=challenge_collateral,json=challengeCollateral,proto3" json:"challenge_collateral,omitempty"`
+	VoteThreshold       string               `protobuf:"bytes,1,opt,name=vote_threshold,json=voteThreshold,proto3" json:"vote_threshold,omitempty"`
+	SlashEpoch          uint64               `protobuf:"varint,2,opt,name=slash_epoch,json=slashEpoch,proto3" json:"slash_epoch,omitempty"`
+	EpochMaxFault       uint64               `protobuf:"varint,3,opt,name=epoch_max_fault,json=epochMaxFault,proto3" json:"epoch_max_fault,omitempty"`
+	SlashFraction       string               `protobuf:"bytes,4,opt,name=slash_fraction,json=slashFraction,proto3" json:"slash_fraction,omitempty"`
+	ReplificationFactor string               `protobuf:"bytes,5,opt,name=replification_factor,json=replificationFactor,proto3" json:"replification_factor,omitempty"`
+	MinShardCount       uint64               `protobuf:"varint,6,opt,name=min_shard_count,json=minShardCount,proto3" json:"min_shard_count,omitempty"`
+	MaxShardSize        uint64               `protobuf:"varint,7,opt,name=max_shard_size,json=maxShardSize,proto3" json:"max_shard_size,omitempty"`
+	ChallengePeriod     *durationpb.Duration `protobuf:"bytes,8,opt,name=challenge_period,json=challengePeriod,proto3" json:"challenge_period,omitempty"`
+	ProofPeriod         *durationpb.Duration `protobuf:"bytes,9,opt,name=proof_period,json=proofPeriod,proto3" json:"proof_period,omitempty"`
+	ChallengeCollateral []*v1beta1.Coin      `protobuf:"bytes,10,rep,name=challenge_collateral,json=challengeCollateral,proto3" json:"challenge_collateral,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -1068,9 +1131,9 @@ func (x *Params) GetSlashFraction() string {
 	return ""
 }
 
-func (x *Params) GetZkpThreshold() string {
+func (x *Params) GetReplificationFactor() string {
 	if x != nil {
-		return x.ZkpThreshold
+		return x.ReplificationFactor
 	}
 	return ""
 }
@@ -1089,18 +1152,18 @@ func (x *Params) GetMaxShardSize() uint64 {
 	return 0
 }
 
-func (x *Params) GetChallengePeriod() uint64 {
+func (x *Params) GetChallengePeriod() *durationpb.Duration {
 	if x != nil {
 		return x.ChallengePeriod
 	}
-	return 0
+	return nil
 }
 
-func (x *Params) GetProofPeriod() uint64 {
+func (x *Params) GetProofPeriod() *durationpb.Duration {
 	if x != nil {
 		return x.ProofPeriod
 	}
-	return 0
+	return nil
 }
 
 func (x *Params) GetChallengeCollateral() []*v1beta1.Coin {
@@ -1119,8 +1182,10 @@ var file_sunrise_da_params_proto_rawDesc = []byte{
 	0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65,
-	0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xed,
-	0x04, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x0e, 0x76, 0x6f, 0x74,
+	0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f,
+	0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc5,
+	0x05, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x0e, 0x76, 0x6f, 0x74,
 	0x65, 0x5f, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
 	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67,
@@ -1134,40 +1199,46 @@ var file_sunrise_da_params_proto_rawDesc = []byte{
 	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74,
 	0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x0d, 0x73, 0x6c, 0x61,
-	0x73, 0x68, 0x46, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x48, 0x0a, 0x0d, 0x7a, 0x6b,
-	0x70, 0x5f, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67,
-	0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x0c, 0x7a, 0x6b, 0x70, 0x54, 0x68, 0x72, 0x65, 0x73,
-	0x68, 0x6f, 0x6c, 0x64, 0x12, 0x26, 0x0a, 0x0f, 0x6d, 0x69, 0x6e, 0x5f, 0x73, 0x68, 0x61, 0x72,
-	0x64, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x6d,
-	0x69, 0x6e, 0x53, 0x68, 0x61, 0x72, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x24, 0x0a, 0x0e,
-	0x6d, 0x61, 0x78, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x64, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x07,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x6d, 0x61, 0x78, 0x53, 0x68, 0x61, 0x72, 0x64, 0x53, 0x69,
-	0x7a, 0x65, 0x12, 0x29, 0x0a, 0x10, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x5f,
-	0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0f, 0x63, 0x68,
-	0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x21, 0x0a,
-	0x0c, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x09, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64,
-	0x12, 0x7e, 0x0a, 0x14, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x5f, 0x63, 0x6f,
-	0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19,
-	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
-	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa,
-	0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f,
-	0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x13, 0x63, 0x68, 0x61,
-	0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c,
-	0x3a, 0x1c, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x13, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64, 0x61, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x83,
-	0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64,
-	0x61, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03,
-	0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61,
-	0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x68, 0x46, 0x72, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x56, 0x0a, 0x14, 0x72, 0x65,
+	0x70, 0x6c, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x61, 0x63, 0x74,
+	0x6f, 0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde,
+	0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d,
+	0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65, 0x63, 0x52, 0x13, 0x72,
+	0x65, 0x70, 0x6c, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x61, 0x63, 0x74,
+	0x6f, 0x72, 0x12, 0x26, 0x0a, 0x0f, 0x6d, 0x69, 0x6e, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x64, 0x5f,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x6d, 0x69, 0x6e,
+	0x53, 0x68, 0x61, 0x72, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x24, 0x0a, 0x0e, 0x6d, 0x61,
+	0x78, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x64, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x07, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x0c, 0x6d, 0x61, 0x78, 0x53, 0x68, 0x61, 0x72, 0x64, 0x53, 0x69, 0x7a, 0x65,
+	0x12, 0x4e, 0x0a, 0x10, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x5f, 0x70, 0x65,
+	0x72, 0x69, 0x6f, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52,
+	0x0f, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64,
+	0x12, 0x46, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64,
+	0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x0b, 0x70, 0x72, 0x6f,
+	0x6f, 0x66, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x7e, 0x0a, 0x14, 0x63, 0x68, 0x61, 0x6c,
+	0x6c, 0x65, 0x6e, 0x67, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c,
+	0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
+	0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f,
+	0x69, 0x6e, 0x73, 0x52, 0x13, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x43, 0x6f,
+	0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x3a, 0x1c, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7,
+	0xb0, 0x2a, 0x13, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64, 0x61, 0x2f,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x83, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
+	0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1184,16 +1255,19 @@ func file_sunrise_da_params_proto_rawDescGZIP() []byte {
 
 var file_sunrise_da_params_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_da_params_proto_goTypes = []interface{}{
-	(*Params)(nil),       // 0: sunrise.da.Params
-	(*v1beta1.Coin)(nil), // 1: cosmos.base.v1beta1.Coin
+	(*Params)(nil),              // 0: sunrise.da.Params
+	(*durationpb.Duration)(nil), // 1: google.protobuf.Duration
+	(*v1beta1.Coin)(nil),        // 2: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_da_params_proto_depIdxs = []int32{
-	1, // 0: sunrise.da.Params.challenge_collateral:type_name -> cosmos.base.v1beta1.Coin
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 0: sunrise.da.Params.challenge_period:type_name -> google.protobuf.Duration
+	1, // 1: sunrise.da.Params.proof_period:type_name -> google.protobuf.Duration
+	2, // 2: sunrise.da.Params.challenge_collateral:type_name -> cosmos.base.v1beta1.Coin
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_da_params_proto_init() }

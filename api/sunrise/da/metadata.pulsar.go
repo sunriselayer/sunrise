@@ -15,67 +15,67 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_Metadata_3_list)(nil)
+var _ protoreflect.List = (*_Metadata_4_list)(nil)
 
-type _Metadata_3_list struct {
+type _Metadata_4_list struct {
 	list *[]string
 }
 
-func (x *_Metadata_3_list) Len() int {
+func (x *_Metadata_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_Metadata_3_list) Get(i int) protoreflect.Value {
+func (x *_Metadata_4_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_Metadata_3_list) Set(i int, value protoreflect.Value) {
+func (x *_Metadata_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_Metadata_3_list) Append(value protoreflect.Value) {
+func (x *_Metadata_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_Metadata_3_list) AppendMutable() protoreflect.Value {
+func (x *_Metadata_4_list) AppendMutable() protoreflect.Value {
 	panic(fmt.Errorf("AppendMutable can not be called on message Metadata at list field ShardUris as it is not of Message kind"))
 }
 
-func (x *_Metadata_3_list) Truncate(n int) {
+func (x *_Metadata_4_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_Metadata_3_list) NewElement() protoreflect.Value {
+func (x *_Metadata_4_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Metadata_3_list) IsValid() bool {
+func (x *_Metadata_4_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
 	md_Metadata                     protoreflect.MessageDescriptor
-	fd_Metadata_shard_size          protoreflect.FieldDescriptor
-	fd_Metadata_shard_count         protoreflect.FieldDescriptor
-	fd_Metadata_shard_uris          protoreflect.FieldDescriptor
 	fd_Metadata_recovered_data_hash protoreflect.FieldDescriptor
+	fd_Metadata_recovered_data_size protoreflect.FieldDescriptor
+	fd_Metadata_shard_size          protoreflect.FieldDescriptor
+	fd_Metadata_shard_uris          protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_da_metadata_proto_init()
 	md_Metadata = File_sunrise_da_metadata_proto.Messages().ByName("Metadata")
-	fd_Metadata_shard_size = md_Metadata.Fields().ByName("shard_size")
-	fd_Metadata_shard_count = md_Metadata.Fields().ByName("shard_count")
-	fd_Metadata_shard_uris = md_Metadata.Fields().ByName("shard_uris")
 	fd_Metadata_recovered_data_hash = md_Metadata.Fields().ByName("recovered_data_hash")
+	fd_Metadata_recovered_data_size = md_Metadata.Fields().ByName("recovered_data_size")
+	fd_Metadata_shard_size = md_Metadata.Fields().ByName("shard_size")
+	fd_Metadata_shard_uris = md_Metadata.Fields().ByName("shard_uris")
 }
 
 var _ protoreflect.Message = (*fastReflection_Metadata)(nil)
@@ -143,27 +143,27 @@ func (x *fastReflection_Metadata) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Metadata) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.RecoveredDataHash) != 0 {
+		value := protoreflect.ValueOfBytes(x.RecoveredDataHash)
+		if !f(fd_Metadata_recovered_data_hash, value) {
+			return
+		}
+	}
+	if x.RecoveredDataSize != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.RecoveredDataSize)
+		if !f(fd_Metadata_recovered_data_size, value) {
+			return
+		}
+	}
 	if x.ShardSize != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.ShardSize)
 		if !f(fd_Metadata_shard_size, value) {
 			return
 		}
 	}
-	if x.ShardCount != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.ShardCount)
-		if !f(fd_Metadata_shard_count, value) {
-			return
-		}
-	}
 	if len(x.ShardUris) != 0 {
-		value := protoreflect.ValueOfList(&_Metadata_3_list{list: &x.ShardUris})
+		value := protoreflect.ValueOfList(&_Metadata_4_list{list: &x.ShardUris})
 		if !f(fd_Metadata_shard_uris, value) {
-			return
-		}
-	}
-	if len(x.RecoveredDataHash) != 0 {
-		value := protoreflect.ValueOfBytes(x.RecoveredDataHash)
-		if !f(fd_Metadata_recovered_data_hash, value) {
 			return
 		}
 	}
@@ -182,14 +182,14 @@ func (x *fastReflection_Metadata) Range(f func(protoreflect.FieldDescriptor, pro
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Metadata) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.da.Metadata.shard_size":
-		return x.ShardSize != uint64(0)
-	case "sunrise.da.Metadata.shard_count":
-		return x.ShardCount != uint64(0)
-	case "sunrise.da.Metadata.shard_uris":
-		return len(x.ShardUris) != 0
 	case "sunrise.da.Metadata.recovered_data_hash":
 		return len(x.RecoveredDataHash) != 0
+	case "sunrise.da.Metadata.recovered_data_size":
+		return x.RecoveredDataSize != uint64(0)
+	case "sunrise.da.Metadata.shard_size":
+		return x.ShardSize != uint64(0)
+	case "sunrise.da.Metadata.shard_uris":
+		return len(x.ShardUris) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Metadata"))
@@ -206,14 +206,14 @@ func (x *fastReflection_Metadata) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Metadata) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.da.Metadata.shard_size":
-		x.ShardSize = uint64(0)
-	case "sunrise.da.Metadata.shard_count":
-		x.ShardCount = uint64(0)
-	case "sunrise.da.Metadata.shard_uris":
-		x.ShardUris = nil
 	case "sunrise.da.Metadata.recovered_data_hash":
 		x.RecoveredDataHash = nil
+	case "sunrise.da.Metadata.recovered_data_size":
+		x.RecoveredDataSize = uint64(0)
+	case "sunrise.da.Metadata.shard_size":
+		x.ShardSize = uint64(0)
+	case "sunrise.da.Metadata.shard_uris":
+		x.ShardUris = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Metadata"))
@@ -230,21 +230,21 @@ func (x *fastReflection_Metadata) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Metadata) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.da.Metadata.shard_size":
-		value := x.ShardSize
-		return protoreflect.ValueOfUint64(value)
-	case "sunrise.da.Metadata.shard_count":
-		value := x.ShardCount
-		return protoreflect.ValueOfUint64(value)
-	case "sunrise.da.Metadata.shard_uris":
-		if len(x.ShardUris) == 0 {
-			return protoreflect.ValueOfList(&_Metadata_3_list{})
-		}
-		listValue := &_Metadata_3_list{list: &x.ShardUris}
-		return protoreflect.ValueOfList(listValue)
 	case "sunrise.da.Metadata.recovered_data_hash":
 		value := x.RecoveredDataHash
 		return protoreflect.ValueOfBytes(value)
+	case "sunrise.da.Metadata.recovered_data_size":
+		value := x.RecoveredDataSize
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.da.Metadata.shard_size":
+		value := x.ShardSize
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.da.Metadata.shard_uris":
+		if len(x.ShardUris) == 0 {
+			return protoreflect.ValueOfList(&_Metadata_4_list{})
+		}
+		listValue := &_Metadata_4_list{list: &x.ShardUris}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Metadata"))
@@ -265,16 +265,16 @@ func (x *fastReflection_Metadata) Get(descriptor protoreflect.FieldDescriptor) p
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Metadata) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.da.Metadata.shard_size":
-		x.ShardSize = value.Uint()
-	case "sunrise.da.Metadata.shard_count":
-		x.ShardCount = value.Uint()
-	case "sunrise.da.Metadata.shard_uris":
-		lv := value.List()
-		clv := lv.(*_Metadata_3_list)
-		x.ShardUris = *clv.list
 	case "sunrise.da.Metadata.recovered_data_hash":
 		x.RecoveredDataHash = value.Bytes()
+	case "sunrise.da.Metadata.recovered_data_size":
+		x.RecoveredDataSize = value.Uint()
+	case "sunrise.da.Metadata.shard_size":
+		x.ShardSize = value.Uint()
+	case "sunrise.da.Metadata.shard_uris":
+		lv := value.List()
+		clv := lv.(*_Metadata_4_list)
+		x.ShardUris = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Metadata"))
@@ -299,14 +299,14 @@ func (x *fastReflection_Metadata) Mutable(fd protoreflect.FieldDescriptor) proto
 		if x.ShardUris == nil {
 			x.ShardUris = []string{}
 		}
-		value := &_Metadata_3_list{list: &x.ShardUris}
+		value := &_Metadata_4_list{list: &x.ShardUris}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.da.Metadata.shard_size":
-		panic(fmt.Errorf("field shard_size of message sunrise.da.Metadata is not mutable"))
-	case "sunrise.da.Metadata.shard_count":
-		panic(fmt.Errorf("field shard_count of message sunrise.da.Metadata is not mutable"))
 	case "sunrise.da.Metadata.recovered_data_hash":
 		panic(fmt.Errorf("field recovered_data_hash of message sunrise.da.Metadata is not mutable"))
+	case "sunrise.da.Metadata.recovered_data_size":
+		panic(fmt.Errorf("field recovered_data_size of message sunrise.da.Metadata is not mutable"))
+	case "sunrise.da.Metadata.shard_size":
+		panic(fmt.Errorf("field shard_size of message sunrise.da.Metadata is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Metadata"))
@@ -320,15 +320,15 @@ func (x *fastReflection_Metadata) Mutable(fd protoreflect.FieldDescriptor) proto
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Metadata) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.da.Metadata.shard_size":
+	case "sunrise.da.Metadata.recovered_data_hash":
+		return protoreflect.ValueOfBytes(nil)
+	case "sunrise.da.Metadata.recovered_data_size":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.da.Metadata.shard_count":
+	case "sunrise.da.Metadata.shard_size":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "sunrise.da.Metadata.shard_uris":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Metadata_3_list{list: &list})
-	case "sunrise.da.Metadata.recovered_data_hash":
-		return protoreflect.ValueOfBytes(nil)
+		return protoreflect.ValueOfList(&_Metadata_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Metadata"))
@@ -398,21 +398,21 @@ func (x *fastReflection_Metadata) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		l = len(x.RecoveredDataHash)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.RecoveredDataSize != 0 {
+			n += 1 + runtime.Sov(uint64(x.RecoveredDataSize))
+		}
 		if x.ShardSize != 0 {
 			n += 1 + runtime.Sov(uint64(x.ShardSize))
-		}
-		if x.ShardCount != 0 {
-			n += 1 + runtime.Sov(uint64(x.ShardCount))
 		}
 		if len(x.ShardUris) > 0 {
 			for _, s := range x.ShardUris {
 				l = len(s)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
-		}
-		l = len(x.RecoveredDataHash)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -443,31 +443,31 @@ func (x *fastReflection_Metadata) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.RecoveredDataHash) > 0 {
-			i -= len(x.RecoveredDataHash)
-			copy(dAtA[i:], x.RecoveredDataHash)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RecoveredDataHash)))
-			i--
-			dAtA[i] = 0x22
-		}
 		if len(x.ShardUris) > 0 {
 			for iNdEx := len(x.ShardUris) - 1; iNdEx >= 0; iNdEx-- {
 				i -= len(x.ShardUris[iNdEx])
 				copy(dAtA[i:], x.ShardUris[iNdEx])
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ShardUris[iNdEx])))
 				i--
-				dAtA[i] = 0x1a
+				dAtA[i] = 0x22
 			}
-		}
-		if x.ShardCount != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ShardCount))
-			i--
-			dAtA[i] = 0x10
 		}
 		if x.ShardSize != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.ShardSize))
 			i--
-			dAtA[i] = 0x8
+			dAtA[i] = 0x18
+		}
+		if x.RecoveredDataSize != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.RecoveredDataSize))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.RecoveredDataHash) > 0 {
+			i -= len(x.RecoveredDataHash)
+			copy(dAtA[i:], x.RecoveredDataHash)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RecoveredDataHash)))
+			i--
+			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -519,76 +519,6 @@ func (x *fastReflection_Metadata) ProtoMethods() *protoiface.Methods {
 			}
 			switch fieldNum {
 			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShardSize", wireType)
-				}
-				x.ShardSize = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ShardSize |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShardCount", wireType)
-				}
-				x.ShardCount = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ShardCount |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShardUris", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.ShardUris = append(x.ShardUris, string(dAtA[iNdEx:postIndex]))
-				iNdEx = postIndex
-			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RecoveredDataHash", wireType)
 				}
@@ -621,6 +551,76 @@ func (x *fastReflection_Metadata) ProtoMethods() *protoiface.Methods {
 				if x.RecoveredDataHash == nil {
 					x.RecoveredDataHash = []byte{}
 				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RecoveredDataSize", wireType)
+				}
+				x.RecoveredDataSize = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.RecoveredDataSize |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShardSize", wireType)
+				}
+				x.ShardSize = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ShardSize |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShardUris", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ShardUris = append(x.ShardUris, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -675,10 +675,10 @@ type Metadata struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ShardSize         uint64   `protobuf:"varint,1,opt,name=shard_size,json=shardSize,proto3" json:"shard_size,omitempty"`
-	ShardCount        uint64   `protobuf:"varint,2,opt,name=shard_count,json=shardCount,proto3" json:"shard_count,omitempty"`
-	ShardUris         []string `protobuf:"bytes,3,rep,name=shard_uris,json=shardUris,proto3" json:"shard_uris,omitempty"`
-	RecoveredDataHash []byte   `protobuf:"bytes,4,opt,name=recovered_data_hash,json=recoveredDataHash,proto3" json:"recovered_data_hash,omitempty"`
+	RecoveredDataHash []byte   `protobuf:"bytes,1,opt,name=recovered_data_hash,json=recoveredDataHash,proto3" json:"recovered_data_hash,omitempty"`
+	RecoveredDataSize uint64   `protobuf:"varint,2,opt,name=recovered_data_size,json=recoveredDataSize,proto3" json:"recovered_data_size,omitempty"`
+	ShardSize         uint64   `protobuf:"varint,3,opt,name=shard_size,json=shardSize,proto3" json:"shard_size,omitempty"`
+	ShardUris         []string `protobuf:"bytes,4,rep,name=shard_uris,json=shardUris,proto3" json:"shard_uris,omitempty"`
 }
 
 func (x *Metadata) Reset() {
@@ -701,6 +701,20 @@ func (*Metadata) Descriptor() ([]byte, []int) {
 	return file_sunrise_da_metadata_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Metadata) GetRecoveredDataHash() []byte {
+	if x != nil {
+		return x.RecoveredDataHash
+	}
+	return nil
+}
+
+func (x *Metadata) GetRecoveredDataSize() uint64 {
+	if x != nil {
+		return x.RecoveredDataSize
+	}
+	return 0
+}
+
 func (x *Metadata) GetShardSize() uint64 {
 	if x != nil {
 		return x.ShardSize
@@ -708,23 +722,9 @@ func (x *Metadata) GetShardSize() uint64 {
 	return 0
 }
 
-func (x *Metadata) GetShardCount() uint64 {
-	if x != nil {
-		return x.ShardCount
-	}
-	return 0
-}
-
 func (x *Metadata) GetShardUris() []string {
 	if x != nil {
 		return x.ShardUris
-	}
-	return nil
-}
-
-func (x *Metadata) GetRecoveredDataHash() []byte {
-	if x != nil {
-		return x.RecoveredDataHash
 	}
 	return nil
 }
@@ -738,26 +738,27 @@ var file_sunrise_da_metadata_proto_rawDesc = []byte{
 	0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d,
 	0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x99, 0x01, 0x0a, 0x08,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x68, 0x61, 0x72,
-	0x64, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x73, 0x68,
-	0x61, 0x72, 0x64, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x68, 0x61, 0x72, 0x64,
-	0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x73, 0x68,
-	0x61, 0x72, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x68, 0x61, 0x72,
-	0x64, 0x5f, 0x75, 0x72, 0x69, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x73, 0x68,
-	0x61, 0x72, 0x64, 0x55, 0x72, 0x69, 0x73, 0x12, 0x2e, 0x0a, 0x13, 0x72, 0x65, 0x63, 0x6f, 0x76,
-	0x65, 0x72, 0x65, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x0c, 0x52, 0x11, 0x72, 0x65, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x65, 0x64, 0x44,
-	0x61, 0x74, 0x61, 0x48, 0x61, 0x73, 0x68, 0x42, 0x85, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0d, 0x4d, 0x65, 0x74, 0x61,
-	0x64, 0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02,
-	0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
-	0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xa8, 0x01, 0x0a, 0x08,
+	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x2e, 0x0a, 0x13, 0x72, 0x65, 0x63, 0x6f,
+	0x76, 0x65, 0x72, 0x65, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x11, 0x72, 0x65, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x65, 0x64,
+	0x44, 0x61, 0x74, 0x61, 0x48, 0x61, 0x73, 0x68, 0x12, 0x2e, 0x0a, 0x13, 0x72, 0x65, 0x63, 0x6f,
+	0x76, 0x65, 0x72, 0x65, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x11, 0x72, 0x65, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x65, 0x64,
+	0x44, 0x61, 0x74, 0x61, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x68, 0x61, 0x72,
+	0x64, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x73, 0x68,
+	0x61, 0x72, 0x64, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x68, 0x61, 0x72, 0x64,
+	0x5f, 0x75, 0x72, 0x69, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x73, 0x68, 0x61,
+	0x72, 0x64, 0x55, 0x72, 0x69, 0x73, 0x42, 0x85, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0d, 0x4d, 0x65, 0x74, 0x61, 0x64,
+	0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a,
+	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
