@@ -155,7 +155,7 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
-					threshold := params.ReplificationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
 
 					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold)
 					if err != nil {
@@ -206,7 +206,7 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper 
 		params := daKeeper.GetParams(ctx)
 		numValidators := h.NumberOfActiveValidators(ctx)
 		for i, data := range voteExt.Data {
-			threshold := params.ReplificationFactor.QuoInt64(numValidators).MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
+			threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
 			err = zkp.VerifyData(voteExt.Shares[i].Indices, voteExt.Shares[i].Shares, data.ShardDoubleHashes, int(threshold))
 			if err != nil {
 				return nil, err
