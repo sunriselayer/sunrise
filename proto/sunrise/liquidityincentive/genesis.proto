@@ -17,7 +17,7 @@ message GenesisState {
   Params params = 1
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
   repeated Epoch epochs = 2 [ (gogoproto.nullable) = false ];
-  uint64 epochCount = 3;
+  uint64 epoch_count = 3;
   repeated Gauge gauges = 4 [ (gogoproto.nullable) = false ];
   repeated Vote votes = 5 [ (gogoproto.nullable) = false ];
 }
