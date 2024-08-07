@@ -78,10 +78,10 @@ func TestEpochQueryPaginated(t *testing.T) {
 		for i := 0; i < len(msgs); i += step {
 			resp, err := keeper.Epochs(ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Epoch), step)
+			require.LessOrEqual(t, len(resp.Epochs), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.Epoch),
+				nullify.Fill(resp.Epochs),
 			)
 		}
 	})
@@ -91,10 +91,10 @@ func TestEpochQueryPaginated(t *testing.T) {
 		for i := 0; i < len(msgs); i += step {
 			resp, err := keeper.Epochs(ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Epoch), step)
+			require.LessOrEqual(t, len(resp.Epochs), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.Epoch),
+				nullify.Fill(resp.Epochs),
 			)
 			next = resp.Pagination.NextKey
 		}
@@ -105,7 +105,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
 			nullify.Fill(msgs),
-			nullify.Fill(resp.Epoch),
+			nullify.Fill(resp.Epochs),
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
