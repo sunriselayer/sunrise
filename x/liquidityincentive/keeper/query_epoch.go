@@ -36,7 +36,7 @@ func (k Keeper) Epochs(ctx context.Context, req *types.QueryEpochsRequest) (*typ
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryEpochsResponse{Epoch: epochs, Pagination: pageRes}, nil
+	return &types.QueryEpochsResponse{Epochs: epochs, Pagination: pageRes}, nil
 }
 
 func (k Keeper) Epoch(ctx context.Context, req *types.QueryEpochRequest) (*types.QueryEpochResponse, error) {
