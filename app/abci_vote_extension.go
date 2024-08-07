@@ -83,6 +83,9 @@ func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int6
 }
 
 func getRandomIndices(n, threshold int64, seed1, seed2 uint64) []int64 {
+	if threshold > n {
+		threshold = n
+	}
 	arr := []int64{}
 	for i := int64(0); i < n; i++ {
 		arr = append(arr, i)
@@ -156,7 +159,9 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
 					threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
-
+					if threshold > int64(len(msg.ShardDoubleHashes)) {
+						threshold = int64(len(msg.ShardDoubleHashes))
+					}
 					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold)
 					if err != nil {
 						continue
@@ -207,6 +212,9 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper 
 		numValidators := h.NumberOfActiveValidators(ctx)
 		for i, data := range voteExt.Data {
 			threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
+			if threshold > int64(len(data.ShardDoubleHashes)) {
+				threshold = int64(len(data.ShardDoubleHashes))
+			}
 			err = zkp.VerifyData(voteExt.Shares[i].Indices, voteExt.Shares[i].Shares, data.ShardDoubleHashes, int(threshold))
 			if err != nil {
 				return nil, err
