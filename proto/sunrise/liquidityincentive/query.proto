@@ -51,14 +51,14 @@ message QueryParamsResponse {
 
 message QueryEpochRequest { uint64 id = 1; }
 
-message QueryEpochResponse { Epoch Epoch = 1 [ (gogoproto.nullable) = false ]; }
+message QueryEpochResponse { Epoch epoch = 1 [ (gogoproto.nullable) = false ]; }
 
 message QueryEpochsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
 message QueryEpochsResponse {
-  repeated Epoch Epoch = 1 [ (gogoproto.nullable) = false ];
+  repeated Epoch epochs = 1 [ (gogoproto.nullable) = false ];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

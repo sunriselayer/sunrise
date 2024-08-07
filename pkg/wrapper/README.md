@@ -61,13 +61,13 @@ ShareIndex < SquareSize && AxisIndex < SquareSize
 
 Otherwise, the share is in `Q1`, `Q2`, or `Q3`.
 
-If the added item falls in the original data square, it's first `NamespaceIDSize` bytes are treated as its namespace ID (as explained in [Namespace ID assignment to the shares of an extended data square](#namespace-id-assignment-to-the-shares-of-an-extended-data-square), and the share is further prepended with the same namespace ID before getting pushed into the tree.
+If the added item falls in the original data square, its first `NamespaceIDSize` bytes are treated as its namespace ID (as explained in [Namespace ID assignment to the shares of an extended data square](#namespace-id-assignment-to-the-shares-of-an-extended-data-square), and the share is further prepended with the same namespace ID before getting pushed into the tree.
 If the added share is not within `Q0` i.e, it is a parity share, then it is prepended with the `ParitySharesNamespaceID` before getting pushed into the tree.
 
 **Some insightful observations can be made from the NMT wrapper description**:
 
 - In the NMT wrapper, the shares are extended in size by `NamespaceIDSize` bytes before insertion to the tree.
-- For every row and column that overlaps with `Q0`, it is the case that the shares in the first half of the tree leaves  belong to `Q0`, whereas the second half of the leaves are the erasure coded version of the first half.
+- For every row and column that overlaps with `Q0`, it is the case that the shares in the first half of the tree leaves belong to `Q0`, whereas the second half of the leaves are the erasure coded version of the first half.
  This means, the second half of the tree leaves all have identical namespace IDs, i.e., `ParitySharesNamespaceID`.
 - Each leaf in the NMT wrapper that corresponds to shares in `Q0` has a doubly namespaced structure.
 Specifically, the underlying data of the leaf contains the namespace ID of the share twice.

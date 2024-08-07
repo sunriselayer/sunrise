@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"encoding/json"
 	"time"
 
 	errors "cosmossdk.io/errors"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
 
-	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
@@ -29,8 +27,8 @@ var (
 	DefaultTransferPacketTimeoutTimestamp = time.Duration(transfertypes.DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
 )
 
-func timeoutTimestamp(ctx sdk.Context) uint64 {
-	return uint64(ctx.BlockTime().UnixNano()) + uint64(DefaultTransferPacketTimeoutTimestamp.Nanoseconds())
+func timeoutTimestamp(ctx sdk.Context, duration time.Duration) uint64 {
+	return uint64(ctx.BlockTime().UnixNano()) + uint64(duration.Nanoseconds())
 }
 
 func (k Keeper) SwapIncomingFund(
@@ -51,31 +49,32 @@ func (k Keeper) SwapIncomingFund(
 		return result, interfaceFee, err
 	}
 
-	if swapData.ExactAmountIn != nil {
+	switch amountStrategy := swapData.AmountStrategy.(type) {
+	case *types.SwapMetadata_ExactAmountIn:
 		// Swap exact amount in
 		amountIn := maxAmountIn
-		minAmountOut := swapData.ExactAmountIn.MinAmountOut
+		minAmountOut := amountStrategy.ExactAmountIn.MinAmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountIn(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			*swapData.Route.GetRoute(),
+			*swapData.Route,
 			amountIn,
 			minAmountOut,
 		)
 		if err != nil {
 			return types.RouteResult{}, sdkmath.Int{}, err
 		}
-	} else {
+	case *types.SwapMetadata_ExactAmountOut:
 		// Swap exact amount out
-		amountOut := swapData.ExactAmountOut.AmountOut
+		amountOut := amountStrategy.ExactAmountOut.AmountOut
 
 		result, interfaceFee, err = k.SwapExactAmountOut(
 			ctx,
 			swapper,
 			swapData.InterfaceProvider,
-			*swapData.Route.GetRoute(),
+			*swapData.Route,
 			maxAmountIn,
 			amountOut,
 		)
@@ -134,23 +133,26 @@ func (k Keeper) ProcessSwappedFund(
 	if remainderAmountIn.IsPositive() {
 		remainderTokenIn := sdk.NewCoin(result.TokenIn.Denom, remainderAmountIn)
 
-		if swapData.ExactAmountOut.Change != nil {
-			// Return the remainder token in
-			returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
-				ctx,
-				waitingPacket.Index,
-				tokenData.Receiver,
-				remainderTokenIn,
-				*swapData.ExactAmountOut.Change,
-			)
-			if err != nil {
-				return nil, err
-			}
+		switch amountStrategy := swapData.AmountStrategy.(type) {
+		case *types.SwapMetadata_ExactAmountOut:
+			if amountStrategy.ExactAmountOut.Change != nil {
+				// Return the remainder token in
+				returnPacket, err := k.TransferAndCreateOutgoingInFlightPacket(
+					ctx,
+					waitingPacket.Index,
+					tokenData.Receiver,
+					remainderTokenIn,
+					*amountStrategy.ExactAmountOut.Change,
+				)
+				if err != nil {
+					return nil, err
+				}
 
-			waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
-				OutgoingIndexChange: &returnPacket.Index,
+				waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
+					OutgoingIndexChange: &returnPacket.Index,
+				}
+				waiting = true
 			}
-			waiting = true
 		}
 	}
 
@@ -192,14 +194,8 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	incomingIndex types.PacketIndex,
 	sender string,
 	tokenOut sdk.Coin,
-	metadata packetforwardtypes.ForwardMetadata,
+	metadata types.ForwardMetadata,
 ) (packet types.OutgoingInFlightPacket, err error) {
-	var memo string
-	if metadata.Next != nil {
-		if err := json.Unmarshal([]byte(memo), &metadata.Next); err != nil {
-			return packet, err
-		}
-	}
 
 	msgTransfer := transfertypes.MsgTransfer{
 		SourcePort:       metadata.Port,
@@ -208,8 +204,8 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		Sender:           sender,
 		Receiver:         metadata.Receiver,
 		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
-		TimeoutTimestamp: timeoutTimestamp(ctx),
-		Memo:             memo,
+		TimeoutTimestamp: timeoutTimestamp(ctx, metadata.Timeout),
+		Memo:             metadata.Next,
 	}
 	// forward token to receiver
 	res, err := k.TransferKeeper.Transfer(ctx, &msgTransfer)
@@ -218,10 +214,10 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 	}
 
 	var retries uint8
-	if metadata.Retries != nil {
-		retries = *metadata.Retries
-	} else {
+	if metadata.Retries == 0 {
 		retries = types.DefaultRetryCount
+	} else {
+		retries = uint8(metadata.Retries)
 	}
 
 	packet = types.OutgoingInFlightPacket{
@@ -305,7 +301,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			packet.SourcePort,
 			packet.SourceChannel,
 			DefaultTransferPacketTimeoutHeight,
-			timeoutTimestamp(ctx),
+			timeoutTimestamp(ctx, DefaultTransferPacketTimeoutTimestamp),
 			packet.Data,
 		)
 		if err != nil {

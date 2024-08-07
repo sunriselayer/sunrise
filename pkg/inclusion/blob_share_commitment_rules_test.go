@@ -117,7 +117,7 @@ func TestFitsInSquare(t *testing.T) {
 			fits:  true,
 		},
 		{
-			name:  "0 blobs. Cursor at the the max share index",
+			name:  "0 blobs. Cursor at the max share index",
 			blobs: []int{},
 			start: 16,
 			size:  4,
