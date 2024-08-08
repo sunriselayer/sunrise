@@ -21,6 +21,7 @@ var (
 
 	PublishedDataKeyPrefix = []byte("published_data/")
 	FaultCounterKeyPrefix  = []byte("fault_counter/")
+	ProofKeyPrefix         = []byte("proof/")
 )
 
 func KeyPrefix(p string) []byte {
@@ -33,4 +34,8 @@ func PublishedDataKey(metadataUri string) []byte {
 
 func GetFaultCounterKey(val sdk.ValAddress) []byte {
 	return append(FaultCounterKeyPrefix, address.MustLengthPrefix(val)...)
+}
+
+func ProofKey(metadataUri string, sender string) []byte {
+	return append(append(ProofKeyPrefix, metadataUri...), sender...)
 }

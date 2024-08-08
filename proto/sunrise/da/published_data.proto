@@ -8,6 +8,7 @@ import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/da/params.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
@@ -17,9 +18,24 @@ message PublishedData {
   google.protobuf.Timestamp timestamp = 3
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
   string status = 4; // TODO: to be replaced with enum
+  string challenger = 5;
+  repeated cosmos.base.v1beta1.Coin collateral = 6 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+  google.protobuf.Timestamp challenge_timestamp = 7
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
 }
 
 message DataShares {
   repeated int64 indices = 1;
   repeated bytes shares = 2;
+}
+
+message Proof {
+  string metadata_uri = 1;
+  string sender = 2;
+  // TODO: replace indices and shard hashes to proof
+  repeated uint64 indices = 3;
+  repeated bytes shard_hashes = 4;
 }

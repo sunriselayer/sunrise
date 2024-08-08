@@ -17,6 +17,7 @@ type (
 		storeService store.KVStoreService
 		logger       log.Logger
 
+		BankKeeper     types.BankKeeper
 		StakingKeeper  types.StakingKeeper
 		SlashingKeeper types.SlashingKeeper
 
@@ -30,6 +31,7 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeService store.KVStoreService,
 	logger log.Logger,
+	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	slashingKeeper types.SlashingKeeper,
 	authority string,
@@ -41,6 +43,7 @@ func NewKeeper(
 	return Keeper{
 		cdc:            cdc,
 		storeService:   storeService,
+		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,
 		SlashingKeeper: slashingKeeper,
 		authority:      authority,

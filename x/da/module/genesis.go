@@ -18,6 +18,11 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 			panic(err)
 		}
 	}
+	for _, proof := range genState.Proofs {
+		if err := k.SetProof(ctx, proof); err != nil {
+			panic(err)
+		}
+	}
 }
 
 // ExportGenesis returns the module's exported genesis.
@@ -25,6 +30,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 	genesis.Params = k.GetParams(ctx)
 	genesis.PublishedData = k.GetAllPublishedData(ctx)
+	genesis.Proofs = k.GetAllProofs(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
 

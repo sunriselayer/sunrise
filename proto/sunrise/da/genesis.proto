@@ -14,4 +14,5 @@ message GenesisState {
   Params params = 1
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
   repeated PublishedData published_data = 2 [ (gogoproto.nullable) = false ];
+  repeated Proof proofs = 3 [ (gogoproto.nullable) = false ];
 }

@@ -20,5 +20,9 @@ func (k msgServer) PublishData(goCtx context.Context, msg *types.MsgPublishData)
 		return nil, err
 	}
 
+	err = ctx.EventManager().EmitTypedEvent(msg)
+	if err != nil {
+		return nil, err
+	}
 	return &types.MsgPublishDataResponse{}, nil
 }

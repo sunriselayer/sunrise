@@ -151,7 +151,8 @@ func (am AppModule) BeginBlock(_ context.Context) error {
 
 // EndBlock contains the logic that is automatically triggered at the end of each block.
 // The end block implementation is optional.
-func (am AppModule) EndBlock(_ context.Context) error {
+func (am AppModule) EndBlock(ctx context.Context) error {
+	am.keeper.EndBlocker(ctx)
 	return nil
 }
 
@@ -203,6 +204,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Cdc,
 		in.StoreService,
 		in.Logger,
+		in.BankKeeper,
 		in.StakingKeeper,
 		in.SlashingKeeper,
 		authority.String(),
