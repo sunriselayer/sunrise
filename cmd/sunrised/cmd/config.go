@@ -10,7 +10,7 @@ import (
 	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 )
 
-func initSDKConfig() {
+func InitSDKConfig() {
 	// Set prefixes
 	accountAddressPrefix := app.Bech32PrefixAccAddr
 	accountPubKeyPrefix := app.Bech32PrefixAccPub
@@ -72,14 +72,14 @@ func initAppConfig() (string, interface{}) {
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
 		DA: app.DAConfig{
-			ShardHashesAPI: "http://localhost:8080/api/uploaded_data",
+			ShardHashesAPI: "http://localhost:8000/api/uploaded_data",
 		},
 	}
 
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [da]
 # API to query DA v2 uploaded data shard hashes
-shard_hashes_api = "http://localhost:8080/api/uploaded_data"
+shard_hashes_api = "http://localhost:8000/api/uploaded_data"
 `
 
 	// Edit the default template file

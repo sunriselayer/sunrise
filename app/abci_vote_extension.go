@@ -54,7 +54,8 @@ func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 
 func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64) ([]int64, [][]byte, error) {
 	indices := getRandomIndices(n, threshold, uint64(time.Now().Unix()), 1024)
-	res, err := http.Get(daConfig.ShardHashesAPI + "?metadata_uri=" + metadataUri + "&indices=" + strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
+	url := daConfig.ShardHashesAPI + "?metadata_uri=" + metadataUri + "&indices=" + strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]")
+	res, err := http.Get(url)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -348,8 +349,12 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeB
 			continue
 		}
 
-		for _, pd := range voteExtTx.VotedData {
-			if err := h.keeper.SetPublishedData(ctx, *pd); err != nil {
+		for _, data := range voteExtTx.VotedData {
+			published := h.keeper.GetPublishedData(ctx, data.MetadataUri)
+			published.MetadataUri = data.MetadataUri
+			published.ShardDoubleHashes = data.ShardDoubleHashes
+			published.Status = "vote_extension"
+			if err := h.keeper.SetPublishedData(ctx, published); err != nil {
 				panic(err)
 			}
 		}
