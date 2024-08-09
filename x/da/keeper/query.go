@@ -17,5 +17,15 @@ func (k Keeper) PublishedData(goCtx context.Context, req *types.QueryPublishedDa
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryPublishedDataResponse{Data: k.GetAllPublishedData(ctx)}, nil
+	data := k.GetPublishedData(ctx, req.MetadataUri)
+	return &types.QueryPublishedDataResponse{Data: data}, nil
+}
+
+func (k Keeper) AllPublishedData(goCtx context.Context, req *types.QueryAllPublishedDataRequest) (*types.QueryAllPublishedDataResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryAllPublishedDataResponse{Data: k.GetAllPublishedData(ctx)}, nil
 }

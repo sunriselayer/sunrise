@@ -22,6 +22,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "published-data",
 					Short:     "Shows published data",
 				},
+				{
+					RpcMethod: "AllPublishedData",
+					Use:       "all-published-data",
+					Short:     "Shows all published data",
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

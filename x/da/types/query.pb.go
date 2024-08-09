@@ -117,6 +117,7 @@ func (m *QueryParamsResponse) GetParams() Params {
 // QueryPublishedDataRequest is request type for the Query/PublishedData RPC
 // method.
 type QueryPublishedDataRequest struct {
+	MetadataUri string `protobuf:"bytes,1,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
 }
 
 func (m *QueryPublishedDataRequest) Reset()         { *m = QueryPublishedDataRequest{} }
@@ -152,10 +153,17 @@ func (m *QueryPublishedDataRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPublishedDataRequest proto.InternalMessageInfo
 
+func (m *QueryPublishedDataRequest) GetMetadataUri() string {
+	if m != nil {
+		return m.MetadataUri
+	}
+	return ""
+}
+
 // QueryPublishedDataResponse is response type for the Query/PublishedData RPC
 // method.
 type QueryPublishedDataResponse struct {
-	Data []PublishedData `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+	Data PublishedData `protobuf:"bytes,1,opt,name=data,proto3" json:"data"`
 }
 
 func (m *QueryPublishedDataResponse) Reset()         { *m = QueryPublishedDataResponse{} }
@@ -191,7 +199,91 @@ func (m *QueryPublishedDataResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPublishedDataResponse proto.InternalMessageInfo
 
-func (m *QueryPublishedDataResponse) GetData() []PublishedData {
+func (m *QueryPublishedDataResponse) GetData() PublishedData {
+	if m != nil {
+		return m.Data
+	}
+	return PublishedData{}
+}
+
+// QueryAllPublishedDataRequest is request type for the
+// Query/AllPublishedDataRequest RPC method.
+type QueryAllPublishedDataRequest struct {
+}
+
+func (m *QueryAllPublishedDataRequest) Reset()         { *m = QueryAllPublishedDataRequest{} }
+func (m *QueryAllPublishedDataRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAllPublishedDataRequest) ProtoMessage()    {}
+func (*QueryAllPublishedDataRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e19bf9d248356d28, []int{4}
+}
+func (m *QueryAllPublishedDataRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryAllPublishedDataRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryAllPublishedDataRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryAllPublishedDataRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAllPublishedDataRequest.Merge(m, src)
+}
+func (m *QueryAllPublishedDataRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryAllPublishedDataRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAllPublishedDataRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryAllPublishedDataRequest proto.InternalMessageInfo
+
+// QueryAllPublishedDataResponse is response type for the
+// Query/AllPublishedDataRequest RPC method.
+type QueryAllPublishedDataResponse struct {
+	Data []PublishedData `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+}
+
+func (m *QueryAllPublishedDataResponse) Reset()         { *m = QueryAllPublishedDataResponse{} }
+func (m *QueryAllPublishedDataResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAllPublishedDataResponse) ProtoMessage()    {}
+func (*QueryAllPublishedDataResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e19bf9d248356d28, []int{5}
+}
+func (m *QueryAllPublishedDataResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryAllPublishedDataResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryAllPublishedDataResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryAllPublishedDataResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAllPublishedDataResponse.Merge(m, src)
+}
+func (m *QueryAllPublishedDataResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryAllPublishedDataResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAllPublishedDataResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryAllPublishedDataResponse proto.InternalMessageInfo
+
+func (m *QueryAllPublishedDataResponse) GetData() []PublishedData {
 	if m != nil {
 		return m.Data
 	}
@@ -203,38 +295,44 @@ func init() {
 	proto.RegisterType((*QueryParamsResponse)(nil), "sunrise.da.QueryParamsResponse")
 	proto.RegisterType((*QueryPublishedDataRequest)(nil), "sunrise.da.QueryPublishedDataRequest")
 	proto.RegisterType((*QueryPublishedDataResponse)(nil), "sunrise.da.QueryPublishedDataResponse")
+	proto.RegisterType((*QueryAllPublishedDataRequest)(nil), "sunrise.da.QueryAllPublishedDataRequest")
+	proto.RegisterType((*QueryAllPublishedDataResponse)(nil), "sunrise.da.QueryAllPublishedDataResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/da/query.proto", fileDescriptor_e19bf9d248356d28) }
 
 var fileDescriptor_e19bf9d248356d28 = []byte{
-	// 402 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x41, 0xef, 0xd2, 0x30,
-	0x18, 0xc6, 0xd7, 0xbf, 0x48, 0x62, 0x89, 0x07, 0x2b, 0x51, 0x98, 0x66, 0xc3, 0x25, 0x0a, 0x72,
-	0x58, 0x03, 0xc4, 0x2f, 0x40, 0x38, 0x7a, 0x10, 0x8e, 0x5e, 0xcc, 0x3b, 0xd6, 0x8c, 0x25, 0x6c,
-	0x1d, 0x6b, 0x67, 0xe4, 0xea, 0xdd, 0x68, 0xe2, 0x97, 0xf0, 0xe8, 0xc7, 0xe0, 0x48, 0xe2, 0xc5,
-	0x93, 0x31, 0x60, 0xe2, 0xd7, 0x30, 0x6b, 0x4b, 0xdc, 0x02, 0xe4, 0x7f, 0x21, 0xcd, 0xfb, 0x3c,
-	0xef, 0xf3, 0xfc, 0x5a, 0x86, 0x1f, 0x89, 0x22, 0xcd, 0x63, 0xc1, 0x68, 0x08, 0x74, 0x53, 0xb0,
-	0x7c, 0xeb, 0x67, 0x39, 0x97, 0x9c, 0x60, 0x33, 0xf7, 0x43, 0xb0, 0x1f, 0x40, 0x12, 0xa7, 0x9c,
-	0xaa, 0x5f, 0x2d, 0xdb, 0xed, 0x88, 0x47, 0x5c, 0x1d, 0x69, 0x79, 0x32, 0xd3, 0xa7, 0x11, 0xe7,
-	0xd1, 0x9a, 0x51, 0xc8, 0x62, 0x0a, 0x69, 0xca, 0x25, 0xc8, 0x98, 0xa7, 0xc2, 0xa8, 0xc3, 0x25,
-	0x17, 0x09, 0x17, 0x34, 0x00, 0xc1, 0x74, 0x17, 0x7d, 0x3f, 0x0a, 0x98, 0x84, 0x11, 0xcd, 0x20,
-	0x8a, 0x53, 0x65, 0x36, 0xde, 0xc7, 0x15, 0xac, 0x0c, 0x72, 0x48, 0x4e, 0x21, 0x6e, 0x55, 0x28,
-	0x82, 0x75, 0x2c, 0x56, 0x2c, 0x7c, 0x17, 0x82, 0x04, 0x6d, 0xf0, 0xda, 0x98, 0xcc, 0xcb, 0xec,
-	0x37, 0x6a, 0x6b, 0xc1, 0x36, 0x05, 0x13, 0xd2, 0x7b, 0x8d, 0x1f, 0xd6, 0xa6, 0x22, 0xe3, 0xa9,
-	0x60, 0xe4, 0x15, 0x6e, 0xea, 0xf4, 0x0e, 0xea, 0xa1, 0x41, 0x6b, 0x4c, 0xfc, 0xff, 0xd7, 0xf6,
-	0xb5, 0x77, 0x7a, 0x6f, 0xf7, 0xcb, 0xb5, 0xbe, 0xfd, 0xfd, 0x3e, 0x44, 0x0b, 0x63, 0xf6, 0x9e,
-	0xe0, 0xae, 0x4e, 0x3b, 0x01, 0xcc, 0x40, 0xc2, 0xa9, 0x6a, 0x8e, 0xed, 0x4b, 0xa2, 0x69, 0x9c,
-	0xe0, 0x46, 0x09, 0xdb, 0x41, 0xbd, 0x3b, 0x83, 0xd6, 0xb8, 0x5b, 0xeb, 0xab, 0x2e, 0x4c, 0x1b,
-	0x65, 0xed, 0x42, 0x99, 0xc7, 0x9f, 0x6e, 0xf0, 0x5d, 0x95, 0x49, 0x72, 0xdc, 0xd4, 0x58, 0xc4,
-	0xa9, 0xae, 0x9e, 0xdf, 0xd8, 0x76, 0xaf, 0xea, 0x9a, 0xc4, 0xeb, 0x7f, 0xfc, 0xf1, 0xe7, 0xeb,
-	0xcd, 0x33, 0xe2, 0x52, 0x63, 0x5c, 0xc3, 0x96, 0xe5, 0xf4, 0xec, 0xe1, 0xc9, 0x67, 0x84, 0xef,
-	0xd7, 0xd8, 0xc8, 0xf3, 0xf3, 0xec, 0x0b, 0x2f, 0x61, 0xbf, 0xb8, 0xcd, 0x66, 0x48, 0xa8, 0x22,
-	0x79, 0x49, 0xfa, 0xd7, 0x49, 0x6a, 0xff, 0xf4, 0x74, 0xb6, 0x3b, 0x38, 0x68, 0x7f, 0x70, 0xd0,
-	0xef, 0x83, 0x83, 0xbe, 0x1c, 0x1d, 0x6b, 0x7f, 0x74, 0xac, 0x9f, 0x47, 0xc7, 0x7a, 0x3b, 0x8c,
-	0x62, 0xb9, 0x2a, 0x02, 0x7f, 0xc9, 0x93, 0xcb, 0x61, 0x1f, 0xca, 0x38, 0xb9, 0xcd, 0x98, 0x08,
-	0x9a, 0xea, 0x83, 0x99, 0xfc, 0x0b, 0x00, 0x00, 0xff, 0xff, 0x40, 0x21, 0x0c, 0x9b, 0x03, 0x03,
-	0x00, 0x00,
+	// 479 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x41, 0x6b, 0x13, 0x41,
+	0x14, 0xc7, 0xb3, 0xb6, 0x06, 0x3a, 0x55, 0xd0, 0xb1, 0xa8, 0x5d, 0xea, 0xc4, 0x2e, 0x68, 0xdb,
+	0x88, 0x3b, 0xb4, 0xc1, 0xab, 0x60, 0xe8, 0xd1, 0x83, 0x0d, 0x7a, 0xf1, 0x12, 0xde, 0x36, 0xc3,
+	0x76, 0x60, 0x77, 0x67, 0x3b, 0x33, 0x2b, 0xe6, 0xea, 0x17, 0x50, 0xf0, 0xea, 0x07, 0xf0, 0xe0,
+	0xc1, 0x8f, 0xd1, 0x63, 0xc1, 0x8b, 0x27, 0x91, 0x44, 0xf0, 0x6b, 0xc8, 0xce, 0x4c, 0x30, 0xeb,
+	0xee, 0x62, 0x2e, 0x61, 0x78, 0xef, 0xff, 0xfe, 0xff, 0x5f, 0xde, 0xcc, 0xa2, 0xdb, 0xaa, 0xc8,
+	0x24, 0x57, 0x8c, 0x4e, 0x80, 0x9e, 0x17, 0x4c, 0x4e, 0xc3, 0x5c, 0x0a, 0x2d, 0x30, 0x72, 0xf5,
+	0x70, 0x02, 0xfe, 0x4d, 0x48, 0x79, 0x26, 0xa8, 0xf9, 0xb5, 0x6d, 0x7f, 0x2b, 0x16, 0xb1, 0x30,
+	0x47, 0x5a, 0x9e, 0x5c, 0x75, 0x27, 0x16, 0x22, 0x4e, 0x18, 0x85, 0x9c, 0x53, 0xc8, 0x32, 0xa1,
+	0x41, 0x73, 0x91, 0x29, 0xd7, 0xed, 0x9f, 0x0a, 0x95, 0x0a, 0x45, 0x23, 0x50, 0xcc, 0x66, 0xd1,
+	0x37, 0x87, 0x11, 0xd3, 0x70, 0x48, 0x73, 0x88, 0x79, 0x66, 0xc4, 0x4e, 0x7b, 0x67, 0x09, 0x2b,
+	0x07, 0x09, 0xe9, 0xc2, 0xa4, 0xb7, 0xdc, 0x28, 0xa2, 0x84, 0xab, 0x33, 0x36, 0x19, 0x4f, 0x40,
+	0x83, 0x15, 0x04, 0x5b, 0x08, 0x9f, 0x94, 0xde, 0x2f, 0xcc, 0xd4, 0x88, 0x9d, 0x17, 0x4c, 0xe9,
+	0xe0, 0x39, 0xba, 0x55, 0xa9, 0xaa, 0x5c, 0x64, 0x8a, 0xe1, 0x27, 0xa8, 0x6b, 0xdd, 0xef, 0x7a,
+	0xf7, 0xbd, 0xfd, 0xcd, 0x23, 0x1c, 0xfe, 0xfd, 0xdb, 0xa1, 0xd5, 0x0e, 0x37, 0x2e, 0x7e, 0xf4,
+	0x3a, 0x9f, 0x7f, 0x7f, 0xed, 0x7b, 0x23, 0x27, 0x0e, 0x9e, 0xa2, 0x6d, 0xeb, 0xb6, 0x00, 0x38,
+	0x06, 0x0d, 0x2e, 0x0a, 0xef, 0xa2, 0x6b, 0x29, 0xd3, 0x50, 0x22, 0x8d, 0x0b, 0xc9, 0x8d, 0xf3,
+	0xc6, 0x68, 0x73, 0x51, 0x7b, 0x25, 0x79, 0x70, 0x82, 0xfc, 0xa6, 0x79, 0x07, 0x35, 0x40, 0xeb,
+	0xa5, 0xd0, 0x21, 0x6d, 0x57, 0x90, 0x96, 0x07, 0x86, 0xeb, 0x25, 0xd9, 0xc8, 0x88, 0x03, 0x82,
+	0x76, 0x8c, 0xe5, 0xb3, 0x24, 0x69, 0xa2, 0x0a, 0x5e, 0xa2, 0x7b, 0x2d, 0xfd, 0x5a, 0xea, 0xda,
+	0xca, 0xa9, 0x47, 0x5f, 0xd6, 0xd0, 0x55, 0x63, 0x8b, 0x25, 0xea, 0xda, 0x7d, 0x61, 0xb2, 0x3c,
+	0x5a, 0xbf, 0x0a, 0xbf, 0xd7, 0xda, 0xb7, 0x24, 0xc1, 0xde, 0xbb, 0x6f, 0xbf, 0x3e, 0x5e, 0xd9,
+	0xc5, 0x3d, 0xea, 0x84, 0x09, 0x4c, 0x99, 0xa4, 0xb5, 0x17, 0x81, 0xdf, 0x7b, 0xe8, 0x7a, 0x85,
+	0x0d, 0x3f, 0xa8, 0x7b, 0x37, 0x2c, 0xc3, 0x7f, 0xf8, 0x3f, 0x99, 0x23, 0xa1, 0x86, 0xe4, 0x00,
+	0xef, 0xb5, 0x93, 0x54, 0x9e, 0x20, 0xfe, 0xe4, 0xa1, 0x1b, 0xff, 0x6e, 0x18, 0xef, 0xd7, 0xd2,
+	0x5a, 0x2e, 0xc9, 0x3f, 0x58, 0x41, 0xe9, 0xd0, 0x06, 0x06, 0xed, 0x31, 0x7e, 0xd4, 0x8a, 0x06,
+	0x49, 0x32, 0xae, 0xe2, 0x0d, 0x8f, 0x2f, 0x66, 0xc4, 0xbb, 0x9c, 0x11, 0xef, 0xe7, 0x8c, 0x78,
+	0x1f, 0xe6, 0xa4, 0x73, 0x39, 0x27, 0x9d, 0xef, 0x73, 0xd2, 0x79, 0xdd, 0x8f, 0xb9, 0x3e, 0x2b,
+	0xa2, 0xf0, 0x54, 0xa4, 0xcd, 0x86, 0x6f, 0x4b, 0x4b, 0x3d, 0xcd, 0x99, 0x8a, 0xba, 0xe6, 0x43,
+	0x1b, 0xfc, 0x09, 0x00, 0x00, 0xff, 0xff, 0x5b, 0x1b, 0x47, 0x59, 0x3b, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -253,6 +351,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// PublishedData queries published data
 	PublishedData(ctx context.Context, in *QueryPublishedDataRequest, opts ...grpc.CallOption) (*QueryPublishedDataResponse, error)
+	// AllPublishedData queries published data
+	AllPublishedData(ctx context.Context, in *QueryAllPublishedDataRequest, opts ...grpc.CallOption) (*QueryAllPublishedDataResponse, error)
 }
 
 type queryClient struct {
@@ -281,12 +381,23 @@ func (c *queryClient) PublishedData(ctx context.Context, in *QueryPublishedDataR
 	return out, nil
 }
 
+func (c *queryClient) AllPublishedData(ctx context.Context, in *QueryAllPublishedDataRequest, opts ...grpc.CallOption) (*QueryAllPublishedDataResponse, error) {
+	out := new(QueryAllPublishedDataResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.Query/AllPublishedData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Params queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// PublishedData queries published data
 	PublishedData(context.Context, *QueryPublishedDataRequest) (*QueryPublishedDataResponse, error)
+	// AllPublishedData queries published data
+	AllPublishedData(context.Context, *QueryAllPublishedDataRequest) (*QueryAllPublishedDataResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -298,6 +409,9 @@ func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsReq
 }
 func (*UnimplementedQueryServer) PublishedData(ctx context.Context, req *QueryPublishedDataRequest) (*QueryPublishedDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublishedData not implemented")
+}
+func (*UnimplementedQueryServer) AllPublishedData(ctx context.Context, req *QueryAllPublishedDataRequest) (*QueryAllPublishedDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AllPublishedData not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -340,6 +454,24 @@ func _Query_PublishedData_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_AllPublishedData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAllPublishedDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).AllPublishedData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.Query/AllPublishedData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).AllPublishedData(ctx, req.(*QueryAllPublishedDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.da.Query",
 	HandlerType: (*QueryServer)(nil),
@@ -351,6 +483,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PublishedData",
 			Handler:    _Query_PublishedData_Handler,
+		},
+		{
+			MethodName: "AllPublishedData",
+			Handler:    _Query_AllPublishedData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -433,6 +569,13 @@ func (m *QueryPublishedDataRequest) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	_ = i
 	var l int
 	_ = l
+	if len(m.MetadataUri) > 0 {
+		i -= len(m.MetadataUri)
+		copy(dAtA[i:], m.MetadataUri)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.MetadataUri)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -452,6 +595,62 @@ func (m *QueryPublishedDataResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *QueryPublishedDataResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryAllPublishedDataRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryAllPublishedDataRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryAllPublishedDataRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryAllPublishedDataResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryAllPublishedDataResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryAllPublishedDataResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -510,10 +709,34 @@ func (m *QueryPublishedDataRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.MetadataUri)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
 func (m *QueryPublishedDataResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Data.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryAllPublishedDataRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryAllPublishedDataResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -696,6 +919,38 @@ func (m *QueryPublishedDataRequest) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: QueryPublishedDataRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MetadataUri", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MetadataUri = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -744,6 +999,139 @@ func (m *QueryPublishedDataResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: QueryPublishedDataResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAllPublishedDataRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAllPublishedDataRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAllPublishedDataRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAllPublishedDataResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAllPublishedDataResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAllPublishedDataResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

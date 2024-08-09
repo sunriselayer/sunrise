@@ -21,6 +21,12 @@ service Query {
       returns (QueryPublishedDataResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/da/published_data";
   }
+  // AllPublishedData queries published data
+  rpc AllPublishedData(QueryAllPublishedDataRequest)
+      returns (QueryAllPublishedDataResponse) {
+    option (google.api.http).get =
+        "/sunriselayer/sunrise/da/all_published_data";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -35,10 +41,20 @@ message QueryParamsResponse {
 
 // QueryPublishedDataRequest is request type for the Query/PublishedData RPC
 // method.
-message QueryPublishedDataRequest {}
+message QueryPublishedDataRequest { string metadata_uri = 1; }
 
 // QueryPublishedDataResponse is response type for the Query/PublishedData RPC
 // method.
 message QueryPublishedDataResponse {
+  PublishedData data = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryAllPublishedDataRequest is request type for the
+// Query/AllPublishedDataRequest RPC method.
+message QueryAllPublishedDataRequest {}
+
+// QueryAllPublishedDataResponse is response type for the
+// Query/AllPublishedDataRequest RPC method.
+message QueryAllPublishedDataResponse {
   repeated PublishedData data = 1 [ (gogoproto.nullable) = false ];
 }
