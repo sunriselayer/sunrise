@@ -18,12 +18,13 @@ message PublishedData {
   google.protobuf.Timestamp timestamp = 3
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
   string status = 4; // TODO: to be replaced with enum
-  string challenger = 5;
-  repeated cosmos.base.v1beta1.Coin collateral = 6 [
+  string publisher = 5;
+  string challenger = 6;
+  repeated cosmos.base.v1beta1.Coin collateral = 7 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  google.protobuf.Timestamp challenge_timestamp = 7
+  google.protobuf.Timestamp challenge_timestamp = 8
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
 }
 

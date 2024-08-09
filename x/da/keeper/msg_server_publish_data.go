@@ -10,14 +10,26 @@ import (
 func (k msgServer) PublishData(goCtx context.Context, msg *types.MsgPublishData) (*types.MsgPublishDataResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	params := k.GetParams(ctx)
 	err := k.SetPublishedData(ctx, types.PublishedData{
+		Publisher:         msg.Sender,
 		MetadataUri:       msg.MetadataUri,
 		ShardDoubleHashes: msg.ShardDoubleHashes,
+		Collateral:        params.ChallengeCollateral,
 		Timestamp:         ctx.BlockTime(),
 		Status:            "msg_server",
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	// Send collateral to module account
+	if params.ChallengeCollateral.IsAllPositive() {
+		sender := sdk.MustAccAddressFromBech32(msg.Sender)
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.ChallengeCollateral)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(msg)

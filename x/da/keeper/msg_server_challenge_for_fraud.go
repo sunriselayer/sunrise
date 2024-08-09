@@ -24,7 +24,7 @@ func (k msgServer) ChallengeForFraud(goCtx context.Context, msg *types.MsgChalle
 	// Send collateral to module account
 	if params.ChallengeCollateral.IsAllPositive() {
 		sender := sdk.MustAccAddressFromBech32(msg.Sender)
-		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.ChallengeCollateral)
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, publishedData.Collateral)
 		if err != nil {
 			return nil, err
 		}
@@ -32,7 +32,6 @@ func (k msgServer) ChallengeForFraud(goCtx context.Context, msg *types.MsgChalle
 
 	publishedData.Status = "challenge_for_fraud"
 	publishedData.Challenger = msg.Sender
-	publishedData.Collateral = params.ChallengeCollateral
 	publishedData.ChallengeTimestamp = ctx.BlockTime()
 	err := k.SetPublishedData(ctx, publishedData)
 	if err != nil {

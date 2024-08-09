@@ -19,9 +19,10 @@ const (
 var (
 	ParamsKey = []byte("p_da")
 
-	PublishedDataKeyPrefix = []byte("published_data/")
-	FaultCounterKeyPrefix  = []byte("fault_counter/")
-	ProofKeyPrefix         = []byte("proof/")
+	PublishedDataKeyPrefix        = []byte("published_data/")
+	UnverifiedDataByTimeKeyPrefix = []byte("unverified_data_by_time/")
+	FaultCounterKeyPrefix         = []byte("fault_counter/")
+	ProofKeyPrefix                = []byte("proof/")
 )
 
 func KeyPrefix(p string) []byte {
@@ -30,6 +31,14 @@ func KeyPrefix(p string) []byte {
 
 func PublishedDataKey(metadataUri string) []byte {
 	return append(PublishedDataKeyPrefix, metadataUri...)
+}
+
+func UnverifiedDataTimeKeyPrefix(timestamp uint64) []byte {
+	return append(UnverifiedDataByTimeKeyPrefix, sdk.Uint64ToBigEndian(timestamp)...)
+}
+
+func UnverifiedDataByTimeKey(timestamp uint64, metadataUri string) []byte {
+	return append(UnverifiedDataTimeKeyPrefix(timestamp), metadataUri...)
 }
 
 func GetFaultCounterKey(val sdk.ValAddress) []byte {

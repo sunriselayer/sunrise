@@ -37,6 +37,20 @@ func (k Keeper) DeleteProof(ctx sdk.Context, metadataUri string, sender string) 
 	store.Delete(types.ProofKey(metadataUri, sender))
 }
 
+func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) []types.Proof {
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	iter := storetypes.KVStorePrefixIterator(store, append(types.ProofKeyPrefix, metadataUri...))
+	defer iter.Close()
+
+	data := []types.Proof{}
+	for ; iter.Valid(); iter.Next() {
+		da := types.Proof{}
+		k.cdc.MustUnmarshal(iter.Value(), &da)
+		data = append(data, da)
+	}
+	return data
+}
+
 func (k Keeper) GetAllProofs(ctx sdk.Context) []types.Proof {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	iter := storetypes.KVStorePrefixIterator(store, types.ProofKeyPrefix)

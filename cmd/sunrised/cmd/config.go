@@ -72,14 +72,14 @@ func initAppConfig() (string, interface{}) {
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
 		DA: app.DAConfig{
-			ShardHashesAPI: "http://localhost:8000/api/uploaded_data",
+			ShardHashesAPI: "http://localhost:8000/api/shard_hashes",
 		},
 	}
 
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [da]
 # API to query DA v2 uploaded data shard hashes
-shard_hashes_api = "http://localhost:8000/api/uploaded_data"
+shard_hashes_api = "http://localhost:8000/api/shard_hashes"
 `
 
 	// Edit the default template file

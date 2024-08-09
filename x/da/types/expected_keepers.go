@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 
+	corestore "cosmossdk.io/core/store"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -39,4 +40,6 @@ type SlashingKeeper interface {
 type StakingKeeper interface {
 	Validator(ctx context.Context, address sdk.ValAddress) (stakingtypes.ValidatorI, error)
 	PowerReduction(ctx context.Context) (res math.Int)
+	ValidatorsPowerStoreIterator(ctx context.Context) (corestore.Iterator, error)
+	TotalBondedTokens(ctx context.Context) (math.Int, error)
 }

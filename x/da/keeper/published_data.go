@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -29,12 +30,19 @@ func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) 
 		return err
 	}
 	store.Set(types.PublishedDataKey(data.MetadataUri), bz)
+
+	if data.Status == "verified" {
+		store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
+	} else {
+		store.Set(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri), []byte(data.MetadataUri))
+	}
 	return nil
 }
 
-func (k Keeper) DeletePublishedData(ctx sdk.Context, metadataUri string) {
+func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store.Delete(types.PublishedDataKey(metadataUri))
+	store.Delete(types.PublishedDataKey(data.MetadataUri))
+	store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
 }
 
 func (k Keeper) GetAllPublishedData(ctx sdk.Context) []types.PublishedData {
@@ -49,4 +57,20 @@ func (k Keeper) GetAllPublishedData(ctx sdk.Context) []types.PublishedData {
 		data = append(data, da)
 	}
 	return data
+}
+
+func (k Keeper) GetUnverifiedDataBeforeTime(ctx sdk.Context, timestamp uint64) ([]types.PublishedData, error) {
+	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	prefixStore := prefix.NewStore(store, types.UnverifiedDataByTimeKeyPrefix)
+
+	iterator := prefixStore.Iterator(nil, sdk.Uint64ToBigEndian(timestamp))
+	defer iterator.Close()
+
+	dataArray := []types.PublishedData{}
+	for ; iterator.Valid(); iterator.Next() {
+		metadataUri := string(iterator.Value())
+		data := k.GetPublishedData(ctx, metadataUri)
+		dataArray = append(dataArray, data)
+	}
+	return dataArray, nil
 }
