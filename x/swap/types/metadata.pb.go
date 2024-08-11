@@ -246,7 +246,6 @@ type SwapMetadata struct {
 	InterfaceProvider string `protobuf:"bytes,1,opt,name=interface_provider,json=interfaceProvider,proto3" json:"interface_provider,omitempty"`
 	Route             *Route `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
 	// Types that are valid to be assigned to AmountStrategy:
-	//
 	//	*SwapMetadata_ExactAmountIn
 	//	*SwapMetadata_ExactAmountOut
 	AmountStrategy isSwapMetadata_AmountStrategy `protobuf_oneof:"amount_strategy"`
