@@ -109,3 +109,43 @@ func VerifyData(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]byt
 	}
 	return nil
 }
+
+// ValidityProofCircuit defines single hash verification ZKP circuit
+type ValidityProofCircuit struct {
+	ShardHash       frontend.Variable `gnark:",private"` // H(s) value
+	ShardDoubleHash frontend.Variable `gnark:",public"`  // H^2(s) value
+}
+
+func (circuit *ValidityProofCircuit) Define(api frontend.API) error {
+	mimcHash, err := mimc.NewMiMC(api)
+	if err != nil {
+		return fmt.Errorf("failed to create MiMC hash: %v", err)
+	}
+
+	// Verify hash
+	mimcHash.Write(circuit.ShardHash)
+	h := mimcHash.Sum()
+	api.AssertIsEqual(h, circuit.ShardDoubleHash)
+
+	return nil
+}
+
+// FaultProofCircuit defines single hash verification ZKP circuit
+type FaultProofCircuit struct {
+	ShardHash       frontend.Variable `gnark:",private"` // H(s) value
+	ShardDoubleHash frontend.Variable `gnark:",public"`  // H^2(s) value
+}
+
+func (circuit *FaultProofCircuit) Define(api frontend.API) error {
+	mimcHash, err := mimc.NewMiMC(api)
+	if err != nil {
+		return fmt.Errorf("failed to create MiMC hash: %v", err)
+	}
+
+	// Verify hash
+	mimcHash.Write(circuit.ShardHash)
+	h := mimcHash.Sum()
+	api.AssertIsDifferent(h, circuit.ShardDoubleHash)
+
+	return nil
+}

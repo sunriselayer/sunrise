@@ -41,21 +41,27 @@ func TestZKP(t *testing.T) {
 	require.NoError(t, err)
 
 	// groth16: Prove & Verify
-	proof, _ := groth16.Prove(ccs, pk, witness)
+	proof, err := groth16.Prove(ccs, pk, witness)
+	require.NoError(t, err)
 	err = groth16.Verify(proof, vk, publicWitness)
 	require.NoError(t, err)
 }
 
 func TestZKP_BigSize(t *testing.T) {
-	threshold := 300
+	threshold := 1
 	shardHashes := []frontend.Variable{}
 	shardDoubleHashes := []frontend.Variable{}
 	indices := []frontend.Variable{}
 	for i := 0; i < threshold; i++ {
-		shardHash := big.NewInt(int64(i + 10000))
+		integer := big.NewInt(int64(i + 10000))
 		m := native_mimc.NewMiMC()
-		m.Write(shardHash.Bytes())
-		shardDoubleHash := m.Sum(nil)
+		m.Write(integer.Bytes())
+		shardHash := m.Sum(nil)
+
+		m2 := native_mimc.NewMiMC()
+		m2.Write(shardHash)
+		shardDoubleHash := m2.Sum(nil)
+
 		indices = append(indices, i)
 		shardHashes = append(shardHashes, shardHash)
 		shardDoubleHashes = append(shardDoubleHashes, shardDoubleHash)
@@ -83,7 +89,8 @@ func TestZKP_BigSize(t *testing.T) {
 	require.NoError(t, err)
 
 	// groth16: Prove & Verify
-	proof, _ := groth16.Prove(ccs, pk, witness)
+	proof, err := groth16.Prove(ccs, pk, witness)
+	require.NoError(t, err)
 	err = groth16.Verify(proof, vk, publicWitness)
 	require.NoError(t, err)
 }
@@ -123,4 +130,96 @@ func TestProveAndVerify(t *testing.T) {
 
 	err := ProveAndVerify(assignment)
 	require.NoError(t, err)
+}
+
+func TestFaultProofCircuitZKP(t *testing.T) {
+	preImage1 := big.NewInt(111)
+	preImage2 := big.NewInt(112)
+
+	m := native_mimc.NewMiMC()
+	m.Write(preImage1.Bytes())
+	hash := m.Sum(nil)
+
+	// witness definition
+	assignment := FaultProofCircuit{
+		ShardHash:       preImage1,
+		ShardDoubleHash: hash,
+	}
+
+	// compiles our circuit into a R1CS
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, Hollow(&assignment))
+	require.NoError(t, err)
+
+	// groth16 zkSNARK: Setup
+	pk, vk, err := groth16.Setup(ccs)
+	require.NoError(t, err)
+
+	witness1, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
+	require.NoError(t, err)
+
+	// groth16: Prove & Verify
+	_, err = groth16.Prove(ccs, pk, witness1)
+	require.Error(t, err)
+
+	assignment2 := FaultProofCircuit{
+		ShardHash:       preImage2,
+		ShardDoubleHash: hash,
+	}
+
+	witness2, err := frontend.NewWitness(&assignment2, ecc.BN254.ScalarField())
+	require.NoError(t, err)
+	publicWitness2, err := witness2.Public()
+	require.NoError(t, err)
+
+	// groth16: Prove & Verify
+	proof, err := groth16.Prove(ccs, pk, witness2)
+	require.NoError(t, err)
+	err = groth16.Verify(proof, vk, publicWitness2)
+	require.NoError(t, err)
+}
+
+func TestValidityProofCircuitZKP(t *testing.T) {
+	preImage1 := big.NewInt(111)
+	preImage2 := big.NewInt(112)
+
+	m := native_mimc.NewMiMC()
+	m.Write(preImage1.Bytes())
+	hash := m.Sum(nil)
+
+	// witness definition
+	assignment := ValidityProofCircuit{
+		ShardHash:       preImage1,
+		ShardDoubleHash: hash,
+	}
+
+	// compiles our circuit into a R1CS
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, Hollow(&assignment))
+	require.NoError(t, err)
+
+	// groth16 zkSNARK: Setup
+	pk, vk, err := groth16.Setup(ccs)
+	require.NoError(t, err)
+
+	witness1, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
+	require.NoError(t, err)
+	publicWitness1, err := witness1.Public()
+	require.NoError(t, err)
+
+	// groth16: Prove & Verify
+	proof, err := groth16.Prove(ccs, pk, witness1)
+	require.NoError(t, err)
+	err = groth16.Verify(proof, vk, publicWitness1)
+	require.NoError(t, err)
+
+	assignment2 := ValidityProofCircuit{
+		ShardHash:       preImage2,
+		ShardDoubleHash: hash,
+	}
+
+	witness2, err := frontend.NewWitness(&assignment2, ecc.BN254.ScalarField())
+	require.NoError(t, err)
+
+	// groth16: Prove & Verify
+	_, err = groth16.Prove(ccs, pk, witness2)
+	require.Error(t, err)
 }
