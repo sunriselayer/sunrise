@@ -54,7 +54,7 @@ func DefaultParams() Params {
 		1000000,       // 1MB
 		time.Minute*6, // 6min,
 		time.Minute*8, // 8min
-		sdk.Coins{},
+		sdk.Coins(nil),
 	)
 }
 

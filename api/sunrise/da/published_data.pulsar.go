@@ -1714,7 +1714,7 @@ func (x *fastReflection_DataShares) ProtoMethods() *protoiface.Methods {
 var _ protoreflect.List = (*_Proof_3_list)(nil)
 
 type _Proof_3_list struct {
-	list *[]uint64
+	list *[]int64
 }
 
 func (x *_Proof_3_list) Len() int {
@@ -1725,17 +1725,17 @@ func (x *_Proof_3_list) Len() int {
 }
 
 func (x *_Proof_3_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfUint64((*x.list)[i])
+	return protoreflect.ValueOfInt64((*x.list)[i])
 }
 
 func (x *_Proof_3_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
+	valueUnwrapped := value.Int()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_Proof_3_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
+	valueUnwrapped := value.Int()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
@@ -1749,8 +1749,8 @@ func (x *_Proof_3_list) Truncate(n int) {
 }
 
 func (x *_Proof_3_list) NewElement() protoreflect.Value {
-	v := uint64(0)
-	return protoreflect.ValueOfUint64(v)
+	v := int64(0)
+	return protoreflect.ValueOfInt64(v)
 }
 
 func (x *_Proof_3_list) IsValid() bool {
@@ -1787,7 +1787,7 @@ func (x *_Proof_4_list) Append(value protoreflect.Value) {
 }
 
 func (x *_Proof_4_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message Proof at list field ShardHashes as it is not of Message kind"))
+	panic(fmt.Errorf("AppendMutable can not be called on message Proof at list field Proofs as it is not of Message kind"))
 }
 
 func (x *_Proof_4_list) Truncate(n int) {
@@ -1804,11 +1804,12 @@ func (x *_Proof_4_list) IsValid() bool {
 }
 
 var (
-	md_Proof              protoreflect.MessageDescriptor
-	fd_Proof_metadata_uri protoreflect.FieldDescriptor
-	fd_Proof_sender       protoreflect.FieldDescriptor
-	fd_Proof_indices      protoreflect.FieldDescriptor
-	fd_Proof_shard_hashes protoreflect.FieldDescriptor
+	md_Proof               protoreflect.MessageDescriptor
+	fd_Proof_metadata_uri  protoreflect.FieldDescriptor
+	fd_Proof_sender        protoreflect.FieldDescriptor
+	fd_Proof_indices       protoreflect.FieldDescriptor
+	fd_Proof_proofs        protoreflect.FieldDescriptor
+	fd_Proof_is_valid_data protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -1817,7 +1818,8 @@ func init() {
 	fd_Proof_metadata_uri = md_Proof.Fields().ByName("metadata_uri")
 	fd_Proof_sender = md_Proof.Fields().ByName("sender")
 	fd_Proof_indices = md_Proof.Fields().ByName("indices")
-	fd_Proof_shard_hashes = md_Proof.Fields().ByName("shard_hashes")
+	fd_Proof_proofs = md_Proof.Fields().ByName("proofs")
+	fd_Proof_is_valid_data = md_Proof.Fields().ByName("is_valid_data")
 }
 
 var _ protoreflect.Message = (*fastReflection_Proof)(nil)
@@ -1903,9 +1905,15 @@ func (x *fastReflection_Proof) Range(f func(protoreflect.FieldDescriptor, protor
 			return
 		}
 	}
-	if len(x.ShardHashes) != 0 {
-		value := protoreflect.ValueOfList(&_Proof_4_list{list: &x.ShardHashes})
-		if !f(fd_Proof_shard_hashes, value) {
+	if len(x.Proofs) != 0 {
+		value := protoreflect.ValueOfList(&_Proof_4_list{list: &x.Proofs})
+		if !f(fd_Proof_proofs, value) {
+			return
+		}
+	}
+	if x.IsValidData != false {
+		value := protoreflect.ValueOfBool(x.IsValidData)
+		if !f(fd_Proof_is_valid_data, value) {
 			return
 		}
 	}
@@ -1930,8 +1938,10 @@ func (x *fastReflection_Proof) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Sender != ""
 	case "sunrise.da.Proof.indices":
 		return len(x.Indices) != 0
-	case "sunrise.da.Proof.shard_hashes":
-		return len(x.ShardHashes) != 0
+	case "sunrise.da.Proof.proofs":
+		return len(x.Proofs) != 0
+	case "sunrise.da.Proof.is_valid_data":
+		return x.IsValidData != false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Proof"))
@@ -1954,8 +1964,10 @@ func (x *fastReflection_Proof) Clear(fd protoreflect.FieldDescriptor) {
 		x.Sender = ""
 	case "sunrise.da.Proof.indices":
 		x.Indices = nil
-	case "sunrise.da.Proof.shard_hashes":
-		x.ShardHashes = nil
+	case "sunrise.da.Proof.proofs":
+		x.Proofs = nil
+	case "sunrise.da.Proof.is_valid_data":
+		x.IsValidData = false
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Proof"))
@@ -1984,12 +1996,15 @@ func (x *fastReflection_Proof) Get(descriptor protoreflect.FieldDescriptor) prot
 		}
 		listValue := &_Proof_3_list{list: &x.Indices}
 		return protoreflect.ValueOfList(listValue)
-	case "sunrise.da.Proof.shard_hashes":
-		if len(x.ShardHashes) == 0 {
+	case "sunrise.da.Proof.proofs":
+		if len(x.Proofs) == 0 {
 			return protoreflect.ValueOfList(&_Proof_4_list{})
 		}
-		listValue := &_Proof_4_list{list: &x.ShardHashes}
+		listValue := &_Proof_4_list{list: &x.Proofs}
 		return protoreflect.ValueOfList(listValue)
+	case "sunrise.da.Proof.is_valid_data":
+		value := x.IsValidData
+		return protoreflect.ValueOfBool(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Proof"))
@@ -2018,10 +2033,12 @@ func (x *fastReflection_Proof) Set(fd protoreflect.FieldDescriptor, value protor
 		lv := value.List()
 		clv := lv.(*_Proof_3_list)
 		x.Indices = *clv.list
-	case "sunrise.da.Proof.shard_hashes":
+	case "sunrise.da.Proof.proofs":
 		lv := value.List()
 		clv := lv.(*_Proof_4_list)
-		x.ShardHashes = *clv.list
+		x.Proofs = *clv.list
+	case "sunrise.da.Proof.is_valid_data":
+		x.IsValidData = value.Bool()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Proof"))
@@ -2044,20 +2061,22 @@ func (x *fastReflection_Proof) Mutable(fd protoreflect.FieldDescriptor) protoref
 	switch fd.FullName() {
 	case "sunrise.da.Proof.indices":
 		if x.Indices == nil {
-			x.Indices = []uint64{}
+			x.Indices = []int64{}
 		}
 		value := &_Proof_3_list{list: &x.Indices}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.da.Proof.shard_hashes":
-		if x.ShardHashes == nil {
-			x.ShardHashes = [][]byte{}
+	case "sunrise.da.Proof.proofs":
+		if x.Proofs == nil {
+			x.Proofs = [][]byte{}
 		}
-		value := &_Proof_4_list{list: &x.ShardHashes}
+		value := &_Proof_4_list{list: &x.Proofs}
 		return protoreflect.ValueOfList(value)
 	case "sunrise.da.Proof.metadata_uri":
 		panic(fmt.Errorf("field metadata_uri of message sunrise.da.Proof is not mutable"))
 	case "sunrise.da.Proof.sender":
 		panic(fmt.Errorf("field sender of message sunrise.da.Proof is not mutable"))
+	case "sunrise.da.Proof.is_valid_data":
+		panic(fmt.Errorf("field is_valid_data of message sunrise.da.Proof is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Proof"))
@@ -2076,11 +2095,13 @@ func (x *fastReflection_Proof) NewField(fd protoreflect.FieldDescriptor) protore
 	case "sunrise.da.Proof.sender":
 		return protoreflect.ValueOfString("")
 	case "sunrise.da.Proof.indices":
-		list := []uint64{}
+		list := []int64{}
 		return protoreflect.ValueOfList(&_Proof_3_list{list: &list})
-	case "sunrise.da.Proof.shard_hashes":
+	case "sunrise.da.Proof.proofs":
 		list := [][]byte{}
 		return protoreflect.ValueOfList(&_Proof_4_list{list: &list})
+	case "sunrise.da.Proof.is_valid_data":
+		return protoreflect.ValueOfBool(false)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Proof"))
@@ -2165,11 +2186,14 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 			}
 			n += 1 + runtime.Sov(uint64(l)) + l
 		}
-		if len(x.ShardHashes) > 0 {
-			for _, b := range x.ShardHashes {
+		if len(x.Proofs) > 0 {
+			for _, b := range x.Proofs {
 				l = len(b)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
+		}
+		if x.IsValidData {
+			n += 2
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2200,11 +2224,21 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.ShardHashes) > 0 {
-			for iNdEx := len(x.ShardHashes) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.ShardHashes[iNdEx])
-				copy(dAtA[i:], x.ShardHashes[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ShardHashes[iNdEx])))
+		if x.IsValidData {
+			i--
+			if x.IsValidData {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x28
+		}
+		if len(x.Proofs) > 0 {
+			for iNdEx := len(x.Proofs) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.Proofs[iNdEx])
+				copy(dAtA[i:], x.Proofs[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Proofs[iNdEx])))
 				i--
 				dAtA[i] = 0x22
 			}
@@ -2216,7 +2250,8 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 			}
 			i -= pksize2
 			j1 := i
-			for _, num := range x.Indices {
+			for _, num1 := range x.Indices {
+				num := uint64(num1)
 				for num >= 1<<7 {
 					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
 					num >>= 7
@@ -2358,7 +2393,7 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType == 0 {
-					var v uint64
+					var v int64
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2368,7 +2403,7 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= uint64(b&0x7F) << shift
+						v |= int64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -2409,10 +2444,10 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 					}
 					elementCount = count
 					if elementCount != 0 && len(x.Indices) == 0 {
-						x.Indices = make([]uint64, 0, elementCount)
+						x.Indices = make([]int64, 0, elementCount)
 					}
 					for iNdEx < postIndex {
-						var v uint64
+						var v int64
 						for shift := uint(0); ; shift += 7 {
 							if shift >= 64 {
 								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2422,7 +2457,7 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 							}
 							b := dAtA[iNdEx]
 							iNdEx++
-							v |= uint64(b&0x7F) << shift
+							v |= int64(b&0x7F) << shift
 							if b < 0x80 {
 								break
 							}
@@ -2434,7 +2469,7 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 				}
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ShardHashes", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Proofs", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -2461,9 +2496,29 @@ func (x *fastReflection_Proof) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ShardHashes = append(x.ShardHashes, make([]byte, postIndex-iNdEx))
-				copy(x.ShardHashes[len(x.ShardHashes)-1], dAtA[iNdEx:postIndex])
+				x.Proofs = append(x.Proofs, make([]byte, postIndex-iNdEx))
+				copy(x.Proofs[len(x.Proofs)-1], dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IsValidData", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.IsValidData = bool(v != 0)
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -2651,11 +2706,11 @@ type Proof struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MetadataUri string `protobuf:"bytes,1,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
-	Sender      string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
-	// TODO: replace indices and shard hashes to proof
-	Indices     []uint64 `protobuf:"varint,3,rep,packed,name=indices,proto3" json:"indices,omitempty"`
-	ShardHashes [][]byte `protobuf:"bytes,4,rep,name=shard_hashes,json=shardHashes,proto3" json:"shard_hashes,omitempty"`
+	MetadataUri string   `protobuf:"bytes,1,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
+	Sender      string   `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
+	Indices     []int64  `protobuf:"varint,3,rep,packed,name=indices,proto3" json:"indices,omitempty"`
+	Proofs      [][]byte `protobuf:"bytes,4,rep,name=proofs,proto3" json:"proofs,omitempty"`
+	IsValidData bool     `protobuf:"varint,5,opt,name=is_valid_data,json=isValidData,proto3" json:"is_valid_data,omitempty"`
 }
 
 func (x *Proof) Reset() {
@@ -2692,18 +2747,25 @@ func (x *Proof) GetSender() string {
 	return ""
 }
 
-func (x *Proof) GetIndices() []uint64 {
+func (x *Proof) GetIndices() []int64 {
 	if x != nil {
 		return x.Indices
 	}
 	return nil
 }
 
-func (x *Proof) GetShardHashes() [][]byte {
+func (x *Proof) GetProofs() [][]byte {
 	if x != nil {
-		return x.ShardHashes
+		return x.Proofs
 	}
 	return nil
+}
+
+func (x *Proof) GetIsValidData() bool {
+	if x != nil {
+		return x.IsValidData
+	}
+	return false
 }
 
 var File_sunrise_da_published_data_proto protoreflect.FileDescriptor
@@ -2755,24 +2817,26 @@ var file_sunrise_da_published_data_proto_rawDesc = []byte{
 	0x68, 0x61, 0x72, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x69, 0x6e, 0x64, 0x69, 0x63, 0x65, 0x73,
 	0x18, 0x01, 0x20, 0x03, 0x28, 0x03, 0x52, 0x07, 0x69, 0x6e, 0x64, 0x69, 0x63, 0x65, 0x73, 0x12,
 	0x16, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52,
-	0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x22, 0x7f, 0x0a, 0x05, 0x50, 0x72, 0x6f, 0x6f, 0x66,
-	0x12, 0x21, 0x0a, 0x0c, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x75, 0x72, 0x69,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0x55, 0x72, 0x69, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x69,
-	0x6e, 0x64, 0x69, 0x63, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x04, 0x52, 0x07, 0x69, 0x6e,
-	0x64, 0x69, 0x63, 0x65, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x68, 0x61, 0x72, 0x64, 0x5f, 0x68,
-	0x61, 0x73, 0x68, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x0b, 0x73, 0x68, 0x61,
-	0x72, 0x64, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x42, 0x8a, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d,
-	0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x12, 0x50, 0x75, 0x62,
-	0x6c, 0x69, 0x73, 0x68, 0x65, 0x64, 0x44, 0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02,
-	0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44,
-	0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02,
-	0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x22, 0x98, 0x01, 0x0a, 0x05, 0x50, 0x72, 0x6f, 0x6f,
+	0x66, 0x12, 0x21, 0x0a, 0x0c, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x75, 0x72,
+	0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0x55, 0x72, 0x69, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x18, 0x0a, 0x07,
+	0x69, 0x6e, 0x64, 0x69, 0x63, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x03, 0x52, 0x07, 0x69,
+	0x6e, 0x64, 0x69, 0x63, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73,
+	0x18, 0x04, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x06, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x73, 0x12, 0x22,
+	0x0a, 0x0d, 0x69, 0x73, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0b, 0x69, 0x73, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x44, 0x61,
+	0x74, 0x61, 0x42, 0x8a, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x12, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64,
+	0x44, 0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02,
+	0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

@@ -36,7 +36,7 @@ message DataShares {
 message Proof {
   string metadata_uri = 1;
   string sender = 2;
-  // TODO: replace indices and shard hashes to proof
-  repeated uint64 indices = 3;
-  repeated bytes shard_hashes = 4;
+  repeated int64 indices = 3;
+  repeated bytes proofs = 4;
+  bool is_valid_data = 5;
 }

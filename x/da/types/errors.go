@@ -13,4 +13,5 @@ var (
 	ErrChallengePeriodIsOver = sdkerrors.Register(ModuleName, 1102, "challenge period is over")
 	ErrDataNotInChallenge    = sdkerrors.Register(ModuleName, 1103, "data is not in challenge")
 	ErrProofPeriodIsOver     = sdkerrors.Register(ModuleName, 1104, "proof period is over")
+	ErrProofIndiceOverflow   = sdkerrors.Register(ModuleName, 1105, "proof indice overflow")
 )
