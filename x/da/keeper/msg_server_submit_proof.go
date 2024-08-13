@@ -32,7 +32,6 @@ func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof)
 	// check proof
 	if msg.IsValidData {
 		// TODO: check number of proofs (threshold)
-		// TODO: check number of proofs <> indices (msg basic validation)
 		vk, err := zkp.UnmarshalVerifyingKey(params.ZkpVerifyingKey)
 		if err != nil {
 			return nil, err

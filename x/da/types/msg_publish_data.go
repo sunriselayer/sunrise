@@ -9,16 +9,15 @@ import (
 var _ sdk.Msg = &MsgPublishData{}
 
 func NewMsgPublishData(sender string) *MsgPublishData {
-  return &MsgPublishData{
+	return &MsgPublishData{
 		Sender: sender,
 	}
 }
 
 func (msg *MsgPublishData) ValidateBasic() error {
-  _, err := sdk.AccAddressFromBech32(msg.Sender)
-  	if err != nil {
-  		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
-  	}
-  return nil
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
+	}
+	return nil
 }
-
