@@ -44,6 +44,21 @@ func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 	return
 }
 
+func ReconstructAndJoinShards(shards [][]byte, blobSize int) (blob []byte, err error) {
+	shardCountHalf := len(shards) / 2
+	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
+	if err != nil {
+		return nil, err
+	}
+
+	err = encoder.Reconstruct(shards)
+	if err != nil {
+		return nil, err
+	}
+
+	return JoinShards(shards, blobSize)
+}
+
 func JoinShards(shards [][]byte, blobSize int) (blob []byte, err error) {
 	shardCountHalf := len(shards) / 2
 	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
