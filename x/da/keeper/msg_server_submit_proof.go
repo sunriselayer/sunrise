@@ -3,14 +3,12 @@ package keeper
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"math/big"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/backend/groth16"
 	groth16bn254 "github.com/consensys/gnark/backend/groth16/bn254"
 	"github.com/consensys/gnark/frontend"
-	"github.com/consensys/gnark/frontend/cs/r1cs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
@@ -35,16 +33,7 @@ func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof)
 	if msg.IsValidData {
 		// TODO: check number of proofs (threshold)
 		// TODO: check number of proofs <> indices (msg basic validation)
-		fmt.Println("SubmitProof-1")
-		// compiles our circuit into a R1CS
-		ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &zkp.ValidityProofCircuit{})
-		if err != nil {
-			return nil, err
-		}
-
-		fmt.Println("SubmitProof-2")
-		// groth16 zkSNARK: Setup
-		_, vk, err := groth16.Setup(ccs)
+		vk, err := zkp.UnmarshalVerifyingKey(params.ZkpVerifyingKey)
 		if err != nil {
 			return nil, err
 		}

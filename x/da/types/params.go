@@ -4,8 +4,13 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
+	"github.com/consensys/gnark-crypto/ecc"
+	groth16 "github.com/consensys/gnark/backend/groth16"
+	"github.com/consensys/gnark/frontend"
+	"github.com/consensys/gnark/frontend/cs/r1cs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
 var _ paramtypes.ParamSet = (*Params)(nil)
@@ -27,7 +32,17 @@ func NewParams(
 	challengePeriod time.Duration,
 	proofPeriod time.Duration,
 	challengeCollateral sdk.Coins,
+	zkpProvingKey groth16.ProvingKey,
+	zkpVerifyingKey groth16.VerifyingKey,
 ) Params {
+	zkpProvingKeyBz, err := zkp.MarshalProvingKey(zkpProvingKey)
+	if err != nil {
+		panic(err)
+	}
+	zkpVerifyingKeyBz, err := zkp.MarshalProvingKey(zkpVerifyingKey)
+	if err != nil {
+		panic(err)
+	}
 	return Params{
 		VoteThreshold:       voteThreshold,
 		SlashEpoch:          slashEpoch,
@@ -39,11 +54,23 @@ func NewParams(
 		ChallengePeriod:     challengePeriod,
 		ProofPeriod:         proofPeriod,
 		ChallengeCollateral: challengeCollateral,
+		ZkpProvingKey:       zkpProvingKeyBz,
+		ZkpVerifyingKey:     zkpVerifyingKeyBz,
 	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &zkp.ValidityProofCircuit{})
+	if err != nil {
+		panic(err)
+	}
+
+	provingKey, verifyingKey, err := groth16.Setup(ccs)
+	if err != nil {
+		panic(err)
+	}
+
 	return NewParams(
 		math.LegacyNewDecWithPrec(67, 2), // 67%
 		120960,                           // 1 week
@@ -55,6 +82,8 @@ func DefaultParams() Params {
 		time.Minute*6, // 6min,
 		time.Minute*8, // 8min
 		sdk.Coins(nil),
+		provingKey,
+		verifyingKey,
 	)
 }
 

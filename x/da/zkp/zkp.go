@@ -1,6 +1,7 @@
 package zkp
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 
@@ -128,4 +129,79 @@ func (circuit *ValidityProofCircuit) Define(api frontend.API) error {
 	api.AssertIsEqual(h, circuit.ShardDoubleHash)
 
 	return nil
+}
+
+func MarshalProvingKey(pk groth16.ProvingKey) ([]byte, error) {
+	var b bytes.Buffer
+	bufWrite := bufio.NewWriter(&b)
+	_, err := pk.WriteTo(bufWrite)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bufWrite.Flush()
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+func UnmarshalProvingKey(bz []byte) (groth16.ProvingKey, error) {
+	pk := groth16.NewProvingKey(ecc.BN254)
+	_, err := pk.ReadFrom(bytes.NewReader(bz))
+	if err != nil {
+		return nil, err
+	}
+	return pk, nil
+}
+
+func MarshalVerifyingKey(vk groth16.VerifyingKey) ([]byte, error) {
+	var b bytes.Buffer
+	bufWrite := bufio.NewWriter(&b)
+	_, err := vk.WriteTo(bufWrite)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bufWrite.Flush()
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+func UnmarshalVerifyingKey(bz []byte) (groth16.VerifyingKey, error) {
+	vk := groth16.NewVerifyingKey(ecc.BN254)
+	_, err := vk.ReadFrom(bytes.NewReader(bz))
+	if err != nil {
+		return nil, err
+	}
+	return vk, nil
+}
+
+func MarshalProof(proof groth16.Proof) ([]byte, error) {
+	var b bytes.Buffer
+	bufWrite := bufio.NewWriter(&b)
+	_, err := proof.WriteTo(bufWrite)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bufWrite.Flush()
+	if err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+func UnmarshalProof(bz []byte) (groth16.Proof, error) {
+	proof := groth16.NewProof(ecc.BN254)
+	_, err := proof.ReadFrom(bytes.NewReader(bz))
+	if err != nil {
+		return nil, err
+	}
+	return proof, nil
 }

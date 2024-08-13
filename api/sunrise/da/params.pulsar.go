@@ -79,6 +79,8 @@ var (
 	fd_Params_challenge_period     protoreflect.FieldDescriptor
 	fd_Params_proof_period         protoreflect.FieldDescriptor
 	fd_Params_challenge_collateral protoreflect.FieldDescriptor
+	fd_Params_zkp_proving_key      protoreflect.FieldDescriptor
+	fd_Params_zkp_verifying_key    protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -94,6 +96,8 @@ func init() {
 	fd_Params_challenge_period = md_Params.Fields().ByName("challenge_period")
 	fd_Params_proof_period = md_Params.Fields().ByName("proof_period")
 	fd_Params_challenge_collateral = md_Params.Fields().ByName("challenge_collateral")
+	fd_Params_zkp_proving_key = md_Params.Fields().ByName("zkp_proving_key")
+	fd_Params_zkp_verifying_key = md_Params.Fields().ByName("zkp_verifying_key")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -221,6 +225,18 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if len(x.ZkpProvingKey) != 0 {
+		value := protoreflect.ValueOfBytes(x.ZkpProvingKey)
+		if !f(fd_Params_zkp_proving_key, value) {
+			return
+		}
+	}
+	if len(x.ZkpVerifyingKey) != 0 {
+		value := protoreflect.ValueOfBytes(x.ZkpVerifyingKey)
+		if !f(fd_Params_zkp_verifying_key, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -256,6 +272,10 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ProofPeriod != nil
 	case "sunrise.da.Params.challenge_collateral":
 		return len(x.ChallengeCollateral) != 0
+	case "sunrise.da.Params.zkp_proving_key":
+		return len(x.ZkpProvingKey) != 0
+	case "sunrise.da.Params.zkp_verifying_key":
+		return len(x.ZkpVerifyingKey) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -292,6 +312,10 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.ProofPeriod = nil
 	case "sunrise.da.Params.challenge_collateral":
 		x.ChallengeCollateral = nil
+	case "sunrise.da.Params.zkp_proving_key":
+		x.ZkpProvingKey = nil
+	case "sunrise.da.Params.zkp_verifying_key":
+		x.ZkpVerifyingKey = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -341,6 +365,12 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 		}
 		listValue := &_Params_10_list{list: &x.ChallengeCollateral}
 		return protoreflect.ValueOfList(listValue)
+	case "sunrise.da.Params.zkp_proving_key":
+		value := x.ZkpProvingKey
+		return protoreflect.ValueOfBytes(value)
+	case "sunrise.da.Params.zkp_verifying_key":
+		value := x.ZkpVerifyingKey
+		return protoreflect.ValueOfBytes(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -383,6 +413,10 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		lv := value.List()
 		clv := lv.(*_Params_10_list)
 		x.ChallengeCollateral = *clv.list
+	case "sunrise.da.Params.zkp_proving_key":
+		x.ZkpProvingKey = value.Bytes()
+	case "sunrise.da.Params.zkp_verifying_key":
+		x.ZkpVerifyingKey = value.Bytes()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -433,6 +467,10 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 		panic(fmt.Errorf("field min_shard_count of message sunrise.da.Params is not mutable"))
 	case "sunrise.da.Params.max_shard_size":
 		panic(fmt.Errorf("field max_shard_size of message sunrise.da.Params is not mutable"))
+	case "sunrise.da.Params.zkp_proving_key":
+		panic(fmt.Errorf("field zkp_proving_key of message sunrise.da.Params is not mutable"))
+	case "sunrise.da.Params.zkp_verifying_key":
+		panic(fmt.Errorf("field zkp_verifying_key of message sunrise.da.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -469,6 +507,10 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 	case "sunrise.da.Params.challenge_collateral":
 		list := []*v1beta1.Coin{}
 		return protoreflect.ValueOfList(&_Params_10_list{list: &list})
+	case "sunrise.da.Params.zkp_proving_key":
+		return protoreflect.ValueOfBytes(nil)
+	case "sunrise.da.Params.zkp_verifying_key":
+		return protoreflect.ValueOfBytes(nil)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.Params"))
@@ -576,6 +618,14 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		l = len(x.ZkpProvingKey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.ZkpVerifyingKey)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -604,6 +654,20 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.ZkpVerifyingKey) > 0 {
+			i -= len(x.ZkpVerifyingKey)
+			copy(dAtA[i:], x.ZkpVerifyingKey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ZkpVerifyingKey)))
+			i--
+			dAtA[i] = 0x62
+		}
+		if len(x.ZkpProvingKey) > 0 {
+			i -= len(x.ZkpProvingKey)
+			copy(dAtA[i:], x.ZkpProvingKey)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ZkpProvingKey)))
+			i--
+			dAtA[i] = 0x5a
 		}
 		if len(x.ChallengeCollateral) > 0 {
 			for iNdEx := len(x.ChallengeCollateral) - 1; iNdEx >= 0; iNdEx-- {
@@ -1017,6 +1081,74 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 11:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ZkpProvingKey", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ZkpProvingKey = append(x.ZkpProvingKey[:0], dAtA[iNdEx:postIndex]...)
+				if x.ZkpProvingKey == nil {
+					x.ZkpProvingKey = []byte{}
+				}
+				iNdEx = postIndex
+			case 12:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ZkpVerifyingKey", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.ZkpVerifyingKey = append(x.ZkpVerifyingKey[:0], dAtA[iNdEx:postIndex]...)
+				if x.ZkpVerifyingKey == nil {
+					x.ZkpVerifyingKey = []byte{}
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1081,6 +1213,8 @@ type Params struct {
 	ChallengePeriod     *durationpb.Duration `protobuf:"bytes,8,opt,name=challenge_period,json=challengePeriod,proto3" json:"challenge_period,omitempty"`
 	ProofPeriod         *durationpb.Duration `protobuf:"bytes,9,opt,name=proof_period,json=proofPeriod,proto3" json:"proof_period,omitempty"`
 	ChallengeCollateral []*v1beta1.Coin      `protobuf:"bytes,10,rep,name=challenge_collateral,json=challengeCollateral,proto3" json:"challenge_collateral,omitempty"`
+	ZkpProvingKey       []byte               `protobuf:"bytes,11,opt,name=zkp_proving_key,json=zkpProvingKey,proto3" json:"zkp_proving_key,omitempty"`
+	ZkpVerifyingKey     []byte               `protobuf:"bytes,12,opt,name=zkp_verifying_key,json=zkpVerifyingKey,proto3" json:"zkp_verifying_key,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -1173,6 +1307,20 @@ func (x *Params) GetChallengeCollateral() []*v1beta1.Coin {
 	return nil
 }
 
+func (x *Params) GetZkpProvingKey() []byte {
+	if x != nil {
+		return x.ZkpProvingKey
+	}
+	return nil
+}
+
+func (x *Params) GetZkpVerifyingKey() []byte {
+	if x != nil {
+		return x.ZkpVerifyingKey
+	}
+	return nil
+}
+
 var File_sunrise_da_params_proto protoreflect.FileDescriptor
 
 var file_sunrise_da_params_proto_rawDesc = []byte{
@@ -1184,8 +1332,8 @@ var file_sunrise_da_params_proto_rawDesc = []byte{
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65,
 	0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e,
 	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f,
-	0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc1,
-	0x05, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x0e, 0x76, 0x6f, 0x74,
+	0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x95,
+	0x06, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x0e, 0x76, 0x6f, 0x74,
 	0x65, 0x5f, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x42, 0x23, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
 	0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67,
@@ -1227,17 +1375,23 @@ var file_sunrise_da_params_proto_rawDesc = []byte{
 	0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d,
 	0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52,
 	0x13, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74,
-	0x65, 0x72, 0x61, 0x6c, 0x3a, 0x1c, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x13, 0x73,
-	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64, 0x61, 0x2f, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x42, 0x83, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e,
-	0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64,
-	0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44,
-	0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x44, 0x61, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0b, 0x53, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x72, 0x61, 0x6c, 0x12, 0x26, 0x0a, 0x0f, 0x7a, 0x6b, 0x70, 0x5f, 0x70, 0x72, 0x6f, 0x76,
+	0x69, 0x6e, 0x67, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0d, 0x7a,
+	0x6b, 0x70, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x6e, 0x67, 0x4b, 0x65, 0x79, 0x12, 0x2a, 0x0a, 0x11,
+	0x7a, 0x6b, 0x70, 0x5f, 0x76, 0x65, 0x72, 0x69, 0x66, 0x79, 0x69, 0x6e, 0x67, 0x5f, 0x6b, 0x65,
+	0x79, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0f, 0x7a, 0x6b, 0x70, 0x56, 0x65, 0x72, 0x69,
+	0x66, 0x79, 0x69, 0x6e, 0x67, 0x4b, 0x65, 0x79, 0x3a, 0x1c, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7,
+	0xb0, 0x2a, 0x13, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x78, 0x2f, 0x64, 0x61, 0x2f,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x83, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2f, 0x64, 0x61, 0xa2, 0x02, 0x03, 0x53, 0x44, 0x58, 0xaa, 0x02, 0x0a, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x44, 0x61, 0xca, 0x02, 0x0a, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x5c, 0x44, 0x61, 0xe2, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c,
+	0x44, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x44, 0x61, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

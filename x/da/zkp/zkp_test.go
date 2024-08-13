@@ -177,3 +177,60 @@ func TestValidityProofCircuitZKP(t *testing.T) {
 	_, err = groth16.Prove(ccs, pk, witness2)
 	require.Error(t, err)
 }
+
+func TestZKPSerialization(t *testing.T) {
+	preImage := big.NewInt(111)
+
+	m := native_mimc.NewMiMC()
+	m.Write(preImage.Bytes())
+	hash := m.Sum(nil)
+
+	// witness definition
+	assignment := ValidityProofCircuit{
+		ShardHash:       preImage,
+		ShardDoubleHash: hash,
+	}
+
+	// compiles our circuit into a R1CS
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, Hollow(&assignment))
+	require.NoError(t, err)
+
+	// groth16 zkSNARK: Setup
+	pk, vk, err := groth16.Setup(ccs)
+	require.NoError(t, err)
+
+	witness, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
+	require.NoError(t, err)
+	publicWitness, err := witness.Public()
+	require.NoError(t, err)
+
+	// groth16: Prove & Verify
+	serializedPK, err := MarshalProvingKey(pk)
+	require.NoError(t, err)
+	unserializedPK, err := UnmarshalProvingKey(serializedPK)
+	require.NoError(t, err)
+	proof, err := groth16.Prove(ccs, unserializedPK, witness)
+	require.NoError(t, err)
+	err = groth16.Verify(proof, vk, publicWitness)
+	require.NoError(t, err)
+
+	serializedProof, err := MarshalProof(proof)
+	require.NoError(t, err)
+
+	serializedVK, err := MarshalVerifyingKey(vk)
+	require.NoError(t, err)
+
+	unserializedVK, err := UnmarshalVerifyingKey(serializedVK)
+	require.NoError(t, err)
+
+	unserializedProof, err := UnmarshalProof(serializedProof)
+	require.NoError(t, err)
+
+	witness2, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
+	require.NoError(t, err)
+	publicWitness2, err := witness2.Public()
+	require.NoError(t, err)
+
+	err = groth16.Verify(unserializedProof, unserializedVK, publicWitness2)
+	require.NoError(t, err)
+}

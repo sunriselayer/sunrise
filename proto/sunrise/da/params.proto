@@ -37,4 +37,6 @@ message Params {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
+  bytes zkp_proving_key = 11;
+  bytes zkp_verifying_key = 12;
 }

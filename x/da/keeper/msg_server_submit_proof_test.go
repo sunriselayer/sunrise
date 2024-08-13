@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"math/big"
 	"testing"
 	"time"
@@ -41,15 +40,15 @@ func TestMsgSubmitProof(t *testing.T) {
 	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &zkp.ValidityProofCircuit{})
 	require.NoError(t, err)
 
-	// groth16 zkSNARK: Setup
-	pk, _, err := groth16.Setup(ccs)
+	// Recover proving key
+	provingKey, err := zkp.UnmarshalProvingKey(params.ZkpProvingKey)
 	require.NoError(t, err)
 
 	witness1, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
 	require.NoError(t, err)
 
 	// groth16: Prove & Verify
-	proof, err := groth16.Prove(ccs, pk, witness1)
+	proof, err := groth16.Prove(ccs, provingKey, witness1)
 	require.NoError(t, err)
 
 	var b bytes.Buffer
@@ -59,9 +58,6 @@ func TestMsgSubmitProof(t *testing.T) {
 	err = bufWrite.Flush()
 	require.NoError(t, err)
 	proofBytes := b.Bytes()
-	fmt.Println("proofBytes", proofBytes)
-	fmt.Printf("proof %+v\n", proof)
-	fmt.Printf("proof2x %T\n", proof)
 
 	err = k.SetPublishedData(ctx, types.PublishedData{
 		MetadataUri:        "ipfs://metadata1",
