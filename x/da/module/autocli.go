@@ -27,6 +27,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "all-published-data",
 					Short:     "Shows all published data",
 				},
+				{
+					RpcMethod: "ZkpProofThreshold",
+					Use:       "zkp-proof-threshold",
+					Short:     "Shows threshold number of proof",
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

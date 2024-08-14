@@ -27,6 +27,11 @@ service Query {
     option (google.api.http).get =
         "/sunriselayer/sunrise/da/all_published_data";
   }
+  rpc ZkpProofThreshold(QueryZkpProofThresholdRequest)
+      returns (QueryZkpProofThresholdResponse) {
+    option (google.api.http).get =
+        "/sunriselayer/sunrise/da/zkp_proof_threshold";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -50,11 +55,19 @@ message QueryPublishedDataResponse {
 }
 
 // QueryAllPublishedDataRequest is request type for the
-// Query/AllPublishedDataRequest RPC method.
+// Query/AllPublishedData RPC method.
 message QueryAllPublishedDataRequest {}
 
 // QueryAllPublishedDataResponse is response type for the
-// Query/AllPublishedDataRequest RPC method.
+// Query/AllPublishedData RPC method.
 message QueryAllPublishedDataResponse {
   repeated PublishedData data = 1 [ (gogoproto.nullable) = false ];
 }
+
+// QueryZkpProofThresholdRequest is request type for the
+// Query/ZkpProofThreshold RPC method.
+message QueryZkpProofThresholdRequest { uint64 shard_count = 1; }
+
+// QueryZkpProofThresholdResponse is response type for the
+// Query/ZkpProofThreshold RPC method.
+message QueryZkpProofThresholdResponse { uint64 threshold = 2; }

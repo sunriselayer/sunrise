@@ -50,7 +50,7 @@ func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof)
 			}
 
 			assignment := zkp.ValidityProofCircuit{
-				ShardHash:       big.NewInt(111),
+				ShardHash:       big.NewInt(1),
 				ShardDoubleHash: publishedData.ShardDoubleHashes[j],
 			}
 			witness, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())

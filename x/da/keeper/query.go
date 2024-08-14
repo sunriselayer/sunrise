@@ -29,3 +29,12 @@ func (k Keeper) AllPublishedData(goCtx context.Context, req *types.QueryAllPubli
 
 	return &types.QueryAllPublishedDataResponse{Data: k.GetAllPublishedData(ctx)}, nil
 }
+
+func (k Keeper) ZkpProofThreshold(goCtx context.Context, req *types.QueryZkpProofThresholdRequest) (*types.QueryZkpProofThresholdResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryZkpProofThresholdResponse{Threshold: k.GetZkpThreshold(ctx, req.ShardCount)}, nil
+}
