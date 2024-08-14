@@ -95,7 +95,6 @@ func (im IBCMiddleware) OnRecvPacket(
 		return im.IBCModule.OnRecvPacket(ctx, packet, relayer)
 	}
 	metadata := *m.Swap
-	fmt.Println("Metadata: ", metadata)
 
 	if err := metadata.Validate(); err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
