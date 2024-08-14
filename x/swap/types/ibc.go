@@ -7,6 +7,7 @@ import (
 
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	host "github.com/cosmos/ibc-go/v8/modules/core/24-host"
+	"github.com/gogo/protobuf/jsonpb"
 )
 
 const DefaultRetryCount uint8 = 3
@@ -84,4 +85,46 @@ func GetDenomForThisChain(port, channel, counterpartyPort, counterpartyChannel, 
 	// append port and channel from this chain to denom
 	prefixedDenom := transfertypes.GetDenomPrefix(port, channel) + denom
 	return transfertypes.ParseDenomTrace(prefixedDenom).IBCDenom()
+}
+
+func DecodeSwapMetadata(memo string) (*PacketMetadata, error) {
+	d := make(map[string]interface{})
+	err := json.Unmarshal([]byte(memo), &d)
+	if err != nil {
+		return nil, err
+	}
+	if d["swap"] == nil {
+		return nil, fmt.Errorf("no swap filed in memo")
+	}
+
+	nextString := ""
+	swap := d["swap"].(map[string]interface{})
+	if swap["forward"] != nil {
+		forward := swap["forward"].(map[string]interface{})
+		if forward["next"] != nil {
+			next := forward["next"]
+			delete(forward, "next")
+			nextJSON, err := json.Marshal(next)
+			if err != nil {
+				return nil, err
+			}
+			nextString = string(nextJSON)
+
+			memoExceptNext, err := json.Marshal(d)
+			if err != nil {
+				return nil, err
+			}
+			memo = string(memoExceptNext)
+		}
+	}
+
+	m := &PacketMetadata{}
+	err = jsonpb.Unmarshal(strings.NewReader(memo), m)
+	if err != nil {
+		return nil, err
+	}
+	if m.Swap.Forward != nil {
+		m.Swap.Forward.Next = nextString
+	}
+	return m, nil
 }
