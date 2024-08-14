@@ -7,10 +7,10 @@ import (
 	"github.com/klauspost/reedsolomon"
 )
 
-func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount int, shards [][]byte) {
+func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount int, shards [][]byte, err error) {
 	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	shardCount = shardCountHalf * 2
@@ -24,13 +24,13 @@ func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 	shardSizeInt := length / shardCountHalf
 	shardSize = uint64(shardSizeInt)
 
-	for i := 0; i < shardCountHalf-1; i++ {
+	extendedBlob := make([]byte, shardSize*uint64(shardCountHalf))
+	copy(extendedBlob, blob)
+
+	for i := 0; i < shardCountHalf; i++ {
 		shards[i] = make([]byte, shardSizeInt)
-		copy(shards[i], blob[i*shardSizeInt:(i+1)*shardSizeInt])
+		copy(shards[i], extendedBlob[i*shardSizeInt:(i+1)*shardSizeInt])
 	}
-	i := shardCountHalf - 1
-	shards[i] = make([]byte, shardSizeInt)
-	copy(shards[i], blob[i*shardSizeInt:])
 
 	for i := 0; i < shardCountHalf; i++ {
 		shards[shardCountHalf+i] = make([]byte, shardSizeInt)
@@ -38,7 +38,7 @@ func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 
 	err = encoder.Encode(shards)
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	return
