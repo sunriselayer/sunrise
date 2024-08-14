@@ -93,8 +93,9 @@ func (im IBCMiddleware) OnRecvPacket(
 		return im.IBCModule.OnRecvPacket(ctx, packet, relayer)
 	}
 
+	memoString := data.Memo
 	d := make(map[string]interface{})
-	err := json.Unmarshal([]byte(data.Memo), &d)
+	err := json.Unmarshal([]byte(memoString), &d)
 	if err != nil || d["swap"] == nil {
 		fmt.Println("=============json.Unmarshal Error============")
 		fmt.Println(err)
@@ -102,14 +103,36 @@ func (im IBCMiddleware) OnRecvPacket(
 		return im.IBCModule.OnRecvPacket(ctx, packet, relayer)
 	}
 
+	nextString := ""
+	swap := d["swap"].(map[string]interface{})
+	if swap["forward"] != nil {
+		forward := swap["forward"].(map[string]interface{})
+		if forward["next"] != nil {
+			next := forward["next"]
+			delete(forward, "next")
+			nextJSON, err := json.Marshal(next)
+			if err != nil {
+				return channeltypes.NewErrorAcknowledgement(fmt.Errorf("error marshalling next field: %w", err))
+			}
+			nextString = string(nextJSON)
+
+			memoExceptNext, err := json.Marshal(d)
+			if err != nil {
+				return channeltypes.NewErrorAcknowledgement(fmt.Errorf("error marshalling swap metadata except next: %w", err))
+			}
+			memoString = string(memoExceptNext)
+		}
+	}
+
 	m := &types.PacketMetadata{}
-	err = jsonpb.Unmarshal(strings.NewReader(data.Memo), m)
+	err = jsonpb.Unmarshal(strings.NewReader(memoString), m)
 	if err != nil {
 		fmt.Println("=============jsonpb.Unmarshal Error============")
 		fmt.Println(err)
 		fmt.Println(data.Memo)
 		return channeltypes.NewErrorAcknowledgement(fmt.Errorf("error parsing swap metadata: %w", err))
 	}
+	m.Swap.Forward.Next = nextString
 
 	metadata := *m.Swap
 	fmt.Println("Metadata: ", metadata)
