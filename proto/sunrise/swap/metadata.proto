@@ -23,7 +23,9 @@ message ForwardMetadata {
     (gogoproto.nullable) = false, (gogoproto.stdduration) = true
   ];
   uint32 retries = 5;
-  string next = 6;
+
+  // Using Google's Any to handle the flexible JSON object
+  google.protobuf.Any next = 6;
 }
 
 message ExactAmountIn {
