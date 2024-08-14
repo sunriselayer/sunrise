@@ -1,7 +1,6 @@
 package types
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 	time "time"
@@ -183,31 +182,74 @@ func TestEncodePacketMetadata_ExactAmountOut(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestDecodePacketMetadata_ExactAmountIn(t *testing.T) {
-	memoString := `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"neutron1s2gtqhnj9d6q5wjr44ll6uyd3xwn9a7fcn8t53yewjtq04ru52fsgupa3j","port":"transfer","channel":"channel-1","timeout":"3600s","retries":2,"next":{"wasm":{"contract":"neutron1s2gtqhnj9d6q5wjr44ll6uyd3xwn9a7fcn8t53yewjtq04ru52fsgupa3j","msg":{"send_to_evm":{"destination_chain":"ethereum-sepolia","destination_contract":"0x8ef2c2b9825a52c44bff05b4dd7b72899ccbd4e4","recipient":"0x4793755541ae9f950a68fc7fc2b3bd2cc9397b9a","fee":"277912"}}}}}}}`
-	d := make(map[string]interface{})
-	err := json.Unmarshal([]byte(memoString), &d)
-	nextString := ""
-	swap := d["swap"].(map[string]interface{})
-	if swap["forward"] != nil {
-		forward := swap["forward"].(map[string]interface{})
-		if forward["next"] != nil {
-			next := forward["next"]
-			delete(forward, "next")
-			nextJSON, err := json.Marshal(next)
-			require.NoError(t, err)
-			nextString = string(nextJSON)
+func TestDecodePacketMetadata_NoForward(t *testing.T) {
+	memoString := `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"}}}`
+	m, err := DecodeSwapMetadata(memoString)
+	require.NoError(t, err)
 
-			memoExceptNext, err := json.Marshal(d)
-			require.NoError(t, err)
-			memoString = string(memoExceptNext)
-		}
+	packetMetadata := PacketMetadata{
+		Swap: &SwapMetadata{
+			InterfaceProvider: "sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y",
+			Route: &Route{
+				DenomIn:  "tokenIn",
+				DenomOut: "tokenOut",
+				Strategy: &Route_Pool{
+					Pool: &RoutePool{
+						PoolId: 1,
+					},
+				},
+			},
+			AmountStrategy: &SwapMetadata_ExactAmountIn{
+				ExactAmountIn: &ExactAmountIn{
+					MinAmountOut: sdkmath.OneInt(),
+				},
+			},
+		},
 	}
 
-	m := &PacketMetadata{}
-	err = jsonpb.Unmarshal(strings.NewReader(memoString), m)
+	require.Equal(t, *m, packetMetadata)
+}
+
+func TestDecodePacketMetadata_NoNext(t *testing.T) {
+	memoString := `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"neutron1s2gtqhnj9d6q5wjr44ll6uyd3xwn9a7fcn8t53yewjtq04ru52fsgupa3j","port":"transfer","channel":"channel-1","timeout":"3600s","retries":2}}}`
+	m, err := DecodeSwapMetadata(memoString)
 	require.NoError(t, err)
-	m.Swap.Forward.Next = nextString
+
+	retries := uint32(2)
+	packetMetadata := PacketMetadata{
+		Swap: &SwapMetadata{
+			InterfaceProvider: "sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y",
+			Route: &Route{
+				DenomIn:  "tokenIn",
+				DenomOut: "tokenOut",
+				Strategy: &Route_Pool{
+					Pool: &RoutePool{
+						PoolId: 1,
+					},
+				},
+			},
+			AmountStrategy: &SwapMetadata_ExactAmountIn{
+				ExactAmountIn: &ExactAmountIn{
+					MinAmountOut: sdkmath.OneInt(),
+				},
+			},
+			Forward: &ForwardMetadata{
+				Receiver: "neutron1s2gtqhnj9d6q5wjr44ll6uyd3xwn9a7fcn8t53yewjtq04ru52fsgupa3j",
+				Port:     "transfer",
+				Channel:  "channel-1",
+				Timeout:  3600000000000,
+				Retries:  retries,
+			},
+		},
+	}
+
+	require.Equal(t, *m, packetMetadata)
+}
+
+func TestDecodePacketMetadata_ForwardAndNext(t *testing.T) {
+	memoString := `{"swap":{"interface_provider":"sunrise18atdu5vvsg95sdpvdwsv7kevlzg8jhtuk7hs4y","route":{"denom_in":"tokenIn","denom_out":"tokenOut","pool":{"pool_id":"1"}},"exact_amount_in":{"min_amount_out":"1"},"forward":{"receiver":"neutron1s2gtqhnj9d6q5wjr44ll6uyd3xwn9a7fcn8t53yewjtq04ru52fsgupa3j","port":"transfer","channel":"channel-1","timeout":"3600s","retries":2,"next":{"wasm":{"contract":"neutron1s2gtqhnj9d6q5wjr44ll6uyd3xwn9a7fcn8t53yewjtq04ru52fsgupa3j","msg":{"send_to_evm":{"destination_chain":"ethereum-sepolia","destination_contract":"0x8ef2c2b9825a52c44bff05b4dd7b72899ccbd4e4","recipient":"0x4793755541ae9f950a68fc7fc2b3bd2cc9397b9a","fee":"277912"}}}}}}}`
+	m, err := DecodeSwapMetadata(memoString)
+	require.NoError(t, err)
 
 	retries := uint32(2)
 	packetMetadata := PacketMetadata{
