@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/fee/types"
 )
@@ -38,8 +39,9 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		return
 	}
 
-	votingPowers := make(map[string]int64)
-	powerReduction := k.StakingKeeper.PowerReduction(ctx)
+	numActiveValidators := int64(0)
+	// votingPowers := make(map[string]int64)
+	// powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
 		k.Logger().Error(err.Error())
@@ -55,42 +57,54 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 
 		if validator.IsBonded() {
-			valAddrStr := validator.GetOperator()
-			valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
-			if err != nil {
-				k.Logger().Error(err.Error())
-				return
-			}
+			// valAddrStr := validator.GetOperator()
+			// valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
+			// if err != nil {
+			// 	k.Logger().Error(err.Error())
+			// 	return
+			// }
 
-			votingPowers[sdk.AccAddress(valAddr).String()] = validator.GetConsensusPower(powerReduction)
+			// votingPowers[sdk.AccAddress(valAddr).String()] = validator.GetConsensusPower(powerReduction)
+			numActiveValidators++
 		}
 	}
 
 	for _, data := range proofPeriodData {
 		if data.Status == "challenge_for_fraud" {
-			bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
-			if err != nil {
-				k.Logger().Error(err.Error())
-				return
-			}
+			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
+			// if err != nil {
+			// 	k.Logger().Error(err.Error())
+			// 	return
+			// }
 
-			totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, k.StakingKeeper.PowerReduction(ctx))
-			thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
+			// totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, k.StakingKeeper.PowerReduction(ctx))
+			// thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 			proofs := k.GetProofs(sdkCtx, data.MetadataUri)
-			proofPower := int64(0)
+			shardProofCount := make(map[int64]int64)
 			for _, proof := range proofs {
-				proofPower += votingPowers[proof.Sender]
+				for _, indice := range proof.Indices {
+					shardProofCount[indice]++
+				}
 			}
 
-			if proofPower >= thresholdPower {
+			safeShardCount := int64(0)
+			for _, proofCount := range shardProofCount {
+				// len(zkp_including_this_shard) / replication_factor >= 2/3
+				if math.LegacyNewDec(proofCount).GTE(params.ReplicationFactor.MulInt64(2).QuoInt64(3)) {
+					safeShardCount++
+				}
+			}
+
+			// valid_shards / len(shards) >= 1/2
+			if safeShardCount*2 < int64(len(data.ShardDoubleHashes)) {
 				// TODO: might require rejected records as well
-				// data.Status = "rejected"
-				// err = k.SetPublishedData(ctx, data)
-				// if err != nil {
-				// 	k.Logger().Error(err.Error())
-				// 	return
-				// }
-				k.DeletePublishedData(sdkCtx, data)
+				data.Status = "rejected"
+				err = k.SetPublishedData(ctx, data)
+				if err != nil {
+					k.Logger().Error(err.Error())
+					return
+				}
+				// k.DeletePublishedData(sdkCtx, data)
 
 				challenger := sdk.MustAccAddressFromBech32(data.Challenger)
 				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.Collateral.Add(data.Collateral...))

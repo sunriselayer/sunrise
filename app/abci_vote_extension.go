@@ -1,17 +1,16 @@
 package app
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"math/rand/v2"
 	"net/http"
 	"reflect"
 	"sort"
 	"strings"
-	"time"
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
@@ -52,8 +51,8 @@ func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 	return cfg, nil
 }
 
-func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64) ([]int64, [][]byte, error) {
-	indices := getRandomIndices(n, threshold, uint64(time.Now().Unix()), 1024)
+func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64, valAddr sdk.ValAddress) ([]int64, [][]byte, error) {
+	indices := types.ShardIndicesForValidator(valAddr, n, threshold)
 	url := daConfig.ShardHashesAPI + "?metadata_uri=" + metadataUri + "&indices=" + strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]")
 	res, err := http.Get(url)
 	if err != nil {
@@ -83,26 +82,6 @@ func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int6
 	return indices, shares, nil
 }
 
-func getRandomIndices(n, threshold int64, seed1, seed2 uint64) []int64 {
-	if threshold > n {
-		threshold = n
-	}
-	arr := []int64{}
-	for i := int64(0); i < n; i++ {
-		arr = append(arr, i)
-	}
-
-	s3 := rand.NewPCG(seed1, seed2)
-	r3 := rand.New(s3)
-
-	r3.Shuffle(int(n), func(i, j int) {
-		arr[i], arr[j] = arr[j], arr[i]
-	})
-
-	// Return the first threshold elements from the shuffled array
-	return arr[:threshold]
-}
-
 type VoteExtHandler struct {
 	Keeper        keeper.Keeper
 	stakingKeeper *stakingkeeper.Keeper
@@ -118,27 +97,46 @@ func NewVoteExtHandler(
 	}
 }
 
-func (h *VoteExtHandler) NumberOfActiveValidators(ctx sdk.Context) int64 {
+func (h *VoteExtHandler) ValidatorsInfo(ctx sdk.Context, consAddr []byte) (int64, sdk.ValAddress, error) {
 	iterator, err := h.stakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
-		return 0
+		return 0, nil, err
 	}
 
 	defer iterator.Close()
 
+	foundValAddr := sdk.ValAddress{}
 	numValidators := int64(0)
 	for ; iterator.Valid(); iterator.Next() {
-		// valAddr := sdk.ValAddress(iterator.Value())
+		valAddr := sdk.ValAddress(iterator.Value())
+		validator, err := h.stakingKeeper.Validator(ctx, iterator.Value())
+		if err != nil {
+			return 0, nil, err
+		}
+
+		if !validator.IsBonded() {
+			continue
+		}
+
+		valConsAddr, err := validator.GetConsAddr()
+		if err != nil {
+			return 0, nil, err
+		}
+
+		if bytes.Equal(consAddr, valConsAddr) {
+			foundValAddr = valAddr
+		}
+
 		numValidators++
 	}
-	return numValidators
+	return numValidators, foundValAddr, nil
 }
 
 func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder, handler sdk.AnteHandler, daKeeper damodulekeeper.Keeper) sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 		voteExt := types.VoteExtension{
-			Data:   []*types.PublishedData{},
-			Shares: []*types.DataShares{},
+			Data: []*types.PublishedData{},
+			// Shares: []*types.DataShares{},
 		}
 
 		txs := req.Txs
@@ -154,7 +152,11 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 			}
 
 			params := daKeeper.GetParams(ctx)
-			numValidators := h.NumberOfActiveValidators(ctx)
+			numValidators, valAddr, err := h.ValidatorsInfo(ctx, req.ProposerAddress)
+			if err != nil {
+				continue
+			}
+
 			msgs := sdkTx.GetMsgs()
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
@@ -163,7 +165,8 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 					if threshold > int64(len(msg.ShardDoubleHashes)) {
 						threshold = int64(len(msg.ShardDoubleHashes))
 					}
-					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold)
+
+					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
 					if err != nil {
 						continue
 					}
@@ -178,10 +181,10 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 						MetadataUri:       msg.MetadataUri,
 						ShardDoubleHashes: msg.ShardDoubleHashes,
 					})
-					voteExt.Shares = append(voteExt.Shares, &types.DataShares{
-						Indices: indices,
-						Shares:  shares,
-					})
+					// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
+					// 	Indices: indices,
+					// 	Shares:  shares,
+					// })
 				}
 			}
 		}
@@ -209,18 +212,22 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper 
 		}
 
 		// check vote extension data with zkp
-		params := daKeeper.GetParams(ctx)
-		numValidators := h.NumberOfActiveValidators(ctx)
-		for i, data := range voteExt.Data {
-			threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
-			if threshold > int64(len(data.ShardDoubleHashes)) {
-				threshold = int64(len(data.ShardDoubleHashes))
-			}
-			err = zkp.VerifyData(voteExt.Shares[i].Indices, voteExt.Shares[i].Shares, data.ShardDoubleHashes, int(threshold))
-			if err != nil {
-				return nil, err
-			}
-		}
+		// params := daKeeper.GetParams(ctx)
+		// numValidators, _, err := h.ValidatorsInfo(ctx, req.ValidatorAddress)
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		// for _, data := range voteExt.Data {
+		// 	threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(data.ShardDoubleHashes))).RoundInt64()
+		// 	if threshold > int64(len(data.ShardDoubleHashes)) {
+		// 		threshold = int64(len(data.ShardDoubleHashes))
+		// 	}
+		// 	err = zkp.VerifyData(voteExt.Shares[i].Indices, voteExt.Shares[i].Shares, data.ShardDoubleHashes, int(threshold))
+		// 	if err != nil {
+		// 		return nil, err
+		// 	}
+		// }
 
 		return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 	}

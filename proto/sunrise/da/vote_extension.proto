@@ -11,7 +11,4 @@ import "sunrise/da/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
-message VoteExtension {
-  repeated PublishedData data = 1;
-  repeated DataShares shares = 2;
-}
+message VoteExtension { repeated PublishedData data = 1; }

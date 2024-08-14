@@ -67,68 +67,15 @@ func (x *_VoteExtension_1_list) IsValid() bool {
 	return x.list != nil
 }
 
-var _ protoreflect.List = (*_VoteExtension_2_list)(nil)
-
-type _VoteExtension_2_list struct {
-	list *[]*DataShares
-}
-
-func (x *_VoteExtension_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_VoteExtension_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_VoteExtension_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DataShares)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_VoteExtension_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DataShares)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_VoteExtension_2_list) AppendMutable() protoreflect.Value {
-	v := new(DataShares)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_VoteExtension_2_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_VoteExtension_2_list) NewElement() protoreflect.Value {
-	v := new(DataShares)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_VoteExtension_2_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
-	md_VoteExtension        protoreflect.MessageDescriptor
-	fd_VoteExtension_data   protoreflect.FieldDescriptor
-	fd_VoteExtension_shares protoreflect.FieldDescriptor
+	md_VoteExtension      protoreflect.MessageDescriptor
+	fd_VoteExtension_data protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_da_vote_extension_proto_init()
 	md_VoteExtension = File_sunrise_da_vote_extension_proto.Messages().ByName("VoteExtension")
 	fd_VoteExtension_data = md_VoteExtension.Fields().ByName("data")
-	fd_VoteExtension_shares = md_VoteExtension.Fields().ByName("shares")
 }
 
 var _ protoreflect.Message = (*fastReflection_VoteExtension)(nil)
@@ -202,12 +149,6 @@ func (x *fastReflection_VoteExtension) Range(f func(protoreflect.FieldDescriptor
 			return
 		}
 	}
-	if len(x.Shares) != 0 {
-		value := protoreflect.ValueOfList(&_VoteExtension_2_list{list: &x.Shares})
-		if !f(fd_VoteExtension_shares, value) {
-			return
-		}
-	}
 }
 
 // Has reports whether a field is populated.
@@ -225,8 +166,6 @@ func (x *fastReflection_VoteExtension) Has(fd protoreflect.FieldDescriptor) bool
 	switch fd.FullName() {
 	case "sunrise.da.VoteExtension.data":
 		return len(x.Data) != 0
-	case "sunrise.da.VoteExtension.shares":
-		return len(x.Shares) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.VoteExtension"))
@@ -245,8 +184,6 @@ func (x *fastReflection_VoteExtension) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.da.VoteExtension.data":
 		x.Data = nil
-	case "sunrise.da.VoteExtension.shares":
-		x.Shares = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.VoteExtension"))
@@ -268,12 +205,6 @@ func (x *fastReflection_VoteExtension) Get(descriptor protoreflect.FieldDescript
 			return protoreflect.ValueOfList(&_VoteExtension_1_list{})
 		}
 		listValue := &_VoteExtension_1_list{list: &x.Data}
-		return protoreflect.ValueOfList(listValue)
-	case "sunrise.da.VoteExtension.shares":
-		if len(x.Shares) == 0 {
-			return protoreflect.ValueOfList(&_VoteExtension_2_list{})
-		}
-		listValue := &_VoteExtension_2_list{list: &x.Shares}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -299,10 +230,6 @@ func (x *fastReflection_VoteExtension) Set(fd protoreflect.FieldDescriptor, valu
 		lv := value.List()
 		clv := lv.(*_VoteExtension_1_list)
 		x.Data = *clv.list
-	case "sunrise.da.VoteExtension.shares":
-		lv := value.List()
-		clv := lv.(*_VoteExtension_2_list)
-		x.Shares = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.VoteExtension"))
@@ -329,12 +256,6 @@ func (x *fastReflection_VoteExtension) Mutable(fd protoreflect.FieldDescriptor) 
 		}
 		value := &_VoteExtension_1_list{list: &x.Data}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.da.VoteExtension.shares":
-		if x.Shares == nil {
-			x.Shares = []*DataShares{}
-		}
-		value := &_VoteExtension_2_list{list: &x.Shares}
-		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.VoteExtension"))
@@ -351,9 +272,6 @@ func (x *fastReflection_VoteExtension) NewField(fd protoreflect.FieldDescriptor)
 	case "sunrise.da.VoteExtension.data":
 		list := []*PublishedData{}
 		return protoreflect.ValueOfList(&_VoteExtension_1_list{list: &list})
-	case "sunrise.da.VoteExtension.shares":
-		list := []*DataShares{}
-		return protoreflect.ValueOfList(&_VoteExtension_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.da.VoteExtension"))
@@ -429,12 +347,6 @@ func (x *fastReflection_VoteExtension) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.Shares) > 0 {
-			for _, e := range x.Shares {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -463,22 +375,6 @@ func (x *fastReflection_VoteExtension) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.Shares) > 0 {
-			for iNdEx := len(x.Shares) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.Shares[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x12
-			}
 		}
 		if len(x.Data) > 0 {
 			for iNdEx := len(x.Data) - 1; iNdEx >= 0; iNdEx-- {
@@ -579,40 +475,6 @@ func (x *fastReflection_VoteExtension) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Shares", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Shares = append(x.Shares, &DataShares{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Shares[len(x.Shares)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -666,8 +528,7 @@ type VoteExtension struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data   []*PublishedData `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Shares []*DataShares    `protobuf:"bytes,2,rep,name=shares,proto3" json:"shares,omitempty"`
+	Data []*PublishedData `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 }
 
 func (x *VoteExtension) Reset() {
@@ -697,13 +558,6 @@ func (x *VoteExtension) GetData() []*PublishedData {
 	return nil
 }
 
-func (x *VoteExtension) GetShares() []*DataShares {
-	if x != nil {
-		return x.Shares
-	}
-	return nil
-}
-
 var File_sunrise_da_vote_extension_proto protoreflect.FileDescriptor
 
 var file_sunrise_da_vote_extension_proto_rawDesc = []byte{
@@ -719,14 +573,11 @@ var file_sunrise_da_vote_extension_proto_rawDesc = []byte{
 	0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x1a, 0x1f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x64, 0x61, 0x2f,
 	0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x6e, 0x0a, 0x0d, 0x56, 0x6f, 0x74, 0x65, 0x45, 0x78, 0x74, 0x65,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x3e, 0x0a, 0x0d, 0x56, 0x6f, 0x74, 0x65, 0x45, 0x78, 0x74, 0x65,
 	0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2d, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20,
 	0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61,
 	0x2e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04,
-	0x64, 0x61, 0x74, 0x61, 0x12, 0x2e, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18, 0x02,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x64,
-	0x61, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x53, 0x68, 0x61, 0x72, 0x65, 0x73, 0x52, 0x06, 0x73, 0x68,
-	0x61, 0x72, 0x65, 0x73, 0x42, 0x8a, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e,
+	0x64, 0x61, 0x74, 0x61, 0x42, 0x8a, 0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e,
 	0x72, 0x69, 0x73, 0x65, 0x2e, 0x64, 0x61, 0x42, 0x12, 0x56, 0x6f, 0x74, 0x65, 0x45, 0x78, 0x74,
 	0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x63,
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f,
@@ -754,16 +605,14 @@ var file_sunrise_da_vote_extension_proto_msgTypes = make([]protoimpl.MessageInfo
 var file_sunrise_da_vote_extension_proto_goTypes = []interface{}{
 	(*VoteExtension)(nil), // 0: sunrise.da.VoteExtension
 	(*PublishedData)(nil), // 1: sunrise.da.PublishedData
-	(*DataShares)(nil),    // 2: sunrise.da.DataShares
 }
 var file_sunrise_da_vote_extension_proto_depIdxs = []int32{
 	1, // 0: sunrise.da.VoteExtension.data:type_name -> sunrise.da.PublishedData
-	2, // 1: sunrise.da.VoteExtension.shares:type_name -> sunrise.da.DataShares
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_da_vote_extension_proto_init() }

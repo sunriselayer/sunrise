@@ -28,11 +28,6 @@ message PublishedData {
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
 }
 
-message DataShares {
-  repeated int64 indices = 1;
-  repeated bytes shares = 2;
-}
-
 message Proof {
   string metadata_uri = 1;
   string sender = 2;
