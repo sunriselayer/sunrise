@@ -28,6 +28,7 @@ func NewParams(
 	slashFraction math.LegacyDec,
 	replicationFactor math.LegacyDec,
 	minShardCount uint64,
+	maxShardCount uint64,
 	maxShardSize uint64,
 	challengePeriod time.Duration,
 	proofPeriod time.Duration,
@@ -50,6 +51,7 @@ func NewParams(
 		SlashFraction:       slashFraction,
 		ReplicationFactor:   replicationFactor,
 		MinShardCount:       minShardCount,
+		MaxShardCount:       maxShardCount,
 		MaxShardSize:        maxShardSize,
 		ChallengePeriod:     challengePeriod,
 		ProofPeriod:         proofPeriod,
@@ -78,6 +80,7 @@ func DefaultParams() Params {
 		math.LegacyNewDecWithPrec(1, 3),  // 0.1%
 		math.LegacyNewDec(5),             // 5.0
 		10,
+		255,
 		1000000,       // 1MB
 		time.Minute*6, // 6min,
 		time.Minute*8, // 8min
