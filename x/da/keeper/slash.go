@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -8,7 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetFaultCounter(ctx sdk.Context, operator sdk.ValAddress) uint64 {
+func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	bz := store.Get(types.GetFaultCounterKey(operator))
 	if bz == nil {
@@ -18,17 +20,17 @@ func (k Keeper) GetFaultCounter(ctx sdk.Context, operator sdk.ValAddress) uint64
 	return sdk.BigEndianToUint64(bz)
 }
 
-func (k Keeper) SetFaultCounter(ctx sdk.Context, operator sdk.ValAddress, faultCounter uint64) {
+func (k Keeper) SetFaultCounter(ctx context.Context, operator sdk.ValAddress, faultCounter uint64) {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store.Set(types.GetFaultCounterKey(operator), sdk.Uint64ToBigEndian(faultCounter))
 }
 
-func (k Keeper) DeleteFaultCounter(ctx sdk.Context, operator sdk.ValAddress) {
+func (k Keeper) DeleteFaultCounter(ctx context.Context, operator sdk.ValAddress) {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store.Delete(types.GetFaultCounterKey(operator))
 }
 
-func (k Keeper) IterateFaultCounters(ctx sdk.Context,
+func (k Keeper) IterateFaultCounters(ctx context.Context,
 	handler func(operator sdk.ValAddress, faultCount uint64) (stop bool),
 ) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))

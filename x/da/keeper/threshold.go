@@ -1,10 +1,8 @@
 package keeper
 
-import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-)
+import "context"
 
-func (k Keeper) GetZkpThreshold(ctx sdk.Context, shardCount uint64) uint64 {
+func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) uint64 {
 	numActiveValidators := int64(0)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {

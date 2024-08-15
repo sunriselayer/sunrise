@@ -484,7 +484,6 @@ func ApplyNotVotedValidators(
 	valPowerMap map[string]ValidatorPower,
 	faultValidators map[string]sdk.ValAddress,
 ) {
-
 	dataHashVoterMap := map[string]map[string]bool{}
 	for dataHash := range votedData {
 		dataHashVoterMap[dataHash] = map[string]bool{}

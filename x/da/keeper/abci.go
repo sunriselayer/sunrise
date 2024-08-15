@@ -5,7 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/fee/types"
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 func (k Keeper) EndBlocker(ctx context.Context) {
@@ -39,6 +39,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		return
 	}
 
+	activeValidators := []sdk.ValAddress{}
 	numActiveValidators := int64(0)
 	// votingPowers := make(map[string]int64)
 	// powerReduction := k.StakingKeeper.PowerReduction(ctx)
@@ -57,6 +58,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 
 		if validator.IsBonded() {
+			activeValidators = append(activeValidators, sdk.ValAddress(iterator.Value()))
 			// valAddrStr := validator.GetOperator()
 			// valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
 			// if err != nil {
@@ -68,6 +70,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			numActiveValidators++
 		}
 	}
+
+	faultValidators := make(map[string]sdk.ValAddress)
 
 	for _, data := range proofPeriodData {
 		if data.Status == "challenge_for_fraud" {
@@ -81,17 +85,33 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			// thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 			proofs := k.GetProofs(sdkCtx, data.MetadataUri)
 			shardProofCount := make(map[int64]int64)
+			shardProofSubmitted := make(map[int64]map[string]bool)
 			for _, proof := range proofs {
 				for _, indice := range proof.Indices {
 					shardProofCount[indice]++
+					shardProofSubmitted[indice][proof.Sender] = true
+				}
+			}
+
+			threshold := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
+			indiceValidators := make(map[int64][]sdk.ValAddress)
+			for _, valAddr := range activeValidators {
+				indices := types.ShardIndicesForValidator(valAddr, int64(threshold), int64(len(data.ShardDoubleHashes)))
+				for _, indice := range indices {
+					indiceValidators[indice] = append(indiceValidators[indice], valAddr)
 				}
 			}
 
 			safeShardCount := int64(0)
-			for _, proofCount := range shardProofCount {
+			for indice, proofCount := range shardProofCount {
 				// len(zkp_including_this_shard) / replication_factor >= 2/3
 				if math.LegacyNewDec(proofCount).GTE(params.ReplicationFactor.MulInt64(2).QuoInt64(3)) {
 					safeShardCount++
+					for _, valAddr := range indiceValidators[indice] {
+						if !shardProofSubmitted[indice][sdk.AccAddress(valAddr).String()] {
+							faultValidators[valAddr.String()] = valAddr
+						}
+					}
 				}
 			}
 
@@ -127,7 +147,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 			}
 
-			// TODO: count validators not voted in proof submission phase
+			// Handle fault validators
+			for _, valAddr := range faultValidators {
+				k.SetFaultCounter(ctx, valAddr, k.GetFaultCounter(ctx, valAddr)+1)
+			}
+
 			// Clean up proofs data
 			for _, proof := range proofs {
 				k.DeleteProof(sdkCtx, proof.MetadataUri, proof.Sender)
