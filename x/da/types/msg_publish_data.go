@@ -19,5 +19,10 @@ func (msg *MsgPublishData) ValidateBasic() error {
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
+
+	if msg.DataShardCount > uint64(len(msg.ShardDoubleHashes)) {
+		return ErrDataShardCountGTTotal
+	}
+
 	return nil
 }

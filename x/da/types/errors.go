@@ -15,4 +15,5 @@ var (
 	ErrProofPeriodIsOver        = sdkerrors.Register(ModuleName, 1104, "proof period is over")
 	ErrProofIndiceOverflow      = sdkerrors.Register(ModuleName, 1105, "proof indice overflow")
 	ErrIndicesAndProofsMismatch = sdkerrors.Register(ModuleName, 1106, "indices and proofs count mismatch")
+	ErrDataShardCountGTTotal    = sdkerrors.Register(ModuleName, 1107, "data shard count is greater than total")
 )

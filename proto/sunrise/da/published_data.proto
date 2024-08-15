@@ -14,17 +14,18 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
 message PublishedData {
   string metadata_uri = 1;
-  repeated bytes shard_double_hashes = 2;
-  google.protobuf.Timestamp timestamp = 3
+  uint64 data_shard_count = 2;
+  repeated bytes shard_double_hashes = 3;
+  google.protobuf.Timestamp timestamp = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
-  string status = 4; // TODO: to be replaced with enum
-  string publisher = 5;
-  string challenger = 6;
-  repeated cosmos.base.v1beta1.Coin collateral = 7 [
+  string status = 5; // TODO: to be replaced with enum
+  string publisher = 6;
+  string challenger = 7;
+  repeated cosmos.base.v1beta1.Coin collateral = 8 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  google.protobuf.Timestamp challenge_timestamp = 8
+  google.protobuf.Timestamp challenge_timestamp = 9
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
 }
 

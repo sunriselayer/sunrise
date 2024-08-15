@@ -12,5 +12,6 @@ message Metadata {
   bytes recovered_data_hash = 1;
   uint64 recovered_data_size = 2;
   uint64 shard_size = 3;
-  repeated string shard_uris = 4;
+  uint64 data_shard_count = 4;
+  repeated string shard_uris = 5;
 }
