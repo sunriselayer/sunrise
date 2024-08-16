@@ -104,8 +104,16 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			safeShardCount := int64(0)
 			for indice, proofCount := range shardProofCount {
-				// len(zkp_including_this_shard) / replication_factor >= 2/3
-				if math.LegacyNewDec(proofCount).GTE(params.ReplicationFactor.MulInt64(2).QuoInt64(3)) {
+				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
+				replicationFactorWithParity := params.ReplicationFactor.
+					MulInt64(int64(data.DataShardCount)).
+					QuoInt64(int64(len(data.ShardDoubleHashes)))
+
+				// len(zkp_including_this_shard) / replication_factor_with_parity >= 2/3
+				if math.LegacyNewDec(proofCount).GTE(
+					replicationFactorWithParity.
+						MulInt64(2).
+						QuoInt64(3)) {
 					safeShardCount++
 					for _, valAddr := range indiceValidators[indice] {
 						if !shardProofSubmitted[indice][sdk.AccAddress(valAddr).String()] {
@@ -115,8 +123,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 			}
 
-			// valid_shards / len(shards) >= 1/2
-			if safeShardCount*2 < int64(len(data.ShardDoubleHashes)) {
+			// valid_shards < data_shard_count
+			if safeShardCount < int64(data.DataShardCount) {
 				// TODO: might require rejected records as well
 				data.Status = "rejected"
 				err = k.SetPublishedData(ctx, data)
