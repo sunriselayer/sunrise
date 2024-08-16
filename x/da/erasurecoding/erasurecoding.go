@@ -7,33 +7,33 @@ import (
 	"github.com/klauspost/reedsolomon"
 )
 
-func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount int, shards [][]byte, err error) {
-	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
+func ErasureCode(blob []byte, dataShardCount int, parityShardCount int) (shardSize uint64, shardCount int, shards [][]byte, err error) {
+	encoder, err := reedsolomon.New(dataShardCount, parityShardCount)
 	if err != nil {
 		return
 	}
 
-	shardCount = shardCountHalf * 2
+	shardCount = dataShardCount + parityShardCount
 	shards = make([][]byte, shardCount)
 
 	length := len(blob)
-	mod := length % shardCountHalf
+	mod := length % dataShardCount
 	if mod != 0 {
-		length += shardCountHalf - mod
+		length += dataShardCount - mod
 	}
-	shardSizeInt := length / shardCountHalf
+	shardSizeInt := length / dataShardCount
 	shardSize = uint64(shardSizeInt)
 
-	extendedBlob := make([]byte, shardSize*uint64(shardCountHalf))
+	extendedBlob := make([]byte, shardSize*uint64(dataShardCount))
 	copy(extendedBlob, blob)
 
-	for i := 0; i < shardCountHalf; i++ {
+	for i := 0; i < dataShardCount; i++ {
 		shards[i] = make([]byte, shardSizeInt)
 		copy(shards[i], extendedBlob[i*shardSizeInt:(i+1)*shardSizeInt])
 	}
 
-	for i := 0; i < shardCountHalf; i++ {
-		shards[shardCountHalf+i] = make([]byte, shardSizeInt)
+	for i := 0; i < parityShardCount; i++ {
+		shards[dataShardCount+i] = make([]byte, shardSizeInt)
 	}
 
 	err = encoder.Encode(shards)
@@ -44,9 +44,9 @@ func ErasureCode(blob []byte, shardCountHalf int) (shardSize uint64, shardCount 
 	return
 }
 
-func ReconstructAndJoinShards(shards [][]byte, blobSize int) (blob []byte, err error) {
-	shardCountHalf := len(shards) / 2
-	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
+func ReconstructAndJoinShards(shards [][]byte, dataShardCount int, blobSize int) (blob []byte, err error) {
+	parityShardCount := len(shards) - dataShardCount
+	encoder, err := reedsolomon.New(dataShardCount, parityShardCount)
 	if err != nil {
 		return nil, err
 	}
@@ -56,12 +56,12 @@ func ReconstructAndJoinShards(shards [][]byte, blobSize int) (blob []byte, err e
 		return nil, err
 	}
 
-	return JoinShards(shards, blobSize)
+	return JoinShards(shards, dataShardCount, blobSize)
 }
 
-func JoinShards(shards [][]byte, blobSize int) (blob []byte, err error) {
-	shardCountHalf := len(shards) / 2
-	encoder, err := reedsolomon.New(shardCountHalf, shardCountHalf)
+func JoinShards(shards [][]byte, dataShardCount int, blobSize int) (blob []byte, err error) {
+	parityShardCount := len(shards) - dataShardCount
+	encoder, err := reedsolomon.New(dataShardCount, parityShardCount)
 	if err != nil {
 		return nil, err
 	}
