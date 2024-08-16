@@ -14,7 +14,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
 message PublishedData {
   string metadata_uri = 1;
-  uint64 data_shard_count = 2;
+  uint64 parity_shard_count = 2;
   repeated bytes shard_double_hashes = 3;
   google.protobuf.Timestamp timestamp = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];

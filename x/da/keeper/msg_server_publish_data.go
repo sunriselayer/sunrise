@@ -14,6 +14,7 @@ func (k msgServer) PublishData(goCtx context.Context, msg *types.MsgPublishData)
 	err := k.SetPublishedData(ctx, types.PublishedData{
 		Publisher:         msg.Sender,
 		MetadataUri:       msg.MetadataUri,
+		ParityShardCount:  msg.ParityShardCount,
 		ShardDoubleHashes: msg.ShardDoubleHashes,
 		Collateral:        params.ChallengeCollateral,
 		Timestamp:         ctx.BlockTime(),

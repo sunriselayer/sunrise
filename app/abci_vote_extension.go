@@ -179,6 +179,7 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 
 					voteExt.Data = append(voteExt.Data, &types.PublishedData{
 						MetadataUri:       msg.MetadataUri,
+						ParityShardCount:  msg.ParityShardCount,
 						ShardDoubleHashes: msg.ShardDoubleHashes,
 					})
 					// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
@@ -359,6 +360,7 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeB
 		for _, data := range voteExtTx.VotedData {
 			published := h.keeper.GetPublishedData(ctx, data.MetadataUri)
 			published.MetadataUri = data.MetadataUri
+			published.ParityShardCount = data.ParityShardCount
 			published.ShardDoubleHashes = data.ShardDoubleHashes
 			published.Status = "vote_extension"
 			if err := h.keeper.SetPublishedData(ctx, published); err != nil {

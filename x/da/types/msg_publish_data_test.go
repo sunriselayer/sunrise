@@ -23,7 +23,9 @@ func TestMsgPublishData_ValidateBasic(t *testing.T) {
 		}, {
 			name: "valid address",
 			msg: MsgPublishData{
-				Sender: sample.AccAddress(),
+				Sender:            sample.AccAddress(),
+				ParityShardCount:  0,
+				ShardDoubleHashes: [][]byte{{0x01}},
 			},
 		},
 	}

@@ -106,7 +106,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			for indice, proofCount := range shardProofCount {
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
 				replicationFactorWithParity := params.ReplicationFactor.
-					MulInt64(int64(data.DataShardCount)).
+					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
 					QuoInt64(int64(len(data.ShardDoubleHashes)))
 
 				// len(zkp_including_this_shard) / replication_factor_with_parity >= 2/3
@@ -124,7 +124,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// valid_shards < data_shard_count
-			if safeShardCount < int64(data.DataShardCount) {
+			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				// TODO: might require rejected records as well
 				data.Status = "rejected"
 				err = k.SetPublishedData(ctx, data)

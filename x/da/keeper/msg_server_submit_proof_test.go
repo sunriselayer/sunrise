@@ -61,6 +61,7 @@ func TestMsgSubmitProof(t *testing.T) {
 
 	err = k.SetPublishedData(ctx, types.PublishedData{
 		MetadataUri:        "ipfs://metadata1",
+		ParityShardCount:   0,
 		ShardDoubleHashes:  [][]byte{hash},
 		Timestamp:          time.Time{},
 		Status:             "challenge_for_fraud",

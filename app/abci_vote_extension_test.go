@@ -14,18 +14,22 @@ import (
 func TestConfirmVotedData(t *testing.T) {
 	data1 := types.PublishedData{
 		MetadataUri:       "metadata/data1",
+		ParityShardCount:  0,
 		ShardDoubleHashes: [][]byte{[]byte("data1")},
 	}
 	data2 := types.PublishedData{
 		MetadataUri:       "metadata/data2",
+		ParityShardCount:  0,
 		ShardDoubleHashes: [][]byte{[]byte("data2")},
 	}
 	data2v := types.PublishedData{
 		MetadataUri:       "metadata/data2v",
+		ParityShardCount:  0,
 		ShardDoubleHashes: [][]byte{[]byte("data2v")},
 	}
 	data3 := types.PublishedData{
 		MetadataUri:       "metadata/data3",
+		ParityShardCount:  0,
 		ShardDoubleHashes: [][]byte{[]byte("data3")},
 	}
 	testCases := []struct {
