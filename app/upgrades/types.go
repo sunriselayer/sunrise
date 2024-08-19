@@ -6,14 +6,14 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/keepers"
 )
 
 // BaseAppParamManager defines an interrace that BaseApp is expected to fullfil
 // that allows upgrade handlers to modify BaseApp parameters.
 type BaseAppParamManager interface {
-	GetConsensusParams(ctx sdk.Context) *tmproto.ConsensusParams
-	StoreConsensusParams(ctx sdk.Context, cp *tmproto.ConsensusParams)
+	GetConsensusParams(ctx sdk.Context) tmproto.ConsensusParams
+	StoreConsensusParams(ctx sdk.Context, cp tmproto.ConsensusParams) error
 }
 
 // Upgrade defines a struct containing necessary fields that a SoftwareUpgradeProposal
@@ -25,7 +25,7 @@ type Upgrade struct {
 	UpgradeName string
 
 	// CreateUpgradeHandler defines the function that creates an upgrade handler
-	CreateUpgradeHandler func(*module.Manager, module.Configurator, BaseAppParamManager, *app.App) upgradetypes.UpgradeHandler
+	CreateUpgradeHandler func(*module.Manager, module.Configurator, BaseAppParamManager, *keepers.AppKeepers) upgradetypes.UpgradeHandler
 
 	// Store upgrades, should be used for any new modules introduced, new modules deleted, or store names renamed.
 	StoreUpgrades storetypes.StoreUpgrades
@@ -43,5 +43,5 @@ type Fork struct {
 	UpgradeHeight int64
 
 	// Function that runs some custom state transition code at the beginning of a fork.
-	BeginForkLogic func(ctx sdk.Context, app *app.App)
+	BeginForkLogic func(ctx sdk.Context, keepers *keepers.AppKeepers)
 }
