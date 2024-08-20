@@ -7,7 +7,7 @@ import (
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-
+	"github.com/cosmos/ibc-go/modules/capability"
 	"github.com/sunriselayer/sunrise/app/keepers"
 )
 
@@ -24,6 +24,8 @@ func CreateUpgradeHandler(
 		if err != nil {
 			panic(err)
 		}
+		// To skip running foo's InitGenesis, you need set `fromVM`'s foo to its latest consensus version:
+		vm["capability"] = capability.AppModule{}.ConsensusVersion()
 
 		return mm.RunMigrations(ctx, configurator, vm)
 	}
