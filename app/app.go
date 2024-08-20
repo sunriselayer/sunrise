@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -9,7 +8,10 @@ import (
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
-	upgradetypes "cosmossdk.io/x/upgrade/types"
+	circuitkeeper "cosmossdk.io/x/circuit/keeper"
+	evidencekeeper "cosmossdk.io/x/evidence/keeper"
+	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
+	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -23,16 +25,32 @@ import (
 	testdata_pulsar "github.com/cosmos/cosmos-sdk/testutil/testdata/testpb"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
+	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
+	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
+	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	capabilitykeeper "github.com/cosmos/ibc-go/modules/capability/keeper"
+	icacontrollerkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/keeper"
+	icahostkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/host/keeper"
+	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
+	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	"github.com/skip-mev/block-sdk/v2/abci"
 	"github.com/skip-mev/block-sdk/v2/abci/checktx"
@@ -40,6 +58,7 @@ import (
 	"github.com/skip-mev/block-sdk/v2/block/base"
 	"github.com/skip-mev/block-sdk/v2/block/service"
 	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
+	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	"github.com/sunriselayer/sunrise/app/ante"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -50,11 +69,16 @@ import (
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
+	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
+	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
+	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
+	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
+	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
-	"github.com/sunriselayer/sunrise/app/keepers"
-	"github.com/sunriselayer/sunrise/app/upgrades"
-	v0_1_5_test "github.com/sunriselayer/sunrise/app/upgrades/v0.1.5-test"
 	"github.com/sunriselayer/sunrise/docs"
 )
 
@@ -73,10 +97,6 @@ const (
 var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
-
-	// <sunrise>
-	Upgrades = []upgrades.Upgrade{v0_1_5_test.Upgrade}
-	// </sunrise>
 )
 
 var (
@@ -89,22 +109,53 @@ var (
 // capabilities aren't needed for testing.
 type App struct {
 	*runtime.App
-	// <sunrise>
-	keepers.AppKeepers
-	// <sunrise>
 	legacyAmino       *codec.LegacyAmino
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
+
+	// keepers
+	AccountKeeper         authkeeper.AccountKeeper
+	BankKeeper            bankkeeper.Keeper
+	StakingKeeper         *stakingkeeper.Keeper
+	SlashingKeeper        slashingkeeper.Keeper
+	MintKeeper            mintkeeper.Keeper
+	DistrKeeper           distrkeeper.Keeper
+	GovKeeper             *govkeeper.Keeper
+	CrisisKeeper          *crisiskeeper.Keeper
+	UpgradeKeeper         *upgradekeeper.Keeper
+	ParamsKeeper          paramskeeper.Keeper
+	AuthzKeeper           authzkeeper.Keeper
+	EvidenceKeeper        evidencekeeper.Keeper
+	FeeGrantKeeper        feegrantkeeper.Keeper
+	GroupKeeper           groupkeeper.Keeper
+	ConsensusParamsKeeper consensuskeeper.Keeper
+	CircuitBreakerKeeper  circuitkeeper.Keeper
+
+	// IBC
+	IBCKeeper           *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+	CapabilityKeeper    *capabilitykeeper.Keeper
+	IBCFeeKeeper        ibcfeekeeper.Keeper
+	ICAControllerKeeper icacontrollerkeeper.Keeper
+	ICAHostKeeper       icahostkeeper.Keeper
+	TransferKeeper      ibctransferkeeper.Keeper
+
+	// Scoped IBC
+	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
+	ScopedIBCTransferKeeper   capabilitykeeper.ScopedKeeper
+	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
+	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
+
+	// Third party module keepers
+	AuctionKeeper            auctionkeeper.Keeper
+	BlobKeeper               blobmodulekeeper.Keeper
+	StreamKeeper             streammodulekeeper.Keeper
+	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
+	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
+	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
+	SwapKeeper               swapmodulekeeper.Keeper
+	FeeKeeper                feemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
-
-	// <sunrise>
-	// the module manager
-	mm *module.Manager
-
-	// module configurator
-	configurator module.Configurator
-	// </sunrise>
 
 	// simulation manager
 	sm *module.SimulationManager
@@ -243,32 +294,32 @@ func New(
 		&app.legacyAmino,
 		&app.txConfig,
 		&app.interfaceRegistry,
-		&app.AppKeepers.AccountKeeper,
-		&app.AppKeepers.BankKeeper,
-		&app.AppKeepers.StakingKeeper,
-		&app.AppKeepers.SlashingKeeper,
-		&app.AppKeepers.MintKeeper,
-		&app.AppKeepers.DistrKeeper,
-		&app.AppKeepers.GovKeeper,
-		&app.AppKeepers.CrisisKeeper,
-		&app.AppKeepers.UpgradeKeeper,
-		&app.AppKeepers.ParamsKeeper,
-		&app.AppKeepers.AuthzKeeper,
-		&app.AppKeepers.EvidenceKeeper,
-		&app.AppKeepers.FeeGrantKeeper,
-		&app.AppKeepers.GroupKeeper,
-		&app.AppKeepers.ConsensusParamsKeeper,
-		&app.AppKeepers.CircuitBreakerKeeper,
+		&app.AccountKeeper,
+		&app.BankKeeper,
+		&app.StakingKeeper,
+		&app.SlashingKeeper,
+		&app.MintKeeper,
+		&app.DistrKeeper,
+		&app.GovKeeper,
+		&app.CrisisKeeper,
+		&app.UpgradeKeeper,
+		&app.ParamsKeeper,
+		&app.AuthzKeeper,
+		&app.EvidenceKeeper,
+		&app.FeeGrantKeeper,
+		&app.GroupKeeper,
+		&app.ConsensusParamsKeeper,
+		&app.CircuitBreakerKeeper,
 
 		// Third party module keepers
-		&app.AppKeepers.AuctionKeeper,
-		&app.AppKeepers.BlobKeeper,
-		&app.AppKeepers.StreamKeeper,
-		&app.AppKeepers.TokenconverterKeeper,
-		&app.AppKeepers.LiquiditypoolKeeper,
-		&app.AppKeepers.LiquidityincentiveKeeper,
-		&app.AppKeepers.SwapKeeper,
-		&app.AppKeepers.FeeKeeper,
+		&app.AuctionKeeper,
+		&app.BlobKeeper,
+		&app.StreamKeeper,
+		&app.TokenconverterKeeper,
+		&app.LiquiditypoolKeeper,
+		&app.LiquidityincentiveKeeper,
+		&app.SwapKeeper,
+		&app.FeeKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
@@ -312,7 +363,7 @@ func New(
 	app.registerIBCModules()
 
 	// <sunrise>
-	app.AppKeepers.SwapKeeper.TransferKeeper = &app.AppKeepers.TransferKeeper
+	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
 	// </sunrise>
 
 	// register streaming services
@@ -346,15 +397,15 @@ func New(
 	// proposals are being built and verified. Note that this step must be done before
 	// setting the ante handler on the lanes.
 	anteHandler := ante.NewAnteHandler(
-		app.AppKeepers.AccountKeeper,
-		app.AppKeepers.BankKeeper,
-		app.AppKeepers.FeeGrantKeeper,
-		app.AppKeepers.BlobKeeper,
-		app.AppKeepers.FeeKeeper,
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.FeeGrantKeeper,
+		app.BlobKeeper,
+		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
-		app.AppKeepers.IBCKeeper,
-		app.AppKeepers.AuctionKeeper,
+		app.IBCKeeper,
+		app.AuctionKeeper,
 		mevLane,
 		app.txConfig.TxEncoder(),
 	)
@@ -400,19 +451,11 @@ func New(
 	)
 
 	app.SetCheckTx(checkTxHandler.CheckTx())
-
-	// <sunrise>
-	// Step 8: Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
-	app.SetupUpgradeHandlers()
-	// Step 8: Set the custom upgrade store loaders on BaseApp.
-	app.SetupUpgradeStoreLoaders()
-	// </sunrise>
-
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
 	// ---------------------------------------------------------------------------- //
 
-	app.ModuleManager.RegisterInvariants(app.AppKeepers.CrisisKeeper)
+	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 
 	// add test gRPC service for testing gRPC queries in isolation
 	testdata_pulsar.RegisterQueryServer(app.GRPCQueryRouter(), testdata_pulsar.QueryImpl{})
@@ -422,7 +465,7 @@ func New(
 	// NOTE: this is not required apps that don't use the simulator for fuzz testing
 	// transactions
 	overrideModules := map[string]module.AppModuleSimulation{
-		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AppKeepers.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
+		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
 	}
 	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, overrideModules)
 
@@ -495,7 +538,7 @@ func (app *App) kvStoreKeys() map[string]*storetypes.KVStoreKey {
 
 // GetSubspace returns a param subspace for a given module name.
 func (app *App) GetSubspace(moduleName string) paramstypes.Subspace {
-	subspace, _ := app.AppKeepers.ParamsKeeper.GetSubspace(moduleName)
+	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
 }
 
@@ -537,12 +580,12 @@ func (app *App) RegisterTxService(clientCtx client.Context) {
 
 // GetIBCKeeper returns the IBC keeper.
 func (app *App) GetIBCKeeper() *ibckeeper.Keeper {
-	return app.AppKeepers.IBCKeeper
+	return app.IBCKeeper
 }
 
 // GetCapabilityScopedKeeper returns the capability scoped keeper.
 func (app *App) GetCapabilityScopedKeeper(moduleName string) capabilitykeeper.ScopedKeeper {
-	return app.AppKeepers.CapabilityKeeper.ScopeToModule(moduleName)
+	return app.CapabilityKeeper.ScopeToModule(moduleName)
 }
 
 // GetMaccPerms returns a copy of the module account permissions
@@ -574,36 +617,4 @@ func BlockedAddresses() map[string]bool {
 // GetTxConfig implements the TestingApp interface.
 func (app *App) GetTxConfig() client.TxConfig {
 	return app.txConfig
-}
-
-func (app *App) SetupUpgradeStoreLoaders() {
-	upgradeInfo, err := app.AppKeepers.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	if err != nil {
-		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
-	}
-
-	if app.AppKeepers.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		return
-	}
-
-	for _, upgrade := range Upgrades {
-		if upgradeInfo.Name == upgrade.UpgradeName {
-			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgrade.StoreUpgrades))
-		}
-	}
-
-}
-
-func (app *App) SetupUpgradeHandlers() {
-	for _, upgrade := range Upgrades {
-		app.AppKeepers.UpgradeKeeper.SetUpgradeHandler(
-			upgrade.UpgradeName,
-			upgrade.CreateUpgradeHandler(
-				app.mm,
-				app.configurator,
-				app.BaseApp,
-				&app.AppKeepers,
-			),
-		)
-	}
 }
