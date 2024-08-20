@@ -700,17 +700,12 @@ func (app *App) setupUpgradeHandlers(appConfig depinject.Config) {
 		SwapKeeper:               app.SwapKeeper,
 		FeeKeeper:                app.FeeKeeper,
 	}
-	var mm *module.Manager
-	var configurator module.Configurator
-	if err := depinject.Inject(appConfig, mm, configurator); err != nil {
-		panic(err)
-	}
 	for _, upgrade := range Upgrades {
 		app.UpgradeKeeper.SetUpgradeHandler(
 			upgrade.UpgradeName,
 			upgrade.CreateUpgradeHandler(
-				mm,
-				configurator,
+				app.ModuleManager,
+				app.Configurator(),
 				&appKeepers,
 			),
 		)
