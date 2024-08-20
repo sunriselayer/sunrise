@@ -463,9 +463,9 @@ func New(
 
 	// <sunrise>
 	// Step 8: Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
-	app.SetupUpgradeHandlers()
+	app.setupUpgradeHandlers()
 	// Step 9: Set the custom upgrade store loaders on BaseApp.
-	app.SetupUpgradeStoreLoaders()
+	app.setupUpgradeStoreLoaders()
 	// </sunrise>
 
 	// ---------------------------------------------------------------------------- //
@@ -637,7 +637,8 @@ func (app *App) GetTxConfig() client.TxConfig {
 }
 
 // <sunrise>
-func (app *App) SetupUpgradeStoreLoaders() {
+// configure store loader that checks if version == upgradeHeight and applies store upgrades
+func (app *App) setupUpgradeStoreLoaders() {
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
 		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
@@ -649,13 +650,13 @@ func (app *App) SetupUpgradeStoreLoaders() {
 
 	for _, upgrade := range Upgrades {
 		if upgradeInfo.Name == upgrade.UpgradeName {
-			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgrade.StoreUpgrades))
+			storeUpgrades := upgrade.StoreUpgrades
+			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
 		}
 	}
-
 }
 
-func (app *App) SetupUpgradeHandlers() {
+func (app *App) setupUpgradeHandlers() {
 	appKeepers := keepers.AppKeepers{
 		// keepers
 		AccountKeeper:         app.AccountKeeper,
@@ -699,13 +700,17 @@ func (app *App) SetupUpgradeHandlers() {
 		SwapKeeper:               app.SwapKeeper,
 		FeeKeeper:                app.FeeKeeper,
 	}
+	var mm *module.Manager
+	var configurator module.Configurator
+	if err := depinject.Inject(appConfig, mm, configurator); err != nil {
+		panic(err)
+	}
 	for _, upgrade := range Upgrades {
 		app.UpgradeKeeper.SetUpgradeHandler(
 			upgrade.UpgradeName,
 			upgrade.CreateUpgradeHandler(
-				app.ModuleManager,
-				app.Configurator(),
-				app.BaseApp,
+				mm,
+				configurator,
 				&appKeepers,
 			),
 		)
