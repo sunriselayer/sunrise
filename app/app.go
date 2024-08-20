@@ -169,14 +169,6 @@ type App struct {
 	// simulation manager
 	sm *module.SimulationManager
 
-	// <sunrise>
-	// the module manager
-	mm *module.Manager
-
-	// module configurator
-	configurator module.Configurator
-	// </sunrise>
-
 	// custom structure for skip-mev protection
 	MevLane        *mevlane.MEVLane
 	CheckTxHandler checktx.CheckTx
@@ -711,8 +703,8 @@ func (app *App) SetupUpgradeHandlers() {
 		app.UpgradeKeeper.SetUpgradeHandler(
 			upgrade.UpgradeName,
 			upgrade.CreateUpgradeHandler(
-				app.mm,
-				app.configurator,
+				app.ModuleManager,
+				app.Configurator(),
 				app.BaseApp,
 				&appKeepers,
 			),
