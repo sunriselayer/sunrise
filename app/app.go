@@ -463,7 +463,7 @@ func New(
 
 	// <sunrise>
 	// Step 8: Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
-	app.setupUpgradeHandlers(appConfig)
+	app.setupUpgradeHandlers()
 	// Step 9: Set the custom upgrade store loaders on BaseApp.
 	app.setupUpgradeStoreLoaders()
 	// </sunrise>
@@ -656,7 +656,7 @@ func (app *App) setupUpgradeStoreLoaders() {
 	}
 }
 
-func (app *App) setupUpgradeHandlers(appConfig depinject.Config) {
+func (app *App) setupUpgradeHandlers() {
 	appKeepers := keepers.AppKeepers{
 		// keepers
 		AccountKeeper:         app.AccountKeeper,
