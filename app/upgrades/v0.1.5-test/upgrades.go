@@ -9,13 +9,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/sunriselayer/sunrise/app/keepers"
-	"github.com/sunriselayer/sunrise/app/upgrades"
 )
 
 func CreateUpgradeHandler(
 	mm *module.Manager,
 	configurator module.Configurator,
-	_ upgrades.BaseAppParamManager,
 	keepers *keepers.AppKeepers,
 ) upgradetypes.UpgradeHandler {
 	return func(context context.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
