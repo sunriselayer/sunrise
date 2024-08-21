@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/base64"
 	"time"
 
 	"cosmossdk.io/math"
@@ -33,17 +34,9 @@ func NewParams(
 	challengePeriod time.Duration,
 	proofPeriod time.Duration,
 	challengeCollateral sdk.Coins,
-	zkpProvingKey groth16.ProvingKey,
-	zkpVerifyingKey groth16.VerifyingKey,
+	zkpProvingKey []byte,
+	zkpVerifyingKey []byte,
 ) Params {
-	zkpProvingKeyBz, err := zkp.MarshalProvingKey(zkpProvingKey)
-	if err != nil {
-		panic(err)
-	}
-	zkpVerifyingKeyBz, err := zkp.MarshalProvingKey(zkpVerifyingKey)
-	if err != nil {
-		panic(err)
-	}
 	return Params{
 		VoteThreshold:       voteThreshold,
 		SlashEpoch:          slashEpoch,
@@ -56,19 +49,19 @@ func NewParams(
 		ChallengePeriod:     challengePeriod,
 		ProofPeriod:         proofPeriod,
 		ChallengeCollateral: challengeCollateral,
-		ZkpProvingKey:       zkpProvingKeyBz,
-		ZkpVerifyingKey:     zkpVerifyingKeyBz,
+		ZkpProvingKey:       zkpProvingKey,
+		ZkpVerifyingKey:     zkpVerifyingKey,
 	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
-	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &zkp.ValidityProofCircuit{})
+	provingKey, err := base64.StdEncoding.DecodeString(DefaultProvingKeyBase64)
 	if err != nil {
 		panic(err)
 	}
 
-	provingKey, verifyingKey, err := groth16.Setup(ccs)
+	verifyingKey, err := base64.StdEncoding.DecodeString(DefaultVerifyingKeyBase64)
 	if err != nil {
 		panic(err)
 	}
@@ -88,6 +81,32 @@ func DefaultParams() Params {
 		provingKey,
 		verifyingKey,
 	)
+}
+
+func GenerateZkpKeys() (string, string) {
+	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &zkp.ValidityProofCircuit{})
+	if err != nil {
+		panic(err)
+	}
+
+	provingKey, verifyingKey, err := groth16.Setup(ccs)
+	if err != nil {
+		panic(err)
+	}
+
+	zkpProvingKeyBz, err := zkp.MarshalProvingKey(provingKey)
+	if err != nil {
+		panic(err)
+	}
+
+	zkpVerifyingKeyBz, err := zkp.MarshalProvingKey(verifyingKey)
+	if err != nil {
+		panic(err)
+	}
+
+	provingKeyBase64 := base64.StdEncoding.EncodeToString(zkpProvingKeyBz)
+	verifyingKeyBase64 := base64.StdEncoding.EncodeToString(zkpVerifyingKeyBz)
+	return provingKeyBase64, verifyingKeyBase64
 }
 
 // ParamSetPairs get the params.ParamSet
