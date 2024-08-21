@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	// "github.com/sunriselayer/sunrise/pkg/appconsts"
 
 	"cosmossdk.io/errors"
 )
@@ -51,12 +51,12 @@ func validateDataCommitmentWindow(i interface{}) error {
 			MinimumDataCommitmentWindow,
 		))
 	}
-	if val > uint64(appconsts.DataCommitmentBlocksLimit) {
-		return errors.Wrap(ErrInvalidDataCommitmentWindow, fmt.Sprintf(
-			"data commitment window %v must be <= data commitment blocks limit %v",
-			val,
-			appconsts.DataCommitmentBlocksLimit,
-		))
-	}
+	// if val > uint64(appconsts.DataCommitmentBlocksLimit) {
+	// 	return errors.Wrap(ErrInvalidDataCommitmentWindow, fmt.Sprintf(
+	// 		"data commitment window %v must be <= data commitment blocks limit %v",
+	// 		val,
+	// 		appconsts.DataCommitmentBlocksLimit,
+	// 	))
+	// }
 	return nil
 }

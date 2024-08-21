@@ -6,7 +6,7 @@ toolchain go1.22.1
 
 replace (
 	// sunrise-core
-	github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.5-cmt-v0.38.2
+	// github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.5-cmt-v0.38.2
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
 	github.com/sunriselayer/sunrise/pkg/blob => ./pkg/blob
@@ -58,7 +58,6 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1
-	github.com/klauspost/reedsolomon v1.11.8
 	github.com/rs/zerolog v1.32.0
 	github.com/skip-mev/block-sdk/v2 v2.1.1
 	github.com/spf13/cast v1.6.0
@@ -70,7 +69,6 @@ require (
 	github.com/sunriselayer/sunrise/pkg/namespace v0.0.3
 	go.uber.org/mock v0.4.0
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
-	golang.org/x/sync v0.7.0
 	golang.org/x/tools v0.22.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240415180920-8c6c420018be
 	google.golang.org/grpc v1.63.2
@@ -216,6 +214,7 @@ require (
 	github.com/klauspost/compress v1.17.8 // indirect
 	github.com/klauspost/cpuid/v2 v2.1.1 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
+	github.com/klauspost/reedsolomon v1.11.8 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
@@ -294,6 +293,7 @@ require (
 	golang.org/x/mod v0.18.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/oauth2 v0.17.0 // indirect
+	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/term v0.21.0 // indirect
 	golang.org/x/text v0.16.0 // indirect

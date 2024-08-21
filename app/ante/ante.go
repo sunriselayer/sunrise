@@ -1,7 +1,7 @@
 package ante
 
 import (
-	blobante "github.com/sunriselayer/sunrise/x/blob/ante"
+	// blobante "github.com/sunriselayer/sunrise/x/blob/ante"
 	blob "github.com/sunriselayer/sunrise/x/blob/keeper"
 	fee "github.com/sunriselayer/sunrise/x/fee/keeper"
 
@@ -67,9 +67,9 @@ func NewAnteHandler(
 		// Ensure that the tx's gas limit is > the gas consumed based on the blob size(s).
 		// Contract: must be called after all decorators that consume gas.
 		// Note: does not consume gas from the gas meter.
-		blobante.NewMinGasPFBDecorator(blobKeeper),
+		// blobante.NewMinGasPFBDecorator(blobKeeper),
 		// Ensure that the tx's total blob size is <= the max blob size.
-		blobante.NewMaxBlobSizeDecorator(blobKeeper),
+		// blobante.NewMaxBlobSizeDecorator(blobKeeper),
 		// Side effect: increment the nonce for all tx signers.
 		ante.NewIncrementSequenceDecorator(accountKeeper),
 		// Ensure that the tx is not a IBC packet or update message that has already been processed.
