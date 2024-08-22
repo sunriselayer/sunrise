@@ -12,7 +12,7 @@ func upgradeSendCoin(
 	ctx sdk.Context,
 	bankkeeper bankkeeper.Keeper,
 ) error {
-	fromAddress := "sunrise155u042u8wk3al32h3vzxu989jj76k4zcc6d03n"
+	fromAddress := "sunrise1kw8x5dncdw7ualrx02q4cldcxhsmg5vwtxaxvq"
 	toAddresses := []string{
 		// new validators
 		"sunrise1m63dprapnud2sy3npvw5mgh4nw606u7x5krrhw",
@@ -20,7 +20,7 @@ func upgradeSendCoin(
 		"sunrise1kw8x5dncdw7ualrx02q4cldcxhsmg5vwtxaxvq",
 	}
 	// same amount as older validator's one
-	coin := sdk.NewInt64Coin("uvrise", 100)
+	coin := sdk.NewInt64Coin("uvrise", 9000000000000)
 
 	fromAddr, err := sdk.AccAddressFromBech32(fromAddress)
 	if err != nil {
