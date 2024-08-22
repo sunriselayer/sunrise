@@ -26,7 +26,7 @@ func (a *App) OutOfOrderPrepareProposal(req abci.RequestPrepareProposal) (*abci.
 		a.AccountKeeper,
 		a.BankKeeper,
 		a.FeeGrantKeeper,
-		a.BlobKeeper,
+		// a.BlobKeeper,
 		a.FeeKeeper,
 		a.GetTxConfig().SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,

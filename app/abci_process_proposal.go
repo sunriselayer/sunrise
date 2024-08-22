@@ -51,7 +51,7 @@ func (app *App) ProcessProposal(req *abci.RequestProcessProposal) (retResp *abci
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.FeeGrantKeeper,
-		app.BlobKeeper,
+		// app.BlobKeeper,
 		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,

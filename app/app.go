@@ -70,8 +70,8 @@ import (
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
-	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	// blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
+	// streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
@@ -151,8 +151,8 @@ type App struct {
 	// Third party module keepers
 	AuctionKeeper auctionkeeper.Keeper
 
-	BlobKeeper               blobmodulekeeper.Keeper
-	StreamKeeper             streammodulekeeper.Keeper
+	// BlobKeeper               blobmodulekeeper.Keeper
+	// StreamKeeper             streammodulekeeper.Keeper
 	DaKeeper                 damodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
@@ -318,8 +318,8 @@ func New(
 		// Third party module keepers
 		&app.AuctionKeeper,
 
-		&app.BlobKeeper,
-		&app.StreamKeeper,
+		// &app.BlobKeeper,
+		// &app.StreamKeeper,
 		&app.DaKeeper,
 		&app.TokenconverterKeeper,
 		&app.LiquiditypoolKeeper,
@@ -406,7 +406,7 @@ func New(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.FeeGrantKeeper,
-		app.BlobKeeper,
+		// app.BlobKeeper,
 		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
