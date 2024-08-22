@@ -718,9 +718,10 @@ func (app *App) setupUpgradeHandlers() {
 		ScopedICAHostKeeper:       app.ScopedICAHostKeeper,
 
 		// Third party module keepers
+		// BlobKeeper:               app.BlobKeeper,
+		// StreamKeeper:             app.StreamKeeper,
 		AuctionKeeper:            app.AuctionKeeper,
-		BlobKeeper:               app.BlobKeeper,
-		StreamKeeper:             app.StreamKeeper,
+		DaKeeper:                 app.DaKeeper,
 		TokenconverterKeeper:     app.TokenconverterKeeper,
 		LiquiditypoolKeeper:      app.LiquiditypoolKeeper,
 		LiquidityincentiveKeeper: app.LiquidityincentiveKeeper,

@@ -25,8 +25,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 
-	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
@@ -69,9 +68,10 @@ type AppKeepers struct {
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
 	// Third party module keepers
+	// BlobKeeper               blobmodulekeeper.Keeper
+	// StreamKeeper             streammodulekeeper.Keeper
 	AuctionKeeper            auctionkeeper.Keeper
-	BlobKeeper               blobmodulekeeper.Keeper
-	StreamKeeper             streammodulekeeper.Keeper
+	DaKeeper                 damodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
