@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -12,6 +13,7 @@ import (
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
 	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
+	upgradetypes "cosmossdk.io/x/upgrade/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -61,6 +63,9 @@ import (
 	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	"github.com/sunriselayer/sunrise/app/ante"
+	"github.com/sunriselayer/sunrise/app/keepers"
+	"github.com/sunriselayer/sunrise/app/upgrades"
+	v0_1_5_test "github.com/sunriselayer/sunrise/app/upgrades/v0.1.5-test"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
@@ -99,6 +104,10 @@ const (
 var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
+
+	// <sunrise>
+	Upgrades = []upgrades.Upgrade{v0_1_5_test.Upgrade}
+	// </sunrise>
 )
 
 var (
@@ -466,6 +475,14 @@ func New(
 	)
 
 	app.SetCheckTx(checkTxHandler.CheckTx())
+
+	// <sunrise>
+	// Step 8: Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
+	app.setupUpgradeHandlers()
+	// Step 9: Set the custom upgrade store loaders on BaseApp.
+	app.setupUpgradeStoreLoaders()
+	// </sunrise>
+
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
 	// ---------------------------------------------------------------------------- //
@@ -644,3 +661,81 @@ func BlockedAddresses() map[string]bool {
 func (app *App) GetTxConfig() client.TxConfig {
 	return app.txConfig
 }
+
+// <sunrise>
+// configure store loader that checks if version == upgradeHeight and applies store upgrades
+func (app *App) setupUpgradeStoreLoaders() {
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	for _, upgrade := range Upgrades {
+		if upgradeInfo.Name == upgrade.UpgradeName {
+			storeUpgrades := upgrade.StoreUpgrades
+			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+		}
+	}
+}
+
+func (app *App) setupUpgradeHandlers() {
+	appKeepers := keepers.AppKeepers{
+		// keepers
+		AccountKeeper:         app.AccountKeeper,
+		BankKeeper:            app.BankKeeper,
+		StakingKeeper:         app.StakingKeeper,
+		SlashingKeeper:        app.SlashingKeeper,
+		MintKeeper:            app.MintKeeper,
+		DistrKeeper:           app.DistrKeeper,
+		GovKeeper:             app.GovKeeper,
+		CrisisKeeper:          app.CrisisKeeper,
+		UpgradeKeeper:         app.UpgradeKeeper,
+		ParamsKeeper:          app.ParamsKeeper,
+		AuthzKeeper:           app.AuthzKeeper,
+		EvidenceKeeper:        app.EvidenceKeeper,
+		FeeGrantKeeper:        app.FeeGrantKeeper,
+		GroupKeeper:           app.GroupKeeper,
+		ConsensusParamsKeeper: app.ConsensusParamsKeeper,
+		CircuitBreakerKeeper:  app.CircuitBreakerKeeper,
+
+		// IBC
+		IBCKeeper:           app.IBCKeeper,
+		CapabilityKeeper:    app.CapabilityKeeper,
+		IBCFeeKeeper:        app.IBCFeeKeeper,
+		ICAControllerKeeper: app.ICAControllerKeeper,
+		ICAHostKeeper:       app.ICAHostKeeper,
+		TransferKeeper:      app.TransferKeeper,
+
+		// Scoped IBC
+		ScopedIBCKeeper:           app.ScopedIBCKeeper,
+		ScopedIBCTransferKeeper:   app.ScopedIBCTransferKeeper,
+		ScopedICAControllerKeeper: app.ScopedICAControllerKeeper,
+		ScopedICAHostKeeper:       app.ScopedICAHostKeeper,
+
+		// Third party module keepers
+		AuctionKeeper:            app.AuctionKeeper,
+		BlobKeeper:               app.BlobKeeper,
+		StreamKeeper:             app.StreamKeeper,
+		TokenconverterKeeper:     app.TokenconverterKeeper,
+		LiquiditypoolKeeper:      app.LiquiditypoolKeeper,
+		LiquidityincentiveKeeper: app.LiquidityincentiveKeeper,
+		SwapKeeper:               app.SwapKeeper,
+		FeeKeeper:                app.FeeKeeper,
+	}
+	for _, upgrade := range Upgrades {
+		app.UpgradeKeeper.SetUpgradeHandler(
+			upgrade.UpgradeName,
+			upgrade.CreateUpgradeHandler(
+				app.ModuleManager,
+				app.Configurator(),
+				&appKeepers,
+			),
+		)
+	}
+}
+
+// </sunrise>
