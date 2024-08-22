@@ -65,7 +65,6 @@ import (
 	"github.com/sunriselayer/sunrise/app/ante"
 	"github.com/sunriselayer/sunrise/app/keepers"
 	"github.com/sunriselayer/sunrise/app/upgrades"
-	v0_1_5_test "github.com/sunriselayer/sunrise/app/upgrades/v0.1.5-test"
 	v0_2_0_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.0-test"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -107,7 +106,7 @@ var (
 	DefaultNodeHome string
 
 	// <sunrise>
-	Upgrades = []upgrades.Upgrade{v0_1_5_test.Upgrade, v0_2_0_test.Upgrade}
+	Upgrades = []upgrades.Upgrade{v0_2_0_test.Upgrade}
 	// </sunrise>
 )
 
