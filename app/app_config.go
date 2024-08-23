@@ -75,19 +75,15 @@ import (
 	_ "github.com/skip-mev/block-sdk/v2/x/auction" // import for side-effects
 	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
 
-	blobmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blob/module/v1"
-	streammodulev1 "github.com/sunriselayer/sunrise/api/sunrise/blobstream/module/v1"
 	damodulev1 "github.com/sunriselayer/sunrise/api/sunrise/da/module"
 	feemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/fee/module"
 	liquidityincentivemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquidityincentive/module"
 	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module"
 	swapmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/swap/module"
 	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
-	_ "github.com/sunriselayer/sunrise/x/blob/module" // import for side-effects
-	blobmoduletypes "github.com/sunriselayer/sunrise/x/blob/types"
+	_ "github.com/sunriselayer/sunrise/x/blob/module"       // import for side-effects
 	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
-	streammoduletypes "github.com/sunriselayer/sunrise/x/blobstream/types"
-	_ "github.com/sunriselayer/sunrise/x/da/module" // import for side-effects
+	_ "github.com/sunriselayer/sunrise/x/da/module"         // import for side-effects
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module" // import for side-effects
 	feemoduletypes "github.com/sunriselayer/sunrise/x/fee/types"
@@ -138,8 +134,8 @@ var (
 		// thirdparty modules
 		auctiontypes.ModuleName,
 		// chain modules
-		blobmoduletypes.ModuleName,
-		streammoduletypes.ModuleName,
+		// blobmoduletypes.ModuleName,
+		// streammoduletypes.ModuleName,
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
@@ -168,8 +164,8 @@ var (
 		ibctransfertypes.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		blobmoduletypes.ModuleName,
-		streammoduletypes.ModuleName,
+		// blobmoduletypes.ModuleName,
+		// streammoduletypes.ModuleName,
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
@@ -193,8 +189,8 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
-		blobmoduletypes.ModuleName,
-		streammoduletypes.ModuleName,
+		// blobmoduletypes.ModuleName,
+		// streammoduletypes.ModuleName,
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
@@ -225,8 +221,8 @@ var (
 		// Third party module accounts
 		{Account: auctiontypes.ModuleName, Permissions: []string{}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
-		{Account: blobmoduletypes.ModuleName},
-		{Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		// {Account: blobmoduletypes.ModuleName},
+		// {Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
@@ -247,8 +243,8 @@ var (
 		// ibctransfertypes.ModuleName,
 		// ibcfeetypes.ModuleName,
 		// icatypes.ModuleName,
-		blobmoduletypes.ModuleName,
-		streammoduletypes.ModuleName,
+		// blobmoduletypes.ModuleName,
+		// streammoduletypes.ModuleName,
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
@@ -377,14 +373,14 @@ var (
 				Name:   auctiontypes.ModuleName,
 				Config: appconfig.WrapAny(&auctionmodulev1.Module{}),
 			},
-			{
-				Name:   blobmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&blobmodulev1.Module{}),
-			},
-			{
-				Name:   streammoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&streammodulev1.Module{}),
-			},
+			// {
+			// 	Name:   blobmoduletypes.ModuleName,
+			// 	Config: appconfig.WrapAny(&blobmodulev1.Module{}),
+			// },
+			// {
+			// 	Name:   streammoduletypes.ModuleName,
+			// 	Config: appconfig.WrapAny(&streammodulev1.Module{}),
+			// },
 			{
 				Name:   damoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&damodulev1.Module{}),
