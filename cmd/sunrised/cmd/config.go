@@ -41,15 +41,21 @@ func initCometBFTConfig() *cmtcfg.Config {
 	return cfg
 }
 
+// The following code snippet is just for reference.
+type CustomAppConfig struct {
+	serverconfig.Config `mapstructure:",squash"`
+	DA                  app.DAConfig `mapstructure:"da"`
+}
+
+var ConfigTemplate = serverconfig.DefaultConfigTemplate + `
+
+[da]
+# API to query DA v2 uploaded data shard hashes
+shard_hashes_api = {{ .DA.ShardHashesAPI }}`
+
 // initAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
-func initAppConfig() (string, interface{}) {
-	// The following code snippet is just for reference.
-	type CustomAppConfig struct {
-		serverconfig.Config `mapstructure:",squash"`
-		DA                  app.DAConfig `mapstructure:"da"`
-	}
-
+func InitAppConfig() (string, CustomAppConfig) {
 	// Optionally allow the chain developer to overwrite the SDK's default
 	// server config.
 	// srvCfg := serverconfig.DefaultConfig()
@@ -91,6 +97,8 @@ shard_hashes_api = "http://localhost:8000/api/shard_hashes"
 	// # This is the number of wasm vm instances we keep cached in memory for speed-up
 	// # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
 	// lru_size = 0`
+
+	serverconfig.SetConfigTemplate(ConfigTemplate)
 
 	return customAppTemplate, customAppConfig
 }
