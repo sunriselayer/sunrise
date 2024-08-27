@@ -18,6 +18,7 @@ func (k msgServer) PublishData(goCtx context.Context, msg *types.MsgPublishData)
 		ShardDoubleHashes: msg.ShardDoubleHashes,
 		Collateral:        params.ChallengeCollateral,
 		Timestamp:         ctx.BlockTime(),
+		DataSourceInfo:    msg.DataSourceInfo,
 		Status:            "msg_server",
 	})
 	if err != nil {

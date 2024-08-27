@@ -48,6 +48,7 @@ message MsgPublishData {
   string metadata_uri = 2;
   uint64 parity_shard_count = 3;
   repeated bytes shard_double_hashes = 4;
+  string data_source_info = 5;
 }
 
 message MsgPublishDataResponse {}

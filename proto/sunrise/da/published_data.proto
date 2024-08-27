@@ -27,6 +27,7 @@ message PublishedData {
   ];
   google.protobuf.Timestamp challenge_timestamp = 9
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  string data_source_info = 10;
 }
 
 message Proof {
