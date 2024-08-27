@@ -10,7 +10,7 @@ import (
 )
 
 func TestProofStore(t *testing.T) {
-	k, ctx := keepertest.DaKeeper(t)
+	k, _, _, _, ctx := keepertest.DaKeeper(t)
 	sender1 := sdk.AccAddress("sender1")
 	sender2 := sdk.AccAddress("sender2")
 
