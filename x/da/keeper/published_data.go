@@ -31,7 +31,7 @@ func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) 
 	}
 	store.Set(types.PublishedDataKey(data.MetadataUri), bz)
 
-	if data.Status == "verified" {
+	if data.Status == "verified" || data.Status == "rejected" {
 		store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
 	} else {
 		store.Set(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri), []byte(data.MetadataUri))
