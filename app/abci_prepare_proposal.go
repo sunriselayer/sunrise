@@ -56,7 +56,7 @@ func (app *App) PrepareProposal(req *abci.RequestPrepareProposal) (*abci.Respons
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.FeeGrantKeeper,
-		app.BlobKeeper,
+		// app.BlobKeeper,
 		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,

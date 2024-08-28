@@ -52,6 +52,7 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
+
 	"github.com/skip-mev/block-sdk/v2/abci"
 	"github.com/skip-mev/block-sdk/v2/abci/checktx"
 	"github.com/skip-mev/block-sdk/v2/block"
@@ -69,8 +70,9 @@ import (
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
-	blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	// blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
+	// streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
@@ -147,9 +149,11 @@ type App struct {
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
 	// Third party module keepers
-	AuctionKeeper            auctionkeeper.Keeper
-	BlobKeeper               blobmodulekeeper.Keeper
-	StreamKeeper             streammodulekeeper.Keeper
+	AuctionKeeper auctionkeeper.Keeper
+
+	// BlobKeeper               blobmodulekeeper.Keeper
+	// StreamKeeper             streammodulekeeper.Keeper
+	DaKeeper                 damodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
@@ -313,8 +317,10 @@ func New(
 
 		// Third party module keepers
 		&app.AuctionKeeper,
-		&app.BlobKeeper,
-		&app.StreamKeeper,
+
+		// &app.BlobKeeper,
+		// &app.StreamKeeper,
+		&app.DaKeeper,
 		&app.TokenconverterKeeper,
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
@@ -400,7 +406,7 @@ func New(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.FeeGrantKeeper,
-		app.BlobKeeper,
+		// app.BlobKeeper,
 		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
@@ -427,14 +433,23 @@ func New(
 
 	// Step 6: Create the proposal handler and set it on the app. Now the application
 	// will build and verify proposals using the Block SDK!
-	proposalHandler := abci.NewProposalHandler(
+	blockSdkProposalHandler := abci.NewProposalHandler(
 		app.Logger(),
 		app.txConfig.TxDecoder(),
 		app.txConfig.TxEncoder(),
 		mempool,
 	)
-	app.App.SetPrepareProposal(proposalHandler.PrepareProposalHandler())
-	app.App.SetProcessProposal(proposalHandler.ProcessProposalHandler())
+
+	propHandler := NewProposalHandler(
+		logger,
+		app.DaKeeper,
+		app.StakingKeeper,
+		app.ModuleManager,
+		blockSdkProposalHandler,
+	)
+	app.BaseApp.SetPrepareProposal(propHandler.PrepareProposal())
+	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal())
+	app.BaseApp.SetPreBlocker(propHandler.PreBlocker)
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
 	// use the MEV lane.
@@ -454,6 +469,17 @@ func New(
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
 	// ---------------------------------------------------------------------------- //
+
+	// Vote extension
+	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
+
+	daConfig, err := ReadDAConfig(appOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
+	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 

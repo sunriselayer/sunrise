@@ -1,6 +1,8 @@
 package app
 
 import (
+	"encoding/json"
+
 	"cosmossdk.io/log"
 	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 	coretypes "github.com/cometbft/cometbft/types"
@@ -28,17 +30,25 @@ func separateTxs(_ client.TxConfig, rawTxs [][]byte) ([][]byte, []blob.BlobTx) {
 // FilterTxs applies the antehandler to all proposed transactions and removes transactions that return an error.
 func FilterTxs(logger log.Logger, ctx sdk.Context, handler sdk.AnteHandler, txConfig client.TxConfig, txs [][]byte) [][]byte {
 	normalTxs, blobTxs := separateTxs(txConfig, txs)
-	normalTxs, ctx = filterStdTxs(logger, txConfig.TxDecoder(), ctx, handler, normalTxs)
+	normalTxs, ctx = filterStdTxsAndVoteExtTx(logger, txConfig.TxDecoder(), ctx, handler, normalTxs)
 	blobTxs, _ = filterBlobTxs(logger, txConfig.TxDecoder(), ctx, handler, blobTxs)
 	return append(normalTxs, encodeBlobTxs(blobTxs)...)
 }
 
-// filterStdTxs applies the provided antehandler to each transaction and removes
+// filterStdTxsAndVoteExtTx collects vote extension tx and applies the provided antehandler to each transaction and removes
 // transactions that return an error. Panics are caught by the checkTxValidity
 // function used to apply the ante handler.
-func filterStdTxs(logger log.Logger, dec sdk.TxDecoder, ctx sdk.Context, handler sdk.AnteHandler, txs [][]byte) ([][]byte, sdk.Context) {
+func filterStdTxsAndVoteExtTx(logger log.Logger, dec sdk.TxDecoder, ctx sdk.Context, handler sdk.AnteHandler, txs [][]byte) ([][]byte, sdk.Context) {
 	n := 0
 	for _, tx := range txs {
+		// collect vote extension tx
+		var voteExtTx VoteExtensionTx
+		if err := json.Unmarshal(tx, &voteExtTx); err == nil {
+			txs[n] = tx
+			n++
+			continue
+		}
+
 		sdkTx, err := dec(tx)
 		if err != nil {
 			logger.Error("decoding already checked transaction", "tx", tmbytes.HexBytes(coretypes.Tx(tx).Hash()), "error", err)

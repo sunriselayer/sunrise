@@ -1,0 +1,18 @@
+syntax = "proto3";
+package sunrise.da;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/da/params.proto";
+import "sunrise/da/published_data.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// GenesisState defines the da module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated PublishedData published_data = 2 [ (gogoproto.nullable) = false ];
+  repeated Proof proofs = 3 [ (gogoproto.nullable) = false ];
+}
