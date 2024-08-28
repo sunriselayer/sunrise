@@ -58,7 +58,6 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1
-	github.com/klauspost/reedsolomon v1.11.8
 	github.com/rs/zerolog v1.32.0
 	github.com/skip-mev/block-sdk/v2 v2.1.1
 	github.com/spf13/cast v1.6.0
@@ -216,6 +215,7 @@ require (
 	github.com/klauspost/compress v1.17.8 // indirect
 	github.com/klauspost/cpuid/v2 v2.1.1 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
+	github.com/klauspost/reedsolomon v1.11.8 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect

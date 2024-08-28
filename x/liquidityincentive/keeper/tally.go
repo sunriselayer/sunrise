@@ -94,10 +94,6 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 		}
 	}
 
-	if err != nil {
-		return []types.PoolWeight{}, err
-	}
-
 	// iterate over the validators again to tally their voting power
 	for _, val := range currValidators {
 		if len(val.Weights) == 0 {
