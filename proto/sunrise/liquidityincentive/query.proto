@@ -37,6 +37,14 @@ service Query {
     option (google.api.http).get =
         "/sunrise/liquidityincentive/epochs/{previous_epoch_id}/gauges";
   }
+
+  // Queries a list of Vote items.
+  rpc Vote(QueryVoteRequest) returns (QueryVoteResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/votes/{address}";
+  }
+  rpc Votes(QueryVotesRequest) returns (QueryVotesResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/votes";
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -76,5 +84,18 @@ message QueryGaugesRequest {
 
 message QueryGaugesResponse {
   repeated Gauge gauge = 1 [ (gogoproto.nullable) = false ];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryVoteRequest { string address = 1; }
+
+message QueryVoteResponse { Vote vote = 1 [ (gogoproto.nullable) = false ]; }
+
+message QueryVotesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryVotesResponse {
+  repeated Vote votes = 1 [ (gogoproto.nullable) = false ];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

@@ -24,6 +24,8 @@ const (
 	Query_Epochs_FullMethodName = "/sunrise.liquidityincentive.Query/Epochs"
 	Query_Gauge_FullMethodName  = "/sunrise.liquidityincentive.Query/Gauge"
 	Query_Gauges_FullMethodName = "/sunrise.liquidityincentive.Query/Gauges"
+	Query_Vote_FullMethodName   = "/sunrise.liquidityincentive.Query/Vote"
+	Query_Votes_FullMethodName  = "/sunrise.liquidityincentive.Query/Votes"
 )
 
 // QueryClient is the client API for Query service.
@@ -38,6 +40,9 @@ type QueryClient interface {
 	// Queries a list of Gauge items.
 	Gauge(ctx context.Context, in *QueryGaugeRequest, opts ...grpc.CallOption) (*QueryGaugeResponse, error)
 	Gauges(ctx context.Context, in *QueryGaugesRequest, opts ...grpc.CallOption) (*QueryGaugesResponse, error)
+	// Queries a list of Vote items.
+	Vote(ctx context.Context, in *QueryVoteRequest, opts ...grpc.CallOption) (*QueryVoteResponse, error)
+	Votes(ctx context.Context, in *QueryVotesRequest, opts ...grpc.CallOption) (*QueryVotesResponse, error)
 }
 
 type queryClient struct {
@@ -93,6 +98,24 @@ func (c *queryClient) Gauges(ctx context.Context, in *QueryGaugesRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) Vote(ctx context.Context, in *QueryVoteRequest, opts ...grpc.CallOption) (*QueryVoteResponse, error) {
+	out := new(QueryVoteResponse)
+	err := c.cc.Invoke(ctx, Query_Vote_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Votes(ctx context.Context, in *QueryVotesRequest, opts ...grpc.CallOption) (*QueryVotesResponse, error) {
+	out := new(QueryVotesResponse)
+	err := c.cc.Invoke(ctx, Query_Votes_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -105,6 +128,9 @@ type QueryServer interface {
 	// Queries a list of Gauge items.
 	Gauge(context.Context, *QueryGaugeRequest) (*QueryGaugeResponse, error)
 	Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error)
+	// Queries a list of Vote items.
+	Vote(context.Context, *QueryVoteRequest) (*QueryVoteResponse, error)
+	Votes(context.Context, *QueryVotesRequest) (*QueryVotesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -126,6 +152,12 @@ func (UnimplementedQueryServer) Gauge(context.Context, *QueryGaugeRequest) (*Que
 }
 func (UnimplementedQueryServer) Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Gauges not implemented")
+}
+func (UnimplementedQueryServer) Vote(context.Context, *QueryVoteRequest) (*QueryVoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Vote not implemented")
+}
+func (UnimplementedQueryServer) Votes(context.Context, *QueryVotesRequest) (*QueryVotesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Votes not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -230,6 +262,42 @@ func _Query_Gauges_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Vote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVoteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Vote(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Vote_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Vote(ctx, req.(*QueryVoteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Votes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVotesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Votes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Votes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Votes(ctx, req.(*QueryVotesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -256,6 +324,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Gauges",
 			Handler:    _Query_Gauges_Handler,
+		},
+		{
+			MethodName: "Vote",
+			Handler:    _Query_Vote_Handler,
+		},
+		{
+			MethodName: "Votes",
+			Handler:    _Query_Votes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
