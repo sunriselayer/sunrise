@@ -1,8 +1,8 @@
 module github.com/sunriselayer/sunrise
 
-go 1.21.5
+go 1.22.2
 
-toolchain go1.22.1
+toolchain go1.22.2
 
 replace (
 	// sunrise-core
