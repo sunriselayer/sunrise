@@ -1,8 +1,75 @@
 # swap
 
-## MsgSwapExactAmountIn
+## Spec
 
-## MsgSwapExactAmountOut
+### Route
+
+This module accepts a swap route with recursive struct.
+
+```protobuf
+
+message RoutePool {
+  uint64 pool_id = 1;
+}
+
+message RouteSeries {
+  repeated Route routes = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message RouteParallel {
+  repeated Route routes = 1 [
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated string weights = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message Route {
+  string denom_in = 1;
+  string denom_out = 2;
+  oneof strategy {
+    RoutePool pool = 3;
+    RouteSeries series = 4;
+    RouteParallel parallel = 5;
+  }
+}
+```
+
+### Params
+
+This module has these params
+
+- `interface_fee_rate`: Interface providers (e.g. frontend web-app provider) can receive a certain rate of the fee from the swap tx.
+
+## Messages
+
+### MsgSwapExactAmountIn
+
+By sending tx with this msg, users can swap tokens with designating the amount for input.
+
+### MsgSwapExactAmountOut
+
+By sending tx with this msg, users can swap tokens with designating the amount for output.
+
+## Query
+
+See [openapi.yml](../../docs/static/openapi.yml) for details
+
+- Params
+- IncomingInFlightPackets
+- IncomingInFlightPacket
+- OutgoingInFlightPackets
+- OutgoingInFlightPacket
+- CalculationSwapExactAmountIn  
+- CalculationSwapExactAmountOut
 
 ## ICS20 Middleware
 
