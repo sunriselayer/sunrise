@@ -32,21 +32,55 @@ Three epochs concurrently exist in the system.
 
 - Past Epoch: The epoch that has ended.
 - Current Epoch: The epoch that is ongoing.
-- Next Epoch: The epoch that will be started after the current epoch.
+<!-- - Next Epoch: The epoch that will be started after the current epoch. -->
+
+Each epoch has these parameters
+
+- `start_block`
+- `end_block`
+- `gauges`
+
+## Msg
 
 ### MsgVoteGauge
 
-Users can vote for a gauge for next epoch. `previous_epoch_id` will be the id of current epoch.
+Users can vote for the gauge.
 
-- `previous_epoch_id`
+- `weights`: The list of what Percentage of voting power to vote for the gauge.
 
-### MsgCollectVoteRewards
+The sum of the weights must be less than or equal to 1 (100%).
+Once a vote is made, the vote will continue to be reflected in all epochs until a new vote is made.
 
-Users can claim vote rewards for the past epoch.
-It is from `treasury_tax` in `x/liquiditypool`.
+## Tally of votes
 
-- `epoch_id`
+The votes will be tallied at the start of each epoch.
 
-### MsgCollectIncentiveRewards
+1. Tally the votes by validators. The validator votes include delegated voting power.
+1. Tally the non-validated ballots. If the address is delegated to a validator, its own voting power is deducted from the validator's votes.
 
-- `pool_ids`
+### Example
+
+- Addresses
+
+Validator A 1000vRISE
+Delegator B 200vRISE (100vRISE delegated to Validator A)
+
+- Pools
+
+Liquidity Pool #1
+Liquidity Pool #2
+
+- Votes
+
+A votes Pool #1 & #2 (50% & 50%)
+B votes Pool #1 (100%)
+
+#### Result
+
+1. Only A voted
+Pool #1's voting power: 550vRISE
+Pool #2's voting power: 550vRISE
+
+1. A & B voted
+Pool #1's voting power: 700vRISE (500 + 200)
+Pool #2's voting power: 650vRISE
