@@ -28,7 +28,7 @@ For pool $i$ position $j$,
 
 ### Epoch
 
-Three epochs concurrently exist in the system.
+Two epochs concurrently exist in the system.
 
 - Past Epoch: The epoch that has ended.
 - Current Epoch: The epoch that is ongoing.
@@ -40,7 +40,16 @@ Each epoch has these parameters
 - `end_block`
 - `gauges`
 
-## Msg
+### Gauge
+
+- `previous_epoch_id`
+- `pool_id`
+- `ratio`
+
+Gauges are created for each liquidity pool and included in the Epoch.
+`ratio` stores the Voting power calculated in the Epoch.
+
+## Messages
 
 ### MsgVoteGauge
 
@@ -84,3 +93,15 @@ Pool #2's voting power: 550vRISE
 1. A & B voted
 Pool #1's voting power: 700vRISE (500 + 200)
 Pool #2's voting power: 650vRISE
+
+## Query
+
+See [openapi.yml](../../docs/static/openapi.yml) for details
+
+- Params
+- Epochs
+- Epoch
+- Gauges
+- Gauge
+- Votes
+- Vote

@@ -49,6 +49,10 @@ Each position has these info
 * `upper_tick`: Uniquely determine the max price of the range of the position
 * `liquidity`: The amount of liquidity determined based on the volume of deposits
 
+## Swap
+
+For sending the tx for swapping tokens, use msgs in `x/swap` module.
+
 ## Msg
 
 ### MsgCreatePool
@@ -110,6 +114,17 @@ Fees are `base_denom` or `quote_denom`, incentives are provided by vRISE.
 
 * `position_ids`: The list of position ids to claim rewards
 
-## Swap
+## Query
 
-For sending the tx for swapping tokens, use msgs in `x/swap` module.
+See [openapi.yml](../../docs/static/openapi.yml) for details
+
+* Params
+* Pools
+* Pool
+* Positions
+* Position
+* PoolPositions
+* AddressPositions
+* PositionFees
+* CalculationCreatePosition
+* CalculationIncreaseLiquidity
