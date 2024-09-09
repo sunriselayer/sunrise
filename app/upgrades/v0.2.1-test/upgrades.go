@@ -18,6 +18,10 @@ func CreateUpgradeHandler(
 	return func(context context.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 		ctx := sdk.UnwrapSDKContext(context)
 		ctx.Logger().Info(fmt.Sprintf("update start:%s", UpgradeName))
+		err := upgradeSendCoin(ctx, keepers.BankKeeper)
+		if err != nil {
+			panic(err)
+		}
 
 		return mm.RunMigrations(ctx, configurator, vm)
 	}
