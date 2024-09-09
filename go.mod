@@ -18,6 +18,8 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+	// replace to fix appHash error https://github.com/cosmos/cosmos-sdk/issues/20489
+	github.com/cosmos/iavl => github.com/cosmos/iavl v1.2.0
 )
 
 require (
