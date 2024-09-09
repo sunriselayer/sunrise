@@ -2,8 +2,6 @@ module github.com/sunriselayer/sunrise
 
 go 1.22.2
 
-toolchain go1.22.2
-
 replace (
 	// sunrise-core
 	github.com/cometbft/cometbft => github.com/sunriselayer/sunrise-core v0.0.5-cmt-v0.38.2
