@@ -15,6 +15,7 @@ func upgradeSendCoin(
 	fromAddress := "sunrise1kw8x5dncdw7ualrx02q4cldcxhsmg5vwtxaxvq" // core dev-2
 	toAddresses := []string{
 		// new validators
+		"sunrise1sj22pg08nszfnje2xs4rhfa35g9xr36z5u6h9l", // InfStones
 	}
 	// same amount as older validator's one
 	govCoin := sdk.NewInt64Coin("uvrise", 9000000000000)
