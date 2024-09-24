@@ -19,3 +19,11 @@ md5: 5190cc61247aef4bf92ae51740388134
 
 - Execute sendCoin vRISE to new validators
 - Delete DAv1 (blob & blobstream module) and add DAv2 (da module)
+
+### v0.2.1-test
+
+<https://github.com/sunriselayer/sunrise/releases/tag/v0.2.1>
+md5: d5252b94ead5217cc7f03f04f874611b
+
+- Execute sendCoin vRISE & RISE to a new validator (InfStones)
+- Fix consensus error on sunrised restart <https://github.com/sunriselayer/sunrise/issues/119>
