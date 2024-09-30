@@ -443,7 +443,7 @@ func New(
 
 	// Step 6: Create the proposal handler and set it on the app. Now the application
 	// will build and verify proposals using the Block SDK!
-	blockSdkProposalHandler := abci.NewProposalHandler(
+	blockSdkProposalHandler := abci.NewDefaultProposalHandler(
 		app.Logger(),
 		app.txConfig.TxDecoder(),
 		app.txConfig.TxEncoder(),
@@ -472,7 +472,9 @@ func New(
 	)
 	checkTxHandler := checktx.NewMempoolParityCheckTx(
 		app.Logger(), mempool,
-		app.txConfig.TxDecoder(), mevCheckTx.CheckTx(),
+		app.txConfig.TxDecoder(),
+		mevCheckTx.CheckTx(),
+		app.BaseApp,
 	)
 
 	app.SetCheckTx(checkTxHandler.CheckTx())
