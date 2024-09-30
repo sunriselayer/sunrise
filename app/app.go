@@ -67,6 +67,7 @@ import (
 	"github.com/sunriselayer/sunrise/app/upgrades"
 	v0_2_0_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.0-test"
 	v0_2_1_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.1-test"
+	v0_2_2_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.2-test"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
@@ -107,7 +108,7 @@ var (
 	DefaultNodeHome string
 
 	// <sunrise>
-	Upgrades = []upgrades.Upgrade{v0_2_0_test.Upgrade, v0_2_1_test.Upgrade}
+	Upgrades = []upgrades.Upgrade{v0_2_0_test.Upgrade, v0_2_1_test.Upgrade, v0_2_2_test.Upgrade}
 	// </sunrise>
 )
 
