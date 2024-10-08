@@ -51,7 +51,7 @@ func MakeConfig(regs ...ModuleRegister) Config {
 	txCfg := tx.NewTxConfig(marshaler, tx.DefaultSignModes)
 
 	dec := txCfg.TxDecoder()
-	dec = IndexWrapperDecoder(dec)
+	// dec = IndexWrapperDecoder(dec)
 
 	txCfg, _ = tx.NewTxConfigWithOptions(marshaler, tx.ConfigOptions{
 		ProtoDecoder: dec,

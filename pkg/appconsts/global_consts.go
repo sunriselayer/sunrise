@@ -6,7 +6,6 @@ import (
 	ns "github.com/sunriselayer/sunrise/pkg/namespace"
 
 	"github.com/celestiaorg/rsmt2d"
-	"github.com/cometbft/cometbft/pkg/consts"
 )
 
 // These constants were originally sourced from:
@@ -79,15 +78,15 @@ const (
 )
 
 var (
-	// DataCommitmentBlocksLimit is the maximum number of blocks that a data commitment can span
-	DataCommitmentBlocksLimit = consts.DataCommitmentBlocksLimit
+	// // DataCommitmentBlocksLimit is the maximum number of blocks that a data commitment can span
+	// DataCommitmentBlocksLimit = consts.DataCommitmentBlocksLimit
 
-	// NewBaseHashFunc is the base hash function used by NMT. Change accordingly
-	// if another hash.Hash should be used as a base hasher in the NMT.
-	NewBaseHashFunc = consts.NewBaseHashFunc
+	// // NewBaseHashFunc is the base hash function used by NMT. Change accordingly
+	// // if another hash.Hash should be used as a base hasher in the NMT.
+	// NewBaseHashFunc = consts.NewBaseHashFunc
 
-	// hashLength is the length of a hash in bytes.
-	hashLength = NewBaseHashFunc().Size()
+	// // hashLength is the length of a hash in bytes.
+	// hashLength = NewBaseHashFunc().Size()
 
 	// DefaultCodec is the default codec creator used for data erasure.
 	DefaultCodec = rsmt2d.NewLeoRSCodec
@@ -96,7 +95,7 @@ var (
 	SupportedShareVersions = []uint8{ShareVersionZero}
 )
 
-// HashLength returns the length of a hash in bytes.
-func HashLength() int {
-	return hashLength
-}
+// // HashLength returns the length of a hash in bytes.
+// func HashLength() int {
+// 	return hashLength
+// }
