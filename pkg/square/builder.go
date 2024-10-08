@@ -12,7 +12,6 @@ import (
 	"github.com/sunriselayer/sunrise/pkg/namespace"
 	"github.com/sunriselayer/sunrise/pkg/shares"
 
-	"github.com/cometbft/cometbft/pkg/consts"
 	coretypes "github.com/cometbft/cometbft/proto/tendermint/types"
 )
 
