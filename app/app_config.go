@@ -81,9 +81,10 @@ import (
 	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module"
 	swapmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/swap/module"
 	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
-	_ "github.com/sunriselayer/sunrise/x/blob/module"       // import for side-effects
-	_ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
-	_ "github.com/sunriselayer/sunrise/x/da/module"         // import for side-effects
+
+	// _ "github.com/sunriselayer/sunrise/x/blob/module"       // import for side-effects
+	// _ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
+	_ "github.com/sunriselayer/sunrise/x/da/module" // import for side-effects
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module" // import for side-effects
 	feemoduletypes "github.com/sunriselayer/sunrise/x/fee/types"
