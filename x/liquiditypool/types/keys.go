@@ -47,7 +47,7 @@ const (
 	FeePositionAccumulatorPrefix = "FeePositionAccumulator/value/"
 	KeyFeePoolAccumulatorPrefix  = "FeePoolAccumulator/value/"
 	KeyAccumPrefix               = "Accumulator/Acc/value/"
-	KeyAccumulatorPositionPrefix = "Accumulator/Pos/value"
+	KeyAccumulatorPositionPrefix = "Accumulator/Pos/value/"
 	KeySeparator                 = "||"
 )
 
