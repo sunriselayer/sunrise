@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -32,7 +31,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 	}
 	err := checkTicks(lowerTick.Int64(), upperTick.Int64())
 	if err != nil {
-		return nil, errorsmod.Wrapf(types.ErrInvalidTickers, err.Error())
+		return nil, types.ErrInvalidTickers
 	}
 	amount, ok := sdkmath.NewIntFromString(req.Amount)
 	if !ok {
@@ -101,10 +100,16 @@ func (k Keeper) CalculationIncreaseLiquidity(ctx context.Context, req *types.Que
 
 	amountInDec := math.LegacyNewDecFromInt(amountIn)
 	if req.DenomIn == pool.DenomBase {
+		if actualAmountBase.IsZero() {
+			return nil, types.ErrZeroActualAmountBase
+		}
 		return &types.QueryCalculationIncreaseLiquidityResponse{
 			TokenRequired: sdk.NewCoin(pool.DenomQuote, amountInDec.Mul(actualAmountQuote).Quo(actualAmountBase).TruncateInt()),
 		}, nil
 	} else if req.DenomIn == pool.DenomQuote {
+		if actualAmountQuote.IsZero() {
+			return nil, types.ErrZeroActualAmountQuote
+		}
 		return &types.QueryCalculationIncreaseLiquidityResponse{
 			TokenRequired: sdk.NewCoin(pool.DenomBase, amountInDec.Mul(actualAmountBase).Quo(actualAmountQuote).TruncateInt()),
 		}, nil
