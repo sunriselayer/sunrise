@@ -275,7 +275,7 @@ func TestGetTotalRewards(t *testing.T) {
 	require.Equal(t, rewards.String(), "")
 }
 
-// func TestDeletePosition(t *testing.T) {
+// func TestLiquidateAndDeletePosition(t *testing.T) {
 // 	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
 // 	// when position does not exist
 // 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
