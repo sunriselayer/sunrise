@@ -247,37 +247,37 @@ func (k Keeper) SetPositionIntervalAccumulation(ctx context.Context, accumName, 
 	return nil
 }
 
-func (k Keeper) DeletePosition(ctx context.Context, accumName, positionName string) (sdk.DecCoins, error) {
-	position, err := k.GetAccumulatorPosition(ctx, accumName, positionName)
-	if err != nil {
-		return sdk.DecCoins{}, err
-	}
+// func (k Keeper) LiquidateAndDeletePosition(ctx context.Context, accumName, positionName string) (sdk.DecCoins, error) {
+// 	position, err := k.GetAccumulatorPosition(ctx, accumName, positionName)
+// 	if err != nil {
+// 		return sdk.DecCoins{}, err
+// 	}
 
-	remainingRewards, dust, err := k.ClaimRewards(ctx, accumName, positionName)
-	if err != nil {
-		return sdk.DecCoins{}, err
-	}
+// 	remainingRewards, dust, err := k.ClaimRewards(ctx, accumName, positionName)
+// 	if err != nil {
+// 		return sdk.DecCoins{}, err
+// 	}
 
-	store := k.storeService.OpenKVStore(ctx)
-	err = store.Delete(types.FormatKeyAccumulatorPositionPrefix(accumName, positionName))
-	if err != nil {
-		return sdk.DecCoins{}, err
-	}
+// 	store := k.storeService.OpenKVStore(ctx)
+// 	err = store.Delete(types.FormatKeyAccumulatorPositionPrefix(accumName, positionName))
+// 	if err != nil {
+// 		return sdk.DecCoins{}, err
+// 	}
 
-	accumulator, err := k.GetAccumulator(ctx, accumName)
-	if err != nil {
-		return sdk.DecCoins{}, err
-	}
-	accumulator.TotalShares.SubMut(position.NumShares)
-	err = k.SetAccumulator(ctx, accumulator)
-	if err != nil {
-		return sdk.DecCoins{}, err
-	}
+// 	accumulator, err := k.GetAccumulator(ctx, accumName)
+// 	if err != nil {
+// 		return sdk.DecCoins{}, err
+// 	}
+// 	accumulator.TotalShares.SubMut(position.NumShares)
+// 	err = k.SetAccumulator(ctx, accumulator)
+// 	if err != nil {
+// 		return sdk.DecCoins{}, err
+// 	}
 
-	return sdk.NewDecCoinsFromCoins(remainingRewards...).Add(dust...), nil
-}
+// 	return sdk.NewDecCoinsFromCoins(remainingRewards...).Add(dust...), nil
+// }
 
-func (k Keeper) deletePosition(ctx context.Context, accumName, positionName string) {
+func (k Keeper) DeletePosition(ctx context.Context, accumName, positionName string) {
 	store := k.storeService.OpenKVStore(ctx)
 	err := store.Delete(types.FormatKeyAccumulatorPositionPrefix(accumName, positionName))
 	if err != nil {
@@ -318,7 +318,7 @@ func (k Keeper) ClaimRewards(ctx context.Context, accumName, positionName string
 	truncatedRewardsTotal, dust := totalRewards.TruncateDecimal()
 
 	if position.NumShares.IsZero() {
-		k.deletePosition(ctx, accumName, positionName)
+		k.DeletePosition(ctx, accumName, positionName)
 	} else {
 		k.SetAccumulatorPosition(ctx, accumName, accumulator.AccumValue, positionName, position.NumShares, sdk.NewDecCoins())
 	}
