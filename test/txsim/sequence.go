@@ -7,7 +7,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/grpc"
-	"github.com/sunriselayer/sunrise/pkg/blob"
 )
 
 // Sequence is the basic unit for programmatic transaction generation.
@@ -35,7 +34,6 @@ type Sequence interface {
 // The gas limit and price can also be set. If left at 0, the DefaultGasLimit will be used.
 type Operation struct {
 	Msgs     []types.Msg
-	Blobs    []*blob.Blob
 	Delay    uint64
 	GasLimit uint64
 	GasPrice float64
