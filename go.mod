@@ -35,7 +35,6 @@ require (
 	github.com/bufbuild/buf v1.31.0
 	github.com/celestiaorg/knuu v0.10.0
 	github.com/celestiaorg/nmt v0.20.0
-	github.com/celestiaorg/rsmt2d v0.11.0
 	github.com/cometbft/cometbft v0.38.12
 	github.com/cometbft/cometbft-db v0.11.0
 	github.com/consensys/gnark v0.10.0
@@ -60,10 +59,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
-	github.com/sunriselayer/sunrise/pkg/blob v0.0.3
-	github.com/sunriselayer/sunrise/pkg/namespace v0.0.3
 	go.uber.org/mock v0.4.0
-	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
 	golang.org/x/tools v0.22.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240624140628-dc46fd24d27d
 	google.golang.org/grpc v1.65.0
@@ -100,7 +96,6 @@ require (
 	github.com/bufbuild/protocompile v0.9.0 // indirect
 	github.com/bufbuild/protovalidate-go v0.6.2 // indirect
 	github.com/bufbuild/protoyaml-go v0.1.9 // indirect
-	github.com/celestiaorg/merkletree v0.0.0-20210714075610-a84dc3ddbbe4 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -204,9 +199,7 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
-	github.com/klauspost/cpuid/v2 v2.1.1 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
-	github.com/klauspost/reedsolomon v1.11.8 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
@@ -276,6 +269,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
+	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8 // indirect
 	golang.org/x/mod v0.18.0 // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/oauth2 v0.21.0 // indirect

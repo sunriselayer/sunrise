@@ -20,7 +20,6 @@ type StakingModuleBasic struct {
 // DefaultGenesis returns custom x/staking module genesis state.
 func (StakingModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genState := stakingtypes.DefaultGenesisState()
-	genState.Params.UnbondingTime = appconsts.DefaultUnbondingTime
 	genState.Params.BondDenom = appconsts.BondDenom
 
 	return cdc.MustMarshalJSON(genState)
