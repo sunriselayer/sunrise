@@ -15,7 +15,7 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 // Modifier allows for arbitrary changes to be made on the genesis state
@@ -38,9 +38,9 @@ type Modifier func(state map[string]json.RawMessage) map[string]json.RawMessage
 func ImmediateProposals(codec codec.Codec) Modifier {
 	return func(state map[string]json.RawMessage) map[string]json.RawMessage {
 		gs := v1.DefaultGenesisState()
-		gs.DepositParams.MinDeposit = sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(1)))
-		gs.TallyParams.Quorum = "0.000001"
-		gs.TallyParams.Threshold = "0.000001"
+		gs.Params.MinDeposit = sdk.NewCoins(sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(1)))
+		gs.Params.Quorum = "0.000001"
+		gs.Params.Threshold = "0.000001"
 		vp := time.Second * 5
 		gs.VotingParams.VotingPeriod = &vp
 		state[govtypes.ModuleName] = codec.MustMarshalJSON(gs)

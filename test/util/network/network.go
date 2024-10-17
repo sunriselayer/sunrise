@@ -19,8 +19,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/sunriselayer/sunrise/app"
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/app/encoding"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
@@ -88,8 +88,8 @@ func DefaultConfig() network.Config {
 		TimeoutCommit:   2 * time.Second,
 		ChainID:         "chain-" + tmrand.Str(6),
 		NumValidators:   1,
-		BondDenom:       appconsts.BondDenom,
-		MinGasPrices:    fmt.Sprintf("0.000006%s", appconsts.BondDenom),
+		BondDenom:       consts.BondDenom,
+		MinGasPrices:    fmt.Sprintf("0.000006%s", consts.BondDenom),
 		AccountTokens:   sdk.TokensFromConsensusPower(1000, sdk.DefaultPowerReduction),
 		StakingTokens:   sdk.TokensFromConsensusPower(500, sdk.DefaultPowerReduction),
 		BondedTokens:    sdk.TokensFromConsensusPower(100, sdk.DefaultPowerReduction),
@@ -132,8 +132,8 @@ func newGenAccout(kr keyring.Keyring, name string, amount int64) (authtypes.Gene
 
 	// create coin
 	balances := sdk.NewCoins(
-		sdk.NewCoin(fmt.Sprintf("%stoken", appconsts.BondDenom), sdkmath.NewInt(amount)),
-		sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(amount)),
+		sdk.NewCoin(fmt.Sprintf("%stoken", consts.BondDenom), sdkmath.NewInt(amount)),
+		sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(amount)),
 	)
 
 	addr, err := info.GetAddress()

@@ -25,7 +25,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	"github.com/sunriselayer/sunrise/app"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/app/consts"
 
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
 	"github.com/sunriselayer/sunrise/test/util/testnode"
@@ -128,7 +128,7 @@ func AddAccount(addr sdk.AccAddress, appState app.GenesisState, cdc codec.Codec)
 
 	coins := sdk.Coins{
 		sdk.NewCoin("token", sdkmath.NewInt(1000000)),
-		sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(1000000)),
+		sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(1000000)),
 	}
 
 	balances := banktypes.Balance{Address: addr.String(), Coins: coins.Sort()}
@@ -203,7 +203,7 @@ func GenesisStateWithSingleValidator(testApp *app.App, genAccounts ...string) (a
 	balances := make([]banktypes.Balance, 0, len(genAccounts)+1)
 	balances = append(balances, banktypes.Balance{
 		Address: acc.GetAddress().String(),
-		Coins:   sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(100000000000000))),
+		Coins:   sdk.NewCoins(sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(100000000000000))),
 	})
 
 	kr, fundedBankAccs, fundedAuthAccs := testnode.FundKeyringAccounts(genAccounts...)
@@ -266,7 +266,7 @@ func genesisStateWithValSet(
 	}
 	// set validators and delegations
 	params := stakingtypes.DefaultParams()
-	params.BondDenom = appconsts.BondDenom
+	params.BondDenom = consts.BondDenom
 	stakingGenesis := stakingtypes.NewGenesisState(params, validators, delegations)
 	genesisState[stakingtypes.ModuleName] = a.AppCodec().MustMarshalJSON(stakingGenesis)
 
@@ -278,13 +278,13 @@ func genesisStateWithValSet(
 
 	for range delegations {
 		// add delegated tokens to total supply
-		totalSupply = totalSupply.Add(sdk.NewCoin(appconsts.BondDenom, bondAmt))
+		totalSupply = totalSupply.Add(sdk.NewCoin(consts.BondDenom, bondAmt))
 	}
 
 	// add bonded amount to bonded pool module account
 	balances = append(balances, banktypes.Balance{
 		Address: authtypes.NewModuleAddress(stakingtypes.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(appconsts.BondDenom, bondAmt)},
+		Coins:   sdk.Coins{sdk.NewCoin(consts.BondDenom, bondAmt)},
 	})
 
 	// update total supply

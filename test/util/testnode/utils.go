@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/hex"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/app/encoding"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
 	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 	"github.com/sunriselayer/sunrise/test/util/testfactory"
 
@@ -74,7 +74,7 @@ func FundKeyringAccounts(accounts ...string) (keyring.Keyring, []banktypes.Balan
 
 	for i, addr := range addresses {
 		balances := sdk.NewCoins(
-			sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(99999999999999999)),
+			sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(99999999999999999)),
 		)
 
 		genBalances[i] = banktypes.Balance{Address: addr.String(), Coins: balances.Sort()}

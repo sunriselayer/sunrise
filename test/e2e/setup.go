@@ -23,9 +23,9 @@ import (
 
 	testencoding "github.com/sunriselayer/sunrise/test/util/encoding"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/encoding"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
 )
 
 type Account struct {
@@ -40,7 +40,7 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 	stakingGenesis := staking.DefaultGenesisState()
 	slashingGenesis := slashing.DefaultGenesisState()
 	genAccs := []auth.GenesisAccount{}
-	stakingGenesis.Params.BondDenom = appconsts.BondDenom
+	stakingGenesis.Params.BondDenom = consts.BondDenom
 	delegations := make([]staking.Delegation, 0, len(nodes))
 	valInfo := make([]slashing.SigningInfo, 0, len(nodes))
 	balances := make([]bank.Balance, 0, len(accounts))
@@ -100,14 +100,14 @@ func MakeGenesis(nodes []*Node, accounts []*Account) (types.GenesisDoc, error) {
 		balances = append(balances, bank.Balance{
 			Address: sdk.AccAddress(addr).String(),
 			Coins: sdk.NewCoins(
-				sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(account.InitialTokens)),
+				sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(account.InitialTokens)),
 			),
 		})
 	}
 	// add bonded amount to bonded pool module account
 	balances = append(balances, bank.Balance{
 		Address: auth.NewModuleAddress(staking.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(totalBonded))},
+		Coins:   sdk.Coins{sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(totalBonded))},
 	})
 	bankGenesis.Balances = bank.SanitizeGenesisBalances(balances)
 	authGenesis := auth.NewGenesisState(auth.DefaultParams(), genAccs)
@@ -167,6 +167,6 @@ func WriteAddressBook(peers []string, file string) error {
 
 func MakeAppConfig(_ *Node) (*serverconfig.Config, error) {
 	srvCfg := serverconfig.DefaultConfig()
-	srvCfg.MinGasPrices = fmt.Sprintf("0.001%s", appconsts.BondDenom)
+	srvCfg.MinGasPrices = fmt.Sprintf("0.001%s", consts.BondDenom)
 	return srvCfg, srvCfg.ValidateBasic()
 }

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/app/encoding"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
 
 	sdkmath "cosmossdk.io/math"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -108,7 +108,7 @@ func accountsToSDKTypes(addrs []string, pubkeys []cryptotypes.PubKey) ([]banktyp
 		pubKey := pubkeys[i]
 
 		balances := sdk.NewCoins(
-			sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(999_999_999_999_999_999)),
+			sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(999_999_999_999_999_999)),
 		)
 
 		genBals[i] = banktypes.Balance{Address: addr, Coins: balances.Sort()}
