@@ -1,65 +1,66 @@
 package util
 
-// import (
-// 	"bytes"
-// 	"testing"
-// 	"time"
+import (
+	// 	"bytes"
+	// 	"testing"
+	// 	"time"
 
-// 	// blobstream "github.com/sunriselayer/sunrise/x/blobstream/module"
+	// 	// blobstream "github.com/sunriselayer/sunrise/x/blobstream/module"
 
-// 	"github.com/sunriselayer/sunrise/app"
-// 	// "github.com/sunriselayer/sunrise/x/blobstream/keeper"
-// 	// bstypes "github.com/sunriselayer/sunrise/x/blobstream/types"
+	// 	"github.com/sunriselayer/sunrise/app"
+	// 	// "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	// 	// bstypes "github.com/sunriselayer/sunrise/x/blobstream/types"
 
-// 	"cosmossdk.io/log"
-// 	sdkmath "cosmossdk.io/math"
-// 	"cosmossdk.io/store"
-// 	"cosmossdk.io/store/metrics"
-// 	storetypes "cosmossdk.io/store/types"
-// 	"cosmossdk.io/x/tx/signing"
-// 	dbm "github.com/cosmos/cosmos-db"
-// 	"github.com/cosmos/cosmos-sdk/codec"
-// 	"github.com/cosmos/cosmos-sdk/codec/address"
-// 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-// 	ccodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-// 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-// 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-// 	ccrypto "github.com/cosmos/cosmos-sdk/crypto/types"
-// 	"github.com/cosmos/cosmos-sdk/runtime"
-// 	"github.com/cosmos/cosmos-sdk/std"
-// 	sdk "github.com/cosmos/cosmos-sdk/types"
-// 	"github.com/cosmos/cosmos-sdk/x/auth"
-// 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
-// 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-// 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-// 	"github.com/cosmos/cosmos-sdk/x/bank"
-// 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-// 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-// 	"github.com/cosmos/cosmos-sdk/x/distribution"
-// 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-// 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-// 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-// 	"github.com/cosmos/cosmos-sdk/x/params"
-// 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
-// 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-// 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
-// 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-// 	"github.com/cosmos/cosmos-sdk/x/staking"
-// 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
-// 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-// 	"github.com/cosmos/gogoproto/proto"
-// 	gethcommon "github.com/ethereum/go-ethereum/common"
-// 	"github.com/stretchr/testify/require"
+	// 	"cosmossdk.io/log"
+	// 	sdkmath "cosmossdk.io/math"
+	// 	"cosmossdk.io/store"
+	// 	"cosmossdk.io/store/metrics"
+	// 	storetypes "cosmossdk.io/store/types"
+	// 	"cosmossdk.io/x/tx/signing"
+	// 	dbm "github.com/cosmos/cosmos-db"
+	// 	"github.com/cosmos/cosmos-sdk/codec"
+	// 	"github.com/cosmos/cosmos-sdk/codec/address"
+	// 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	// 	ccodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	// 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+	// 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	// 	ccrypto "github.com/cosmos/cosmos-sdk/crypto/types"
+	// 	"github.com/cosmos/cosmos-sdk/runtime"
+	// 	"github.com/cosmos/cosmos-sdk/std"
+	// 	sdk "github.com/cosmos/cosmos-sdk/types"
+	// 	"github.com/cosmos/cosmos-sdk/x/auth"
+	// 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
+	// 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	// 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	// 	"github.com/cosmos/cosmos-sdk/x/bank"
+	// 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	// 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	// 	"github.com/cosmos/cosmos-sdk/x/distribution"
+	// 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	// 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	// 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	// 	"github.com/cosmos/cosmos-sdk/x/params"
+	// 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	// 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	// 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	// 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	// 	"github.com/cosmos/cosmos-sdk/x/staking"
+	// 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	// 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	// 	"github.com/cosmos/gogoproto/proto"
+	// 	gethcommon "github.com/ethereum/go-ethereum/common"
+	// 	"github.com/stretchr/testify/require"
 
-// 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-// 	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
+	// 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	// 	tmversion "github.com/cometbft/cometbft/proto/tendermint/version"
 
-// 	encoding "github.com/sunriselayer/sunrise/test/util/encoding"
-// )
+	encoding "github.com/sunriselayer/sunrise/test/util/encoding"
+)
 
-// var (
-// 	// ModuleBasics is a mock module basic manager for testing
-// 	ModuleBasics = encoding.ModuleBasics
+var (
+	// 	// ModuleBasics is a mock module basic manager for testing
+	ModuleBasics = encoding.ModuleBasics
+
 // 	// TestingStakeParams is a set of staking params for testing
 // 	TestingStakeParams = stakingtypes.Params{
 // 		UnbondingTime:     100,
@@ -133,9 +134,9 @@ package util
 // 	// InitCoins holds the number of coins to initialize an account with
 // 	InitCoins = sdk.NewCoins(sdk.NewCoin(TestingStakeParams.BondDenom, InitTokens))
 
-// 	// StakingAmount holds the staking power to start a validator with
-// 	StakingAmount = sdk.TokensFromConsensusPower(10, sdk.DefaultPowerReduction)
-// )
+// // StakingAmount holds the staking power to start a validator with
+// StakingAmount = sdk.TokensFromConsensusPower(10, sdk.DefaultPowerReduction)
+)
 
 // func initEVMAddrs(count int) []gethcommon.Address {
 // 	addresses := make([]gethcommon.Address, count)

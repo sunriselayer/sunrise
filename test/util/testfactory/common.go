@@ -9,8 +9,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
-	apprand "github.com/sunriselayer/sunrise/pkg/random"
 )
 
 const (
@@ -27,21 +25,6 @@ func Repeat[T any](s T, count int) []T {
 		ss[i] = s
 	}
 	return ss
-}
-
-// GenerateRandNamespacedRawData returns random data of length count. Each chunk
-// of random data is of size shareSize and is prefixed with a random blob
-// namespace.
-func GenerateRandNamespacedRawData(count int) (result [][]byte) {
-	for i := 0; i < count; i++ {
-		rawData := tmrand.Bytes(appconsts.ShareSize)
-		namespace := apprand.RandomBlobNamespace().Bytes()
-		copy(rawData, namespace)
-		result = append(result, rawData)
-	}
-
-	sortByteArrays(result)
-	return result
 }
 
 func sortByteArrays(src [][]byte) {

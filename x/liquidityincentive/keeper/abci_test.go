@@ -12,7 +12,7 @@ import (
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	appconsts "github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/app/consts"
 	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -217,7 +217,7 @@ func TestBeginBlocker(t *testing.T) {
 			name: "empty epochs",
 			setup: func(s tallyFixture) {
 				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(appconsts.BondDenom, 1000000)}).AnyTimes()
+					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
 			},
 		},
 		{
@@ -241,7 +241,7 @@ func TestBeginBlocker(t *testing.T) {
 				err := s.keeper.SetParams(s.ctx, params)
 				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(appconsts.BondDenom, 1000000)}).AnyTimes()
+					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
 				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
 			},
@@ -267,7 +267,7 @@ func TestBeginBlocker(t *testing.T) {
 				err := s.keeper.SetParams(s.ctx, params)
 				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(appconsts.BondDenom, 1000000)}).AnyTimes()
+					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
 				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
 			},

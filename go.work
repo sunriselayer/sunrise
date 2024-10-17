@@ -2,7 +2,5 @@ go 1.22.7
 
 use (
 	.
-	./pkg/blob
-	./pkg/namespace
 	./x/da/erasurecoding
 )

@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	appconsts "github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -79,8 +79,8 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
 	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector)
-	vRiseAmount := fees.AmountOf(appconsts.BondDenom)
-	amount := sdk.NewCoin(appconsts.BondDenom, vRiseAmount)
+	vRiseAmount := fees.AmountOf(consts.BondDenom)
+	amount := sdk.NewCoin(consts.BondDenom, vRiseAmount)
 	feesDec := sdk.NewDecCoinsFromCoins(amount)
 
 	params := k.GetParams(ctx)

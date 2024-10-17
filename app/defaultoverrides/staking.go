@@ -8,7 +8,7 @@ import (
 	staking "github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 // StakingModuleBasic wraps the x/staking module in order to overwrite specific
@@ -20,8 +20,7 @@ type StakingModuleBasic struct {
 // DefaultGenesis returns custom x/staking module genesis state.
 func (StakingModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genState := stakingtypes.DefaultGenesisState()
-	genState.Params.UnbondingTime = appconsts.DefaultUnbondingTime
-	genState.Params.BondDenom = appconsts.BondDenom
+	genState.Params.BondDenom = consts.BondDenom
 
 	return cdc.MustMarshalJSON(genState)
 }

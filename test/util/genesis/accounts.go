@@ -16,7 +16,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/sunriselayer/sunrise/pkg/appconsts"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 type Account struct {
@@ -110,7 +110,7 @@ func (v *Validator) GenTx(ctx context.Context, ecfg encoding.Config, kr keyring.
 	createValMsg, err := stakingtypes.NewMsgCreateValidator(
 		sdk.ValAddress(addr).String(),
 		pk,
-		sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(v.Stake)),
+		sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(v.Stake)),
 		stakingtypes.NewDescription(v.Name, "", "", "", ""),
 		stakingtypes.NewCommissionRates(commission, sdkmath.LegacyOneDec(), sdkmath.LegacyOneDec()),
 		sdkmath.NewInt(v.Stake/2),
@@ -119,7 +119,7 @@ func (v *Validator) GenTx(ctx context.Context, ecfg encoding.Config, kr keyring.
 		return nil, err
 	}
 
-	fee := sdk.NewCoins(sdk.NewCoin(appconsts.BondDenom, sdkmath.NewInt(1)))
+	fee := sdk.NewCoins(sdk.NewCoin(consts.BondDenom, sdkmath.NewInt(1)))
 	txBuilder := ecfg.TxConfig.NewTxBuilder()
 	err = txBuilder.SetMsgs(createValMsg)
 	if err != nil {
