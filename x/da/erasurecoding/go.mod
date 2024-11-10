@@ -1,4 +1,4 @@
-module sunrise/erasurecoding
+module github.com/sunriselayer/sunrise/x/da/erasurecoding
 
 go 1.22.1
 
