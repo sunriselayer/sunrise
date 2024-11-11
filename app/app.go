@@ -424,6 +424,7 @@ func New(
 		app.IBCKeeper,
 		app.AuctionKeeper,
 		mevLane,
+		freeLane,
 		app.txConfig.TxEncoder(),
 	)
 	// Set the ante handler on the lanes.

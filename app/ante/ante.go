@@ -12,6 +12,7 @@ import (
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
+	"github.com/skip-mev/block-sdk/v2/block"
 	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	feeante "github.com/sunriselayer/sunrise/x/fee/ante"
@@ -27,7 +28,8 @@ func NewAnteHandler(
 	sigGasConsumer ante.SignatureVerificationGasConsumer,
 	channelKeeper *ibckeeper.Keeper,
 	auctionkeeper auctionkeeper.Keeper,
-	MEVLane auctionante.MEVLane,
+	mevLane auctionante.MEVLane,
+	freeLane block.Lane,
 	TxEncoder sdk.TxEncoder,
 ) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
@@ -50,7 +52,10 @@ func NewAnteHandler(
 		// Ensure the feepayer (fee granter or first signer) has enough funds to pay for the tx.
 		// Side effect: deducts fees from the fee payer. Sets the tx priority in context.
 		// ante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, nil),
-		feeante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, feeKeeper),
+		block.NewIgnoreDecorator(
+			feeante.NewDeductFeeDecorator(accountKeeper, bankKeeper, feegrantKeeper, feeKeeper),
+			freeLane,
+		),
 		// Set public keys in the context for fee-payer and all signers.
 		// Contract: must be called before all signature verification decorators.
 		ante.NewSetPubKeyDecorator(accountKeeper),
@@ -74,7 +79,7 @@ func NewAnteHandler(
 		ante.NewIncrementSequenceDecorator(accountKeeper),
 		// Ensure that the tx is not a IBC packet or update message that has already been processed.
 		ibcante.NewRedundantRelayDecorator(channelKeeper),
-		auctionante.NewAuctionDecorator(auctionkeeper, TxEncoder, MEVLane),
+		auctionante.NewAuctionDecorator(auctionkeeper, TxEncoder, mevLane),
 	)
 }
 
