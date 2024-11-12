@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sunrise.liquiditypool;
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+message EventCreatePool {
+
+}
+
+message EventCreatePosition {
+
+}
+
+message EventIncreaseLiquidity {
+
+}
+
+message EventDecreaseLiquidity {
+
+}
+
+message EventClaimRewards {
+
+}

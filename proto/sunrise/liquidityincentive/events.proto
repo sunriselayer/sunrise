@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sunrise.liquidityincentive;
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+message EventVoteGauge {
+
+}
+
+message EventCollectVoteRewards {
+
+}

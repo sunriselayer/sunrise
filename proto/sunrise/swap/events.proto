@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.swap;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+message EventSwap {
+
+}
+
+message EventIbcSwap {
+
+}
