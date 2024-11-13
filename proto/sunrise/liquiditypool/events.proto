@@ -2,24 +2,56 @@ syntax = "proto3";
 
 package sunrise.liquiditypool;
 
+import "cosmos/base/v1beta1/coin.proto";
+
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 message EventCreatePool {
-
+  string authority = 1;
+  string denom_base = 2;
+  string denom_quote = 3;
+  string fee_rate = 4;
+  string price_ratio = 5;
+  string base_offset = 6;
+  uint64 pool_id = 7;
 }
 
 message EventCreatePosition {
-
+  string sender = 1;
+  string pool_id = 2;
+  string lower_tick = 3;
+  string upper_tick = 4;
+  cosmos.base.v1beta1.Coin token_base = 5 [ (gogoproto.nullable) = false ];
+  cosmos.base.v1beta1.Coin token_quote = 6 [ (gogoproto.nullable) = false ];
+  string min_amount_base = 7;
+  string min_amount_quote = 8;
+  uint64 position_id = 9;
+  string amount_base = 10;
+  string amount_quote = 11;
+  string liquidity = 12;
 }
 
 message EventIncreaseLiquidity {
-
+  string sender = 1;
+  uint64 position_id = 2;
+  string amount_base = 3;
+  string amount_quote = 4;
+  string min_amount_base = 5;
+  string min_amount_quote = 6;
+  string amount_base = 7;
+  string amount_quote = 8;
 }
 
 message EventDecreaseLiquidity {
-
+  string sender = 1;
+  uint64 position_id = 2;
+  string liquidity = 3;
+  string amount_base = 4;
+  string amount_quote = 5;
 }
 
 message EventClaimRewards {
-
+  string sender = 1;
+  repeated uint64 position_ids = 2;
+  repeated cosmos.base.v1beta1.Coin collected_fees = 3;
 }
