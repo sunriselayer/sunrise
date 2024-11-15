@@ -6,52 +6,53 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
-message EventCreatePool {
-  string authority = 1;
+message EventSetPool {
+  uint64 pool_id = 1;
   string denom_base = 2;
   string denom_quote = 3;
   string fee_rate = 4;
   string price_ratio = 5;
   string base_offset = 6;
-  uint64 pool_id = 7;
+  int64 current_tick = 7;
+  string current_tick_liquidity = 8;
+  string current_sqrt_price =9;
 }
 
-message EventCreatePosition {
-  string sender = 1;
-  string pool_id = 2;
-  string lower_tick = 3;
-  string upper_tick = 4;
-  cosmos.base.v1beta1.Coin token_base = 5 [ (gogoproto.nullable) = false ];
-  cosmos.base.v1beta1.Coin token_quote = 6 [ (gogoproto.nullable) = false ];
-  string min_amount_base = 7;
-  string min_amount_quote = 8;
-  uint64 position_id = 9;
-  string amount_base = 10;
-  string amount_quote = 11;
-  string liquidity = 12;
+message EventRemovePool {
+  uint64 pool_id = 1;
 }
 
-message EventIncreaseLiquidity {
-  string sender = 1;
-  uint64 position_id = 2;
-  string amount_base = 3;
-  string amount_quote = 4;
-  string min_amount_base = 5;
-  string min_amount_quote = 6;
-  string amount_base = 7;
-  string amount_quote = 8;
+message EventSetPosition {
+  uint64 position_id = 1;
+  string address = 2;
+  uint64 pool_id = 3;
+  string lower_tick = 4;
+  string upper_tick = 5;
+  string liquidity = 6;
 }
 
-message EventDecreaseLiquidity {
+message EventRemovePosition {
+  uint64 position_id = 1;
+}
+
+message EventCollectFees {
   string sender = 1;
   uint64 position_id = 2;
-  string liquidity = 3;
-  string amount_base = 4;
-  string amount_quote = 5;
-}
-
-message EventClaimRewards {
-  string sender = 1;
-  repeated uint64 position_ids = 2;
   repeated cosmos.base.v1beta1.Coin collected_fees = 3;
+}
+
+message EventSwapExactAmountIn{
+  string sender = 1;
+  uint64 pool_id = 2;
+  cosmos.base.v1beta1.Coin token_in = 3;
+  string denom_out = 4;
+  bool fee_enabled = 5;
+}
+
+message EventSwapExactAmountout{
+  string sender = 1;
+  uint64 pool_id = 2;
+  cosmos.base.v1beta1.Coin token_out = 3;
+  string denom_in = 4;
+  bool fee_enabled = 5;
 }

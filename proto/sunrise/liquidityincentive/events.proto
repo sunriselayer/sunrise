@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package sunrise.liquidityincentive;
 
+import "gogoproto/gogo.proto";
+import "sunrise/liquidityincentive/gauge.proto";
+
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
-message EventVoteGauge {
-
-}
-
-message EventCollectVoteRewards {
-
+message EventSetVote {
+  string sender = 1;
+  repeated PoolWeight weights = 2 [ (gogoproto.nullable) = false ];
 }

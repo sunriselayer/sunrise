@@ -2,14 +2,17 @@ syntax = "proto3";
 package sunrise.tokenconverter;
 
 import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/tokenconverter/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
 
-message EventConvert {
-  string sender = 1;
-  string min_amount = 2;
-  string max_amount = 3;
-  string amount = 4;
+message EventBurnAndMint {
+  string address = 1;
+  string amount = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
 }
