@@ -329,6 +329,8 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 			}
 		}
 
+		// Insert the binary of `Metadata` (in proto/sunrise/da/metadata.proto) of VoteExtension succeeded blobs, into txs.
+
 		defaultReq := *req
 		defaultReq.Txs = txs
 		defaultHandler := h.DefaultProposalHandler.ProcessProposalHandler()
