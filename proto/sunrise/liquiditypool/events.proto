@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sunrise.liquiditypool;
 
+import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
@@ -26,8 +27,8 @@ message EventSetPosition {
   uint64 position_id = 1;
   string address = 2;
   uint64 pool_id = 3;
-  string lower_tick = 4;
-  string upper_tick = 5;
+  int64 lower_tick = 4;
+  int64 upper_tick = 5;
   string liquidity = 6;
 }
 
@@ -36,23 +37,30 @@ message EventRemovePosition {
 }
 
 message EventCollectFees {
-  string sender = 1;
+  string address = 1;
   uint64 position_id = 2;
-  repeated cosmos.base.v1beta1.Coin collected_fees = 3;
+  repeated cosmos.base.v1beta1.Coin collected_fees = 3[
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
 }
 
 message EventSwapExactAmountIn{
-  string sender = 1;
+  string address = 1;
   uint64 pool_id = 2;
-  cosmos.base.v1beta1.Coin token_in = 3;
-  string denom_out = 4;
-  bool fee_enabled = 5;
+  string denom_in = 3;
+  string amount_in = 4;
+  string denom_out = 5;
+  string amount_out = 6;
+  bool fee_enabled = 7;
 }
 
-message EventSwapExactAmountout{
-  string sender = 1;
+message EventSwapExactAmountOut{
+  string address = 1;
   uint64 pool_id = 2;
-  cosmos.base.v1beta1.Coin token_out = 3;
-  string denom_in = 4;
-  bool fee_enabled = 5;
+  string denom_out = 3;
+  string amount_out = 4;
+  string denom_in = 5;
+  string amount_in = 6;
+  bool fee_enabled = 7;
 }
