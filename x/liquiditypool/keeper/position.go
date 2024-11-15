@@ -65,6 +65,15 @@ func (k Keeper) SetPosition(ctx context.Context, position types.Position) {
 
 	store = prefix.NewStore(storeAdapter, types.PositionByAddressPrefix(position.Address))
 	store.Set(positionKey, positionKey)
+
+	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPosition{
+		PositionId: position.Id,
+		Address:    position.Address,
+		PoolId:     position.PoolId,
+		LowerTick:  position.LowerTick,
+		UpperTick:  position.UpperTick,
+		Liquidity:  position.Liquidity.String(),
+	})
 }
 
 // GetPosition returns a position from its id
@@ -133,6 +142,10 @@ func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
 	store.Delete(GetPositionIDBytes(id))
+
+	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventRemovePosition{
+		PositionId: id,
+	})
 }
 
 // GetAllPositions returns all position

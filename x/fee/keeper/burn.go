@@ -40,7 +40,7 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 			return err
 		}
 
-		if err := ctx.EventManager().EmitTypedEvent(&types.EventFeeBurnt{
+		if err := ctx.EventManager().EmitTypedEvent(&types.EventFeeBurn{
 			Fees: burnCoins,
 		}); err != nil {
 			return err

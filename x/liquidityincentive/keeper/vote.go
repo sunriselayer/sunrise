@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -15,6 +16,11 @@ func (k Keeper) SetVote(ctx context.Context, vote types.Vote) {
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.VoteKeyPrefix))
 	b := k.cdc.MustMarshal(&vote)
 	store.Set([]byte(vote.Sender), b)
+
+	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetVote{
+		Address: vote.Sender,
+		Weights: vote.Weights,
+	})
 }
 
 // GetVote returns a vote from its index

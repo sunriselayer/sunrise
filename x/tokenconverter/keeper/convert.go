@@ -57,5 +57,12 @@ func (k Keeper) BurnAndMint(ctx context.Context, amount math.Int, address sdk.Ac
 		return err
 	}
 
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventBurnAndMint{
+		Address: address.String(),
+		Amount:  amount,
+	}); err != nil {
+		return err
+	}
+
 	return nil
 }
