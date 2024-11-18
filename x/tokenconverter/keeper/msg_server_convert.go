@@ -20,7 +20,7 @@ func (k msgServer) Convert(goCtx context.Context, msg *types.MsgConvert) (*types
 		return nil, err
 	}
 
-	if err := k.Keeper.BurnAndMint(ctx, amount, address); err != nil {
+	if err := k.Keeper.Convert(ctx, amount, address); err != nil {
 		return nil, err
 	}
 
