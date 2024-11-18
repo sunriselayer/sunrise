@@ -16,27 +16,27 @@ import (
 )
 
 var (
-	md_EventBurnAndMint         protoreflect.MessageDescriptor
-	fd_EventBurnAndMint_address protoreflect.FieldDescriptor
-	fd_EventBurnAndMint_amount  protoreflect.FieldDescriptor
+	md_EventConvert         protoreflect.MessageDescriptor
+	fd_EventConvert_address protoreflect.FieldDescriptor
+	fd_EventConvert_amount  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_tokenconverter_events_proto_init()
-	md_EventBurnAndMint = File_sunrise_tokenconverter_events_proto.Messages().ByName("EventBurnAndMint")
-	fd_EventBurnAndMint_address = md_EventBurnAndMint.Fields().ByName("address")
-	fd_EventBurnAndMint_amount = md_EventBurnAndMint.Fields().ByName("amount")
+	md_EventConvert = File_sunrise_tokenconverter_events_proto.Messages().ByName("EventConvert")
+	fd_EventConvert_address = md_EventConvert.Fields().ByName("address")
+	fd_EventConvert_amount = md_EventConvert.Fields().ByName("amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventBurnAndMint)(nil)
+var _ protoreflect.Message = (*fastReflection_EventConvert)(nil)
 
-type fastReflection_EventBurnAndMint EventBurnAndMint
+type fastReflection_EventConvert EventConvert
 
-func (x *EventBurnAndMint) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventBurnAndMint)(x)
+func (x *EventConvert) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventConvert)(x)
 }
 
-func (x *EventBurnAndMint) slowProtoReflect() protoreflect.Message {
+func (x *EventConvert) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_tokenconverter_events_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -48,43 +48,43 @@ func (x *EventBurnAndMint) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventBurnAndMint_messageType fastReflection_EventBurnAndMint_messageType
-var _ protoreflect.MessageType = fastReflection_EventBurnAndMint_messageType{}
+var _fastReflection_EventConvert_messageType fastReflection_EventConvert_messageType
+var _ protoreflect.MessageType = fastReflection_EventConvert_messageType{}
 
-type fastReflection_EventBurnAndMint_messageType struct{}
+type fastReflection_EventConvert_messageType struct{}
 
-func (x fastReflection_EventBurnAndMint_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventBurnAndMint)(nil)
+func (x fastReflection_EventConvert_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventConvert)(nil)
 }
-func (x fastReflection_EventBurnAndMint_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventBurnAndMint)
+func (x fastReflection_EventConvert_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventConvert)
 }
-func (x fastReflection_EventBurnAndMint_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventBurnAndMint
+func (x fastReflection_EventConvert_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventConvert
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventBurnAndMint) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventBurnAndMint
+func (x *fastReflection_EventConvert) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventConvert
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventBurnAndMint) Type() protoreflect.MessageType {
-	return _fastReflection_EventBurnAndMint_messageType
+func (x *fastReflection_EventConvert) Type() protoreflect.MessageType {
+	return _fastReflection_EventConvert_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventBurnAndMint) New() protoreflect.Message {
-	return new(fastReflection_EventBurnAndMint)
+func (x *fastReflection_EventConvert) New() protoreflect.Message {
+	return new(fastReflection_EventConvert)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventBurnAndMint) Interface() protoreflect.ProtoMessage {
-	return (*EventBurnAndMint)(x)
+func (x *fastReflection_EventConvert) Interface() protoreflect.ProtoMessage {
+	return (*EventConvert)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -92,16 +92,16 @@ func (x *fastReflection_EventBurnAndMint) Interface() protoreflect.ProtoMessage 
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventBurnAndMint) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_EventConvert) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Address != "" {
 		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_EventBurnAndMint_address, value) {
+		if !f(fd_EventConvert_address, value) {
 			return
 		}
 	}
 	if x.Amount != "" {
 		value := protoreflect.ValueOfString(x.Amount)
-		if !f(fd_EventBurnAndMint_amount, value) {
+		if !f(fd_EventConvert_amount, value) {
 			return
 		}
 	}
@@ -118,17 +118,17 @@ func (x *fastReflection_EventBurnAndMint) Range(f func(protoreflect.FieldDescrip
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventBurnAndMint) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventConvert) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.EventBurnAndMint.address":
+	case "sunrise.tokenconverter.EventConvert.address":
 		return x.Address != ""
-	case "sunrise.tokenconverter.EventBurnAndMint.amount":
+	case "sunrise.tokenconverter.EventConvert.amount":
 		return x.Amount != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventBurnAndMint"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.EventBurnAndMint does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.EventConvert does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -138,17 +138,17 @@ func (x *fastReflection_EventBurnAndMint) Has(fd protoreflect.FieldDescriptor) b
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventBurnAndMint) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventConvert) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.EventBurnAndMint.address":
+	case "sunrise.tokenconverter.EventConvert.address":
 		x.Address = ""
-	case "sunrise.tokenconverter.EventBurnAndMint.amount":
+	case "sunrise.tokenconverter.EventConvert.amount":
 		x.Amount = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventBurnAndMint"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.EventBurnAndMint does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.EventConvert does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -158,19 +158,19 @@ func (x *fastReflection_EventBurnAndMint) Clear(fd protoreflect.FieldDescriptor)
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventBurnAndMint) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventConvert) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.tokenconverter.EventBurnAndMint.address":
+	case "sunrise.tokenconverter.EventConvert.address":
 		value := x.Address
 		return protoreflect.ValueOfString(value)
-	case "sunrise.tokenconverter.EventBurnAndMint.amount":
+	case "sunrise.tokenconverter.EventConvert.amount":
 		value := x.Amount
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventBurnAndMint"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.EventBurnAndMint does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.EventConvert does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -184,17 +184,17 @@ func (x *fastReflection_EventBurnAndMint) Get(descriptor protoreflect.FieldDescr
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventBurnAndMint) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventConvert) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.EventBurnAndMint.address":
+	case "sunrise.tokenconverter.EventConvert.address":
 		x.Address = value.Interface().(string)
-	case "sunrise.tokenconverter.EventBurnAndMint.amount":
+	case "sunrise.tokenconverter.EventConvert.amount":
 		x.Amount = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventBurnAndMint"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.EventBurnAndMint does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.EventConvert does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -208,44 +208,44 @@ func (x *fastReflection_EventBurnAndMint) Set(fd protoreflect.FieldDescriptor, v
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventBurnAndMint) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventConvert) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.EventBurnAndMint.address":
-		panic(fmt.Errorf("field address of message sunrise.tokenconverter.EventBurnAndMint is not mutable"))
-	case "sunrise.tokenconverter.EventBurnAndMint.amount":
-		panic(fmt.Errorf("field amount of message sunrise.tokenconverter.EventBurnAndMint is not mutable"))
+	case "sunrise.tokenconverter.EventConvert.address":
+		panic(fmt.Errorf("field address of message sunrise.tokenconverter.EventConvert is not mutable"))
+	case "sunrise.tokenconverter.EventConvert.amount":
+		panic(fmt.Errorf("field amount of message sunrise.tokenconverter.EventConvert is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventBurnAndMint"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.EventBurnAndMint does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.EventConvert does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventBurnAndMint) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventConvert) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.tokenconverter.EventBurnAndMint.address":
+	case "sunrise.tokenconverter.EventConvert.address":
 		return protoreflect.ValueOfString("")
-	case "sunrise.tokenconverter.EventBurnAndMint.amount":
+	case "sunrise.tokenconverter.EventConvert.amount":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventBurnAndMint"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.tokenconverter.EventConvert"))
 		}
-		panic(fmt.Errorf("message sunrise.tokenconverter.EventBurnAndMint does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.tokenconverter.EventConvert does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventBurnAndMint) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventConvert) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.EventBurnAndMint", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.tokenconverter.EventConvert", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -253,7 +253,7 @@ func (x *fastReflection_EventBurnAndMint) WhichOneof(d protoreflect.OneofDescrip
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventBurnAndMint) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventConvert) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -264,7 +264,7 @@ func (x *fastReflection_EventBurnAndMint) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventBurnAndMint) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventConvert) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -276,7 +276,7 @@ func (x *fastReflection_EventBurnAndMint) SetUnknown(fields protoreflect.RawFiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventBurnAndMint) IsValid() bool {
+func (x *fastReflection_EventConvert) IsValid() bool {
 	return x != nil
 }
 
@@ -286,9 +286,9 @@ func (x *fastReflection_EventBurnAndMint) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventBurnAndMint) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventConvert) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventBurnAndMint)
+		x := input.Message.Interface().(*EventConvert)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -318,7 +318,7 @@ func (x *fastReflection_EventBurnAndMint) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventBurnAndMint)
+		x := input.Message.Interface().(*EventConvert)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -362,7 +362,7 @@ func (x *fastReflection_EventBurnAndMint) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventBurnAndMint)
+		x := input.Message.Interface().(*EventConvert)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -394,10 +394,10 @@ func (x *fastReflection_EventBurnAndMint) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventBurnAndMint: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventConvert: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventBurnAndMint: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventConvert: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -512,7 +512,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type EventBurnAndMint struct {
+type EventConvert struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -521,8 +521,8 @@ type EventBurnAndMint struct {
 	Amount  string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
-func (x *EventBurnAndMint) Reset() {
-	*x = EventBurnAndMint{}
+func (x *EventConvert) Reset() {
+	*x = EventConvert{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_tokenconverter_events_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -530,25 +530,25 @@ func (x *EventBurnAndMint) Reset() {
 	}
 }
 
-func (x *EventBurnAndMint) String() string {
+func (x *EventConvert) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventBurnAndMint) ProtoMessage() {}
+func (*EventConvert) ProtoMessage() {}
 
-// Deprecated: Use EventBurnAndMint.ProtoReflect.Descriptor instead.
-func (*EventBurnAndMint) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventConvert.ProtoReflect.Descriptor instead.
+func (*EventConvert) Descriptor() ([]byte, []int) {
 	return file_sunrise_tokenconverter_events_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EventBurnAndMint) GetAddress() string {
+func (x *EventConvert) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *EventBurnAndMint) GetAmount() string {
+func (x *EventConvert) GetAmount() string {
 	if x != nil {
 		return x.Amount
 	}
@@ -566,27 +566,27 @@ var file_sunrise_tokenconverter_events_proto_rawDesc = []byte{
 	0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63,
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67,
 	0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0x76, 0x0a, 0x10, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x42, 0x75, 0x72, 0x6e, 0x41, 0x6e,
-	0x64, 0x4d, 0x69, 0x6e, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
-	0x48, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42,
-	0x30, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
-	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4,
-	0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0xcb, 0x01, 0x0a, 0x1a, 0x63, 0x6f,
-	0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63,
-	0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x42, 0x0b, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73,
-	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x27, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
-	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x2f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72,
-	0xa2, 0x02, 0x03, 0x53, 0x54, 0x58, 0xaa, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x2e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0xca,
-	0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x63,
-	0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0xe2, 0x02, 0x22, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x5c, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65,
-	0x72, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f,
-	0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x22, 0x72, 0x0a, 0x0c, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x76, 0x65, 0x72,
+	0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x48, 0x0a, 0x06, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x30, 0xc8, 0xde, 0x1f,
+	0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0xcb, 0x01, 0x0a, 0x1a, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65,
+	0x72, 0x74, 0x65, 0x72, 0x42, 0x0b, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x50, 0x72, 0x6f, 0x74,
+	0x6f, 0x50, 0x01, 0x5a, 0x27, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69,
+	0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x74, 0x6f,
+	0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0xa2, 0x02, 0x03, 0x53,
+	0x54, 0x58, 0xaa, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x54, 0x6f, 0x6b,
+	0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0xca, 0x02, 0x16, 0x53, 0x75,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65,
+	0x72, 0x74, 0x65, 0x72, 0xe2, 0x02, 0x22, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x54,
+	0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72, 0x74, 0x65, 0x72, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x53, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x3a, 0x3a, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x76, 0x65, 0x72,
+	0x74, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -603,7 +603,7 @@ func file_sunrise_tokenconverter_events_proto_rawDescGZIP() []byte {
 
 var file_sunrise_tokenconverter_events_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_tokenconverter_events_proto_goTypes = []interface{}{
-	(*EventBurnAndMint)(nil), // 0: sunrise.tokenconverter.EventBurnAndMint
+	(*EventConvert)(nil), // 0: sunrise.tokenconverter.EventConvert
 }
 var file_sunrise_tokenconverter_events_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -620,7 +620,7 @@ func file_sunrise_tokenconverter_events_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_tokenconverter_events_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventBurnAndMint); i {
+			switch v := v.(*EventConvert); i {
 			case 0:
 				return &v.state
 			case 1:
