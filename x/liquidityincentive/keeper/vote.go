@@ -17,10 +17,6 @@ func (k Keeper) SetVote(ctx context.Context, vote types.Vote) {
 	b := k.cdc.MustMarshal(&vote)
 	store.Set([]byte(vote.Sender), b)
 
-	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetVote{
-		Address: vote.Sender,
-		Weights: vote.Weights,
-	})
 }
 
 // GetVote returns a vote from its index

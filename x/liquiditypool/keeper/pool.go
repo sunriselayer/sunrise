@@ -7,7 +7,6 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -58,18 +57,6 @@ func (k Keeper) SetPool(ctx context.Context, pool types.Pool) {
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
 	b := k.cdc.MustMarshal(&pool)
 	store.Set(GetPoolIDBytes(pool.Id), b)
-
-	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPool{
-		PoolId:               pool.Id,
-		DenomBase:            pool.DenomBase,
-		DenomQuote:           pool.DenomQuote,
-		FeeRate:              pool.FeeRate.String(),
-		PriceRatio:           pool.TickParams.PriceRatio.String(),
-		BaseOffset:           pool.TickParams.BaseOffset.String(),
-		CurrentTick:          pool.CurrentTick,
-		CurrentTickLiquidity: pool.CurrentTickLiquidity.String(),
-		CurrentSqrtPrice:     pool.CurrentSqrtPrice.String(),
-	})
 }
 
 // GetPool returns a pool from its id
@@ -89,10 +76,6 @@ func (k Keeper) RemovePool(ctx context.Context, id uint64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
 	store.Delete(GetPoolIDBytes(id))
-
-	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventRemovePool{
-		PoolId: id,
-	})
 }
 
 // GetAllPools returns all pool
