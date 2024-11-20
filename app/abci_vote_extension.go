@@ -22,6 +22,7 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	blocksdkabci "github.com/skip-mev/block-sdk/v2/abci"
 	"github.com/spf13/cast"
+
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
@@ -29,13 +30,23 @@ import (
 )
 
 const flagDAShardHashesAPI = "da.shard_hashes_api"
+const flagDAMetadataURI = "da.metadata_uri"
 
 type DAConfig struct {
+	MetadataURI    string `mapstructure:"metadata_uri"`
 	ShardHashesAPI string `mapstructure:"shard_hashes_api"`
 }
 
 type DAShardHashesResponse struct {
 	ShardHashes []string `json:"shard_hashes"`
+}
+
+type DAMetadataResponse struct {
+	RecoveredDataHash []string `json:"recovered_data_hash"`
+	RecoveredDataSize uint64   `json:"recovered_data_size"`
+	ShardSize         uint64   `json:"shard_size"`
+	ShardUris         []string `json:"shard_uris"`
+	ParityShardCount  uint64   `json:"parity_shard_count"`
 }
 
 // ReadOracleConfig reads the wasm specifig configuration
@@ -47,8 +58,35 @@ func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 			return cfg, err
 		}
 	}
+	if v := opts.Get(flagDAMetadataURI); v != nil {
+		if cfg.MetadataURI, err = cast.ToStringE(v); err != nil {
+			return cfg, err
+		}
+	}
 
 	return cfg, nil
+}
+
+func GetDAMetadata(daConfig DAConfig, metadataUri string) (DAMetadataResponse, error) {
+	url := daConfig.MetadataURI + "?metadata_uri=" + metadataUri
+	res, err := http.Get(url)
+	if err != nil {
+		return DAMetadataResponse{}, err
+	}
+	defer res.Body.Close()
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return DAMetadataResponse{}, err
+	}
+
+	daMetadata := DAMetadataResponse{}
+	err = json.Unmarshal(resBody, &daMetadata)
+	if err != nil {
+		return DAMetadataResponse{}, err
+	}
+
+	return daMetadata, nil
 }
 
 func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64, valAddr sdk.ValAddress) ([]int64, [][]byte, error) {
@@ -301,7 +339,7 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 	}
 }
 
-func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
+func (h *ProposalHandler) ProcessProposal(daConfig DAConfig) sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
 		txs := [][]byte{}
 		var voteExtTx VoteExtensionTx
@@ -324,12 +362,42 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 				if err := ConfirmFaultValidators(voteExtTx.FaultValidators, faultValidators); err != nil {
 					return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
 				}
+
+				// Create and append metadata for each successfully voted blob
+				for _, data := range votedData {
+					daMetadata, err := GetDAMetadata(daConfig, data.MetadataUri)
+					if err != nil {
+						continue
+					}
+
+					dataHashes := []byte{}
+					for _, hashEncoded := range daMetadata.RecoveredDataHash {
+						hash, err := base64.StdEncoding.DecodeString(hashEncoded)
+						if err != nil {
+							continue
+						}
+						dataHashes = append(dataHashes, hash...)
+					}
+
+					metadata := &types.Metadata{
+						RecoveredDataHash: dataHashes,
+						RecoveredDataSize: daMetadata.RecoveredDataSize,
+						ShardSize:         daMetadata.ShardSize,
+						ParityShardCount:  daMetadata.ParityShardCount,
+						ShardUris:         daMetadata.ShardUris,
+					}
+
+					metadataBz, err := metadata.Marshal()
+					if err != nil {
+						return nil, fmt.Errorf("failed to marshal metadata: %w", err)
+					}
+
+					txs = append(txs, metadataBz)
+				}
 			} else {
 				txs = append(txs, tx)
 			}
 		}
-
-		// Insert the binary of `Metadata` (in proto/sunrise/da/metadata.proto) of VoteExtension succeeded blobs, into txs.
 
 		defaultReq := *req
 		defaultReq.Txs = txs

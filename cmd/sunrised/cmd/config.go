@@ -6,7 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/app"
-
 	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 )
 
@@ -51,7 +50,11 @@ var ConfigTemplate = serverconfig.DefaultConfigTemplate + `
 
 [da]
 # API to query DA v2 uploaded data shard hashes
-shard_hashes_api = {{ .DA.ShardHashesAPI }}`
+shard_hashes_api = {{ .DA.ShardHashesAPI }}
+
+# API to query DA v2 metadata
+metadata_uri = {{ .DA.MetadataURI }}
+`
 
 // initAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
@@ -79,6 +82,7 @@ func InitAppConfig() (string, CustomAppConfig) {
 		Config: *srvCfg,
 		DA: app.DAConfig{
 			ShardHashesAPI: "http://localhost:8000/api/shard_hashes",
+			MetadataURI:    "http://localhost:8000/api/metadata",
 		},
 	}
 

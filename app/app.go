@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
@@ -32,8 +33,10 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
+	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
@@ -43,18 +46,19 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	capabilitykeeper "github.com/cosmos/ibc-go/modules/capability/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/keeper"
 	icahostkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/host/keeper"
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
-
 	"github.com/skip-mev/block-sdk/v2/abci"
 	"github.com/skip-mev/block-sdk/v2/abci/checktx"
 	"github.com/skip-mev/block-sdk/v2/block"
@@ -62,33 +66,24 @@ import (
 	"github.com/skip-mev/block-sdk/v2/block/service"
 	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
+
 	"github.com/sunriselayer/sunrise/app/ante"
+	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/keepers"
 	"github.com/sunriselayer/sunrise/app/upgrades"
-
 	v0_2_1_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.1-test"
 	v0_2_2_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.2-test"
-
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
-
 	// blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
 	// streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
+	"github.com/sunriselayer/sunrise/docs"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
-
-	// this line is used by starport scaffolding # stargate/app/moduleImport
-
-	"github.com/sunriselayer/sunrise/docs"
 )
 
 const (
@@ -459,8 +454,14 @@ func New(
 		app.ModuleManager,
 		blockSdkProposalHandler,
 	)
+
+	daConfig, err := ReadDAConfig(appOpts)
+	if err != nil {
+		return nil, err
+	}
+
 	app.BaseApp.SetPrepareProposal(propHandler.PrepareProposal())
-	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal())
+	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal(daConfig))
 	app.BaseApp.SetPreBlocker(propHandler.PreBlocker)
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
@@ -494,11 +495,6 @@ func New(
 
 	// Vote extension
 	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
-
-	daConfig, err := ReadDAConfig(appOpts)
-	if err != nil {
-		return nil, err
-	}
 
 	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
 	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
