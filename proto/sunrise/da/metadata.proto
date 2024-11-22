@@ -15,3 +15,7 @@ message Metadata {
   uint64 parity_shard_count = 4;
   repeated string shard_uris = 5;
 }
+
+message MetadataUriWrapper {
+  string metadata_uri = 1;
+}
