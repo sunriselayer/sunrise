@@ -7,8 +7,9 @@ import (
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GetPositionCount get the total number of position
@@ -65,15 +66,6 @@ func (k Keeper) SetPosition(ctx context.Context, position types.Position) {
 
 	store = prefix.NewStore(storeAdapter, types.PositionByAddressPrefix(position.Address))
 	store.Set(positionKey, positionKey)
-
-	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPosition{
-		PositionId: position.Id,
-		Address:    position.Address,
-		PoolId:     position.PoolId,
-		LowerTick:  position.LowerTick,
-		UpperTick:  position.UpperTick,
-		Liquidity:  position.Liquidity.String(),
-	})
 }
 
 // GetPosition returns a position from its id
@@ -86,6 +78,38 @@ func (k Keeper) GetPosition(ctx context.Context, id uint64) (val types.Position,
 	}
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
+}
+
+// RemovePosition removes a position from the store
+func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
+	store.Delete(GetPositionIDBytes(id))
+}
+
+// GetAllPositions returns all position
+func (k Keeper) GetAllPositions(ctx context.Context) (list []types.Position) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Position
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
+		list = append(list, val)
+	}
+
+	return
+}
+
+// GetPositionIDBytes returns the byte representation of the ID
+func GetPositionIDBytes(id uint64) []byte {
+	bz := types.KeyPrefix(types.PositionKey)
+	bz = append(bz, []byte("/")...)
+	bz = binary.BigEndian.AppendUint64(bz, id)
+	return bz
 }
 
 func (k Keeper) PoolHasPosition(ctx context.Context, poolId uint64) bool {
@@ -135,40 +159,4 @@ func (k Keeper) GetPositionsByAddress(ctx context.Context, addr string) []types.
 		}
 	}
 	return positions
-}
-
-// RemovePosition removes a position from the store
-func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
-	store.Delete(GetPositionIDBytes(id))
-
-	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventRemovePosition{
-		PositionId: id,
-	})
-}
-
-// GetAllPositions returns all position
-func (k Keeper) GetAllPositions(ctx context.Context) (list []types.Position) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
-
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Position
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
-	}
-
-	return
-}
-
-// GetPositionIDBytes returns the byte representation of the ID
-func GetPositionIDBytes(id uint64) []byte {
-	bz := types.KeyPrefix(types.PositionKey)
-	bz = append(bz, []byte("/")...)
-	bz = binary.BigEndian.AppendUint64(bz, id)
-	return bz
 }
