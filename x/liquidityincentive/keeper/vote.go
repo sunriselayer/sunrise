@@ -15,6 +15,7 @@ func (k Keeper) SetVote(ctx context.Context, vote types.Vote) {
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.VoteKeyPrefix))
 	b := k.cdc.MustMarshal(&vote)
 	store.Set([]byte(vote.Sender), b)
+
 }
 
 // GetVote returns a vote from its index

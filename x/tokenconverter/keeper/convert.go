@@ -29,7 +29,7 @@ func (k Keeper) CalculateConversionAmount(ctx context.Context, minAmountOutFeeTo
 	return amount, nil
 }
 
-func (k Keeper) BurnAndMint(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
+func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
 	params := k.GetParams(ctx)
 
 	bondToken := sdk.NewCoin(params.BondDenom, amount)
@@ -54,6 +54,13 @@ func (k Keeper) BurnAndMint(ctx context.Context, amount math.Int, address sdk.Ac
 	}
 
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(feeToken)); err != nil {
+		return err
+	}
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvert{
+		Address: address.String(),
+		Amount:  amount,
+	}); err != nil {
 		return err
 	}
 

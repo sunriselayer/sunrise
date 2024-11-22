@@ -15,77 +15,77 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_EventFeeBurnt_1_list)(nil)
+var _ protoreflect.List = (*_EventFeeBurn_1_list)(nil)
 
-type _EventFeeBurnt_1_list struct {
+type _EventFeeBurn_1_list struct {
 	list *[]*v1beta1.Coin
 }
 
-func (x *_EventFeeBurnt_1_list) Len() int {
+func (x *_EventFeeBurn_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_EventFeeBurnt_1_list) Get(i int) protoreflect.Value {
+func (x *_EventFeeBurn_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_EventFeeBurnt_1_list) Set(i int, value protoreflect.Value) {
+func (x *_EventFeeBurn_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_EventFeeBurnt_1_list) Append(value protoreflect.Value) {
+func (x *_EventFeeBurn_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_EventFeeBurnt_1_list) AppendMutable() protoreflect.Value {
+func (x *_EventFeeBurn_1_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_EventFeeBurnt_1_list) Truncate(n int) {
+func (x *_EventFeeBurn_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_EventFeeBurnt_1_list) NewElement() protoreflect.Value {
+func (x *_EventFeeBurn_1_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_EventFeeBurnt_1_list) IsValid() bool {
+func (x *_EventFeeBurn_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_EventFeeBurnt      protoreflect.MessageDescriptor
-	fd_EventFeeBurnt_fees protoreflect.FieldDescriptor
+	md_EventFeeBurn      protoreflect.MessageDescriptor
+	fd_EventFeeBurn_fees protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_fee_events_proto_init()
-	md_EventFeeBurnt = File_sunrise_fee_events_proto.Messages().ByName("EventFeeBurnt")
-	fd_EventFeeBurnt_fees = md_EventFeeBurnt.Fields().ByName("fees")
+	md_EventFeeBurn = File_sunrise_fee_events_proto.Messages().ByName("EventFeeBurn")
+	fd_EventFeeBurn_fees = md_EventFeeBurn.Fields().ByName("fees")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventFeeBurnt)(nil)
+var _ protoreflect.Message = (*fastReflection_EventFeeBurn)(nil)
 
-type fastReflection_EventFeeBurnt EventFeeBurnt
+type fastReflection_EventFeeBurn EventFeeBurn
 
-func (x *EventFeeBurnt) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventFeeBurnt)(x)
+func (x *EventFeeBurn) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventFeeBurn)(x)
 }
 
-func (x *EventFeeBurnt) slowProtoReflect() protoreflect.Message {
+func (x *EventFeeBurn) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_fee_events_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -97,43 +97,43 @@ func (x *EventFeeBurnt) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventFeeBurnt_messageType fastReflection_EventFeeBurnt_messageType
-var _ protoreflect.MessageType = fastReflection_EventFeeBurnt_messageType{}
+var _fastReflection_EventFeeBurn_messageType fastReflection_EventFeeBurn_messageType
+var _ protoreflect.MessageType = fastReflection_EventFeeBurn_messageType{}
 
-type fastReflection_EventFeeBurnt_messageType struct{}
+type fastReflection_EventFeeBurn_messageType struct{}
 
-func (x fastReflection_EventFeeBurnt_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventFeeBurnt)(nil)
+func (x fastReflection_EventFeeBurn_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventFeeBurn)(nil)
 }
-func (x fastReflection_EventFeeBurnt_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventFeeBurnt)
+func (x fastReflection_EventFeeBurn_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventFeeBurn)
 }
-func (x fastReflection_EventFeeBurnt_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventFeeBurnt
+func (x fastReflection_EventFeeBurn_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventFeeBurn
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventFeeBurnt) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventFeeBurnt
+func (x *fastReflection_EventFeeBurn) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventFeeBurn
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventFeeBurnt) Type() protoreflect.MessageType {
-	return _fastReflection_EventFeeBurnt_messageType
+func (x *fastReflection_EventFeeBurn) Type() protoreflect.MessageType {
+	return _fastReflection_EventFeeBurn_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventFeeBurnt) New() protoreflect.Message {
-	return new(fastReflection_EventFeeBurnt)
+func (x *fastReflection_EventFeeBurn) New() protoreflect.Message {
+	return new(fastReflection_EventFeeBurn)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventFeeBurnt) Interface() protoreflect.ProtoMessage {
-	return (*EventFeeBurnt)(x)
+func (x *fastReflection_EventFeeBurn) Interface() protoreflect.ProtoMessage {
+	return (*EventFeeBurn)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -141,10 +141,10 @@ func (x *fastReflection_EventFeeBurnt) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventFeeBurnt) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_EventFeeBurn) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Fees) != 0 {
-		value := protoreflect.ValueOfList(&_EventFeeBurnt_1_list{list: &x.Fees})
-		if !f(fd_EventFeeBurnt_fees, value) {
+		value := protoreflect.ValueOfList(&_EventFeeBurn_1_list{list: &x.Fees})
+		if !f(fd_EventFeeBurn_fees, value) {
 			return
 		}
 	}
@@ -161,15 +161,15 @@ func (x *fastReflection_EventFeeBurnt) Range(f func(protoreflect.FieldDescriptor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventFeeBurnt) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventFeeBurn) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.fee.EventFeeBurnt.fees":
+	case "sunrise.fee.EventFeeBurn.fees":
 		return len(x.Fees) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurnt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurn"))
 		}
-		panic(fmt.Errorf("message sunrise.fee.EventFeeBurnt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.fee.EventFeeBurn does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -179,15 +179,15 @@ func (x *fastReflection_EventFeeBurnt) Has(fd protoreflect.FieldDescriptor) bool
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventFeeBurnt) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventFeeBurn) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.fee.EventFeeBurnt.fees":
+	case "sunrise.fee.EventFeeBurn.fees":
 		x.Fees = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurnt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurn"))
 		}
-		panic(fmt.Errorf("message sunrise.fee.EventFeeBurnt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.fee.EventFeeBurn does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -197,19 +197,19 @@ func (x *fastReflection_EventFeeBurnt) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventFeeBurnt) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventFeeBurn) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.fee.EventFeeBurnt.fees":
+	case "sunrise.fee.EventFeeBurn.fees":
 		if len(x.Fees) == 0 {
-			return protoreflect.ValueOfList(&_EventFeeBurnt_1_list{})
+			return protoreflect.ValueOfList(&_EventFeeBurn_1_list{})
 		}
-		listValue := &_EventFeeBurnt_1_list{list: &x.Fees}
+		listValue := &_EventFeeBurn_1_list{list: &x.Fees}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurnt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurn"))
 		}
-		panic(fmt.Errorf("message sunrise.fee.EventFeeBurnt does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.fee.EventFeeBurn does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -223,17 +223,17 @@ func (x *fastReflection_EventFeeBurnt) Get(descriptor protoreflect.FieldDescript
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventFeeBurnt) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventFeeBurn) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.fee.EventFeeBurnt.fees":
+	case "sunrise.fee.EventFeeBurn.fees":
 		lv := value.List()
-		clv := lv.(*_EventFeeBurnt_1_list)
+		clv := lv.(*_EventFeeBurn_1_list)
 		x.Fees = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurnt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurn"))
 		}
-		panic(fmt.Errorf("message sunrise.fee.EventFeeBurnt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.fee.EventFeeBurn does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -247,45 +247,45 @@ func (x *fastReflection_EventFeeBurnt) Set(fd protoreflect.FieldDescriptor, valu
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventFeeBurnt) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventFeeBurn) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.fee.EventFeeBurnt.fees":
+	case "sunrise.fee.EventFeeBurn.fees":
 		if x.Fees == nil {
 			x.Fees = []*v1beta1.Coin{}
 		}
-		value := &_EventFeeBurnt_1_list{list: &x.Fees}
+		value := &_EventFeeBurn_1_list{list: &x.Fees}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurnt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurn"))
 		}
-		panic(fmt.Errorf("message sunrise.fee.EventFeeBurnt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.fee.EventFeeBurn does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventFeeBurnt) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventFeeBurn) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.fee.EventFeeBurnt.fees":
+	case "sunrise.fee.EventFeeBurn.fees":
 		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_EventFeeBurnt_1_list{list: &list})
+		return protoreflect.ValueOfList(&_EventFeeBurn_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurnt"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.fee.EventFeeBurn"))
 		}
-		panic(fmt.Errorf("message sunrise.fee.EventFeeBurnt does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.fee.EventFeeBurn does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventFeeBurnt) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventFeeBurn) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.fee.EventFeeBurnt", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.fee.EventFeeBurn", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -293,7 +293,7 @@ func (x *fastReflection_EventFeeBurnt) WhichOneof(d protoreflect.OneofDescriptor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventFeeBurnt) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventFeeBurn) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -304,7 +304,7 @@ func (x *fastReflection_EventFeeBurnt) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventFeeBurnt) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventFeeBurn) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -316,7 +316,7 @@ func (x *fastReflection_EventFeeBurnt) SetUnknown(fields protoreflect.RawFields)
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventFeeBurnt) IsValid() bool {
+func (x *fastReflection_EventFeeBurn) IsValid() bool {
 	return x != nil
 }
 
@@ -326,9 +326,9 @@ func (x *fastReflection_EventFeeBurnt) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventFeeBurnt) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventFeeBurn) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventFeeBurnt)
+		x := input.Message.Interface().(*EventFeeBurn)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -356,7 +356,7 @@ func (x *fastReflection_EventFeeBurnt) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventFeeBurnt)
+		x := input.Message.Interface().(*EventFeeBurn)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -402,7 +402,7 @@ func (x *fastReflection_EventFeeBurnt) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventFeeBurnt)
+		x := input.Message.Interface().(*EventFeeBurn)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -434,10 +434,10 @@ func (x *fastReflection_EventFeeBurnt) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventFeeBurnt: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventFeeBurn: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventFeeBurnt: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventFeeBurn: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -522,7 +522,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type EventFeeBurnt struct {
+type EventFeeBurn struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -530,8 +530,8 @@ type EventFeeBurnt struct {
 	Fees []*v1beta1.Coin `protobuf:"bytes,1,rep,name=fees,proto3" json:"fees,omitempty"`
 }
 
-func (x *EventFeeBurnt) Reset() {
-	*x = EventFeeBurnt{}
+func (x *EventFeeBurn) Reset() {
+	*x = EventFeeBurn{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_fee_events_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -539,18 +539,18 @@ func (x *EventFeeBurnt) Reset() {
 	}
 }
 
-func (x *EventFeeBurnt) String() string {
+func (x *EventFeeBurn) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventFeeBurnt) ProtoMessage() {}
+func (*EventFeeBurn) ProtoMessage() {}
 
-// Deprecated: Use EventFeeBurnt.ProtoReflect.Descriptor instead.
-func (*EventFeeBurnt) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventFeeBurn.ProtoReflect.Descriptor instead.
+func (*EventFeeBurn) Descriptor() ([]byte, []int) {
 	return file_sunrise_fee_events_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EventFeeBurnt) GetFees() []*v1beta1.Coin {
+func (x *EventFeeBurn) GetFees() []*v1beta1.Coin {
 	if x != nil {
 		return x.Fees
 	}
@@ -567,23 +567,23 @@ var file_sunrise_fee_events_proto_rawDesc = []byte{
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
 	0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
 	0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f,
-	0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x70, 0x0a, 0x0d, 0x45, 0x76, 0x65, 0x6e,
-	0x74, 0x46, 0x65, 0x65, 0x42, 0x75, 0x72, 0x6e, 0x74, 0x12, 0x5f, 0x0a, 0x04, 0x66, 0x65, 0x65,
-	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f,
-	0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43,
-	0x6f, 0x69, 0x6e, 0x73, 0x52, 0x04, 0x66, 0x65, 0x65, 0x73, 0x42, 0x89, 0x01, 0x0a, 0x0f, 0x63,
-	0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x66, 0x65, 0x65, 0x42, 0x0b,
-	0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1c, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x66, 0x65, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x46,
-	0x58, 0xaa, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x46, 0x65, 0x65, 0xca,
-	0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0xe2, 0x02, 0x17,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73,
-	0x65, 0x3a, 0x3a, 0x46, 0x65, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x6f, 0x0a, 0x0c, 0x45, 0x76, 0x65, 0x6e,
+	0x74, 0x46, 0x65, 0x65, 0x42, 0x75, 0x72, 0x6e, 0x12, 0x5f, 0x0a, 0x04, 0x66, 0x65, 0x65, 0x73,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
+	0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f,
+	0x69, 0x6e, 0x73, 0x52, 0x04, 0x66, 0x65, 0x65, 0x73, 0x42, 0x89, 0x01, 0x0a, 0x0f, 0x63, 0x6f,
+	0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x66, 0x65, 0x65, 0x42, 0x0b, 0x45,
+	0x76, 0x65, 0x6e, 0x74, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1c, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x66, 0x65, 0x65, 0xa2, 0x02, 0x03, 0x53, 0x46, 0x58,
+	0xaa, 0x02, 0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x46, 0x65, 0x65, 0xca, 0x02,
+	0x0b, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0xe2, 0x02, 0x17, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x46, 0x65, 0x65, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
+	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
+	0x3a, 0x3a, 0x46, 0x65, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -600,11 +600,11 @@ func file_sunrise_fee_events_proto_rawDescGZIP() []byte {
 
 var file_sunrise_fee_events_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_fee_events_proto_goTypes = []interface{}{
-	(*EventFeeBurnt)(nil), // 0: sunrise.fee.EventFeeBurnt
-	(*v1beta1.Coin)(nil),  // 1: cosmos.base.v1beta1.Coin
+	(*EventFeeBurn)(nil), // 0: sunrise.fee.EventFeeBurn
+	(*v1beta1.Coin)(nil), // 1: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_fee_events_proto_depIdxs = []int32{
-	1, // 0: sunrise.fee.EventFeeBurnt.fees:type_name -> cosmos.base.v1beta1.Coin
+	1, // 0: sunrise.fee.EventFeeBurn.fees:type_name -> cosmos.base.v1beta1.Coin
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -619,7 +619,7 @@ func file_sunrise_fee_events_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_fee_events_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventFeeBurnt); i {
+			switch v := v.(*EventFeeBurn); i {
 			case 0:
 				return &v.state
 			case 1:
