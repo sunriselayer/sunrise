@@ -146,18 +146,6 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 		return nil, errorsmod.Wrapf(types.ErrInvalidTokenAmounts, "base amount %s, quote amount %s", msg.AmountBase.String(), msg.AmountQuote.String())
 	}
 
-	k.SetPosition(ctx, position)
-	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPosition{
-		PositionId: position.Id,
-		Address:    position.Address,
-		PoolId:     position.PoolId,
-		LowerTick:  position.LowerTick,
-		UpperTick:  position.UpperTick,
-		Liquidity:  position.Liquidity.String(),
-	}); err != nil {
-		return nil, err
-	}
-
 	// Remove full position liquidity
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
