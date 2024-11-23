@@ -146,8 +146,6 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 		return nil, errorsmod.Wrapf(types.ErrInvalidTokenAmounts, "base amount %s, quote amount %s", msg.AmountBase.String(), msg.AmountQuote.String())
 	}
 
-	k.SetPosition(ctx, position)
-
 	// Remove full position liquidity
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
@@ -216,8 +214,15 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 		return math.Int{}, math.Int{}, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", position.PoolId)
 	}
 
-	liquiditDelta := liquidity.Neg()
-	amountBase, amountQuote, lowerTickEmpty, upperTickEmpty, err := k.UpdatePosition(ctx, position.PoolId, sender, position.LowerTick, position.UpperTick, liquiditDelta, positionId)
+	if liquidity.Equal(position.Liquidity) {
+		// Collect fees
+		if _, err := k.collectFees(ctx, sender, positionId); err != nil {
+			return math.Int{}, math.Int{}, err
+		}
+	}
+
+	liquidityDelta := liquidity.Neg()
+	amountBase, amountQuote, lowerTickEmpty, upperTickEmpty, err := k.UpdatePosition(ctx, position.PoolId, sender, position.LowerTick, position.UpperTick, liquidityDelta, positionId)
 	if err != nil {
 		return math.Int{}, math.Int{}, err
 	}
@@ -232,18 +237,6 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 	err = k.bankKeeper.SendCoins(ctx, pool.GetAddress(), sender, coins)
 	if err != nil {
 		return math.Int{}, math.Int{}, err
-	}
-
-	if liquidity.Equal(position.Liquidity) {
-		// Collect fees
-		if _, err := k.collectFees(ctx, sender, positionId); err != nil {
-			return math.Int{}, math.Int{}, err
-		}
-		k.RemovePosition(ctx, position.Id)
-
-		if !k.PoolHasPosition(ctx, position.PoolId) {
-			k.resetPool(ctx, pool)
-		}
 	}
 
 	if lowerTickEmpty {
@@ -335,16 +328,23 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 	if position.Liquidity.IsNegative() {
 		return math.Int{}, math.Int{}, false, false, types.ErrNegativeLiquidity
 	}
-	k.SetPosition(ctx, position)
+	if position.Liquidity.IsZero() {
+		k.RemovePosition(ctx, position.Id)
+	} else {
+		k.SetPosition(ctx, position)
+	}
 
 	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick, upperTick, liquidityDelta)
 	if err != nil {
 		return math.Int{}, math.Int{}, false, false, err
 	}
 
-	pool.UpdateLiquidityIfActivePosition(ctx, lowerTick, upperTick, liquidityDelta)
-
-	k.SetPool(ctx, pool)
+	if !k.PoolHasPosition(ctx, poolId) {
+		k.resetPool(ctx, pool)
+	} else {
+		pool.UpdateLiquidityIfActivePosition(ctx, lowerTick, upperTick, liquidityDelta)
+		k.SetPool(ctx, pool)
+	}
 
 	// update fee accumulator
 	if err := k.SetAccumulatorPositionFeeAccumulator(ctx, poolId, lowerTick, upperTick, positionId, liquidityDelta); err != nil {
