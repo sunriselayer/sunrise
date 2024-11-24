@@ -214,11 +214,9 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 		return math.Int{}, math.Int{}, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", position.PoolId)
 	}
 
-	if liquidity.Equal(position.Liquidity) {
-		// Collect fees
-		if _, err := k.collectFees(ctx, sender, positionId); err != nil {
-			return math.Int{}, math.Int{}, err
-		}
+	// Collect fees
+	if _, err := k.collectFees(ctx, sender, positionId); err != nil {
+		return math.Int{}, math.Int{}, err
 	}
 
 	liquidityDelta := liquidity.Neg()
