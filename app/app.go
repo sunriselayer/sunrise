@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"cosmossdk.io/depinject"
@@ -75,6 +76,7 @@ import (
 	v0_2_2_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.2-test"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+
 	// blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
 	// streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
 	"github.com/sunriselayer/sunrise/docs"
@@ -461,7 +463,7 @@ func New(
 	}
 
 	app.BaseApp.SetPrepareProposal(propHandler.PrepareProposal())
-	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal(daConfig))
+	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal())
 	app.BaseApp.SetPreBlocker(propHandler.PreBlocker)
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you

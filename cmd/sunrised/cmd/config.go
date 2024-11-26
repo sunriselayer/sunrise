@@ -51,9 +51,6 @@ var ConfigTemplate = serverconfig.DefaultConfigTemplate + `
 [da]
 # API to query DA v2 uploaded data shard hashes
 shard_hashes_api = {{ .DA.ShardHashesAPI }}
-
-# API to query DA v2 metadata
-metadata_uri = {{ .DA.MetadataURI }}
 `
 
 // initAppConfig helps to override default appConfig template and configs.
@@ -82,7 +79,6 @@ func InitAppConfig() (string, CustomAppConfig) {
 		Config: *srvCfg,
 		DA: app.DAConfig{
 			ShardHashesAPI: "http://localhost:8000/api/shard_hashes",
-			MetadataURI:    "http://localhost:8000/api/metadata",
 		},
 	}
 
