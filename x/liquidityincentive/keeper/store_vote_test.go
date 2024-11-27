@@ -34,6 +34,28 @@ func createNVote(keeper keeper.Keeper, ctx context.Context, n int) []types.Vote 
 	return items
 }
 
+func TestVoteSet(t *testing.T) {
+	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
+	keeper.SetVote(ctx, types.Vote{
+		Sender:  "sender1",
+		Weights: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}, {PoolId: 2, Weight: math.LegacyOneDec()}},
+	})
+	keeper.SetVote(ctx, types.Vote{
+		Sender:  "sender2",
+		Weights: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}},
+	})
+	require.ElementsMatch(t,
+		nullify.Fill([]types.Vote{{
+			Sender:  "sender1",
+			Weights: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}, {PoolId: 2, Weight: math.LegacyOneDec()}},
+		}, {
+			Sender:  "sender2",
+			Weights: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}},
+		}}),
+		nullify.Fill(keeper.GetAllVotes(ctx)),
+	)
+}
+
 func TestVoteGet(t *testing.T) {
 	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
 	items := createNVote(keeper, ctx, 10)
