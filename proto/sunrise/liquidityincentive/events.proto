@@ -9,5 +9,5 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 message EventSetVote {
   string address = 1;
-  repeated PoolWeight weights = 2 [ (gogoproto.nullable) = false ];
+  repeated PoolWeight pool_weights = 2 [ (gogoproto.nullable) = false ];
 }
