@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -43,38 +41,8 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 	return nil
 }
 
-func (k Keeper) EndBlocker(ctx sdk.Context) error {
-	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
-
-	// Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
-	lastEpoch, found := k.GetLastEpoch(ctx)
-	if !found {
-		err := k.CreateEpoch(ctx, 0, 1)
-		if err != nil {
-			ctx.Logger().Error("epoch creation error", err)
-			return nil
-		}
-	} else if ctx.BlockHeight() >= lastEpoch.EndBlock {
-		err := k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
-		if err != nil {
-			ctx.Logger().Error("epoch creation error", err)
-			return nil
-		}
-		// remove old epoch and gauges
-		epochs := k.GetAllEpoch(ctx)
-		if len(epochs) > 2 {
-			epoch := epochs[0]
-			k.RemoveEpoch(ctx, epoch.Id)
-			for _, gauge := range epoch.Gauges {
-				k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
-			}
-		}
-	}
-	return nil
-}
-
 func (k Keeper) BeginBlocker(ctx sdk.Context) error {
-	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyEndBlocker)
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyBeginBlocker)
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
@@ -116,5 +84,35 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		}
 	}
 
+	return nil
+}
+
+func (k Keeper) EndBlocker(ctx sdk.Context) error {
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
+
+	// Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
+	lastEpoch, found := k.GetLastEpoch(ctx)
+	if !found {
+		err := k.CreateEpoch(ctx, 0, 1)
+		if err != nil {
+			ctx.Logger().Error("epoch creation error", err)
+			return nil
+		}
+	} else if ctx.BlockHeight() >= lastEpoch.EndBlock {
+		err := k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
+		if err != nil {
+			ctx.Logger().Error("epoch creation error", err)
+			return nil
+		}
+		// remove old epoch and gauges
+		epochs := k.GetAllEpoch(ctx)
+		if len(epochs) > 2 {
+			epoch := epochs[0]
+			k.RemoveEpoch(ctx, epoch.Id)
+			for _, gauge := range epoch.Gauges {
+				k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
+			}
+		}
+	}
 	return nil
 }
