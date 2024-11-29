@@ -18,6 +18,16 @@ message Gauge {
   ];
 }
 
+message TallyResult {
+  uint64 pool_id = 1;
+  string count = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
 message PoolWeight {
   uint64 pool_id = 1;
   string weight = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
