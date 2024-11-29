@@ -38,8 +38,8 @@ var (
 	}
 	delegatorVote = func(s tallyFixture, voter sdk.AccAddress, delegations []stakingtypes.Delegation, weights []types.PoolWeight) {
 		s.keeper.SetVote(s.ctx, types.Vote{
-			Sender:  voter.String(),
-			Weights: weights,
+			Sender:      voter.String(),
+			PoolWeights: weights,
 		})
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
@@ -61,7 +61,7 @@ func TestTally_Standard(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
-		expectedTally []types.PoolWeight
+		expectedTally []types.TallyResult
 		expectError   bool
 	}{
 		{
@@ -69,30 +69,30 @@ func TestTally_Standard(t *testing.T) {
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 0)
 			},
-			expectedTally: []types.PoolWeight{},
+			expectedTally: []types.TallyResult{},
 		},
 		{
 			name: "no votes: tally fails",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
 			},
-			expectedTally: []types.PoolWeight{},
+			expectedTally: []types.TallyResult{},
 		},
 		{
 			name: "one validator votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(1000000)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1000000)}},
 		},
 		{
 			name: "one account votes without delegation",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
-				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{},
+			expectedTally: []types.TallyResult{},
 		},
 		{
 			name: "one delegator votes",
@@ -107,9 +107,9 @@ func TestTally_Standard(t *testing.T) {
 					ValidatorAddress: val0Addr,
 					Shares:           sdkmath.LegacyNewDec(42),
 				}}
-				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(42)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(42)}},
 		},
 		{
 			name: "one delegator votes, validator votes",
@@ -124,10 +124,10 @@ func TestTally_Standard(t *testing.T) {
 					ValidatorAddress: val0Addr,
 					Shares:           sdkmath.LegacyNewDec(42),
 				}}
-				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(1000000)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1000000)}},
 		},
 		{
 			name: "delegator with mixed delegations",
@@ -151,12 +151,12 @@ func TestTally_Standard(t *testing.T) {
 						Shares:           sdkmath.LegacyNewDec(21),
 					},
 				}
-				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
-				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
-				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
+				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
+				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(3000000)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(3000000)}},
 		},
 	}
 	for _, tt := range tests {
@@ -213,7 +213,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
-		expectedTally []types.PoolWeight
+		expectedTally []types.TallyResult
 		expectError   bool
 	}{
 		{
@@ -221,30 +221,30 @@ func TestTally_MultipleChoice(t *testing.T) {
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 0)
 			},
-			expectedTally: []types.PoolWeight{},
+			expectedTally: []types.TallyResult{},
 		},
 		{
 			name: "no votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
 			},
-			expectedTally: []types.PoolWeight{},
+			expectedTally: []types.TallyResult{},
 		},
 		{
 			name: "one validator votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(500000)}, {PoolId: 2, Weight: math.LegacyNewDec(500000)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(500000)}, {PoolId: 2, Count: math.NewIntFromUint64(500000)}},
 		},
 		{
 			name: "one account votes without delegation",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
-				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
+				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.PoolWeight{},
+			expectedTally: []types.TallyResult{},
 		},
 		{
 			name: "one delegator votes",
@@ -259,9 +259,9 @@ func TestTally_MultipleChoice(t *testing.T) {
 					ValidatorAddress: val0Addr,
 					Shares:           sdkmath.LegacyNewDec(42),
 				}}
-				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(21)}, {PoolId: 2, Weight: math.LegacyNewDec(21)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(21)}, {PoolId: 2, Count: math.NewIntFromUint64(21)}},
 		},
 		{
 			name: "one delegator votes, validator votes",
@@ -276,10 +276,10 @@ func TestTally_MultipleChoice(t *testing.T) {
 					ValidatorAddress: val0Addr,
 					Shares:           sdkmath.LegacyNewDec(42),
 				}}
-				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(500000)}, {PoolId: 2, Weight: math.LegacyNewDec(500000)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(500000)}, {PoolId: 2, Count: math.NewIntFromUint64(500000)}},
 		},
 		{
 			name: "delegator with mixed delegations",
@@ -303,12 +303,12 @@ func TestTally_MultipleChoice(t *testing.T) {
 						Shares:           sdkmath.LegacyNewDec(21),
 					},
 				}
-				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
-				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
-				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}})
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
+				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
+				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(1500000)}, {PoolId: 2, Weight: math.LegacyNewDec(1500000)}},
+			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1500000)}, {PoolId: 2, Count: math.NewIntFromUint64(1500000)}},
 		},
 	}
 	for _, tt := range tests {

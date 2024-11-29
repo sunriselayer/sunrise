@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"testing"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
@@ -33,8 +32,8 @@ func TestMsgVoteGauge(t *testing.T) {
 		{
 			name: "not available pool",
 			input: &types.MsgVoteGauge{
-				Sender:  sender,
-				Weights: []types.PoolWeight{{PoolId: 3, Weight: math.LegacyOneDec()}},
+				Sender:      sender,
+				PoolWeights: []types.PoolWeight{{PoolId: 3, Weight: "1"}},
 			},
 			expErr:    true,
 			expErrMsg: "pool not found",
@@ -42,16 +41,16 @@ func TestMsgVoteGauge(t *testing.T) {
 		{
 			name: "available pools",
 			input: &types.MsgVoteGauge{
-				Sender:  sender,
-				Weights: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}},
+				Sender:      sender,
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 1, Weight: "0.5"}},
 			},
 			expErr: false,
 		},
 		{
 			name: "empty votes",
 			input: &types.MsgVoteGauge{
-				Sender:  sender,
-				Weights: []types.PoolWeight{},
+				Sender:      sender,
+				PoolWeights: []types.PoolWeight{},
 			},
 			expErr: false,
 		},
@@ -92,16 +91,16 @@ func TestMsgVoteGaugePartial(t *testing.T) {
 		{
 			name: "all available pools",
 			input: &types.MsgVoteGauge{
-				Sender:  sender,
-				Weights: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}, {PoolId: 3, Weight: math.LegacyNewDecWithPrec(50, 2)}},
+				Sender:      sender,
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}, {PoolId: 3, Weight: "0.5"}},
 			},
 			expErr: false,
 		},
 		{
 			name: "partial pool",
 			input: &types.MsgVoteGauge{
-				Sender:  sender,
-				Weights: []types.PoolWeight{{PoolId: 2, Weight: math.LegacyNewDecWithPrec(50, 2)}},
+				Sender:      sender,
+				PoolWeights: []types.PoolWeight{{PoolId: 2, Weight: "0.5"}},
 			},
 			expErr: false,
 		},

@@ -21,7 +21,7 @@ func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gaug
 	for i := range items {
 		items[i].PreviousEpochId = 1
 		items[i].PoolId = uint64(i)
-		items[i].Ratio = math.LegacyOneDec()
+		items[i].Count = math.OneInt()
 
 		keeper.SetGauge(ctx, items[i])
 	}
