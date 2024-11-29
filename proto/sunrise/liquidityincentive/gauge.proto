@@ -20,12 +20,11 @@ message Gauge {
 message PoolWeight {
   uint64 pool_id = 1;
   string weight = 2 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.customtype) = "github.com/sunriselayer/sunrise/math.Dec",
     (gogoproto.nullable) = false
   ];
 }
 message Vote {
   string sender = 1;
-  repeated PoolWeight weights = 2 [ (gogoproto.nullable) = false ];
+  repeated PoolWeight weights = 2 [(gogoproto.nullable) = false];
 }
