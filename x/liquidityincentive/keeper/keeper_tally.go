@@ -20,12 +20,7 @@ type ValidatorGovInfo struct {
 	PoolWeights         []types.PoolWeight // Vote of the validator
 }
 
-type TallyResult struct {
-	PoolId uint64
-	Count  math.Int
-}
-
-func (k Keeper) Tally(ctx context.Context) ([]TallyResult, error) {
+func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	results := make(map[uint64]math.LegacyDec)
 
 	totalVotingPower := math.LegacyZeroDec()
@@ -48,7 +43,7 @@ func (k Keeper) Tally(ctx context.Context) ([]TallyResult, error) {
 		return false
 	})
 	if err != nil {
-		return []TallyResult{}, err
+		return []types.TallyResult{}, err
 	}
 
 	votes := k.GetAllVotes(ctx)
@@ -56,12 +51,12 @@ func (k Keeper) Tally(ctx context.Context) ([]TallyResult, error) {
 		// if validator, just record it in the map
 		voter, err := k.authKeeper.AddressCodec().StringToBytes(vote.Sender)
 		if err != nil {
-			return []TallyResult{}, err
+			return []types.TallyResult{}, err
 		}
 
 		valAddrStr, err := k.sk.ValidatorAddressCodec().BytesToString(voter)
 		if err != nil {
-			return []TallyResult{}, err
+			return []types.TallyResult{}, err
 		}
 		if val, ok := currValidators[valAddrStr]; ok {
 			val.PoolWeights = vote.PoolWeights
@@ -96,7 +91,7 @@ func (k Keeper) Tally(ctx context.Context) ([]TallyResult, error) {
 			return false
 		})
 		if err != nil {
-			return []TallyResult{}, err
+			return []types.TallyResult{}, err
 		}
 	}
 
@@ -124,11 +119,11 @@ func (k Keeper) Tally(ctx context.Context) ([]TallyResult, error) {
 	// If there is no staked coins, the proposal fails
 	totalBonded, err := k.sk.TotalBondedTokens(ctx)
 	if err != nil {
-		return []TallyResult{}, err
+		return []types.TallyResult{}, err
 	}
 
 	if totalBonded.IsZero() {
-		return []TallyResult{}, nil
+		return []types.TallyResult{}, nil
 	}
 
 	tallyResults := NewTallyResultFromMap(results)
@@ -140,10 +135,10 @@ func (k Keeper) Tally(ctx context.Context) ([]TallyResult, error) {
 }
 
 // NewTallyResultFromMap creates a new TallyResult instance from a pool_id -> Dec map
-func NewTallyResultFromMap(results map[uint64]math.LegacyDec) []TallyResult {
-	tallyResults := []TallyResult{}
+func NewTallyResultFromMap(results map[uint64]math.LegacyDec) []types.TallyResult {
+	tallyResults := []types.TallyResult{}
 	for poolId, count := range results {
-		tallyResults = append(tallyResults, TallyResult{
+		tallyResults = append(tallyResults, types.TallyResult{
 			PoolId: poolId,
 			Count:  count.TruncateInt(),
 		})
