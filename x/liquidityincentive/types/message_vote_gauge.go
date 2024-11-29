@@ -21,8 +21,9 @@ func (msg *MsgVoteGauge) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
 	totalWeight := math.LegacyZeroDec()
-	for _, weight := range msg.Weights {
-		totalWeight = totalWeight.Add(weight.Weight)
+	for _, poolWeight := range msg.PoolWeights {
+		weight, _ := math.LegacyNewDecFromStr(poolWeight.Weight)
+		totalWeight = totalWeight.Add(weight)
 	}
 	if totalWeight.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrapf(ErrTotalWeightGTOne, "total weight: %s", totalWeight.String())
