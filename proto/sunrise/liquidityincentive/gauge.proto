@@ -20,7 +20,7 @@ message Gauge {
 message PoolWeight {
   uint64 pool_id = 1;
   string weight = 2 [
-    (gogoproto.customtype) = "github.com/sunriselayer/sunrise/math.Dec",
+    (gogoproto.customtype) = "github.com/sunriselayer/sunrise/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
 }

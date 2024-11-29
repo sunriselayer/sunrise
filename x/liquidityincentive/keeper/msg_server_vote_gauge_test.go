@@ -3,10 +3,11 @@ package keeper_test
 import (
 	"testing"
 
-	"cosmossdk.io/math"
+	// "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"github.com/sunriselayer/sunrise/math"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
