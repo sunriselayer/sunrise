@@ -10,21 +10,21 @@ import (
 )
 
 func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) error {
-	weights, err := k.Tally(ctx)
+	results, err := k.Tally(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(weights) == 0 {
+	if len(results) == 0 {
 		return nil
 	}
 
 	gauges := []types.Gauge{}
-	for _, weight := range weights {
+	for _, result := range results {
 		gauge := types.Gauge{
 			PreviousEpochId: previousEpochId,
-			PoolId:          weight.PoolId,
-			Ratio:           weight.Weight,
+			PoolId:          result.PoolId,
+			Count:           result.Count,
 		}
 		k.SetGauge(ctx, gauge)
 		gauges = append(gauges, gauge)
@@ -59,22 +59,22 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		return nil
 	}
 
-	totalWeight := math.LegacyZeroDec()
-	for _, weight := range lastEpoch.Gauges {
-		totalWeight = totalWeight.Add(weight.Ratio)
+	totalCount := math.LegacyZeroDec()
+	for _, gauge := range lastEpoch.Gauges {
+		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
 	}
 
-	if totalWeight.IsZero() {
+	if totalCount.IsZero() {
 		return nil
 	}
-	for _, weight := range lastEpoch.Gauges {
-		ratio := weight.Ratio.Quo(totalWeight)
-		allocationDec := incentiveFeesDec.MulDecTruncate(ratio)
+	for _, gauge := range lastEpoch.Gauges {
+		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
+		allocationDec := incentiveFeesDec.MulDecTruncate(weight)
 		allocation, _ := allocationDec.TruncateDecimal()
 		if allocation.IsAllPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(
 				ctx,
-				weight.PoolId,
+				gauge.PoolId,
 				authtypes.NewModuleAddress(authtypes.FeeCollectorName),
 				allocation,
 			)
