@@ -60,6 +60,7 @@ import (
 	"github.com/skip-mev/block-sdk/v2/block"
 	"github.com/skip-mev/block-sdk/v2/block/base"
 	"github.com/skip-mev/block-sdk/v2/block/service"
+	blockutils "github.com/skip-mev/block-sdk/v2/block/utils"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	"github.com/sunriselayer/sunrise/app/ante"
 	"github.com/sunriselayer/sunrise/app/keepers"
@@ -460,16 +461,23 @@ func New(
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
 	// use the MEV lane.
+
+	cacheDecoder, err := blockutils.NewDefaultCacheTxDecoder(app.txConfig.TxDecoder())
+	if err != nil {
+		panic(err)
+	}
+
 	mevCheckTx := checktx.NewMEVCheckTxHandler(
 		app.App,
-		app.txConfig.TxDecoder(),
+		cacheDecoder.TxDecoder(),
 		mevLane,
 		anteHandler,
 		app.App.CheckTx,
 	)
 	parityCheckTx := checktx.NewMempoolParityCheckTx(
-		app.Logger(), mempool,
-		app.txConfig.TxDecoder(),
+		app.Logger(),
+		mempool,
+		cacheDecoder.TxDecoder(),
 		mevCheckTx.CheckTx(),
 		app.BaseApp,
 	)
