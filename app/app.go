@@ -459,14 +459,13 @@ func New(
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
 	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
 
-	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
-	// use the MEV lane.
-
 	cacheDecoder, err := blockutils.NewDefaultCacheTxDecoder(app.txConfig.TxDecoder())
 	if err != nil {
 		panic(err)
 	}
 
+	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
+	// use the MEV lane.
 	mevCheckTx := checktx.NewMEVCheckTxHandler(
 		app.App,
 		cacheDecoder.TxDecoder(),
