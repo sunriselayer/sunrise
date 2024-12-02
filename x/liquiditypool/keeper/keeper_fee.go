@@ -131,10 +131,10 @@ func (k Keeper) collectFees(ctx sdk.Context, sender sdk.AccAddress, positionId u
 		return sdk.Coins{}, err
 	}
 
-	if err := ctx.EventManager().EmitTypedEvent(&types.EventCollectFees{
-		Address:       sender.String(),
-		PositionId:    positionId,
-		CollectedFees: feesClaimed,
+	if err := ctx.EventManager().EmitTypedEvent(&types.EventClaimRewards{
+		Address:    sender.String(),
+		PositionId: positionId,
+		Rewards:    feesClaimed,
 	}); err != nil {
 		return sdk.Coins{}, err
 	}
