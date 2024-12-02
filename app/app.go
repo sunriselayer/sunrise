@@ -60,6 +60,7 @@ import (
 	"github.com/skip-mev/block-sdk/v2/block"
 	"github.com/skip-mev/block-sdk/v2/block/base"
 	"github.com/skip-mev/block-sdk/v2/block/service"
+	blockutils "github.com/skip-mev/block-sdk/v2/block/utils"
 	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	"github.com/sunriselayer/sunrise/app/ante"
@@ -71,6 +72,7 @@ import (
 	v0_2_3_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.3-test"
 	v0_2_4_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.4-test"
 	v0_2_5_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.5-test"
+	v0_2_6_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.6-test"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
@@ -80,8 +82,6 @@ import (
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
-	// blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	// streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
@@ -111,7 +111,7 @@ var (
 	DefaultNodeHome string
 
 	// <sunrise>
-	Upgrades = []upgrades.Upgrade{v0_2_0_test.Upgrade, v0_2_1_test.Upgrade, v0_2_2_test.Upgrade, v0_2_3_test.Upgrade, v0_2_4_test.Upgrade, v0_2_5_test.Upgrade}
+	Upgrades = []upgrades.Upgrade{v0_2_0_test.Upgrade, v0_2_1_test.Upgrade, v0_2_2_test.Upgrade, v0_2_3_test.Upgrade, v0_2_4_test.Upgrade, v0_2_5_test.Upgrade, v0_2_6_test.Upgrade}
 	// </sunrise>
 )
 
@@ -420,7 +420,6 @@ func New(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.FeeGrantKeeper,
-		// app.BlobKeeper,
 		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
@@ -429,6 +428,8 @@ func New(
 		mevLane,
 		app.txConfig.TxEncoder(),
 	)
+	app.SetAnteHandler(anteHandler)
+
 	// Set the ante handler on the lanes.
 	opt := []base.LaneOption{
 		base.WithAnteHandler(anteHandler),
@@ -454,45 +455,52 @@ func New(
 		mempool,
 	)
 
-	propHandler := NewProposalHandler(
+	daProposalHandler := NewProposalHandler(
 		logger,
 		app.DaKeeper,
 		app.StakingKeeper,
 		app.ModuleManager,
 		blockSdkProposalHandler,
 	)
-	app.BaseApp.SetPrepareProposal(propHandler.PrepareProposal())
-	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal())
-	app.BaseApp.SetPreBlocker(propHandler.PreBlocker)
+	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
+	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
+	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
+
+	cacheDecoder, err := blockutils.NewDefaultCacheTxDecoder(app.txConfig.TxDecoder())
+	if err != nil {
+		panic(err)
+	}
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
 	// use the MEV lane.
 	mevCheckTx := checktx.NewMEVCheckTxHandler(
 		app.App,
-		app.txConfig.TxDecoder(),
+		cacheDecoder.TxDecoder(),
 		mevLane,
 		anteHandler,
 		app.App.CheckTx,
 	)
-	checkTxHandler := checktx.NewMempoolParityCheckTx(
-		app.Logger(), mempool,
-		app.txConfig.TxDecoder(),
+	parityCheckTx := checktx.NewMempoolParityCheckTx(
+		app.Logger(),
+		mempool,
+		cacheDecoder.TxDecoder(),
 		mevCheckTx.CheckTx(),
 		app.BaseApp,
 	)
 
-	app.SetCheckTx(checkTxHandler.CheckTx())
-
-	// <sunrise>
-	// Step 8: Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
-	app.setupUpgradeHandlers()
-	// Step 9: Set the custom upgrade store loaders on BaseApp.
-	app.setupUpgradeStoreLoaders()
-	// </sunrise>
+	app.SetCheckTx(parityCheckTx.CheckTx())
 
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
 	// ---------------------------------------------------------------------------- //
+
+	// <sunrise>
+	// Upgrade Handler
+	// Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
+	app.setupUpgradeHandlers()
+	// Set the custom upgrade store loaders on BaseApp.
+	app.setupUpgradeStoreLoaders()
+	// </sunrise>
 
 	// Vote extension
 	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
