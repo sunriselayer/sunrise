@@ -21,7 +21,8 @@ func (k msgServer) VoteGauge(goCtx context.Context, msg *types.MsgVoteGauge) (*t
 		Sender:      msg.Sender,
 		PoolWeights: msg.PoolWeights,
 	})
-	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetVote{
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventVoteGauge{
 		Address:     msg.Sender,
 		PoolWeights: msg.PoolWeights,
 	}); err != nil {

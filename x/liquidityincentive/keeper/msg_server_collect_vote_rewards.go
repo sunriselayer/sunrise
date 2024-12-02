@@ -13,5 +13,11 @@ func (k msgServer) CollectVoteRewards(goCtx context.Context, msg *types.MsgColle
 	// TODO: Handling the message
 	_ = ctx
 
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventCollectVoteRewards{
+		Address: msg.Sender,
+	}); err != nil {
+		return nil, err
+	}
+
 	return &types.MsgCollectVoteRewardsResponse{}, nil
 }
