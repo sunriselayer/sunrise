@@ -422,6 +422,8 @@ func New(
 		freeLane,
 		app.txConfig.TxEncoder(),
 	)
+	app.SetAnteHandler(anteHandler)
+
 	// Set the ante handler on the lanes.
 	opt := []base.LaneOption{
 		base.WithAnteHandler(anteHandler),
@@ -473,7 +475,6 @@ func New(
 	)
 
 	app.SetCheckTx(parityCheckTx.CheckTx())
-	app.SetAnteHandler(anteHandler)
 
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
