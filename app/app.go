@@ -61,6 +61,7 @@ import (
 	"github.com/skip-mev/block-sdk/v2/block/base"
 	"github.com/skip-mev/block-sdk/v2/block/service"
 	blockutils "github.com/skip-mev/block-sdk/v2/block/utils"
+	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	"github.com/sunriselayer/sunrise/app/ante"
 	"github.com/sunriselayer/sunrise/app/keepers"
@@ -178,6 +179,7 @@ type App struct {
 	sm *module.SimulationManager
 
 	// custom structure for skip-mev protection
+	MevLane        *mevlane.MEVLane
 	CheckTxHandler checktx.CheckTx
 }
 
@@ -441,6 +443,8 @@ func New(
 	defaultLane.WithOptions(
 		opt...,
 	)
+
+	app.MevLane = mevLane
 
 	// Step 6: Create the proposal handler and set it on the app. Now the application
 	// will build and verify proposals using the Block SDK!
