@@ -1,12 +1,12 @@
 syntax = "proto3";
 package sunrise.liquiditypool;
 
-import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
+// Pool
 message Pool {
   uint64 id = 1;
   string denom_base = 2;
@@ -14,40 +14,35 @@ message Pool {
   string fee_rate = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
-  TickParams tick_params = 5
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  TickParams tick_params = 5 [(gogoproto.nullable) = false];
   int64 current_tick = 6;
   string current_tick_liquidity = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
   string current_sqrt_price = 8 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
 }
 
+// TickParams
 // PriceRatio^(Tick - BaseOffSet)
 message TickParams {
   // Basically 1.0001
   string price_ratio = 1 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
   // basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
   string base_offset = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
 }

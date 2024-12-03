@@ -1,24 +1,20 @@
 syntax = "proto3";
 package sunrise.tokenconverter;
 
-import "amino/amino.proto";
-import "gogoproto/gogo.proto";
-
 import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/tokenconverter/Params";
   option (gogoproto.equal) = true;
 
   string bond_denom = 1;
   string fee_denom = 2;
   string max_supply_fee = 3 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
 }

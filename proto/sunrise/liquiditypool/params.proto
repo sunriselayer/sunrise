@@ -1,28 +1,25 @@
 syntax = "proto3";
 package sunrise.liquiditypool;
 
-import "amino/amino.proto";
-import "gogoproto/gogo.proto";
-
 import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/liquiditypool/Params";
   option (gogoproto.equal) = true;
 
+  // For reservation, not used yet
   string withdraw_fee_rate = 1 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
+  // For reservation, not used yet
   string swap_treasury_tax_rate = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
+    (gogoproto.nullable) = false
   ];
 }

@@ -37,13 +37,17 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Queries a list of Pool items.
+	// Pool
 	Pool(ctx context.Context, in *QueryPoolRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error)
+	// Pools
 	Pools(ctx context.Context, in *QueryPoolsRequest, opts ...grpc.CallOption) (*QueryPoolsResponse, error)
-	// Queries a list of Position items.
+	// Position
 	Position(ctx context.Context, in *QueryPositionRequest, opts ...grpc.CallOption) (*QueryPositionResponse, error)
+	// Positions
 	Positions(ctx context.Context, in *QueryPositionsRequest, opts ...grpc.CallOption) (*QueryPositionsResponse, error)
+	// PoolPositions
 	PoolPositions(ctx context.Context, in *QueryPoolPositionsRequest, opts ...grpc.CallOption) (*QueryPoolPositionsResponse, error)
+	// AddressPositions
 	AddressPositions(ctx context.Context, in *QueryAddressPositionsRequest, opts ...grpc.CallOption) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(ctx context.Context, in *QueryPositionFeesRequest, opts ...grpc.CallOption) (*QueryPositionFeesResponse, error)
@@ -157,13 +161,17 @@ func (c *queryClient) CalculationIncreaseLiquidity(ctx context.Context, in *Quer
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Queries a list of Pool items.
+	// Pool
 	Pool(context.Context, *QueryPoolRequest) (*QueryPoolResponse, error)
+	// Pools
 	Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error)
-	// Queries a list of Position items.
+	// Position
 	Position(context.Context, *QueryPositionRequest) (*QueryPositionResponse, error)
+	// Positions
 	Positions(context.Context, *QueryPositionsRequest) (*QueryPositionsResponse, error)
+	// PoolPositions
 	PoolPositions(context.Context, *QueryPoolPositionsRequest) (*QueryPoolPositionsResponse, error)
+	// AddressPositions
 	AddressPositions(context.Context, *QueryAddressPositionsRequest) (*QueryAddressPositionsResponse, error)
 	// Query fees by position id
 	PositionFees(context.Context, *QueryPositionFeesRequest) (*QueryPositionFeesResponse, error)

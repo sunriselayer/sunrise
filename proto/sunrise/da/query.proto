@@ -4,7 +4,6 @@ package sunrise.da;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "sunrise/da/params.proto";
 import "sunrise/da/published_data.proto";
 
@@ -17,20 +16,16 @@ service Query {
     option (google.api.http).get = "/sunriselayer/sunrise/da/params";
   }
   // PublishedData queries published data
-  rpc PublishedData(QueryPublishedDataRequest)
-      returns (QueryPublishedDataResponse) {
+  rpc PublishedData(QueryPublishedDataRequest) returns (QueryPublishedDataResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/da/published_data";
   }
   // AllPublishedData queries published data
-  rpc AllPublishedData(QueryAllPublishedDataRequest)
-      returns (QueryAllPublishedDataResponse) {
-    option (google.api.http).get =
-        "/sunriselayer/sunrise/da/all_published_data";
+  rpc AllPublishedData(QueryAllPublishedDataRequest) returns (QueryAllPublishedDataResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/da/all_published_data";
   }
-  rpc ZkpProofThreshold(QueryZkpProofThresholdRequest)
-      returns (QueryZkpProofThresholdResponse) {
-    option (google.api.http).get =
-        "/sunriselayer/sunrise/da/zkp_proof_threshold";
+  // ZkpProofThreshold
+  rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/da/zkp_proof_threshold";
   }
 }
 
@@ -40,18 +35,22 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryPublishedDataRequest is request type for the Query/PublishedData RPC
 // method.
-message QueryPublishedDataRequest { string metadata_uri = 1; }
+message QueryPublishedDataRequest {
+  string metadata_uri = 1;
+}
 
 // QueryPublishedDataResponse is response type for the Query/PublishedData RPC
 // method.
 message QueryPublishedDataResponse {
-  PublishedData data = 1 [ (gogoproto.nullable) = false ];
+  PublishedData data = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryAllPublishedDataRequest is request type for the
@@ -61,13 +60,17 @@ message QueryAllPublishedDataRequest {}
 // QueryAllPublishedDataResponse is response type for the
 // Query/AllPublishedData RPC method.
 message QueryAllPublishedDataResponse {
-  repeated PublishedData data = 1 [ (gogoproto.nullable) = false ];
+  repeated PublishedData data = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryZkpProofThresholdRequest is request type for the
 // Query/ZkpProofThreshold RPC method.
-message QueryZkpProofThresholdRequest { uint64 shard_count = 1; }
+message QueryZkpProofThresholdRequest {
+  uint64 shard_count = 1;
+}
 
 // QueryZkpProofThresholdResponse is response type for the
 // Query/ZkpProofThreshold RPC method.
-message QueryZkpProofThresholdResponse { uint64 threshold = 2; }
+message QueryZkpProofThresholdResponse {
+  uint64 threshold = 2;
+}

@@ -34,14 +34,17 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Queries a list of IncomingInFlightPacket items.
+	// IncomingInFlightPacket
 	IncomingInFlightPacket(ctx context.Context, in *QueryIncomingInFlightPacketRequest, opts ...grpc.CallOption) (*QueryIncomingInFlightPacketResponse, error)
+	// IncomingInFlightPackets
 	IncomingInFlightPackets(ctx context.Context, in *QueryIncomingInFlightPacketsRequest, opts ...grpc.CallOption) (*QueryIncomingInFlightPacketsResponse, error)
-	// Queries a list of OutgoingInFlightPacket items.
+	// OutgoingInFlightPacket
 	OutgoingInFlightPacket(ctx context.Context, in *QueryOutgoingInFlightPacketRequest, opts ...grpc.CallOption) (*QueryOutgoingInFlightPacketResponse, error)
+	// OutgoingInFlightPackets
 	OutgoingInFlightPackets(ctx context.Context, in *QueryOutgoingInFlightPacketsRequest, opts ...grpc.CallOption) (*QueryOutgoingInFlightPacketsResponse, error)
-	// Queries a Calculation swap value.
+	// CalculationSwapExactAmountIn
 	CalculationSwapExactAmountIn(ctx context.Context, in *QueryCalculationSwapExactAmountInRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountInResponse, error)
+	// CalculationSwapExactAmountOut
 	CalculationSwapExactAmountOut(ctx context.Context, in *QueryCalculationSwapExactAmountOutRequest, opts ...grpc.CallOption) (*QueryCalculationSwapExactAmountOutResponse, error)
 }
 
@@ -122,14 +125,17 @@ func (c *queryClient) CalculationSwapExactAmountOut(ctx context.Context, in *Que
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Queries a list of IncomingInFlightPacket items.
+	// IncomingInFlightPacket
 	IncomingInFlightPacket(context.Context, *QueryIncomingInFlightPacketRequest) (*QueryIncomingInFlightPacketResponse, error)
+	// IncomingInFlightPackets
 	IncomingInFlightPackets(context.Context, *QueryIncomingInFlightPacketsRequest) (*QueryIncomingInFlightPacketsResponse, error)
-	// Queries a list of OutgoingInFlightPacket items.
+	// OutgoingInFlightPacket
 	OutgoingInFlightPacket(context.Context, *QueryOutgoingInFlightPacketRequest) (*QueryOutgoingInFlightPacketResponse, error)
+	// OutgoingInFlightPackets
 	OutgoingInFlightPackets(context.Context, *QueryOutgoingInFlightPacketsRequest) (*QueryOutgoingInFlightPacketsResponse, error)
-	// Queries a Calculation swap value.
+	// CalculationSwapExactAmountIn
 	CalculationSwapExactAmountIn(context.Context, *QueryCalculationSwapExactAmountInRequest) (*QueryCalculationSwapExactAmountInResponse, error)
+	// CalculationSwapExactAmountOut
 	CalculationSwapExactAmountOut(context.Context, *QueryCalculationSwapExactAmountOutRequest) (*QueryCalculationSwapExactAmountOutResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }

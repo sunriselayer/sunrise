@@ -34,10 +34,15 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// CreatePool
 	CreatePool(ctx context.Context, in *MsgCreatePool, opts ...grpc.CallOption) (*MsgCreatePoolResponse, error)
+	// CreatePosition
 	CreatePosition(ctx context.Context, in *MsgCreatePosition, opts ...grpc.CallOption) (*MsgCreatePositionResponse, error)
+	// IncreaseLiquidity
 	IncreaseLiquidity(ctx context.Context, in *MsgIncreaseLiquidity, opts ...grpc.CallOption) (*MsgIncreaseLiquidityResponse, error)
+	// DecreaseLiquidity
 	DecreaseLiquidity(ctx context.Context, in *MsgDecreaseLiquidity, opts ...grpc.CallOption) (*MsgDecreaseLiquidityResponse, error)
+	// ClaimRewards
 	ClaimRewards(ctx context.Context, in *MsgClaimRewards, opts ...grpc.CallOption) (*MsgClaimRewardsResponse, error)
 }
 
@@ -110,10 +115,15 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// CreatePool
 	CreatePool(context.Context, *MsgCreatePool) (*MsgCreatePoolResponse, error)
+	// CreatePosition
 	CreatePosition(context.Context, *MsgCreatePosition) (*MsgCreatePositionResponse, error)
+	// IncreaseLiquidity
 	IncreaseLiquidity(context.Context, *MsgIncreaseLiquidity) (*MsgIncreaseLiquidityResponse, error)
+	// DecreaseLiquidity
 	DecreaseLiquidity(context.Context, *MsgDecreaseLiquidity) (*MsgDecreaseLiquidityResponse, error)
+	// ClaimRewards
 	ClaimRewards(context.Context, *MsgClaimRewards) (*MsgClaimRewardsResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }

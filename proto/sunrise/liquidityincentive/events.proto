@@ -7,7 +7,13 @@ import "sunrise/liquidityincentive/gauge.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
-message EventSetVote {
+// EventVoteGauge
+message EventVoteGauge {
   string address = 1;
-  repeated PoolWeight weights = 2 [ (gogoproto.nullable) = false ];
+  repeated PoolWeight pool_weights = 2 [(gogoproto.nullable) = false];
+}
+
+// EventCollectVoteRewards
+message EventCollectVoteRewards {
+  string address = 1;
 }

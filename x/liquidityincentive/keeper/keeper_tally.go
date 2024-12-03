@@ -17,11 +17,11 @@ type ValidatorGovInfo struct {
 	BondedTokens        math.Int           // Power of a Validator
 	DelegatorShares     math.LegacyDec     // Total outstanding delegator shares
 	DelegatorDeductions math.LegacyDec     // Delegator deductions from validator's delegators voting independently
-	Weights             []types.PoolWeight // Vote of the validator
+	PoolWeights         []types.PoolWeight // Vote of the validator
 }
 
-func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
-	weights := make(map[uint64]math.LegacyDec)
+func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
+	results := make(map[uint64]math.LegacyDec)
 
 	totalVotingPower := math.LegacyZeroDec()
 	currValidators := make(map[string]ValidatorGovInfo)
@@ -37,13 +37,13 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 			BondedTokens:        validator.GetBondedTokens(),
 			DelegatorShares:     validator.GetDelegatorShares(),
 			DelegatorDeductions: math.LegacyZeroDec(),
-			Weights:             []types.PoolWeight{},
+			PoolWeights:         []types.PoolWeight{},
 		}
 
 		return false
 	})
 	if err != nil {
-		return []types.PoolWeight{}, err
+		return []types.TallyResult{}, err
 	}
 
 	votes := k.GetAllVotes(ctx)
@@ -51,15 +51,15 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 		// if validator, just record it in the map
 		voter, err := k.authKeeper.AddressCodec().StringToBytes(vote.Sender)
 		if err != nil {
-			return []types.PoolWeight{}, err
+			return []types.TallyResult{}, err
 		}
 
 		valAddrStr, err := k.sk.ValidatorAddressCodec().BytesToString(voter)
 		if err != nil {
-			return []types.PoolWeight{}, err
+			return []types.TallyResult{}, err
 		}
 		if val, ok := currValidators[valAddrStr]; ok {
-			val.Weights = vote.Weights
+			val.PoolWeights = vote.PoolWeights
 			currValidators[valAddrStr] = val
 		}
 
@@ -76,13 +76,14 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 				// delegation shares * bonded / total shares
 				votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
 
-				for _, weight := range vote.Weights {
-					subPower := votingPower.Mul(weight.Weight)
-					oldWeight := weights[weight.PoolId]
+				for _, poolWeight := range vote.PoolWeights {
+					weight, _ := math.LegacyNewDecFromStr(poolWeight.Weight)
+					subPower := votingPower.Mul(weight)
+					oldWeight := results[poolWeight.PoolId]
 					if oldWeight.IsNil() {
 						oldWeight = math.LegacyZeroDec()
 					}
-					weights[weight.PoolId] = oldWeight.Add(subPower)
+					results[poolWeight.PoolId] = oldWeight.Add(subPower)
 				}
 				totalVotingPower = totalVotingPower.Add(votingPower)
 			}
@@ -90,26 +91,30 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 			return false
 		})
 		if err != nil {
-			return []types.PoolWeight{}, err
+			return []types.TallyResult{}, err
 		}
 	}
 
 	// iterate over the validators again to tally their voting power
 	for _, val := range currValidators {
-		if len(val.Weights) == 0 {
+		if len(val.PoolWeights) == 0 {
 			continue
 		}
 
 		sharesAfterDeductions := val.DelegatorShares.Sub(val.DelegatorDeductions)
 		votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
 
-		for _, weight := range val.Weights {
-			subPower := votingPower.Mul(weight.Weight)
-			oldWeight := weights[weight.PoolId]
+		for _, poolWeight := range val.PoolWeights {
+			weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
+			if err != nil {
+				return []types.TallyResult{}, err
+			}
+			subPower := votingPower.Mul(weight)
+			oldWeight := results[poolWeight.PoolId]
 			if oldWeight.IsNil() {
 				oldWeight = math.LegacyZeroDec()
 			}
-			weights[weight.PoolId] = oldWeight.Add(subPower)
+			results[poolWeight.PoolId] = oldWeight.Add(subPower)
 		}
 		totalVotingPower = totalVotingPower.Add(votingPower)
 	}
@@ -117,23 +122,29 @@ func (k Keeper) Tally(ctx context.Context) ([]types.PoolWeight, error) {
 	// If there is no staked coins, the proposal fails
 	totalBonded, err := k.sk.TotalBondedTokens(ctx)
 	if err != nil {
-		return []types.PoolWeight{}, err
+		return []types.TallyResult{}, err
 	}
 
 	if totalBonded.IsZero() {
-		return []types.PoolWeight{}, nil
+		return []types.TallyResult{}, nil
 	}
 
-	weightsArr := []types.PoolWeight{}
-	for poolId, weight := range weights {
-		weightsArr = append(weightsArr, types.PoolWeight{
-			PoolId: poolId,
-			Weight: weight,
-		})
-	}
-	sort.SliceStable(weightsArr, func(i, j int) bool {
-		return weightsArr[i].PoolId < weightsArr[j].PoolId
+	tallyResults := NewTallyResultFromMap(results)
+	sort.SliceStable(tallyResults, func(i, j int) bool {
+		return tallyResults[i].PoolId < tallyResults[j].PoolId
 	})
 
-	return weightsArr, nil
+	return tallyResults, nil
+}
+
+// NewTallyResultFromMap creates a new TallyResult instance from a pool_id -> Dec map
+func NewTallyResultFromMap(results map[uint64]math.LegacyDec) []types.TallyResult {
+	tallyResults := []types.TallyResult{}
+	for poolId, count := range results {
+		tallyResults = append(tallyResults, types.TallyResult{
+			PoolId: poolId,
+			Count:  count.TruncateInt(),
+		})
+	}
+	return tallyResults
 }

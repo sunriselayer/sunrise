@@ -741,9 +741,9 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sunrise", "swap", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_IncomingInFlightPacket_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunrise", "swap", "ack_waiting_packets", "incoming", "src_port_id", "src_channel_id", "sequence"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_IncomingInFlightPacket_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunrise", "swap", "in_flight_packets", "incoming", "src_port_id", "src_channel_id", "sequence"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_IncomingInFlightPackets_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "ack_waiting_packets", "incoming"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_IncomingInFlightPackets_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "swap", "in_flight_packets", "incoming"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_OutgoingInFlightPacket_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunrise", "swap", "in_flight_packets", "outgoing", "src_port_id", "src_channel_id", "sequence"}, "", runtime.AssumeColonVerbOpt(false)))
 

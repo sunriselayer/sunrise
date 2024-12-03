@@ -35,9 +35,9 @@ func TestCreateEpoch(t *testing.T) {
 			name: "one validator votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(1000000)}},
+			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: "1000000"}},
 		},
 	}
 	for _, tt := range tests {
@@ -98,7 +98,7 @@ func TestCreateEpoch(t *testing.T) {
 				require.Len(t, gauges, 1)
 				require.Equal(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Ratio, tt.expectedTally[0].Weight)
+				require.Equal(t, gauges[0].Count, tt.expectedTally[0].Weight)
 			}
 		})
 	}
@@ -122,9 +122,9 @@ func TestEndBlocker(t *testing.T) {
 			name: "one validator votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(1000000)}},
+			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: "1000000"}},
 		},
 		{
 			name: "historical epochs",
@@ -136,9 +136,9 @@ func TestEndBlocker(t *testing.T) {
 					Gauges:     []types.Gauge{},
 				})
 				setTotalBonded(s, 10000000)
-				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: math.LegacyOneDec()}})
+				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: math.LegacyNewDec(1000000)}},
+			expectedTally: []types.PoolWeight{{PoolId: 1, Weight: "1000000"}},
 		},
 	}
 	for _, tt := range tests {
@@ -201,7 +201,7 @@ func TestEndBlocker(t *testing.T) {
 				require.Len(t, gauges, 1)
 				require.GreaterOrEqual(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Ratio, tt.expectedTally[0].Weight)
+				require.Equal(t, gauges[0].Count, tt.expectedTally[0].Weight)
 			}
 		})
 	}
@@ -231,7 +231,7 @@ func TestBeginBlocker(t *testing.T) {
 						{
 							PreviousEpochId: 0,
 							PoolId:          1,
-							Ratio:           math.LegacyOneDec(),
+							Count:           math.OneInt(),
 						},
 					},
 				})
@@ -257,7 +257,7 @@ func TestBeginBlocker(t *testing.T) {
 						{
 							PreviousEpochId: 0,
 							PoolId:          1,
-							Ratio:           math.LegacyOneDec(),
+							Count:           math.OneInt(),
 						},
 					},
 				})
@@ -283,7 +283,7 @@ func TestBeginBlocker(t *testing.T) {
 						{
 							PreviousEpochId: 0,
 							PoolId:          1,
-							Ratio:           math.LegacyOneDec(),
+							Count:           math.OneInt(),
 						},
 					},
 				})
