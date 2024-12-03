@@ -85,6 +85,13 @@ func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
 	store.Delete(GetPositionIDBytes(id))
+
+	// Retrieve the position to get the address
+	position, found := k.GetPosition(ctx, id)
+	if found {
+		k.RemovePositionsByPool(ctx, position.PoolId)
+		k.RemovePositionsByAddress(ctx, position.Address)
+	}
 }
 
 // GetAllPositions returns all position
@@ -159,4 +166,30 @@ func (k Keeper) GetPositionsByAddress(ctx context.Context, addr string) []types.
 		}
 	}
 	return positions
+}
+
+// RemovePositionsByPool removes all positions associated with the given pool ID
+func (k Keeper) RemovePositionsByPool(ctx context.Context, poolId uint64) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.PositionByPoolPrefix(poolId))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+	for ; iterator.Valid(); iterator.Next() {
+		id := sdk.BigEndianToUint64(iterator.Value())
+		store.Delete(GetPositionIDBytes(id))
+	}
+}
+
+// RemovePositionsByAddress removes all positions associated with the given address
+func (k Keeper) RemovePositionsByAddress(ctx context.Context, address string) {
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := prefix.NewStore(storeAdapter, types.PositionByAddressPrefix(address))
+	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+	for ; iterator.Valid(); iterator.Next() {
+		id := sdk.BigEndianToUint64(iterator.Value())
+		store.Delete(GetPositionIDBytes(id))
+	}
 }
