@@ -1004,6 +1004,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// EventVoteGauge
 type EventVoteGauge struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1047,6 +1048,7 @@ func (x *EventVoteGauge) GetPoolWeights() []*PoolWeight {
 	return nil
 }
 
+// EventCollectVoteRewards
 type EventCollectVoteRewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

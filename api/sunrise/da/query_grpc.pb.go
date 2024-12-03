@@ -35,6 +35,7 @@ type QueryClient interface {
 	PublishedData(ctx context.Context, in *QueryPublishedDataRequest, opts ...grpc.CallOption) (*QueryPublishedDataResponse, error)
 	// AllPublishedData queries published data
 	AllPublishedData(ctx context.Context, in *QueryAllPublishedDataRequest, opts ...grpc.CallOption) (*QueryAllPublishedDataResponse, error)
+	// ZkpProofThreshold
 	ZkpProofThreshold(ctx context.Context, in *QueryZkpProofThresholdRequest, opts ...grpc.CallOption) (*QueryZkpProofThresholdResponse, error)
 }
 
@@ -92,6 +93,7 @@ type QueryServer interface {
 	PublishedData(context.Context, *QueryPublishedDataRequest) (*QueryPublishedDataResponse, error)
 	// AllPublishedData queries published data
 	AllPublishedData(context.Context, *QueryAllPublishedDataRequest) (*QueryAllPublishedDataResponse, error)
+	// ZkpProofThreshold
 	ZkpProofThreshold(context.Context, *QueryZkpProofThresholdRequest) (*QueryZkpProofThresholdResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }

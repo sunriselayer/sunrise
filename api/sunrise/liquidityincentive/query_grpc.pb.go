@@ -34,14 +34,17 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Queries a list of Epoch items.
+	// Epoch
 	Epoch(ctx context.Context, in *QueryEpochRequest, opts ...grpc.CallOption) (*QueryEpochResponse, error)
+	// Epochs
 	Epochs(ctx context.Context, in *QueryEpochsRequest, opts ...grpc.CallOption) (*QueryEpochsResponse, error)
-	// Queries a list of Gauge items.
+	// Gauge
 	Gauge(ctx context.Context, in *QueryGaugeRequest, opts ...grpc.CallOption) (*QueryGaugeResponse, error)
+	// Gauges
 	Gauges(ctx context.Context, in *QueryGaugesRequest, opts ...grpc.CallOption) (*QueryGaugesResponse, error)
-	// Queries a list of Vote items.
+	// Vote
 	Vote(ctx context.Context, in *QueryVoteRequest, opts ...grpc.CallOption) (*QueryVoteResponse, error)
+	// Votes
 	Votes(ctx context.Context, in *QueryVotesRequest, opts ...grpc.CallOption) (*QueryVotesResponse, error)
 }
 
@@ -122,14 +125,17 @@ func (c *queryClient) Votes(ctx context.Context, in *QueryVotesRequest, opts ...
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Queries a list of Epoch items.
+	// Epoch
 	Epoch(context.Context, *QueryEpochRequest) (*QueryEpochResponse, error)
+	// Epochs
 	Epochs(context.Context, *QueryEpochsRequest) (*QueryEpochsResponse, error)
-	// Queries a list of Gauge items.
+	// Gauge
 	Gauge(context.Context, *QueryGaugeRequest) (*QueryGaugeResponse, error)
+	// Gauges
 	Gauges(context.Context, *QueryGaugesRequest) (*QueryGaugesResponse, error)
-	// Queries a list of Vote items.
+	// Vote
 	Vote(context.Context, *QueryVoteRequest) (*QueryVoteResponse, error)
+	// Votes
 	Votes(context.Context, *QueryVotesRequest) (*QueryVotesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }

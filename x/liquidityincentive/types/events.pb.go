@@ -23,6 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// EventVoteGauge
 type EventVoteGauge struct {
 	Address     string       `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	PoolWeights []PoolWeight `protobuf:"bytes,2,rep,name=pool_weights,json=poolWeights,proto3" json:"pool_weights"`
@@ -75,6 +76,7 @@ func (m *EventVoteGauge) GetPoolWeights() []PoolWeight {
 	return nil
 }
 
+// EventCollectVoteRewards
 type EventCollectVoteRewards struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
