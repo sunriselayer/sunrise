@@ -28,7 +28,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	WithdrawFeeRate     cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=withdraw_fee_rate,json=withdrawFeeRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"withdraw_fee_rate"`
+	// For reservation, not used yet
+	WithdrawFeeRate cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=withdraw_fee_rate,json=withdrawFeeRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"withdraw_fee_rate"`
+	// For reservation, not used yet
 	SwapTreasuryTaxRate cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=swap_treasury_tax_rate,json=swapTreasuryTaxRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"swap_treasury_tax_rate"`
 }
 

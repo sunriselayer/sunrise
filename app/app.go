@@ -6,8 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	// this line is used by starport scaffolding # stargate/app/moduleImport
-
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
@@ -60,32 +58,35 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
+
 	"github.com/skip-mev/block-sdk/v2/abci"
 	"github.com/skip-mev/block-sdk/v2/abci/checktx"
 	"github.com/skip-mev/block-sdk/v2/block"
 	"github.com/skip-mev/block-sdk/v2/block/base"
 	"github.com/skip-mev/block-sdk/v2/block/service"
-	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
+	blockutils "github.com/skip-mev/block-sdk/v2/block/utils"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 
 	"github.com/sunriselayer/sunrise/app/ante"
-	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
+	"github.com/sunriselayer/sunrise/app/defaultoverrides"
 	"github.com/sunriselayer/sunrise/app/keepers"
 	"github.com/sunriselayer/sunrise/app/upgrades"
+
 	v0_2_1_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.1-test"
 	v0_2_2_test "github.com/sunriselayer/sunrise/app/upgrades/v0.2.2-test"
-	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
-	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
-	// blobmodulekeeper "github.com/sunriselayer/sunrise/x/blob/keeper"
-	// streammodulekeeper "github.com/sunriselayer/sunrise/x/blobstream/keeper"
-	"github.com/sunriselayer/sunrise/docs"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
+	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+
+	// this line is used by starport scaffolding # stargate/app/moduleImport
+
+	"github.com/sunriselayer/sunrise/docs"
 )
 
 const (
@@ -173,7 +174,6 @@ type App struct {
 	sm *module.SimulationManager
 
 	// custom structure for skip-mev protection
-	MevLane        *mevlane.MEVLane
 	CheckTxHandler checktx.CheckTx
 }
 
@@ -414,7 +414,6 @@ func New(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.FeeGrantKeeper,
-		// app.BlobKeeper,
 		app.FeeKeeper,
 		app.txConfig.SignModeHandler(),
 		ante.DefaultSigVerificationGasConsumer,
@@ -424,6 +423,8 @@ func New(
 		freeLane,
 		app.txConfig.TxEncoder(),
 	)
+	app.SetAnteHandler(anteHandler)
+
 	// Set the ante handler on the lanes.
 	opt := []base.LaneOption{
 		base.WithAnteHandler(anteHandler),
@@ -438,8 +439,6 @@ func New(
 		opt...,
 	)
 
-	app.MevLane = mevLane
-
 	// Step 6: Create the proposal handler and set it on the app. Now the application
 	// will build and verify proposals using the Block SDK!
 	blockSdkProposalHandler := abci.NewDefaultProposalHandler(
@@ -449,7 +448,7 @@ func New(
 		mempool,
 	)
 
-	propHandler := NewProposalHandler(
+	daProposalHandler := NewProposalHandler(
 		logger,
 		app.DaKeeper,
 		app.StakingKeeper,
@@ -462,44 +461,53 @@ func New(
 		return nil, err
 	}
 
-	app.BaseApp.SetPrepareProposal(propHandler.PrepareProposal())
-	app.BaseApp.SetProcessProposal(propHandler.ProcessProposal())
-	app.BaseApp.SetPreBlocker(propHandler.PreBlocker)
+	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
+	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
+	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
+
+	cacheDecoder, err := blockutils.NewDefaultCacheTxDecoder(app.txConfig.TxDecoder())
+	if err != nil {
+		panic(err)
+	}
 
 	// Step 7: Set the custom CheckTx handler on BaseApp. This is only required if you
 	// use the MEV lane.
 	mevCheckTx := checktx.NewMEVCheckTxHandler(
 		app.App,
-		app.txConfig.TxDecoder(),
+		cacheDecoder.TxDecoder(),
 		mevLane,
 		anteHandler,
 		app.App.CheckTx,
 	)
-	checkTxHandler := checktx.NewMempoolParityCheckTx(
-		app.Logger(), mempool,
-		app.txConfig.TxDecoder(),
+	parityCheckTx := checktx.NewMempoolParityCheckTx(
+		app.Logger(),
+		mempool,
+		cacheDecoder.TxDecoder(),
 		mevCheckTx.CheckTx(),
 		app.BaseApp,
 	)
 
-	app.SetCheckTx(checkTxHandler.CheckTx())
-
-	// <sunrise>
-	// Step 8: Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
-	app.setupUpgradeHandlers()
-	// Step 9: Set the custom upgrade store loaders on BaseApp.
-	app.setupUpgradeStoreLoaders()
-	// </sunrise>
+	app.SetCheckTx(parityCheckTx.CheckTx())
 
 	// ---------------------------------------------------------------------------- //
 	// ------------------------- End `Skip MEV` Code ------------------------------ //
 	// ---------------------------------------------------------------------------- //
 
+	// <sunrise>
+	// Upgrade Handler
+	// Set the custom Upgrade handler on BaseApp. This is added for on-chain upgrade.
+	app.setupUpgradeHandlers()
+	// Set the custom upgrade store loaders on BaseApp.
+	app.setupUpgradeStoreLoaders()
+	// </sunrise>
+
+	// <sunrise>
 	// Vote extension
 	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
 
 	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
 	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
+	// </sunrise>
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 
@@ -658,11 +666,6 @@ func BlockedAddresses() map[string]bool {
 		}
 	}
 	return result
-}
-
-// GetTxConfig implements the TestingApp interface.
-func (app *App) GetTxConfig() client.TxConfig {
-	return app.txConfig
 }
 
 // <sunrise>
