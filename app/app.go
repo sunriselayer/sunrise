@@ -456,11 +456,6 @@ func New(
 		blockSdkProposalHandler,
 	)
 
-	daConfig, err := ReadDAConfig(appOpts)
-	if err != nil {
-		return nil, err
-	}
-
 	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
 	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
@@ -504,6 +499,11 @@ func New(
 	// <sunrise>
 	// Vote extension
 	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
+
+	daConfig, err := ReadDAConfig(appOpts)
+	if err != nil {
+		return nil, err
+	}
 
 	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
 	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
