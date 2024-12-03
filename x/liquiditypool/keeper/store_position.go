@@ -82,16 +82,17 @@ func (k Keeper) GetPosition(ctx context.Context, id uint64) (val types.Position,
 
 // RemovePosition removes a position from the store
 func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
+	// Retrieve the position to get the address
+	position, found := k.GetPosition(ctx, id)
+	if !found {
+		return
+	}
+	k.RemovePositionsByPool(ctx, position.PoolId)
+	k.RemovePositionsByAddress(ctx, position.Address)
+
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
 	store.Delete(GetPositionIDBytes(id))
-
-	// Retrieve the position to get the address
-	position, found := k.GetPosition(ctx, id)
-	if found {
-		k.RemovePositionsByPool(ctx, position.PoolId)
-		k.RemovePositionsByAddress(ctx, position.Address)
-	}
 }
 
 // GetAllPositions returns all position
