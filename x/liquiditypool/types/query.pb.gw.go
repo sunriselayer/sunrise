@@ -1034,9 +1034,9 @@ var (
 
 	pattern_Query_PositionFees_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"sunrise", "liquiditypool", "positions", "id", "fees"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculationCreatePosition_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5}, []string{"sunrise", "liquiditypool", "pools", "pool_id", "calculations", "create_position"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculationCreatePosition_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5}, []string{"sunrise", "liquiditypool", "pools", "pool_id", "calculations", "create-position"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculationIncreaseLiquidity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5}, []string{"sunrise", "liquiditypool", "positions", "id", "calculations", "increase_liquidity"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculationIncreaseLiquidity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5}, []string{"sunrise", "liquiditypool", "positions", "id", "calculations", "increase-liquidity"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

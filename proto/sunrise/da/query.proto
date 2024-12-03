@@ -17,15 +17,15 @@ service Query {
   }
   // PublishedData queries published data
   rpc PublishedData(QueryPublishedDataRequest) returns (QueryPublishedDataResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/da/published_data";
+    option (google.api.http).get = "/sunriselayer/sunrise/da/published-data";
   }
   // AllPublishedData queries published data
   rpc AllPublishedData(QueryAllPublishedDataRequest) returns (QueryAllPublishedDataResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/da/all_published_data";
+    option (google.api.http).get = "/sunriselayer/sunrise/da/all-published-data";
   }
   // ZkpProofThreshold
   rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/da/zkp_proof_threshold";
+    option (google.api.http).get = "/sunriselayer/sunrise/da/zkp-proof-threshold";
   }
 }
 
