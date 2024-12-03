@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,21 +10,21 @@ import (
 )
 
 func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) error {
-	weights, err := k.Tally(ctx)
+	results, err := k.Tally(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(weights) == 0 {
+	if len(results) == 0 {
 		return nil
 	}
 
 	gauges := []types.Gauge{}
-	for _, weight := range weights {
+	for _, result := range results {
 		gauge := types.Gauge{
 			PreviousEpochId: previousEpochId,
-			PoolId:          weight.PoolId,
-			Ratio:           weight.Weight,
+			PoolId:          result.PoolId,
+			Count:           result.Count,
 		}
 		k.SetGauge(ctx, gauge)
 		gauges = append(gauges, gauge)
@@ -43,8 +41,54 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 	return nil
 }
 
+func (k Keeper) BeginBlocker(ctx sdk.Context) error {
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyBeginBlocker)
+
+	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
+	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
+	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector)
+	vRiseAmount := fees.AmountOf(consts.BondDenom)
+	amount := sdk.NewCoin(consts.BondDenom, vRiseAmount)
+	feesDec := sdk.NewDecCoinsFromCoins(amount)
+
+	params := k.GetParams(ctx)
+	incentiveFeesDec := feesDec.MulDecTruncate(math.LegacyOneDec().Sub(params.StakingRewardRatio))
+
+	lastEpoch, found := k.GetLastEpoch(ctx)
+	if !found {
+		return nil
+	}
+
+	totalCount := math.LegacyZeroDec()
+	for _, gauge := range lastEpoch.Gauges {
+		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
+	}
+
+	if totalCount.IsZero() {
+		return nil
+	}
+	for _, gauge := range lastEpoch.Gauges {
+		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
+		allocationDec := incentiveFeesDec.MulDecTruncate(weight)
+		allocation, _ := allocationDec.TruncateDecimal()
+		if allocation.IsAllPositive() {
+			err := k.liquidityPoolKeeper.AllocateIncentive(
+				ctx,
+				gauge.PoolId,
+				authtypes.NewModuleAddress(authtypes.FeeCollectorName),
+				allocation,
+			)
+			if err != nil {
+				ctx.Logger().Error("failure in incentive allocation", "error", err)
+			}
+		}
+	}
+
+	return nil
+}
+
 func (k Keeper) EndBlocker(ctx sdk.Context) error {
-	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
 	lastEpoch, found := k.GetLastEpoch(ctx)
@@ -70,51 +114,5 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 			}
 		}
 	}
-	return nil
-}
-
-func (k Keeper) BeginBlocker(ctx sdk.Context) error {
-	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyEndBlocker)
-
-	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
-	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
-	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector)
-	vRiseAmount := fees.AmountOf(consts.BondDenom)
-	amount := sdk.NewCoin(consts.BondDenom, vRiseAmount)
-	feesDec := sdk.NewDecCoinsFromCoins(amount)
-
-	params := k.GetParams(ctx)
-	incentiveFeesDec := feesDec.MulDecTruncate(math.LegacyOneDec().Sub(params.StakingRewardRatio))
-
-	lastEpoch, found := k.GetLastEpoch(ctx)
-	if !found {
-		return nil
-	}
-
-	totalWeight := math.LegacyZeroDec()
-	for _, weight := range lastEpoch.Gauges {
-		totalWeight = totalWeight.Add(weight.Ratio)
-	}
-
-	if totalWeight.IsZero() {
-		return nil
-	}
-	for _, weight := range lastEpoch.Gauges {
-		ratio := weight.Ratio.Quo(totalWeight)
-		allocationDec := incentiveFeesDec.MulDecTruncate(ratio)
-		allocation, _ := allocationDec.TruncateDecimal()
-		if allocation.IsAllPositive() {
-			err := k.liquidityPoolKeeper.AllocateIncentive(
-				ctx,
-				weight.PoolId,
-				authtypes.NewModuleAddress(authtypes.FeeCollectorName),
-				allocation,
-			)
-			if err != nil {
-				ctx.Logger().Error("failure in incentive allocation", "error", err)
-			}
-		}
-	}
-
 	return nil
 }

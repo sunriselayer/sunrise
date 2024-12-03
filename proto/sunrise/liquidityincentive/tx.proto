@@ -45,7 +45,7 @@ message MsgUpdateParamsResponse {}
 message MsgVoteGauge {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1;
-  repeated PoolWeight weights = 2 [ (gogoproto.nullable) = false ];
+  repeated PoolWeight pool_weights = 2 [ (gogoproto.nullable) = false ];
 }
 
 message MsgVoteGaugeResponse {}
