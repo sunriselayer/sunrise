@@ -518,7 +518,9 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WithdrawFeeRate     string `protobuf:"bytes,1,opt,name=withdraw_fee_rate,json=withdrawFeeRate,proto3" json:"withdraw_fee_rate,omitempty"`
+	// For reservation, not used yet
+	WithdrawFeeRate string `protobuf:"bytes,1,opt,name=withdraw_fee_rate,json=withdrawFeeRate,proto3" json:"withdraw_fee_rate,omitempty"`
+	// For reservation, not used yet
 	SwapTreasuryTaxRate string `protobuf:"bytes,2,opt,name=swap_treasury_tax_rate,json=swapTreasuryTaxRate,proto3" json:"swap_treasury_tax_rate,omitempty"`
 }
 
