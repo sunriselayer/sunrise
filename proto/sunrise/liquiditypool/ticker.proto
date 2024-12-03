@@ -2,11 +2,12 @@ syntax = "proto3";
 
 package sunrise.liquiditypool;
 
-import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
+// TickInfo
 message TickInfo {
   uint64 pool_id = 1;
   int64 tick_index = 2;

@@ -2,25 +2,22 @@ syntax = "proto3";
 
 package sunrise.liquiditypool;
 
-import "amino/amino.proto";
 import "gogoproto/gogo.proto";
+import "sunrise/liquiditypool/accumulator.proto";
 import "sunrise/liquiditypool/params.proto";
 import "sunrise/liquiditypool/pool.proto";
 import "sunrise/liquiditypool/position.proto";
-import "sunrise/liquiditypool/accumulator.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // GenesisState defines the liquiditypool module's genesis state.
 message GenesisState {
   // params defines all the parameters of the module.
-  Params params = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-  repeated Pool pools = 2 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Pool pools = 2 [(gogoproto.nullable) = false];
   uint64 pool_count = 3;
-  repeated Position positions = 4 [ (gogoproto.nullable) = false ];
+  repeated Position positions = 4 [(gogoproto.nullable) = false];
   uint64 position_count = 5;
-  repeated AccumulatorObject accumulators = 6 [ (gogoproto.nullable) = false ];
-  repeated AccumulatorPosition accumulator_positions = 7
-      [ (gogoproto.nullable) = false ];
+  repeated AccumulatorObject accumulators = 6 [(gogoproto.nullable) = false];
+  repeated AccumulatorPosition accumulator_positions = 7 [(gogoproto.nullable) = false];
 }
