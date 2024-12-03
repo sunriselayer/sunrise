@@ -1,16 +1,14 @@
 syntax = "proto3";
 package sunrise.da;
 
-import "amino/amino.proto";
-import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/da/Params";
   option (gogoproto.equal) = true;
 
   string vote_threshold = 1 [
@@ -30,10 +28,14 @@ message Params {
   uint64 min_shard_count = 6;
   uint64 max_shard_count = 7;
   uint64 max_shard_size = 8;
-  google.protobuf.Duration challenge_period = 9
-      [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
-  google.protobuf.Duration proof_period = 10
-      [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
+  google.protobuf.Duration challenge_period = 9 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+  google.protobuf.Duration proof_period = 10 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
   repeated cosmos.base.v1beta1.Coin challenge_collateral = 11 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false

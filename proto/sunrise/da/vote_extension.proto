@@ -2,13 +2,11 @@ syntax = "proto3";
 
 package sunrise.da;
 
-import "amino/amino.proto";
-import "cosmos/msg/v1/msg.proto";
-import "cosmos_proto/cosmos.proto";
-import "gogoproto/gogo.proto";
-import "sunrise/da/params.proto";
 import "sunrise/da/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
-message VoteExtension { repeated PublishedData data = 1; }
+// VoteExtension
+message VoteExtension {
+  repeated PublishedData data = 1;
+}
