@@ -98,10 +98,8 @@ func (k Keeper) SwapExactAmountIn(
 	if err := ctx.EventManager().EmitTypedEvent(&types.EventSwapExactAmountIn{
 		Address:    sender.String(),
 		PoolId:     pool.Id,
-		DenomIn:    tokenIn.Denom,
-		AmountIn:   tokenIn.Amount.String(),
-		DenomOut:   denomOut,
-		AmountOut:  amountOut.String(),
+		TokenIn:    tokenIn,
+		TokenOut:   sdk.NewCoin(denomOut, amountOut),
 		FeeEnabled: feeEnabled,
 	}); err != nil {
 		return math.Int{}, err
@@ -138,10 +136,8 @@ func (k Keeper) SwapExactAmountOut(
 	if err := ctx.EventManager().EmitTypedEvent(&types.EventSwapExactAmountOut{
 		Address:    sender.String(),
 		PoolId:     pool.Id,
-		DenomOut:   tokenOut.Denom,
-		AmountOut:  tokenOut.Amount.String(),
-		DenomIn:    denomIn,
-		AmountIn:   amountIn.String(),
+		TokenIn:    sdk.NewCoin(denomIn, amountIn),
+		TokenOut:   tokenOut,
 		FeeEnabled: feeEnabled,
 	}); err != nil {
 		return math.Int{}, err

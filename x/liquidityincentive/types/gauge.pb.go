@@ -26,6 +26,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// Gauge
 type Gauge struct {
 	PreviousEpochId uint64                `protobuf:"varint,1,opt,name=previous_epoch_id,json=previousEpochId,proto3" json:"previous_epoch_id,omitempty"`
 	PoolId          uint64                `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
@@ -79,6 +80,7 @@ func (m *Gauge) GetPoolId() uint64 {
 	return 0
 }
 
+// TallyResult
 type TallyResult struct {
 	PoolId uint64                `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 	Count  cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=count,proto3,customtype=cosmossdk.io/math.Int" json:"count"`
@@ -124,6 +126,7 @@ func (m *TallyResult) GetPoolId() uint64 {
 	return 0
 }
 
+// PoolWeight
 type PoolWeight struct {
 	PoolId uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 	Weight string `protobuf:"bytes,2,opt,name=weight,proto3" json:"weight,omitempty"`
@@ -176,6 +179,7 @@ func (m *PoolWeight) GetWeight() string {
 	return ""
 }
 
+// Vote
 type Vote struct {
 	Sender      string       `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	PoolWeights []PoolWeight `protobuf:"bytes,2,rep,name=pool_weights,json=poolWeights,proto3" json:"pool_weights"`

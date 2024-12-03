@@ -2038,6 +2038,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Gauge
 type Gauge struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2089,6 +2090,7 @@ func (x *Gauge) GetCount() string {
 	return ""
 }
 
+// TallyResult
 type TallyResult struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2132,6 +2134,7 @@ func (x *TallyResult) GetCount() string {
 	return ""
 }
 
+// PoolWeight
 type PoolWeight struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2175,6 +2178,7 @@ func (x *PoolWeight) GetWeight() string {
 	return ""
 }
 
+// Vote
 type Vote struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

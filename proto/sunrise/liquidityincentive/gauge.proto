@@ -7,32 +7,37 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
+// Gauge
 message Gauge {
   uint64 previous_epoch_id = 1;
   uint64 pool_id = 2;
   string count = 3 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
+// TallyResult
 message TallyResult {
   uint64 pool_id = 1;
   string count = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false,
+    (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
+// PoolWeight
 message PoolWeight {
   uint64 pool_id = 1;
   string weight = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
+
+// Vote
 message Vote {
   string sender = 1;
-  repeated PoolWeight pool_weights = 2 [ (gogoproto.nullable) = false ];
+  repeated PoolWeight pool_weights = 2 [(gogoproto.nullable) = false];
 }

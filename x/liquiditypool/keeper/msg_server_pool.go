@@ -48,6 +48,17 @@ func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (
 		return nil, err
 	}
 
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventCreatePool{
+		PoolId:     id,
+		DenomBase:  msg.DenomBase,
+		DenomQuote: msg.DenomQuote,
+		FeeRate:    feeRate.String(),
+		PriceRatio: priceRatio.String(),
+		BaseOffset: baseOffset.String(),
+	}); err != nil {
+		return nil, err
+	}
+
 	return &types.MsgCreatePoolResponse{
 		Id: id,
 	}, nil
