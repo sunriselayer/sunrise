@@ -26,6 +26,9 @@ func (msg *MsgVoteGauge) ValidateBasic() error {
 		if err != nil {
 			return errorsmod.Wrapf(ErrInvalidWeight, "invalid weight (pool %d): %s", poolWeight.PoolId, err)
 		}
+		if weight.IsNegative() {
+			return errorsmod.Wrapf(ErrInvalidWeight, "negative weight (pool %d)", poolWeight.PoolId)
+		}
 		totalWeight = totalWeight.Add(weight)
 	}
 	if totalWeight.GT(math.LegacyOneDec()) {
