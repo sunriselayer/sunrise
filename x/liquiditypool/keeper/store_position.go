@@ -85,6 +85,14 @@ func (k Keeper) RemovePosition(ctx context.Context, id uint64) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PositionKey))
 	store.Delete(GetPositionIDBytes(id))
+
+	// Remove from PositionsByPoolId
+	position, found := k.GetPosition(ctx, id)
+	if found {
+		positionKey := sdk.Uint64ToBigEndian(id)
+		poolStore := prefix.NewStore(storeAdapter, types.PositionByPoolPrefix(position.PoolId))
+		poolStore.Delete(positionKey)
+	}
 }
 
 // GetAllPositions returns all position
