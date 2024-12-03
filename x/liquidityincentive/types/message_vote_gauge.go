@@ -22,7 +22,10 @@ func (msg *MsgVoteGauge) ValidateBasic() error {
 	}
 	totalWeight := math.LegacyZeroDec()
 	for _, poolWeight := range msg.PoolWeights {
-		weight, _ := math.LegacyNewDecFromStr(poolWeight.Weight)
+		weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
+		if err != nil {
+			return errorsmod.Wrapf(ErrInvalidWeight, "invalid weight (pool %d): %s", poolWeight.PoolId, err)
+		}
 		totalWeight = totalWeight.Add(weight)
 	}
 	if totalWeight.GT(math.LegacyOneDec()) {
