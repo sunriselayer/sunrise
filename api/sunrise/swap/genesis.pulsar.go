@@ -2,7 +2,6 @@
 package swap
 
 import (
-	_ "cosmossdk.io/api/amino"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
@@ -119,16 +118,16 @@ func (x *_GenesisState_3_list) IsValid() bool {
 var (
 	md_GenesisState                            protoreflect.MessageDescriptor
 	fd_GenesisState_params                     protoreflect.FieldDescriptor
-	fd_GenesisState_incomingInFlightPacketList protoreflect.FieldDescriptor
-	fd_GenesisState_outgoingInFlightPacketList protoreflect.FieldDescriptor
+	fd_GenesisState_incoming_in_flight_packets protoreflect.FieldDescriptor
+	fd_GenesisState_outgoing_in_flight_packets protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_swap_genesis_proto_init()
 	md_GenesisState = File_sunrise_swap_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_incomingInFlightPacketList = md_GenesisState.Fields().ByName("incomingInFlightPacketList")
-	fd_GenesisState_outgoingInFlightPacketList = md_GenesisState.Fields().ByName("outgoingInFlightPacketList")
+	fd_GenesisState_incoming_in_flight_packets = md_GenesisState.Fields().ByName("incoming_in_flight_packets")
+	fd_GenesisState_outgoing_in_flight_packets = md_GenesisState.Fields().ByName("outgoing_in_flight_packets")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -202,15 +201,15 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.IncomingInFlightPacketList) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.IncomingInFlightPacketList})
-		if !f(fd_GenesisState_incomingInFlightPacketList, value) {
+	if len(x.IncomingInFlightPackets) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.IncomingInFlightPackets})
+		if !f(fd_GenesisState_incoming_in_flight_packets, value) {
 			return
 		}
 	}
-	if len(x.OutgoingInFlightPacketList) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.OutgoingInFlightPacketList})
-		if !f(fd_GenesisState_outgoingInFlightPacketList, value) {
+	if len(x.OutgoingInFlightPackets) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.OutgoingInFlightPackets})
+		if !f(fd_GenesisState_outgoing_in_flight_packets, value) {
 			return
 		}
 	}
@@ -231,10 +230,10 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "sunrise.swap.GenesisState.params":
 		return x.Params != nil
-	case "sunrise.swap.GenesisState.incomingInFlightPacketList":
-		return len(x.IncomingInFlightPacketList) != 0
-	case "sunrise.swap.GenesisState.outgoingInFlightPacketList":
-		return len(x.OutgoingInFlightPacketList) != 0
+	case "sunrise.swap.GenesisState.incoming_in_flight_packets":
+		return len(x.IncomingInFlightPackets) != 0
+	case "sunrise.swap.GenesisState.outgoing_in_flight_packets":
+		return len(x.OutgoingInFlightPackets) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.GenesisState"))
@@ -253,10 +252,10 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sunrise.swap.GenesisState.params":
 		x.Params = nil
-	case "sunrise.swap.GenesisState.incomingInFlightPacketList":
-		x.IncomingInFlightPacketList = nil
-	case "sunrise.swap.GenesisState.outgoingInFlightPacketList":
-		x.OutgoingInFlightPacketList = nil
+	case "sunrise.swap.GenesisState.incoming_in_flight_packets":
+		x.IncomingInFlightPackets = nil
+	case "sunrise.swap.GenesisState.outgoing_in_flight_packets":
+		x.OutgoingInFlightPackets = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.GenesisState"))
@@ -276,17 +275,17 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "sunrise.swap.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sunrise.swap.GenesisState.incomingInFlightPacketList":
-		if len(x.IncomingInFlightPacketList) == 0 {
+	case "sunrise.swap.GenesisState.incoming_in_flight_packets":
+		if len(x.IncomingInFlightPackets) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_2_list{})
 		}
-		listValue := &_GenesisState_2_list{list: &x.IncomingInFlightPacketList}
+		listValue := &_GenesisState_2_list{list: &x.IncomingInFlightPackets}
 		return protoreflect.ValueOfList(listValue)
-	case "sunrise.swap.GenesisState.outgoingInFlightPacketList":
-		if len(x.OutgoingInFlightPacketList) == 0 {
+	case "sunrise.swap.GenesisState.outgoing_in_flight_packets":
+		if len(x.OutgoingInFlightPackets) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_3_list{})
 		}
-		listValue := &_GenesisState_3_list{list: &x.OutgoingInFlightPacketList}
+		listValue := &_GenesisState_3_list{list: &x.OutgoingInFlightPackets}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -310,14 +309,14 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "sunrise.swap.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "sunrise.swap.GenesisState.incomingInFlightPacketList":
+	case "sunrise.swap.GenesisState.incoming_in_flight_packets":
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
-		x.IncomingInFlightPacketList = *clv.list
-	case "sunrise.swap.GenesisState.outgoingInFlightPacketList":
+		x.IncomingInFlightPackets = *clv.list
+	case "sunrise.swap.GenesisState.outgoing_in_flight_packets":
 		lv := value.List()
 		clv := lv.(*_GenesisState_3_list)
-		x.OutgoingInFlightPacketList = *clv.list
+		x.OutgoingInFlightPackets = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.swap.GenesisState"))
@@ -343,17 +342,17 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "sunrise.swap.GenesisState.incomingInFlightPacketList":
-		if x.IncomingInFlightPacketList == nil {
-			x.IncomingInFlightPacketList = []*IncomingInFlightPacket{}
+	case "sunrise.swap.GenesisState.incoming_in_flight_packets":
+		if x.IncomingInFlightPackets == nil {
+			x.IncomingInFlightPackets = []*IncomingInFlightPacket{}
 		}
-		value := &_GenesisState_2_list{list: &x.IncomingInFlightPacketList}
+		value := &_GenesisState_2_list{list: &x.IncomingInFlightPackets}
 		return protoreflect.ValueOfList(value)
-	case "sunrise.swap.GenesisState.outgoingInFlightPacketList":
-		if x.OutgoingInFlightPacketList == nil {
-			x.OutgoingInFlightPacketList = []*OutgoingInFlightPacket{}
+	case "sunrise.swap.GenesisState.outgoing_in_flight_packets":
+		if x.OutgoingInFlightPackets == nil {
+			x.OutgoingInFlightPackets = []*OutgoingInFlightPacket{}
 		}
-		value := &_GenesisState_3_list{list: &x.OutgoingInFlightPacketList}
+		value := &_GenesisState_3_list{list: &x.OutgoingInFlightPackets}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
@@ -371,10 +370,10 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "sunrise.swap.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sunrise.swap.GenesisState.incomingInFlightPacketList":
+	case "sunrise.swap.GenesisState.incoming_in_flight_packets":
 		list := []*IncomingInFlightPacket{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
-	case "sunrise.swap.GenesisState.outgoingInFlightPacketList":
+	case "sunrise.swap.GenesisState.outgoing_in_flight_packets":
 		list := []*OutgoingInFlightPacket{}
 		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
 	default:
@@ -450,14 +449,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.IncomingInFlightPacketList) > 0 {
-			for _, e := range x.IncomingInFlightPacketList {
+		if len(x.IncomingInFlightPackets) > 0 {
+			for _, e := range x.IncomingInFlightPackets {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.OutgoingInFlightPacketList) > 0 {
-			for _, e := range x.OutgoingInFlightPacketList {
+		if len(x.OutgoingInFlightPackets) > 0 {
+			for _, e := range x.OutgoingInFlightPackets {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -491,9 +490,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.OutgoingInFlightPacketList) > 0 {
-			for iNdEx := len(x.OutgoingInFlightPacketList) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.OutgoingInFlightPacketList[iNdEx])
+		if len(x.OutgoingInFlightPackets) > 0 {
+			for iNdEx := len(x.OutgoingInFlightPackets) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.OutgoingInFlightPackets[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -507,9 +506,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x1a
 			}
 		}
-		if len(x.IncomingInFlightPacketList) > 0 {
-			for iNdEx := len(x.IncomingInFlightPacketList) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.IncomingInFlightPacketList[iNdEx])
+		if len(x.IncomingInFlightPackets) > 0 {
+			for iNdEx := len(x.IncomingInFlightPackets) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.IncomingInFlightPackets[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -624,7 +623,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IncomingInFlightPacketList", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IncomingInFlightPackets", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -651,14 +650,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.IncomingInFlightPacketList = append(x.IncomingInFlightPacketList, &IncomingInFlightPacket{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.IncomingInFlightPacketList[len(x.IncomingInFlightPacketList)-1]); err != nil {
+				x.IncomingInFlightPackets = append(x.IncomingInFlightPackets, &IncomingInFlightPacket{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.IncomingInFlightPackets[len(x.IncomingInFlightPackets)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutgoingInFlightPacketList", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutgoingInFlightPackets", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -685,8 +684,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OutgoingInFlightPacketList = append(x.OutgoingInFlightPacketList, &OutgoingInFlightPacket{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OutgoingInFlightPacketList[len(x.OutgoingInFlightPacketList)-1]); err != nil {
+				x.OutgoingInFlightPackets = append(x.OutgoingInFlightPackets, &OutgoingInFlightPacket{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OutgoingInFlightPackets[len(x.OutgoingInFlightPackets)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -745,9 +744,9 @@ type GenesisState struct {
 	unknownFields protoimpl.UnknownFields
 
 	// params defines all the parameters of the module.
-	Params                     *Params                   `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	IncomingInFlightPacketList []*IncomingInFlightPacket `protobuf:"bytes,2,rep,name=incomingInFlightPacketList,proto3" json:"incomingInFlightPacketList,omitempty"`
-	OutgoingInFlightPacketList []*OutgoingInFlightPacket `protobuf:"bytes,3,rep,name=outgoingInFlightPacketList,proto3" json:"outgoingInFlightPacketList,omitempty"`
+	Params                  *Params                   `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	IncomingInFlightPackets []*IncomingInFlightPacket `protobuf:"bytes,2,rep,name=incoming_in_flight_packets,json=incomingInFlightPackets,proto3" json:"incoming_in_flight_packets,omitempty"`
+	OutgoingInFlightPackets []*OutgoingInFlightPacket `protobuf:"bytes,3,rep,name=outgoing_in_flight_packets,json=outgoingInFlightPackets,proto3" json:"outgoing_in_flight_packets,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -777,16 +776,16 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetIncomingInFlightPacketList() []*IncomingInFlightPacket {
+func (x *GenesisState) GetIncomingInFlightPackets() []*IncomingInFlightPacket {
 	if x != nil {
-		return x.IncomingInFlightPacketList
+		return x.IncomingInFlightPackets
 	}
 	return nil
 }
 
-func (x *GenesisState) GetOutgoingInFlightPacketList() []*OutgoingInFlightPacket {
+func (x *GenesisState) GetOutgoingInFlightPackets() []*OutgoingInFlightPacket {
 	if x != nil {
-		return x.OutgoingInFlightPacketList
+		return x.OutgoingInFlightPackets
 	}
 	return nil
 }
@@ -796,41 +795,40 @@ var File_sunrise_swap_genesis_proto protoreflect.FileDescriptor
 var file_sunrise_swap_genesis_proto_rawDesc = []byte{
 	0x0a, 0x1a, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x67,
 	0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e,
-	0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67,
-	0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61,
-	0x70, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x23,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x69, 0x6e, 0x5f,
-	0x66, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x9f, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53,
-	0x74, 0x61, 0x74, 0x65, 0x12, 0x37, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73,
-	0x77, 0x61, 0x70, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
-	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x6a, 0x0a,
-	0x1a, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68,
-	0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70,
-	0x2e, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68,
-	0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x1a, 0x69,
-	0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50,
-	0x61, 0x63, 0x6b, 0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x6a, 0x0a, 0x1a, 0x6f, 0x75, 0x74,
-	0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63,
-	0x6b, 0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e,
-	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x4f, 0x75, 0x74,
-	0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63,
-	0x6b, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x1a, 0x6f, 0x75, 0x74, 0x67, 0x6f,
-	0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65,
-	0x74, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x90, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75,
-	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65,
-	0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53, 0x58, 0xaa,
-	0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70, 0xca, 0x02,
-	0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2, 0x02, 0x18,
-	0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x1a, 0x23, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0x2f, 0x69,
+	0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73,
+	0x77, 0x61, 0x70, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x22, 0x94, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74,
+	0x65, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x14, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70,
+	0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x67, 0x0a, 0x1a, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e,
+	0x67, 0x5f, 0x69, 0x6e, 0x5f, 0x66, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61, 0x63, 0x6b,
+	0x65, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72,
+	0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x2e, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e,
+	0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x17, 0x69, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x49,
+	0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x12, 0x67,
+	0x0a, 0x1a, 0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x5f, 0x66, 0x6c,
+	0x69, 0x67, 0x68, 0x74, 0x5f, 0x70, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x18, 0x03, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x24, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61,
+	0x70, 0x2e, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67,
+	0x68, 0x74, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x17,
+	0x6f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x46, 0x6c, 0x69, 0x67, 0x68, 0x74,
+	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x42, 0x90, 0x01, 0x0a, 0x10, 0x63, 0x6f, 0x6d, 0x2e,
+	0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x73, 0x77, 0x61, 0x70, 0x42, 0x0c, 0x47, 0x65,
+	0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1d, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x73, 0x77, 0x61, 0x70, 0xa2, 0x02, 0x03, 0x53, 0x53,
+	0x58, 0xaa, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x53, 0x77, 0x61, 0x70,
+	0xca, 0x02, 0x0c, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0xe2,
+	0x02, 0x18, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x53, 0x77, 0x61, 0x70, 0x5c, 0x47,
+	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0d, 0x53, 0x75, 0x6e,
+	0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x53, 0x77, 0x61, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -854,8 +852,8 @@ var file_sunrise_swap_genesis_proto_goTypes = []interface{}{
 }
 var file_sunrise_swap_genesis_proto_depIdxs = []int32{
 	1, // 0: sunrise.swap.GenesisState.params:type_name -> sunrise.swap.Params
-	2, // 1: sunrise.swap.GenesisState.incomingInFlightPacketList:type_name -> sunrise.swap.IncomingInFlightPacket
-	3, // 2: sunrise.swap.GenesisState.outgoingInFlightPacketList:type_name -> sunrise.swap.OutgoingInFlightPacket
+	2, // 1: sunrise.swap.GenesisState.incoming_in_flight_packets:type_name -> sunrise.swap.IncomingInFlightPacket
+	3, // 2: sunrise.swap.GenesisState.outgoing_in_flight_packets:type_name -> sunrise.swap.OutgoingInFlightPacket
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -868,8 +866,8 @@ func file_sunrise_swap_genesis_proto_init() {
 	if File_sunrise_swap_genesis_proto != nil {
 		return
 	}
-	file_sunrise_swap_params_proto_init()
 	file_sunrise_swap_in_flight_packet_proto_init()
+	file_sunrise_swap_params_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_swap_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GenesisState); i {

@@ -30,6 +30,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// Convert
 	Convert(ctx context.Context, in *MsgConvert, opts ...grpc.CallOption) (*MsgConvertResponse, error)
 }
 
@@ -66,6 +67,7 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// Convert
 	Convert(context.Context, *MsgConvert) (*MsgConvertResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }

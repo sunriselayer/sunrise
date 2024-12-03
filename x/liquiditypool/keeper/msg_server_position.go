@@ -118,6 +118,18 @@ func (k msgServer) CreatePosition(goCtx context.Context, msg *types.MsgCreatePos
 	}
 
 	position, _ = k.GetPosition(ctx, positionId)
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventCreatePosition{
+		PositionId: positionId,
+		Address:    msg.Sender,
+		PoolId:     msg.PoolId,
+		LowerTick:  msg.LowerTick,
+		UpperTick:  msg.UpperTick,
+		Liquidity:  position.Liquidity.String(),
+	}); err != nil {
+		return nil, err
+	}
+
 	return &types.MsgCreatePositionResponse{
 		Id:          positionId,
 		AmountBase:  amountBase,
@@ -178,6 +190,16 @@ func (k msgServer) IncreaseLiquidity(goCtx context.Context, msg *types.MsgIncrea
 		MinAmountQuote: minAmountQuote,
 	})
 	if err != nil {
+		return nil, err
+	}
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventIncreaseLiquidity{
+		OldPositionId: msg.Id,
+		NewPositionId: res.Id,
+		Address:       msg.Sender,
+		AmountBase:    res.AmountBase.String(),
+		AmountQuote:   res.AmountQuote.String(),
+	}); err != nil {
 		return nil, err
 	}
 
@@ -243,6 +265,16 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 	if upperTickEmpty {
 		k.RemoveTickInfo(ctx, position.PoolId, position.UpperTick)
 	}
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventDecreaseLiquidity{
+		PositionId:  positionId,
+		Address:     sender.String(),
+		AmountBase:  amountBase.Abs().String(),
+		AmountQuote: amountQuote.Abs().String(),
+	}); err != nil {
+		return math.Int{}, math.Int{}, err
+	}
+
 	return amountBase.Abs(), amountQuote.Abs(), nil
 }
 
@@ -290,19 +322,6 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 	pool.CurrentTick = initialTick
 
 	k.SetPool(ctx, pool)
-	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPool{
-		PoolId:               pool.Id,
-		DenomBase:            pool.DenomBase,
-		DenomQuote:           pool.DenomQuote,
-		FeeRate:              pool.FeeRate.String(),
-		PriceRatio:           pool.TickParams.PriceRatio.String(),
-		BaseOffset:           pool.TickParams.BaseOffset.String(),
-		CurrentTick:          pool.CurrentTick,
-		CurrentTickLiquidity: pool.CurrentTickLiquidity.String(),
-		CurrentSqrtPrice:     pool.CurrentSqrtPrice.String(),
-	}); err != nil {
-		return err
-	}
 
 	return nil
 }
@@ -312,17 +331,6 @@ func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) {
 	pool.CurrentTick = 0
 
 	k.SetPool(ctx, pool)
-	_ = sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPool{
-		PoolId:               pool.Id,
-		DenomBase:            pool.DenomBase,
-		DenomQuote:           pool.DenomQuote,
-		FeeRate:              pool.FeeRate.String(),
-		PriceRatio:           pool.TickParams.PriceRatio.String(),
-		BaseOffset:           pool.TickParams.BaseOffset.String(),
-		CurrentTick:          pool.CurrentTick,
-		CurrentTickLiquidity: pool.CurrentTickLiquidity.String(),
-		CurrentSqrtPrice:     pool.CurrentSqrtPrice.String(),
-	})
 }
 
 func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddress, lowerTick, upperTick int64, liquidityDelta math.LegacyDec, positionId uint64) (amountBase math.Int, amountQuote math.Int, lowerTickEmpty bool, upperTickEmpty bool, err error) {
@@ -353,23 +361,8 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 	}
 	if position.Liquidity.IsZero() {
 		k.RemovePosition(ctx, position.Id)
-		if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventRemovePosition{
-			PositionId: positionId,
-		}); err != nil {
-			return math.Int{}, math.Int{}, false, false, types.ErrNegativeLiquidity
-		}
 	} else {
 		k.SetPosition(ctx, position)
-		if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPosition{
-			PositionId: position.Id,
-			Address:    position.Address,
-			PoolId:     position.PoolId,
-			LowerTick:  position.LowerTick,
-			UpperTick:  position.UpperTick,
-			Liquidity:  position.Liquidity.String(),
-		}); err != nil {
-			return math.Int{}, math.Int{}, false, false, err
-		}
 	}
 
 	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick, upperTick, liquidityDelta)
@@ -383,19 +376,6 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 		pool.UpdateLiquidityIfActivePosition(ctx, lowerTick, upperTick, liquidityDelta)
 
 		k.SetPool(ctx, pool)
-		if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventSetPool{
-			PoolId:               pool.Id,
-			DenomBase:            pool.DenomBase,
-			DenomQuote:           pool.DenomQuote,
-			FeeRate:              pool.FeeRate.String(),
-			PriceRatio:           pool.TickParams.PriceRatio.String(),
-			BaseOffset:           pool.TickParams.BaseOffset.String(),
-			CurrentTick:          pool.CurrentTick,
-			CurrentTickLiquidity: pool.CurrentTickLiquidity.String(),
-			CurrentSqrtPrice:     pool.CurrentSqrtPrice.String(),
-		}); err != nil {
-			return math.Int{}, math.Int{}, false, false, err
-		}
 	}
 
 	// update fee accumulator

@@ -2,22 +2,19 @@ syntax = "proto3";
 
 package sunrise.liquidityincentive;
 
-import "amino/amino.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/liquidityincentive/params.proto";
 import "sunrise/liquidityincentive/epoch.proto";
 import "sunrise/liquidityincentive/gauge.proto";
+import "sunrise/liquidityincentive/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
 // GenesisState defines the liquidityincentive module's genesis state.
 message GenesisState {
-
   // params defines all the parameters of the module.
-  Params params = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-  repeated Epoch epochs = 2 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Epoch epochs = 2 [(gogoproto.nullable) = false];
   uint64 epoch_count = 3;
-  repeated Gauge gauges = 4 [ (gogoproto.nullable) = false ];
-  repeated Vote votes = 5 [ (gogoproto.nullable) = false ];
+  repeated Gauge gauges = 4 [(gogoproto.nullable) = false];
+  repeated Vote votes = 5 [(gogoproto.nullable) = false];
 }

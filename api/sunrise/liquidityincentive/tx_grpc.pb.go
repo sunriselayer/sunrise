@@ -31,7 +31,9 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// VoteGauge
 	VoteGauge(ctx context.Context, in *MsgVoteGauge, opts ...grpc.CallOption) (*MsgVoteGaugeResponse, error)
+	// CollectVoteRewards
 	CollectVoteRewards(ctx context.Context, in *MsgCollectVoteRewards, opts ...grpc.CallOption) (*MsgCollectVoteRewardsResponse, error)
 }
 
@@ -77,7 +79,9 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// VoteGauge
 	VoteGauge(context.Context, *MsgVoteGauge) (*MsgVoteGaugeResponse, error)
+	// CollectVoteRewards
 	CollectVoteRewards(context.Context, *MsgCollectVoteRewards) (*MsgCollectVoteRewardsResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }

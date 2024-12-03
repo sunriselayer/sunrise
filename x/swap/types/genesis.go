@@ -10,8 +10,8 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		IncomingInFlightPacketList: []IncomingInFlightPacket{},
-		OutgoingInFlightPacketList: []OutgoingInFlightPacket{},
+		IncomingInFlightPackets: []IncomingInFlightPacket{},
+		OutgoingInFlightPackets: []OutgoingInFlightPacket{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -23,7 +23,7 @@ func (gs GenesisState) Validate() error {
 	// Check for duplicated index in incomingPacket
 	incomingPacketIndexMap := make(map[string]struct{})
 
-	for _, elem := range gs.IncomingInFlightPacketList {
+	for _, elem := range gs.IncomingInFlightPackets {
 		index := string(IncomingInFlightPacketKey(elem.Index))
 		if _, ok := incomingPacketIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for incomingInFlightPacket")
@@ -33,7 +33,7 @@ func (gs GenesisState) Validate() error {
 	// Check for duplicated index in outgoingInFlightPacket
 	outgoingInFlightPacketIndexMap := make(map[string]struct{})
 
-	for _, elem := range gs.OutgoingInFlightPacketList {
+	for _, elem := range gs.OutgoingInFlightPackets {
 		index := string(OutgoingInFlightPacketKey(elem.Index))
 		if _, ok := outgoingInFlightPacketIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for outgoingInFlightPacket")

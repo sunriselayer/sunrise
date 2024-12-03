@@ -2,28 +2,23 @@ syntax = "proto3";
 
 package sunrise.liquiditypool;
 
-import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
-message EventSetPool {
+// EventCreatePool
+message EventCreatePool {
   uint64 pool_id = 1;
   string denom_base = 2;
   string denom_quote = 3;
   string fee_rate = 4;
   string price_ratio = 5;
   string base_offset = 6;
-  int64 current_tick = 7;
-  string current_tick_liquidity = 8;
-  string current_sqrt_price =9;
 }
 
-message EventRemovePool {
-  uint64 pool_id = 1;
-}
-
-message EventSetPosition {
+// EventCreatePosition
+message EventCreatePosition {
   uint64 position_id = 1;
   string address = 2;
   uint64 pool_id = 3;
@@ -32,35 +27,59 @@ message EventSetPosition {
   string liquidity = 6;
 }
 
-message EventRemovePosition {
-  uint64 position_id = 1;
+// EventIncreaseLiquidity
+message EventIncreaseLiquidity {
+  uint64 old_position_id = 1;
+  uint64 new_position_id = 2;
+  string address = 3;
+  string amount_base = 4;
+  string amount_quote = 5;
 }
 
-message EventCollectFees {
+// EventDecreaseLiquidity
+message EventDecreaseLiquidity {
+  uint64 position_id = 1;
+  string address = 2;
+  string amount_base = 3;
+  string amount_quote = 4;
+}
+
+// EventClaimRewards
+message EventClaimRewards {
   string address = 1;
   uint64 position_id = 2;
-  repeated cosmos.base.v1beta1.Coin collected_fees = 3[
+  repeated cosmos.base.v1beta1.Coin rewards = 3 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
 }
 
-message EventSwapExactAmountIn{
+// EventSwapExactAmountIn
+message EventSwapExactAmountIn {
   string address = 1;
   uint64 pool_id = 2;
-  string denom_in = 3;
-  string amount_in = 4;
-  string denom_out = 5;
-  string amount_out = 6;
-  bool fee_enabled = 7;
+  cosmos.base.v1beta1.Coin token_in = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+  cosmos.base.v1beta1.Coin token_out = 4 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+  bool fee_enabled = 5;
 }
 
-message EventSwapExactAmountOut{
+// EventSwapExactAmountOut
+message EventSwapExactAmountOut {
   string address = 1;
   uint64 pool_id = 2;
-  string denom_out = 3;
-  string amount_out = 4;
-  string denom_in = 5;
-  string amount_in = 6;
-  bool fee_enabled = 7;
+  cosmos.base.v1beta1.Coin token_in = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+  cosmos.base.v1beta1.Coin token_out = 4 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+  bool fee_enabled = 5;
 }

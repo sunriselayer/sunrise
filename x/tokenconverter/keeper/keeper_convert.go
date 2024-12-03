@@ -59,7 +59,7 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 
 	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvert{
 		Address: address.String(),
-		Amount:  amount,
+		Amount:  amount.String(),
 	}); err != nil {
 		return err
 	}

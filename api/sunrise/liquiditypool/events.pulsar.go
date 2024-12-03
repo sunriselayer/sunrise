@@ -15,41 +15,35 @@ import (
 )
 
 var (
-	md_EventSetPool                        protoreflect.MessageDescriptor
-	fd_EventSetPool_pool_id                protoreflect.FieldDescriptor
-	fd_EventSetPool_denom_base             protoreflect.FieldDescriptor
-	fd_EventSetPool_denom_quote            protoreflect.FieldDescriptor
-	fd_EventSetPool_fee_rate               protoreflect.FieldDescriptor
-	fd_EventSetPool_price_ratio            protoreflect.FieldDescriptor
-	fd_EventSetPool_base_offset            protoreflect.FieldDescriptor
-	fd_EventSetPool_current_tick           protoreflect.FieldDescriptor
-	fd_EventSetPool_current_tick_liquidity protoreflect.FieldDescriptor
-	fd_EventSetPool_current_sqrt_price     protoreflect.FieldDescriptor
+	md_EventCreatePool             protoreflect.MessageDescriptor
+	fd_EventCreatePool_pool_id     protoreflect.FieldDescriptor
+	fd_EventCreatePool_denom_base  protoreflect.FieldDescriptor
+	fd_EventCreatePool_denom_quote protoreflect.FieldDescriptor
+	fd_EventCreatePool_fee_rate    protoreflect.FieldDescriptor
+	fd_EventCreatePool_price_ratio protoreflect.FieldDescriptor
+	fd_EventCreatePool_base_offset protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_events_proto_init()
-	md_EventSetPool = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventSetPool")
-	fd_EventSetPool_pool_id = md_EventSetPool.Fields().ByName("pool_id")
-	fd_EventSetPool_denom_base = md_EventSetPool.Fields().ByName("denom_base")
-	fd_EventSetPool_denom_quote = md_EventSetPool.Fields().ByName("denom_quote")
-	fd_EventSetPool_fee_rate = md_EventSetPool.Fields().ByName("fee_rate")
-	fd_EventSetPool_price_ratio = md_EventSetPool.Fields().ByName("price_ratio")
-	fd_EventSetPool_base_offset = md_EventSetPool.Fields().ByName("base_offset")
-	fd_EventSetPool_current_tick = md_EventSetPool.Fields().ByName("current_tick")
-	fd_EventSetPool_current_tick_liquidity = md_EventSetPool.Fields().ByName("current_tick_liquidity")
-	fd_EventSetPool_current_sqrt_price = md_EventSetPool.Fields().ByName("current_sqrt_price")
+	md_EventCreatePool = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventCreatePool")
+	fd_EventCreatePool_pool_id = md_EventCreatePool.Fields().ByName("pool_id")
+	fd_EventCreatePool_denom_base = md_EventCreatePool.Fields().ByName("denom_base")
+	fd_EventCreatePool_denom_quote = md_EventCreatePool.Fields().ByName("denom_quote")
+	fd_EventCreatePool_fee_rate = md_EventCreatePool.Fields().ByName("fee_rate")
+	fd_EventCreatePool_price_ratio = md_EventCreatePool.Fields().ByName("price_ratio")
+	fd_EventCreatePool_base_offset = md_EventCreatePool.Fields().ByName("base_offset")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventSetPool)(nil)
+var _ protoreflect.Message = (*fastReflection_EventCreatePool)(nil)
 
-type fastReflection_EventSetPool EventSetPool
+type fastReflection_EventCreatePool EventCreatePool
 
-func (x *EventSetPool) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventSetPool)(x)
+func (x *EventCreatePool) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventCreatePool)(x)
 }
 
-func (x *EventSetPool) slowProtoReflect() protoreflect.Message {
+func (x *EventCreatePool) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -61,43 +55,43 @@ func (x *EventSetPool) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventSetPool_messageType fastReflection_EventSetPool_messageType
-var _ protoreflect.MessageType = fastReflection_EventSetPool_messageType{}
+var _fastReflection_EventCreatePool_messageType fastReflection_EventCreatePool_messageType
+var _ protoreflect.MessageType = fastReflection_EventCreatePool_messageType{}
 
-type fastReflection_EventSetPool_messageType struct{}
+type fastReflection_EventCreatePool_messageType struct{}
 
-func (x fastReflection_EventSetPool_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventSetPool)(nil)
+func (x fastReflection_EventCreatePool_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventCreatePool)(nil)
 }
-func (x fastReflection_EventSetPool_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventSetPool)
+func (x fastReflection_EventCreatePool_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventCreatePool)
 }
-func (x fastReflection_EventSetPool_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventSetPool
+func (x fastReflection_EventCreatePool_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventCreatePool
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventSetPool) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventSetPool
+func (x *fastReflection_EventCreatePool) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventCreatePool
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventSetPool) Type() protoreflect.MessageType {
-	return _fastReflection_EventSetPool_messageType
+func (x *fastReflection_EventCreatePool) Type() protoreflect.MessageType {
+	return _fastReflection_EventCreatePool_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventSetPool) New() protoreflect.Message {
-	return new(fastReflection_EventSetPool)
+func (x *fastReflection_EventCreatePool) New() protoreflect.Message {
+	return new(fastReflection_EventCreatePool)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventSetPool) Interface() protoreflect.ProtoMessage {
-	return (*EventSetPool)(x)
+func (x *fastReflection_EventCreatePool) Interface() protoreflect.ProtoMessage {
+	return (*EventCreatePool)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -105,58 +99,40 @@ func (x *fastReflection_EventSetPool) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventSetPool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_EventCreatePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.PoolId != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.PoolId)
-		if !f(fd_EventSetPool_pool_id, value) {
+		if !f(fd_EventCreatePool_pool_id, value) {
 			return
 		}
 	}
 	if x.DenomBase != "" {
 		value := protoreflect.ValueOfString(x.DenomBase)
-		if !f(fd_EventSetPool_denom_base, value) {
+		if !f(fd_EventCreatePool_denom_base, value) {
 			return
 		}
 	}
 	if x.DenomQuote != "" {
 		value := protoreflect.ValueOfString(x.DenomQuote)
-		if !f(fd_EventSetPool_denom_quote, value) {
+		if !f(fd_EventCreatePool_denom_quote, value) {
 			return
 		}
 	}
 	if x.FeeRate != "" {
 		value := protoreflect.ValueOfString(x.FeeRate)
-		if !f(fd_EventSetPool_fee_rate, value) {
+		if !f(fd_EventCreatePool_fee_rate, value) {
 			return
 		}
 	}
 	if x.PriceRatio != "" {
 		value := protoreflect.ValueOfString(x.PriceRatio)
-		if !f(fd_EventSetPool_price_ratio, value) {
+		if !f(fd_EventCreatePool_price_ratio, value) {
 			return
 		}
 	}
 	if x.BaseOffset != "" {
 		value := protoreflect.ValueOfString(x.BaseOffset)
-		if !f(fd_EventSetPool_base_offset, value) {
-			return
-		}
-	}
-	if x.CurrentTick != int64(0) {
-		value := protoreflect.ValueOfInt64(x.CurrentTick)
-		if !f(fd_EventSetPool_current_tick, value) {
-			return
-		}
-	}
-	if x.CurrentTickLiquidity != "" {
-		value := protoreflect.ValueOfString(x.CurrentTickLiquidity)
-		if !f(fd_EventSetPool_current_tick_liquidity, value) {
-			return
-		}
-	}
-	if x.CurrentSqrtPrice != "" {
-		value := protoreflect.ValueOfString(x.CurrentSqrtPrice)
-		if !f(fd_EventSetPool_current_sqrt_price, value) {
+		if !f(fd_EventCreatePool_base_offset, value) {
 			return
 		}
 	}
@@ -173,31 +149,25 @@ func (x *fastReflection_EventSetPool) Range(f func(protoreflect.FieldDescriptor,
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventSetPool) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventCreatePool) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPool.pool_id":
+	case "sunrise.liquiditypool.EventCreatePool.pool_id":
 		return x.PoolId != uint64(0)
-	case "sunrise.liquiditypool.EventSetPool.denom_base":
+	case "sunrise.liquiditypool.EventCreatePool.denom_base":
 		return x.DenomBase != ""
-	case "sunrise.liquiditypool.EventSetPool.denom_quote":
+	case "sunrise.liquiditypool.EventCreatePool.denom_quote":
 		return x.DenomQuote != ""
-	case "sunrise.liquiditypool.EventSetPool.fee_rate":
+	case "sunrise.liquiditypool.EventCreatePool.fee_rate":
 		return x.FeeRate != ""
-	case "sunrise.liquiditypool.EventSetPool.price_ratio":
+	case "sunrise.liquiditypool.EventCreatePool.price_ratio":
 		return x.PriceRatio != ""
-	case "sunrise.liquiditypool.EventSetPool.base_offset":
+	case "sunrise.liquiditypool.EventCreatePool.base_offset":
 		return x.BaseOffset != ""
-	case "sunrise.liquiditypool.EventSetPool.current_tick":
-		return x.CurrentTick != int64(0)
-	case "sunrise.liquiditypool.EventSetPool.current_tick_liquidity":
-		return x.CurrentTickLiquidity != ""
-	case "sunrise.liquiditypool.EventSetPool.current_sqrt_price":
-		return x.CurrentSqrtPrice != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPool"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePool"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPool does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePool does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -207,31 +177,25 @@ func (x *fastReflection_EventSetPool) Has(fd protoreflect.FieldDescriptor) bool 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPool) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventCreatePool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPool.pool_id":
+	case "sunrise.liquiditypool.EventCreatePool.pool_id":
 		x.PoolId = uint64(0)
-	case "sunrise.liquiditypool.EventSetPool.denom_base":
+	case "sunrise.liquiditypool.EventCreatePool.denom_base":
 		x.DenomBase = ""
-	case "sunrise.liquiditypool.EventSetPool.denom_quote":
+	case "sunrise.liquiditypool.EventCreatePool.denom_quote":
 		x.DenomQuote = ""
-	case "sunrise.liquiditypool.EventSetPool.fee_rate":
+	case "sunrise.liquiditypool.EventCreatePool.fee_rate":
 		x.FeeRate = ""
-	case "sunrise.liquiditypool.EventSetPool.price_ratio":
+	case "sunrise.liquiditypool.EventCreatePool.price_ratio":
 		x.PriceRatio = ""
-	case "sunrise.liquiditypool.EventSetPool.base_offset":
+	case "sunrise.liquiditypool.EventCreatePool.base_offset":
 		x.BaseOffset = ""
-	case "sunrise.liquiditypool.EventSetPool.current_tick":
-		x.CurrentTick = int64(0)
-	case "sunrise.liquiditypool.EventSetPool.current_tick_liquidity":
-		x.CurrentTickLiquidity = ""
-	case "sunrise.liquiditypool.EventSetPool.current_sqrt_price":
-		x.CurrentSqrtPrice = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPool"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePool"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPool does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePool does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -241,40 +205,31 @@ func (x *fastReflection_EventSetPool) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventSetPool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventCreatePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.EventSetPool.pool_id":
+	case "sunrise.liquiditypool.EventCreatePool.pool_id":
 		value := x.PoolId
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.EventSetPool.denom_base":
+	case "sunrise.liquiditypool.EventCreatePool.denom_base":
 		value := x.DenomBase
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPool.denom_quote":
+	case "sunrise.liquiditypool.EventCreatePool.denom_quote":
 		value := x.DenomQuote
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPool.fee_rate":
+	case "sunrise.liquiditypool.EventCreatePool.fee_rate":
 		value := x.FeeRate
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPool.price_ratio":
+	case "sunrise.liquiditypool.EventCreatePool.price_ratio":
 		value := x.PriceRatio
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPool.base_offset":
+	case "sunrise.liquiditypool.EventCreatePool.base_offset":
 		value := x.BaseOffset
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPool.current_tick":
-		value := x.CurrentTick
-		return protoreflect.ValueOfInt64(value)
-	case "sunrise.liquiditypool.EventSetPool.current_tick_liquidity":
-		value := x.CurrentTickLiquidity
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPool.current_sqrt_price":
-		value := x.CurrentSqrtPrice
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPool"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePool"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPool does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePool does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -288,31 +243,25 @@ func (x *fastReflection_EventSetPool) Get(descriptor protoreflect.FieldDescripto
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventCreatePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPool.pool_id":
+	case "sunrise.liquiditypool.EventCreatePool.pool_id":
 		x.PoolId = value.Uint()
-	case "sunrise.liquiditypool.EventSetPool.denom_base":
+	case "sunrise.liquiditypool.EventCreatePool.denom_base":
 		x.DenomBase = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPool.denom_quote":
+	case "sunrise.liquiditypool.EventCreatePool.denom_quote":
 		x.DenomQuote = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPool.fee_rate":
+	case "sunrise.liquiditypool.EventCreatePool.fee_rate":
 		x.FeeRate = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPool.price_ratio":
+	case "sunrise.liquiditypool.EventCreatePool.price_ratio":
 		x.PriceRatio = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPool.base_offset":
+	case "sunrise.liquiditypool.EventCreatePool.base_offset":
 		x.BaseOffset = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPool.current_tick":
-		x.CurrentTick = value.Int()
-	case "sunrise.liquiditypool.EventSetPool.current_tick_liquidity":
-		x.CurrentTickLiquidity = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPool.current_sqrt_price":
-		x.CurrentSqrtPrice = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPool"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePool"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPool does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePool does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -326,72 +275,60 @@ func (x *fastReflection_EventSetPool) Set(fd protoreflect.FieldDescriptor, value
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventCreatePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPool.pool_id":
-		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.denom_base":
-		panic(fmt.Errorf("field denom_base of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.denom_quote":
-		panic(fmt.Errorf("field denom_quote of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.fee_rate":
-		panic(fmt.Errorf("field fee_rate of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.price_ratio":
-		panic(fmt.Errorf("field price_ratio of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.base_offset":
-		panic(fmt.Errorf("field base_offset of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.current_tick":
-		panic(fmt.Errorf("field current_tick of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.current_tick_liquidity":
-		panic(fmt.Errorf("field current_tick_liquidity of message sunrise.liquiditypool.EventSetPool is not mutable"))
-	case "sunrise.liquiditypool.EventSetPool.current_sqrt_price":
-		panic(fmt.Errorf("field current_sqrt_price of message sunrise.liquiditypool.EventSetPool is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePool.pool_id":
+		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventCreatePool is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePool.denom_base":
+		panic(fmt.Errorf("field denom_base of message sunrise.liquiditypool.EventCreatePool is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePool.denom_quote":
+		panic(fmt.Errorf("field denom_quote of message sunrise.liquiditypool.EventCreatePool is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePool.fee_rate":
+		panic(fmt.Errorf("field fee_rate of message sunrise.liquiditypool.EventCreatePool is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePool.price_ratio":
+		panic(fmt.Errorf("field price_ratio of message sunrise.liquiditypool.EventCreatePool is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePool.base_offset":
+		panic(fmt.Errorf("field base_offset of message sunrise.liquiditypool.EventCreatePool is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPool"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePool"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPool does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePool does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventSetPool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventCreatePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPool.pool_id":
+	case "sunrise.liquiditypool.EventCreatePool.pool_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.EventSetPool.denom_base":
+	case "sunrise.liquiditypool.EventCreatePool.denom_base":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPool.denom_quote":
+	case "sunrise.liquiditypool.EventCreatePool.denom_quote":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPool.fee_rate":
+	case "sunrise.liquiditypool.EventCreatePool.fee_rate":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPool.price_ratio":
+	case "sunrise.liquiditypool.EventCreatePool.price_ratio":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPool.base_offset":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPool.current_tick":
-		return protoreflect.ValueOfInt64(int64(0))
-	case "sunrise.liquiditypool.EventSetPool.current_tick_liquidity":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPool.current_sqrt_price":
+	case "sunrise.liquiditypool.EventCreatePool.base_offset":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPool"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePool"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPool does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePool does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventSetPool) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventCreatePool) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventSetPool", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventCreatePool", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -399,7 +336,7 @@ func (x *fastReflection_EventSetPool) WhichOneof(d protoreflect.OneofDescriptor)
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventSetPool) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventCreatePool) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -410,7 +347,7 @@ func (x *fastReflection_EventSetPool) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPool) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventCreatePool) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -422,7 +359,7 @@ func (x *fastReflection_EventSetPool) SetUnknown(fields protoreflect.RawFields) 
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventSetPool) IsValid() bool {
+func (x *fastReflection_EventCreatePool) IsValid() bool {
 	return x != nil
 }
 
@@ -432,9 +369,9 @@ func (x *fastReflection_EventSetPool) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventCreatePool) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventSetPool)
+		x := input.Message.Interface().(*EventCreatePool)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -469,17 +406,6 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.CurrentTick != 0 {
-			n += 1 + runtime.Sov(uint64(x.CurrentTick))
-		}
-		l = len(x.CurrentTickLiquidity)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.CurrentSqrtPrice)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -490,7 +416,7 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventSetPool)
+		x := input.Message.Interface().(*EventCreatePool)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -508,25 +434,6 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.CurrentSqrtPrice) > 0 {
-			i -= len(x.CurrentSqrtPrice)
-			copy(dAtA[i:], x.CurrentSqrtPrice)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.CurrentSqrtPrice)))
-			i--
-			dAtA[i] = 0x4a
-		}
-		if len(x.CurrentTickLiquidity) > 0 {
-			i -= len(x.CurrentTickLiquidity)
-			copy(dAtA[i:], x.CurrentTickLiquidity)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.CurrentTickLiquidity)))
-			i--
-			dAtA[i] = 0x42
-		}
-		if x.CurrentTick != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.CurrentTick))
-			i--
-			dAtA[i] = 0x38
 		}
 		if len(x.BaseOffset) > 0 {
 			i -= len(x.BaseOffset)
@@ -579,7 +486,7 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventSetPool)
+		x := input.Message.Interface().(*EventCreatePool)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -611,10 +518,10 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventSetPool: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventCreatePool: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventSetPool: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventCreatePool: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -796,89 +703,6 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 				}
 				x.BaseOffset = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 7:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CurrentTick", wireType)
-				}
-				x.CurrentTick = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.CurrentTick |= int64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 8:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CurrentTickLiquidity", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.CurrentTickLiquidity = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 9:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CurrentSqrtPrice", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.CurrentSqrtPrice = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -915,25 +739,35 @@ func (x *fastReflection_EventSetPool) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_EventRemovePool         protoreflect.MessageDescriptor
-	fd_EventRemovePool_pool_id protoreflect.FieldDescriptor
+	md_EventCreatePosition             protoreflect.MessageDescriptor
+	fd_EventCreatePosition_position_id protoreflect.FieldDescriptor
+	fd_EventCreatePosition_address     protoreflect.FieldDescriptor
+	fd_EventCreatePosition_pool_id     protoreflect.FieldDescriptor
+	fd_EventCreatePosition_lower_tick  protoreflect.FieldDescriptor
+	fd_EventCreatePosition_upper_tick  protoreflect.FieldDescriptor
+	fd_EventCreatePosition_liquidity   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_events_proto_init()
-	md_EventRemovePool = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventRemovePool")
-	fd_EventRemovePool_pool_id = md_EventRemovePool.Fields().ByName("pool_id")
+	md_EventCreatePosition = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventCreatePosition")
+	fd_EventCreatePosition_position_id = md_EventCreatePosition.Fields().ByName("position_id")
+	fd_EventCreatePosition_address = md_EventCreatePosition.Fields().ByName("address")
+	fd_EventCreatePosition_pool_id = md_EventCreatePosition.Fields().ByName("pool_id")
+	fd_EventCreatePosition_lower_tick = md_EventCreatePosition.Fields().ByName("lower_tick")
+	fd_EventCreatePosition_upper_tick = md_EventCreatePosition.Fields().ByName("upper_tick")
+	fd_EventCreatePosition_liquidity = md_EventCreatePosition.Fields().ByName("liquidity")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventRemovePool)(nil)
+var _ protoreflect.Message = (*fastReflection_EventCreatePosition)(nil)
 
-type fastReflection_EventRemovePool EventRemovePool
+type fastReflection_EventCreatePosition EventCreatePosition
 
-func (x *EventRemovePool) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventRemovePool)(x)
+func (x *EventCreatePosition) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventCreatePosition)(x)
 }
 
-func (x *EventRemovePool) slowProtoReflect() protoreflect.Message {
+func (x *EventCreatePosition) slowProtoReflect() protoreflect.Message {
 	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -945,43 +779,43 @@ func (x *EventRemovePool) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventRemovePool_messageType fastReflection_EventRemovePool_messageType
-var _ protoreflect.MessageType = fastReflection_EventRemovePool_messageType{}
+var _fastReflection_EventCreatePosition_messageType fastReflection_EventCreatePosition_messageType
+var _ protoreflect.MessageType = fastReflection_EventCreatePosition_messageType{}
 
-type fastReflection_EventRemovePool_messageType struct{}
+type fastReflection_EventCreatePosition_messageType struct{}
 
-func (x fastReflection_EventRemovePool_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventRemovePool)(nil)
+func (x fastReflection_EventCreatePosition_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventCreatePosition)(nil)
 }
-func (x fastReflection_EventRemovePool_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventRemovePool)
+func (x fastReflection_EventCreatePosition_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventCreatePosition)
 }
-func (x fastReflection_EventRemovePool_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRemovePool
+func (x fastReflection_EventCreatePosition_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventCreatePosition
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventRemovePool) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRemovePool
+func (x *fastReflection_EventCreatePosition) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventCreatePosition
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventRemovePool) Type() protoreflect.MessageType {
-	return _fastReflection_EventRemovePool_messageType
+func (x *fastReflection_EventCreatePosition) Type() protoreflect.MessageType {
+	return _fastReflection_EventCreatePosition_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventRemovePool) New() protoreflect.Message {
-	return new(fastReflection_EventRemovePool)
+func (x *fastReflection_EventCreatePosition) New() protoreflect.Message {
+	return new(fastReflection_EventCreatePosition)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventRemovePool) Interface() protoreflect.ProtoMessage {
-	return (*EventRemovePool)(x)
+func (x *fastReflection_EventCreatePosition) Interface() protoreflect.ProtoMessage {
+	return (*EventCreatePosition)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -989,454 +823,40 @@ func (x *fastReflection_EventRemovePool) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventRemovePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.PoolId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.PoolId)
-		if !f(fd_EventRemovePool_pool_id, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventRemovePool) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePool.pool_id":
-		return x.PoolId != uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePool) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePool.pool_id":
-		x.PoolId = uint64(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventRemovePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.EventRemovePool.pool_id":
-		value := x.PoolId
-		return protoreflect.ValueOfUint64(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePool does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePool.pool_id":
-		x.PoolId = value.Uint()
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePool.pool_id":
-		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventRemovePool is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventRemovePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePool.pool_id":
-		return protoreflect.ValueOfUint64(uint64(0))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePool"))
-		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePool does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventRemovePool) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventRemovePool", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventRemovePool) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePool) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_EventRemovePool) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_EventRemovePool) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventRemovePool)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.PoolId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolId))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventRemovePool)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.PoolId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventRemovePool)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRemovePool: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRemovePool: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
-				}
-				x.PoolId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.PoolId |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_EventSetPosition             protoreflect.MessageDescriptor
-	fd_EventSetPosition_position_id protoreflect.FieldDescriptor
-	fd_EventSetPosition_address     protoreflect.FieldDescriptor
-	fd_EventSetPosition_pool_id     protoreflect.FieldDescriptor
-	fd_EventSetPosition_lower_tick  protoreflect.FieldDescriptor
-	fd_EventSetPosition_upper_tick  protoreflect.FieldDescriptor
-	fd_EventSetPosition_liquidity   protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_sunrise_liquiditypool_events_proto_init()
-	md_EventSetPosition = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventSetPosition")
-	fd_EventSetPosition_position_id = md_EventSetPosition.Fields().ByName("position_id")
-	fd_EventSetPosition_address = md_EventSetPosition.Fields().ByName("address")
-	fd_EventSetPosition_pool_id = md_EventSetPosition.Fields().ByName("pool_id")
-	fd_EventSetPosition_lower_tick = md_EventSetPosition.Fields().ByName("lower_tick")
-	fd_EventSetPosition_upper_tick = md_EventSetPosition.Fields().ByName("upper_tick")
-	fd_EventSetPosition_liquidity = md_EventSetPosition.Fields().ByName("liquidity")
-}
-
-var _ protoreflect.Message = (*fastReflection_EventSetPosition)(nil)
-
-type fastReflection_EventSetPosition EventSetPosition
-
-func (x *EventSetPosition) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventSetPosition)(x)
-}
-
-func (x *EventSetPosition) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_EventSetPosition_messageType fastReflection_EventSetPosition_messageType
-var _ protoreflect.MessageType = fastReflection_EventSetPosition_messageType{}
-
-type fastReflection_EventSetPosition_messageType struct{}
-
-func (x fastReflection_EventSetPosition_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventSetPosition)(nil)
-}
-func (x fastReflection_EventSetPosition_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventSetPosition)
-}
-func (x fastReflection_EventSetPosition_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventSetPosition
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_EventSetPosition) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventSetPosition
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventSetPosition) Type() protoreflect.MessageType {
-	return _fastReflection_EventSetPosition_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventSetPosition) New() protoreflect.Message {
-	return new(fastReflection_EventSetPosition)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventSetPosition) Interface() protoreflect.ProtoMessage {
-	return (*EventSetPosition)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_EventSetPosition) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_EventCreatePosition) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.PositionId != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.PositionId)
-		if !f(fd_EventSetPosition_position_id, value) {
+		if !f(fd_EventCreatePosition_position_id, value) {
 			return
 		}
 	}
 	if x.Address != "" {
 		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_EventSetPosition_address, value) {
+		if !f(fd_EventCreatePosition_address, value) {
 			return
 		}
 	}
 	if x.PoolId != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.PoolId)
-		if !f(fd_EventSetPosition_pool_id, value) {
+		if !f(fd_EventCreatePosition_pool_id, value) {
 			return
 		}
 	}
 	if x.LowerTick != int64(0) {
 		value := protoreflect.ValueOfInt64(x.LowerTick)
-		if !f(fd_EventSetPosition_lower_tick, value) {
+		if !f(fd_EventCreatePosition_lower_tick, value) {
 			return
 		}
 	}
 	if x.UpperTick != int64(0) {
 		value := protoreflect.ValueOfInt64(x.UpperTick)
-		if !f(fd_EventSetPosition_upper_tick, value) {
+		if !f(fd_EventCreatePosition_upper_tick, value) {
 			return
 		}
 	}
 	if x.Liquidity != "" {
 		value := protoreflect.ValueOfString(x.Liquidity)
-		if !f(fd_EventSetPosition_liquidity, value) {
+		if !f(fd_EventCreatePosition_liquidity, value) {
 			return
 		}
 	}
@@ -1453,25 +873,25 @@ func (x *fastReflection_EventSetPosition) Range(f func(protoreflect.FieldDescrip
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventSetPosition) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventCreatePosition) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPosition.position_id":
+	case "sunrise.liquiditypool.EventCreatePosition.position_id":
 		return x.PositionId != uint64(0)
-	case "sunrise.liquiditypool.EventSetPosition.address":
+	case "sunrise.liquiditypool.EventCreatePosition.address":
 		return x.Address != ""
-	case "sunrise.liquiditypool.EventSetPosition.pool_id":
+	case "sunrise.liquiditypool.EventCreatePosition.pool_id":
 		return x.PoolId != uint64(0)
-	case "sunrise.liquiditypool.EventSetPosition.lower_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.lower_tick":
 		return x.LowerTick != int64(0)
-	case "sunrise.liquiditypool.EventSetPosition.upper_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.upper_tick":
 		return x.UpperTick != int64(0)
-	case "sunrise.liquiditypool.EventSetPosition.liquidity":
+	case "sunrise.liquiditypool.EventCreatePosition.liquidity":
 		return x.Liquidity != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePosition"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePosition does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1481,25 +901,25 @@ func (x *fastReflection_EventSetPosition) Has(fd protoreflect.FieldDescriptor) b
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPosition) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventCreatePosition) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPosition.position_id":
+	case "sunrise.liquiditypool.EventCreatePosition.position_id":
 		x.PositionId = uint64(0)
-	case "sunrise.liquiditypool.EventSetPosition.address":
+	case "sunrise.liquiditypool.EventCreatePosition.address":
 		x.Address = ""
-	case "sunrise.liquiditypool.EventSetPosition.pool_id":
+	case "sunrise.liquiditypool.EventCreatePosition.pool_id":
 		x.PoolId = uint64(0)
-	case "sunrise.liquiditypool.EventSetPosition.lower_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.lower_tick":
 		x.LowerTick = int64(0)
-	case "sunrise.liquiditypool.EventSetPosition.upper_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.upper_tick":
 		x.UpperTick = int64(0)
-	case "sunrise.liquiditypool.EventSetPosition.liquidity":
+	case "sunrise.liquiditypool.EventCreatePosition.liquidity":
 		x.Liquidity = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePosition"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePosition does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1509,31 +929,31 @@ func (x *fastReflection_EventSetPosition) Clear(fd protoreflect.FieldDescriptor)
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventSetPosition) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventCreatePosition) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.EventSetPosition.position_id":
+	case "sunrise.liquiditypool.EventCreatePosition.position_id":
 		value := x.PositionId
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.EventSetPosition.address":
+	case "sunrise.liquiditypool.EventCreatePosition.address":
 		value := x.Address
 		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSetPosition.pool_id":
+	case "sunrise.liquiditypool.EventCreatePosition.pool_id":
 		value := x.PoolId
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.EventSetPosition.lower_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.lower_tick":
 		value := x.LowerTick
 		return protoreflect.ValueOfInt64(value)
-	case "sunrise.liquiditypool.EventSetPosition.upper_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.upper_tick":
 		value := x.UpperTick
 		return protoreflect.ValueOfInt64(value)
-	case "sunrise.liquiditypool.EventSetPosition.liquidity":
+	case "sunrise.liquiditypool.EventCreatePosition.liquidity":
 		value := x.Liquidity
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePosition"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPosition does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePosition does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1547,25 +967,25 @@ func (x *fastReflection_EventSetPosition) Get(descriptor protoreflect.FieldDescr
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPosition) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventCreatePosition) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPosition.position_id":
+	case "sunrise.liquiditypool.EventCreatePosition.position_id":
 		x.PositionId = value.Uint()
-	case "sunrise.liquiditypool.EventSetPosition.address":
+	case "sunrise.liquiditypool.EventCreatePosition.address":
 		x.Address = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSetPosition.pool_id":
+	case "sunrise.liquiditypool.EventCreatePosition.pool_id":
 		x.PoolId = value.Uint()
-	case "sunrise.liquiditypool.EventSetPosition.lower_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.lower_tick":
 		x.LowerTick = value.Int()
-	case "sunrise.liquiditypool.EventSetPosition.upper_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.upper_tick":
 		x.UpperTick = value.Int()
-	case "sunrise.liquiditypool.EventSetPosition.liquidity":
+	case "sunrise.liquiditypool.EventCreatePosition.liquidity":
 		x.Liquidity = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePosition"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePosition does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1579,60 +999,60 @@ func (x *fastReflection_EventSetPosition) Set(fd protoreflect.FieldDescriptor, v
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPosition) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventCreatePosition) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPosition.position_id":
-		panic(fmt.Errorf("field position_id of message sunrise.liquiditypool.EventSetPosition is not mutable"))
-	case "sunrise.liquiditypool.EventSetPosition.address":
-		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventSetPosition is not mutable"))
-	case "sunrise.liquiditypool.EventSetPosition.pool_id":
-		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventSetPosition is not mutable"))
-	case "sunrise.liquiditypool.EventSetPosition.lower_tick":
-		panic(fmt.Errorf("field lower_tick of message sunrise.liquiditypool.EventSetPosition is not mutable"))
-	case "sunrise.liquiditypool.EventSetPosition.upper_tick":
-		panic(fmt.Errorf("field upper_tick of message sunrise.liquiditypool.EventSetPosition is not mutable"))
-	case "sunrise.liquiditypool.EventSetPosition.liquidity":
-		panic(fmt.Errorf("field liquidity of message sunrise.liquiditypool.EventSetPosition is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePosition.position_id":
+		panic(fmt.Errorf("field position_id of message sunrise.liquiditypool.EventCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePosition.address":
+		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePosition.pool_id":
+		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePosition.lower_tick":
+		panic(fmt.Errorf("field lower_tick of message sunrise.liquiditypool.EventCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePosition.upper_tick":
+		panic(fmt.Errorf("field upper_tick of message sunrise.liquiditypool.EventCreatePosition is not mutable"))
+	case "sunrise.liquiditypool.EventCreatePosition.liquidity":
+		panic(fmt.Errorf("field liquidity of message sunrise.liquiditypool.EventCreatePosition is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePosition"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePosition does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventSetPosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventCreatePosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventSetPosition.position_id":
+	case "sunrise.liquiditypool.EventCreatePosition.position_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.EventSetPosition.address":
+	case "sunrise.liquiditypool.EventCreatePosition.address":
 		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSetPosition.pool_id":
+	case "sunrise.liquiditypool.EventCreatePosition.pool_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.EventSetPosition.lower_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.lower_tick":
 		return protoreflect.ValueOfInt64(int64(0))
-	case "sunrise.liquiditypool.EventSetPosition.upper_tick":
+	case "sunrise.liquiditypool.EventCreatePosition.upper_tick":
 		return protoreflect.ValueOfInt64(int64(0))
-	case "sunrise.liquiditypool.EventSetPosition.liquidity":
+	case "sunrise.liquiditypool.EventCreatePosition.liquidity":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventSetPosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCreatePosition"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventSetPosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventCreatePosition does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventSetPosition) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventCreatePosition) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventSetPosition", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventCreatePosition", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1640,7 +1060,7 @@ func (x *fastReflection_EventSetPosition) WhichOneof(d protoreflect.OneofDescrip
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventSetPosition) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventCreatePosition) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1651,7 +1071,7 @@ func (x *fastReflection_EventSetPosition) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventSetPosition) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventCreatePosition) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1663,7 +1083,7 @@ func (x *fastReflection_EventSetPosition) SetUnknown(fields protoreflect.RawFiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventSetPosition) IsValid() bool {
+func (x *fastReflection_EventCreatePosition) IsValid() bool {
 	return x != nil
 }
 
@@ -1673,9 +1093,9 @@ func (x *fastReflection_EventSetPosition) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventSetPosition) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventCreatePosition) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventSetPosition)
+		x := input.Message.Interface().(*EventCreatePosition)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1717,7 +1137,7 @@ func (x *fastReflection_EventSetPosition) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventSetPosition)
+		x := input.Message.Interface().(*EventCreatePosition)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1781,7 +1201,7 @@ func (x *fastReflection_EventSetPosition) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventSetPosition)
+		x := input.Message.Interface().(*EventCreatePosition)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1813,10 +1233,10 @@ func (x *fastReflection_EventSetPosition) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventSetPosition: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventCreatePosition: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventSetPosition: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventCreatePosition: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1995,26 +1415,34 @@ func (x *fastReflection_EventSetPosition) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_EventRemovePosition             protoreflect.MessageDescriptor
-	fd_EventRemovePosition_position_id protoreflect.FieldDescriptor
+	md_EventIncreaseLiquidity                 protoreflect.MessageDescriptor
+	fd_EventIncreaseLiquidity_old_position_id protoreflect.FieldDescriptor
+	fd_EventIncreaseLiquidity_new_position_id protoreflect.FieldDescriptor
+	fd_EventIncreaseLiquidity_address         protoreflect.FieldDescriptor
+	fd_EventIncreaseLiquidity_amount_base     protoreflect.FieldDescriptor
+	fd_EventIncreaseLiquidity_amount_quote    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_events_proto_init()
-	md_EventRemovePosition = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventRemovePosition")
-	fd_EventRemovePosition_position_id = md_EventRemovePosition.Fields().ByName("position_id")
+	md_EventIncreaseLiquidity = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventIncreaseLiquidity")
+	fd_EventIncreaseLiquidity_old_position_id = md_EventIncreaseLiquidity.Fields().ByName("old_position_id")
+	fd_EventIncreaseLiquidity_new_position_id = md_EventIncreaseLiquidity.Fields().ByName("new_position_id")
+	fd_EventIncreaseLiquidity_address = md_EventIncreaseLiquidity.Fields().ByName("address")
+	fd_EventIncreaseLiquidity_amount_base = md_EventIncreaseLiquidity.Fields().ByName("amount_base")
+	fd_EventIncreaseLiquidity_amount_quote = md_EventIncreaseLiquidity.Fields().ByName("amount_quote")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventRemovePosition)(nil)
+var _ protoreflect.Message = (*fastReflection_EventIncreaseLiquidity)(nil)
 
-type fastReflection_EventRemovePosition EventRemovePosition
+type fastReflection_EventIncreaseLiquidity EventIncreaseLiquidity
 
-func (x *EventRemovePosition) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventRemovePosition)(x)
+func (x *EventIncreaseLiquidity) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventIncreaseLiquidity)(x)
 }
 
-func (x *EventRemovePosition) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[3]
+func (x *EventIncreaseLiquidity) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2025,43 +1453,43 @@ func (x *EventRemovePosition) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventRemovePosition_messageType fastReflection_EventRemovePosition_messageType
-var _ protoreflect.MessageType = fastReflection_EventRemovePosition_messageType{}
+var _fastReflection_EventIncreaseLiquidity_messageType fastReflection_EventIncreaseLiquidity_messageType
+var _ protoreflect.MessageType = fastReflection_EventIncreaseLiquidity_messageType{}
 
-type fastReflection_EventRemovePosition_messageType struct{}
+type fastReflection_EventIncreaseLiquidity_messageType struct{}
 
-func (x fastReflection_EventRemovePosition_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventRemovePosition)(nil)
+func (x fastReflection_EventIncreaseLiquidity_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventIncreaseLiquidity)(nil)
 }
-func (x fastReflection_EventRemovePosition_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventRemovePosition)
+func (x fastReflection_EventIncreaseLiquidity_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventIncreaseLiquidity)
 }
-func (x fastReflection_EventRemovePosition_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRemovePosition
+func (x fastReflection_EventIncreaseLiquidity_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventIncreaseLiquidity
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventRemovePosition) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRemovePosition
+func (x *fastReflection_EventIncreaseLiquidity) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventIncreaseLiquidity
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventRemovePosition) Type() protoreflect.MessageType {
-	return _fastReflection_EventRemovePosition_messageType
+func (x *fastReflection_EventIncreaseLiquidity) Type() protoreflect.MessageType {
+	return _fastReflection_EventIncreaseLiquidity_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventRemovePosition) New() protoreflect.Message {
-	return new(fastReflection_EventRemovePosition)
+func (x *fastReflection_EventIncreaseLiquidity) New() protoreflect.Message {
+	return new(fastReflection_EventIncreaseLiquidity)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventRemovePosition) Interface() protoreflect.ProtoMessage {
-	return (*EventRemovePosition)(x)
+func (x *fastReflection_EventIncreaseLiquidity) Interface() protoreflect.ProtoMessage {
+	return (*EventIncreaseLiquidity)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2069,10 +1497,34 @@ func (x *fastReflection_EventRemovePosition) Interface() protoreflect.ProtoMessa
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventRemovePosition) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.PositionId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.PositionId)
-		if !f(fd_EventRemovePosition_position_id, value) {
+func (x *fastReflection_EventIncreaseLiquidity) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.OldPositionId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.OldPositionId)
+		if !f(fd_EventIncreaseLiquidity_old_position_id, value) {
+			return
+		}
+	}
+	if x.NewPositionId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.NewPositionId)
+		if !f(fd_EventIncreaseLiquidity_new_position_id, value) {
+			return
+		}
+	}
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_EventIncreaseLiquidity_address, value) {
+			return
+		}
+	}
+	if x.AmountBase != "" {
+		value := protoreflect.ValueOfString(x.AmountBase)
+		if !f(fd_EventIncreaseLiquidity_amount_base, value) {
+			return
+		}
+	}
+	if x.AmountQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountQuote)
+		if !f(fd_EventIncreaseLiquidity_amount_quote, value) {
 			return
 		}
 	}
@@ -2089,15 +1541,23 @@ func (x *fastReflection_EventRemovePosition) Range(f func(protoreflect.FieldDesc
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventRemovePosition) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventIncreaseLiquidity) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePosition.position_id":
-		return x.PositionId != uint64(0)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.old_position_id":
+		return x.OldPositionId != uint64(0)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.new_position_id":
+		return x.NewPositionId != uint64(0)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.address":
+		return x.Address != ""
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_base":
+		return x.AmountBase != ""
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_quote":
+		return x.AmountQuote != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2107,15 +1567,23 @@ func (x *fastReflection_EventRemovePosition) Has(fd protoreflect.FieldDescriptor
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePosition) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventIncreaseLiquidity) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePosition.position_id":
-		x.PositionId = uint64(0)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.old_position_id":
+		x.OldPositionId = uint64(0)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.new_position_id":
+		x.NewPositionId = uint64(0)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.address":
+		x.Address = ""
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_base":
+		x.AmountBase = ""
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_quote":
+		x.AmountQuote = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2125,16 +1593,28 @@ func (x *fastReflection_EventRemovePosition) Clear(fd protoreflect.FieldDescript
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventRemovePosition) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventIncreaseLiquidity) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.EventRemovePosition.position_id":
-		value := x.PositionId
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.old_position_id":
+		value := x.OldPositionId
 		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.new_position_id":
+		value := x.NewPositionId
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.address":
+		value := x.Address
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_base":
+		value := x.AmountBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_quote":
+		value := x.AmountQuote
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePosition does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventIncreaseLiquidity does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2148,15 +1628,23 @@ func (x *fastReflection_EventRemovePosition) Get(descriptor protoreflect.FieldDe
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePosition) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventIncreaseLiquidity) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePosition.position_id":
-		x.PositionId = value.Uint()
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.old_position_id":
+		x.OldPositionId = value.Uint()
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.new_position_id":
+		x.NewPositionId = value.Uint()
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.address":
+		x.Address = value.Interface().(string)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_base":
+		x.AmountBase = value.Interface().(string)
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_quote":
+		x.AmountQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2170,40 +1658,56 @@ func (x *fastReflection_EventRemovePosition) Set(fd protoreflect.FieldDescriptor
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePosition) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventIncreaseLiquidity) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePosition.position_id":
-		panic(fmt.Errorf("field position_id of message sunrise.liquiditypool.EventRemovePosition is not mutable"))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.old_position_id":
+		panic(fmt.Errorf("field old_position_id of message sunrise.liquiditypool.EventIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.new_position_id":
+		panic(fmt.Errorf("field new_position_id of message sunrise.liquiditypool.EventIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.address":
+		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_base":
+		panic(fmt.Errorf("field amount_base of message sunrise.liquiditypool.EventIncreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_quote":
+		panic(fmt.Errorf("field amount_quote of message sunrise.liquiditypool.EventIncreaseLiquidity is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventRemovePosition) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventIncreaseLiquidity) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventRemovePosition.position_id":
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.old_position_id":
 		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.new_position_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.address":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventIncreaseLiquidity.amount_quote":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventRemovePosition"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventIncreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventRemovePosition does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventIncreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventRemovePosition) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventIncreaseLiquidity) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventRemovePosition", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventIncreaseLiquidity", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2211,7 +1715,7 @@ func (x *fastReflection_EventRemovePosition) WhichOneof(d protoreflect.OneofDesc
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventRemovePosition) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventIncreaseLiquidity) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2222,7 +1726,7 @@ func (x *fastReflection_EventRemovePosition) GetUnknown() protoreflect.RawFields
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRemovePosition) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventIncreaseLiquidity) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2234,7 +1738,7 @@ func (x *fastReflection_EventRemovePosition) SetUnknown(fields protoreflect.RawF
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventRemovePosition) IsValid() bool {
+func (x *fastReflection_EventIncreaseLiquidity) IsValid() bool {
 	return x != nil
 }
 
@@ -2244,9 +1748,9 @@ func (x *fastReflection_EventRemovePosition) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventIncreaseLiquidity) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventRemovePosition)
+		x := input.Message.Interface().(*EventIncreaseLiquidity)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2258,8 +1762,23 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 		var n int
 		var l int
 		_ = l
-		if x.PositionId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PositionId))
+		if x.OldPositionId != 0 {
+			n += 1 + runtime.Sov(uint64(x.OldPositionId))
+		}
+		if x.NewPositionId != 0 {
+			n += 1 + runtime.Sov(uint64(x.NewPositionId))
+		}
+		l = len(x.Address)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.AmountQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2271,7 +1790,7 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventRemovePosition)
+		x := input.Message.Interface().(*EventIncreaseLiquidity)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2290,8 +1809,34 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.PositionId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PositionId))
+		if len(x.AmountQuote) > 0 {
+			i -= len(x.AmountQuote)
+			copy(dAtA[i:], x.AmountQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountQuote)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.AmountBase) > 0 {
+			i -= len(x.AmountBase)
+			copy(dAtA[i:], x.AmountBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountBase)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Address) > 0 {
+			i -= len(x.Address)
+			copy(dAtA[i:], x.Address)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.NewPositionId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.NewPositionId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.OldPositionId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OldPositionId))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -2306,7 +1851,7 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventRemovePosition)
+		x := input.Message.Interface().(*EventIncreaseLiquidity)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2338,17 +1883,17 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRemovePosition: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventIncreaseLiquidity: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRemovePosition: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventIncreaseLiquidity: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PositionId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OldPositionId", wireType)
 				}
-				x.PositionId = 0
+				x.OldPositionId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2358,11 +1903,126 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PositionId |= uint64(b&0x7F) << shift
+					x.OldPositionId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NewPositionId", wireType)
+				}
+				x.NewPositionId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.NewPositionId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Address = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -2398,82 +2058,33 @@ func (x *fastReflection_EventRemovePosition) ProtoMethods() *protoiface.Methods 
 	}
 }
 
-var _ protoreflect.List = (*_EventCollectFees_3_list)(nil)
-
-type _EventCollectFees_3_list struct {
-	list *[]*v1beta1.Coin
-}
-
-func (x *_EventCollectFees_3_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_EventCollectFees_3_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_EventCollectFees_3_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_EventCollectFees_3_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_EventCollectFees_3_list) AppendMutable() protoreflect.Value {
-	v := new(v1beta1.Coin)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_EventCollectFees_3_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_EventCollectFees_3_list) NewElement() protoreflect.Value {
-	v := new(v1beta1.Coin)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_EventCollectFees_3_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
-	md_EventCollectFees                protoreflect.MessageDescriptor
-	fd_EventCollectFees_address        protoreflect.FieldDescriptor
-	fd_EventCollectFees_position_id    protoreflect.FieldDescriptor
-	fd_EventCollectFees_collected_fees protoreflect.FieldDescriptor
+	md_EventDecreaseLiquidity              protoreflect.MessageDescriptor
+	fd_EventDecreaseLiquidity_position_id  protoreflect.FieldDescriptor
+	fd_EventDecreaseLiquidity_address      protoreflect.FieldDescriptor
+	fd_EventDecreaseLiquidity_amount_base  protoreflect.FieldDescriptor
+	fd_EventDecreaseLiquidity_amount_quote protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_liquiditypool_events_proto_init()
-	md_EventCollectFees = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventCollectFees")
-	fd_EventCollectFees_address = md_EventCollectFees.Fields().ByName("address")
-	fd_EventCollectFees_position_id = md_EventCollectFees.Fields().ByName("position_id")
-	fd_EventCollectFees_collected_fees = md_EventCollectFees.Fields().ByName("collected_fees")
+	md_EventDecreaseLiquidity = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventDecreaseLiquidity")
+	fd_EventDecreaseLiquidity_position_id = md_EventDecreaseLiquidity.Fields().ByName("position_id")
+	fd_EventDecreaseLiquidity_address = md_EventDecreaseLiquidity.Fields().ByName("address")
+	fd_EventDecreaseLiquidity_amount_base = md_EventDecreaseLiquidity.Fields().ByName("amount_base")
+	fd_EventDecreaseLiquidity_amount_quote = md_EventDecreaseLiquidity.Fields().ByName("amount_quote")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventCollectFees)(nil)
+var _ protoreflect.Message = (*fastReflection_EventDecreaseLiquidity)(nil)
 
-type fastReflection_EventCollectFees EventCollectFees
+type fastReflection_EventDecreaseLiquidity EventDecreaseLiquidity
 
-func (x *EventCollectFees) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventCollectFees)(x)
+func (x *EventDecreaseLiquidity) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventDecreaseLiquidity)(x)
 }
 
-func (x *EventCollectFees) slowProtoReflect() protoreflect.Message {
-	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[4]
+func (x *EventDecreaseLiquidity) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2484,43 +2095,43 @@ func (x *EventCollectFees) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventCollectFees_messageType fastReflection_EventCollectFees_messageType
-var _ protoreflect.MessageType = fastReflection_EventCollectFees_messageType{}
+var _fastReflection_EventDecreaseLiquidity_messageType fastReflection_EventDecreaseLiquidity_messageType
+var _ protoreflect.MessageType = fastReflection_EventDecreaseLiquidity_messageType{}
 
-type fastReflection_EventCollectFees_messageType struct{}
+type fastReflection_EventDecreaseLiquidity_messageType struct{}
 
-func (x fastReflection_EventCollectFees_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventCollectFees)(nil)
+func (x fastReflection_EventDecreaseLiquidity_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventDecreaseLiquidity)(nil)
 }
-func (x fastReflection_EventCollectFees_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventCollectFees)
+func (x fastReflection_EventDecreaseLiquidity_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventDecreaseLiquidity)
 }
-func (x fastReflection_EventCollectFees_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventCollectFees
+func (x fastReflection_EventDecreaseLiquidity_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventDecreaseLiquidity
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventCollectFees) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventCollectFees
+func (x *fastReflection_EventDecreaseLiquidity) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventDecreaseLiquidity
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventCollectFees) Type() protoreflect.MessageType {
-	return _fastReflection_EventCollectFees_messageType
+func (x *fastReflection_EventDecreaseLiquidity) Type() protoreflect.MessageType {
+	return _fastReflection_EventDecreaseLiquidity_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventCollectFees) New() protoreflect.Message {
-	return new(fastReflection_EventCollectFees)
+func (x *fastReflection_EventDecreaseLiquidity) New() protoreflect.Message {
+	return new(fastReflection_EventDecreaseLiquidity)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventCollectFees) Interface() protoreflect.ProtoMessage {
-	return (*EventCollectFees)(x)
+func (x *fastReflection_EventDecreaseLiquidity) Interface() protoreflect.ProtoMessage {
+	return (*EventDecreaseLiquidity)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2528,22 +2139,28 @@ func (x *fastReflection_EventCollectFees) Interface() protoreflect.ProtoMessage 
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventCollectFees) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Address != "" {
-		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_EventCollectFees_address, value) {
-			return
-		}
-	}
+func (x *fastReflection_EventDecreaseLiquidity) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.PositionId != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.PositionId)
-		if !f(fd_EventCollectFees_position_id, value) {
+		if !f(fd_EventDecreaseLiquidity_position_id, value) {
 			return
 		}
 	}
-	if len(x.CollectedFees) != 0 {
-		value := protoreflect.ValueOfList(&_EventCollectFees_3_list{list: &x.CollectedFees})
-		if !f(fd_EventCollectFees_collected_fees, value) {
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_EventDecreaseLiquidity_address, value) {
+			return
+		}
+	}
+	if x.AmountBase != "" {
+		value := protoreflect.ValueOfString(x.AmountBase)
+		if !f(fd_EventDecreaseLiquidity_amount_base, value) {
+			return
+		}
+	}
+	if x.AmountQuote != "" {
+		value := protoreflect.ValueOfString(x.AmountQuote)
+		if !f(fd_EventDecreaseLiquidity_amount_quote, value) {
 			return
 		}
 	}
@@ -2560,19 +2177,21 @@ func (x *fastReflection_EventCollectFees) Range(f func(protoreflect.FieldDescrip
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventCollectFees) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventDecreaseLiquidity) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventCollectFees.address":
-		return x.Address != ""
-	case "sunrise.liquiditypool.EventCollectFees.position_id":
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.position_id":
 		return x.PositionId != uint64(0)
-	case "sunrise.liquiditypool.EventCollectFees.collected_fees":
-		return len(x.CollectedFees) != 0
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.address":
+		return x.Address != ""
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_base":
+		return x.AmountBase != ""
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_quote":
+		return x.AmountQuote != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2582,19 +2201,21 @@ func (x *fastReflection_EventCollectFees) Has(fd protoreflect.FieldDescriptor) b
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventCollectFees) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventDecreaseLiquidity) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventCollectFees.address":
-		x.Address = ""
-	case "sunrise.liquiditypool.EventCollectFees.position_id":
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.position_id":
 		x.PositionId = uint64(0)
-	case "sunrise.liquiditypool.EventCollectFees.collected_fees":
-		x.CollectedFees = nil
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.address":
+		x.Address = ""
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_base":
+		x.AmountBase = ""
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_quote":
+		x.AmountQuote = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2604,25 +2225,25 @@ func (x *fastReflection_EventCollectFees) Clear(fd protoreflect.FieldDescriptor)
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventCollectFees) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDecreaseLiquidity) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.liquiditypool.EventCollectFees.address":
-		value := x.Address
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventCollectFees.position_id":
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.position_id":
 		value := x.PositionId
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.EventCollectFees.collected_fees":
-		if len(x.CollectedFees) == 0 {
-			return protoreflect.ValueOfList(&_EventCollectFees_3_list{})
-		}
-		listValue := &_EventCollectFees_3_list{list: &x.CollectedFees}
-		return protoreflect.ValueOfList(listValue)
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.address":
+		value := x.Address
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_base":
+		value := x.AmountBase
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_quote":
+		value := x.AmountQuote
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventCollectFees does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventDecreaseLiquidity does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2636,21 +2257,21 @@ func (x *fastReflection_EventCollectFees) Get(descriptor protoreflect.FieldDescr
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventCollectFees) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventDecreaseLiquidity) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventCollectFees.address":
-		x.Address = value.Interface().(string)
-	case "sunrise.liquiditypool.EventCollectFees.position_id":
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.position_id":
 		x.PositionId = value.Uint()
-	case "sunrise.liquiditypool.EventCollectFees.collected_fees":
-		lv := value.List()
-		clv := lv.(*_EventCollectFees_3_list)
-		x.CollectedFees = *clv.list
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.address":
+		x.Address = value.Interface().(string)
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_base":
+		x.AmountBase = value.Interface().(string)
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_quote":
+		x.AmountQuote = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2664,53 +2285,52 @@ func (x *fastReflection_EventCollectFees) Set(fd protoreflect.FieldDescriptor, v
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventCollectFees) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDecreaseLiquidity) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventCollectFees.collected_fees":
-		if x.CollectedFees == nil {
-			x.CollectedFees = []*v1beta1.Coin{}
-		}
-		value := &_EventCollectFees_3_list{list: &x.CollectedFees}
-		return protoreflect.ValueOfList(value)
-	case "sunrise.liquiditypool.EventCollectFees.address":
-		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventCollectFees is not mutable"))
-	case "sunrise.liquiditypool.EventCollectFees.position_id":
-		panic(fmt.Errorf("field position_id of message sunrise.liquiditypool.EventCollectFees is not mutable"))
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.position_id":
+		panic(fmt.Errorf("field position_id of message sunrise.liquiditypool.EventDecreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.address":
+		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventDecreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_base":
+		panic(fmt.Errorf("field amount_base of message sunrise.liquiditypool.EventDecreaseLiquidity is not mutable"))
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_quote":
+		panic(fmt.Errorf("field amount_quote of message sunrise.liquiditypool.EventDecreaseLiquidity is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventCollectFees) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDecreaseLiquidity) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.liquiditypool.EventCollectFees.address":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventCollectFees.position_id":
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.position_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.EventCollectFees.collected_fees":
-		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_EventCollectFees_3_list{list: &list})
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.address":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_base":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventDecreaseLiquidity.amount_quote":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventCollectFees"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventDecreaseLiquidity"))
 		}
-		panic(fmt.Errorf("message sunrise.liquiditypool.EventCollectFees does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventDecreaseLiquidity does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventCollectFees) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventDecreaseLiquidity) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventCollectFees", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventDecreaseLiquidity", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2718,7 +2338,7 @@ func (x *fastReflection_EventCollectFees) WhichOneof(d protoreflect.OneofDescrip
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventCollectFees) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventDecreaseLiquidity) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2729,7 +2349,7 @@ func (x *fastReflection_EventCollectFees) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventCollectFees) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventDecreaseLiquidity) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2741,7 +2361,7 @@ func (x *fastReflection_EventCollectFees) SetUnknown(fields protoreflect.RawFiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventCollectFees) IsValid() bool {
+func (x *fastReflection_EventDecreaseLiquidity) IsValid() bool {
 	return x != nil
 }
 
@@ -2751,9 +2371,9 @@ func (x *fastReflection_EventCollectFees) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventDecreaseLiquidity) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventCollectFees)
+		x := input.Message.Interface().(*EventDecreaseLiquidity)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2765,18 +2385,20 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.PositionId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PositionId))
+		}
 		l = len(x.Address)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.PositionId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PositionId))
+		l = len(x.AmountBase)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.CollectedFees) > 0 {
-			for _, e := range x.CollectedFees {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
+		l = len(x.AmountQuote)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -2788,7 +2410,7 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventCollectFees)
+		x := input.Message.Interface().(*EventDecreaseLiquidity)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2807,9 +2429,643 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.CollectedFees) > 0 {
-			for iNdEx := len(x.CollectedFees) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.CollectedFees[iNdEx])
+		if len(x.AmountQuote) > 0 {
+			i -= len(x.AmountQuote)
+			copy(dAtA[i:], x.AmountQuote)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountQuote)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.AmountBase) > 0 {
+			i -= len(x.AmountBase)
+			copy(dAtA[i:], x.AmountBase)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountBase)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Address) > 0 {
+			i -= len(x.Address)
+			copy(dAtA[i:], x.Address)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Address)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.PositionId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PositionId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*EventDecreaseLiquidity)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventDecreaseLiquidity: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventDecreaseLiquidity: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PositionId", wireType)
+				}
+				x.PositionId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PositionId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Address = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountBase", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountBase = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountQuote", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AmountQuote = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_EventClaimRewards_3_list)(nil)
+
+type _EventClaimRewards_3_list struct {
+	list *[]*v1beta1.Coin
+}
+
+func (x *_EventClaimRewards_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_EventClaimRewards_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_EventClaimRewards_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_EventClaimRewards_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_EventClaimRewards_3_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_EventClaimRewards_3_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_EventClaimRewards_3_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_EventClaimRewards_3_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_EventClaimRewards             protoreflect.MessageDescriptor
+	fd_EventClaimRewards_address     protoreflect.FieldDescriptor
+	fd_EventClaimRewards_position_id protoreflect.FieldDescriptor
+	fd_EventClaimRewards_rewards     protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sunrise_liquiditypool_events_proto_init()
+	md_EventClaimRewards = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventClaimRewards")
+	fd_EventClaimRewards_address = md_EventClaimRewards.Fields().ByName("address")
+	fd_EventClaimRewards_position_id = md_EventClaimRewards.Fields().ByName("position_id")
+	fd_EventClaimRewards_rewards = md_EventClaimRewards.Fields().ByName("rewards")
+}
+
+var _ protoreflect.Message = (*fastReflection_EventClaimRewards)(nil)
+
+type fastReflection_EventClaimRewards EventClaimRewards
+
+func (x *EventClaimRewards) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventClaimRewards)(x)
+}
+
+func (x *EventClaimRewards) slowProtoReflect() protoreflect.Message {
+	mi := &file_sunrise_liquiditypool_events_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_EventClaimRewards_messageType fastReflection_EventClaimRewards_messageType
+var _ protoreflect.MessageType = fastReflection_EventClaimRewards_messageType{}
+
+type fastReflection_EventClaimRewards_messageType struct{}
+
+func (x fastReflection_EventClaimRewards_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventClaimRewards)(nil)
+}
+func (x fastReflection_EventClaimRewards_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventClaimRewards)
+}
+func (x fastReflection_EventClaimRewards_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventClaimRewards
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_EventClaimRewards) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventClaimRewards
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_EventClaimRewards) Type() protoreflect.MessageType {
+	return _fastReflection_EventClaimRewards_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_EventClaimRewards) New() protoreflect.Message {
+	return new(fastReflection_EventClaimRewards)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_EventClaimRewards) Interface() protoreflect.ProtoMessage {
+	return (*EventClaimRewards)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_EventClaimRewards) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Address != "" {
+		value := protoreflect.ValueOfString(x.Address)
+		if !f(fd_EventClaimRewards_address, value) {
+			return
+		}
+	}
+	if x.PositionId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.PositionId)
+		if !f(fd_EventClaimRewards_position_id, value) {
+			return
+		}
+	}
+	if len(x.Rewards) != 0 {
+		value := protoreflect.ValueOfList(&_EventClaimRewards_3_list{list: &x.Rewards})
+		if !f(fd_EventClaimRewards_rewards, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_EventClaimRewards) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventClaimRewards.address":
+		return x.Address != ""
+	case "sunrise.liquiditypool.EventClaimRewards.position_id":
+		return x.PositionId != uint64(0)
+	case "sunrise.liquiditypool.EventClaimRewards.rewards":
+		return len(x.Rewards) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventClaimRewards"))
+		}
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventClaimRewards does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_EventClaimRewards) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventClaimRewards.address":
+		x.Address = ""
+	case "sunrise.liquiditypool.EventClaimRewards.position_id":
+		x.PositionId = uint64(0)
+	case "sunrise.liquiditypool.EventClaimRewards.rewards":
+		x.Rewards = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventClaimRewards"))
+		}
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventClaimRewards does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_EventClaimRewards) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sunrise.liquiditypool.EventClaimRewards.address":
+		value := x.Address
+		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventClaimRewards.position_id":
+		value := x.PositionId
+		return protoreflect.ValueOfUint64(value)
+	case "sunrise.liquiditypool.EventClaimRewards.rewards":
+		if len(x.Rewards) == 0 {
+			return protoreflect.ValueOfList(&_EventClaimRewards_3_list{})
+		}
+		listValue := &_EventClaimRewards_3_list{list: &x.Rewards}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventClaimRewards"))
+		}
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventClaimRewards does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_EventClaimRewards) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventClaimRewards.address":
+		x.Address = value.Interface().(string)
+	case "sunrise.liquiditypool.EventClaimRewards.position_id":
+		x.PositionId = value.Uint()
+	case "sunrise.liquiditypool.EventClaimRewards.rewards":
+		lv := value.List()
+		clv := lv.(*_EventClaimRewards_3_list)
+		x.Rewards = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventClaimRewards"))
+		}
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventClaimRewards does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_EventClaimRewards) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventClaimRewards.rewards":
+		if x.Rewards == nil {
+			x.Rewards = []*v1beta1.Coin{}
+		}
+		value := &_EventClaimRewards_3_list{list: &x.Rewards}
+		return protoreflect.ValueOfList(value)
+	case "sunrise.liquiditypool.EventClaimRewards.address":
+		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventClaimRewards is not mutable"))
+	case "sunrise.liquiditypool.EventClaimRewards.position_id":
+		panic(fmt.Errorf("field position_id of message sunrise.liquiditypool.EventClaimRewards is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventClaimRewards"))
+		}
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventClaimRewards does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_EventClaimRewards) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventClaimRewards.address":
+		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventClaimRewards.position_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sunrise.liquiditypool.EventClaimRewards.rewards":
+		list := []*v1beta1.Coin{}
+		return protoreflect.ValueOfList(&_EventClaimRewards_3_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.liquiditypool.EventClaimRewards"))
+		}
+		panic(fmt.Errorf("message sunrise.liquiditypool.EventClaimRewards does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_EventClaimRewards) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sunrise.liquiditypool.EventClaimRewards", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_EventClaimRewards) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_EventClaimRewards) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_EventClaimRewards) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_EventClaimRewards) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*EventClaimRewards)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Address)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.PositionId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PositionId))
+		}
+		if len(x.Rewards) > 0 {
+			for _, e := range x.Rewards {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*EventClaimRewards)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Rewards) > 0 {
+			for iNdEx := len(x.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Rewards[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2846,7 +3102,7 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventCollectFees)
+		x := input.Message.Interface().(*EventClaimRewards)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2878,10 +3134,10 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventCollectFees: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventClaimRewards: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventCollectFees: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventClaimRewards: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2937,7 +3193,7 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 				}
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CollectedFees", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -2964,8 +3220,8 @@ func (x *fastReflection_EventCollectFees) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.CollectedFees = append(x.CollectedFees, &v1beta1.Coin{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CollectedFees[len(x.CollectedFees)-1]); err != nil {
+				x.Rewards = append(x.Rewards, &v1beta1.Coin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Rewards[len(x.Rewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -3008,10 +3264,8 @@ var (
 	md_EventSwapExactAmountIn             protoreflect.MessageDescriptor
 	fd_EventSwapExactAmountIn_address     protoreflect.FieldDescriptor
 	fd_EventSwapExactAmountIn_pool_id     protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountIn_denom_in    protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountIn_amount_in   protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountIn_denom_out   protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountIn_amount_out  protoreflect.FieldDescriptor
+	fd_EventSwapExactAmountIn_token_in    protoreflect.FieldDescriptor
+	fd_EventSwapExactAmountIn_token_out   protoreflect.FieldDescriptor
 	fd_EventSwapExactAmountIn_fee_enabled protoreflect.FieldDescriptor
 )
 
@@ -3020,10 +3274,8 @@ func init() {
 	md_EventSwapExactAmountIn = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventSwapExactAmountIn")
 	fd_EventSwapExactAmountIn_address = md_EventSwapExactAmountIn.Fields().ByName("address")
 	fd_EventSwapExactAmountIn_pool_id = md_EventSwapExactAmountIn.Fields().ByName("pool_id")
-	fd_EventSwapExactAmountIn_denom_in = md_EventSwapExactAmountIn.Fields().ByName("denom_in")
-	fd_EventSwapExactAmountIn_amount_in = md_EventSwapExactAmountIn.Fields().ByName("amount_in")
-	fd_EventSwapExactAmountIn_denom_out = md_EventSwapExactAmountIn.Fields().ByName("denom_out")
-	fd_EventSwapExactAmountIn_amount_out = md_EventSwapExactAmountIn.Fields().ByName("amount_out")
+	fd_EventSwapExactAmountIn_token_in = md_EventSwapExactAmountIn.Fields().ByName("token_in")
+	fd_EventSwapExactAmountIn_token_out = md_EventSwapExactAmountIn.Fields().ByName("token_out")
 	fd_EventSwapExactAmountIn_fee_enabled = md_EventSwapExactAmountIn.Fields().ByName("fee_enabled")
 }
 
@@ -3104,27 +3356,15 @@ func (x *fastReflection_EventSwapExactAmountIn) Range(f func(protoreflect.FieldD
 			return
 		}
 	}
-	if x.DenomIn != "" {
-		value := protoreflect.ValueOfString(x.DenomIn)
-		if !f(fd_EventSwapExactAmountIn_denom_in, value) {
+	if x.TokenIn != nil {
+		value := protoreflect.ValueOfMessage(x.TokenIn.ProtoReflect())
+		if !f(fd_EventSwapExactAmountIn_token_in, value) {
 			return
 		}
 	}
-	if x.AmountIn != "" {
-		value := protoreflect.ValueOfString(x.AmountIn)
-		if !f(fd_EventSwapExactAmountIn_amount_in, value) {
-			return
-		}
-	}
-	if x.DenomOut != "" {
-		value := protoreflect.ValueOfString(x.DenomOut)
-		if !f(fd_EventSwapExactAmountIn_denom_out, value) {
-			return
-		}
-	}
-	if x.AmountOut != "" {
-		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_EventSwapExactAmountIn_amount_out, value) {
+	if x.TokenOut != nil {
+		value := protoreflect.ValueOfMessage(x.TokenOut.ProtoReflect())
+		if !f(fd_EventSwapExactAmountIn_token_out, value) {
 			return
 		}
 	}
@@ -3153,14 +3393,10 @@ func (x *fastReflection_EventSwapExactAmountIn) Has(fd protoreflect.FieldDescrip
 		return x.Address != ""
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.pool_id":
 		return x.PoolId != uint64(0)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_in":
-		return x.DenomIn != ""
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_in":
-		return x.AmountIn != ""
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_out":
-		return x.DenomOut != ""
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_out":
-		return x.AmountOut != ""
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_in":
+		return x.TokenIn != nil
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_out":
+		return x.TokenOut != nil
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.fee_enabled":
 		return x.FeeEnabled != false
 	default:
@@ -3183,14 +3419,10 @@ func (x *fastReflection_EventSwapExactAmountIn) Clear(fd protoreflect.FieldDescr
 		x.Address = ""
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.pool_id":
 		x.PoolId = uint64(0)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_in":
-		x.DenomIn = ""
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_in":
-		x.AmountIn = ""
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_out":
-		x.DenomOut = ""
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_out":
-		x.AmountOut = ""
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_in":
+		x.TokenIn = nil
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_out":
+		x.TokenOut = nil
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.fee_enabled":
 		x.FeeEnabled = false
 	default:
@@ -3215,18 +3447,12 @@ func (x *fastReflection_EventSwapExactAmountIn) Get(descriptor protoreflect.Fiel
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.pool_id":
 		value := x.PoolId
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_in":
-		value := x.DenomIn
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_in":
-		value := x.AmountIn
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_out":
-		value := x.DenomOut
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_out":
-		value := x.AmountOut
-		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_in":
+		value := x.TokenIn
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_out":
+		value := x.TokenOut
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.fee_enabled":
 		value := x.FeeEnabled
 		return protoreflect.ValueOfBool(value)
@@ -3254,14 +3480,10 @@ func (x *fastReflection_EventSwapExactAmountIn) Set(fd protoreflect.FieldDescrip
 		x.Address = value.Interface().(string)
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.pool_id":
 		x.PoolId = value.Uint()
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_in":
-		x.DenomIn = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_in":
-		x.AmountIn = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_out":
-		x.DenomOut = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_out":
-		x.AmountOut = value.Interface().(string)
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_in":
+		x.TokenIn = value.Message().Interface().(*v1beta1.Coin)
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_out":
+		x.TokenOut = value.Message().Interface().(*v1beta1.Coin)
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.fee_enabled":
 		x.FeeEnabled = value.Bool()
 	default:
@@ -3284,18 +3506,20 @@ func (x *fastReflection_EventSwapExactAmountIn) Set(fd protoreflect.FieldDescrip
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventSwapExactAmountIn) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_in":
+		if x.TokenIn == nil {
+			x.TokenIn = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TokenIn.ProtoReflect())
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_out":
+		if x.TokenOut == nil {
+			x.TokenOut = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TokenOut.ProtoReflect())
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.address":
 		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.pool_id":
 		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_in":
-		panic(fmt.Errorf("field denom_in of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_in":
-		panic(fmt.Errorf("field amount_in of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_out":
-		panic(fmt.Errorf("field denom_out of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.fee_enabled":
 		panic(fmt.Errorf("field fee_enabled of message sunrise.liquiditypool.EventSwapExactAmountIn is not mutable"))
 	default:
@@ -3315,14 +3539,12 @@ func (x *fastReflection_EventSwapExactAmountIn) NewField(fd protoreflect.FieldDe
 		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.pool_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_in":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_in":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.denom_out":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSwapExactAmountIn.amount_out":
-		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_in":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.liquiditypool.EventSwapExactAmountIn.token_out":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.liquiditypool.EventSwapExactAmountIn.fee_enabled":
 		return protoreflect.ValueOfBool(false)
 	default:
@@ -3401,20 +3623,12 @@ func (x *fastReflection_EventSwapExactAmountIn) ProtoMethods() *protoiface.Metho
 		if x.PoolId != 0 {
 			n += 1 + runtime.Sov(uint64(x.PoolId))
 		}
-		l = len(x.DenomIn)
-		if l > 0 {
+		if x.TokenIn != nil {
+			l = options.Size(x.TokenIn)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.AmountIn)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.DenomOut)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.AmountOut)
-		if l > 0 {
+		if x.TokenOut != nil {
+			l = options.Size(x.TokenOut)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.FeeEnabled {
@@ -3457,33 +3671,33 @@ func (x *fastReflection_EventSwapExactAmountIn) ProtoMethods() *protoiface.Metho
 				dAtA[i] = 0
 			}
 			i--
-			dAtA[i] = 0x38
+			dAtA[i] = 0x28
 		}
-		if len(x.AmountOut) > 0 {
-			i -= len(x.AmountOut)
-			copy(dAtA[i:], x.AmountOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
-			i--
-			dAtA[i] = 0x32
-		}
-		if len(x.DenomOut) > 0 {
-			i -= len(x.DenomOut)
-			copy(dAtA[i:], x.DenomOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DenomOut)))
-			i--
-			dAtA[i] = 0x2a
-		}
-		if len(x.AmountIn) > 0 {
-			i -= len(x.AmountIn)
-			copy(dAtA[i:], x.AmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountIn)))
+		if x.TokenOut != nil {
+			encoded, err := options.Marshal(x.TokenOut)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x22
 		}
-		if len(x.DenomIn) > 0 {
-			i -= len(x.DenomIn)
-			copy(dAtA[i:], x.DenomIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DenomIn)))
+		if x.TokenIn != nil {
+			encoded, err := options.Marshal(x.TokenIn)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x1a
 		}
@@ -3601,9 +3815,9 @@ func (x *fastReflection_EventSwapExactAmountIn) ProtoMethods() *protoiface.Metho
 				}
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DenomIn", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TokenIn", wireType)
 				}
-				var stringLen uint64
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -3613,29 +3827,33 @@ func (x *fastReflection_EventSwapExactAmountIn) ProtoMethods() *protoiface.Metho
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
+				if msglen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + intStringLen
+				postIndex := iNdEx + msglen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.DenomIn = string(dAtA[iNdEx:postIndex])
+				if x.TokenIn == nil {
+					x.TokenIn = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TokenIn); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountIn", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TokenOut", wireType)
 				}
-				var stringLen uint64
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -3645,89 +3863,29 @@ func (x *fastReflection_EventSwapExactAmountIn) ProtoMethods() *protoiface.Metho
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
+				if msglen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + intStringLen
+				postIndex := iNdEx + msglen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.AmountIn = string(dAtA[iNdEx:postIndex])
+				if x.TokenOut == nil {
+					x.TokenOut = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TokenOut); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DenomOut", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.DenomOut = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AmountOut = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 7:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeEnabled", wireType)
 				}
@@ -3786,10 +3944,8 @@ var (
 	md_EventSwapExactAmountOut             protoreflect.MessageDescriptor
 	fd_EventSwapExactAmountOut_address     protoreflect.FieldDescriptor
 	fd_EventSwapExactAmountOut_pool_id     protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountOut_denom_out   protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountOut_amount_out  protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountOut_denom_in    protoreflect.FieldDescriptor
-	fd_EventSwapExactAmountOut_amount_in   protoreflect.FieldDescriptor
+	fd_EventSwapExactAmountOut_token_in    protoreflect.FieldDescriptor
+	fd_EventSwapExactAmountOut_token_out   protoreflect.FieldDescriptor
 	fd_EventSwapExactAmountOut_fee_enabled protoreflect.FieldDescriptor
 )
 
@@ -3798,10 +3954,8 @@ func init() {
 	md_EventSwapExactAmountOut = File_sunrise_liquiditypool_events_proto.Messages().ByName("EventSwapExactAmountOut")
 	fd_EventSwapExactAmountOut_address = md_EventSwapExactAmountOut.Fields().ByName("address")
 	fd_EventSwapExactAmountOut_pool_id = md_EventSwapExactAmountOut.Fields().ByName("pool_id")
-	fd_EventSwapExactAmountOut_denom_out = md_EventSwapExactAmountOut.Fields().ByName("denom_out")
-	fd_EventSwapExactAmountOut_amount_out = md_EventSwapExactAmountOut.Fields().ByName("amount_out")
-	fd_EventSwapExactAmountOut_denom_in = md_EventSwapExactAmountOut.Fields().ByName("denom_in")
-	fd_EventSwapExactAmountOut_amount_in = md_EventSwapExactAmountOut.Fields().ByName("amount_in")
+	fd_EventSwapExactAmountOut_token_in = md_EventSwapExactAmountOut.Fields().ByName("token_in")
+	fd_EventSwapExactAmountOut_token_out = md_EventSwapExactAmountOut.Fields().ByName("token_out")
 	fd_EventSwapExactAmountOut_fee_enabled = md_EventSwapExactAmountOut.Fields().ByName("fee_enabled")
 }
 
@@ -3882,27 +4036,15 @@ func (x *fastReflection_EventSwapExactAmountOut) Range(f func(protoreflect.Field
 			return
 		}
 	}
-	if x.DenomOut != "" {
-		value := protoreflect.ValueOfString(x.DenomOut)
-		if !f(fd_EventSwapExactAmountOut_denom_out, value) {
+	if x.TokenIn != nil {
+		value := protoreflect.ValueOfMessage(x.TokenIn.ProtoReflect())
+		if !f(fd_EventSwapExactAmountOut_token_in, value) {
 			return
 		}
 	}
-	if x.AmountOut != "" {
-		value := protoreflect.ValueOfString(x.AmountOut)
-		if !f(fd_EventSwapExactAmountOut_amount_out, value) {
-			return
-		}
-	}
-	if x.DenomIn != "" {
-		value := protoreflect.ValueOfString(x.DenomIn)
-		if !f(fd_EventSwapExactAmountOut_denom_in, value) {
-			return
-		}
-	}
-	if x.AmountIn != "" {
-		value := protoreflect.ValueOfString(x.AmountIn)
-		if !f(fd_EventSwapExactAmountOut_amount_in, value) {
+	if x.TokenOut != nil {
+		value := protoreflect.ValueOfMessage(x.TokenOut.ProtoReflect())
+		if !f(fd_EventSwapExactAmountOut_token_out, value) {
 			return
 		}
 	}
@@ -3931,14 +4073,10 @@ func (x *fastReflection_EventSwapExactAmountOut) Has(fd protoreflect.FieldDescri
 		return x.Address != ""
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.pool_id":
 		return x.PoolId != uint64(0)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_out":
-		return x.DenomOut != ""
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_out":
-		return x.AmountOut != ""
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_in":
-		return x.DenomIn != ""
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_in":
-		return x.AmountIn != ""
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_in":
+		return x.TokenIn != nil
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_out":
+		return x.TokenOut != nil
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.fee_enabled":
 		return x.FeeEnabled != false
 	default:
@@ -3961,14 +4099,10 @@ func (x *fastReflection_EventSwapExactAmountOut) Clear(fd protoreflect.FieldDesc
 		x.Address = ""
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.pool_id":
 		x.PoolId = uint64(0)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_out":
-		x.DenomOut = ""
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_out":
-		x.AmountOut = ""
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_in":
-		x.DenomIn = ""
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_in":
-		x.AmountIn = ""
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_in":
+		x.TokenIn = nil
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_out":
+		x.TokenOut = nil
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.fee_enabled":
 		x.FeeEnabled = false
 	default:
@@ -3993,18 +4127,12 @@ func (x *fastReflection_EventSwapExactAmountOut) Get(descriptor protoreflect.Fie
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.pool_id":
 		value := x.PoolId
 		return protoreflect.ValueOfUint64(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_out":
-		value := x.DenomOut
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_out":
-		value := x.AmountOut
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_in":
-		value := x.DenomIn
-		return protoreflect.ValueOfString(value)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_in":
-		value := x.AmountIn
-		return protoreflect.ValueOfString(value)
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_in":
+		value := x.TokenIn
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_out":
+		value := x.TokenOut
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.fee_enabled":
 		value := x.FeeEnabled
 		return protoreflect.ValueOfBool(value)
@@ -4032,14 +4160,10 @@ func (x *fastReflection_EventSwapExactAmountOut) Set(fd protoreflect.FieldDescri
 		x.Address = value.Interface().(string)
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.pool_id":
 		x.PoolId = value.Uint()
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_out":
-		x.DenomOut = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_out":
-		x.AmountOut = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_in":
-		x.DenomIn = value.Interface().(string)
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_in":
-		x.AmountIn = value.Interface().(string)
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_in":
+		x.TokenIn = value.Message().Interface().(*v1beta1.Coin)
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_out":
+		x.TokenOut = value.Message().Interface().(*v1beta1.Coin)
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.fee_enabled":
 		x.FeeEnabled = value.Bool()
 	default:
@@ -4062,18 +4186,20 @@ func (x *fastReflection_EventSwapExactAmountOut) Set(fd protoreflect.FieldDescri
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventSwapExactAmountOut) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_in":
+		if x.TokenIn == nil {
+			x.TokenIn = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TokenIn.ProtoReflect())
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_out":
+		if x.TokenOut == nil {
+			x.TokenOut = new(v1beta1.Coin)
+		}
+		return protoreflect.ValueOfMessage(x.TokenOut.ProtoReflect())
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.address":
 		panic(fmt.Errorf("field address of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.pool_id":
 		panic(fmt.Errorf("field pool_id of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_out":
-		panic(fmt.Errorf("field denom_out of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_out":
-		panic(fmt.Errorf("field amount_out of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_in":
-		panic(fmt.Errorf("field denom_in of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_in":
-		panic(fmt.Errorf("field amount_in of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.fee_enabled":
 		panic(fmt.Errorf("field fee_enabled of message sunrise.liquiditypool.EventSwapExactAmountOut is not mutable"))
 	default:
@@ -4093,14 +4219,12 @@ func (x *fastReflection_EventSwapExactAmountOut) NewField(fd protoreflect.FieldD
 		return protoreflect.ValueOfString("")
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.pool_id":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_out":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_out":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.denom_in":
-		return protoreflect.ValueOfString("")
-	case "sunrise.liquiditypool.EventSwapExactAmountOut.amount_in":
-		return protoreflect.ValueOfString("")
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_in":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sunrise.liquiditypool.EventSwapExactAmountOut.token_out":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sunrise.liquiditypool.EventSwapExactAmountOut.fee_enabled":
 		return protoreflect.ValueOfBool(false)
 	default:
@@ -4179,20 +4303,12 @@ func (x *fastReflection_EventSwapExactAmountOut) ProtoMethods() *protoiface.Meth
 		if x.PoolId != 0 {
 			n += 1 + runtime.Sov(uint64(x.PoolId))
 		}
-		l = len(x.DenomOut)
-		if l > 0 {
+		if x.TokenIn != nil {
+			l = options.Size(x.TokenIn)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.AmountOut)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.DenomIn)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.AmountIn)
-		if l > 0 {
+		if x.TokenOut != nil {
+			l = options.Size(x.TokenOut)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.FeeEnabled {
@@ -4235,33 +4351,33 @@ func (x *fastReflection_EventSwapExactAmountOut) ProtoMethods() *protoiface.Meth
 				dAtA[i] = 0
 			}
 			i--
-			dAtA[i] = 0x38
+			dAtA[i] = 0x28
 		}
-		if len(x.AmountIn) > 0 {
-			i -= len(x.AmountIn)
-			copy(dAtA[i:], x.AmountIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountIn)))
-			i--
-			dAtA[i] = 0x32
-		}
-		if len(x.DenomIn) > 0 {
-			i -= len(x.DenomIn)
-			copy(dAtA[i:], x.DenomIn)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DenomIn)))
-			i--
-			dAtA[i] = 0x2a
-		}
-		if len(x.AmountOut) > 0 {
-			i -= len(x.AmountOut)
-			copy(dAtA[i:], x.AmountOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AmountOut)))
+		if x.TokenOut != nil {
+			encoded, err := options.Marshal(x.TokenOut)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x22
 		}
-		if len(x.DenomOut) > 0 {
-			i -= len(x.DenomOut)
-			copy(dAtA[i:], x.DenomOut)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DenomOut)))
+		if x.TokenIn != nil {
+			encoded, err := options.Marshal(x.TokenIn)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x1a
 		}
@@ -4379,9 +4495,9 @@ func (x *fastReflection_EventSwapExactAmountOut) ProtoMethods() *protoiface.Meth
 				}
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DenomOut", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TokenIn", wireType)
 				}
-				var stringLen uint64
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -4391,29 +4507,33 @@ func (x *fastReflection_EventSwapExactAmountOut) ProtoMethods() *protoiface.Meth
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
+				if msglen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + intStringLen
+				postIndex := iNdEx + msglen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.DenomOut = string(dAtA[iNdEx:postIndex])
+				if x.TokenIn == nil {
+					x.TokenIn = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TokenIn); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountOut", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TokenOut", wireType)
 				}
-				var stringLen uint64
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -4423,89 +4543,29 @@ func (x *fastReflection_EventSwapExactAmountOut) ProtoMethods() *protoiface.Meth
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
+				if msglen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + intStringLen
+				postIndex := iNdEx + msglen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.AmountOut = string(dAtA[iNdEx:postIndex])
+				if x.TokenOut == nil {
+					x.TokenOut = &v1beta1.Coin{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TokenOut); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DenomIn", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.DenomIn = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AmountIn", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AmountIn = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 7:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeEnabled", wireType)
 				}
@@ -4573,24 +4633,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type EventSetPool struct {
+// EventCreatePool
+type EventCreatePool struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PoolId               uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	DenomBase            string `protobuf:"bytes,2,opt,name=denom_base,json=denomBase,proto3" json:"denom_base,omitempty"`
-	DenomQuote           string `protobuf:"bytes,3,opt,name=denom_quote,json=denomQuote,proto3" json:"denom_quote,omitempty"`
-	FeeRate              string `protobuf:"bytes,4,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
-	PriceRatio           string `protobuf:"bytes,5,opt,name=price_ratio,json=priceRatio,proto3" json:"price_ratio,omitempty"`
-	BaseOffset           string `protobuf:"bytes,6,opt,name=base_offset,json=baseOffset,proto3" json:"base_offset,omitempty"`
-	CurrentTick          int64  `protobuf:"varint,7,opt,name=current_tick,json=currentTick,proto3" json:"current_tick,omitempty"`
-	CurrentTickLiquidity string `protobuf:"bytes,8,opt,name=current_tick_liquidity,json=currentTickLiquidity,proto3" json:"current_tick_liquidity,omitempty"`
-	CurrentSqrtPrice     string `protobuf:"bytes,9,opt,name=current_sqrt_price,json=currentSqrtPrice,proto3" json:"current_sqrt_price,omitempty"`
+	PoolId     uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	DenomBase  string `protobuf:"bytes,2,opt,name=denom_base,json=denomBase,proto3" json:"denom_base,omitempty"`
+	DenomQuote string `protobuf:"bytes,3,opt,name=denom_quote,json=denomQuote,proto3" json:"denom_quote,omitempty"`
+	FeeRate    string `protobuf:"bytes,4,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
+	PriceRatio string `protobuf:"bytes,5,opt,name=price_ratio,json=priceRatio,proto3" json:"price_ratio,omitempty"`
+	BaseOffset string `protobuf:"bytes,6,opt,name=base_offset,json=baseOffset,proto3" json:"base_offset,omitempty"`
 }
 
-func (x *EventSetPool) Reset() {
-	*x = EventSetPool{}
+func (x *EventCreatePool) Reset() {
+	*x = EventCreatePool{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_events_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4598,116 +4656,61 @@ func (x *EventSetPool) Reset() {
 	}
 }
 
-func (x *EventSetPool) String() string {
+func (x *EventCreatePool) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventSetPool) ProtoMessage() {}
+func (*EventCreatePool) ProtoMessage() {}
 
-// Deprecated: Use EventSetPool.ProtoReflect.Descriptor instead.
-func (*EventSetPool) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventCreatePool.ProtoReflect.Descriptor instead.
+func (*EventCreatePool) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_events_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EventSetPool) GetPoolId() uint64 {
+func (x *EventCreatePool) GetPoolId() uint64 {
 	if x != nil {
 		return x.PoolId
 	}
 	return 0
 }
 
-func (x *EventSetPool) GetDenomBase() string {
+func (x *EventCreatePool) GetDenomBase() string {
 	if x != nil {
 		return x.DenomBase
 	}
 	return ""
 }
 
-func (x *EventSetPool) GetDenomQuote() string {
+func (x *EventCreatePool) GetDenomQuote() string {
 	if x != nil {
 		return x.DenomQuote
 	}
 	return ""
 }
 
-func (x *EventSetPool) GetFeeRate() string {
+func (x *EventCreatePool) GetFeeRate() string {
 	if x != nil {
 		return x.FeeRate
 	}
 	return ""
 }
 
-func (x *EventSetPool) GetPriceRatio() string {
+func (x *EventCreatePool) GetPriceRatio() string {
 	if x != nil {
 		return x.PriceRatio
 	}
 	return ""
 }
 
-func (x *EventSetPool) GetBaseOffset() string {
+func (x *EventCreatePool) GetBaseOffset() string {
 	if x != nil {
 		return x.BaseOffset
 	}
 	return ""
 }
 
-func (x *EventSetPool) GetCurrentTick() int64 {
-	if x != nil {
-		return x.CurrentTick
-	}
-	return 0
-}
-
-func (x *EventSetPool) GetCurrentTickLiquidity() string {
-	if x != nil {
-		return x.CurrentTickLiquidity
-	}
-	return ""
-}
-
-func (x *EventSetPool) GetCurrentSqrtPrice() string {
-	if x != nil {
-		return x.CurrentSqrtPrice
-	}
-	return ""
-}
-
-type EventRemovePool struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	PoolId uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-}
-
-func (x *EventRemovePool) Reset() {
-	*x = EventRemovePool{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_sunrise_liquiditypool_events_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *EventRemovePool) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EventRemovePool) ProtoMessage() {}
-
-// Deprecated: Use EventRemovePool.ProtoReflect.Descriptor instead.
-func (*EventRemovePool) Descriptor() ([]byte, []int) {
-	return file_sunrise_liquiditypool_events_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *EventRemovePool) GetPoolId() uint64 {
-	if x != nil {
-		return x.PoolId
-	}
-	return 0
-}
-
-type EventSetPosition struct {
+// EventCreatePosition
+type EventCreatePosition struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -4720,8 +4723,83 @@ type EventSetPosition struct {
 	Liquidity  string `protobuf:"bytes,6,opt,name=liquidity,proto3" json:"liquidity,omitempty"`
 }
 
-func (x *EventSetPosition) Reset() {
-	*x = EventSetPosition{}
+func (x *EventCreatePosition) Reset() {
+	*x = EventCreatePosition{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sunrise_liquiditypool_events_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EventCreatePosition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventCreatePosition) ProtoMessage() {}
+
+// Deprecated: Use EventCreatePosition.ProtoReflect.Descriptor instead.
+func (*EventCreatePosition) Descriptor() ([]byte, []int) {
+	return file_sunrise_liquiditypool_events_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *EventCreatePosition) GetPositionId() uint64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *EventCreatePosition) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *EventCreatePosition) GetPoolId() uint64 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+func (x *EventCreatePosition) GetLowerTick() int64 {
+	if x != nil {
+		return x.LowerTick
+	}
+	return 0
+}
+
+func (x *EventCreatePosition) GetUpperTick() int64 {
+	if x != nil {
+		return x.UpperTick
+	}
+	return 0
+}
+
+func (x *EventCreatePosition) GetLiquidity() string {
+	if x != nil {
+		return x.Liquidity
+	}
+	return ""
+}
+
+// EventIncreaseLiquidity
+type EventIncreaseLiquidity struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OldPositionId uint64 `protobuf:"varint,1,opt,name=old_position_id,json=oldPositionId,proto3" json:"old_position_id,omitempty"`
+	NewPositionId uint64 `protobuf:"varint,2,opt,name=new_position_id,json=newPositionId,proto3" json:"new_position_id,omitempty"`
+	Address       string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	AmountBase    string `protobuf:"bytes,4,opt,name=amount_base,json=amountBase,proto3" json:"amount_base,omitempty"`
+	AmountQuote   string `protobuf:"bytes,5,opt,name=amount_quote,json=amountQuote,proto3" json:"amount_quote,omitempty"`
+}
+
+func (x *EventIncreaseLiquidity) Reset() {
+	*x = EventIncreaseLiquidity{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_events_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4729,69 +4807,66 @@ func (x *EventSetPosition) Reset() {
 	}
 }
 
-func (x *EventSetPosition) String() string {
+func (x *EventIncreaseLiquidity) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventSetPosition) ProtoMessage() {}
+func (*EventIncreaseLiquidity) ProtoMessage() {}
 
-// Deprecated: Use EventSetPosition.ProtoReflect.Descriptor instead.
-func (*EventSetPosition) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventIncreaseLiquidity.ProtoReflect.Descriptor instead.
+func (*EventIncreaseLiquidity) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_events_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *EventSetPosition) GetPositionId() uint64 {
+func (x *EventIncreaseLiquidity) GetOldPositionId() uint64 {
 	if x != nil {
-		return x.PositionId
+		return x.OldPositionId
 	}
 	return 0
 }
 
-func (x *EventSetPosition) GetAddress() string {
+func (x *EventIncreaseLiquidity) GetNewPositionId() uint64 {
+	if x != nil {
+		return x.NewPositionId
+	}
+	return 0
+}
+
+func (x *EventIncreaseLiquidity) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *EventSetPosition) GetPoolId() uint64 {
+func (x *EventIncreaseLiquidity) GetAmountBase() string {
 	if x != nil {
-		return x.PoolId
-	}
-	return 0
-}
-
-func (x *EventSetPosition) GetLowerTick() int64 {
-	if x != nil {
-		return x.LowerTick
-	}
-	return 0
-}
-
-func (x *EventSetPosition) GetUpperTick() int64 {
-	if x != nil {
-		return x.UpperTick
-	}
-	return 0
-}
-
-func (x *EventSetPosition) GetLiquidity() string {
-	if x != nil {
-		return x.Liquidity
+		return x.AmountBase
 	}
 	return ""
 }
 
-type EventRemovePosition struct {
+func (x *EventIncreaseLiquidity) GetAmountQuote() string {
+	if x != nil {
+		return x.AmountQuote
+	}
+	return ""
+}
+
+// EventDecreaseLiquidity
+type EventDecreaseLiquidity struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PositionId uint64 `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	PositionId  uint64 `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	Address     string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	AmountBase  string `protobuf:"bytes,3,opt,name=amount_base,json=amountBase,proto3" json:"amount_base,omitempty"`
+	AmountQuote string `protobuf:"bytes,4,opt,name=amount_quote,json=amountQuote,proto3" json:"amount_quote,omitempty"`
 }
 
-func (x *EventRemovePosition) Reset() {
-	*x = EventRemovePosition{}
+func (x *EventDecreaseLiquidity) Reset() {
+	*x = EventDecreaseLiquidity{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_events_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4799,36 +4874,58 @@ func (x *EventRemovePosition) Reset() {
 	}
 }
 
-func (x *EventRemovePosition) String() string {
+func (x *EventDecreaseLiquidity) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventRemovePosition) ProtoMessage() {}
+func (*EventDecreaseLiquidity) ProtoMessage() {}
 
-// Deprecated: Use EventRemovePosition.ProtoReflect.Descriptor instead.
-func (*EventRemovePosition) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventDecreaseLiquidity.ProtoReflect.Descriptor instead.
+func (*EventDecreaseLiquidity) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_events_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *EventRemovePosition) GetPositionId() uint64 {
+func (x *EventDecreaseLiquidity) GetPositionId() uint64 {
 	if x != nil {
 		return x.PositionId
 	}
 	return 0
 }
 
-type EventCollectFees struct {
+func (x *EventDecreaseLiquidity) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *EventDecreaseLiquidity) GetAmountBase() string {
+	if x != nil {
+		return x.AmountBase
+	}
+	return ""
+}
+
+func (x *EventDecreaseLiquidity) GetAmountQuote() string {
+	if x != nil {
+		return x.AmountQuote
+	}
+	return ""
+}
+
+// EventClaimRewards
+type EventClaimRewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Address       string          `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	PositionId    uint64          `protobuf:"varint,2,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
-	CollectedFees []*v1beta1.Coin `protobuf:"bytes,3,rep,name=collected_fees,json=collectedFees,proto3" json:"collected_fees,omitempty"`
+	Address    string          `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	PositionId uint64          `protobuf:"varint,2,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	Rewards    []*v1beta1.Coin `protobuf:"bytes,3,rep,name=rewards,proto3" json:"rewards,omitempty"`
 }
 
-func (x *EventCollectFees) Reset() {
-	*x = EventCollectFees{}
+func (x *EventClaimRewards) Reset() {
+	*x = EventClaimRewards{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sunrise_liquiditypool_events_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4836,50 +4933,49 @@ func (x *EventCollectFees) Reset() {
 	}
 }
 
-func (x *EventCollectFees) String() string {
+func (x *EventClaimRewards) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventCollectFees) ProtoMessage() {}
+func (*EventClaimRewards) ProtoMessage() {}
 
-// Deprecated: Use EventCollectFees.ProtoReflect.Descriptor instead.
-func (*EventCollectFees) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventClaimRewards.ProtoReflect.Descriptor instead.
+func (*EventClaimRewards) Descriptor() ([]byte, []int) {
 	return file_sunrise_liquiditypool_events_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *EventCollectFees) GetAddress() string {
+func (x *EventClaimRewards) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *EventCollectFees) GetPositionId() uint64 {
+func (x *EventClaimRewards) GetPositionId() uint64 {
 	if x != nil {
 		return x.PositionId
 	}
 	return 0
 }
 
-func (x *EventCollectFees) GetCollectedFees() []*v1beta1.Coin {
+func (x *EventClaimRewards) GetRewards() []*v1beta1.Coin {
 	if x != nil {
-		return x.CollectedFees
+		return x.Rewards
 	}
 	return nil
 }
 
+// EventSwapExactAmountIn
 type EventSwapExactAmountIn struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Address    string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	PoolId     uint64 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	DenomIn    string `protobuf:"bytes,3,opt,name=denom_in,json=denomIn,proto3" json:"denom_in,omitempty"`
-	AmountIn   string `protobuf:"bytes,4,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
-	DenomOut   string `protobuf:"bytes,5,opt,name=denom_out,json=denomOut,proto3" json:"denom_out,omitempty"`
-	AmountOut  string `protobuf:"bytes,6,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
-	FeeEnabled bool   `protobuf:"varint,7,opt,name=fee_enabled,json=feeEnabled,proto3" json:"fee_enabled,omitempty"`
+	Address    string        `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	PoolId     uint64        `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	TokenIn    *v1beta1.Coin `protobuf:"bytes,3,opt,name=token_in,json=tokenIn,proto3" json:"token_in,omitempty"`
+	TokenOut   *v1beta1.Coin `protobuf:"bytes,4,opt,name=token_out,json=tokenOut,proto3" json:"token_out,omitempty"`
+	FeeEnabled bool          `protobuf:"varint,5,opt,name=fee_enabled,json=feeEnabled,proto3" json:"fee_enabled,omitempty"`
 }
 
 func (x *EventSwapExactAmountIn) Reset() {
@@ -4916,32 +5012,18 @@ func (x *EventSwapExactAmountIn) GetPoolId() uint64 {
 	return 0
 }
 
-func (x *EventSwapExactAmountIn) GetDenomIn() string {
+func (x *EventSwapExactAmountIn) GetTokenIn() *v1beta1.Coin {
 	if x != nil {
-		return x.DenomIn
+		return x.TokenIn
 	}
-	return ""
+	return nil
 }
 
-func (x *EventSwapExactAmountIn) GetAmountIn() string {
+func (x *EventSwapExactAmountIn) GetTokenOut() *v1beta1.Coin {
 	if x != nil {
-		return x.AmountIn
+		return x.TokenOut
 	}
-	return ""
-}
-
-func (x *EventSwapExactAmountIn) GetDenomOut() string {
-	if x != nil {
-		return x.DenomOut
-	}
-	return ""
-}
-
-func (x *EventSwapExactAmountIn) GetAmountOut() string {
-	if x != nil {
-		return x.AmountOut
-	}
-	return ""
+	return nil
 }
 
 func (x *EventSwapExactAmountIn) GetFeeEnabled() bool {
@@ -4951,18 +5033,17 @@ func (x *EventSwapExactAmountIn) GetFeeEnabled() bool {
 	return false
 }
 
+// EventSwapExactAmountOut
 type EventSwapExactAmountOut struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Address    string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	PoolId     uint64 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	DenomOut   string `protobuf:"bytes,3,opt,name=denom_out,json=denomOut,proto3" json:"denom_out,omitempty"`
-	AmountOut  string `protobuf:"bytes,4,opt,name=amount_out,json=amountOut,proto3" json:"amount_out,omitempty"`
-	DenomIn    string `protobuf:"bytes,5,opt,name=denom_in,json=denomIn,proto3" json:"denom_in,omitempty"`
-	AmountIn   string `protobuf:"bytes,6,opt,name=amount_in,json=amountIn,proto3" json:"amount_in,omitempty"`
-	FeeEnabled bool   `protobuf:"varint,7,opt,name=fee_enabled,json=feeEnabled,proto3" json:"fee_enabled,omitempty"`
+	Address    string        `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	PoolId     uint64        `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	TokenIn    *v1beta1.Coin `protobuf:"bytes,3,opt,name=token_in,json=tokenIn,proto3" json:"token_in,omitempty"`
+	TokenOut   *v1beta1.Coin `protobuf:"bytes,4,opt,name=token_out,json=tokenOut,proto3" json:"token_out,omitempty"`
+	FeeEnabled bool          `protobuf:"varint,5,opt,name=fee_enabled,json=feeEnabled,proto3" json:"fee_enabled,omitempty"`
 }
 
 func (x *EventSwapExactAmountOut) Reset() {
@@ -4999,32 +5080,18 @@ func (x *EventSwapExactAmountOut) GetPoolId() uint64 {
 	return 0
 }
 
-func (x *EventSwapExactAmountOut) GetDenomOut() string {
+func (x *EventSwapExactAmountOut) GetTokenIn() *v1beta1.Coin {
 	if x != nil {
-		return x.DenomOut
+		return x.TokenIn
 	}
-	return ""
+	return nil
 }
 
-func (x *EventSwapExactAmountOut) GetAmountOut() string {
+func (x *EventSwapExactAmountOut) GetTokenOut() *v1beta1.Coin {
 	if x != nil {
-		return x.AmountOut
+		return x.TokenOut
 	}
-	return ""
-}
-
-func (x *EventSwapExactAmountOut) GetDenomIn() string {
-	if x != nil {
-		return x.DenomIn
-	}
-	return ""
-}
-
-func (x *EventSwapExactAmountOut) GetAmountIn() string {
-	if x != nil {
-		return x.AmountIn
-	}
-	return ""
+	return nil
 }
 
 func (x *EventSwapExactAmountOut) GetFeeEnabled() bool {
@@ -5040,104 +5107,123 @@ var file_sunrise_liquiditypool_events_proto_rawDesc = []byte{
 	0x0a, 0x22, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
 	0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x2f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x15, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x1a, 0x14, 0x67, 0x6f, 0x67,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x1a, 0x1e, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
+	0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67,
 	0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76,
-	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0xcb, 0x02, 0x0a, 0x0c, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x74, 0x50, 0x6f,
-	0x6f, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x64,
-	0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x09, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x42, 0x61, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x64, 0x65,
-	0x6e, 0x6f, 0x6d, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0a, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x66,
-	0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x66,
-	0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x72, 0x69, 0x63, 0x65, 0x5f,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x70, 0x72, 0x69,
-	0x63, 0x65, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x12, 0x1f, 0x0a, 0x0b, 0x62, 0x61, 0x73, 0x65, 0x5f,
-	0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x62, 0x61,
-	0x73, 0x65, 0x4f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x63, 0x75, 0x72, 0x72,
-	0x65, 0x6e, 0x74, 0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x07, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b,
-	0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x34, 0x0a, 0x16, 0x63,
-	0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x74, 0x69, 0x63, 0x6b, 0x5f, 0x6c, 0x69, 0x71, 0x75,
-	0x69, 0x64, 0x69, 0x74, 0x79, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x14, 0x63, 0x75, 0x72,
-	0x72, 0x65, 0x6e, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74,
-	0x79, 0x12, 0x2c, 0x0a, 0x12, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x73, 0x71, 0x72,
-	0x74, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x63,
-	0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x53, 0x71, 0x72, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x22,
-	0x2a, 0x0a, 0x0f, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x50, 0x6f,
-	0x6f, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x22, 0xc2, 0x01, 0x0a, 0x10,
-	0x45, 0x76, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x74, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49,
-	0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70,
-	0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f,
-	0x6f, 0x6c, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x74, 0x69,
-	0x63, 0x6b, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x54,
-	0x69, 0x63, 0x6b, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x70, 0x65, 0x72, 0x5f, 0x74, 0x69, 0x63,
-	0x6b, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65, 0x72, 0x54, 0x69,
-	0x63, 0x6b, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x18,
-	0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x22, 0x36, 0x0a, 0x13, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x50,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x6f, 0x22, 0xc7, 0x01, 0x0a, 0x0f, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x1d,
+	0x0a, 0x0a, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x42, 0x61, 0x73, 0x65, 0x12, 0x1f, 0x0a,
+	0x0b, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0a, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x12, 0x19,
+	0x0a, 0x08, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x66, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x72, 0x69,
+	0x63, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a,
+	0x70, 0x72, 0x69, 0x63, 0x65, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x12, 0x1f, 0x0a, 0x0b, 0x62, 0x61,
+	0x73, 0x65, 0x5f, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0a, 0x62, 0x61, 0x73, 0x65, 0x4f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x22, 0xc5, 0x01, 0x0a, 0x13,
+	0x45, 0x76, 0x65, 0x6e, 0x74, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69,
+	0x6f, 0x6e, 0x49, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x17,
+	0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x6f, 0x77, 0x65, 0x72,
+	0x5f, 0x74, 0x69, 0x63, 0x6b, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x6f, 0x77,
+	0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x70, 0x65, 0x72, 0x5f,
+	0x74, 0x69, 0x63, 0x6b, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x75, 0x70, 0x70, 0x65,
+	0x72, 0x54, 0x69, 0x63, 0x6b, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x69, 0x74, 0x79, 0x22, 0xc6, 0x01, 0x0a, 0x16, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x63,
+	0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x26,
+	0x0a, 0x0f, 0x6f, 0x6c, 0x64, 0x5f, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x6f, 0x6c, 0x64, 0x50, 0x6f, 0x73, 0x69,
+	0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x0f, 0x6e, 0x65, 0x77, 0x5f, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x0d, 0x6e, 0x65, 0x77, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x18,
+	0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x61, 0x6d, 0x6f, 0x75,
+	0x6e, 0x74, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x61, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x5f, 0x71, 0x75, 0x6f, 0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x22, 0x97, 0x01, 0x0a,
+	0x16, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x44, 0x65, 0x63, 0x72, 0x65, 0x61, 0x73, 0x65, 0x4c, 0x69,
+	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74,
 	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x22, 0xc1, 0x01, 0x0a, 0x10, 0x45, 0x76, 0x65,
-	0x6e, 0x74, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x46, 0x65, 0x65, 0x73, 0x12, 0x18, 0x0a,
-	0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
-	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x72, 0x0a, 0x0e, 0x63, 0x6f, 0x6c, 0x6c,
-	0x65, 0x63, 0x74, 0x65, 0x64, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x62, 0x61, 0x73,
+	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42,
+	0x61, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x71, 0x75,
+	0x6f, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x51, 0x75, 0x6f, 0x74, 0x65, 0x22, 0xb5, 0x01, 0x0a, 0x11, 0x45, 0x76, 0x65, 0x6e, 0x74,
+	0x43, 0x6c, 0x61, 0x69, 0x6d, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x18, 0x0a, 0x07,
+	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x65, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43,
+	0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e,
+	0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0xbe,
+	0x02, 0x0a, 0x16, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63,
+	0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x66, 0x0a, 0x08,
+	0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
+	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
+	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa,
+	0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f,
+	0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x07, 0x74, 0x6f, 0x6b,
+	0x65, 0x6e, 0x49, 0x6e, 0x12, 0x68, 0x0a, 0x09, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x6f, 0x75,
+	0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f,
+	0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43,
+	0x6f, 0x69, 0x6e, 0x73, 0x52, 0x08, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x4f, 0x75, 0x74, 0x12, 0x1f,
+	0x0a, 0x0b, 0x66, 0x65, 0x65, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x0a, 0x66, 0x65, 0x65, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22,
+	0xbf, 0x02, 0x0a, 0x17, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61,
+	0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x66,
+	0x0a, 0x08, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76,
 	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f,
 	0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64,
-	0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x0d, 0x63,
-	0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x65, 0x64, 0x46, 0x65, 0x65, 0x73, 0x22, 0xe0, 0x01, 0x0a,
-	0x16, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61, 0x63, 0x74, 0x41,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x64, 0x65,
-	0x6e, 0x6f, 0x6d, 0x5f, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x64, 0x65,
-	0x6e, 0x6f, 0x6d, 0x49, 0x6e, 0x12, 0x1b, 0x0a, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f,
-	0x69, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x49, 0x6e, 0x12, 0x1b, 0x0a, 0x09, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x6f, 0x75, 0x74, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x4f, 0x75, 0x74, 0x12,
-	0x1d, 0x0a, 0x0a, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x06, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x1f,
-	0x0a, 0x0b, 0x66, 0x65, 0x65, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x07, 0x20,
-	0x01, 0x28, 0x08, 0x52, 0x0a, 0x66, 0x65, 0x65, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22,
-	0xe1, 0x01, 0x0a, 0x17, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x53, 0x77, 0x61, 0x70, 0x45, 0x78, 0x61,
-	0x63, 0x74, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x1b,
-	0x0a, 0x09, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x08, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x4f, 0x75, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x61,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x6f, 0x75, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x4f, 0x75, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x64, 0x65,
-	0x6e, 0x6f, 0x6d, 0x5f, 0x69, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x64, 0x65,
-	0x6e, 0x6f, 0x6d, 0x49, 0x6e, 0x12, 0x1b, 0x0a, 0x09, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x5f,
-	0x69, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x49, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x65, 0x65, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x66, 0x65, 0x65, 0x45, 0x6e, 0x61, 0x62,
-	0x6c, 0x65, 0x64, 0x42, 0xc5, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f,
-	0x6c, 0x42, 0x0b, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x26, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02,
-	0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65,
-	0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02,
-	0x21, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x07, 0x74,
+	0x6f, 0x6b, 0x65, 0x6e, 0x49, 0x6e, 0x12, 0x68, 0x0a, 0x09, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f,
+	0x6f, 0x75, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73,
+	0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x08, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x4f, 0x75, 0x74,
+	0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x65, 0x65, 0x5f, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x66, 0x65, 0x65, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65,
+	0x64, 0x42, 0xc5, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73,
+	0x65, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x42,
+	0x0b, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x26,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69,
+	0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xa2, 0x02, 0x03, 0x53, 0x4c, 0x58, 0xaa, 0x02, 0x15, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0xca, 0x02, 0x15, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c,
+	0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0xe2, 0x02, 0x21, 0x53,
+	0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x69, 0x74, 0x79,
+	0x70, 0x6f, 0x6f, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x16, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x69, 0x74, 0x79, 0x70, 0x6f, 0x6f, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -5154,22 +5240,26 @@ func file_sunrise_liquiditypool_events_proto_rawDescGZIP() []byte {
 
 var file_sunrise_liquiditypool_events_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_sunrise_liquiditypool_events_proto_goTypes = []interface{}{
-	(*EventSetPool)(nil),            // 0: sunrise.liquiditypool.EventSetPool
-	(*EventRemovePool)(nil),         // 1: sunrise.liquiditypool.EventRemovePool
-	(*EventSetPosition)(nil),        // 2: sunrise.liquiditypool.EventSetPosition
-	(*EventRemovePosition)(nil),     // 3: sunrise.liquiditypool.EventRemovePosition
-	(*EventCollectFees)(nil),        // 4: sunrise.liquiditypool.EventCollectFees
+	(*EventCreatePool)(nil),         // 0: sunrise.liquiditypool.EventCreatePool
+	(*EventCreatePosition)(nil),     // 1: sunrise.liquiditypool.EventCreatePosition
+	(*EventIncreaseLiquidity)(nil),  // 2: sunrise.liquiditypool.EventIncreaseLiquidity
+	(*EventDecreaseLiquidity)(nil),  // 3: sunrise.liquiditypool.EventDecreaseLiquidity
+	(*EventClaimRewards)(nil),       // 4: sunrise.liquiditypool.EventClaimRewards
 	(*EventSwapExactAmountIn)(nil),  // 5: sunrise.liquiditypool.EventSwapExactAmountIn
 	(*EventSwapExactAmountOut)(nil), // 6: sunrise.liquiditypool.EventSwapExactAmountOut
 	(*v1beta1.Coin)(nil),            // 7: cosmos.base.v1beta1.Coin
 }
 var file_sunrise_liquiditypool_events_proto_depIdxs = []int32{
-	7, // 0: sunrise.liquiditypool.EventCollectFees.collected_fees:type_name -> cosmos.base.v1beta1.Coin
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	7, // 0: sunrise.liquiditypool.EventClaimRewards.rewards:type_name -> cosmos.base.v1beta1.Coin
+	7, // 1: sunrise.liquiditypool.EventSwapExactAmountIn.token_in:type_name -> cosmos.base.v1beta1.Coin
+	7, // 2: sunrise.liquiditypool.EventSwapExactAmountIn.token_out:type_name -> cosmos.base.v1beta1.Coin
+	7, // 3: sunrise.liquiditypool.EventSwapExactAmountOut.token_in:type_name -> cosmos.base.v1beta1.Coin
+	7, // 4: sunrise.liquiditypool.EventSwapExactAmountOut.token_out:type_name -> cosmos.base.v1beta1.Coin
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_liquiditypool_events_proto_init() }
@@ -5179,7 +5269,7 @@ func file_sunrise_liquiditypool_events_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_sunrise_liquiditypool_events_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventSetPool); i {
+			switch v := v.(*EventCreatePool); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5191,7 +5281,7 @@ func file_sunrise_liquiditypool_events_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_events_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventRemovePool); i {
+			switch v := v.(*EventCreatePosition); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5203,7 +5293,7 @@ func file_sunrise_liquiditypool_events_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_events_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventSetPosition); i {
+			switch v := v.(*EventIncreaseLiquidity); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5215,7 +5305,7 @@ func file_sunrise_liquiditypool_events_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_events_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventRemovePosition); i {
+			switch v := v.(*EventDecreaseLiquidity); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5227,7 +5317,7 @@ func file_sunrise_liquiditypool_events_proto_init() {
 			}
 		}
 		file_sunrise_liquiditypool_events_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventCollectFees); i {
+			switch v := v.(*EventClaimRewards); i {
 			case 0:
 				return &v.state
 			case 1:
