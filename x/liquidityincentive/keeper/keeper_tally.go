@@ -105,7 +105,10 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
 
 		for _, poolWeight := range val.PoolWeights {
-			weight, _ := math.LegacyNewDecFromStr(poolWeight.Weight)
+			weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
+			if err != nil {
+				return []types.TallyResult{}, err
+			}
 			subPower := votingPower.Mul(weight)
 			oldWeight := results[poolWeight.PoolId]
 			if oldWeight.IsNil() {
