@@ -1,203 +1,162 @@
-VERSION := $(shell echo $(shell git describe --tags 2>/dev/null || git log -1 --format='%h') | sed 's/^v//')
-COMMIT := $(shell git rev-parse --short HEAD)
+#!/usr/bin/make -f
+
+BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+COMMIT := $(shell git log -1 --format='%H')
+
+# don't override user values
+ifeq (,$(VERSION))
+  VERSION := $(shell git describe --exact-match 2>/dev/null)
+  # if VERSION is empty, then populate it with branch's name and raw commit hash
+  ifeq (,$(VERSION))
+    VERSION := $(BRANCH)-$(COMMIT)
+  endif
+endif
+
+PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
+LEDGER_ENABLED ?= true
+SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
+TM_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::') # grab everything after the space in "github.com/cometbft/cometbft v0.34.7"
 DOCKER := $(shell which docker)
-ALL_VERSIONS := $(shell git tag -l)
-DOCKER_BUF := $(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace bufbuild/buf
-IMAGE := ghcr.io/tendermint/docker-build-proto:latest
-DOCKER_PROTO_BUILDER := docker run -v $(shell pwd):/workspace --workdir /workspace $(IMAGE)
-PROJECTNAME=$(shell basename "$(PWD)")
-HTTPS_GIT := https://github.com/sunriselayer/sunrise.git
-PACKAGE_NAME          := github.com/sunriselayer/sunrise
-GOLANG_CROSS_VERSION  ?= v1.21.4
-MOCKS_DIR = $(CURDIR)/test/mocks
+BUILDDIR ?= $(CURDIR)/build
+TEST_DOCKER_REPO=cosmos/contrib-gaiatest
+
+GO_SYSTEM_VERSION = $(shell go version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f1-2)
+REQUIRE_GO_VERSION = 1.22
+
+export GO111MODULE = on
+
+# process build tags
+
+build_tags = netgo
+ifeq ($(LEDGER_ENABLED),true)
+  ifeq ($(OS),Windows_NT)
+    GCCEXE = $(shell where gcc.exe 2> NUL)
+    ifeq ($(GCCEXE),)
+      $(error gcc.exe not installed for ledger support, please install or set LEDGER_ENABLED=false)
+    else
+      build_tags += ledger
+    endif
+  else
+    UNAME_S = $(shell uname -s)
+    ifeq ($(UNAME_S),OpenBSD)
+      $(warning OpenBSD detected, disabling ledger support (https://github.com/cosmos/cosmos-sdk/issues/1988))
+    else
+      GCC = $(shell command -v gcc 2> /dev/null)
+      ifeq ($(GCC),)
+        $(error gcc not installed for ledger support, please install or set LEDGER_ENABLED=false)
+      else
+        build_tags += ledger
+      endif
+    endif
+  endif
+endif
+
+ifeq (cleveldb,$(findstring cleveldb,$(GAIA_BUILD_OPTIONS)))
+  build_tags += gcc cleveldb
+endif
+build_tags += $(BUILD_TAGS)
+build_tags := $(strip $(build_tags))
+
+whitespace :=
+whitespace := $(whitespace) $(whitespace)
+comma := ,
+build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
 # process linker flags
-ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=surise-app \
+
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=sunrise \
 		  -X github.com/cosmos/cosmos-sdk/version.AppName=sunrised \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
+		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
+			-X github.com/cometbft/cometbft/version.TMCoreSemVer=$(TM_VERSION)
 
-BUILD_FLAGS := -tags "ledger" -ldflags '$(ldflags)'
+ifeq (cleveldb,$(findstring cleveldb,$(GAIA_BUILD_OPTIONS)))
+  ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
+endif
+ifeq ($(LINK_STATICALLY),true)
+  ldflags += -linkmode=external -extldflags "-Wl,-z,muldefs -static"
+endif
+ifeq (,$(findstring nostrip,$(GAIA_BUILD_OPTIONS)))
+  ldflags += -w -s
+endif
+ldflags += $(LDFLAGS)
+ldflags := $(strip $(ldflags))
 
-## help: Get more info on make commands.
-help: Makefile
-	@echo " Choose a command run in "$(PROJECTNAME)":"
-	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
-.PHONY: help
+BUILD_FLAGS := -tags "$(build_tags)" -ldflags '$(ldflags)'
+# check for nostrip option
+ifeq (,$(findstring nostrip,$(GAIA_BUILD_OPTIONS)))
+  BUILD_FLAGS += -trimpath
+endif
 
-## build: Build the sunrised binary into the ./build directory.
-build: mod
-	@cd ./cmd/sunrised
-	@mkdir -p build/
-	@go build $(BUILD_FLAGS) -o build/ ./cmd/sunrised
-.PHONY: build
+#$(info $$BUILD_FLAGS is [$(BUILD_FLAGS)])
 
-## install: Build and install the sunrised binary into the $GOPATH/bin directory.
-install: go.sum
-	@echo "--> Installing sunrised"
-	@go install $(BUILD_FLAGS) ./cmd/sunrised
-.PHONY: install
+###############################################################################
+###                              Build                                      ###
+###############################################################################
 
-## mod: Update go.mod.
-mod:
-	@echo "--> Updating go.mod"
-	@go mod tidy
-.PHONY: mod
+check_version:
+ifneq ($(shell [ "$(GO_SYSTEM_VERSION)" \< "$(REQUIRE_GO_VERSION)" ] && echo true),)
+	@echo "ERROR: Minimum Go version $(REQUIRE_GO_VERSION) is required for $(VERSION) of Sunrise."
+	exit 1
+endif
 
-## mod-verify: Verify dependencies have expected content.
-mod-verify: mod
-	@echo "--> Verifying dependencies have expected content"
-	GO111MODULE=on go mod verify
-.PHONY: mod-verify
+all: install lint run-tests test-e2e vulncheck
 
-## proto-gen: Generate protobuf files. Requires docker.
-proto-gen:
-	@echo "--> Generating Protobuf files"
-	$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace tendermintdev/sdk-proto-gen:v0.7 sh ./scripts/protocgen.sh
-.PHONY: proto-gen
+BUILD_TARGETS := build install
 
-## proto-lint: Lint protobuf files. Requires docker.
-proto-lint:
-	@echo "--> Linting Protobuf files"
-	@$(DOCKER_BUF) lint --error-format=json
-.PHONY: proto-lint
+build: BUILD_ARGS=-o $(BUILDDIR)/
 
-## proto-check-breaking: Check if there are any breaking change to protobuf definitions.
-proto-check-breaking:
-	@echo "--> Checking if Protobuf definitions have any breaking changes"
-	@$(DOCKER_BUF) breaking --against $(HTTPS_GIT)#branch=main
-.PHONY: proto-check-breaking
+$(BUILD_TARGETS): check_version go.sum $(BUILDDIR)/
+	go $@ -mod=readonly $(BUILD_FLAGS) $(BUILD_ARGS) ./...
 
-## proto-format: Format protobuf files. Requires docker.
-proto-format:
-	@echo "--> Formatting Protobuf files"
-	@$(DOCKER_PROTO_BUILDER) find . -name '*.proto' -path "./proto/*" -exec clang-format -i {} \;
-.PHONY: proto-format
+$(BUILDDIR)/:
+	mkdir -p $(BUILDDIR)/
 
-## build-docker: Build the sunrised docker image. Requires docker.
-build-docker:
-	@echo "--> Building Docker image"
-	$(DOCKER) build -t sunriselayer/surise-app -f Dockerfile .
-.PHONY: build-docker
+vulncheck: $(BUILDDIR)/
+	GOBIN=$(BUILDDIR) go install golang.org/x/vuln/cmd/govulncheck@latest
+	$(BUILDDIR)/govulncheck ./...
 
-## lint: Run all linters; golangci-lint, markdownlint, hadolint, yamllint.
+go.sum: go.mod
+	@echo "--> Ensure dependencies have not been modified"
+	@echo "--> Ensure dependencies have not been modified unless suppressed by SKIP_MOD_VERIFY"
+ifndef SKIP_MOD_VERIFY
+	go mod verify
+endif
+	go mod tidy
+	@echo "--> Download go modules to local cache"
+	go mod download
+
+draw-deps:
+	@# requires brew install graphviz or apt-get install graphviz
+	go install github.com/RobotsAndPencils/goviz
+	@goviz -i ./cmd/gaiad -d 2 | dot -Tpng -o dependency-graph.png
+
+clean:
+	rm -rf $(BUILDDIR)/ artifacts/
+
+distclean: clean
+	rm -rf vendor/
+
+###############################################################################
+###                                Linting                                  ###
+###############################################################################
+golangci_lint_cmd=golangci-lint
+golangci_version=v1.60.1
+
 lint:
-	@echo "--> Running golangci-lint"
-	@golangci-lint run
-	@echo "--> Running markdownlint"
-	@markdownlint --config .markdownlint.yaml '**/*.md'
-	@echo "--> Running hadolint"
-	@hadolint Dockerfile
-	@echo "--> Running yamllint"
-	@yamllint --no-warnings . -c .yamllint.yml
+	@echo "--> Running linter"
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(golangci_lint_cmd) run --timeout=10m
 
-.PHONY: lint
+lint-fix:
+	@echo "--> Running linter"
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
 
-## markdown-link-check: Check all markdown links.
-markdown-link-check:
-	@echo "--> Running markdown-link-check"
-	@find . -name \*.md -print0 | xargs -0 -n1 markdown-link-check
-
-
-## fmt: Format files per linters golangci-lint and markdownlint.
-fmt:
-	@echo "--> Running golangci-lint --fix"
-	@golangci-lint run --fix
-	@echo "--> Running markdownlint --fix"
-	@markdownlint --fix --quiet --config .markdownlint.yaml .
-.PHONY: fmt
-
-## test: Run tests.
-test:
-	@echo "--> Running tests"
-	@go test -timeout 30m ./...
-.PHONY: test
-
-## test-short: Run tests in short mode.
-test-short:
-	@echo "--> Running tests in short mode"
-	@go test ./... -short -timeout 1m
-.PHONY: test-short
-
-## test-e2e: Run end to end tests via knuu. This command requires a kube/config file to configure kubernetes.
-test-e2e:
-	@echo "--> Running end to end tests"
-	@KNUU_NAMESPACE=test KNUU_TIMEOUT=20m E2E_LATEST_VERSION=$(shell git rev-parse --short main) E2E_VERSIONS="$(ALL_VERSIONS)" E2E=true go test ./test/e2e/... -timeout 20m -v
-.PHONY: test-e2e
-
-## test-race: Run tests in race mode.
-test-race:
-# TODO: Remove the -skip flag once the following tests no longer contain data races.
-# https://github.com/celestiaorg/celestia-app/issues/1369
-	@echo "--> Running tests in race mode"
-	@go test ./... -v -race -skip "TestPrepareProposalConsistency|TestIntegrationTestSuite|TestBlobstreamRPCQueries|TestSquareSizeIntegrationTest|TestStandardSDKIntegrationTestSuite|TestTxsimCommandFlags|TestTxsimCommandEnvVar|TestMintIntegrationTestSuite|TestBlobstreamCLI|TestUpgrade|TestMaliciousTestNode|TestMaxTotalBlobSizeSuite|TestQGBIntegrationSuite|TestSignerTestSuite|TestPriorityTestSuite|TestTimeInPrepareProposalContext|TestBlobstream|TestCLITestSuite"
-.PHONY: test-race
-
-## test-bench: Run unit tests in bench mode.
-test-bench:
-	@echo "--> Running tests in bench mode"
-	@go test -bench=. ./...
-.PHONY: test-bench
-
-## test-coverage: Generate test coverage.txt
-test-coverage:
-	@echo "--> Generating coverage.txt"
-	@export VERSION=$(VERSION); bash -x scripts/test_cover.sh
-.PHONY: test-coverage
-
-test-fuzz:
-	bash -x scripts/test_fuzz.sh
-.PHONY: test-fuzz
-
-## txsim-install: Install the tx simulator.
-txsim-install:
-	@echo "--> Installing tx simulator"
-	@go install $(BUILD_FLAGS) ./test/cmd/txsim
-.PHONY: txsim-install
-
-## txsim-build: Build the tx simulator binary into the ./build directory.
-txsim-build:
-	@echo "--> Building tx simulator"
-	@cd ./test/cmd/txsim
-	@mkdir -p build/
-	@go build $(BUILD_FLAGS) -o build/ ./test/cmd/txsim
-	@go mod tidy
-.PHONY: txsim-build
-
-## txsim-build-docker: Build the tx simulator Docker image. Requires Docker.
-txsim-build-docker:
-	docker build -t ghcr.io/sunriselayer/txsim -f docker/Dockerfile_txsim  .
-.PHONY: txsim-build-docker
-
-## adr-gen: Download the ADR template from the celestiaorg/.github repo. Ex. `make adr-gen`
-adr-gen:
-	@echo "--> Downloading ADR template"
-	@curl -sSL https://raw.githubusercontent.com/sunriselayer/.github/main/adr-template.md > docs/architecture/adr-template.md
-.PHONY: adr-gen
-
-## prebuilt-binary: Create prebuilt binaries and attach them to GitHub release. Requires Docker.
-prebuilt-binary:
-	@if [ ! -f ".release-env" ]; then \
-		echo "A .release-env file was not found but is required to create prebuilt binaries. This command is expected to be run in CI where a .release-env file exists. If you need to run this command locally to attach binaries to a release, you need to create a .release-env file with a Github token (classic) that has repo:public_repo scope."; \
-		exit 1;\
-	fi
-	docker run \
-		--rm \
-		-e CGO_ENABLED=1 \
-		--env-file .release-env \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		-v `pwd`:/go/src/$(PACKAGE_NAME) \
-		-w /go/src/$(PACKAGE_NAME) \
-		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
-		release --clean
-.PHONY: prebuilt-binary
-
-
-#? mocks: Generate mock file
-mocks: $(MOCKS_DIR)
-	@go install github.com/golang/mock/mockgen@v1.6.0
-	sh ./scripts/mockgen.sh
-.PHONY: mocks
-
-$(MOCKS_DIR):
-	mkdir -p $(MOCKS_DIR)
+format:
+	@go install mvdan.cc/gofumpt@latest
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name "*.pb.go" -not -name "*.pb.gw.go" -not -name "*.pulsar.go" -not -path "./crypto/keys/secp256k1/*" | xargs gofumpt -w -l
+	$(golangci_lint_cmd) run --fix
+.PHONY: format
