@@ -22,6 +22,7 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	blocksdkabci "github.com/skip-mev/block-sdk/v2/abci"
 	"github.com/spf13/cast"
+
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
@@ -323,6 +324,20 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 
 				if err := ConfirmFaultValidators(voteExtTx.FaultValidators, faultValidators); err != nil {
 					return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
+				}
+
+				// Create and append metadata for each successfully voted blob
+				for _, data := range votedData {
+					metadataUri := &types.MetadataUriWrapper{
+						MetadataUri: data.MetadataUri,
+					}
+
+					metadataUriBz, err := metadataUri.Marshal()
+					if err != nil {
+						return nil, fmt.Errorf("failed to marshal metadata uri: %w", err)
+					}
+
+					txs = append(txs, metadataUriBz)
 				}
 			} else {
 				txs = append(txs, tx)
