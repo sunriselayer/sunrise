@@ -96,7 +96,10 @@ import (
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
-	// this line is used by starport scaffolding # stargate/app/moduleImport
+	vmintmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/vmint/module"
+_ "github.com/sunriselayer/sunrise/x/vmint/module" // import for side-effects
+vmintmoduletypes "github.com/sunriselayer/sunrise/x/vmint/types"
+// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 var (
@@ -143,7 +146,8 @@ var (
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/initGenesis
+		vmintmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -172,7 +176,8 @@ var (
 		liquiditypoolmoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
+		vmintmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
 	endBlockers = []string{
@@ -198,7 +203,8 @@ var (
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
+		vmintmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
 	preBlockers = []string{
@@ -406,7 +412,11 @@ var (
 				Name:   feemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feemodulev1.Module{}),
 			},
-			// this line is used by starport scaffolding # stargate/app/moduleConfig
+			{
+				Name:   vmintmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&vmintmodulev1.Module{}),
+			},
+// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
