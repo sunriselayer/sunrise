@@ -15,16 +15,9 @@ func (k msgServer) Convert(goCtx context.Context, msg *types.MsgConvert) (*types
 		return nil, err
 	}
 
-	amount, err := k.Keeper.CalculateConversionAmount(ctx, msg.MinAmount, msg.MaxAmount)
-	if err != nil {
+	if err := k.Keeper.Convert(ctx, msg.Amount, address); err != nil {
 		return nil, err
 	}
 
-	if err := k.Keeper.Convert(ctx, amount, address); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgConvertResponse{
-		Amount: amount,
-	}, nil
+	return &types.MsgConvertResponse{}, nil
 }

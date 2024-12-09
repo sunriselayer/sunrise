@@ -18,17 +18,15 @@ func TestMsgConvert_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgConvert{
-				Sender:    "invalid_address",
-				MinAmount: math.NewInt(1),
-				MaxAmount: math.NewInt(2),
+				Sender: "invalid_address",
+				Amount: math.NewInt(1),
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgConvert{
-				Sender:    sample.AccAddress(),
-				MinAmount: math.NewInt(1),
-				MaxAmount: math.NewInt(2),
+				Sender: sample.AccAddress(),
+				Amount: math.NewInt(1),
 			},
 		},
 	}
