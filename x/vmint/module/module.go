@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-    "cosmossdk.io/core/appmodule"
-    "cosmossdk.io/core/store"
+	"cosmossdk.io/core/appmodule"
+	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -17,14 +17,12 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	
 
 	// this line is used by starport scaffolding # 1
 
 	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/vmint/module"
 	"github.com/sunriselayer/sunrise/x/vmint/keeper"
 	"github.com/sunriselayer/sunrise/x/vmint/types"
-	
 )
 
 var (
@@ -37,7 +35,6 @@ var (
 	_ appmodule.AppModule       = (*AppModule)(nil)
 	_ appmodule.HasBeginBlocker = (*AppModule)(nil)
 	_ appmodule.HasEndBlocker   = (*AppModule)(nil)
-	
 )
 
 // ----------------------------------------------------------------------------
@@ -90,8 +87,6 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 	}
 }
 
-
-
 // ----------------------------------------------------------------------------
 // AppModule
 // ----------------------------------------------------------------------------
@@ -121,8 +116,8 @@ func NewAppModule(
 
 // RegisterServices registers a gRPC query service to respond to the module-specific gRPC queries
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-    types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-    types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }
 
 // RegisterInvariants registers the invariants of the module. If an invariant deviates from its predicted value, the InvariantRegistry triggers appropriate logic (most often the chain will be halted)
@@ -150,8 +145,9 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block.
 // The begin block implementation is optional.
-func (am AppModule) BeginBlock(_ context.Context) error {
-	return nil
+func (am AppModule) BeginBlock(goCtx context.Context) error {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	return am.keeper.BeginBlocker(ctx)
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block.
@@ -172,7 +168,7 @@ func (am AppModule) IsAppModule() {}
 
 func init() {
 	appmodule.Register(
-	    &modulev1.Module{},
+		&modulev1.Module{},
 		appmodule.Provide(ProvideModule),
 	)
 }
@@ -187,15 +183,13 @@ type ModuleInputs struct {
 
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
-
-    
 }
 
 type ModuleOutputs struct {
 	depinject.Out
 
 	VmintKeeper keeper.Keeper
-	Module appmodule.AppModule
+	Module      appmodule.AppModule
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
@@ -205,16 +199,16 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
 	}
 	k := keeper.NewKeeper(
-	    in.Cdc,
+		in.Cdc,
 		in.StoreService,
-	    in.Logger,
-	    authority.String(), 
+		in.Logger,
+		authority.String(),
 	)
 	m := NewAppModule(
-	    in.Cdc,
-	    k,
-	    in.AccountKeeper,
-	    in.BankKeeper,
+		in.Cdc,
+		k,
+		in.AccountKeeper,
+		in.BankKeeper,
 	)
 
 	return ModuleOutputs{VmintKeeper: k, Module: m}
