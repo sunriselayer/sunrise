@@ -31,6 +31,7 @@ import (
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	vmintmodulekeeper "github.com/sunriselayer/sunrise/x/vmint/keeper"
 )
 
 type AppKeepers struct {
@@ -77,4 +78,5 @@ type AppKeepers struct {
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
+	VmintKeeper              vmintmodulekeeper.Keeper
 }
