@@ -17,11 +17,11 @@ var (
 
 func CalculateAnnualProvision(
 	ctx context.Context,
-	genesis time.Time,
 	inflationRateCapInitial math.LegacyDec,
 	inflationRateCapMinimum math.LegacyDec,
 	disinflationRate math.LegacyDec,
 	supplyCap math.Int,
+	genesis time.Time,
 	totalSupply math.Int,
 ) math.Int {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)

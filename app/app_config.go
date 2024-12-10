@@ -118,7 +118,6 @@ var (
 		stakingtypes.ModuleName,
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
-		minttypes.ModuleName,
 		crisistypes.ModuleName,
 		ibcexported.ModuleName,
 		genutiltypes.ModuleName,
@@ -138,8 +137,6 @@ var (
 		// thirdparty modules
 		auctiontypes.ModuleName,
 		// chain modules
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
@@ -156,8 +153,9 @@ var (
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
-		minttypes.ModuleName,
+		vmintmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
+		//
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -169,14 +167,12 @@ var (
 		ibctransfertypes.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
+		//
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
-		vmintmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -228,14 +224,13 @@ var (
 		// Third party module accounts
 		{Account: auctiontypes.ModuleName, Permissions: []string{}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
-		// {Account: blobmoduletypes.ModuleName},
-		// {Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: damoduletypes.ModuleName},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: liquidityincentivemoduletypes.ModuleName},
+		{Account: liquiditypoolmoduletypes.ModuleName},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		{Account: damoduletypes.ModuleName},
+		{Account: vmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 	}
 
 	// blocked account addresses

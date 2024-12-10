@@ -9,15 +9,19 @@ import (
 	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -27,9 +31,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	InitialInflationRateCap string                `protobuf:"bytes,1,opt,name=initial_inflation_rate_cap,json=initialInflationRateCap,proto3" json:"initial_inflation_rate_cap,omitempty"`
-	DisinflationRate        string                `protobuf:"bytes,2,opt,name=disinflation_rate,json=disinflationRate,proto3" json:"disinflation_rate,omitempty"`
-	SupplyCap               cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=supply_cap,json=supplyCap,proto3,customtype=cosmossdk.io/math.Int" json:"supply_cap"`
+	BondDenom               string                `protobuf:"bytes,1,opt,name=bond_denom,json=bondDenom,proto3" json:"bond_denom,omitempty"`
+	FeeDenom                string                `protobuf:"bytes,2,opt,name=fee_denom,json=feeDenom,proto3" json:"fee_denom,omitempty"`
+	InflationRateCapInitial string                `protobuf:"bytes,3,opt,name=inflation_rate_cap_initial,json=inflationRateCapInitial,proto3" json:"inflation_rate_cap_initial,omitempty"`
+	InflationRateCapMinimum string                `protobuf:"bytes,4,opt,name=inflation_rate_cap_minimum,json=inflationRateCapMinimum,proto3" json:"inflation_rate_cap_minimum,omitempty"`
+	DisinflationRate        string                `protobuf:"bytes,5,opt,name=disinflation_rate,json=disinflationRate,proto3" json:"disinflation_rate,omitempty"`
+	SupplyCap               cosmossdk_io_math.Int `protobuf:"bytes,6,opt,name=supply_cap,json=supplyCap,proto3,customtype=cosmossdk.io/math.Int" json:"supply_cap"`
+	Genesis                 time.Time             `protobuf:"bytes,7,opt,name=genesis,proto3,stdtime" json:"genesis"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -65,9 +73,30 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetInitialInflationRateCap() string {
+func (m *Params) GetBondDenom() string {
 	if m != nil {
-		return m.InitialInflationRateCap
+		return m.BondDenom
+	}
+	return ""
+}
+
+func (m *Params) GetFeeDenom() string {
+	if m != nil {
+		return m.FeeDenom
+	}
+	return ""
+}
+
+func (m *Params) GetInflationRateCapInitial() string {
+	if m != nil {
+		return m.InflationRateCapInitial
+	}
+	return ""
+}
+
+func (m *Params) GetInflationRateCapMinimum() string {
+	if m != nil {
+		return m.InflationRateCapMinimum
 	}
 	return ""
 }
@@ -79,6 +108,13 @@ func (m *Params) GetDisinflationRate() string {
 	return ""
 }
 
+func (m *Params) GetGenesis() time.Time {
+	if m != nil {
+		return m.Genesis
+	}
+	return time.Time{}
+}
+
 func init() {
 	proto.RegisterType((*Params)(nil), "sunrise.vmint.Params")
 }
@@ -86,26 +122,32 @@ func init() {
 func init() { proto.RegisterFile("sunrise/vmint/params.proto", fileDescriptor_34c5a770ec9b541b) }
 
 var fileDescriptor_34c5a770ec9b541b = []byte{
-	// 292 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2a, 0x2e, 0xcd, 0x2b,
-	0xca, 0x2c, 0x4e, 0xd5, 0x2f, 0xcb, 0xcd, 0xcc, 0x2b, 0xd1, 0x2f, 0x48, 0x2c, 0x4a, 0xcc, 0x2d,
-	0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x85, 0xca, 0xe9, 0x81, 0xe5, 0xa4, 0x24, 0x93,
-	0xf3, 0x8b, 0x73, 0xf3, 0x8b, 0xe3, 0xc1, 0x92, 0xfa, 0x10, 0x0e, 0x44, 0xa5, 0x94, 0x48, 0x7a,
-	0x7e, 0x7a, 0x3e, 0x44, 0x1c, 0xc4, 0x82, 0x88, 0x2a, 0x1d, 0x61, 0xe4, 0x62, 0x0b, 0x00, 0x1b,
-	0x28, 0x64, 0xcd, 0x25, 0x95, 0x99, 0x97, 0x59, 0x92, 0x99, 0x98, 0x13, 0x9f, 0x99, 0x97, 0x96,
-	0x93, 0x58, 0x92, 0x99, 0x9f, 0x17, 0x5f, 0x94, 0x58, 0x92, 0x1a, 0x9f, 0x9c, 0x58, 0x20, 0xc1,
-	0xa8, 0xc0, 0xa8, 0xc1, 0x19, 0x24, 0x0e, 0x55, 0xe1, 0x09, 0x53, 0x10, 0x94, 0x58, 0x92, 0xea,
-	0x9c, 0x58, 0x20, 0xa4, 0xcd, 0x25, 0x98, 0x92, 0x59, 0x8c, 0xaa, 0x4f, 0x82, 0x09, 0xac, 0x47,
-	0x00, 0x59, 0x02, 0xa4, 0x5e, 0xc8, 0x8b, 0x8b, 0xab, 0xb8, 0xb4, 0xa0, 0x20, 0xa7, 0x12, 0x6c,
-	0x32, 0x33, 0x48, 0x95, 0x93, 0xf6, 0x89, 0x7b, 0xf2, 0x0c, 0xb7, 0xee, 0xc9, 0x8b, 0x42, 0x1c,
-	0x5d, 0x9c, 0x92, 0xad, 0x97, 0x99, 0xaf, 0x9f, 0x9b, 0x58, 0x92, 0xa1, 0xe7, 0x99, 0x57, 0x72,
-	0x69, 0x8b, 0x2e, 0x17, 0xd4, 0x37, 0x9e, 0x79, 0x25, 0x41, 0x9c, 0x10, 0xed, 0xce, 0x89, 0x05,
-	0x56, 0x2c, 0x2f, 0x16, 0xc8, 0x33, 0x3a, 0xb9, 0x9f, 0x78, 0x24, 0xc7, 0x78, 0xe1, 0x91, 0x1c,
-	0xe3, 0x83, 0x47, 0x72, 0x8c, 0x13, 0x1e, 0xcb, 0x31, 0x5c, 0x78, 0x2c, 0xc7, 0x70, 0xe3, 0xb1,
-	0x1c, 0x43, 0x94, 0x6e, 0x7a, 0x66, 0x49, 0x46, 0x69, 0x92, 0x5e, 0x72, 0x7e, 0xae, 0x3e, 0x34,
-	0xac, 0x72, 0x12, 0x2b, 0x53, 0x8b, 0x60, 0x1c, 0xfd, 0x0a, 0x68, 0xb0, 0x96, 0x54, 0x16, 0xa4,
-	0x16, 0x27, 0xb1, 0x81, 0x83, 0xc5, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x35, 0x08, 0x19, 0x7e,
-	0x74, 0x01, 0x00, 0x00,
+	// 398 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0xcd, 0xaa, 0xd3, 0x40,
+	0x1c, 0xc5, 0x33, 0xd7, 0x6b, 0xef, 0xcd, 0x88, 0xa0, 0x41, 0x31, 0x46, 0x4c, 0x8a, 0xab, 0x42,
+	0xe9, 0x0c, 0xe8, 0x4e, 0xc1, 0x45, 0x2b, 0x48, 0x05, 0x41, 0x82, 0x2b, 0x37, 0x61, 0xd2, 0x4c,
+	0xd2, 0xc1, 0xcc, 0x07, 0x99, 0x89, 0xd8, 0xb7, 0xe8, 0x23, 0xf8, 0x10, 0x3e, 0x44, 0x97, 0xc5,
+	0x95, 0xb8, 0xa8, 0xd2, 0x6e, 0x7c, 0x09, 0x41, 0x32, 0x93, 0x88, 0x82, 0x77, 0x37, 0xff, 0xf3,
+	0x3b, 0x87, 0x03, 0x87, 0x81, 0x91, 0x6e, 0x45, 0xc3, 0x34, 0xc5, 0x1f, 0x38, 0x13, 0x06, 0x2b,
+	0xd2, 0x10, 0xae, 0x91, 0x6a, 0xa4, 0x91, 0xc1, 0xcd, 0x9e, 0x21, 0xcb, 0xa2, 0xfb, 0x2b, 0xa9,
+	0xb9, 0xd4, 0x99, 0x85, 0xd8, 0x1d, 0xce, 0x19, 0xdd, 0xa9, 0x64, 0x25, 0x9d, 0xde, 0xbd, 0x7a,
+	0x35, 0xa9, 0xa4, 0xac, 0x6a, 0x8a, 0xed, 0x95, 0xb7, 0x25, 0x36, 0x8c, 0x53, 0x6d, 0x08, 0x57,
+	0xce, 0xf0, 0xe8, 0xd7, 0x19, 0x1c, 0xbd, 0xb1, 0x8d, 0xc1, 0x43, 0x08, 0x73, 0x29, 0x8a, 0xac,
+	0xa0, 0x42, 0xf2, 0x10, 0x8c, 0xc1, 0xc4, 0x4f, 0xfd, 0x4e, 0x79, 0xd1, 0x09, 0xc1, 0x03, 0xe8,
+	0x97, 0x94, 0xf6, 0xf4, 0xcc, 0xd2, 0xcb, 0x92, 0x52, 0x07, 0x9f, 0xc1, 0x88, 0x89, 0xb2, 0x26,
+	0x86, 0x49, 0x91, 0x35, 0xc4, 0xd0, 0x6c, 0x45, 0x54, 0xc6, 0x04, 0x33, 0x8c, 0xd4, 0xe1, 0x35,
+	0xeb, 0xbe, 0xf7, 0xc7, 0x91, 0x12, 0x43, 0x17, 0x44, 0x2d, 0x1d, 0xbe, 0x22, 0xcc, 0x99, 0x60,
+	0xbc, 0xe5, 0xe1, 0xf9, 0xff, 0xc3, 0xaf, 0x1d, 0x0e, 0xa6, 0xf0, 0x76, 0xc1, 0xf4, 0xbf, 0xf9,
+	0xf0, 0xba, 0xcd, 0xdc, 0xfa, 0x1b, 0x74, 0xb1, 0xe0, 0x15, 0x84, 0xba, 0x55, 0xaa, 0xde, 0x74,
+	0x0d, 0xe1, 0xa8, 0x73, 0xcd, 0xa7, 0xbb, 0x43, 0xe2, 0x7d, 0x3b, 0x24, 0x77, 0xdd, 0x9c, 0xba,
+	0x78, 0x8f, 0x98, 0xc4, 0x9c, 0x98, 0x35, 0x5a, 0x0a, 0xf3, 0xe5, 0xf3, 0x0c, 0xf6, 0x3b, 0x2f,
+	0x85, 0x49, 0x7d, 0x17, 0x5f, 0x10, 0x15, 0x3c, 0x87, 0x17, 0x15, 0x15, 0x54, 0x33, 0x1d, 0x5e,
+	0x8c, 0xc1, 0xe4, 0xc6, 0xe3, 0x08, 0xb9, 0xb1, 0xd1, 0x30, 0x36, 0x7a, 0x3b, 0x8c, 0x3d, 0xbf,
+	0xec, 0x4a, 0xb6, 0xdf, 0x13, 0x90, 0x0e, 0xa1, 0xa7, 0xe7, 0x3f, 0x3f, 0x25, 0x60, 0xfe, 0x72,
+	0x77, 0x8c, 0xc1, 0xfe, 0x18, 0x83, 0x1f, 0xc7, 0x18, 0x6c, 0x4f, 0xb1, 0xb7, 0x3f, 0xc5, 0xde,
+	0xd7, 0x53, 0xec, 0xbd, 0x9b, 0x55, 0xcc, 0xac, 0xdb, 0x1c, 0xad, 0x24, 0xc7, 0xfd, 0x2f, 0xa8,
+	0xc9, 0x86, 0x36, 0xc3, 0x81, 0x3f, 0xf6, 0x1f, 0xc6, 0x6c, 0x14, 0xd5, 0xf9, 0xc8, 0xb6, 0x3e,
+	0xf9, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x85, 0xd2, 0xfe, 0xd1, 0x4e, 0x02, 0x00, 0x00,
 }
 
 func (this *Params) Equal(that interface{}) bool {
@@ -127,13 +169,25 @@ func (this *Params) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.InitialInflationRateCap != that1.InitialInflationRateCap {
+	if this.BondDenom != that1.BondDenom {
+		return false
+	}
+	if this.FeeDenom != that1.FeeDenom {
+		return false
+	}
+	if this.InflationRateCapInitial != that1.InflationRateCapInitial {
+		return false
+	}
+	if this.InflationRateCapMinimum != that1.InflationRateCapMinimum {
 		return false
 	}
 	if this.DisinflationRate != that1.DisinflationRate {
 		return false
 	}
 	if !this.SupplyCap.Equal(that1.SupplyCap) {
+		return false
+	}
+	if !this.Genesis.Equal(that1.Genesis) {
 		return false
 	}
 	return true
@@ -158,6 +212,14 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Genesis, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Genesis):])
+	if err1 != nil {
+		return 0, err1
+	}
+	i -= n1
+	i = encodeVarintParams(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x3a
 	{
 		size := m.SupplyCap.Size()
 		i -= size
@@ -167,18 +229,39 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x32
 	if len(m.DisinflationRate) > 0 {
 		i -= len(m.DisinflationRate)
 		copy(dAtA[i:], m.DisinflationRate)
 		i = encodeVarintParams(dAtA, i, uint64(len(m.DisinflationRate)))
 		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.InflationRateCapMinimum) > 0 {
+		i -= len(m.InflationRateCapMinimum)
+		copy(dAtA[i:], m.InflationRateCapMinimum)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.InflationRateCapMinimum)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.InflationRateCapInitial) > 0 {
+		i -= len(m.InflationRateCapInitial)
+		copy(dAtA[i:], m.InflationRateCapInitial)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.InflationRateCapInitial)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.FeeDenom) > 0 {
+		i -= len(m.FeeDenom)
+		copy(dAtA[i:], m.FeeDenom)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.FeeDenom)))
+		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.InitialInflationRateCap) > 0 {
-		i -= len(m.InitialInflationRateCap)
-		copy(dAtA[i:], m.InitialInflationRateCap)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.InitialInflationRateCap)))
+	if len(m.BondDenom) > 0 {
+		i -= len(m.BondDenom)
+		copy(dAtA[i:], m.BondDenom)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.BondDenom)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -202,7 +285,19 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.InitialInflationRateCap)
+	l = len(m.BondDenom)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.FeeDenom)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.InflationRateCapInitial)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.InflationRateCapMinimum)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
@@ -211,6 +306,8 @@ func (m *Params) Size() (n int) {
 		n += 1 + l + sovParams(uint64(l))
 	}
 	l = m.SupplyCap.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Genesis)
 	n += 1 + l + sovParams(uint64(l))
 	return n
 }
@@ -252,7 +349,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InitialInflationRateCap", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BondDenom", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -280,9 +377,105 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InitialInflationRateCap = string(dAtA[iNdEx:postIndex])
+			m.BondDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FeeDenom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FeeDenom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InflationRateCapInitial", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InflationRateCapInitial = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InflationRateCapMinimum", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InflationRateCapMinimum = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DisinflationRate", wireType)
 			}
@@ -314,7 +507,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 			m.DisinflationRate = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SupplyCap", wireType)
 			}
@@ -345,6 +538,39 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.SupplyCap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Genesis", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.Genesis, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

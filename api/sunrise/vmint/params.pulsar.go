@@ -9,6 +9,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
@@ -16,17 +17,25 @@ import (
 
 var (
 	md_Params                            protoreflect.MessageDescriptor
-	fd_Params_initial_inflation_rate_cap protoreflect.FieldDescriptor
+	fd_Params_bond_denom                 protoreflect.FieldDescriptor
+	fd_Params_fee_denom                  protoreflect.FieldDescriptor
+	fd_Params_inflation_rate_cap_initial protoreflect.FieldDescriptor
+	fd_Params_inflation_rate_cap_minimum protoreflect.FieldDescriptor
 	fd_Params_disinflation_rate          protoreflect.FieldDescriptor
 	fd_Params_supply_cap                 protoreflect.FieldDescriptor
+	fd_Params_genesis                    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sunrise_vmint_params_proto_init()
 	md_Params = File_sunrise_vmint_params_proto.Messages().ByName("Params")
-	fd_Params_initial_inflation_rate_cap = md_Params.Fields().ByName("initial_inflation_rate_cap")
+	fd_Params_bond_denom = md_Params.Fields().ByName("bond_denom")
+	fd_Params_fee_denom = md_Params.Fields().ByName("fee_denom")
+	fd_Params_inflation_rate_cap_initial = md_Params.Fields().ByName("inflation_rate_cap_initial")
+	fd_Params_inflation_rate_cap_minimum = md_Params.Fields().ByName("inflation_rate_cap_minimum")
 	fd_Params_disinflation_rate = md_Params.Fields().ByName("disinflation_rate")
 	fd_Params_supply_cap = md_Params.Fields().ByName("supply_cap")
+	fd_Params_genesis = md_Params.Fields().ByName("genesis")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -94,9 +103,27 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.InitialInflationRateCap != "" {
-		value := protoreflect.ValueOfString(x.InitialInflationRateCap)
-		if !f(fd_Params_initial_inflation_rate_cap, value) {
+	if x.BondDenom != "" {
+		value := protoreflect.ValueOfString(x.BondDenom)
+		if !f(fd_Params_bond_denom, value) {
+			return
+		}
+	}
+	if x.FeeDenom != "" {
+		value := protoreflect.ValueOfString(x.FeeDenom)
+		if !f(fd_Params_fee_denom, value) {
+			return
+		}
+	}
+	if x.InflationRateCapInitial != "" {
+		value := protoreflect.ValueOfString(x.InflationRateCapInitial)
+		if !f(fd_Params_inflation_rate_cap_initial, value) {
+			return
+		}
+	}
+	if x.InflationRateCapMinimum != "" {
+		value := protoreflect.ValueOfString(x.InflationRateCapMinimum)
+		if !f(fd_Params_inflation_rate_cap_minimum, value) {
 			return
 		}
 	}
@@ -109,6 +136,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 	if x.SupplyCap != "" {
 		value := protoreflect.ValueOfString(x.SupplyCap)
 		if !f(fd_Params_supply_cap, value) {
+			return
+		}
+	}
+	if x.Genesis != nil {
+		value := protoreflect.ValueOfMessage(x.Genesis.ProtoReflect())
+		if !f(fd_Params_genesis, value) {
 			return
 		}
 	}
@@ -127,12 +160,20 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sunrise.vmint.Params.initial_inflation_rate_cap":
-		return x.InitialInflationRateCap != ""
+	case "sunrise.vmint.Params.bond_denom":
+		return x.BondDenom != ""
+	case "sunrise.vmint.Params.fee_denom":
+		return x.FeeDenom != ""
+	case "sunrise.vmint.Params.inflation_rate_cap_initial":
+		return x.InflationRateCapInitial != ""
+	case "sunrise.vmint.Params.inflation_rate_cap_minimum":
+		return x.InflationRateCapMinimum != ""
 	case "sunrise.vmint.Params.disinflation_rate":
 		return x.DisinflationRate != ""
 	case "sunrise.vmint.Params.supply_cap":
 		return x.SupplyCap != ""
+	case "sunrise.vmint.Params.genesis":
+		return x.Genesis != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.vmint.Params"))
@@ -149,12 +190,20 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sunrise.vmint.Params.initial_inflation_rate_cap":
-		x.InitialInflationRateCap = ""
+	case "sunrise.vmint.Params.bond_denom":
+		x.BondDenom = ""
+	case "sunrise.vmint.Params.fee_denom":
+		x.FeeDenom = ""
+	case "sunrise.vmint.Params.inflation_rate_cap_initial":
+		x.InflationRateCapInitial = ""
+	case "sunrise.vmint.Params.inflation_rate_cap_minimum":
+		x.InflationRateCapMinimum = ""
 	case "sunrise.vmint.Params.disinflation_rate":
 		x.DisinflationRate = ""
 	case "sunrise.vmint.Params.supply_cap":
 		x.SupplyCap = ""
+	case "sunrise.vmint.Params.genesis":
+		x.Genesis = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.vmint.Params"))
@@ -171,8 +220,17 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sunrise.vmint.Params.initial_inflation_rate_cap":
-		value := x.InitialInflationRateCap
+	case "sunrise.vmint.Params.bond_denom":
+		value := x.BondDenom
+		return protoreflect.ValueOfString(value)
+	case "sunrise.vmint.Params.fee_denom":
+		value := x.FeeDenom
+		return protoreflect.ValueOfString(value)
+	case "sunrise.vmint.Params.inflation_rate_cap_initial":
+		value := x.InflationRateCapInitial
+		return protoreflect.ValueOfString(value)
+	case "sunrise.vmint.Params.inflation_rate_cap_minimum":
+		value := x.InflationRateCapMinimum
 		return protoreflect.ValueOfString(value)
 	case "sunrise.vmint.Params.disinflation_rate":
 		value := x.DisinflationRate
@@ -180,6 +238,9 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "sunrise.vmint.Params.supply_cap":
 		value := x.SupplyCap
 		return protoreflect.ValueOfString(value)
+	case "sunrise.vmint.Params.genesis":
+		value := x.Genesis
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.vmint.Params"))
@@ -200,12 +261,20 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sunrise.vmint.Params.initial_inflation_rate_cap":
-		x.InitialInflationRateCap = value.Interface().(string)
+	case "sunrise.vmint.Params.bond_denom":
+		x.BondDenom = value.Interface().(string)
+	case "sunrise.vmint.Params.fee_denom":
+		x.FeeDenom = value.Interface().(string)
+	case "sunrise.vmint.Params.inflation_rate_cap_initial":
+		x.InflationRateCapInitial = value.Interface().(string)
+	case "sunrise.vmint.Params.inflation_rate_cap_minimum":
+		x.InflationRateCapMinimum = value.Interface().(string)
 	case "sunrise.vmint.Params.disinflation_rate":
 		x.DisinflationRate = value.Interface().(string)
 	case "sunrise.vmint.Params.supply_cap":
 		x.SupplyCap = value.Interface().(string)
+	case "sunrise.vmint.Params.genesis":
+		x.Genesis = value.Message().Interface().(*timestamppb.Timestamp)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.vmint.Params"))
@@ -226,8 +295,19 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.vmint.Params.initial_inflation_rate_cap":
-		panic(fmt.Errorf("field initial_inflation_rate_cap of message sunrise.vmint.Params is not mutable"))
+	case "sunrise.vmint.Params.genesis":
+		if x.Genesis == nil {
+			x.Genesis = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.Genesis.ProtoReflect())
+	case "sunrise.vmint.Params.bond_denom":
+		panic(fmt.Errorf("field bond_denom of message sunrise.vmint.Params is not mutable"))
+	case "sunrise.vmint.Params.fee_denom":
+		panic(fmt.Errorf("field fee_denom of message sunrise.vmint.Params is not mutable"))
+	case "sunrise.vmint.Params.inflation_rate_cap_initial":
+		panic(fmt.Errorf("field inflation_rate_cap_initial of message sunrise.vmint.Params is not mutable"))
+	case "sunrise.vmint.Params.inflation_rate_cap_minimum":
+		panic(fmt.Errorf("field inflation_rate_cap_minimum of message sunrise.vmint.Params is not mutable"))
 	case "sunrise.vmint.Params.disinflation_rate":
 		panic(fmt.Errorf("field disinflation_rate of message sunrise.vmint.Params is not mutable"))
 	case "sunrise.vmint.Params.supply_cap":
@@ -245,12 +325,21 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sunrise.vmint.Params.initial_inflation_rate_cap":
+	case "sunrise.vmint.Params.bond_denom":
+		return protoreflect.ValueOfString("")
+	case "sunrise.vmint.Params.fee_denom":
+		return protoreflect.ValueOfString("")
+	case "sunrise.vmint.Params.inflation_rate_cap_initial":
+		return protoreflect.ValueOfString("")
+	case "sunrise.vmint.Params.inflation_rate_cap_minimum":
 		return protoreflect.ValueOfString("")
 	case "sunrise.vmint.Params.disinflation_rate":
 		return protoreflect.ValueOfString("")
 	case "sunrise.vmint.Params.supply_cap":
 		return protoreflect.ValueOfString("")
+	case "sunrise.vmint.Params.genesis":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sunrise.vmint.Params"))
@@ -320,7 +409,19 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.InitialInflationRateCap)
+		l = len(x.BondDenom)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.FeeDenom)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.InflationRateCapInitial)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.InflationRateCapMinimum)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -330,6 +431,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		}
 		l = len(x.SupplyCap)
 		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Genesis != nil {
+			l = options.Size(x.Genesis)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -361,24 +466,59 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if x.Genesis != nil {
+			encoded, err := options.Marshal(x.Genesis)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x3a
+		}
 		if len(x.SupplyCap) > 0 {
 			i -= len(x.SupplyCap)
 			copy(dAtA[i:], x.SupplyCap)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SupplyCap)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x32
 		}
 		if len(x.DisinflationRate) > 0 {
 			i -= len(x.DisinflationRate)
 			copy(dAtA[i:], x.DisinflationRate)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DisinflationRate)))
 			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.InflationRateCapMinimum) > 0 {
+			i -= len(x.InflationRateCapMinimum)
+			copy(dAtA[i:], x.InflationRateCapMinimum)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.InflationRateCapMinimum)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.InflationRateCapInitial) > 0 {
+			i -= len(x.InflationRateCapInitial)
+			copy(dAtA[i:], x.InflationRateCapInitial)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.InflationRateCapInitial)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.FeeDenom) > 0 {
+			i -= len(x.FeeDenom)
+			copy(dAtA[i:], x.FeeDenom)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeDenom)))
+			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.InitialInflationRateCap) > 0 {
-			i -= len(x.InitialInflationRateCap)
-			copy(dAtA[i:], x.InitialInflationRateCap)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.InitialInflationRateCap)))
+		if len(x.BondDenom) > 0 {
+			i -= len(x.BondDenom)
+			copy(dAtA[i:], x.BondDenom)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BondDenom)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -433,7 +573,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field InitialInflationRateCap", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BondDenom", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -461,9 +601,105 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.InitialInflationRateCap = string(dAtA[iNdEx:postIndex])
+				x.BondDenom = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeDenom", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.FeeDenom = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field InflationRateCapInitial", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.InflationRateCapInitial = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field InflationRateCapMinimum", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.InflationRateCapMinimum = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DisinflationRate", wireType)
 				}
@@ -495,7 +731,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.DisinflationRate = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 3:
+			case 6:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SupplyCap", wireType)
 				}
@@ -526,6 +762,42 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.SupplyCap = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Genesis", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Genesis == nil {
+					x.Genesis = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Genesis); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -581,9 +853,13 @@ type Params struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	InitialInflationRateCap string `protobuf:"bytes,1,opt,name=initial_inflation_rate_cap,json=initialInflationRateCap,proto3" json:"initial_inflation_rate_cap,omitempty"`
-	DisinflationRate        string `protobuf:"bytes,2,opt,name=disinflation_rate,json=disinflationRate,proto3" json:"disinflation_rate,omitempty"`
-	SupplyCap               string `protobuf:"bytes,3,opt,name=supply_cap,json=supplyCap,proto3" json:"supply_cap,omitempty"`
+	BondDenom               string                 `protobuf:"bytes,1,opt,name=bond_denom,json=bondDenom,proto3" json:"bond_denom,omitempty"`
+	FeeDenom                string                 `protobuf:"bytes,2,opt,name=fee_denom,json=feeDenom,proto3" json:"fee_denom,omitempty"`
+	InflationRateCapInitial string                 `protobuf:"bytes,3,opt,name=inflation_rate_cap_initial,json=inflationRateCapInitial,proto3" json:"inflation_rate_cap_initial,omitempty"`
+	InflationRateCapMinimum string                 `protobuf:"bytes,4,opt,name=inflation_rate_cap_minimum,json=inflationRateCapMinimum,proto3" json:"inflation_rate_cap_minimum,omitempty"`
+	DisinflationRate        string                 `protobuf:"bytes,5,opt,name=disinflation_rate,json=disinflationRate,proto3" json:"disinflation_rate,omitempty"`
+	SupplyCap               string                 `protobuf:"bytes,6,opt,name=supply_cap,json=supplyCap,proto3" json:"supply_cap,omitempty"`
+	Genesis                 *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=genesis,proto3" json:"genesis,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -606,9 +882,30 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_sunrise_vmint_params_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Params) GetInitialInflationRateCap() string {
+func (x *Params) GetBondDenom() string {
 	if x != nil {
-		return x.InitialInflationRateCap
+		return x.BondDenom
+	}
+	return ""
+}
+
+func (x *Params) GetFeeDenom() string {
+	if x != nil {
+		return x.FeeDenom
+	}
+	return ""
+}
+
+func (x *Params) GetInflationRateCapInitial() string {
+	if x != nil {
+		return x.InflationRateCapInitial
+	}
+	return ""
+}
+
+func (x *Params) GetInflationRateCapMinimum() string {
+	if x != nil {
+		return x.InflationRateCapMinimum
 	}
 	return ""
 }
@@ -627,6 +924,13 @@ func (x *Params) GetSupplyCap() string {
 	return ""
 }
 
+func (x *Params) GetGenesis() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Genesis
+	}
+	return nil
+}
+
 var File_sunrise_vmint_params_proto protoreflect.FileDescriptor
 
 var file_sunrise_vmint_params_proto_rawDesc = []byte{
@@ -635,30 +939,43 @@ var file_sunrise_vmint_params_proto_rawDesc = []byte{
 	0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x76, 0x6d, 0x69, 0x6e, 0x74, 0x1a, 0x19, 0x63, 0x6f, 0x73,
 	0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc4, 0x01, 0x0a,
-	0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x3b, 0x0a, 0x1a, 0x69, 0x6e, 0x69, 0x74, 0x69,
-	0x61, 0x6c, 0x5f, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x74,
-	0x65, 0x5f, 0x63, 0x61, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x17, 0x69, 0x6e, 0x69,
-	0x74, 0x69, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x74,
-	0x65, 0x43, 0x61, 0x70, 0x12, 0x2b, 0x0a, 0x11, 0x64, 0x69, 0x73, 0x69, 0x6e, 0x66, 0x6c, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x10, 0x64, 0x69, 0x73, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x74,
-	0x65, 0x12, 0x4a, 0x0a, 0x0a, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x79, 0x5f, 0x63, 0x61, 0x70, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x2b, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68,
-	0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4, 0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49,
-	0x6e, 0x74, 0x52, 0x09, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x79, 0x43, 0x61, 0x70, 0x3a, 0x04, 0xe8,
-	0xa0, 0x1f, 0x01, 0x42, 0x95, 0x01, 0x0a, 0x11, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72,
-	0x69, 0x73, 0x65, 0x2e, 0x76, 0x6d, 0x69, 0x6e, 0x74, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
-	0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69,
-	0x73, 0x65, 0x2f, 0x76, 0x6d, 0x69, 0x6e, 0x74, 0xa2, 0x02, 0x03, 0x53, 0x56, 0x58, 0xaa, 0x02,
-	0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0xca, 0x02,
-	0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0xe2, 0x02,
-	0x19, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x5c, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e, 0x53, 0x75, 0x6e,
-	0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1f, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69,
+	0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xfd, 0x02,
+	0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x6f, 0x6e, 0x64,
+	0x5f, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x6f,
+	0x6e, 0x64, 0x44, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x1b, 0x0a, 0x09, 0x66, 0x65, 0x65, 0x5f, 0x64,
+	0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x66, 0x65, 0x65, 0x44,
+	0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x3b, 0x0a, 0x1a, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x63, 0x61, 0x70, 0x5f, 0x69, 0x6e, 0x69, 0x74, 0x69,
+	0x61, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x17, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x61, 0x74, 0x65, 0x43, 0x61, 0x70, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61,
+	0x6c, 0x12, 0x3b, 0x0a, 0x1a, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72,
+	0x61, 0x74, 0x65, 0x5f, 0x63, 0x61, 0x70, 0x5f, 0x6d, 0x69, 0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x17, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x61, 0x74, 0x65, 0x43, 0x61, 0x70, 0x4d, 0x69, 0x6e, 0x69, 0x6d, 0x75, 0x6d, 0x12, 0x2b,
+	0x0a, 0x11, 0x64, 0x69, 0x73, 0x69, 0x6e, 0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72,
+	0x61, 0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x64, 0x69, 0x73, 0x69, 0x6e,
+	0x66, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x74, 0x65, 0x12, 0x4a, 0x0a, 0x0a, 0x73,
+	0x75, 0x70, 0x70, 0x6c, 0x79, 0x5f, 0x63, 0x61, 0x70, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x2b, 0xc8, 0xde, 0x1f, 0x00, 0xda, 0xde, 0x1f, 0x15, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73,
+	0x64, 0x6b, 0x2e, 0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x49, 0x6e, 0x74, 0xd2, 0xb4,
+	0x2d, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x49, 0x6e, 0x74, 0x52, 0x09, 0x73, 0x75,
+	0x70, 0x70, 0x6c, 0x79, 0x43, 0x61, 0x70, 0x12, 0x3e, 0x0a, 0x07, 0x67, 0x65, 0x6e, 0x65, 0x73,
+	0x69, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x07,
+	0x67, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x3a, 0x04, 0xe8, 0xa0, 0x1f, 0x01, 0x42, 0x95, 0x01,
+	0x0a, 0x11, 0x63, 0x6f, 0x6d, 0x2e, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2e, 0x76, 0x6d,
+	0x69, 0x6e, 0x74, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f,
+	0x50, 0x01, 0x5a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e, 0x69, 0x6f,
+	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x2f, 0x76, 0x6d, 0x69,
+	0x6e, 0x74, 0xa2, 0x02, 0x03, 0x53, 0x56, 0x58, 0xaa, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x2e, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0xca, 0x02, 0x0d, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x5c, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0xe2, 0x02, 0x19, 0x53, 0x75, 0x6e, 0x72, 0x69,
+	0x73, 0x65, 0x5c, 0x56, 0x6d, 0x69, 0x6e, 0x74, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x0e, 0x53, 0x75, 0x6e, 0x72, 0x69, 0x73, 0x65, 0x3a, 0x3a,
+	0x56, 0x6d, 0x69, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -675,14 +992,16 @@ func file_sunrise_vmint_params_proto_rawDescGZIP() []byte {
 
 var file_sunrise_vmint_params_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_sunrise_vmint_params_proto_goTypes = []interface{}{
-	(*Params)(nil), // 0: sunrise.vmint.Params
+	(*Params)(nil),                // 0: sunrise.vmint.Params
+	(*timestamppb.Timestamp)(nil), // 1: google.protobuf.Timestamp
 }
 var file_sunrise_vmint_params_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: sunrise.vmint.Params.genesis:type_name -> google.protobuf.Timestamp
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_sunrise_vmint_params_proto_init() }
