@@ -10,9 +10,5 @@ option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 message Params {
   option (gogoproto.equal) = true;
 
-  string interface_fee_rate = 1 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string interface_fee_rate = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }

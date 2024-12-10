@@ -1,0 +1,28 @@
+syntax = "proto3";
+package sunrise.vmint;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/vmint/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.equal) = true;
+
+  string bond_denom = 1;
+  string fee_denom = 2;
+  string inflation_rate_cap_initial = 3;
+  string inflation_rate_cap_minimum = 4;
+  string disinflation_rate = 5;
+  string supply_cap = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  google.protobuf.Timestamp genesis = 7 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+}

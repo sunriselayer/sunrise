@@ -9,26 +9,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
-func (k Keeper) CalculateConversionAmount(ctx context.Context, minAmountOutFeeToken math.Int, maxAmountInGovToken math.Int) (math.Int, error) {
-	params := k.GetParams(ctx)
-
-	supplyFee := k.bankKeeper.GetSupply(ctx, params.FeeDenom)
-
-	space := params.MaxSupplyFee.Sub(supplyFee.Amount)
-	if space.IsZero() || space.LT(minAmountOutFeeToken) {
-		return math.ZeroInt(), types.ErrExceedsMaxSupply
-	}
-
-	var amount math.Int
-	if space.LT(maxAmountInGovToken) {
-		amount = space
-	} else {
-		amount = maxAmountInGovToken
-	}
-
-	return amount, nil
-}
-
 func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
 	params := k.GetParams(ctx)
 

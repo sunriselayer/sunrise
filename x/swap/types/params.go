@@ -15,7 +15,7 @@ func ParamKeyTable() paramtypes.KeyTable {
 // NewParams creates a new Params instance
 func NewParams(interfaceFeeRate math.LegacyDec) Params {
 	return Params{
-		InterfaceFeeRate: interfaceFeeRate,
+		InterfaceFeeRate: interfaceFeeRate.String(),
 	}
 }
 
@@ -31,5 +31,10 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	_, err := math.LegacyNewDecFromStr(p.InterfaceFeeRate)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

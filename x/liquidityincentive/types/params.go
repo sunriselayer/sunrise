@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -16,14 +17,14 @@ func ParamKeyTable() paramtypes.KeyTable {
 func NewParams(epochBlocks int64, stakingRewardRatio math.LegacyDec) Params {
 	return Params{
 		EpochBlocks:        epochBlocks,
-		StakingRewardRatio: stakingRewardRatio,
+		StakingRewardRatio: stakingRewardRatio.String(),
 	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return NewParams(
-		5,                                // new epoch per 10 blocks
+		10,                               // new epoch per 10 blocks
 		math.LegacyNewDecWithPrec(50, 2), // 50% to staking
 	)
 }
@@ -35,5 +36,14 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // Validate validates the set of params
 func (p Params) Validate() error {
+	if p.EpochBlocks <= 0 {
+		return errorsmod.Wrap(ErrInvalidParam, "EpochBlocks must be positive")
+	}
+
+	_, err := math.LegacyNewDecFromStr(p.StakingRewardRatio)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
