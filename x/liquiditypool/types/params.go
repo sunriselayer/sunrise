@@ -15,8 +15,8 @@ func ParamKeyTable() paramtypes.KeyTable {
 // NewParams creates a new Params instance
 func NewParams(withdrawFeeRate, swapTreasuryTaxRate math.LegacyDec) Params {
 	return Params{
-		WithdrawFeeRate:     withdrawFeeRate,
-		SwapTreasuryTaxRate: swapTreasuryTaxRate,
+		WithdrawFeeRate:     withdrawFeeRate.String(),
+		SwapTreasuryTaxRate: swapTreasuryTaxRate.String(),
 	}
 }
 

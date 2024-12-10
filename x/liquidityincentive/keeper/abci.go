@@ -52,7 +52,11 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	feesDec := sdk.NewDecCoinsFromCoins(amount)
 
 	params := k.GetParams(ctx)
-	incentiveFeesDec := feesDec.MulDecTruncate(math.LegacyOneDec().Sub(params.StakingRewardRatio))
+	stakingRewardRatio, err := math.LegacyNewDecFromStr(params.StakingRewardRatio)
+	if err != nil {
+		return err
+	}
+	incentiveFeesDec := feesDec.MulDecTruncate(math.LegacyOneDec().Sub(stakingRewardRatio))
 
 	lastEpoch, found := k.GetLastEpoch(ctx)
 	if !found {
