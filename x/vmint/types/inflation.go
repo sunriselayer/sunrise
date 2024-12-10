@@ -8,13 +8,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var (
-	DefaultInitialSupply    = math.NewInt(500_000_000).Mul(math.NewInt(1_000_000))
-	DefaultInflationRateCap = math.LegacyMustNewDecFromStr("0.1")
-	DefaultDisinflationRate = math.LegacyMustNewDecFromStr("0.08")
-	DefaultSupplyCap        = math.NewInt(1_000_000_000).Mul(math.NewInt(1_000_000))
-)
-
 func CalculateAnnualProvision(
 	ctx context.Context,
 	inflationRateCapInitial math.LegacyDec,
