@@ -31,21 +31,23 @@ func _checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx, k feekeepe
 	gas := feeTx.GetGas()
 
 	// <sunrise>
-	if len(feeCoins) != 1 {
-		return nil, 0, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
-	}
-	params := k.GetParams(ctx)
-	if feeCoins[0].Denom != params.FeeDenom {
-		includedBypass := false
-		for _, denom := range params.BypassDenoms {
-			if feeCoins[0].Denom == denom {
-				includedBypass = true
-				break
-			}
+	if ctx.BlockHeight() != 0 {
+		if len(feeCoins) != 1 {
+			return nil, 0, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
 		}
+		params := k.GetParams(ctx)
+		if feeCoins[0].Denom != params.FeeDenom {
+			includedBypass := false
+			for _, denom := range params.BypassDenoms {
+				if feeCoins[0].Denom == denom {
+					includedBypass = true
+					break
+				}
+			}
 
-		if !includedBypass {
-			return nil, 0, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid fee denomination: %s", feeCoins[0].Denom)
+			if !includedBypass {
+				return nil, 0, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid fee denomination: %s", feeCoins[0].Denom)
+			}
 		}
 	}
 	// </sunrise>
