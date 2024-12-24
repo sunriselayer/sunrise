@@ -53,7 +53,7 @@ var ConfigTemplate = serverconfig.DefaultConfigTemplate + `
 # API to query DA v2 uploaded data shard hashes
 shard_hashes_api = {{ .DA.ShardHashesAPI }}`
 
-// initAppConfig helps to override default appConfig template and configs.
+// InitAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
 func InitAppConfig() (string, CustomAppConfig) {
 	// Optionally allow the chain developer to overwrite the SDK's default

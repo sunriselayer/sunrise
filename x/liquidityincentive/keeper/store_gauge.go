@@ -35,7 +35,7 @@ func (k Keeper) RemoveGauge(ctx context.Context, previousEpochId uint64, poolId 
 	storeAdapter.Delete(types.GaugeKey(previousEpochId, poolId))
 }
 
-// GetAllGauge returns all gauges
+// GetAllGauges returns all gauges
 func (k Keeper) GetAllGauges(ctx context.Context) (list []types.Gauge) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.GaugeKeyPrefix))
