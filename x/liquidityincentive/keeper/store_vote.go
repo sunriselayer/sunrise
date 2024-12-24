@@ -39,7 +39,7 @@ func (k Keeper) RemoveVote(ctx context.Context, sender string) {
 	store.Delete([]byte(sender))
 }
 
-// GetAllVote returns all vote
+// GetAllVotes returns all vote
 func (k Keeper) GetAllVotes(ctx context.Context) (list []types.Vote) {
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.VoteKeyPrefix))
