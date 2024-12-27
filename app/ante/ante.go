@@ -8,7 +8,6 @@ import (
 	"cosmossdk.io/x/tx/signing"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
@@ -20,7 +19,7 @@ import (
 
 func NewAnteHandler(
 	accountKeeper ante.AccountKeeper,
-	bankKeeper bankkeeper.Keeper,
+	bankKeeper feeante.BankKeeper,
 	feegrantKeeper ante.FeegrantKeeper,
 	// blobKeeper blob.Keeper,
 	feeKeeper fee.Keeper,
@@ -69,12 +68,6 @@ func NewAnteHandler(
 		// account sequence number of the signer.
 		// Note: does not consume gas from the gas meter.
 		ante.NewSigVerificationDecorator(accountKeeper, signModeHandler),
-		// Ensure that the tx's gas limit is > the gas consumed based on the blob size(s).
-		// Contract: must be called after all decorators that consume gas.
-		// Note: does not consume gas from the gas meter.
-		// blobante.NewMinGasPFBDecorator(blobKeeper),
-		// Ensure that the tx's total blob size is <= the max blob size.
-		// blobante.NewMaxBlobSizeDecorator(blobKeeper),
 		// Side effect: increment the nonce for all tx signers.
 		ante.NewIncrementSequenceDecorator(accountKeeper),
 		// Ensure that the tx is not a IBC packet or update message that has already been processed.
