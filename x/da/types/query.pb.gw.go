@@ -366,11 +366,11 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_PublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "published_data"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_PublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "published-data"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AllPublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "all_published_data"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AllPublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "all-published-data"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ZkpProofThreshold_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "zkp_proof_threshold"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ZkpProofThreshold_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunriselayer", "sunrise", "da", "zkp-proof-threshold"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

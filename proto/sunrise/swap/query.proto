@@ -21,33 +21,33 @@ service Query {
 
   // IncomingInFlightPacket
   rpc IncomingInFlightPacket(QueryIncomingInFlightPacketRequest) returns (QueryIncomingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunrise/swap/in_flight_packets/incoming/{src_port_id}/{src_channel_id}/{sequence}";
+    option (google.api.http).get = "/sunrise/swap/in-flight-packets/incoming/{src_port_id}/{src_channel_id}/{sequence}";
   }
   // IncomingInFlightPackets
   rpc IncomingInFlightPackets(QueryIncomingInFlightPacketsRequest) returns (QueryIncomingInFlightPacketsResponse) {
-    option (google.api.http).get = "/sunrise/swap/in_flight_packets/incoming";
+    option (google.api.http).get = "/sunrise/swap/in-flight-packets/incoming";
   }
 
   // OutgoingInFlightPacket
   rpc OutgoingInFlightPacket(QueryOutgoingInFlightPacketRequest) returns (QueryOutgoingInFlightPacketResponse) {
-    option (google.api.http).get = "/sunrise/swap/in_flight_packets/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
+    option (google.api.http).get = "/sunrise/swap/in-flight-packets/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
   }
   // OutgoingInFlightPackets
   rpc OutgoingInFlightPackets(QueryOutgoingInFlightPacketsRequest) returns (QueryOutgoingInFlightPacketsResponse) {
-    option (google.api.http).get = "/sunrise/swap/in_flight_packets/outgoing";
+    option (google.api.http).get = "/sunrise/swap/in-flight-packets/outgoing";
   }
 
   // CalculationSwapExactAmountIn
   rpc CalculationSwapExactAmountIn(QueryCalculationSwapExactAmountInRequest) returns (QueryCalculationSwapExactAmountInResponse) {
     option (google.api.http) = {
-      post: "/sunrise/swap/calculations/swap_exact_amount_in"
+      post: "/sunrise/swap/calculations/swap-exact-amount-in"
       body: "*"
     };
   }
   // CalculationSwapExactAmountOut
   rpc CalculationSwapExactAmountOut(QueryCalculationSwapExactAmountOutRequest) returns (QueryCalculationSwapExactAmountOutResponse) {
     option (google.api.http) = {
-      post: "/sunrise/swap/calculations/swap_exact_amount_out"
+      post: "/sunrise/swap/calculations/swap-exact-amount-out"
       body: "*"
     };
   }
