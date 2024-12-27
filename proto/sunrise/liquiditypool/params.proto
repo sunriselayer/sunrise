@@ -11,15 +11,7 @@ message Params {
   option (gogoproto.equal) = true;
 
   // For reservation, not used yet
-  string withdraw_fee_rate = 1 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string withdraw_fee_rate = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
   // For reservation, not used yet
-  string swap_treasury_tax_rate = 2 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string swap_treasury_tax_rate = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }

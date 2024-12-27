@@ -2,8 +2,6 @@ package types
 
 import (
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-
-	"cosmossdk.io/math"
 )
 
 var _ paramtypes.ParamSet = (*Params)(nil)
@@ -14,11 +12,10 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params instance
-func NewParams(bondDenom string, feeDenom string, maxSupplyFee math.Int) Params {
+func NewParams(bondDenom string, feeDenom string) Params {
 	return Params{
-		BondDenom:    bondDenom,
-		FeeDenom:     feeDenom,
-		MaxSupplyFee: maxSupplyFee,
+		BondDenom: bondDenom,
+		FeeDenom:  feeDenom,
 	}
 }
 
@@ -27,7 +24,6 @@ func DefaultParams() Params {
 	return NewParams(
 		"stake",
 		"fee",
-		math.NewInt(1000_000_000_000_000),
 	)
 }
 
@@ -44,10 +40,6 @@ func (p Params) Validate() error {
 
 	if p.FeeDenom == "" {
 		return ErrEmptyFeeDenom
-	}
-
-	if p.MaxSupplyFee.IsNegative() {
-		return ErrNegativeMaxSupplyFee
 	}
 
 	return nil

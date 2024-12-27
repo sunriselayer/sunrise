@@ -44,8 +44,8 @@ import (
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
-	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+	// mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
+	// minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -83,7 +83,7 @@ import (
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
-
+	vmintmodulekeeper "github.com/sunriselayer/sunrise/x/vmint/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"github.com/sunriselayer/sunrise/docs"
@@ -126,11 +126,11 @@ type App struct {
 	interfaceRegistry codectypes.InterfaceRegistry
 
 	// keepers
-	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.Keeper
-	StakingKeeper         *stakingkeeper.Keeper
-	SlashingKeeper        slashingkeeper.Keeper
-	MintKeeper            mintkeeper.Keeper
+	AccountKeeper  authkeeper.AccountKeeper
+	BankKeeper     bankkeeper.Keeper
+	StakingKeeper  *stakingkeeper.Keeper
+	SlashingKeeper slashingkeeper.Keeper
+	// MintKeeper            mintkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	GovKeeper             *govkeeper.Keeper
 	CrisisKeeper          *crisiskeeper.Keeper
@@ -168,6 +168,7 @@ type App struct {
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
+	VmintKeeper              vmintmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -217,7 +218,6 @@ func AppConfig() depinject.Config {
 				govtypes.ModuleName: defaultoverrides.GovModuleBasic{
 					AppModuleBasic: gov.NewAppModuleBasic(getGovProposalHandlers()),
 				},
-				minttypes.ModuleName:           defaultoverrides.MintModuleBasic{},
 				stakingtypes.ModuleName:        defaultoverrides.StakingModuleBasic{},
 				tokenconvertertypes.ModuleName: defaultoverrides.TokenConverterModuleBasic{},
 				feetypes.ModuleName:            defaultoverrides.FeeModuleBasic{},
@@ -310,7 +310,7 @@ func New(
 		&app.BankKeeper,
 		&app.StakingKeeper,
 		&app.SlashingKeeper,
-		&app.MintKeeper,
+		// &app.MintKeeper,
 		&app.DistrKeeper,
 		&app.GovKeeper,
 		&app.CrisisKeeper,
@@ -334,6 +334,7 @@ func New(
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
 		&app.FeeKeeper,
+		&app.VmintKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
@@ -691,11 +692,11 @@ func (app *App) setupUpgradeStoreLoaders() {
 func (app *App) setupUpgradeHandlers() {
 	appKeepers := keepers.AppKeepers{
 		// keepers
-		AccountKeeper:         app.AccountKeeper,
-		BankKeeper:            app.BankKeeper,
-		StakingKeeper:         app.StakingKeeper,
-		SlashingKeeper:        app.SlashingKeeper,
-		MintKeeper:            app.MintKeeper,
+		AccountKeeper:  app.AccountKeeper,
+		BankKeeper:     app.BankKeeper,
+		StakingKeeper:  app.StakingKeeper,
+		SlashingKeeper: app.SlashingKeeper,
+		// MintKeeper:            app.MintKeeper,
 		DistrKeeper:           app.DistrKeeper,
 		GovKeeper:             app.GovKeeper,
 		CrisisKeeper:          app.CrisisKeeper,
@@ -732,6 +733,7 @@ func (app *App) setupUpgradeHandlers() {
 		LiquidityincentiveKeeper: app.LiquidityincentiveKeeper,
 		SwapKeeper:               app.SwapKeeper,
 		FeeKeeper:                app.FeeKeeper,
+		VmintKeeper:              app.VmintKeeper,
 	}
 	for _, upgrade := range Upgrades {
 		app.UpgradeKeeper.SetUpgradeHandler(

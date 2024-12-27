@@ -17,7 +17,7 @@ func ParamKeyTable() paramtypes.KeyTable {
 func NewParams(feeDenom string, burnRatio math.LegacyDec, bypassDenoms []string) Params {
 	return Params{
 		FeeDenom:     feeDenom,
-		BurnRatio:    burnRatio,
+		BurnRatio:    burnRatio.String(),
 		BypassDenoms: bypassDenoms,
 	}
 }
@@ -42,7 +42,12 @@ func (p Params) Validate() error {
 		return ErrEmptyFeeDenom
 	}
 
-	if p.BurnRatio.IsNegative() || p.BurnRatio.GTE(math.LegacyOneDec()) {
+	burnRatio, err := math.LegacyNewDecFromStr(p.BurnRatio)
+	if err != nil {
+		return err
+	}
+
+	if burnRatio.IsNegative() || burnRatio.GTE(math.LegacyOneDec()) {
 		return ErrInvalidBurnRatio
 	}
 

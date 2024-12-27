@@ -17,7 +17,7 @@ import (
 	genutilmodulev1 "cosmossdk.io/api/cosmos/genutil/module/v1"
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
-	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
+	// mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
 	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
@@ -84,6 +84,7 @@ import (
 
 	// _ "github.com/sunriselayer/sunrise/x/blob/module"       // import for side-effects
 	// _ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
+	vmintmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/vmint/module"
 	_ "github.com/sunriselayer/sunrise/x/da/module" // import for side-effects
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module" // import for side-effects
@@ -96,6 +97,8 @@ import (
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	_ "github.com/sunriselayer/sunrise/x/vmint/module" // import for side-effects
+	vmintmoduletypes "github.com/sunriselayer/sunrise/x/vmint/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -115,7 +118,6 @@ var (
 		stakingtypes.ModuleName,
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
-		minttypes.ModuleName,
 		crisistypes.ModuleName,
 		ibcexported.ModuleName,
 		genutiltypes.ModuleName,
@@ -135,14 +137,13 @@ var (
 		// thirdparty modules
 		auctiontypes.ModuleName,
 		// chain modules
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
+		vmintmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -152,8 +153,9 @@ var (
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
-		minttypes.ModuleName,
+		vmintmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
+		//
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -165,8 +167,7 @@ var (
 		ibctransfertypes.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
+		//
 		damoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
@@ -198,6 +199,7 @@ var (
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
+		vmintmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -222,14 +224,13 @@ var (
 		// Third party module accounts
 		{Account: auctiontypes.ModuleName, Permissions: []string{}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
-		// {Account: blobmoduletypes.ModuleName},
-		// {Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: damoduletypes.ModuleName},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: liquidityincentivemoduletypes.ModuleName},
+		{Account: liquiditypoolmoduletypes.ModuleName},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		{Account: damoduletypes.ModuleName},
+		{Account: vmintmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 	}
 
 	// blocked account addresses
@@ -339,10 +340,10 @@ var (
 				Name:   evidencetypes.ModuleName,
 				Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
 			},
-			{
-				Name:   minttypes.ModuleName,
-				Config: appconfig.WrapAny(&mintmodulev1.Module{}),
-			},
+			// {
+			// 	Name:   minttypes.ModuleName,
+			// 	Config: appconfig.WrapAny(&mintmodulev1.Module{}),
+			// },
 			{
 				Name: group.ModuleName,
 				Config: appconfig.WrapAny(&groupmodulev1.Module{
@@ -374,14 +375,6 @@ var (
 				Name:   auctiontypes.ModuleName,
 				Config: appconfig.WrapAny(&auctionmodulev1.Module{}),
 			},
-			// {
-			// 	Name:   blobmoduletypes.ModuleName,
-			// 	Config: appconfig.WrapAny(&blobmodulev1.Module{}),
-			// },
-			// {
-			// 	Name:   streammoduletypes.ModuleName,
-			// 	Config: appconfig.WrapAny(&streammodulev1.Module{}),
-			// },
 			{
 				Name:   damoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&damodulev1.Module{}),
@@ -405,6 +398,10 @@ var (
 			{
 				Name:   feemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feemodulev1.Module{}),
+			},
+			{
+				Name:   vmintmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&vmintmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

@@ -237,7 +237,7 @@ func TestBeginBlocker(t *testing.T) {
 				})
 
 				params := s.keeper.GetParams(s.ctx)
-				params.StakingRewardRatio = math.LegacyZeroDec()
+				params.StakingRewardRatio = math.LegacyZeroDec().String()
 				err := s.keeper.SetParams(s.ctx, params)
 				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
@@ -263,7 +263,7 @@ func TestBeginBlocker(t *testing.T) {
 				})
 
 				params := s.keeper.GetParams(s.ctx)
-				params.StakingRewardRatio = math.LegacyOneDec()
+				params.StakingRewardRatio = math.LegacyOneDec().String()
 				err := s.keeper.SetParams(s.ctx, params)
 				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
