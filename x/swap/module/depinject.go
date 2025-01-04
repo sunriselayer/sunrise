@@ -10,6 +10,8 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
+
+	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}
@@ -31,6 +33,13 @@ type ModuleInputs struct {
 	Environment  appmodule.Environment
 	Cdc          codec.Codec
 	AddressCodec address.Codec
+
+	AccountKeeper types.AccountKeeper
+	BankKeeper    types.BankKeeper
+	// TransferKeeper      types.TransferKeeper
+	LiquidityPoolKeeper types.LiquidityPoolKeeper
+
+	IBCKeeperFn func() *ibckeeper.Keeper `optional:"true"`
 }
 
 type ModuleOutputs struct {
@@ -51,6 +60,11 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Cdc,
 		in.AddressCodec,
 		authority,
+		in.AccountKeeper,
+		in.BankKeeper,
+		nil, // TransferKeeper is not supported by DepInject
+		in.LiquidityPoolKeeper,
+		in.IBCKeeperFn,
 	)
 	m := NewAppModule(in.Cdc, k)
 

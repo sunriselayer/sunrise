@@ -9,6 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 
 	"github.com/sunriselayer/sunrise/x/swap/types"
+
+	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 )
 
 type Keeper struct {
@@ -22,6 +24,13 @@ type Keeper struct {
 
 	Schema collections.Schema
 	Params collections.Item[types.Params]
+
+	AccountKeeper       types.AccountKeeper
+	BankKeeper          types.BankKeeper
+	TransferKeeper      types.TransferKeeper
+	liquidityPoolKeeper types.LiquidityPoolKeeper
+
+	IbcKeeperFn func() *ibckeeper.Keeper
 }
 
 func NewKeeper(
@@ -29,7 +38,11 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	addressCodec address.Codec,
 	authority []byte,
-
+	accountKeeper types.AccountKeeper,
+	bankKeeper types.BankKeeper,
+	transferKeeper types.TransferKeeper,
+	liquidityPoolKeeper types.LiquidityPoolKeeper,
+	ibcKeeperFn func() *ibckeeper.Keeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -44,6 +57,12 @@ func NewKeeper(
 		authority:    authority,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+
+		AccountKeeper:       accountKeeper,
+		BankKeeper:          bankKeeper,
+		TransferKeeper:      transferKeeper,
+		liquidityPoolKeeper: liquidityPoolKeeper,
+		IbcKeeperFn:         ibcKeeperFn,
 	}
 
 	schema, err := sb.Build()

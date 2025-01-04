@@ -17,3 +17,8 @@ const (
 
 // ParamsKey is the prefix to retrieve all Params
 var ParamsKey = collections.NewPrefix("p_swap")
+
+// deprecated
+func KeyPrefix(p string) []byte {
+	return []byte(p)
+}
