@@ -126,9 +126,8 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgConvert
 type MsgConvert struct {
-	Sender    string                `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	MinAmount cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=min_amount,json=minAmount,proto3,customtype=cosmossdk.io/math.Int" json:"min_amount"`
-	MaxAmount cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=max_amount,json=maxAmount,proto3,customtype=cosmossdk.io/math.Int" json:"max_amount"`
+	Sender string                `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Amount cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
 }
 
 func (m *MsgConvert) Reset()         { *m = MsgConvert{} }
@@ -173,7 +172,6 @@ func (m *MsgConvert) GetSender() string {
 
 // MsgConvertResponse
 type MsgConvertResponse struct {
-	Amount cosmossdk_io_math.Int `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
 }
 
 func (m *MsgConvertResponse) Reset()         { *m = MsgConvertResponse{} }
@@ -209,11 +207,93 @@ func (m *MsgConvertResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgConvertResponse proto.InternalMessageInfo
 
+type MsgSelfDelegate struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+}
+
+func (m *MsgSelfDelegate) Reset()         { *m = MsgSelfDelegate{} }
+func (m *MsgSelfDelegate) String() string { return proto.CompactTextString(m) }
+func (*MsgSelfDelegate) ProtoMessage()    {}
+func (*MsgSelfDelegate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1c06db355649ac70, []int{4}
+}
+func (m *MsgSelfDelegate) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSelfDelegate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSelfDelegate.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSelfDelegate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSelfDelegate.Merge(m, src)
+}
+func (m *MsgSelfDelegate) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSelfDelegate) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSelfDelegate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSelfDelegate proto.InternalMessageInfo
+
+func (m *MsgSelfDelegate) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+type MsgSelfDelegateResponse struct {
+}
+
+func (m *MsgSelfDelegateResponse) Reset()         { *m = MsgSelfDelegateResponse{} }
+func (m *MsgSelfDelegateResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSelfDelegateResponse) ProtoMessage()    {}
+func (*MsgSelfDelegateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1c06db355649ac70, []int{5}
+}
+func (m *MsgSelfDelegateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSelfDelegateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSelfDelegateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSelfDelegateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSelfDelegateResponse.Merge(m, src)
+}
+func (m *MsgSelfDelegateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSelfDelegateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSelfDelegateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSelfDelegateResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.tokenconverter.v1.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.tokenconverter.v1.MsgUpdateParamsResponse")
 	proto.RegisterType((*MsgConvert)(nil), "sunrise.tokenconverter.v1.MsgConvert")
 	proto.RegisterType((*MsgConvertResponse)(nil), "sunrise.tokenconverter.v1.MsgConvertResponse")
+	proto.RegisterType((*MsgSelfDelegate)(nil), "sunrise.tokenconverter.v1.MsgSelfDelegate")
+	proto.RegisterType((*MsgSelfDelegateResponse)(nil), "sunrise.tokenconverter.v1.MsgSelfDelegateResponse")
 }
 
 func init() {
@@ -221,37 +301,38 @@ func init() {
 }
 
 var fileDescriptor_1c06db355649ac70 = []byte{
-	// 466 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0x4f, 0x6b, 0x13, 0x41,
-	0x14, 0xcf, 0x58, 0x8d, 0xe4, 0x55, 0x14, 0x96, 0x4a, 0x93, 0x3d, 0x6c, 0xeb, 0x82, 0x52, 0x22,
-	0xd9, 0xb5, 0x11, 0x7a, 0xe8, 0x45, 0x9a, 0x9e, 0x2a, 0x04, 0x4a, 0xc4, 0x83, 0x5e, 0xc2, 0x34,
-	0x3b, 0x4c, 0x96, 0x3a, 0x33, 0xcb, 0xbc, 0x49, 0x48, 0x6e, 0xe2, 0x27, 0xf0, 0xec, 0xa7, 0xe8,
-	0xa1, 0x1f, 0xa2, 0xc7, 0xd2, 0x93, 0x08, 0x16, 0x49, 0x0e, 0xfd, 0x1a, 0xb2, 0x3b, 0xb3, 0x86,
-	0x06, 0x5a, 0xab, 0xb7, 0x7d, 0xf3, 0x7e, 0xff, 0xde, 0x3e, 0x1e, 0x84, 0x38, 0x92, 0x3a, 0x45,
-	0x16, 0x1b, 0x75, 0xcc, 0xe4, 0x40, 0xc9, 0x31, 0xd3, 0x86, 0xe9, 0x78, 0xbc, 0x1d, 0x9b, 0x49,
-	0x94, 0x69, 0x65, 0x94, 0xd7, 0x70, 0x98, 0xe8, 0x3a, 0x26, 0x1a, 0x6f, 0xfb, 0xeb, 0x03, 0x85,
-	0x42, 0x61, 0x2c, 0x90, 0xe7, 0x14, 0x81, 0xdc, 0x72, 0xfc, 0x86, 0x6d, 0xf4, 0x8b, 0x2a, 0xb6,
-	0x85, 0x6b, 0xad, 0x71, 0xc5, 0x95, 0x7d, 0xcf, 0xbf, 0xdc, 0xeb, 0x8b, 0x9b, 0x83, 0x64, 0x54,
-	0x53, 0xe1, 0xd8, 0xe1, 0x37, 0x02, 0x4f, 0xba, 0xc8, 0xdf, 0x67, 0x09, 0x35, 0xec, 0xb0, 0xe8,
-	0x78, 0x3b, 0x50, 0xa3, 0x23, 0x33, 0x54, 0x3a, 0x35, 0xd3, 0x3a, 0xd9, 0x24, 0x5b, 0xb5, 0x4e,
-	0xfd, 0xe2, 0xb4, 0xb5, 0xe6, 0x6c, 0xf7, 0x92, 0x44, 0x33, 0xc4, 0x77, 0x46, 0xa7, 0x92, 0xf7,
-	0x16, 0x50, 0xef, 0x0d, 0x54, 0xad, 0x76, 0xfd, 0xde, 0x26, 0xd9, 0x5a, 0x6d, 0x3f, 0x8b, 0x6e,
-	0x9c, 0x34, 0xb2, 0x56, 0x9d, 0xfb, 0x67, 0x97, 0x1b, 0x95, 0x9e, 0xa3, 0xed, 0x3e, 0xfe, 0x72,
-	0x75, 0xd2, 0x5c, 0x08, 0x86, 0x0d, 0x58, 0x5f, 0xca, 0xd6, 0x63, 0x98, 0x29, 0x89, 0x2c, 0x9c,
-	0x13, 0x80, 0x2e, 0xf2, 0x7d, 0xab, 0xe9, 0xbd, 0x82, 0x2a, 0x32, 0x99, 0x30, 0xfd, 0xd7, 0xbc,
-	0x0e, 0xe7, 0xbd, 0x05, 0x10, 0xa9, 0xec, 0x53, 0xa1, 0x46, 0xd2, 0x14, 0x81, 0x6b, 0x9d, 0x97,
-	0x79, 0x9a, 0x1f, 0x97, 0x1b, 0x4f, 0x2d, 0x13, 0x93, 0xe3, 0x28, 0x55, 0xb1, 0xa0, 0x66, 0x18,
-	0x1d, 0x48, 0x73, 0x71, 0xda, 0x02, 0x27, 0x79, 0x20, 0x4d, 0xaf, 0x26, 0x52, 0xb9, 0x57, 0xb0,
-	0x0b, 0x2d, 0x3a, 0x29, 0xb5, 0x56, 0xfe, 0x47, 0x8b, 0x4e, 0xac, 0xd6, 0xee, 0x6a, 0xfe, 0x0f,
-	0x5c, 0xc8, 0xf0, 0x03, 0x78, 0x8b, 0x21, 0xcb, 0xd9, 0xbd, 0x7d, 0xa8, 0x3a, 0x2b, 0xf2, 0xef,
-	0x56, 0x8e, 0xda, 0xfe, 0x49, 0x60, 0xa5, 0x8b, 0xdc, 0x93, 0xf0, 0xe8, 0xda, 0xf2, 0x9b, 0xb7,
-	0x2c, 0x6d, 0x69, 0x19, 0x7e, 0xfb, 0xee, 0xd8, 0x3f, 0xe1, 0xfb, 0xf0, 0xb0, 0x5c, 0xda, 0xf3,
-	0xdb, 0xe9, 0x0e, 0xe6, 0xb7, 0xee, 0x04, 0x2b, 0x0d, 0xfc, 0x07, 0x9f, 0xaf, 0x4e, 0x9a, 0xa4,
-	0x73, 0x78, 0x36, 0x0b, 0xc8, 0xf9, 0x2c, 0x20, 0xbf, 0x66, 0x01, 0xf9, 0x3a, 0x0f, 0x2a, 0xe7,
-	0xf3, 0xa0, 0xf2, 0x7d, 0x1e, 0x54, 0x3e, 0xee, 0xf0, 0xd4, 0x0c, 0x47, 0x47, 0xd1, 0x40, 0x89,
-	0xd8, 0x29, 0x7f, 0xa2, 0x53, 0xa6, 0xcb, 0x22, 0x9e, 0x2c, 0x1f, 0x8d, 0x99, 0x66, 0x0c, 0x8f,
-	0xaa, 0xc5, 0xc5, 0xbc, 0xfe, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x69, 0xf2, 0x1e, 0x70, 0xe4, 0x03,
-	0x00, 0x00,
+	// 490 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0x31, 0x6b, 0xdb, 0x40,
+	0x18, 0xf5, 0xa5, 0xad, 0x83, 0x2f, 0xa6, 0x85, 0xc3, 0x25, 0xb6, 0x06, 0x25, 0x15, 0xb4, 0x04,
+	0x17, 0x4b, 0x8d, 0x0b, 0x81, 0x7a, 0x29, 0x75, 0xba, 0x64, 0x30, 0x04, 0x85, 0x2e, 0x5d, 0xc2,
+	0xc5, 0xfa, 0x7a, 0x16, 0xb1, 0xee, 0xc4, 0xdd, 0xc9, 0xc4, 0x5b, 0xe9, 0x2f, 0xc8, 0xdc, 0x5f,
+	0x91, 0x21, 0x3f, 0x22, 0x4b, 0x21, 0x64, 0x2a, 0x1d, 0x42, 0xb1, 0x87, 0xfc, 0x8d, 0x22, 0xe9,
+	0x14, 0xc7, 0xa6, 0x89, 0xb3, 0xe9, 0xdd, 0xbd, 0xf7, 0xbe, 0xf7, 0x3d, 0x71, 0xd8, 0x51, 0x09,
+	0x97, 0xa1, 0x02, 0x4f, 0x8b, 0x63, 0xe0, 0x7d, 0xc1, 0x47, 0x20, 0x35, 0x48, 0x6f, 0xb4, 0xed,
+	0xe9, 0x13, 0x37, 0x96, 0x42, 0x0b, 0xd2, 0x30, 0x1c, 0x77, 0x9e, 0xe3, 0x8e, 0xb6, 0xad, 0xf5,
+	0xbe, 0x50, 0x91, 0x50, 0x5e, 0xa4, 0x58, 0x2a, 0x89, 0x14, 0xcb, 0x35, 0x56, 0x23, 0xbf, 0x38,
+	0xcc, 0x90, 0x97, 0x03, 0x73, 0x55, 0x63, 0x82, 0x89, 0xfc, 0x3c, 0xfd, 0x32, 0xa7, 0x6f, 0xee,
+	0x0f, 0x12, 0x53, 0x49, 0x23, 0xa3, 0x76, 0x7e, 0x22, 0xfc, 0xa2, 0xa7, 0xd8, 0x97, 0x38, 0xa0,
+	0x1a, 0xf6, 0xb3, 0x1b, 0xb2, 0x83, 0x2b, 0x34, 0xd1, 0x03, 0x21, 0x43, 0x3d, 0xae, 0xa3, 0x4d,
+	0xb4, 0x55, 0xe9, 0xd6, 0xaf, 0xce, 0x5b, 0x35, 0x33, 0xf6, 0x53, 0x10, 0x48, 0x50, 0xea, 0x40,
+	0xcb, 0x90, 0x33, 0x7f, 0x46, 0x25, 0x1f, 0x71, 0x39, 0xf7, 0xae, 0xaf, 0x6c, 0xa2, 0xad, 0xb5,
+	0xf6, 0x2b, 0xf7, 0xde, 0x4d, 0xdd, 0x7c, 0x54, 0xf7, 0xe9, 0xc5, 0xf5, 0x46, 0xc9, 0x37, 0xb2,
+	0xce, 0xf3, 0x1f, 0x37, 0x67, 0xcd, 0x99, 0xa1, 0xd3, 0xc0, 0xeb, 0x0b, 0xd9, 0x7c, 0x50, 0xb1,
+	0xe0, 0x0a, 0x9c, 0x53, 0x84, 0x71, 0x4f, 0xb1, 0xdd, 0xdc, 0x93, 0xbc, 0xc3, 0x65, 0x05, 0x3c,
+	0x00, 0xb9, 0x34, 0xaf, 0xe1, 0x91, 0x5d, 0x5c, 0xa6, 0x91, 0x48, 0xb8, 0xce, 0xc2, 0x56, 0xba,
+	0x6f, 0xd3, 0x24, 0x7f, 0xae, 0x37, 0x5e, 0xe6, 0x2a, 0x15, 0x1c, 0xbb, 0xa1, 0xf0, 0x22, 0xaa,
+	0x07, 0xee, 0x1e, 0xd7, 0x57, 0xe7, 0x2d, 0x6c, 0xec, 0xf6, 0xb8, 0xf6, 0x8d, 0xb4, 0xb3, 0x96,
+	0x06, 0x36, 0x8e, 0x4e, 0x0d, 0x93, 0x59, 0xa2, 0xdb, 0xa0, 0x1f, 0xb2, 0x7e, 0x0f, 0x60, 0xf8,
+	0xed, 0x33, 0x0c, 0x81, 0x51, 0x0d, 0xa4, 0x8e, 0x57, 0xfb, 0x12, 0xa8, 0x16, 0x26, 0xad, 0x5f,
+	0xc0, 0x4e, 0x35, 0xf5, 0x2b, 0x90, 0x59, 0xff, 0xae, 0xb4, 0x70, 0x6d, 0xff, 0x5a, 0xc1, 0x4f,
+	0x7a, 0x8a, 0x11, 0x8e, 0xab, 0x73, 0xbf, 0xae, 0xf9, 0x40, 0xe5, 0x0b, 0x55, 0x5a, 0xed, 0xc7,
+	0x73, 0x8b, 0xb9, 0xe4, 0x10, 0xaf, 0x16, 0x95, 0xbf, 0x7e, 0x58, 0x6e, 0x68, 0x56, 0xeb, 0x51,
+	0xb4, 0xdb, 0x01, 0x1c, 0x57, 0xe7, 0xba, 0x5a, 0xb2, 0xd0, 0x5d, 0xee, 0xb2, 0x85, 0xfe, 0x57,
+	0xa4, 0xf5, 0xec, 0xfb, 0xcd, 0x59, 0x13, 0x75, 0xf7, 0x2f, 0x26, 0x36, 0xba, 0x9c, 0xd8, 0xe8,
+	0xef, 0xc4, 0x46, 0xa7, 0x53, 0xbb, 0x74, 0x39, 0xb5, 0x4b, 0xbf, 0xa7, 0x76, 0xe9, 0xeb, 0x0e,
+	0x0b, 0xf5, 0x20, 0x39, 0x72, 0xfb, 0x22, 0xf2, 0x8c, 0xfd, 0x90, 0x8e, 0x41, 0x16, 0xc0, 0x3b,
+	0x59, 0x7c, 0x62, 0x7a, 0x1c, 0x83, 0x3a, 0x2a, 0x67, 0xef, 0xeb, 0xfd, 0xbf, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x98, 0xb6, 0xd1, 0xc6, 0x12, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -271,6 +352,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	// Convert
 	Convert(ctx context.Context, in *MsgConvert, opts ...grpc.CallOption) (*MsgConvertResponse, error)
+	SelfDelegate(ctx context.Context, in *MsgSelfDelegate, opts ...grpc.CallOption) (*MsgSelfDelegateResponse, error)
 }
 
 type msgClient struct {
@@ -299,6 +381,15 @@ func (c *msgClient) Convert(ctx context.Context, in *MsgConvert, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *msgClient) SelfDelegate(ctx context.Context, in *MsgSelfDelegate, opts ...grpc.CallOption) (*MsgSelfDelegateResponse, error) {
+	out := new(MsgSelfDelegateResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.v1.Msg/SelfDelegate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
@@ -306,6 +397,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	// Convert
 	Convert(context.Context, *MsgConvert) (*MsgConvertResponse, error)
+	SelfDelegate(context.Context, *MsgSelfDelegate) (*MsgSelfDelegateResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -317,6 +409,9 @@ func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateP
 }
 func (*UnimplementedMsgServer) Convert(ctx context.Context, req *MsgConvert) (*MsgConvertResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Convert not implemented")
+}
+func (*UnimplementedMsgServer) SelfDelegate(ctx context.Context, req *MsgSelfDelegate) (*MsgSelfDelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelfDelegate not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -359,6 +454,24 @@ func _Msg_Convert_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SelfDelegate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSelfDelegate)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SelfDelegate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.tokenconverter.v1.Msg/SelfDelegate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SelfDelegate(ctx, req.(*MsgSelfDelegate))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.tokenconverter.v1.Msg",
@@ -371,6 +484,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Convert",
 			Handler:    _Msg_Convert_Handler,
+		},
+		{
+			MethodName: "SelfDelegate",
+			Handler:    _Msg_SelfDelegate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -461,19 +578,9 @@ func (m *MsgConvert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	{
-		size := m.MaxAmount.Size()
+		size := m.Amount.Size()
 		i -= size
-		if _, err := m.MaxAmount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size := m.MinAmount.Size()
-		i -= size
-		if _, err := m.MinAmount.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintTx(dAtA, i, uint64(size))
@@ -510,16 +617,59 @@ func (m *MsgConvertResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	{
-		size := m.Amount.Size()
-		i -= size
-		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTx(dAtA, i, uint64(size))
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSelfDelegate) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
 	}
-	i--
-	dAtA[i] = 0xa
+	return dAtA[:n], nil
+}
+
+func (m *MsgSelfDelegate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSelfDelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSelfDelegateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSelfDelegateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSelfDelegateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -568,9 +718,7 @@ func (m *MsgConvert) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = m.MinAmount.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = m.MaxAmount.Size()
+	l = m.Amount.Size()
 	n += 1 + l + sovTx(uint64(l))
 	return n
 }
@@ -581,8 +729,28 @@ func (m *MsgConvertResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.Amount.Size()
-	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgSelfDelegate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSelfDelegateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -820,7 +988,7 @@ func (m *MsgConvert) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinAmount", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -848,41 +1016,7 @@ func (m *MsgConvert) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.MinAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxAmount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.MaxAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -936,9 +1070,59 @@ func (m *MsgConvertResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgConvertResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSelfDelegate) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSelfDelegate: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSelfDelegate: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -966,10 +1150,58 @@ func (m *MsgConvertResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
 				return err
 			}
-			iNdEx = postIndex
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSelfDelegateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSelfDelegateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSelfDelegateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
