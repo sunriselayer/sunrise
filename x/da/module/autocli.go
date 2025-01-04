@@ -17,6 +17,21 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "PublishedData",
+					Use:       "published-data",
+					Short:     "Shows published data",
+				},
+				{
+					RpcMethod: "AllPublishedData",
+					Use:       "all-published-data",
+					Short:     "Shows all published data",
+				},
+				{
+					RpcMethod: "ZkpProofThreshold",
+					Use:       "zkp-proof-threshold",
+					Short:     "Shows threshold number of proof",
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -29,22 +44,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "PublishData",
-					Use:            "publish-data",
-					Short:          "Send a publish-data tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "PublishData",
+					Skip:      true,
 				},
 				{
-					RpcMethod:      "ChallengeForFraud",
-					Use:            "challenge-for-fraud",
-					Short:          "Send a challenge-for-fraud tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "ChallengeForFraud",
+					Skip:      true,
 				},
 				{
-					RpcMethod:      "SubmitProof",
-					Use:            "submit-proof",
-					Short:          "Send a submit-proof tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "SubmitProof",
+					Skip:      true,
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
