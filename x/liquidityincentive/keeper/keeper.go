@@ -23,7 +23,7 @@ type Keeper struct {
 	Schema collections.Schema
 	Params collections.Item[types.Params]
 
-	authKeeper          types.AccountKeeper
+	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
 	stakingKeeper       types.StakingKeeper
 	liquidityPoolKeeper types.LiquidityPoolKeeper
@@ -53,7 +53,7 @@ func NewKeeper(
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 
-		authKeeper:          authKeeper,
+		accountKeeper:       authKeeper,
 		bankKeeper:          bankKeeper,
 		stakingKeeper:       stakingKeeper,
 		liquidityPoolKeeper: liquidityPoolKeeper,
