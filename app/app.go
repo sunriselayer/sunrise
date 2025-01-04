@@ -54,6 +54,8 @@ import (
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+
+	"github.com/sunriselayer/sunrise/app/mint"
 )
 
 const (
@@ -124,6 +126,7 @@ func init() {
 func AppConfig() depinject.Config {
 	return depinject.Configs(
 		appConfig,
+		depinject.Provide(mint.ProvideMintFn),
 	)
 }
 
