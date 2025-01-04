@@ -1,7 +1,7 @@
 package types
 
-func NewMsgDecreaseLiquidity(creator string) *MsgDecreaseLiquidity {
+func NewMsgDecreaseLiquidity(sender string) *MsgDecreaseLiquidity {
 	return &MsgDecreaseLiquidity{
-		Creator: creator,
+		Sender: sender,
 	}
 }

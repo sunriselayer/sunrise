@@ -1,7 +1,7 @@
 package types
 
-func NewMsgConvert(creator string) *MsgConvert {
+func NewMsgConvert(sender string) *MsgConvert {
 	return &MsgConvert{
-		Creator: creator,
+		Sender: sender,
 	}
 }

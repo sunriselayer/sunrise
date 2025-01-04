@@ -14,7 +14,7 @@ func MsgVoteGaugeFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgVoteGa
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgVoteGauge{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the VoteGauge simulation

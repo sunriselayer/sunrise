@@ -1,7 +1,7 @@
 package types
 
-func NewMsgPublishData(creator string) *MsgPublishData {
+func NewMsgPublishData(sender string) *MsgPublishData {
 	return &MsgPublishData{
-		Creator: creator,
+		Sender: sender,
 	}
 }

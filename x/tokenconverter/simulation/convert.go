@@ -14,7 +14,7 @@ func MsgConvertFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgConvert]
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgConvert{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the Convert simulation

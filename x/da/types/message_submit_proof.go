@@ -1,7 +1,7 @@
 package types
 
-func NewMsgSubmitProof(creator string) *MsgSubmitProof {
+func NewMsgSubmitProof(sender string) *MsgSubmitProof {
 	return &MsgSubmitProof{
-		Creator: creator,
+		Sender: sender,
 	}
 }

@@ -14,7 +14,7 @@ func MsgCreatePositionFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgC
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgCreatePosition{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the CreatePosition simulation

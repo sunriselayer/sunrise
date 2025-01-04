@@ -10,6 +10,9 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
+
+	// should be removed
+	"cosmossdk.io/core/store"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}
@@ -35,6 +38,9 @@ type ModuleInputs struct {
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
 	SlashingKeeper types.SlashingKeeper
+
+	// should be removed
+	StoreService store.KVStoreService
 }
 
 type ModuleOutputs struct {
@@ -58,6 +64,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.BankKeeper,
 		in.StakingKeeper,
 		in.SlashingKeeper,
+		in.StoreService,
 	)
 	m := NewAppModule(in.Cdc, k)
 

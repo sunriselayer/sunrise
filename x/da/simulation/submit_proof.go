@@ -14,7 +14,7 @@ func MsgSubmitProofFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSubm
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgSubmitProof{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the SubmitProof simulation

@@ -9,7 +9,7 @@ import (
 )
 
 func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 

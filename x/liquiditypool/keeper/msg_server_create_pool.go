@@ -9,7 +9,7 @@ import (
 )
 
 func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+	if _, err := k.addressCodec.StringToBytes(msg.Authority); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 

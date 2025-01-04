@@ -14,7 +14,7 @@ func MsgSwapExactAmountOutFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgSwapExactAmountOut{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the SwapExactAmountOut simulation

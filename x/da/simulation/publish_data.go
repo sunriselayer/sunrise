@@ -14,7 +14,7 @@ func MsgPublishDataFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgPubl
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgPublishData{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the PublishData simulation

@@ -9,7 +9,7 @@ import (
 )
 
 func (k msgServer) SwapExactAmountOut(ctx context.Context, msg *types.MsgSwapExactAmountOut) (*types.MsgSwapExactAmountOutResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 

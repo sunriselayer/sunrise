@@ -1,7 +1,7 @@
 package types
 
-func NewMsgCreatePosition(creator string) *MsgCreatePosition {
+func NewMsgCreatePosition(sender string) *MsgCreatePosition {
 	return &MsgCreatePosition{
-		Creator: creator,
+		Sender: sender,
 	}
 }

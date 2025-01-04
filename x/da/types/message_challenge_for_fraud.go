@@ -1,7 +1,7 @@
 package types
 
-func NewMsgChallengeForFraud(creator string) *MsgChallengeForFraud {
+func NewMsgChallengeForFraud(sender string) *MsgChallengeForFraud {
 	return &MsgChallengeForFraud{
-		Creator: creator,
+		Sender: sender,
 	}
 }

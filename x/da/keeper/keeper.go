@@ -9,6 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
+
+	// should be removed
+	"cosmossdk.io/core/store"
 )
 
 type Keeper struct {
@@ -26,6 +29,9 @@ type Keeper struct {
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
 	SlashingKeeper types.SlashingKeeper
+
+	// should be removed
+	storeService store.KVStoreService
 }
 
 func NewKeeper(
@@ -36,6 +42,8 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	slashingKeeper types.SlashingKeeper,
+	// should be removed
+	storeService store.KVStoreService,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -54,6 +62,9 @@ func NewKeeper(
 		SlashingKeeper: slashingKeeper,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+
+		// should be removed
+		storeService: storeService,
 	}
 
 	schema, err := sb.Build()

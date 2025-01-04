@@ -9,7 +9,7 @@ import (
 )
 
 func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (*types.MsgPublishDataResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 

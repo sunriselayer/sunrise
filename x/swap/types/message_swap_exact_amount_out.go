@@ -1,7 +1,7 @@
 package types
 
-func NewMsgSwapExactAmountOut(creator string) *MsgSwapExactAmountOut {
+func NewMsgSwapExactAmountOut(sender string) *MsgSwapExactAmountOut {
 	return &MsgSwapExactAmountOut{
-		Creator: creator,
+		Sender: sender,
 	}
 }

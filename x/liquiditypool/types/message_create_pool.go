@@ -1,7 +1,7 @@
 package types
 
-func NewMsgCreatePool(creator string) *MsgCreatePool {
+func NewMsgCreatePool(authority string) *MsgCreatePool {
 	return &MsgCreatePool{
-		Creator: creator,
+		Authority: authority,
 	}
 }
