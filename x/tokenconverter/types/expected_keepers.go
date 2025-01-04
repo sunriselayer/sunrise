@@ -3,10 +3,16 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	banktypes "cosmossdk.io/x/bank/types"
+	stakingtypes "cosmossdk.io/x/staking/types"
 )
+
+type AccountKeeper interface {
+	GetModuleAddress(moduleName string) sdk.AccAddress
+}
 
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
@@ -35,4 +41,13 @@ type BankKeeper interface {
 
 	DelegateCoins(ctx context.Context, delegatorAddr, moduleAccAddr sdk.AccAddress, amt sdk.Coins) error
 	UndelegateCoins(ctx context.Context, moduleAccAddr, delegatorAddr sdk.AccAddress, amt sdk.Coins) error
+}
+
+// StakingKeeper is expected keeper for staking module
+type StakingKeeper interface {
+	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
+	Delegate(
+		ctx context.Context, delAddr sdk.AccAddress, bondAmt math.Int, tokenSrc stakingtypes.BondStatus,
+		validator stakingtypes.Validator, subtractAccount bool,
+	) (newShares math.LegacyDec, err error)
 }

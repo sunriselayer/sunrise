@@ -57,7 +57,12 @@ message MsgConvertResponse {}
 // MsgSelfDelegate
 message MsgSelfDelegate {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgSelfDelegateResponse
