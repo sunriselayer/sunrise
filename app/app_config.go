@@ -130,6 +130,7 @@ var (
 					// NOTE: staking module is required if HistoricalEntries param > 0
 					BeginBlockers: []string{
 						minttypes.ModuleName,
+						liquidityincentivemoduletypes.ModuleName,
 						distrtypes.ModuleName,
 						pooltypes.ModuleName,
 						slashingtypes.ModuleName,
@@ -141,7 +142,6 @@ var (
 						damoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
-						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
