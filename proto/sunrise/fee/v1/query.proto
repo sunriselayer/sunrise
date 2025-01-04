@@ -11,7 +11,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunrise/fee/params";
+    option (google.api.http).get = "/sunrise/fee/v1/params";
   }
 }
 
