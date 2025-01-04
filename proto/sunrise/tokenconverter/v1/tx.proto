@@ -41,12 +41,7 @@ message MsgConvert {
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string min_amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-  string max_amount = 3 [
+  string amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
@@ -54,10 +49,4 @@ message MsgConvert {
 }
 
 // MsgConvertResponse
-message MsgConvertResponse {
-  string amount = 1 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
+message MsgConvertResponse {}

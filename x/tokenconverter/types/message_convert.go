@@ -1,7 +1,13 @@
 package types
 
-func NewMsgConvert(sender string) *MsgConvert {
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgConvert(sender string, minAmount math.Int, maxAmount math.Int) *MsgConvert {
 	return &MsgConvert{
-		Sender: sender,
+		Sender:    sender,
+		MinAmount: minAmount,
+		MaxAmount: maxAmount,
 	}
 }
