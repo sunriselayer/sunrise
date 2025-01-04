@@ -1,7 +1,8 @@
 package types
 
-func NewMsgClaimRewards(sender string) *MsgClaimRewards {
+func NewMsgClaimRewards(sender string, positionIds []uint64) *MsgClaimRewards {
 	return &MsgClaimRewards{
-		Sender: sender,
+		Sender:      sender,
+		PositionIds: positionIds,
 	}
 }
