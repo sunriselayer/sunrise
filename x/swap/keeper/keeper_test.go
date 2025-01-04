@@ -14,9 +14,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	module "github.com/sunriselayer/sunrise/x/swap/module"
+	swaptestutil "github.com/sunriselayer/sunrise/x/swap/testutil"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
@@ -59,5 +61,23 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+	}
+}
+
+type SwapMocks struct {
+	AcctKeeper          *swaptestutil.MockAccountKeeper
+	BankKeeper          *swaptestutil.MockBankKeeper
+	TransferKeeper      *swaptestutil.MockTransferKeeper
+	LiquiditypoolKeeper *swaptestutil.MockLiquidityPoolKeeper
+}
+
+func getMocks(t *testing.T) SwapMocks {
+
+	ctrl := gomock.NewController(t)
+	return SwapMocks{
+		AcctKeeper:          swaptestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:          swaptestutil.NewMockBankKeeper(ctrl),
+		TransferKeeper:      swaptestutil.NewMockTransferKeeper(ctrl),
+		LiquiditypoolKeeper: swaptestutil.NewMockLiquidityPoolKeeper(ctrl),
 	}
 }
