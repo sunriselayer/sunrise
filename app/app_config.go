@@ -110,6 +110,13 @@ var (
 		// We allow the following module accounts to receive funds:
 		// govtypes.ModuleName
 		// pooltypes.ModuleName
+
+		damoduletypes.ModuleName,
+		tokenconvertermoduletypes.ModuleName,
+		liquiditypoolmoduletypes.ModuleName,
+		liquidityincentivemoduletypes.ModuleName,
+		swapmoduletypes.ModuleName,
+		feemoduletypes.ModuleName,
 	}
 
 	// application configuration (used by depinject)
