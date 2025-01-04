@@ -14,6 +14,7 @@ func (k msgServer) ChallengeForFraud(ctx context.Context, msg *types.MsgChalleng
 	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
+	// end validation
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 

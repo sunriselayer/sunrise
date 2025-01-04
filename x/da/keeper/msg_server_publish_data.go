@@ -15,6 +15,11 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
+	if msg.ParityShardCount >= uint64(len(msg.ShardDoubleHashes)) {
+		return nil, types.ErrParityShardCountGTETotal
+	}
+	// end validation
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	params, err := k.Params.Get(ctx)
