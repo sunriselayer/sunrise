@@ -11,7 +11,7 @@ import (
 )
 
 func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	bz := store.Get(types.GetFaultCounterKey(operator))
 	if bz == nil {
 		return 0
@@ -21,19 +21,19 @@ func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) ui
 }
 
 func (k Keeper) SetFaultCounter(ctx context.Context, operator sdk.ValAddress, faultCounter uint64) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	store.Set(types.GetFaultCounterKey(operator), sdk.Uint64ToBigEndian(faultCounter))
 }
 
 func (k Keeper) DeleteFaultCounter(ctx context.Context, operator sdk.ValAddress) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	store.Delete(types.GetFaultCounterKey(operator))
 }
 
 func (k Keeper) IterateFaultCounters(ctx context.Context,
 	handler func(operator sdk.ValAddress, faultCount uint64) (stop bool),
 ) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	prefixStore := prefix.NewStore(storeAdapter, types.FaultCounterKeyPrefix)
 	iter := storetypes.KVStorePrefixIterator(prefixStore, []byte{})
 	defer iter.Close()

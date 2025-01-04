@@ -46,7 +46,6 @@ func initFixture(t *testing.T) *fixture {
 		nil,
 		nil,
 		nil,
-		env.KVStoreService,
 	)
 
 	// Initialize params

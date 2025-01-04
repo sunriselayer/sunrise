@@ -12,7 +12,7 @@ import (
 )
 
 func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	bz := store.Get(types.PublishedDataKey(metadataUri))
 	if bz == nil {
 		return data
@@ -24,7 +24,7 @@ func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data 
 
 // SetParams set the params
 func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) error {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	bz, err := k.cdc.Marshal(&data)
 	if err != nil {
 		return err
@@ -40,13 +40,13 @@ func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) 
 }
 
 func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	store.Delete(types.PublishedDataKey(data.MetadataUri))
 	store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
 }
 
 func (k Keeper) GetAllPublishedData(ctx context.Context) []types.PublishedData {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	iter := storetypes.KVStorePrefixIterator(store, types.PublishedDataKeyPrefix)
 	defer iter.Close()
 
@@ -60,7 +60,7 @@ func (k Keeper) GetAllPublishedData(ctx context.Context) []types.PublishedData {
 }
 
 func (k Keeper) GetUnverifiedDataBeforeTime(ctx sdk.Context, timestamp uint64) ([]types.PublishedData, error) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	prefixStore := prefix.NewStore(store, types.UnverifiedDataByTimeKeyPrefix)
 
 	iterator := prefixStore.Iterator(nil, sdk.Uint64ToBigEndian(timestamp))

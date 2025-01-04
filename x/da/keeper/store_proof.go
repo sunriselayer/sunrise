@@ -11,7 +11,7 @@ import (
 )
 
 func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender string) (data types.Proof) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	bz := store.Get(types.ProofKey(metadataUri, sender))
 	if bz == nil {
 		return data
@@ -23,7 +23,7 @@ func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender string)
 
 // SetParams set the params
 func (k Keeper) SetProof(ctx context.Context, data types.Proof) error {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	bz, err := k.cdc.Marshal(&data)
 	if err != nil {
 		return err
@@ -33,12 +33,12 @@ func (k Keeper) SetProof(ctx context.Context, data types.Proof) error {
 }
 
 func (k Keeper) DeleteProof(ctx sdk.Context, metadataUri string, sender string) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	store.Delete(types.ProofKey(metadataUri, sender))
 }
 
 func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) []types.Proof {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	iter := storetypes.KVStorePrefixIterator(store, append(types.ProofKeyPrefix, metadataUri...))
 	defer iter.Close()
 
@@ -52,7 +52,7 @@ func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) []types.Proof {
 }
 
 func (k Keeper) GetAllProofs(ctx context.Context) []types.Proof {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	iter := storetypes.KVStorePrefixIterator(store, types.ProofKeyPrefix)
 	defer iter.Close()
 
