@@ -45,7 +45,7 @@ func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) {
 	store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
 }
 
-func (k Keeper) GetAllPublishedData(ctx sdk.Context) []types.PublishedData {
+func (k Keeper) GetAllPublishedData(ctx context.Context) []types.PublishedData {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	iter := storetypes.KVStorePrefixIterator(store, types.PublishedDataKeyPrefix)
 	defer iter.Close()

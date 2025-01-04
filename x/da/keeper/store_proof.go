@@ -51,7 +51,7 @@ func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) []types.Proof {
 	return data
 }
 
-func (k Keeper) GetAllProofs(ctx sdk.Context) []types.Proof {
+func (k Keeper) GetAllProofs(ctx context.Context) []types.Proof {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	iter := storetypes.KVStorePrefixIterator(store, types.ProofKeyPrefix)
 	defer iter.Close()
