@@ -22,6 +22,11 @@ type Keeper struct {
 
 	Schema collections.Schema
 	Params collections.Item[types.Params]
+
+	authKeeper          types.AccountKeeper
+	bankKeeper          types.BankKeeper
+	stakingKeeper       types.StakingKeeper
+	liquidityPoolKeeper types.LiquidityPoolKeeper
 }
 
 func NewKeeper(
@@ -29,7 +34,10 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	addressCodec address.Codec,
 	authority []byte,
-
+	authKeeper types.AccountKeeper,
+	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
+	liquidityPoolKeeper types.LiquidityPoolKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -44,6 +52,11 @@ func NewKeeper(
 		authority:    authority,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+
+		authKeeper:          authKeeper,
+		bankKeeper:          bankKeeper,
+		stakingKeeper:       stakingKeeper,
+		liquidityPoolKeeper: liquidityPoolKeeper,
 	}
 
 	schema, err := sb.Build()

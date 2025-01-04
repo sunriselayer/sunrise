@@ -17,6 +17,40 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "Epochs",
+					Use:       "list-epochs",
+					Short:     "List all epoch",
+				},
+				{
+					RpcMethod:      "Epoch",
+					Use:            "show-epoch [id]",
+					Short:          "Shows a epoch by id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod:      "Gauges",
+					Use:            "list-gauges [previous_epoch_id]",
+					Short:          "List all gauge",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
+				},
+				{
+					RpcMethod:      "Gauge",
+					Use:            "show-gauge [previous_epoch_id] [pool_id]",
+					Short:          "Shows a gauge",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
+				},
+				{
+					RpcMethod: "Votes",
+					Use:       "list-votes",
+					Short:     "List all gauge votes",
+				},
+				{
+					RpcMethod:      "Vote",
+					Use:            "show-vote [address]",
+					Short:          "Shows a gauge vote",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

@@ -49,11 +49,11 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
+		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,
 		SlashingKeeper: slashingKeeper,
-
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
 
 	schema, err := sb.Build()

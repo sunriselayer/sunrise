@@ -17,3 +17,14 @@ const (
 
 // ParamsKey is the prefix to retrieve all Params
 var ParamsKey = collections.NewPrefix("p_liquidityincentive")
+
+// TODO: use collections
+func KeyPrefix(p string) []byte {
+	return []byte(p)
+}
+
+const (
+	EpochKey      = "Epoch/value/"
+	EpochCountKey = "Epoch/count/"
+	VoteKeyPrefix = "Vote/value"
+)

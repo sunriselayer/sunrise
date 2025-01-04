@@ -14,6 +14,8 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var (
@@ -113,12 +115,14 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block.
 // The begin block implementation is optional.
-func (am AppModule) BeginBlock(_ context.Context) error {
-	return nil
+func (am AppModule) BeginBlock(ctx context.Context) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return am.keeper.BeginBlocker(sdkCtx)
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block.
 // The end block implementation is optional.
-func (am AppModule) EndBlock(_ context.Context) error {
-	return nil
+func (am AppModule) EndBlock(ctx context.Context) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return am.keeper.EndBlocker(sdkCtx)
 }
