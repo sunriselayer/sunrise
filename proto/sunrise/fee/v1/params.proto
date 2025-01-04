@@ -13,7 +13,7 @@ message Params {
   string fee_denom = 1;
   string burn_ratio = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
   repeated string bypass_denoms = 3;
