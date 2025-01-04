@@ -1,19 +1,54 @@
 syntax = "proto3";
 package sunrise.swap.v1;
 
-import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
+import "sunrise/swap/v1/in_flight_packet.proto";
 import "sunrise/swap/v1/params.proto";
+import "sunrise/swap/v1/route.proto";
 
-option go_package = "sunrise/x/swap/types";
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 // Query defines the gRPC querier service.
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sunrise/swap/v1/params";
+  }
+
+  // IncomingInFlightPacket
+  rpc IncomingInFlightPacket(QueryIncomingInFlightPacketRequest) returns (QueryIncomingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunrise/swap/v1/in-flight-packets/incoming/{src_port_id}/{src_channel_id}/{sequence}";
+  }
+  // IncomingInFlightPackets
+  rpc IncomingInFlightPackets(QueryIncomingInFlightPacketsRequest) returns (QueryIncomingInFlightPacketsResponse) {
+    option (google.api.http).get = "/sunrise/swap/v1/in-flight-packets/incoming";
+  }
+
+  // OutgoingInFlightPacket
+  rpc OutgoingInFlightPacket(QueryOutgoingInFlightPacketRequest) returns (QueryOutgoingInFlightPacketResponse) {
+    option (google.api.http).get = "/sunrise/swap/v1/in-flight-packets/outgoing/{src_port_id}/{src_channel_id}/{sequence}";
+  }
+  // OutgoingInFlightPackets
+  rpc OutgoingInFlightPackets(QueryOutgoingInFlightPacketsRequest) returns (QueryOutgoingInFlightPacketsResponse) {
+    option (google.api.http).get = "/sunrise/swap/v1/in-flight-packets/outgoing";
+  }
+
+  // CalculationSwapExactAmountIn
+  rpc CalculationSwapExactAmountIn(QueryCalculationSwapExactAmountInRequest) returns (QueryCalculationSwapExactAmountInResponse) {
+    option (google.api.http) = {
+      post: "/sunrise/swap/v1/calculations/swap-exact-amount-in"
+      body: "*"
+    };
+  }
+  // CalculationSwapExactAmountOut
+  rpc CalculationSwapExactAmountOut(QueryCalculationSwapExactAmountOutRequest) returns (QueryCalculationSwapExactAmountOutResponse) {
+    option (google.api.http) = {
+      post: "/sunrise/swap/v1/calculations/swap-exact-amount-out"
+      body: "*"
+    };
   }
 }
 
@@ -23,8 +58,95 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryIncomingInFlightPacketRequest
+message QueryIncomingInFlightPacketRequest {
+  string src_port_id = 1;
+  string src_channel_id = 2;
+  uint64 sequence = 3;
+}
+
+// QueryIncomingInFlightPacketResponse
+message QueryIncomingInFlightPacketResponse {
+  IncomingInFlightPacket packet = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryIncomingInFlightPacketsRequest
+message QueryIncomingInFlightPacketsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryIncomingInFlightPacketsResponse
+message QueryIncomingInFlightPacketsResponse {
+  repeated IncomingInFlightPacket packets = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryOutgoingInFlightPacketRequest
+message QueryOutgoingInFlightPacketRequest {
+  string src_port_id = 1;
+  string src_channel_id = 2;
+  uint64 sequence = 3;
+}
+
+// QueryOutgoingInFlightPacketResponse
+message QueryOutgoingInFlightPacketResponse {
+  OutgoingInFlightPacket packet = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryOutgoingInFlightPacketsRequest
+message QueryOutgoingInFlightPacketsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryOutgoingInFlightPacketsResponse
+message QueryOutgoingInFlightPacketsResponse {
+  repeated OutgoingInFlightPacket packets = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryCalculationSwapExactAmountInRequest
+message QueryCalculationSwapExactAmountInRequest {
+  bool has_interface_fee = 1;
+  Route route = 2;
+  string amount_in = 3;
+}
+
+// QueryCalculationSwapExactAmountInResponse
+message QueryCalculationSwapExactAmountInResponse {
+  RouteResult result = 1 [(gogoproto.nullable) = false];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string amount_out = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryCalculationSwapExactAmountOutRequest
+message QueryCalculationSwapExactAmountOutRequest {
+  bool has_interface_fee = 1;
+  Route route = 2;
+  string amount_out = 3;
+}
+
+// QueryCalculationSwapExactAmountOutResponse
+message QueryCalculationSwapExactAmountOutResponse {
+  RouteResult result = 1 [(gogoproto.nullable) = false];
+  string interface_provider_fee = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string amount_in = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
   ];
 }

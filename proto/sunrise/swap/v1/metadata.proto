@@ -1,0 +1,58 @@
+syntax = "proto3";
+package sunrise.swap.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "sunrise/swap/v1/route.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+// PacketMetadata
+message PacketMetadata {
+  SwapMetadata swap = 1;
+}
+
+// ForwardMetadata
+message ForwardMetadata {
+  string receiver = 1;
+  string port = 2;
+  string channel = 3;
+  google.protobuf.Duration timeout = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+  uint32 retries = 5;
+  string next = 6;
+}
+
+// ExactAmountIn
+message ExactAmountIn {
+  string min_amount_out = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// ExactAmountOut
+message ExactAmountOut {
+  string amount_out = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  ForwardMetadata change = 2;
+}
+
+// SwapMetadata
+message SwapMetadata {
+  string interface_provider = 1;
+  Route route = 2;
+  // amount_strategy
+  oneof amount_strategy {
+    ExactAmountIn exact_amount_in = 3;
+    ExactAmountOut exact_amount_out = 4;
+  }
+  ForwardMetadata forward = 5;
+}

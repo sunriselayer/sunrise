@@ -1,17 +1,16 @@
 syntax = "proto3";
 package sunrise.swap.v1;
 
-import "amino/amino.proto";
 import "gogoproto/gogo.proto";
+import "sunrise/swap/v1/in_flight_packet.proto";
 import "sunrise/swap/v1/params.proto";
 
-option go_package = "sunrise/x/swap/types";
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 // GenesisState defines the swap module's genesis state.
 message GenesisState {
   // params defines all the parameters of the module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated IncomingInFlightPacket incoming_in_flight_packets = 2 [(gogoproto.nullable) = false];
+  repeated OutgoingInFlightPacket outgoing_in_flight_packets = 3 [(gogoproto.nullable) = false];
 }
