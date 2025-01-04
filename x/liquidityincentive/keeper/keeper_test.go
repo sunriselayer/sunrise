@@ -14,9 +14,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	module "github.com/sunriselayer/sunrise/x/liquidityincentive/module"
+	liquidityincentivetestutil "github.com/sunriselayer/sunrise/x/liquidityincentive/testutil"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -58,5 +60,23 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+	}
+}
+
+type LiquidityIncentiveMocks struct {
+	AcctKeeper          *liquidityincentivetestutil.MockAccountKeeper
+	BankKeeper          *liquidityincentivetestutil.MockBankKeeper
+	StakingKeeper       *liquidityincentivetestutil.MockStakingKeeper
+	LiquiditypoolKeeper *liquidityincentivetestutil.MockLiquidityPoolKeeper
+}
+
+func getMocks(t *testing.T) LiquidityIncentiveMocks {
+	ctrl := gomock.NewController(t)
+
+	return LiquidityIncentiveMocks{
+		AcctKeeper:          liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:          liquidityincentivetestutil.NewMockBankKeeper(ctrl),
+		StakingKeeper:       liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
+		LiquiditypoolKeeper: liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
 	}
 }

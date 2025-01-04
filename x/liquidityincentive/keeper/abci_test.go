@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
@@ -13,7 +13,6 @@ import (
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/app/consts"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -42,7 +41,10 @@ func TestCreateEpoch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			fixture := initFixture(t)
+			ctx := fixture.ctx
+			k := fixture.keeper
+			mocks := getMocks(t)
 
 			var (
 				numVals       = 10
@@ -73,13 +75,13 @@ func TestCreateEpoch(t *testing.T) {
 				t:        t,
 				valAddrs: valAddrs,
 				delAddrs: delAddrs,
-				ctx:      ctx,
+				ctx:      sdk.UnwrapSDKContext(ctx),
 				keeper:   &k,
 				mocks:    mocks,
 			}
 			tt.setup(suite)
 
-			err := k.CreateEpoch(ctx, 0, 1)
+			err := k.CreateEpoch(sdk.UnwrapSDKContext(ctx), 0, 1)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
@@ -143,7 +145,10 @@ func TestEndBlocker(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			fixture := initFixture(t)
+			ctx := fixture.ctx
+			k := fixture.keeper
+			mocks := getMocks(t)
 
 			var (
 				numVals       = 10
@@ -174,13 +179,13 @@ func TestEndBlocker(t *testing.T) {
 				t:        t,
 				valAddrs: valAddrs,
 				delAddrs: delAddrs,
-				ctx:      ctx,
+				ctx:      sdk.UnwrapSDKContext(ctx),
 				keeper:   &k,
 				mocks:    mocks,
 			}
 			tt.setup(suite)
 
-			err := k.EndBlocker(ctx)
+			err := k.EndBlocker(sdk.UnwrapSDKContext(ctx))
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
@@ -296,7 +301,10 @@ func TestBeginBlocker(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			fixture := initFixture(t)
+			ctx := fixture.ctx
+			k := fixture.keeper
+			mocks := getMocks(t)
 
 			var (
 				numVals       = 10
@@ -309,13 +317,13 @@ func TestBeginBlocker(t *testing.T) {
 				t:        t,
 				valAddrs: valAddrs,
 				delAddrs: delAddrs,
-				ctx:      ctx,
+				ctx:      sdk.UnwrapSDKContext(ctx),
 				keeper:   &k,
 				mocks:    mocks,
 			}
 			tt.setup(suite)
 
-			err := k.BeginBlocker(ctx)
+			err := k.BeginBlocker(sdk.UnwrapSDKContext(ctx))
 			if tt.expectError {
 				require.Error(t, err)
 			} else {

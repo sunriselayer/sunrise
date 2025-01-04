@@ -4,14 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
 	stakingtypes "cosmossdk.io/x/staking/types"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
@@ -26,7 +25,7 @@ type tallyFixture struct {
 	delAddrs []sdk.AccAddress
 	keeper   *keeper.Keeper
 	ctx      sdk.Context
-	mocks    keepertest.LiquidityIncentiveMocks
+	mocks    LiquidityIncentiveMocks
 }
 
 var (
@@ -161,7 +160,10 @@ func TestTally_Standard(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			k := f.keeper
+			mocks := getMocks(t)
 
 			var (
 				numVals       = 10
@@ -313,7 +315,11 @@ func TestTally_MultipleChoice(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			k := f.keeper
+			mocks := getMocks(t)
+
 			var (
 				numVals       = 10
 				numDelegators = 5
