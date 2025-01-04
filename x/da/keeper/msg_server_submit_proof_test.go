@@ -22,7 +22,7 @@ import (
 func TestMsgSubmitProof(t *testing.T) {
 	k, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
-	require.NoError(t, k.SetParams(ctx, params))
+	require.NoError(t, k.Params.Set(ctx, params))
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	preImage1 := big.NewInt(111)

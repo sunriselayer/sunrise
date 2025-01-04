@@ -6,7 +6,7 @@ func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) uint64 {
 	numActiveValidators := int64(0)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
-		k.Logger().Error(err.Error())
+		k.Logger.Error(err.Error())
 		return 0
 	}
 
@@ -15,7 +15,8 @@ func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) uint64 {
 		numActiveValidators++
 	}
 
-	params := k.GetParams(ctx)
+	// TODO: error handling
+	params, _ := k.Params.Get(ctx)
 	threshold := params.ReplicationFactor.MulInt64(int64(shardCount)).QuoInt64(int64(numActiveValidators)).RoundInt64()
 
 	if threshold < 1 {

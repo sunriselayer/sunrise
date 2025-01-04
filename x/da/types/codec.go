@@ -1,18 +1,21 @@
 package types
 
 import (
-	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	"cosmossdk.io/core/registry"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
-	// this line is used by starport scaffolding # 1
 )
 
-func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgUpdateParams{},
+func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
+	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgPublishData{},
 		&MsgChallengeForFraud{},
 		&MsgSubmitProof{},
 	)
-	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
+
+	registrar.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgUpdateParams{},
+	)
+	msgservice.RegisterMsgServiceDesc(registrar, &_Msg_serviceDesc)
 }

@@ -3,26 +3,17 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
+
+	errorsmod "cosmossdk.io/errors"
 )
 
-func (k msgServer) SwapExactAmountOut(goCtx context.Context, msg *types.MsgSwapExactAmountOut) (*types.MsgSwapExactAmountOutResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return nil, err
+func (k msgServer) SwapExactAmountOut(ctx context.Context, msg *types.MsgSwapExactAmountOut) (*types.MsgSwapExactAmountOutResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	result, interfaceProviderFee, err := k.Keeper.SwapExactAmountOut(ctx, sender, msg.InterfaceProvider, msg.Route, msg.MaxAmountIn, msg.AmountOut)
-	if err != nil {
-		return nil, err
-	}
+	// TODO: Handle the message
 
-	return &types.MsgSwapExactAmountOutResponse{
-		Result:               result,
-		InterfaceProviderFee: interfaceProviderFee,
-		AmountOut:            result.TokenOut.Amount.Sub(interfaceProviderFee),
-	}, nil
+	return &types.MsgSwapExactAmountOutResponse{}, nil
 }

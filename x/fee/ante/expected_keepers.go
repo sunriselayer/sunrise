@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	banktypes "cosmossdk.io/x/bank/types"
 )
 
 // AccountKeeper defines the contract needed for AccountKeeper related APIs.

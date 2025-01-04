@@ -10,7 +10,10 @@ import (
 )
 
 func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
-	params := k.GetParams(ctx)
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
 	for _, fee := range fees {
 		// skip if fee is not the fee denom
 		if fee.Denom != params.FeeDenom {
@@ -27,13 +30,12 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 		burnCoins := sdk.NewCoins(burnCoin)
 
 		// burn coins from the fee module account
-		err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
+		if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
 			authtypes.FeeCollectorName,
 			types.ModuleName,
 			burnCoins,
-		)
-		if err != nil {
-			return errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, err.Error())
+		); err != nil {
+			return errorsmod.Wrap(sdkerrors.ErrInsufficientFunds, err.Error())
 		}
 
 		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {

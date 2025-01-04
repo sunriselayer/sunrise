@@ -10,18 +10,10 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-var _ paramtypes.ParamSet = (*Params)(nil)
-
-// ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// NewParams creates a new Params instance
+// NewParams creates a new Params instance.
 func NewParams(
 	voteThreshold math.LegacyDec,
 	slashEpoch uint64,
@@ -54,7 +46,7 @@ func NewParams(
 	}
 }
 
-// DefaultParams returns a default set of parameters
+// DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	provingKey, err := base64.StdEncoding.DecodeString(DefaultProvingKeyBase64)
 	if err != nil {
@@ -109,12 +101,8 @@ func GenerateZkpKeys() (string, string) {
 	return provingKeyBase64, verifyingKeyBase64
 }
 
-// ParamSetPairs get the params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{}
-}
-
-// Validate validates the set of params
+// Validate validates the set of params.
 func (p Params) Validate() error {
+
 	return nil
 }

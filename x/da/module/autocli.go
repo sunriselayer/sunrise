@@ -3,14 +3,14 @@ package da
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/da"
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
 func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 	return &autocliv1.ModuleOptions{
 		Query: &autocliv1.ServiceCommandDescriptor{
-			Service: modulev1.Query_ServiceDesc.ServiceName,
+			Service: types.Query_serviceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "Params",
@@ -36,7 +36,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
-			Service:              modulev1.Msg_ServiceDesc.ServiceName,
+			Service:              types.Msg_serviceDesc.ServiceName,
 			EnhanceCustomCommand: true, // only required if you want to use the custom command
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
@@ -44,10 +44,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "PublishData",
-					Use:            "publish-data",
-					Short:          "Send a publish-data tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "PublishData",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "ChallengeForFraud",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "SubmitProof",
+					Skip:      true,
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

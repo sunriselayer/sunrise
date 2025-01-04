@@ -35,7 +35,10 @@ func _checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx, k feekeepe
 		if len(feeCoins) != 1 {
 			return nil, 0, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
 		}
-		params := k.GetParams(ctx)
+		params, err := k.Params.Get(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
 		if feeCoins[0].Denom != params.FeeDenom {
 			includedBypass := false
 			for _, denom := range params.BypassDenoms {

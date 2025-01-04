@@ -1,0 +1,18 @@
+syntax = "proto3";
+package sunrise.liquidityincentive.v1;
+
+import "gogoproto/gogo.proto";
+import "sunrise/liquidityincentive/v1/gauge.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+// EventVoteGauge
+message EventVoteGauge {
+  string address = 1;
+  repeated PoolWeight pool_weights = 2 [(gogoproto.nullable) = false];
+}
+
+// EventCollectVoteRewards
+message EventCollectVoteRewards {
+  string address = 1;
+}

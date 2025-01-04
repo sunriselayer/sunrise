@@ -3,21 +3,36 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/da/types"
+
+	errorsmod "cosmossdk.io/errors"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k msgServer) PublishData(goCtx context.Context, msg *types.MsgPublishData) (*types.MsgPublishDataResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (*types.MsgPublishDataResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid authority address")
+	}
 
-	params := k.GetParams(ctx)
-	err := k.SetPublishedData(ctx, types.PublishedData{
+	if msg.ParityShardCount >= uint64(len(msg.ShardDoubleHashes)) {
+		return nil, types.ErrParityShardCountGTETotal
+	}
+	// end validation
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = k.SetPublishedData(ctx, types.PublishedData{
 		Publisher:         msg.Sender,
 		MetadataUri:       msg.MetadataUri,
 		ParityShardCount:  msg.ParityShardCount,
 		ShardDoubleHashes: msg.ShardDoubleHashes,
 		Collateral:        params.ChallengeCollateral,
-		Timestamp:         ctx.BlockTime(),
+		Timestamp:         sdkCtx.BlockTime(),
 		DataSourceInfo:    msg.DataSourceInfo,
 		Status:            "msg_server",
 	})
@@ -34,9 +49,10 @@ func (k msgServer) PublishData(goCtx context.Context, msg *types.MsgPublishData)
 		}
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(msg)
+	err = sdkCtx.EventManager().EmitTypedEvent(msg)
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.MsgPublishDataResponse{}, nil
 }

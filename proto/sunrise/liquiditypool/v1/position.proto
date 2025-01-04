@@ -1,0 +1,21 @@
+syntax = "proto3";
+package sunrise.liquiditypool.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+// Position
+message Position {
+  uint64 id = 1;
+  string address = 2;
+  uint64 pool_id = 3;
+  int64 lower_tick = 4;
+  int64 upper_tick = 5;
+  string liquidity = 6 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}

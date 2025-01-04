@@ -5,18 +5,29 @@ import (
 	"context"
 	"math/big"
 
+	"github.com/sunriselayer/sunrise/x/da/types"
+
+	errorsmod "cosmossdk.io/errors"
+
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/backend/groth16"
 	groth16bn254 "github.com/consensys/gnark/backend/groth16/bn254"
 	"github.com/consensys/gnark/frontend"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/sunriselayer/sunrise/x/da/types"
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof) (*types.MsgSubmitProofResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (*types.MsgSubmitProofResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid authority address")
+	}
+	// check number of proofs <> indices
+	if len(msg.Indices) != len(msg.Proofs) {
+		return nil, types.ErrIndicesAndProofsMismatch
+	}
+	// end validation
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
 	if publishedData.Status != "challenge_for_fraud" {
@@ -24,8 +35,11 @@ func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof)
 	}
 
 	// check proof period
-	params := k.GetParams(ctx)
-	if publishedData.ChallengeTimestamp.Add(params.ProofPeriod).Before(ctx.BlockTime()) {
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if publishedData.ChallengeTimestamp.Add(params.ProofPeriod).Before(sdkCtx.BlockTime()) {
 		return nil, types.ErrProofPeriodIsOver
 	}
 
@@ -71,7 +85,7 @@ func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof)
 	}
 
 	// save proof in the storage
-	err := k.SetProof(ctx, types.Proof{
+	err = k.SetProof(ctx, types.Proof{
 		MetadataUri: msg.MetadataUri,
 		Sender:      msg.Sender,
 		Indices:     msg.Indices,
@@ -82,9 +96,10 @@ func (k msgServer) SubmitProof(goCtx context.Context, msg *types.MsgSubmitProof)
 		return nil, err
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(msg)
+	err = sdkCtx.EventManager().EmitTypedEvent(msg)
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.MsgSubmitProofResponse{}, nil
 }
