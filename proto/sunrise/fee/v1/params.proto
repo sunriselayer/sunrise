@@ -1,15 +1,20 @@
 syntax = "proto3";
 package sunrise.fee.v1;
 
-import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "sunrise/x/fee/types";
+option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/fee/Params";
   option (gogoproto.equal) = true;
 
-  
+  string fee_denom = 1;
+  string burn_ratio = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.Dec",
+    (gogoproto.nullable) = false
+  ];
+  repeated string bypass_denoms = 3;
 }
