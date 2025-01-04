@@ -3,46 +3,31 @@ package liquidityincentive
 import (
 	"math/rand"
 
+	"github.com/cosmos/cosmos-sdk/simsx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/sunriselayer/sunrise/testutil/sample"
-	liquidityincentivesimulation "github.com/sunriselayer/sunrise/x/liquidityincentive/simulation"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	"sunrise/testutil/sample"
+	"sunrise/x/liquidityincentive/simulation"
+	"sunrise/x/liquidityincentive/types"
 )
 
 // avoid unused import issue
 var (
-	_ = liquidityincentivesimulation.FindAccount
 	_ = rand.Rand{}
 	_ = sample.AccAddress
 	_ = sdk.AccAddress{}
-	_ = simulation.MsgEntryKind
-)
-
-const (
-	opWeightMsgVoteGauge = "op_weight_msg_vote_gauge"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgVoteGauge int = 100
-
-	opWeightMsgCollectVoteRewards = "op_weight_msg_collect_vote_rewards"
-	// TODO: Determine the simulation weight value
-	defaultWeightMsgCollectVoteRewards int = 100
-
-	// this line is used by starport scaffolding # simapp/module/const
 )
 
 // GenerateGenesisState creates a randomized GenState of the module.
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	accs := make([]string, len(simState.Accounts))
 	for i, acc := range simState.Accounts {
-		accs[i] = acc.Address.String()
+		accs[i] = acc.AddressBech32
 	}
 	liquidityincentiveGenesis := types.GenesisState{
 		Params: types.DefaultParams(),
-		// this line is used by starport scaffolding # simapp/module/genesisState
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&liquidityincentiveGenesis)
 }
@@ -50,56 +35,14 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 // RegisterStoreDecoder registers a decoder.
 func (am AppModule) RegisterStoreDecoder(_ simtypes.StoreDecoderRegistry) {}
 
-// WeightedOperations returns the all the gov module operations with their respective weights.
-func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
-	operations := make([]simtypes.WeightedOperation, 0)
-
-	var weightMsgVoteGauge int
-	simState.AppParams.GetOrGenerate(opWeightMsgVoteGauge, &weightMsgVoteGauge, nil,
-		func(_ *rand.Rand) {
-			weightMsgVoteGauge = defaultWeightMsgVoteGauge
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgVoteGauge,
-		liquidityincentivesimulation.SimulateMsgVoteGauge(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	var weightMsgCollectVoteRewards int
-	simState.AppParams.GetOrGenerate(opWeightMsgCollectVoteRewards, &weightMsgCollectVoteRewards, nil,
-		func(_ *rand.Rand) {
-			weightMsgCollectVoteRewards = defaultWeightMsgCollectVoteRewards
-		},
-	)
-	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgCollectVoteRewards,
-		liquidityincentivesimulation.SimulateMsgCollectVoteRewards(am.accountKeeper, am.bankKeeper, am.keeper),
-	))
-
-	// this line is used by starport scaffolding # simapp/module/operation
-
-	return operations
+// ProposalMsgsX returns msgs used for governance proposals for simulations.
+func (am AppModule) ProposalMsgsX(weights simsx.WeightSource, reg simsx.Registry) {
+	reg.Add(weights.Get("msg_update_params", 100), simulation.MsgUpdateParamsFactory())
 }
 
-// ProposalMsgs returns msgs used for governance proposals for simulations.
-func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
-	return []simtypes.WeightedProposalMsg{
-		simulation.NewWeightedProposalMsg(
-			opWeightMsgVoteGauge,
-			defaultWeightMsgVoteGauge,
-			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquidityincentivesimulation.SimulateMsgVoteGauge(am.accountKeeper, am.bankKeeper, am.keeper)
-				return nil
-			},
-		),
-		simulation.NewWeightedProposalMsg(
-			opWeightMsgCollectVoteRewards,
-			defaultWeightMsgCollectVoteRewards,
-			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				liquidityincentivesimulation.SimulateMsgCollectVoteRewards(am.accountKeeper, am.bankKeeper, am.keeper)
-				return nil
-			},
-		),
-		// this line is used by starport scaffolding # simapp/module/OpMsg
-	}
+// WeightedOperationsX returns the all the module operations with their respective weights.
+func (am AppModule) WeightedOperationsX(weights simsx.WeightSource, reg simsx.Registry) {
+	reg.Add(weights.Get("msg__vote_gauge", 100), simulation.MsgVoteGaugeFactory(am.keeper))
+	reg.Add(weights.Get("msg__collect_vote_rewards", 100), simulation.MsgCollectVoteRewardsFactory(am.keeper))
+
 }

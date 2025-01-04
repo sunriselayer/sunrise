@@ -3,12 +3,10 @@ package types
 // DONTCOVER
 
 import (
-	sdkerrors "cosmossdk.io/errors"
+	"cosmossdk.io/errors/v2"
 )
 
 // x/liquidityincentive module sentinel errors
 var (
-	ErrInvalidSigner    = sdkerrors.Register(ModuleName, 1, "expected gov account as only signer for proposal message")
-	ErrTotalWeightGTOne = sdkerrors.Register(ModuleName, 2, "total weight is greater than 1")
-	ErrInvalidWeight    = sdkerrors.Register(ModuleName, 3, "invalid weight")
+	ErrInvalidSigner = errors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
 )

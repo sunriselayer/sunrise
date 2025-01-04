@@ -1,7 +1,17 @@
 package keeper
 
 import (
-	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	"sunrise/x/liquiditypool/types"
 )
 
-var _ types.QueryServer = Keeper{}
+var _ types.QueryServer = queryServer{}
+
+// NewQueryServerImpl returns an implementation of the QueryServer interface
+// for the provided Keeper.
+func NewQueryServerImpl(k Keeper) types.QueryServer {
+	return queryServer{k}
+}
+
+type queryServer struct {
+	k Keeper
+}

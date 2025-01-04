@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.liquiditypool.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/liquiditypool/v1/params.proto";
+
+option go_package = "sunrise/x/liquiditypool/types";
+
+// GenesisState defines the liquiditypool module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

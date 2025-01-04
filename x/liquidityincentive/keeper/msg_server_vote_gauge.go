@@ -3,31 +3,17 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
-	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	"sunrise/x/liquidityincentive/types"
+
+	errorsmod "cosmossdk.io/errors"
 )
 
-func (k msgServer) VoteGauge(goCtx context.Context, msg *types.MsgVoteGauge) (*types.MsgVoteGaugeResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	for _, poolWeight := range msg.PoolWeights {
-		if _, found := k.liquidityPoolKeeper.GetPool(goCtx, poolWeight.PoolId); !found {
-			return nil, liquiditypooltypes.ErrPoolNotFound
-		}
+func (k msgServer) VoteGauge(ctx context.Context, msg *types.MsgVoteGauge) (*types.MsgVoteGaugeResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	k.SetVote(ctx, types.Vote{
-		Sender:      msg.Sender,
-		PoolWeights: msg.PoolWeights,
-	})
-
-	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventVoteGauge{
-		Address:     msg.Sender,
-		PoolWeights: msg.PoolWeights,
-	}); err != nil {
-		return nil, err
-	}
+	// TODO: Handle the message
 
 	return &types.MsgVoteGaugeResponse{}, nil
 }

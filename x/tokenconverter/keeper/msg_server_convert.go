@@ -3,28 +3,17 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	"sunrise/x/tokenconverter/types"
+
+	errorsmod "cosmossdk.io/errors"
 )
 
-func (k msgServer) Convert(goCtx context.Context, msg *types.MsgConvert) (*types.MsgConvertResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	address, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return nil, err
+func (k msgServer) Convert(ctx context.Context, msg *types.MsgConvert) (*types.MsgConvertResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	amount, err := k.Keeper.CalculateConversionAmount(ctx, msg.MinAmount, msg.MaxAmount)
-	if err != nil {
-		return nil, err
-	}
+	// TODO: Handle the message
 
-	if err := k.Keeper.Convert(ctx, amount, address); err != nil {
-		return nil, err
-	}
-
-	return &types.MsgConvertResponse{
-		Amount: amount,
-	}, nil
+	return &types.MsgConvertResponse{}, nil
 }

@@ -1,29 +1,24 @@
 package simulation
 
 import (
-	"math/rand"
+	"context"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
-	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	"github.com/cosmos/cosmos-sdk/simsx"
+
+	"sunrise/x/tokenconverter/keeper"
+	"sunrise/x/tokenconverter/types"
 )
 
-func SimulateMsgConvert(
-	ak types.AccountKeeper,
-	bk types.BankKeeper,
-	k keeper.Keeper,
-) simtypes.Operation {
-	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
-	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-		simAccount, _ := simtypes.RandomAcc(r, accs)
+func MsgConvertFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgConvert] {
+	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgConvert) {
+		from := testData.AnyAccount(reporter)
+
 		msg := &types.MsgConvert{
-			Sender: simAccount.Address.String(),
+			Creator: from.AddressBech32,
 		}
 
-		// TODO: Handling the Convert simulation
+		// TODO: Handle the Convert simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "Convert simulation not implemented"), nil, nil
+		return []simsx.SimAccount{from}, msg
 	}
 }

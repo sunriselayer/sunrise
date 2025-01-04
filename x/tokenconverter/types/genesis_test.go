@@ -3,8 +3,9 @@ package types_test
 import (
 	"testing"
 
+	"sunrise/x/tokenconverter/types"
+
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {
@@ -19,14 +20,10 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc: "valid genesis state",
-			genState: &types.GenesisState{
-				Params: types.DefaultParams(),
-				// this line is used by starport scaffolding # types/genesis/validField
-			},
-			valid: true,
+			desc:     "valid genesis state",
+			genState: &types.GenesisState{},
+			valid:    true,
 		},
-		// this line is used by starport scaffolding # types/genesis/testcase
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {

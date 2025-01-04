@@ -1,29 +1,24 @@
 package simulation
 
 import (
-	"math/rand"
+	"context"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	"github.com/cosmos/cosmos-sdk/simsx"
+
+	"sunrise/x/liquidityincentive/keeper"
+	"sunrise/x/liquidityincentive/types"
 )
 
-func SimulateMsgCollectVoteRewards(
-	ak types.AccountKeeper,
-	bk types.BankKeeper,
-	k keeper.Keeper,
-) simtypes.Operation {
-	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
-	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-		simAccount, _ := simtypes.RandomAcc(r, accs)
+func MsgCollectVoteRewardsFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgCollectVoteRewards] {
+	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgCollectVoteRewards) {
+		from := testData.AnyAccount(reporter)
+
 		msg := &types.MsgCollectVoteRewards{
-			Sender: simAccount.Address.String(),
+			Creator: from.AddressBech32,
 		}
 
-		// TODO: Handling the CollectVoteRewards simulation
+		// TODO: Handle the CollectVoteRewards simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "CollectVoteRewards simulation not implemented"), nil, nil
+		return []simsx.SimAccount{from}, msg
 	}
 }

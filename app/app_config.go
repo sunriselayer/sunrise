@@ -3,6 +3,9 @@ package app
 import (
 	"time"
 
+	"google.golang.org/protobuf/types/known/durationpb"
+
+	accountsmodulev1 "cosmossdk.io/api/cosmos/accounts/module/v1"
 	runtimev1alpha1 "cosmossdk.io/api/cosmos/app/runtime/v1alpha1"
 	appv1alpha1 "cosmossdk.io/api/cosmos/app/v1alpha1"
 	authmodulev1 "cosmossdk.io/api/cosmos/auth/module/v1"
@@ -10,226 +13,90 @@ import (
 	bankmodulev1 "cosmossdk.io/api/cosmos/bank/module/v1"
 	circuitmodulev1 "cosmossdk.io/api/cosmos/circuit/module/v1"
 	consensusmodulev1 "cosmossdk.io/api/cosmos/consensus/module/v1"
-	crisismodulev1 "cosmossdk.io/api/cosmos/crisis/module/v1"
 	distrmodulev1 "cosmossdk.io/api/cosmos/distribution/module/v1"
+	epochsmodulev1 "cosmossdk.io/api/cosmos/epochs/module/v1"
 	evidencemodulev1 "cosmossdk.io/api/cosmos/evidence/module/v1"
 	feegrantmodulev1 "cosmossdk.io/api/cosmos/feegrant/module/v1"
 	genutilmodulev1 "cosmossdk.io/api/cosmos/genutil/module/v1"
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
 	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
-	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
+	nftmodulev1 "cosmossdk.io/api/cosmos/nft/module/v1"
+	poolmodulev1 "cosmossdk.io/api/cosmos/protocolpool/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
 	upgrademodulev1 "cosmossdk.io/api/cosmos/upgrade/module/v1"
-	vestingmodulev1 "cosmossdk.io/api/cosmos/vesting/module/v1"
-	"cosmossdk.io/core/appconfig"
+	"cosmossdk.io/depinject/appconfig"
+	"cosmossdk.io/x/accounts"
+	"cosmossdk.io/x/authz"
+	_ "cosmossdk.io/x/authz/module" // import for side-effects
+	_ "cosmossdk.io/x/bank"         // import for side-effects
+	banktypes "cosmossdk.io/x/bank/types"
 	_ "cosmossdk.io/x/circuit" // import for side-effects
 	circuittypes "cosmossdk.io/x/circuit/types"
+	_ "cosmossdk.io/x/consensus" // import for side-effects
+	consensustypes "cosmossdk.io/x/consensus/types"
+	_ "cosmossdk.io/x/distribution" // import for side-effects
+	distrtypes "cosmossdk.io/x/distribution/types"
+	_ "cosmossdk.io/x/epochs" // import for side-effects
+	epochstypes "cosmossdk.io/x/epochs/types"
 	_ "cosmossdk.io/x/evidence" // import for side-effects
 	evidencetypes "cosmossdk.io/x/evidence/types"
 	"cosmossdk.io/x/feegrant"
 	_ "cosmossdk.io/x/feegrant/module" // import for side-effects
-	_ "cosmossdk.io/x/upgrade"         // import for side-effects
+	_ "cosmossdk.io/x/gov"             // import for side-effects
+	govtypes "cosmossdk.io/x/gov/types"
+	"cosmossdk.io/x/group"
+	_ "cosmossdk.io/x/group/module" // import for side-effects
+	_ "cosmossdk.io/x/mint"         // import for side-effects
+	minttypes "cosmossdk.io/x/mint/types"
+	"cosmossdk.io/x/nft"
+	_ "cosmossdk.io/x/nft/module"   // import for side-effects
+	_ "cosmossdk.io/x/protocolpool" // import for side-effects
+	pooltypes "cosmossdk.io/x/protocolpool/types"
+	_ "cosmossdk.io/x/slashing" // import for side-effects
+	slashingtypes "cosmossdk.io/x/slashing/types"
+	_ "cosmossdk.io/x/staking" // import for side-effects
+	stakingtypes "cosmossdk.io/x/staking/types"
+	_ "cosmossdk.io/x/upgrade" // import for side-effects
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	_ "github.com/cosmos/cosmos-sdk/x/auth/vesting" // import for side-effects
-	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
-	"github.com/cosmos/cosmos-sdk/x/authz"
-	_ "github.com/cosmos/cosmos-sdk/x/authz/module" // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/bank"         // import for side-effects
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
-	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
-	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
-	_ "github.com/cosmos/cosmos-sdk/x/crisis" // import for side-effects
-	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
-	_ "github.com/cosmos/cosmos-sdk/x/distribution" // import for side-effects
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+
+	_ "sunrise/x/da/module"
+
+	"github.com/cosmos/cosmos-sdk/runtime"
+	_ "github.com/cosmos/cosmos-sdk/testutil/x/counter" // import for side-effects
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/cosmos/cosmos-sdk/x/group"
-	_ "github.com/cosmos/cosmos-sdk/x/group/module" // import for side-effects
-	_ "github.com/cosmos/cosmos-sdk/x/mint"         // import for side-effects
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	_ "github.com/cosmos/cosmos-sdk/x/params" // import for side-effects
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	_ "github.com/cosmos/cosmos-sdk/x/slashing" // import for side-effects
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	_ "github.com/cosmos/cosmos-sdk/x/staking" // import for side-effects
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	_ "github.com/cosmos/ibc-go/modules/capability" // import for side-effects
-	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
-	_ "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts" // import for side-effects
-	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
-	_ "github.com/cosmos/ibc-go/v8/modules/apps/29-fee" // import for side-effects
-	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
-	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
-	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
-	"google.golang.org/protobuf/types/known/durationpb"
 
-	auctionmodulev1 "github.com/skip-mev/block-sdk/v2/api/sdk/auction/module/v1"
-	_ "github.com/skip-mev/block-sdk/v2/x/auction" // import for side-effects
-	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
-
-	damodulev1 "github.com/sunriselayer/sunrise/api/sunrise/da/module"
-	feemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/fee/module"
-	liquidityincentivemodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquidityincentive/module"
-	liquiditypoolmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool/module"
-	swapmodulev1 "github.com/sunriselayer/sunrise/api/sunrise/swap/module"
-	tokenconvertermodulev1 "github.com/sunriselayer/sunrise/api/sunrise/tokenconverter/module"
-
-	// _ "github.com/sunriselayer/sunrise/x/blob/module"       // import for side-effects
-	// _ "github.com/sunriselayer/sunrise/x/blobstream/module" // import for side-effects
-	_ "github.com/sunriselayer/sunrise/x/da/module" // import for side-effects
-	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
-	_ "github.com/sunriselayer/sunrise/x/fee/module" // import for side-effects
-	feemoduletypes "github.com/sunriselayer/sunrise/x/fee/types"
-	_ "github.com/sunriselayer/sunrise/x/liquidityincentive/module" // import for side-effects
-	liquidityincentivemoduletypes "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
-	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module" // import for side-effects
-	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
-	_ "github.com/sunriselayer/sunrise/x/swap/module" // import for side-effects
-	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
-	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module" // import for side-effects
-	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
-	// this line is used by starport scaffolding # stargate/app/moduleImport
+	// module account permissions
+	damoduletypes "sunrise/x/da/types"
+	_ "sunrise/x/fee/module"
+	feemoduletypes "sunrise/x/fee/types"
+	_ "sunrise/x/liquidityincentive/module"
+	liquidityincentivemoduletypes "sunrise/x/liquidityincentive/types"
+	_ "sunrise/x/liquiditypool/module"
+	liquiditypoolmoduletypes "sunrise/x/liquiditypool/types"
+	_ "sunrise/x/swap/module"
+	swapmoduletypes "sunrise/x/swap/types"
+	_ "sunrise/x/tokenconverter/module"
+	tokenconvertermoduletypes "sunrise/x/tokenconverter/types"
 )
 
 var (
-	// NOTE: The genutils module must occur after staking so that pools are
-	// properly initialized with tokens from genesis accounts.
-	// NOTE: The genutils module must also occur after auth so that it can access the params from auth.
-	// NOTE: Capability module must occur first so that it can initialize any capabilities
-	// so that other modules that want to create or claim capabilities afterwards in InitChain
-	// can do so safely.
-	genesisModuleOrder = []string{
-		// cosmos-sdk/ibc modules
-		capabilitytypes.ModuleName,
-		authtypes.ModuleName,
-		banktypes.ModuleName,
-		distrtypes.ModuleName,
-		stakingtypes.ModuleName,
-		slashingtypes.ModuleName,
-		govtypes.ModuleName,
-		minttypes.ModuleName,
-		crisistypes.ModuleName,
-		ibcexported.ModuleName,
-		genutiltypes.ModuleName,
-		evidencetypes.ModuleName,
-		authz.ModuleName,
-		ibctransfertypes.ModuleName,
-		icatypes.ModuleName,
-		ibcfeetypes.ModuleName,
-		feegrant.ModuleName,
-		paramstypes.ModuleName,
-		upgradetypes.ModuleName,
-		vestingtypes.ModuleName,
-		circuittypes.ModuleName,
-		group.ModuleName,
-		consensusparamtypes.ModuleName,
-		circuittypes.ModuleName,
-		// thirdparty modules
-		auctiontypes.ModuleName,
-		// chain modules
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-		tokenconvertermoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
-		swapmoduletypes.ModuleName,
-		feemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/initGenesis
-	}
-
-	// During begin block slashing happens after distr.BeginBlocker so that
-	// there is nothing left over in the validator fee pool, so as to keep the
-	// CanWithdrawInvariant invariant.
-	// NOTE: staking module is required if HistoricalEntries param > 0
-	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
-	beginBlockers = []string{
-		minttypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
-		distrtypes.ModuleName,
-		slashingtypes.ModuleName,
-		evidencetypes.ModuleName,
-		stakingtypes.ModuleName,
-		authz.ModuleName,
-		genutiltypes.ModuleName,
-		capabilitytypes.ModuleName,
-		ibcexported.ModuleName,
-		ibctransfertypes.ModuleName,
-		icatypes.ModuleName,
-		ibcfeetypes.ModuleName,
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-		tokenconvertermoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
-		swapmoduletypes.ModuleName,
-		feemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
-	}
-
-	endBlockers = []string{
-		// cosmos sdk modules
-		crisistypes.ModuleName,
-		govtypes.ModuleName,
-		stakingtypes.ModuleName,
-		feegrant.ModuleName,
-		group.ModuleName,
-		genutiltypes.ModuleName,
-		// ibc modules
-		ibcexported.ModuleName,
-		ibctransfertypes.ModuleName,
-		capabilitytypes.ModuleName,
-		icatypes.ModuleName,
-		ibcfeetypes.ModuleName,
-		// chain modules
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-		tokenconvertermoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
-		swapmoduletypes.ModuleName,
-		feemoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
-	}
-
-	preBlockers = []string{
-		upgradetypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/preBlockers
-	}
-
-	// module account permissions
 	moduleAccPerms = []*authmodulev1.ModuleAccountPermission{
-		// SDK module accounts
 		{Account: authtypes.FeeCollectorName},
 		{Account: distrtypes.ModuleName},
+		{Account: pooltypes.ModuleName},
+		{Account: pooltypes.StreamAccount},
+		{Account: pooltypes.ProtocolPoolDistrAccount},
 		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		// IBC module accounts
-		{Account: ibctransfertypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: ibcfeetypes.ModuleName},
-		{Account: icatypes.ModuleName},
-		// Third party module accounts
-		{Account: auctiontypes.ModuleName, Permissions: []string{}},
+		{Account: nft.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
-		// {Account: blobmoduletypes.ModuleName},
-		// {Account: streammoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
-		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
-		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
-		{Account: swapmoduletypes.ModuleName},
-		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		{Account: damoduletypes.ModuleName},
 	}
 
 	// blocked account addresses
@@ -239,58 +106,120 @@ var (
 		minttypes.ModuleName,
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
+		nft.ModuleName,
 		// We allow the following module accounts to receive funds:
-		// govtypes.ModuleName,
-		// ibctransfertypes.ModuleName,
-		// ibcfeetypes.ModuleName,
-		// icatypes.ModuleName,
-		// blobmoduletypes.ModuleName,
-		// streammoduletypes.ModuleName,
-		damoduletypes.ModuleName,
-		tokenconvertermoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
-		// swapmoduletypes.ModuleName,
-		feemoduletypes.ModuleName,
+		// govtypes.ModuleName
+		// pooltypes.ModuleName
 	}
 
-	// appConfig application configuration (used by depinject)
+	// application configuration (used by depinject)
 	appConfig = appconfig.Compose(&appv1alpha1.Config{
 		Modules: []*appv1alpha1.ModuleConfig{
 			{
 				Name: runtime.ModuleName,
 				Config: appconfig.WrapAny(&runtimev1alpha1.Module{
-					AppName:       Name,
-					PreBlockers:   preBlockers,
-					BeginBlockers: beginBlockers,
-					EndBlockers:   endBlockers,
-					InitGenesis:   genesisModuleOrder,
+					AppName: Name,
+					// NOTE: upgrade module is required to be prioritized
+					PreBlockers: []string{
+						upgradetypes.ModuleName,
+						// this line is used by starport scaffolding # stargate/app/preBlockers
+					},
+					// During begin block slashing happens after distr.BeginBlocker so that
+					// there is nothing left over in the validator fee pool, so as to keep the
+					// CanWithdrawInvariant invariant.
+					// NOTE: staking module is required if HistoricalEntries param > 0
+					BeginBlockers: []string{
+						minttypes.ModuleName,
+						distrtypes.ModuleName,
+						pooltypes.ModuleName,
+						slashingtypes.ModuleName,
+						evidencetypes.ModuleName,
+						stakingtypes.ModuleName,
+						authz.ModuleName,
+						epochstypes.ModuleName,
+						// chain modules
+						damoduletypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
+						liquiditypoolmoduletypes.ModuleName,
+						liquidityincentivemoduletypes.ModuleName,
+						swapmoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
+						// this line is used by starport scaffolding # stargate/app/beginBlockers
+					},
+					EndBlockers: []string{
+						govtypes.ModuleName,
+						stakingtypes.ModuleName,
+						feegrant.ModuleName,
+						group.ModuleName,
+						pooltypes.ModuleName,
+						// chain modules
+						damoduletypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
+						liquiditypoolmoduletypes.ModuleName,
+						liquidityincentivemoduletypes.ModuleName,
+						swapmoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
+						// this line is used by starport scaffolding # stargate/app/endBlockers
+					},
+					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
 							ModuleName: authtypes.ModuleName,
 							KvStoreKey: "acc",
 						},
+						{
+							ModuleName: accounts.ModuleName,
+							KvStoreKey: accounts.StoreKey,
+						},
 					},
-					// When ExportGenesis is not specified, the export genesis module order
-					// is equal to the init genesis order
-					// ExportGenesis: genesisModuleOrder,
-					// Uncomment if you want to set a custom migration order here.
-					// OrderMigrations: nil,
+					// NOTE: The genutils module must occur after staking so that pools are
+					// properly initialized with tokens from genesis accounts.
+					// NOTE: The genutils module must also occur after auth so that it can access the params from auth.
+					InitGenesis: []string{
+						consensustypes.ModuleName,
+						accounts.ModuleName,
+						authtypes.ModuleName,
+						banktypes.ModuleName,
+						distrtypes.ModuleName,
+						stakingtypes.ModuleName,
+						slashingtypes.ModuleName,
+						govtypes.ModuleName,
+						minttypes.ModuleName,
+						genutiltypes.ModuleName,
+						evidencetypes.ModuleName,
+						authz.ModuleName,
+						feegrant.ModuleName,
+						nft.ModuleName,
+						group.ModuleName,
+						upgradetypes.ModuleName,
+						circuittypes.ModuleName,
+						pooltypes.ModuleName,
+						epochstypes.ModuleName,
+						// chain modules
+						damoduletypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
+						liquiditypoolmoduletypes.ModuleName,
+						liquidityincentivemoduletypes.ModuleName,
+						swapmoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
+						// this line is used by starport scaffolding # stargate/app/initGenesis
+					},
+					// SkipStoreKeys is an optional list of store keys to skip when constructing the
+					// module's keeper. This is useful when a module does not have a store key.
+					SkipStoreKeys: []string{
+						"tx",
+					},
 				}),
 			},
 			{
 				Name: authtypes.ModuleName,
 				Config: appconfig.WrapAny(&authmodulev1.Module{
-					Bech32Prefix:             Bech32MainPrefix,
+					Bech32Prefix:             AccountAddressPrefix,
 					ModuleAccountPermissions: moduleAccPerms,
 					// By default modules authority is the governance module. This is configurable with the following:
 					// Authority: "group", // A custom module authority can be set using a module name
 					// Authority: "cosmos1cwwv22j5ca08ggdv9c2uky355k908694z577tv", // or a specific address
 				}),
-			},
-			{
-				Name:   vestingtypes.ModuleName,
-				Config: appconfig.WrapAny(&vestingmodulev1.Module{}),
 			},
 			{
 				Name: banktypes.ModuleName,
@@ -299,21 +228,12 @@ var (
 				}),
 			},
 			{
-				Name: stakingtypes.ModuleName,
-				Config: appconfig.WrapAny(&stakingmodulev1.Module{
-					// NOTE: specifying a prefix is only necessary when using bech32 addresses
-					// If not specfied, the auth Bech32Prefix appended with "valoper" and "valcons" is used by default
-					Bech32PrefixValidator: Bech32PrefixValAddr,
-					Bech32PrefixConsensus: Bech32PrefixConsAddr,
-				}),
+				Name:   stakingtypes.ModuleName,
+				Config: appconfig.WrapAny(&stakingmodulev1.Module{}),
 			},
 			{
 				Name:   slashingtypes.ModuleName,
 				Config: appconfig.WrapAny(&slashingmodulev1.Module{}),
-			},
-			{
-				Name:   paramstypes.ModuleName,
-				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
 			},
 			{
 				Name:   "tx",
@@ -351,16 +271,16 @@ var (
 				}),
 			},
 			{
+				Name:   nft.ModuleName,
+				Config: appconfig.WrapAny(&nftmodulev1.Module{}),
+			},
+			{
 				Name:   feegrant.ModuleName,
 				Config: appconfig.WrapAny(&feegrantmodulev1.Module{}),
 			},
 			{
 				Name:   govtypes.ModuleName,
 				Config: appconfig.WrapAny(&govmodulev1.Module{}),
-			},
-			{
-				Name:   crisistypes.ModuleName,
-				Config: appconfig.WrapAny(&crisismodulev1.Module{}),
 			},
 			{
 				Name:   consensustypes.ModuleName,
@@ -371,40 +291,40 @@ var (
 				Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
 			},
 			{
-				Name:   auctiontypes.ModuleName,
-				Config: appconfig.WrapAny(&auctionmodulev1.Module{}),
+				Name:   pooltypes.ModuleName,
+				Config: appconfig.WrapAny(&poolmodulev1.Module{}),
 			},
-			// {
-			// 	Name:   blobmoduletypes.ModuleName,
-			// 	Config: appconfig.WrapAny(&blobmodulev1.Module{}),
-			// },
-			// {
-			// 	Name:   streammoduletypes.ModuleName,
-			// 	Config: appconfig.WrapAny(&streammodulev1.Module{}),
-			// },
+			{
+				Name:   accounts.ModuleName,
+				Config: appconfig.WrapAny(&accountsmodulev1.Module{}),
+			},
+			{
+				Name:   epochstypes.ModuleName,
+				Config: appconfig.WrapAny(&epochsmodulev1.Module{}),
+			},
 			{
 				Name:   damoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&damodulev1.Module{}),
+				Config: appconfig.WrapAny(&damoduletypes.Module{}),
 			},
 			{
 				Name:   tokenconvertermoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&tokenconvertermodulev1.Module{}),
+				Config: appconfig.WrapAny(&tokenconvertermoduletypes.Module{}),
 			},
 			{
 				Name:   liquiditypoolmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&liquiditypoolmodulev1.Module{}),
+				Config: appconfig.WrapAny(&liquiditypoolmoduletypes.Module{}),
 			},
 			{
 				Name:   liquidityincentivemoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&liquidityincentivemodulev1.Module{}),
+				Config: appconfig.WrapAny(&liquidityincentivemoduletypes.Module{}),
 			},
 			{
 				Name:   swapmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&swapmodulev1.Module{}),
+				Config: appconfig.WrapAny(&swapmoduletypes.Module{}),
 			},
 			{
 				Name:   feemoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&feemodulev1.Module{}),
+				Config: appconfig.WrapAny(&feemoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

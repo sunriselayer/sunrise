@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	"sunrise/x/tokenconverter/types"
 )
 
 type msgServer struct {

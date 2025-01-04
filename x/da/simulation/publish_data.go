@@ -1,29 +1,24 @@
 package simulation
 
 import (
-	"math/rand"
+	"context"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/sunriselayer/sunrise/x/da/keeper"
-	"github.com/sunriselayer/sunrise/x/da/types"
+	"github.com/cosmos/cosmos-sdk/simsx"
+
+	"sunrise/x/da/keeper"
+	"sunrise/x/da/types"
 )
 
-func SimulateMsgPublishData(
-	ak types.AccountKeeper,
-	bk types.BankKeeper,
-	k keeper.Keeper,
-) simtypes.Operation {
-	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
-	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-		simAccount, _ := simtypes.RandomAcc(r, accs)
+func MsgPublishDataFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgPublishData] {
+	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgPublishData) {
+		from := testData.AnyAccount(reporter)
+
 		msg := &types.MsgPublishData{
-			Sender: simAccount.Address.String(),
+			Creator: from.AddressBech32,
 		}
 
-		// TODO: Handling the PublishData simulation
+		// TODO: Handle the PublishData simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "PublishData simulation not implemented"), nil, nil
+		return []simsx.SimAccount{from}, msg
 	}
 }

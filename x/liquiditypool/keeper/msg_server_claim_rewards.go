@@ -3,28 +3,17 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	"sunrise/x/liquiditypool/types"
+
+	errorsmod "cosmossdk.io/errors"
 )
 
-func (k msgServer) ClaimRewards(goCtx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	sender, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return nil, err
+func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	totalCollectedFees := sdk.NewCoins()
-	for _, positionId := range msg.PositionIds {
-		collectedFees, err := k.Keeper.collectFees(ctx, sender, positionId)
-		if err != nil {
-			return nil, err
-		}
-		totalCollectedFees = totalCollectedFees.Add(collectedFees...)
-	}
+	// TODO: Handle the message
 
-	return &types.MsgClaimRewardsResponse{
-		CollectedFees: totalCollectedFees,
-	}, nil
+	return &types.MsgClaimRewardsResponse{}, nil
 }
