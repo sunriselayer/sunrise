@@ -97,6 +97,13 @@ var (
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		{Account: nft.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
+
+		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: swapmoduletypes.ModuleName},
+		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
+		{Account: damoduletypes.ModuleName},
 	}
 
 	// blocked account addresses
