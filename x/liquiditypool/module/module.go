@@ -12,8 +12,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 
-	"sunrise/x/liquiditypool/keeper"
-	"sunrise/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 var (

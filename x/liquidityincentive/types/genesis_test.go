@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 	"github.com/stretchr/testify/require"
 )

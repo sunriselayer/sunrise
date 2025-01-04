@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

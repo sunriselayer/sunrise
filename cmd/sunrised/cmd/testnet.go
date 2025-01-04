@@ -29,7 +29,7 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"sunrise/app"
+	"github.com/sunriselayer/sunrise/app"
 )
 
 const (

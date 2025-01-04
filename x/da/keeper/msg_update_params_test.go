@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/da/keeper"
-	"sunrise/x/da/types"
+	"github.com/sunriselayer/sunrise/x/da/keeper"
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 func TestMsgUpdateParams(t *testing.T) {

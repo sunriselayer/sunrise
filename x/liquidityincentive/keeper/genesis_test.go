@@ -3,8 +3,8 @@ package keeper_test
 import (
 	"testing"
 
-	"sunrise/testutil/nullify"
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 	"github.com/stretchr/testify/require"
 )

@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simsx"
 
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // MsgUpdateParamsFactory creates a gov proposal for param updates

@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/tokenconverter/keeper"
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 func TestParamsQuery(t *testing.T) {

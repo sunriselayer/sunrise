@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simsx"
 
-	"sunrise/x/liquidityincentive/keeper"
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 func MsgCollectVoteRewardsFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgCollectVoteRewards] {

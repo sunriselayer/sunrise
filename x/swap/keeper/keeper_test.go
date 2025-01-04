@@ -15,9 +15,9 @@ import (
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"sunrise/x/swap/keeper"
-	module "sunrise/x/swap/module"
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/keeper"
+	module "github.com/sunriselayer/sunrise/x/swap/module"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 type fixture struct {

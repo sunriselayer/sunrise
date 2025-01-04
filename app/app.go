@@ -47,13 +47,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"sunrise/docs"
-	damodulekeeper "sunrise/x/da/keeper"
-	feemodulekeeper "sunrise/x/fee/keeper"
-	liquidityincentivemodulekeeper "sunrise/x/liquidityincentive/keeper"
-	liquiditypoolmodulekeeper "sunrise/x/liquiditypool/keeper"
-	swapmodulekeeper "sunrise/x/swap/keeper"
-	tokenconvertermodulekeeper "sunrise/x/tokenconverter/keeper"
+	"github.com/sunriselayer/sunrise/docs"
+	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
+	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
+	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
+	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
+	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 )
 
 const (

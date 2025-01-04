@@ -8,8 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"sunrise/x/swap/keeper"
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/keeper"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}

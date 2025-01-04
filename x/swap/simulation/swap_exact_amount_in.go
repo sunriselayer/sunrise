@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simsx"
 
-	"sunrise/x/swap/keeper"
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/keeper"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 func MsgSwapExactAmountInFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSwapExactAmountIn] {

@@ -3,7 +3,7 @@ package fee
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"sunrise/x/fee/types"
+	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

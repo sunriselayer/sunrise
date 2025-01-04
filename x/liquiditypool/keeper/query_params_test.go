@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/liquiditypool/keeper"
-	"sunrise/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestParamsQuery(t *testing.T) {

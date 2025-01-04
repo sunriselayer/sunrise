@@ -3,7 +3,7 @@ package liquiditypool
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"sunrise/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

@@ -12,8 +12,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 
-	"sunrise/x/swap/keeper"
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/keeper"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 var (

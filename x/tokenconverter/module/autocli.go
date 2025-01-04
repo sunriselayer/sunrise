@@ -3,7 +3,7 @@ package tokenconverter
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	"github.com/stretchr/testify/require"
 
-	"sunrise/app"
+	"github.com/sunriselayer/sunrise/app"
 )
 
 // New creates instance with fully configured cosmos network.

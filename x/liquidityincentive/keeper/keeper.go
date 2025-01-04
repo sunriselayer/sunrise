@@ -8,7 +8,7 @@ import (
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 type Keeper struct {

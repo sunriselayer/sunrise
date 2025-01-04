@@ -3,7 +3,7 @@ package da
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"sunrise/x/da/types"
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

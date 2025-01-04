@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simsx"
 
-	"sunrise/x/liquiditypool/keeper"
-	"sunrise/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func MsgCreatePositionFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgCreatePosition] {

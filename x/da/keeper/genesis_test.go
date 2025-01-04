@@ -3,8 +3,8 @@ package keeper_test
 import (
 	"testing"
 
-	"sunrise/testutil/nullify"
-	"sunrise/x/da/types"
+	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/da/types"
 
 	"github.com/stretchr/testify/require"
 )

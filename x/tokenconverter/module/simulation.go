@@ -8,9 +8,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"sunrise/testutil/sample"
-	"sunrise/x/tokenconverter/simulation"
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/testutil/sample"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/simulation"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // avoid unused import issue

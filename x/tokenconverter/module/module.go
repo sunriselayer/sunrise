@@ -12,8 +12,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 
-	"sunrise/x/tokenconverter/keeper"
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 var (

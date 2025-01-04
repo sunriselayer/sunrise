@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simsx"
 
-	"sunrise/x/tokenconverter/keeper"
-	"sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 func MsgConvertFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgConvert] {

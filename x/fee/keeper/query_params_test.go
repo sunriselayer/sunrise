@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"sunrise/x/fee/keeper"
-	"sunrise/x/fee/types"
+	"github.com/sunriselayer/sunrise/x/fee/keeper"
+	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 
 func TestParamsQuery(t *testing.T) {

@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 
 	"github.com/stretchr/testify/require"
 )

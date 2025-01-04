@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simsx"
 
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 // MsgUpdateParamsFactory creates a gov proposal for param updates

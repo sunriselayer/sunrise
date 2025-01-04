@@ -3,7 +3,7 @@ package liquidityincentive
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

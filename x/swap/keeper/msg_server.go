@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 type msgServer struct {

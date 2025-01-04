@@ -3,7 +3,7 @@ package swap
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"sunrise/x/swap/types"
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"sunrise/x/da/types"
+	"github.com/sunriselayer/sunrise/x/da/types"
 
 	errorsmod "cosmossdk.io/errors"
 )

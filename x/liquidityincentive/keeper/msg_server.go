@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 type msgServer struct {

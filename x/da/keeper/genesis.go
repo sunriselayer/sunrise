@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"sunrise/x/da/types"
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

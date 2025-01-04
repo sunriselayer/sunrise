@@ -64,24 +64,24 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	_ "sunrise/x/da/module"
+	_ "github.com/sunriselayer/sunrise/x/da/module"
 
 	"github.com/cosmos/cosmos-sdk/runtime"
 	_ "github.com/cosmos/cosmos-sdk/testutil/x/counter" // import for side-effects
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
 	// module account permissions
-	damoduletypes "sunrise/x/da/types"
-	_ "sunrise/x/fee/module"
-	feemoduletypes "sunrise/x/fee/types"
-	_ "sunrise/x/liquidityincentive/module"
-	liquidityincentivemoduletypes "sunrise/x/liquidityincentive/types"
-	_ "sunrise/x/liquiditypool/module"
-	liquiditypoolmoduletypes "sunrise/x/liquiditypool/types"
-	_ "sunrise/x/swap/module"
-	swapmoduletypes "sunrise/x/swap/types"
-	_ "sunrise/x/tokenconverter/module"
-	tokenconvertermoduletypes "sunrise/x/tokenconverter/types"
+	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
+	_ "github.com/sunriselayer/sunrise/x/fee/module"
+	feemoduletypes "github.com/sunriselayer/sunrise/x/fee/types"
+	_ "github.com/sunriselayer/sunrise/x/liquidityincentive/module"
+	liquidityincentivemoduletypes "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module"
+	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	_ "github.com/sunriselayer/sunrise/x/swap/module"
+	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
+	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module"
+	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 var (

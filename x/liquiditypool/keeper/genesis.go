@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"sunrise/x/liquiditypool/types"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

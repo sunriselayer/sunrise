@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"sunrise/x/liquidityincentive/types"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 	errorsmod "cosmossdk.io/errors"
 )
