@@ -18,7 +18,7 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 	if msg.ParityShardCount >= uint64(len(msg.ShardDoubleHashes)) {
 		return nil, types.ErrParityShardCountGTETotal
 	}
-	// end validation
+	// end static validation
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 

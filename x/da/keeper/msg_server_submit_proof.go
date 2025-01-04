@@ -25,7 +25,7 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 	if len(msg.Indices) != len(msg.Proofs) {
 		return nil, types.ErrIndicesAndProofsMismatch
 	}
-	// end validation
+	// end static validation
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
