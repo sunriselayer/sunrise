@@ -55,6 +55,7 @@ import (
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
+	"github.com/sunriselayer/sunrise/app/custom"
 	"github.com/sunriselayer/sunrise/app/mint"
 )
 
@@ -202,6 +203,10 @@ func New(
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
 	/****  Module Options ****/
+
+	// <sunrise>
+	custom.ReplaceCustomModules(app.ModuleManager, app.appCodec)
+	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	overrideModules := map[string]module.AppModuleSimulation{
