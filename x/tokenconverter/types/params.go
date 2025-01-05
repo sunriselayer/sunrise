@@ -1,5 +1,9 @@
 package types
 
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
 // NewParams creates a new Params instance.
 func NewParams(bondDenom string, feeDenom string) Params {
 	return Params{
@@ -18,6 +22,13 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if err := sdk.ValidateDenom(p.BondDenom); err != nil {
+		return err
+	}
+
+	if err := sdk.ValidateDenom(p.FeeDenom); err != nil {
+		return err
+	}
 
 	return nil
 }
