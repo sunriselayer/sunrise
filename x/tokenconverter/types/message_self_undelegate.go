@@ -1,7 +1,12 @@
 package types
 
-func NewMsgSelfUndelegate(sender string) *MsgSelfUndelegate {
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgSelfUndelegate(sender string, amount math.Int) *MsgSelfUndelegate {
 	return &MsgSelfUndelegate{
-		Creator: sender,
+		Sender: sender,
+		Amount: amount,
 	}
 }

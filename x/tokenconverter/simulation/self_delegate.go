@@ -14,7 +14,7 @@ func MsgSelfDelegateFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSel
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgSelfDelegate{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the SelfDelegate simulation

@@ -1,7 +1,12 @@
 package types
 
-func NewMsgSelfDelegate(sender string) *MsgSelfDelegate {
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgSelfDelegate(sender string, amount math.Int) *MsgSelfDelegate {
 	return &MsgSelfDelegate{
-		Creator: sender,
+		Sender: sender,
+		Amount: amount,
 	}
 }

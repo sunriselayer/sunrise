@@ -1,7 +1,13 @@
 package types
 
-func NewMsgSelfCancelUnbonding(sender string) *MsgSelfCancelUnbonding {
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgSelfCancelUnbonding(sender string, amount math.Int, creationHeight int64) *MsgSelfCancelUnbonding {
 	return &MsgSelfCancelUnbonding{
-		Creator: sender,
+		Sender:         sender,
+		Amount:         amount,
+		CreationHeight: creationHeight,
 	}
 }

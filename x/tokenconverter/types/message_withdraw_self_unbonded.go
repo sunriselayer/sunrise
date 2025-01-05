@@ -1,7 +1,11 @@
 package types
 
-func NewMsgWithdrawSelfUnbonded(sender string) *MsgWithdrawSelfUnbonded {
-	return &MsgSelfDelegate{
-		Creator: sender,
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgWithdrawSelfUnbonded(sender string, amount math.Int) *MsgWithdrawSelfUnbonded {
+	return &MsgWithdrawSelfUnbonded{
+		Sender: sender,
 	}
 }

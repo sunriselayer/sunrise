@@ -6,7 +6,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	errorsmod "cosmossdk.io/errors"
-
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -16,7 +15,7 @@ import (
 )
 
 func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate) (*types.MsgSelfDelegateResponse, error) {
-	sender, err := k.addressCodec.StringToBytes(msg.Creator)
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
@@ -65,7 +64,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, err
 	}
 
-	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Creator)
+	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	err = k.bankKeeper.SendCoinsFromModuleToModule(
 		ctx,
 		types.ModuleName,
