@@ -7,9 +7,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	distributionkeeper "cosmossdk.io/x/distribution/keeper"
 	distributiontypes "cosmossdk.io/x/distribution/types"
 )
 
@@ -29,11 +27,7 @@ func (k msgServer) WithdrawSelfDelegationRewards(ctx context.Context, msg *types
 	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
-	distributionKeeper, ok := k.distributionKeeper.(distributionkeeper.Keeper)
-	if !ok {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidType, "invalid distribution keeper")
-	}
-	_, err = distributionkeeper.NewMsgServerImpl(distributionKeeper).WithdrawDelegatorReward(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
+	_, err = k.MsgRouterService.Invoke(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
 		DelegatorAddress: proxyAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
 	})

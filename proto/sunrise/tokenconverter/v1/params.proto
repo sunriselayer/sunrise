@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.tokenconverter.v1;
 
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
@@ -11,4 +12,9 @@ message Params {
 
   string bond_denom = 1;
   string fee_denom = 2;
+  string self_delegation_cap = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }

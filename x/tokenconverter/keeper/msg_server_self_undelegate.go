@@ -6,11 +6,8 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	stakingtypes "cosmossdk.io/x/staking/types"
 )
 
@@ -27,9 +24,6 @@ func (k msgServer) SelfUndelegate(ctx context.Context, msg *types.MsgSelfUndeleg
 		return nil, err
 	}
 
-	// TODO
-	var amount math.Int
-
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
@@ -37,14 +31,10 @@ func (k msgServer) SelfUndelegate(ctx context.Context, msg *types.MsgSelfUndeleg
 	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
-	stakingKeeper, ok := k.stakingKeeper.(*stakingkeeper.Keeper)
-	if !ok {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidType, "invalid staking keeper")
-	}
-	_, err = stakingkeeper.NewMsgServerImpl(stakingKeeper).Undelegate(ctx, &stakingtypes.MsgUndelegate{
+	_, err = k.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: proxyAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
-		Amount:           sdk.NewCoin(params.BondDenom, amount),
+		Amount:           sdk.NewCoin(params.BondDenom, msg.Amount),
 	})
 	if err != nil {
 		return nil, err
