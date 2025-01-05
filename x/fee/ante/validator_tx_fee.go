@@ -2,26 +2,20 @@
 package ante
 
 import (
+	"context"
 	"math"
 
+	"cosmossdk.io/core/transaction"
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	feekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 )
-
-func checkTxFeeWithValidatorMinGasPrices(k feekeeper.Keeper) func(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
-	return func(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
-		return _checkTxFeeWithValidatorMinGasPrices(ctx, tx, k)
-	}
-}
 
 // checkTxFeeWithValidatorMinGasPrices implements the default fee logic, where the minimum price per
 // unit of gas is fixed and set by each validator, can the tx priority is computed from the gas price.
-func _checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx, k feekeeper.Keeper) (sdk.Coins, int64, error) {
+func (dfd *DeductFeeDecorator) checkTxFeeWithValidatorMinGasPrices(ctx context.Context, tx transaction.Tx) (sdk.Coins, int64, error) {
 	feeTx, ok := tx.(sdk.FeeTx)
 	if !ok {
 		return nil, 0, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
@@ -30,12 +24,16 @@ func _checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx, k feekeepe
 	feeCoins := feeTx.GetFee()
 	gas := feeTx.GetGas()
 
-	// <sunrise>
-	if ctx.BlockHeight() != 0 {
+	// Ensure that the provided fees meet a minimum threshold for the validator,
+	// if this is a CheckTx. This is only for local mempool purposes, and thus
+	// is only ran on check tx.
+	if dfd.accountKeeper.GetEnvironment().TransactionService.ExecMode(ctx) == transaction.ExecModeCheck {
+		// <sunrise>
+
 		if len(feeCoins) != 1 {
 			return nil, 0, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
 		}
-		params, err := k.Params.Get(ctx)
+		params, err := dfd.feeKeeper.Params.Get(ctx)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -52,14 +50,9 @@ func _checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx, k feekeepe
 				return nil, 0, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid fee denomination: %s", feeCoins[0].Denom)
 			}
 		}
-	}
-	// </sunrise>
+		// </sunrise>
 
-	// Ensure that the provided fees meet a minimum threshold for the validator,
-	// if this is a CheckTx. This is only for local mempool purposes, and thus
-	// is only ran on check tx.
-	if ctx.ExecMode() == sdk.ExecModeCheck { // NOTE: using environment here breaks the API of fee logic, an alternative must be found for server/v2. ref: https://github.com/cosmos/cosmos-sdk/issues/19640
-		minGasPrices := ctx.MinGasPrices()
+		minGasPrices := dfd.minGasPrices
 		if !minGasPrices.IsZero() {
 			requiredFees := make(sdk.Coins, len(minGasPrices))
 

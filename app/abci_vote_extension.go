@@ -248,11 +248,19 @@ type ProposalHandler struct {
 	logger                 log.Logger
 	keeper                 keeper.Keeper
 	stakingKeeper          *stakingkeeper.Keeper
-	DefaultProposalHandler *blocksdkabci.ProposalHandler
 	ModuleManager          *module.Manager
+	DefaultProposalHandler *baseapp.DefaultProposalHandler
+	// DefaultProposalHandler *blocksdkabci.ProposalHandler
 }
 
-func NewProposalHandler(logger log.Logger, keeper keeper.Keeper, stakingKeeper *stakingkeeper.Keeper, ModuleManager *module.Manager, proposalHandler *blocksdkabci.ProposalHandler) *ProposalHandler {
+func NewProposalHandler(
+	logger log.Logger,
+	keeper keeper.Keeper,
+	stakingKeeper *stakingkeeper.Keeper,
+	ModuleManager *module.Manager,
+	proposalHandler *baseapp.DefaultProposalHandler,
+	// proposalHandler *blocksdkabci.ProposalHandler,
+) *ProposalHandler {
 	return &ProposalHandler{
 		logger:                 logger,
 		keeper:                 keeper,
@@ -278,7 +286,7 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 			return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
 		}
 
-		err = baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.Height, ctx.ChainID(), req.LocalLastCommit)
+		err = baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.LocalLastCommit)
 		if err != nil {
 			return nil, err
 		}
@@ -311,7 +319,7 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 		var voteExtTx VoteExtensionTx
 		for _, tx := range req.Txs {
 			if err := json.Unmarshal(tx, &voteExtTx); err == nil {
-				err := baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.Height, ctx.ChainID(), voteExtTx.ExtendedCommitInfo)
+				err := baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, voteExtTx.ExtendedCommitInfo)
 				if err != nil {
 					return nil, err
 				}
@@ -354,18 +362,16 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	}
 }
 
-func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockRequest) (*sdk.ResponsePreBlock, error) {
+func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockRequest) error {
 	ctx = ctx.WithEventManager(sdk.NewEventManager())
-	paramsChanged := false
+
 	for _, moduleName := range h.ModuleManager.OrderPreBlockers {
 		if module, ok := h.ModuleManager.Modules[moduleName].(appmodule.HasPreBlocker); ok {
-			rsp, err := module.PreBlock(ctx)
+			err := module.PreBlock(ctx)
 			if err != nil {
-				return nil, err
+				return err
 			}
-			if rsp.IsConsensusParamsChanged() {
-				paramsChanged = true
-			}
+
 		}
 	}
 
@@ -399,7 +405,7 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 		}
 	}
 
-	return &sdk.ResponsePreBlock{ConsensusParamsChanged: paramsChanged}, nil
+	return nil
 }
 
 type DataVote struct {
