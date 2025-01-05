@@ -15,7 +15,7 @@ import (
 	stakingtypes "cosmossdk.io/x/staking/types"
 )
 
-func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate) (*types.MsgSelfDelegateResponse, error) {
+func (k msgServer) SelfCancelUnbonding(ctx context.Context, msg *types.MsgSelfCancelUnbonding) (*types.MsgSelfCancelUnbondingResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Creator)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
@@ -28,68 +28,30 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, err
 	}
 
-	accAddress := sdk.AccAddress(sender)
 	// TODO
 	var amount math.Int
+	var creationHeight int64
 
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
-
-	err = k.bankKeeper.SendCoinsFromAccountToModule(
-		ctx,
-		accAddress,
-		types.ModuleName,
-		sdk.NewCoins(sdk.NewCoin(params.FeeDenom, amount)),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	err = k.bankKeeper.BurnCoins(
-		ctx,
-		types.ModuleName,
-		sdk.NewCoins(sdk.NewCoin(params.FeeDenom, amount)),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	err = k.bankKeeper.MintCoins(
-		ctx,
-		types.ModuleName,
-		sdk.NewCoins(sdk.NewCoin(params.BondDenom, amount)),
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Creator)
-	err = k.bankKeeper.SendCoinsFromModuleToModule(
-		ctx,
-		types.ModuleName,
-		proxyModuleName,
-		sdk.NewCoins(sdk.NewCoin(params.BondDenom, amount)),
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
 	stakingKeeper, ok := k.stakingKeeper.(*stakingkeeper.Keeper)
 	if !ok {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidType, "invalid staking keeper")
 	}
-	_, err = stakingkeeper.NewMsgServerImpl(stakingKeeper).Delegate(ctx, &stakingtypes.MsgDelegate{
+	_, err = stakingkeeper.NewMsgServerImpl(stakingKeeper).CancelUnbondingDelegation(ctx, &stakingtypes.MsgCancelUnbondingDelegation{
 		DelegatorAddress: proxyAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
 		Amount:           sdk.NewCoin(params.BondDenom, amount),
+		CreationHeight:   creationHeight,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return &types.MsgSelfDelegateResponse{}, nil
+	return &types.MsgSelfRedelegateResponse{}, nil
 }
