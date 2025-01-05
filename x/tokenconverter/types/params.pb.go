@@ -4,9 +4,7 @@
 package types
 
 import (
-	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
-	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	io "io"
@@ -27,9 +25,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	BondDenom    string                `protobuf:"bytes,1,opt,name=bond_denom,json=bondDenom,proto3" json:"bond_denom,omitempty"`
-	FeeDenom     string                `protobuf:"bytes,2,opt,name=fee_denom,json=feeDenom,proto3" json:"fee_denom,omitempty"`
-	MaxSupplyFee cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=max_supply_fee,json=maxSupplyFee,proto3,customtype=cosmossdk.io/math.Int" json:"max_supply_fee"`
+	BondDenom string `protobuf:"bytes,1,opt,name=bond_denom,json=bondDenom,proto3" json:"bond_denom,omitempty"`
+	FeeDenom  string `protobuf:"bytes,2,opt,name=fee_denom,json=feeDenom,proto3" json:"fee_denom,omitempty"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -135,9 +132,6 @@ func (this *Params) Equal(that interface{}) bool {
 	if this.FeeDenom != that1.FeeDenom {
 		return false
 	}
-	if !this.MaxSupplyFee.Equal(that1.MaxSupplyFee) {
-		return false
-	}
 	return true
 }
 func (m *Params) Marshal() (dAtA []byte, err error) {
@@ -160,16 +154,6 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	{
-		size := m.MaxSupplyFee.Size()
-		i -= size
-		if _, err := m.MaxSupplyFee.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintParams(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
 	if len(m.FeeDenom) > 0 {
 		i -= len(m.FeeDenom)
 		copy(dAtA[i:], m.FeeDenom)
@@ -212,8 +196,6 @@ func (m *Params) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
-	l = m.MaxSupplyFee.Size()
-	n += 1 + l + sovParams(uint64(l))
 	return n
 }
 
@@ -315,40 +297,6 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.FeeDenom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxSupplyFee", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.MaxSupplyFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
