@@ -3,6 +3,9 @@ package cmd
 import (
 	cmtcfg "github.com/cometbft/cometbft/config"
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
+
+	"fmt"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 // initCometBFTConfig helps to override default CometBFT Config values.
@@ -41,6 +44,9 @@ func initAppConfig() (string, interface{}) {
 	//
 	// In tests, we set the min gas prices to 0.
 	// srvCfg.MinGasPrices = "0stake"
+	// <sunrise>
+	srvCfg.MinGasPrices = fmt.Sprintf("%v%s", consts.DefaultMinGasPrice, consts.FeeDenom)
+	// </sunrise>
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
