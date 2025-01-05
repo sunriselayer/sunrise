@@ -6,7 +6,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	errorsmod "cosmossdk.io/errors"
-
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -16,7 +15,7 @@ import (
 )
 
 func (k msgServer) SelfUndelegate(ctx context.Context, msg *types.MsgSelfUndelegate) (*types.MsgSelfUndelegateResponse, error) {
-	sender, err := k.addressCodec.StringToBytes(msg.Creator)
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
@@ -35,7 +34,7 @@ func (k msgServer) SelfUndelegate(ctx context.Context, msg *types.MsgSelfUndeleg
 	if err != nil {
 		return nil, err
 	}
-	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Creator)
+	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
 	stakingKeeper, ok := k.stakingKeeper.(*stakingkeeper.Keeper)
@@ -51,5 +50,5 @@ func (k msgServer) SelfUndelegate(ctx context.Context, msg *types.MsgSelfUndeleg
 		return nil, err
 	}
 
-	return &types.MsgSelfDelegateResponse{}, nil
+	return &types.MsgSelfUndelegateResponse{}, nil
 }

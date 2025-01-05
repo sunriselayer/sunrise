@@ -6,8 +6,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	errorsmod "cosmossdk.io/errors"
-
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -16,7 +14,7 @@ import (
 )
 
 func (k msgServer) SelfCancelUnbonding(ctx context.Context, msg *types.MsgSelfCancelUnbonding) (*types.MsgSelfCancelUnbondingResponse, error) {
-	sender, err := k.addressCodec.StringToBytes(msg.Creator)
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
@@ -28,15 +26,11 @@ func (k msgServer) SelfCancelUnbonding(ctx context.Context, msg *types.MsgSelfCa
 		return nil, err
 	}
 
-	// TODO
-	var amount math.Int
-	var creationHeight int64
-
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
-	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Creator)
+	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
 	stakingKeeper, ok := k.stakingKeeper.(*stakingkeeper.Keeper)
@@ -46,8 +40,8 @@ func (k msgServer) SelfCancelUnbonding(ctx context.Context, msg *types.MsgSelfCa
 	_, err = stakingkeeper.NewMsgServerImpl(stakingKeeper).CancelUnbondingDelegation(ctx, &stakingtypes.MsgCancelUnbondingDelegation{
 		DelegatorAddress: proxyAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
-		Amount:           sdk.NewCoin(params.BondDenom, amount),
-		CreationHeight:   creationHeight,
+		Amount:           sdk.NewCoin(params.BondDenom, msg.Amount),
+		CreationHeight:   msg.CreationHeight,
 	})
 	if err != nil {
 		return nil, err

@@ -6,7 +6,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	errorsmod "cosmossdk.io/errors"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -15,7 +14,7 @@ import (
 )
 
 func (k msgServer) WithdrawSelfDelegationRewards(ctx context.Context, msg *types.MsgWithdrawSelfDelegationRewards) (*types.MsgSelfDelegateResponse, error) {
-	sender, err := k.addressCodec.StringToBytes(msg.Creator)
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
@@ -27,7 +26,7 @@ func (k msgServer) WithdrawSelfDelegationRewards(ctx context.Context, msg *types
 		return nil, err
 	}
 
-	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Creator)
+	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
 	distributionKeeper, ok := k.distributionKeeper.(distributionkeeper.Keeper)
