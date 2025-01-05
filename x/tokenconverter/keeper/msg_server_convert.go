@@ -16,8 +16,8 @@ func (k msgServer) Convert(ctx context.Context, msg *types.MsgConvert) (*types.M
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	if msg.Amount.IsNegative() {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "min amount must not be negative")
+	if !msg.Amount.IsPositive() {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "amount must be positive")
 	}
 
 	// end static validation

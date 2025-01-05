@@ -126,9 +126,8 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgConvert
 type MsgConvert struct {
-	Sender    string                `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	MinAmount cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=min_amount,json=minAmount,proto3,customtype=cosmossdk.io/math.Int" json:"min_amount"`
-	MaxAmount cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=max_amount,json=maxAmount,proto3,customtype=cosmossdk.io/math.Int" json:"max_amount"`
+	Sender string                `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Amount cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
 }
 
 func (m *MsgConvert) Reset()         { *m = MsgConvert{} }
@@ -173,7 +172,6 @@ func (m *MsgConvert) GetSender() string {
 
 // MsgConvertResponse
 type MsgConvertResponse struct {
-	Amount cosmossdk_io_math.Int `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
 }
 
 func (m *MsgConvertResponse) Reset()         { *m = MsgConvertResponse{} }
@@ -461,19 +459,9 @@ func (m *MsgConvert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	{
-		size := m.MaxAmount.Size()
+		size := m.Amount.Size()
 		i -= size
-		if _, err := m.MaxAmount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size := m.MinAmount.Size()
-		i -= size
-		if _, err := m.MinAmount.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintTx(dAtA, i, uint64(size))
@@ -510,16 +498,6 @@ func (m *MsgConvertResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	{
-		size := m.Amount.Size()
-		i -= size
-		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -568,9 +546,7 @@ func (m *MsgConvert) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = m.MinAmount.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = m.MaxAmount.Size()
+	l = m.Amount.Size()
 	n += 1 + l + sovTx(uint64(l))
 	return n
 }
@@ -581,8 +557,6 @@ func (m *MsgConvertResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.Amount.Size()
-	n += 1 + l + sovTx(uint64(l))
 	return n
 }
 
@@ -820,7 +794,7 @@ func (m *MsgConvert) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinAmount", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -848,41 +822,7 @@ func (m *MsgConvert) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.MinAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxAmount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.MaxAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -936,40 +876,6 @@ func (m *MsgConvertResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgConvertResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
