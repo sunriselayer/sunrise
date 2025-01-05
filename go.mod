@@ -14,6 +14,19 @@ replace (
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
 
+replace (
+	github.com/cosmos/cosmos-sdk/x/authz => cosmossdk.io/x/authz v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/bank => cosmossdk.io/x/bank v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/consensus => cosmossdk.io/x/consensus v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/distribution => cosmossdk.io/x/distribution v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/gov => cosmossdk.io/x/gov v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/group => cosmossdk.io/x/group v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/mint => cosmossdk.io/x/mint v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/params => cosmossdk.io/x/params v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/slashing => cosmossdk.io/x/slashing v0.2.0-rc.1
+	github.com/cosmos/cosmos-sdk/x/staking => cosmossdk.io/x/staking v0.2.0-rc.1
+)
+
 require (
 	cosmossdk.io/api v0.8.0-rc.3
 	cosmossdk.io/client/v2 v2.10.0-beta.1
@@ -45,12 +58,14 @@ require (
 	cosmossdk.io/x/upgrade v0.2.0-rc.1
 	github.com/bufbuild/buf v1.32.1
 	github.com/cometbft/cometbft v1.0.0
+	github.com/cometbft/cometbft-db v1.0.1
 	github.com/cometbft/cometbft/api v1.0.0
 	github.com/consensys/gnark v0.10.0
 	github.com/consensys/gnark-crypto v0.12.2-0.20240215234832-d72fcb379d3e
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.53.0
 	github.com/cosmos/gogoproto v1.7.0
+	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
@@ -60,6 +75,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
+	go.uber.org/mock v0.5.0
 	golang.org/x/tools v0.27.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241118233622-e639e219e697
 	google.golang.org/grpc v1.68.1
@@ -116,7 +132,6 @@ require (
 	github.com/cockroachdb/pebble v1.1.2 // indirect
 	github.com/cockroachdb/redact v1.1.5 // indirect
 	github.com/cockroachdb/tokenbucket v0.0.0-20230807174530-cc333fc44b06 // indirect
-	github.com/cometbft/cometbft-db v1.0.1 // indirect
 	github.com/consensys/bavard v0.1.13 // indirect
 	github.com/containerd/stargz-snapshotter/estargz v0.15.1 // indirect
 	github.com/cosmos/btcutil v1.0.5 // indirect
@@ -124,7 +139,6 @@ require (
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/gogogateway v1.2.0 // indirect
 	github.com/cosmos/iavl v1.3.4 // indirect
-	github.com/cosmos/ibc-go/v9 v9.0.2 // indirect
 	github.com/cosmos/ics23/go v0.11.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.13.3 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
@@ -160,7 +174,6 @@ require (
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gofrs/uuid/v5 v5.2.0 // indirect
 	github.com/gogo/googleapis v1.4.1 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/glog v1.2.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/mock v1.6.0 // indirect
@@ -278,7 +291,6 @@ require (
 	go.opentelemetry.io/otel/trace v1.33.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.4.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	go.uber.org/mock v0.5.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/arch v0.12.0 // indirect
