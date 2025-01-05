@@ -54,6 +54,9 @@ import (
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+
+	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	"github.com/sunriselayer/sunrise/app/custom"
 )
 
 const (
@@ -199,6 +202,63 @@ func New(
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
 	/****  Module Options ****/
+
+	// <sunrise>
+	anteHandler, err := NewAnteHandler(
+		HandlerOptions{
+			ante.HandlerOptions{
+				AccountKeeper:            app.AuthKeeper,
+				BankKeeper:               app.BankKeeper,
+				ConsensusKeeper:          app.ConsensusParamsKeeper,
+				SignModeHandler:          app.txConfig.SignModeHandler(),
+				FeegrantKeeper:           app.FeeGrantKeeper,
+				SigGasConsumer:           ante.DefaultSigVerificationGasConsumer,
+				UnorderedTxManager:       app.UnorderedTxManager,
+				Environment:              app.AuthKeeper.Environment,
+				AccountAbstractionKeeper: app.AccountsKeeper,
+			},
+			&app.CircuitBreakerKeeper,
+			app.FeeKeeper,
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	app.SetAnteHandler(anteHandler)
+	// </sunrise>
+
+	// <sunrise>
+	// Proposal handler for DA module
+	// </sunrise>
+	daProposalHandler := NewProposalHandler(
+		logger,
+		app.DaKeeper,
+		app.StakingKeeper,
+		app.ModuleManager,
+		baseapp.NewDefaultProposalHandler(app.Mempool(), app),
+	)
+
+	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
+	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
+	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
+
+	// <sunrise>
+	// Vote extension
+	voteExtHandler := NewVoteExtHandler(app.DaKeeper, app.StakingKeeper)
+
+	daConfig, err := ReadDAConfig(appOpts)
+	if err != nil {
+		panic(err)
+	}
+
+	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
+	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
+	// </sunrise>
+
+	// <sunrise>
+	// Replace custom modules
+	custom.ReplaceCustomModules(app.ModuleManager, app.appCodec)
+	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	overrideModules := map[string]module.AppModuleSimulation{

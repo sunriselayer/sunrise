@@ -10,8 +10,7 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
-
-	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
+	// ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}
