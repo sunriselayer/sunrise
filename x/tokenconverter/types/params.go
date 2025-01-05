@@ -1,13 +1,19 @@
 package types
 
 // NewParams creates a new Params instance.
-func NewParams() Params {
-	return Params{}
+func NewParams(bondDenom string, feeDenom string) Params {
+	return Params{
+		BondDenom: bondDenom,
+		FeeDenom:  feeDenom,
+	}
 }
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	return NewParams()
+	return NewParams(
+		"stake",
+		"fee",
+	)
 }
 
 // Validate validates the set of params.
