@@ -53,5 +53,5 @@ func (k msgServer) SelfCancelUnbonding(ctx context.Context, msg *types.MsgSelfCa
 		return nil, err
 	}
 
-	return &types.MsgSelfRedelegateResponse{}, nil
+	return &types.MsgSelfCancelUnbondingResponse{}, nil
 }
