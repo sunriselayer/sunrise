@@ -4,12 +4,16 @@ import (
 	"encoding/base64"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/consensys/gnark-crypto/ecc"
 	groth16 "github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
+
+	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
@@ -103,6 +107,70 @@ func GenerateZkpKeys() (string, string) {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if p.VoteThreshold.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote threshold must not be negative")
+	}
+	if p.VoteThreshold.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote threshold must be less than 1")
+	}
+
+	if p.SlashEpoch == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash epoch must be positive")
+	}
+
+	if p.EpochMaxFault == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "epoch max fault must be positive")
+	}
+
+	if p.SlashFraction.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must not be negative")
+	}
+	if p.SlashFraction.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must be less than 1")
+	}
+
+	if p.ReplicationFactor.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must not be negative")
+	}
+	if p.ReplicationFactor.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must be less than 1")
+	}
+
+	if p.MinShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "min shard count must be positive")
+	}
+
+	if p.MaxShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be positive")
+	}
+
+	if p.MaxShardCount < p.MinShardCount {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be greater than or equal to min shard count")
+	}
+
+	if p.MaxShardSize == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard size must be positive")
+	}
+
+	if p.ChallengePeriod == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge period must be positive")
+	}
+
+	if p.ProofPeriod == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "proof period must be positive")
+	}
+
+	if !p.ChallengeCollateral.IsValid() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge collateral must be valid")
+	}
+
+	if len(p.ZkpProvingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp proving key must not be empty")
+	}
+
+	if len(p.ZkpVerifyingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp verifying key must not be empty")
+	}
 
 	return nil
 }
