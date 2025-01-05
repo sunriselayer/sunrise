@@ -91,5 +91,10 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, err
 	}
 
+	err = k.distributionKeeper.SetWithdrawAddr(ctx, proxyAddr, accAddress)
+	if err != nil {
+		return nil, err
+	}
+
 	return &types.MsgSelfDelegateResponse{}, nil
 }

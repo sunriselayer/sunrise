@@ -51,3 +51,7 @@ type StakingKeeper interface {
 		validator stakingtypes.Validator, subtractAccount bool,
 	) (newShares math.LegacyDec, err error)
 }
+
+type DistributionKeeper interface {
+	SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAddr sdk.AccAddress) error
+}
