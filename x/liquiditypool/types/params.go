@@ -2,6 +2,9 @@ package types
 
 import (
 	"cosmossdk.io/math"
+
+	errorsmod "cosmossdk.io/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // NewParams creates a new Params instance.
@@ -22,6 +25,19 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if p.WithdrawFeeRate.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdraw fee rate must not be negative")
+	}
+	if p.WithdrawFeeRate.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdraw fee rate must be less than 1")
+	}
+
+	if p.SwapTreasuryTaxRate.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "swap treasury tax rate must not be negative")
+	}
+	if p.SwapTreasuryTaxRate.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "swap treasury tax rate must be less than 1")
+	}
 
 	return nil
 }
