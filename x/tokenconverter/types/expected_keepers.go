@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	banktypes "cosmossdk.io/x/bank/types"
+	stakingtypes "cosmossdk.io/x/staking/types"
 )
 
 // AccountKeeper defines the expected account keeper (noalias)
@@ -42,7 +43,7 @@ type BankKeeper interface {
 
 // StakingKeeper is expected keeper for staking module
 type StakingKeeper interface {
-	GetValidator(ctx context.Context, addr sdk.ValAddress) (sdk.ValidatorI, error)
+	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
 	GetDelegatorBonded(ctx context.Context, delegator sdk.AccAddress) (math.Int, error)
 }
 
