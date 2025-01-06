@@ -8,8 +8,8 @@ import (
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
 
+	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
-	// ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 )
 
 type Keeper struct {

@@ -7,9 +7,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	stakingtypes "cosmossdk.io/x/staking/types"
 )
 
@@ -33,11 +31,7 @@ func (k msgServer) SelfCancelUnbonding(ctx context.Context, msg *types.MsgSelfCa
 	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
 	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
 
-	stakingKeeper, ok := k.stakingKeeper.(*stakingkeeper.Keeper)
-	if !ok {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidType, "invalid staking keeper")
-	}
-	_, err = stakingkeeper.NewMsgServerImpl(stakingKeeper).CancelUnbondingDelegation(ctx, &stakingtypes.MsgCancelUnbondingDelegation{
+	_, err = k.MsgRouterService.Invoke(ctx, &stakingtypes.MsgCancelUnbondingDelegation{
 		DelegatorAddress: proxyAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
 		Amount:           sdk.NewCoin(params.BondDenom, msg.Amount),

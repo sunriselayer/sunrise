@@ -70,6 +70,13 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/testutil/x/counter" // import for side-effects
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
+	paramstypes "cosmossdk.io/x/params/types"
+	icatypes "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/types"
+	_ "github.com/cosmos/ibc-go/v9/modules/apps/29-fee" // import for side-effects
+	ibcfeetypes "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/types"
+	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
+	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
+
 	// module account permissions
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module"
@@ -96,6 +103,10 @@ var (
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		{Account: nft.ModuleName},
+		// IBC module accounts
+		{Account: ibctransfertypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: ibcfeetypes.ModuleName},
+		{Account: icatypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
@@ -152,6 +163,11 @@ var (
 						stakingtypes.ModuleName,
 						authz.ModuleName,
 						epochstypes.ModuleName,
+						// ibc modules
+						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
@@ -166,6 +182,11 @@ var (
 						feegrant.ModuleName,
 						group.ModuleName,
 						pooltypes.ModuleName,
+						// ibc modules
+						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
@@ -209,6 +230,12 @@ var (
 						circuittypes.ModuleName,
 						pooltypes.ModuleName,
 						epochstypes.ModuleName,
+						// ibc modules
+						paramstypes.ModuleName,
+						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
