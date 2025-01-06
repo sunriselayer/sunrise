@@ -47,6 +47,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
+	paramskeeper "cosmossdk.io/x/params/keeper"
+	icacontrollerkeeper "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/controller/keeper"
+	icahostkeeper "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/host/keeper"
+	ibcfeekeeper "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/keeper"
+	ibctransferkeeper "github.com/cosmos/ibc-go/v9/modules/apps/transfer/keeper"
+	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
+
 	"github.com/sunriselayer/sunrise/docs"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
@@ -101,6 +108,14 @@ type App struct {
 	CircuitBreakerKeeper  circuitkeeper.Keeper
 	PoolKeeper            poolkeeper.Keeper
 	EpochsKeeper          *epochskeeper.Keeper
+
+	// IBC
+	ParamsKeeper        paramskeeper.Keeper
+	IBCKeeper           *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+	IBCFeeKeeper        ibcfeekeeper.Keeper
+	ICAControllerKeeper icacontrollerkeeper.Keeper
+	ICAHostKeeper       icahostkeeper.Keeper
+	TransferKeeper      ibctransferkeeper.Keeper
 
 	DaKeeper                 damodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
@@ -200,6 +215,13 @@ func New(
 
 	// build app
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
+
+	// Register legacy modules
+	app.registerIBCModules()
+
+	// <sunrise>
+	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
+	// </sunrise>
 
 	/****  Module Options ****/
 

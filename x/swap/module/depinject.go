@@ -8,9 +8,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
+	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
-	// ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}
