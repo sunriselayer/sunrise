@@ -21,6 +21,14 @@ service Msg {
   rpc Convert(MsgConvert) returns (MsgConvertResponse);
   // SelfDelegate
   rpc SelfDelegate(MsgSelfDelegate) returns (MsgSelfDelegateResponse);
+  // SelfUndelegate
+  rpc SelfUndelegate(MsgSelfUndelegate) returns (MsgSelfUndelegateResponse);
+  // SelfCancelUnbonding
+  rpc SelfCancelUnbonding(MsgSelfCancelUnbonding) returns (MsgSelfCancelUnbondingResponse);
+  // WithdrawSelfDelegationRewards
+  rpc WithdrawSelfDelegationRewards(MsgWithdrawSelfDelegationRewards) returns (MsgWithdrawSelfDelegationRewardsResponse);
+  // WithdrawSelfUnbonded
+  rpc WithdrawSelfUnbonded(MsgWithdrawSelfUnbonded) returns (MsgWithdrawSelfUnbondedResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
