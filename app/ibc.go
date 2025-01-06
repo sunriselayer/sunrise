@@ -5,6 +5,7 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	govtypes "cosmossdk.io/x/gov/types"
 	govv1beta1 "cosmossdk.io/x/gov/types/v1beta1"
+	params "cosmossdk.io/x/params"
 	paramskeeper "cosmossdk.io/x/params/keeper"
 	paramstypes "cosmossdk.io/x/params/types"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -161,6 +162,7 @@ func (app *App) registerIBCModules() {
 
 	// register IBC modules
 	if err := app.RegisterModules(
+		params.NewAppModule(app.ParamsKeeper),
 		ibc.NewAppModule(app.appCodec, app.IBCKeeper),
 		ibctransfer.NewAppModule(app.appCodec, app.TransferKeeper),
 		ibcfee.NewAppModule(app.appCodec, app.IBCFeeKeeper),
@@ -177,6 +179,7 @@ func (app *App) registerIBCModules() {
 // This needs to be removed after IBC supports App Wiring.
 func RegisterIBC(registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
 	modules := map[string]appmodule.AppModule{
+		paramstypes.ModuleName:      params.AppModule{},
 		ibcexported.ModuleName:      ibc.AppModule{},
 		ibctransfertypes.ModuleName: ibctransfer.AppModule{},
 		ibcfeetypes.ModuleName:      ibcfee.AppModule{},
