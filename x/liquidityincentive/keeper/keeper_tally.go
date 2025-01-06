@@ -6,7 +6,6 @@ import (
 
 	"cosmossdk.io/math"
 
-	stakingtypes "cosmossdk.io/x/staking/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -27,7 +26,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	currValidators := make(map[string]ValidatorGovInfo)
 
 	// fetch all the bonded validators, insert them into currValidators
-	err := k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.Validator) (stop bool) {
+	err := k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator sdk.ValidatorI) (stop bool) {
 		valBz, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validator.GetOperator())
 		if err != nil {
 			return false
@@ -64,7 +63,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		}
 
 		// iterate over all delegations from voter, deduct from any delegated-to validators
-		err = k.stakingKeeper.IterateDelegations(ctx, voter, func(index int64, delegation stakingtypes.Delegation) (stop bool) {
+		err = k.stakingKeeper.IterateDelegations(ctx, voter, func(index int64, delegation sdk.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 
 			if val, ok := currValidators[valAddrStr]; ok {
