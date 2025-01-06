@@ -55,7 +55,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 
 	err = k.bankKeeper.BurnCoins(
 		ctx,
-		types.ModuleName,
+		k.accountKeeper.GetModuleAddress(types.ModuleName),
 		sdk.NewCoins(sdk.NewCoin(params.FeeDenom, msg.Amount)),
 	)
 	if err != nil {

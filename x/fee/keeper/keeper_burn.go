@@ -38,7 +38,7 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 			return errorsmod.Wrap(sdkerrors.ErrInsufficientFunds, err.Error())
 		}
 
-		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
+		if err := k.bankKeeper.BurnCoins(ctx, k.accountKeeper.GetModuleAddress(types.ModuleName), burnCoins); err != nil {
 			return err
 		}
 

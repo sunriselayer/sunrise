@@ -9,8 +9,9 @@ import (
 	banktypes "cosmossdk.io/x/bank/types"
 )
 
+// AccountKeeper defines the expected account keeper (noalias)
 type AccountKeeper interface {
-	GetModuleAddress(moduleName string) sdk.AccAddress
+	GetModuleAddress(name string) sdk.AccAddress
 }
 
 // BankKeeper defines the expected interface for the Bank module.
@@ -36,7 +37,7 @@ type BankKeeper interface {
 	DelegateCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 	UndelegateCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
-	BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
+	BurnCoins(ctx context.Context, address []byte, amt sdk.Coins) error
 }
 
 // StakingKeeper is expected keeper for staking module
