@@ -9,8 +9,9 @@ import (
 	banktypes "cosmossdk.io/x/bank/types"
 )
 
+// AccountKeeper defines the expected account keeper (noalias)
 type AccountKeeper interface {
-	GetModuleAddress(moduleName string) sdk.AccAddress
+	GetModuleAddress(name string) sdk.AccAddress
 }
 
 // BankKeeper defines the expected interface for the Bank module.
