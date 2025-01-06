@@ -36,7 +36,7 @@ func (k msgServer) WithdrawSelfUnbonded(ctx context.Context, msg *types.MsgWithd
 
 	err = k.bankKeeper.BurnCoins(
 		ctx,
-		types.ModuleName,
+		k.accountKeeper.GetModuleAddress(types.ModuleName),
 		sdk.NewCoins(sdk.NewCoin(params.BondDenom, msg.Amount)),
 	)
 	if err != nil {
