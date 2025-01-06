@@ -57,7 +57,7 @@ func (im IBCMiddleware) receiveFunds(
 		TimeoutTimestamp:   packet.TimeoutTimestamp,
 	}
 
-	ack := im.IBCModule.OnRecvPacket(ctx, overridePacket, relayer)
+	ack := im.IBCModule.OnRecvPacket(ctx, "v1", overridePacket, relayer)
 
 	if ack == nil {
 		return ack, fmt.Errorf("ack is nil")
@@ -85,12 +85,12 @@ func (im IBCMiddleware) OnRecvPacket(
 		// not have a transfer module, or c) the transfer module has been modified
 		// to accept other Packets. The best thing we can do here is pass the packet
 		// on down the stack.
-		return im.IBCModule.OnRecvPacket(ctx, packet, relayer)
+		return im.IBCModule.OnRecvPacket(ctx, "v1", packet, relayer)
 	}
 
 	m, err := types.DecodeSwapMetadata(data.Memo)
 	if err != nil {
-		return im.IBCModule.OnRecvPacket(ctx, packet, relayer)
+		return im.IBCModule.OnRecvPacket(ctx, "v1", packet, relayer)
 	}
 	metadata := *m.Swap
 
@@ -173,12 +173,12 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 ) error {
 	var data transfertypes.FungibleTokenPacketData
 	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
-		return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+		return im.IBCModule.OnAcknowledgementPacket(ctx, "v1", packet, acknowledgement, relayer)
 	}
 
 	inflightPacket, found := im.keeper.GetOutgoingInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
 	if !found {
-		return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+		return im.IBCModule.OnAcknowledgementPacket(ctx, "v1", packet, acknowledgement, relayer)
 	}
 
 	err := im.keeper.OnAcknowledgementOutgoingInFlightPacket(ctx, packet, acknowledgement, inflightPacket)
@@ -186,7 +186,7 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 		return err
 	}
 
-	return im.IBCModule.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+	return im.IBCModule.OnAcknowledgementPacket(ctx, "v1", packet, acknowledgement, relayer)
 }
 
 // OnTimeoutPacket implements the IBCModule interface.
@@ -197,17 +197,17 @@ func (im IBCMiddleware) OnTimeoutPacket(
 ) error {
 	var data transfertypes.FungibleTokenPacketData
 	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
-		return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
+		return im.IBCModule.OnTimeoutPacket(ctx, "v1", packet, relayer)
 	}
 
 	inflightPacket, found := im.keeper.GetOutgoingInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
 	if !found {
-		return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
+		return im.IBCModule.OnTimeoutPacket(ctx, "v1", packet, relayer)
 	}
 
 	if err := im.keeper.OnTimeoutOutgoingInFlightPacket(ctx, packet, inflightPacket); err != nil {
 		return err
 	}
 
-	return im.IBCModule.OnTimeoutPacket(ctx, packet, relayer)
+	return im.IBCModule.OnTimeoutPacket(ctx, "v1", packet, relayer)
 }

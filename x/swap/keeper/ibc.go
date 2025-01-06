@@ -22,8 +22,9 @@ var (
 		RevisionHeight: 0,
 	}
 
+	DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
 	// DefaultTransferPacketTimeoutTimestamp is the timeout timestamp following IBC defaults
-	DefaultTransferPacketTimeoutTimestamp = time.Duration(transfertypes.DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
+	DefaultTransferPacketTimeoutTimestamp = time.Duration(DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
 )
 
 func timeoutTimestamp(ctx sdk.Context, duration time.Duration) uint64 {
@@ -290,13 +291,13 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 	if outgoingPacket.RetriesRemaining > 0 {
 		// Resend packet
-		_, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.DestinationPort, packet.DestinationChannel)
-		if err != nil {
-			return errors.Wrap(err, "could not retrieve module from port-id")
-		}
+		// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.DestinationPort, packet.DestinationChannel)
+		// if err != nil {
+		// 	return errors.Wrap(err, "could not retrieve module from port-id")
+		// }
 		sequence, err := k.IbcKeeperFn().ChannelKeeper.SendPacket(
 			ctx,
-			chanCap,
+			// chanCap,
 			packet.SourcePort,
 			packet.SourceChannel,
 			DefaultTransferPacketTimeoutHeight,
@@ -397,13 +398,13 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		return false, err
 	}
 
-	_, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.Index.PortId, packet.Index.ChannelId)
+	// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.Index.PortId, packet.Index.ChannelId)
 	if err != nil {
 		return false, errors.Wrap(err, "could not retrieve module from port-id")
 	}
 	if err := k.IbcKeeperFn().ChannelKeeper.WriteAcknowledgement(
 		ctx,
-		chanCap,
+		// chanCap,
 		channeltypes.NewPacket(
 			packet.Data,
 			packet.Index.Sequence,
