@@ -87,20 +87,26 @@ func ProvideMintFn(bankKeeper BankKeeper) minttypes.MintFn {
 			feeProvision := liquidityIncentiveParamsRes.Params.StakingRewardRatio.MulInt(blockProvision).TruncateInt()
 			bondProvision := blockProvision.Sub(feeProvision)
 
-			feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, feeProvision))
-			bondCoins := sdk.NewCoins(sdk.NewCoin(consts.BondDenom, bondProvision))
-			if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, feeCoins); err != nil {
-				return err
-			}
-			if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, bondCoins); err != nil {
-				return err
+			if feeProvision.IsPositive() {
+				feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, feeProvision))
+
+				if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, feeCoins); err != nil {
+					return err
+				}
+				if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, feeCoins); err != nil {
+					return err
+				}
 			}
 
-			if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, feeCoins); err != nil {
-				return err
-			}
-			if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, bondCoins); err != nil {
-				return err
+			if bondProvision.IsPositive() {
+				bondCoins := sdk.NewCoins(sdk.NewCoin(consts.BondDenom, bondProvision))
+
+				if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, bondCoins); err != nil {
+					return err
+				}
+				if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, bondCoins); err != nil {
+					return err
+				}
 			}
 		}
 
