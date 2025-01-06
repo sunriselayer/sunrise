@@ -11,7 +11,7 @@ import (
 	distributiontypes "cosmossdk.io/x/distribution/types"
 )
 
-func (k msgServer) WithdrawSelfDelegationRewards(ctx context.Context, msg *types.MsgWithdrawSelfDelegationRewards) (*types.MsgSelfDelegateResponse, error) {
+func (k msgServer) WithdrawSelfDelegationRewards(ctx context.Context, msg *types.MsgWithdrawSelfDelegationRewards) (*types.MsgWithdrawSelfDelegationRewardsResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
@@ -35,5 +35,5 @@ func (k msgServer) WithdrawSelfDelegationRewards(ctx context.Context, msg *types
 		return nil, err
 	}
 
-	return &types.MsgSelfDelegateResponse{}, nil
+	return &types.MsgWithdrawSelfDelegationRewardsResponse{}, nil
 }
