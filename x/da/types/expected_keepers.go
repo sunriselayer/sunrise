@@ -5,7 +5,6 @@ import (
 
 	corestore "cosmossdk.io/core/store"
 	"cosmossdk.io/math"
-	stakingtypes "cosmossdk.io/x/staking/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -38,7 +37,7 @@ type SlashingKeeper interface {
 
 // StakingKeeper is expected keeper for staking module
 type StakingKeeper interface {
-	Validator(ctx context.Context, address sdk.ValAddress) (stakingtypes.Validator, error)
+	Validator(ctx context.Context, address sdk.ValAddress) (sdk.ValidatorI, error)
 	PowerReduction(ctx context.Context) (res math.Int)
 	ValidatorsPowerStoreIterator(ctx context.Context) (corestore.Iterator, error)
 	TotalBondedTokens(ctx context.Context) (math.Int, error)
