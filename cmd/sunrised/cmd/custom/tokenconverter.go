@@ -19,7 +19,6 @@ type CustomTokenConverterModule struct {
 func (cm CustomTokenConverterModule) DefaultGenesis() json.RawMessage {
 	genesis := tokenconvertertypes.DefaultGenesis()
 
-	genesis.Params.BondDenom = consts.BondDenom
 	genesis.Params.FeeDenom = consts.FeeDenom
 
 	return cm.cdc.MustMarshalJSON(genesis)

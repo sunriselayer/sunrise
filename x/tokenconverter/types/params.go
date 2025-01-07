@@ -19,8 +19,8 @@ func NewParams(bondDenom string, feeDenom string, selfDelegationCap math.Int) Pa
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		"stake",
-		"fee",
+		sdk.DefaultBondDenom,
+		"token",
 		math.NewInt(1_000_000).Mul(math.NewInt(1_000_000)),
 	)
 }

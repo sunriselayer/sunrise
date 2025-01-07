@@ -8,6 +8,7 @@ import (
 	params "cosmossdk.io/x/params"
 	paramskeeper "cosmossdk.io/x/params/keeper"
 	paramstypes "cosmossdk.io/x/params/types"
+	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	icamodule "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts"
@@ -25,8 +26,8 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v9/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/v9/modules/core"
-	// ibcclienttypes "github.com/cosmos/ibc-go/v9/modules/core/02-client/types"
-	// ibcconnectiontypes "github.com/cosmos/ibc-go/v9/modules/core/03-connection/types"
+	ibcclienttypes "github.com/cosmos/ibc-go/v9/modules/core/02-client/types"
+	ibcconnectiontypes "github.com/cosmos/ibc-go/v9/modules/core/03-connection/types"
 	porttypes "github.com/cosmos/ibc-go/v9/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
 	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
@@ -55,6 +56,7 @@ func (app *App) registerIBCModules() {
 		storetypes.NewKVStoreKey(ibcfeetypes.StoreKey),
 		storetypes.NewKVStoreKey(icahosttypes.StoreKey),
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
+		storetypes.NewTransientStoreKey(paramstypes.TStoreKey),
 	); err != nil {
 		panic(err)
 	}
@@ -65,6 +67,14 @@ func (app *App) registerIBCModules() {
 		app.GetKey(paramstypes.StoreKey),
 		storetypes.NewTransientStoreKeys(paramstypes.TStoreKey)[paramstypes.TStoreKey],
 	)
+
+	// register the key tables for legacy param subspaces
+	keyTable := ibcclienttypes.ParamKeyTable()
+	keyTable.RegisterParamSet(&ibcconnectiontypes.Params{})
+	app.ParamsKeeper.Subspace(ibcexported.ModuleName).WithKeyTable(keyTable)
+	app.ParamsKeeper.Subspace(ibctransfertypes.ModuleName).WithKeyTable(ibctransfertypes.ParamKeyTable())
+	app.ParamsKeeper.Subspace(icacontrollertypes.SubModuleName).WithKeyTable(icacontrollertypes.ParamKeyTable())
+	app.ParamsKeeper.Subspace(icahosttypes.SubModuleName).WithKeyTable(icahosttypes.ParamKeyTable())
 
 	// Create IBC keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
@@ -177,13 +187,13 @@ func (app *App) registerIBCModules() {
 // Since the IBC modules don't support dependency injection, we need to
 // manually register the modules on the client side.
 // This needs to be removed after IBC supports App Wiring.
-func RegisterIBC(registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
+func RegisterIBC(registry cdctypes.InterfaceRegistry, appCodec codec.Codec) map[string]appmodule.AppModule {
 	modules := map[string]appmodule.AppModule{
 		paramstypes.ModuleName:      params.AppModule{},
-		ibcexported.ModuleName:      ibc.AppModule{},
-		ibctransfertypes.ModuleName: ibctransfer.AppModule{},
-		ibcfeetypes.ModuleName:      ibcfee.AppModule{},
-		icatypes.ModuleName:         icamodule.AppModule{},
+		ibcexported.ModuleName:      ibc.NewAppModule(appCodec, nil),
+		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(appCodec, ibctransferkeeper.Keeper{}),
+		ibcfeetypes.ModuleName:      ibcfee.NewAppModule(appCodec, ibcfeekeeper.Keeper{}),
+		icatypes.ModuleName:         icamodule.NewAppModule(appCodec, nil, nil),
 		ibctm.ModuleName:            ibctm.AppModule{},
 		solomachine.ModuleName:      solomachine.AppModule{},
 	}

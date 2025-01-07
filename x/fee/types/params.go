@@ -20,9 +20,9 @@ func NewParams(feeDenom string, burnRatio math.LegacyDec, bypassDenoms []string)
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		"fee",
+		"token",
 		math.LegacyNewDecWithPrec(50, 2),
-		[]string{"stake"},
+		[]string{sdk.DefaultBondDenom},
 	)
 }
 

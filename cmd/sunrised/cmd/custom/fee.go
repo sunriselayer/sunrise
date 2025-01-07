@@ -20,7 +20,6 @@ func (cm CustomFeeModule) DefaultGenesis() json.RawMessage {
 	genesis := feetypes.DefaultGenesis()
 
 	genesis.Params.FeeDenom = consts.FeeDenom
-	genesis.Params.BypassDenoms = []string{consts.BondDenom}
 
 	return cm.cdc.MustMarshalJSON(genesis)
 }
