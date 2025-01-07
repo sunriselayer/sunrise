@@ -141,11 +141,8 @@ func (p Params) Validate() error {
 	if err != nil {
 		return err
 	}
-	if replicationFactor.IsNegative() {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must not be negative")
-	}
-	if replicationFactor.GT(math.LegacyOneDec()) {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must be less than 1")
+	if !replicationFactor.IsPositive() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must be negative")
 	}
 
 	if p.MinShardCount == 0 {
