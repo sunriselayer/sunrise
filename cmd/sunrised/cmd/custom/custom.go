@@ -2,6 +2,7 @@ package custom
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"cosmossdk.io/x/bank"
@@ -17,9 +18,13 @@ import (
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	tokenconverter "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 func ReplaceCustomModules(manager *module.Manager, cdc codec.Codec) {
+	sdk.DefaultBondDenom = consts.BondDenom
+
 	// bank
 	oldBankModule, _ := manager.Modules[banktypes.ModuleName].(bank.AppModule)
 	manager.Modules[banktypes.ModuleName] = CustomBankModule{
