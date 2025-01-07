@@ -12,7 +12,7 @@ import (
 func NewParams(feeDenom string, burnRatio math.LegacyDec, bypassDenoms []string) Params {
 	return Params{
 		FeeDenom:     feeDenom,
-		BurnRatio:    burnRatio,
+		BurnRatio:    burnRatio.String(),
 		BypassDenoms: bypassDenoms,
 	}
 }
@@ -32,10 +32,14 @@ func (p Params) Validate() error {
 		return err
 	}
 
-	if p.BurnRatio.IsNegative() {
+	burnRatio, err := math.LegacyNewDecFromStr(p.BurnRatio)
+	if err != nil {
+		return err
+	}
+	if burnRatio.IsNegative() {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "burn ratio must not be negative")
 	}
-	if p.BurnRatio.GT(math.LegacyOneDec()) {
+	if burnRatio.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "burn ratio must be less than 1")
 	}
 

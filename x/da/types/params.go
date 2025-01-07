@@ -34,11 +34,11 @@ func NewParams(
 	zkpVerifyingKey []byte,
 ) Params {
 	return Params{
-		VoteThreshold:       voteThreshold,
+		VoteThreshold:       voteThreshold.String(),
 		SlashEpoch:          slashEpoch,
 		EpochMaxFault:       epochMaxFault,
-		SlashFraction:       slashFraction,
-		ReplicationFactor:   replicationFactor,
+		SlashFraction:       slashFraction.String(),
+		ReplicationFactor:   replicationFactor.String(),
 		MinShardCount:       minShardCount,
 		MaxShardCount:       maxShardCount,
 		MaxShardSize:        maxShardSize,
@@ -107,10 +107,14 @@ func GenerateZkpKeys() (string, string) {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.VoteThreshold.IsNegative() {
+	voteThreshold, err := math.LegacyNewDecFromStr(p.VoteThreshold)
+	if err != nil {
+		return err
+	}
+	if voteThreshold.IsNegative() {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote threshold must not be negative")
 	}
-	if p.VoteThreshold.GT(math.LegacyOneDec()) {
+	if voteThreshold.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote threshold must be less than 1")
 	}
 
@@ -122,17 +126,25 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "epoch max fault must be positive")
 	}
 
-	if p.SlashFraction.IsNegative() {
+	slashFraction, err := math.LegacyNewDecFromStr(p.SlashFraction)
+	if err != nil {
+		return err
+	}
+	if slashFraction.IsNegative() {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must not be negative")
 	}
-	if p.SlashFraction.GT(math.LegacyOneDec()) {
+	if slashFraction.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must be less than 1")
 	}
 
-	if p.ReplicationFactor.IsNegative() {
+	replicationFactor, err := math.LegacyNewDecFromStr(p.ReplicationFactor)
+	if err != nil {
+		return err
+	}
+	if replicationFactor.IsNegative() {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must not be negative")
 	}
-	if p.ReplicationFactor.GT(math.LegacyOneDec()) {
+	if replicationFactor.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must be less than 1")
 	}
 

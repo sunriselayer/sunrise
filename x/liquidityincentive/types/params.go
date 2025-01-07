@@ -11,7 +11,7 @@ import (
 func NewParams(epochBlocks int64, stakingRewardRatio math.LegacyDec) Params {
 	return Params{
 		EpochBlocks:        epochBlocks,
-		StakingRewardRatio: stakingRewardRatio,
+		StakingRewardRatio: stakingRewardRatio.String(),
 	}
 }
 
@@ -29,10 +29,14 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "epoch blocks must be positive")
 	}
 
-	if p.StakingRewardRatio.IsNegative() {
+	stakingRewardRatio, err := math.LegacyNewDecFromStr(p.StakingRewardRatio)
+	if err != nil {
+		return err
+	}
+	if stakingRewardRatio.IsNegative() {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "staking reward ratio must not be negative")
 	}
-	if p.StakingRewardRatio.GT(math.LegacyOneDec()) {
+	if stakingRewardRatio.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "staking reward ratio must be less than 1")
 	}
 
