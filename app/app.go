@@ -64,7 +64,6 @@ import (
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	"github.com/sunriselayer/sunrise/app/custom"
 	"github.com/sunriselayer/sunrise/app/mint"
 )
 
@@ -259,7 +258,6 @@ func New(
 
 	// <sunrise>
 	// Proposal handler for DA module
-	// </sunrise>
 	daProposalHandler := NewProposalHandler(
 		logger,
 		app.DaKeeper,
@@ -271,6 +269,7 @@ func New(
 	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
 	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
+	// </sunrise>
 
 	// <sunrise>
 	// Vote extension
@@ -283,11 +282,6 @@ func New(
 
 	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
 	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
-	// </sunrise>
-
-	// <sunrise>
-	// Replace custom modules
-	custom.ReplaceCustomModules(app.ModuleManager, app.appCodec)
 	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations

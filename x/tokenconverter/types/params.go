@@ -1,5 +1,9 @@
 package types
 
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
 // NewParams creates a new Params instance.
 func NewParams(bondDenom string, feeDenom string) Params {
 	return Params{
@@ -11,8 +15,8 @@ func NewParams(bondDenom string, feeDenom string) Params {
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		"stake",
-		"fee",
+		sdk.DefaultBondDenom,
+		"token",
 	)
 }
 
