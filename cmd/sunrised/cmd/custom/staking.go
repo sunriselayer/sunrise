@@ -7,8 +7,6 @@ import (
 
 	"cosmossdk.io/x/staking"
 	stakingtypes "cosmossdk.io/x/staking/types"
-
-	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 type CustomStakingModule struct {
@@ -19,7 +17,7 @@ type CustomStakingModule struct {
 func (cm CustomStakingModule) DefaultGenesis() json.RawMessage {
 	genesis := stakingtypes.DefaultGenesisState()
 
-	genesis.Params.BondDenom = consts.BondDenom
+	genesis.Params.KeyRotationFee.Denom = genesis.Params.BondDenom
 
 	return cm.cdc.MustMarshalJSON(genesis)
 }

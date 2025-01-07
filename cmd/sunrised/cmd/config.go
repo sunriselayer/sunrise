@@ -5,6 +5,7 @@ import (
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 
 	"fmt"
+	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
@@ -26,6 +27,7 @@ func initAppConfig() (string, interface{}) {
 	// The following code snippet is just for reference.
 	type CustomAppConfig struct {
 		serverconfig.Config `mapstructure:",squash"`
+		DA                  app.DAConfig `mapstructure:"da"`
 	}
 
 	// Optionally allow the chain developer to overwrite the SDK's default
@@ -50,9 +52,16 @@ func initAppConfig() (string, interface{}) {
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
+		DA: app.DAConfig{
+			ShardHashesAPI: "http://localhost:8000/api/shard_hashes",
+		},
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate
+	customAppTemplate := serverconfig.DefaultConfigTemplate + `
+[da]
+# API to query DA v2 uploaded data shard hashes
+shard_hashes_api = "http://localhost:8000/api/shard_hashes"
+`
 	// Edit the default template file
 	//
 	// customAppTemplate := serverconfig.DefaultConfigTemplate + `
