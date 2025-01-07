@@ -21,44 +21,44 @@ import (
 
 func ReplaceCustomModules(manager *module.Manager, cdc codec.Codec) {
 	// bank
-	oldBankModule, _ := manager.Modules[banktypes.ModuleName].(*bank.AppModule)
+	oldBankModule, _ := manager.Modules[banktypes.ModuleName].(bank.AppModule)
 	manager.Modules[banktypes.ModuleName] = CustomBankModule{
-		AppModule: *oldBankModule,
+		AppModule: oldBankModule,
 		cdc:       cdc,
 	}
 
 	// fee
-	oldFeeModule, _ := manager.Modules[feetypes.ModuleName].(*fee.AppModule)
+	oldFeeModule, _ := manager.Modules[feetypes.ModuleName].(fee.AppModule)
 	manager.Modules[feetypes.ModuleName] = CustomFeeModule{
-		AppModule: *oldFeeModule,
+		AppModule: oldFeeModule,
 		cdc:       cdc,
 	}
 
 	// gov
-	oldGovModule, _ := manager.Modules[govtypes.ModuleName].(*gov.AppModule)
+	oldGovModule, _ := manager.Modules[govtypes.ModuleName].(gov.AppModule)
 	manager.Modules[govtypes.ModuleName] = CustomGovModule{
-		AppModule: *oldGovModule,
+		AppModule: oldGovModule,
 		cdc:       cdc,
 	}
 
 	// mint
-	oldMintModule, _ := manager.Modules[minttypes.ModuleName].(*mint.AppModule)
+	oldMintModule, _ := manager.Modules[minttypes.ModuleName].(mint.AppModule)
 	manager.Modules[minttypes.ModuleName] = CustomMintModule{
-		AppModule: *oldMintModule,
+		AppModule: oldMintModule,
 		cdc:       cdc,
 	}
 
 	// staking
-	oldStakingModule, _ := manager.Modules[stakingtypes.ModuleName].(*staking.AppModule)
+	oldStakingModule, _ := manager.Modules[stakingtypes.ModuleName].(staking.AppModule)
 	manager.Modules[stakingtypes.ModuleName] = CustomStakingModule{
-		AppModule: *oldStakingModule,
+		AppModule: oldStakingModule,
 		cdc:       cdc,
 	}
 
 	// tokenconverter
-	oldTokenConverterModule, _ := manager.Modules[tokenconvertertypes.ModuleName].(*tokenconverter.AppModule)
+	oldTokenConverterModule, _ := manager.Modules[tokenconvertertypes.ModuleName].(tokenconverter.AppModule)
 	manager.Modules[tokenconvertertypes.ModuleName] = CustomTokenConverterModule{
-		AppModule: *oldTokenConverterModule,
+		AppModule: oldTokenConverterModule,
 		cdc:       cdc,
 	}
 }
