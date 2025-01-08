@@ -43,7 +43,8 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, errorsmod.Wrapf(types.ErrExceedSelfDelegationCap, "%s + %s > %s", bonded.String(), msg.Amount.String(), params.SelfDelegationCap.String())
 	}
 
-	err = k.bankKeeper.SendCoinsFromAccountToModule(
+	// To support vesting account, use delegate
+	err = k.bankKeeper.DelegateCoinsFromAccountToModule(
 		ctx,
 		accAddress,
 		types.ModuleName,

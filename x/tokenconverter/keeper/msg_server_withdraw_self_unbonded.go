@@ -52,7 +52,8 @@ func (k msgServer) WithdrawSelfUnbonded(ctx context.Context, msg *types.MsgWithd
 		return nil, err
 	}
 
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(
+	// To support vesting account, use undelegate
+	err = k.bankKeeper.UndelegateCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
 		accAddress,
