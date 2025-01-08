@@ -45,6 +45,9 @@ require (
 	cosmossdk.io/store v1.10.0-rc.1.0.20241218084712-ca559989da43
 	cosmossdk.io/tools/confix v0.2.0-rc.1
 	cosmossdk.io/x/accounts v0.2.0-rc.1
+	cosmossdk.io/x/accounts/defaults/base v0.0.0-20241108095921-406f977be0b9
+	cosmossdk.io/x/accounts/defaults/lockup v0.0.0-00010101000000-000000000000
+	cosmossdk.io/x/accounts/defaults/multisig v0.0.0-00010101000000-000000000000
 	cosmossdk.io/x/authz v0.2.0-rc.1
 	cosmossdk.io/x/bank v0.2.0-rc.1
 	cosmossdk.io/x/circuit v0.2.0-rc.1
