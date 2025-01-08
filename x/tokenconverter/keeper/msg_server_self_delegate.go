@@ -72,10 +72,10 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, err
 	}
 
-	err = k.bankKeeper.SendCoinsFromModuleToModule(
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
-		proxyModuleName,
+		proxyAddr,
 		sdk.NewCoins(sdk.NewCoin(params.BondDenom, msg.Amount)),
 	)
 	if err != nil {
@@ -91,6 +91,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, err
 	}
 
+	// Important
 	err = k.distributionKeeper.SetWithdrawAddr(ctx, proxyAddr, accAddress)
 	if err != nil {
 		return nil, err

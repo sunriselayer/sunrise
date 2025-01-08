@@ -24,9 +24,11 @@ func (k msgServer) WithdrawSelfUnbonded(ctx context.Context, msg *types.MsgWithd
 	}
 
 	proxyModuleName := types.SelfDelegateProxyAccountModuleName(msg.Sender)
-	err = k.bankKeeper.SendCoinsFromModuleToModule(
+	proxyAddr := k.accountKeeper.GetModuleAddress(proxyModuleName)
+
+	err = k.bankKeeper.SendCoinsFromAccountToModule(
 		ctx,
-		proxyModuleName,
+		proxyAddr,
 		types.ModuleName,
 		sdk.NewCoins(sdk.NewCoin(params.BondDenom, msg.Amount)),
 	)
