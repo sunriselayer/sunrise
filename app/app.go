@@ -64,6 +64,10 @@ import (
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+
+	basedepinject "cosmossdk.io/x/accounts/defaults/base/depinject"
+	lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
+	multisigdepinject "cosmossdk.io/x/accounts/defaults/multisig/depinject"
 )
 
 const (
@@ -169,6 +173,13 @@ func New(
 				// for instance supplying a custom address codec for not using bech32 addresses.
 				// read the depinject documentation and depinject module wiring for more information
 				// on available options and how to use them.
+			),
+			depinject.Provide(
+				basedepinject.ProvideAccount,
+				lockupdepinject.ProvideAllLockupAccounts,
+				multisigdepinject.ProvideAccount,
+
+				basedepinject.ProvideSecp256K1PubKey,
 			),
 		)
 	)
