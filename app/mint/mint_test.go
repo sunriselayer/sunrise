@@ -7,6 +7,7 @@ import (
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/core/header"
+	"cosmossdk.io/core/transaction"
 	"cosmossdk.io/math"
 	minttypes "cosmossdk.io/x/mint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -50,9 +51,14 @@ type mockQueryRouterService struct {
 	mock.Mock
 }
 
-func (m *mockQueryRouterService) Invoke(ctx context.Context, req interface{}) (interface{}, error) {
+func (m *mockQueryRouterService) Invoke(ctx context.Context, req transaction.Msg) (transaction.Msg, error) {
 	args := m.Called(ctx, req)
-	return args.Get(0), args.Error(1)
+	return args.Get(0).(transaction.Msg), args.Error(1)
+}
+
+func (m *mockQueryRouterService) CanInvoke(ctx context.Context, typeURL string) error {
+	args := m.Called(ctx, typeURL)
+	return args.Error(0)
 }
 
 func TestProvideMintFn(t *testing.T) {
