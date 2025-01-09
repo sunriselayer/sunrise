@@ -41,7 +41,7 @@ func yearsSinceGenesis(genesis time.Time, current time.Time) (years uint64) {
 	if current.Before(genesis) {
 		return 0
 	}
-	const millisecondsPerYear = 31556952000
+	const millisecondsPerYear = 31536000000
 
 	return uint64(current.Sub(genesis).Milliseconds() / millisecondsPerYear)
 }

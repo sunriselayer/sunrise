@@ -13,7 +13,7 @@ import (
 
 func TestCalculateAnnualProvision(t *testing.T) {
 	ctx := sdk.Context{}
-	genesis := ctx.BlockTime().Add(-366 * 24 * time.Hour)
+	genesis := ctx.BlockTime().Add(-365 * 24 * time.Hour)
 
 	t.Run("normal inflation calculation", func(t *testing.T) {
 		provision := mint.CalculateAnnualProvision(
@@ -32,7 +32,7 @@ func TestCalculateAnnualProvision(t *testing.T) {
 	})
 
 	t.Run("hits minimum inflation rate", func(t *testing.T) {
-		genesis := ctx.BlockTime().Add(-10 * 366 * 24 * time.Hour)
+		genesis := ctx.BlockTime().Add(-10 * 365 * 24 * time.Hour)
 		provision := mint.CalculateAnnualProvision(
 			ctx,
 			math.LegacyNewDecWithPrec(10, 2), // 10% initial inflation
