@@ -2,6 +2,7 @@ package mint_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"cosmossdk.io/math"
 	minttypes "cosmossdk.io/x/mint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
@@ -62,17 +64,17 @@ func (m *mockQueryRouterService) CanInvoke(ctx context.Context, typeURL string) 
 }
 
 func TestProvideMintFn(t *testing.T) {
-	ctx := context.Background()
-	mockBank := &mockBankKeeper{}
-	mockHeader := &mockHeaderService{}
-	mockRouter := &mockQueryRouterService{}
-
-	env := appmodule.Environment{
-		HeaderService:      mockHeader,
-		QueryRouterService: mockRouter,
-	}
+	ctx := sdk.Context{}
 
 	t.Run("skips non-minute epochs", func(t *testing.T) {
+		mockBank := &mockBankKeeper{}
+		mockHeader := &mockHeaderService{}
+		mockRouter := &mockQueryRouterService{}
+
+		env := appmodule.Environment{
+			HeaderService:      mockHeader,
+			QueryRouterService: mockRouter,
+		}
 		mintFn := mint.ProvideMintFn(mockBank)
 		minter := &minttypes.Minter{}
 
@@ -80,7 +82,38 @@ func TestProvideMintFn(t *testing.T) {
 		require.NoError(t, err)
 	})
 
-	t.Run("first time minting initialization", func(t *testing.T) {
+	t.Run("zero provision when supply at cap", func(t *testing.T) {
+		mockBank := &mockBankKeeper{}
+		mockHeader := &mockHeaderService{}
+		mockRouter := &mockQueryRouterService{}
+
+		env := appmodule.Environment{
+			HeaderService:      mockHeader,
+			QueryRouterService: mockRouter,
+		}
+		currentTime := time.Now()
+		mockBank.On("GetSupply", ctx, consts.BondDenom).Return(sdk.NewCoin(consts.BondDenom, mint.SupplyCap))
+		mockBank.On("GetSupply", ctx, consts.FeeDenom).Return(sdk.NewCoin(consts.FeeDenom, math.NewInt(0)))
+		mockHeader.On("HeaderInfo", ctx).Return(header.Info{Time: currentTime})
+		mockBank.On("MintCoins", ctx, minttypes.ModuleName, mock.Anything).Return(fmt.Errorf("minted any coins"))                                             // if this is called, it means the test failed
+		mockBank.On("SendCoinsFromModuleToModule", ctx, minttypes.ModuleName, authtypes.FeeCollectorName, mock.Anything).Return(fmt.Errorf("sent any coins")) // if this is called, it means the test failed
+
+		mintFn := mint.ProvideMintFn(mockBank)
+		minter := &minttypes.Minter{Data: make([]byte, 8)}
+
+		err := mintFn(ctx, env, minter, "minute", 1)
+		require.NoError(t, err)
+	})
+
+	t.Run("normal minting", func(t *testing.T) {
+		mockBank := &mockBankKeeper{}
+		mockHeader := &mockHeaderService{}
+		mockRouter := &mockQueryRouterService{}
+
+		env := appmodule.Environment{
+			HeaderService:      mockHeader,
+			QueryRouterService: mockRouter,
+		}
 		currentTime := time.Now()
 		mockBank.On("GetSupply", ctx, consts.BondDenom).Return(sdk.NewCoin(consts.BondDenom, math.NewInt(1000000)))
 		mockBank.On("GetSupply", ctx, consts.FeeDenom).Return(sdk.NewCoin(consts.FeeDenom, math.NewInt(0)))
@@ -90,28 +123,15 @@ func TestProvideMintFn(t *testing.T) {
 				StakingRewardRatio: math.LegacyNewDecWithPrec(30, 2),
 			},
 		}, nil)
-		mockBank.On("MintCoins", ctx, mock.Anything, mock.Anything).Return(nil)
-		mockBank.On("SendCoinsFromModuleToModule", ctx, mock.Anything, mock.Anything, mock.Anything).Return(nil)
-
-		mintFn := mint.ProvideMintFn(mockBank)
-		minter := &minttypes.Minter{}
-
-		err := mintFn(ctx, env, minter, "minute", 1)
-		require.NoError(t, err)
-		require.NotNil(t, minter.Data)
-		require.Equal(t, 8, len(minter.Data))
-	})
-
-	t.Run("zero provision when supply at cap", func(t *testing.T) {
-		currentTime := time.Now()
-		mockBank.On("GetSupply", ctx, consts.BondDenom).Return(sdk.NewCoin(consts.BondDenom, mint.SupplyCap))
-		mockBank.On("GetSupply", ctx, consts.FeeDenom).Return(sdk.NewCoin(consts.FeeDenom, math.NewInt(0)))
-		mockHeader.On("HeaderInfo", ctx).Return(header.Info{Time: currentTime})
+		mockBank.On("MintCoins", ctx, minttypes.ModuleName, mock.Anything).Return(nil)
+		mockBank.On("SendCoinsFromModuleToModule", ctx, minttypes.ModuleName, authtypes.FeeCollectorName, mock.Anything).Return(nil)
 
 		mintFn := mint.ProvideMintFn(mockBank)
 		minter := &minttypes.Minter{Data: make([]byte, 8)}
 
 		err := mintFn(ctx, env, minter, "minute", 1)
 		require.NoError(t, err)
+		require.NotNil(t, minter.Data)
+		require.Equal(t, 8, len(minter.Data))
 	})
 }
