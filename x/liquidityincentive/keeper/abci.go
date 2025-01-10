@@ -49,20 +49,8 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
-	fees := k.bankKeeper.GetAllBalances(ctx, feeCollector)
-	vRiseAmount := fees.AmountOf(consts.BondDenom)
-	amount := sdk.NewCoin(consts.BondDenom, vRiseAmount)
-	feesDec := sdk.NewDecCoinsFromCoins(amount)
-
-	params, err := k.Params.Get(ctx)
-	if err != nil {
-		return err
-	}
-	stakingRewardRatio, err := math.LegacyNewDecFromStr(params.StakingRewardRatio)
-	if err != nil {
-		return err
-	}
-	incentiveFeesDec := feesDec.MulDecTruncate(math.LegacyOneDec().Sub(stakingRewardRatio))
+	vRise := k.bankKeeper.GetBalance(ctx, feeCollector, consts.BondDenom)
+	vRiseDec := sdk.NewDecCoinsFromCoins(vRise)
 
 	lastEpoch, found := k.GetLastEpoch(ctx)
 	if !found {
@@ -79,7 +67,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	}
 	for _, gauge := range lastEpoch.Gauges {
 		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
-		allocationDec := incentiveFeesDec.MulDecTruncate(weight)
+		allocationDec := vRiseDec.MulDecTruncate(weight)
 		allocation, _ := allocationDec.TruncateDecimal()
 		if allocation.IsAllPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(

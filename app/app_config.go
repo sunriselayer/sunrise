@@ -212,11 +212,11 @@ var (
 					// NOTE: The genutils module must also occur after auth so that it can access the params from auth.
 					InitGenesis: []string{
 						consensustypes.ModuleName,
-						accounts.ModuleName,
 						authtypes.ModuleName,
 						banktypes.ModuleName,
-						distrtypes.ModuleName,
 						stakingtypes.ModuleName,
+						accounts.ModuleName,
+						distrtypes.ModuleName,
 						slashingtypes.ModuleName,
 						govtypes.ModuleName,
 						minttypes.ModuleName,
