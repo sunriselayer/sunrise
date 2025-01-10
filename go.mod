@@ -60,6 +60,7 @@ require (
 	cosmossdk.io/x/group v0.2.0-rc.1
 	cosmossdk.io/x/mint v0.2.0-rc.1
 	cosmossdk.io/x/nft v0.2.0-rc.1
+	cosmossdk.io/x/params v0.0.0-00010101000000-000000000000
 	cosmossdk.io/x/protocolpool v0.2.0-rc.1
 	cosmossdk.io/x/slashing v0.2.0-rc.1
 	cosmossdk.io/x/staking v0.2.0-rc.1
@@ -108,7 +109,6 @@ require (
 	connectrpc.com/otelconnect v0.7.0 // indirect
 	cosmossdk.io/core/testing v0.0.1 // indirect
 	cosmossdk.io/schema v1.0.0 // indirect
-	cosmossdk.io/x/params v0.0.0-00010101000000-000000000000 // indirect
 	cosmossdk.io/x/tx v1.0.0-alpha.3 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
@@ -276,6 +276,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/supranational/blst v0.3.13 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d // indirect
