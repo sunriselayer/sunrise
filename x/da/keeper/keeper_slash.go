@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -49,6 +50,7 @@ func (k Keeper) IterateFaultCounters(ctx context.Context,
 func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 	// TODO: error handling
 	params, _ := k.Params.Get(ctx)
+	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction) // TODO: remove with Dec
 	powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
 		validator, err := k.StakingKeeper.Validator(ctx, operator)
@@ -71,7 +73,7 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 		}
 
 		err = k.SlashingKeeper.Slash(
-			ctx, consAddr, params.SlashFraction,
+			ctx, consAddr, slashFraction,
 			validator.GetConsensusPower(powerReduction),
 			ctx.BlockHeight()-sdk.ValidatorUpdateDelay-1,
 		)

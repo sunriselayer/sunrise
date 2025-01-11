@@ -39,7 +39,9 @@ func TestMsgUpdateParams(t *testing.T) {
 			name: "send enabled param",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params:    types.Params{},
+				Params: types.Params{
+					InterfaceFeeRate: "0.01",
+				},
 			},
 			expErr: false,
 		},

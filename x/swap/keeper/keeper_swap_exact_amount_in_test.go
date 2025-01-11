@@ -4,16 +4,17 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sunriselayer/sunrise/testutil/sample"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 func TestSwapExactAmountIn(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sample.AccAddress()
 	senderAcc := sdk.MustAccAddressFromBech32(sender)
 	tests := []struct {
 		desc              string

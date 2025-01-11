@@ -14,6 +14,7 @@ import (
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
+	"cosmossdk.io/math"
 	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -165,7 +166,11 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
-					threshold := params.ReplicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
+					if err != nil {
+						continue
+					}
+					threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
 					if threshold > int64(len(msg.ShardDoubleHashes)) {
 						threshold = int64(len(msg.ShardDoubleHashes))
 					}
@@ -591,7 +596,11 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		}
 
 		totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, h.stakingKeeper.PowerReduction(ctx))
-		thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
+		voteThreshold, err := math.LegacyNewDecFromStr(params.VoteThreshold) // TODO: remove with math.Dec
+		if err != nil {
+			return nil, nil, err
+		}
+		thresholdPower := voteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 
 		publishedData, aboveThreshold := GetAboveThresholdVotedData(dataVote, thresholdPower, valPowerMap, faultValidators)
 		if !aboveThreshold {

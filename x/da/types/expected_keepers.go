@@ -23,12 +23,6 @@ type BankKeeper interface {
 	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 }
 
-// ParamSubspace defines the expected Subspace interface for parameters.
-type ParamSubspace interface {
-	Get(context.Context, []byte, interface{})
-	Set(context.Context, []byte, interface{})
-}
-
 // StakingKeeper is expected keeper for slashing module
 type SlashingKeeper interface {
 	Slash(context.Context, sdk.ConsAddress, math.LegacyDec, int64, int64) error

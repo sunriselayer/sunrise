@@ -19,9 +19,10 @@ func (k Keeper) calculateInterfaceFeeExactAmountIn(
 
 	//TODO: error handling
 	params, _ := k.Params.Get(ctx)
+	interfaceFeeRate := math.LegacyMustNewDecFromStr(params.InterfaceFeeRate) // TODO: remove with math.Dec
 	// $ amountOutNet = amountOutGross - interfaceFee $
 	//                = amountOutGross * (1 - interfaceFeeRate) $
-	amountOutNet = math.LegacyNewDecFromInt(amountOutGross).Mul(math.LegacyOneDec().Sub(params.InterfaceFeeRate)).TruncateInt()
+	amountOutNet = math.LegacyNewDecFromInt(amountOutGross).Mul(math.LegacyOneDec().Sub(interfaceFeeRate)).TruncateInt()
 	interfaceFee = amountOutGross.Sub(amountOutNet)
 
 	return amountOutNet, interfaceFee

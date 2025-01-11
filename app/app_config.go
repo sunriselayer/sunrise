@@ -109,12 +109,12 @@ var (
 		{Account: icatypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
-		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: damoduletypes.ModuleName},
+		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		{Account: damoduletypes.ModuleName},
 	}
 
 	// blocked account addresses
@@ -212,11 +212,11 @@ var (
 					// NOTE: The genutils module must also occur after auth so that it can access the params from auth.
 					InitGenesis: []string{
 						consensustypes.ModuleName,
-						accounts.ModuleName,
 						authtypes.ModuleName,
 						banktypes.ModuleName,
-						distrtypes.ModuleName,
 						stakingtypes.ModuleName,
+						accounts.ModuleName,
+						distrtypes.ModuleName,
 						slashingtypes.ModuleName,
 						govtypes.ModuleName,
 						minttypes.ModuleName,

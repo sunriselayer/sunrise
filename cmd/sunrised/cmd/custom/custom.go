@@ -11,6 +11,8 @@ import (
 	govtypes "cosmossdk.io/x/gov/types"
 	"cosmossdk.io/x/mint"
 	minttypes "cosmossdk.io/x/mint/types"
+	"cosmossdk.io/x/protocolpool"
+	protocolpooltypes "cosmossdk.io/x/protocolpool/types"
 	"cosmossdk.io/x/staking"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
@@ -50,6 +52,13 @@ func ReplaceCustomModules(manager *module.Manager, cdc codec.Codec) {
 	oldMintModule, _ := manager.Modules[minttypes.ModuleName].(mint.AppModule)
 	manager.Modules[minttypes.ModuleName] = CustomMintModule{
 		AppModule: oldMintModule,
+		cdc:       cdc,
+	}
+
+	// protocolpool
+	oldProtocolPoolModule, _ := manager.Modules[protocolpooltypes.ModuleName].(protocolpool.AppModule)
+	manager.Modules[protocolpooltypes.ModuleName] = CustomProtocolPoolModule{
+		AppModule: oldProtocolPoolModule,
 		cdc:       cdc,
 	}
 
