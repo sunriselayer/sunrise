@@ -8,11 +8,13 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/testutil/sample"
+
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestAllocateIncentive(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sample.AccAddress()
 	senderAcc := sdk.MustAccAddressFromBech32(sender)
 
 	tests := []struct {

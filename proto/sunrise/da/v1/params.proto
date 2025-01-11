@@ -2,6 +2,7 @@ syntax = "proto3";
 package sunrise.da.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
@@ -11,20 +12,11 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 message Params {
   option (gogoproto.equal) = true;
 
-  string vote_threshold = 1 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string vote_threshold = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
   uint64 slash_epoch = 2;
   uint64 epoch_max_fault = 3;
-  string slash_fraction = 4 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
-  string replication_factor = 5 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string slash_fraction = 4 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  string replication_factor = 5 [(cosmos_proto.scalar) = "cosmos.Dec"];
   uint64 min_shard_count = 6;
   uint64 max_shard_count = 7;
   uint64 max_shard_size = 8;

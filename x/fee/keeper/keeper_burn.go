@@ -2,6 +2,7 @@ package keeper
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -14,12 +15,17 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	if err != nil {
 		return err
 	}
+	burnRatio, err := math.LegacyNewDecFromStr(params.BurnRatio)
+	if err != nil {
+		return err
+	}
+
 	for _, fee := range fees {
 		// skip if fee is not the fee denom
 		if fee.Denom != params.FeeDenom {
 			continue
 		}
-		burnAmount := params.BurnRatio.MulInt(fee.Amount).TruncateInt()
+		burnAmount := burnRatio.MulInt(fee.Amount).TruncateInt()
 
 		// skip if burn amount is zero
 		if burnAmount.IsZero() {

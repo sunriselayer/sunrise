@@ -12,6 +12,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// TODO: error handling
 	params, _ := k.Params.Get(ctx)
+	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
 	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, uint64(sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix()))
 	if err != nil {
 		k.Logger.Error(err.Error())
@@ -106,7 +107,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			safeShardCount := int64(0)
 			for indice, proofCount := range shardProofCount {
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
-				replicationFactorWithParity := params.ReplicationFactor.
+				replicationFactorWithParity := replicationFactor.
 					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
 					QuoInt64(int64(len(data.ShardDoubleHashes)))
 
