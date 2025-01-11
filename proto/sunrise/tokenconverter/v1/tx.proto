@@ -19,16 +19,6 @@ service Msg {
 
   // Convert
   rpc Convert(MsgConvert) returns (MsgConvertResponse);
-  // SelfDelegate
-  rpc SelfDelegate(MsgSelfDelegate) returns (MsgSelfDelegateResponse);
-  // SelfUndelegate
-  rpc SelfUndelegate(MsgSelfUndelegate) returns (MsgSelfUndelegateResponse);
-  // SelfCancelUnbonding
-  rpc SelfCancelUnbonding(MsgSelfCancelUnbonding) returns (MsgSelfCancelUnbondingResponse);
-  // WithdrawSelfDelegationRewards
-  rpc WithdrawSelfDelegationRewards(MsgWithdrawSelfDelegationRewards) returns (MsgWithdrawSelfDelegationRewardsResponse);
-  // WithdrawSelfUnbonded
-  rpc WithdrawSelfUnbonded(MsgWithdrawSelfUnbonded) returns (MsgWithdrawSelfUnbondedResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -62,73 +52,3 @@ message MsgConvert {
 
 // MsgConvertResponse
 message MsgConvertResponse {}
-
-// MsgSelfDelegate
-message MsgSelfDelegate {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of fee denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
-// MsgSelfDelegateResponse
-message MsgSelfDelegateResponse {}
-
-// MsgSelfUndelegate
-message MsgSelfUndelegate {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of bond denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
-// MsgSelfUndelegateResponse
-message MsgSelfUndelegateResponse {}
-
-// MsgSelfCancelUnbonding
-message MsgSelfCancelUnbonding {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of bond denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-  int64 creation_height = 3;
-}
-
-// MsgSelfCancelUnbondingResponse
-message MsgSelfCancelUnbondingResponse {}
-
-// MsgWithdrawSelfDelegationRewards
-message MsgWithdrawSelfDelegationRewards {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-}
-
-// MsgWithdrawSelfDelegationRewardsResponse
-message MsgWithdrawSelfDelegationRewardsResponse {}
-
-// MsgWithdrawSelfUnbonded
-message MsgWithdrawSelfUnbonded {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of bond denom in proxy account
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
-// MsgWithdrawSelfUnbondedResponse
-message MsgWithdrawSelfUnbondedResponse {}
