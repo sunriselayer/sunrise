@@ -120,7 +120,7 @@ func TestProvideMintFn(t *testing.T) {
 		mockHeader.On("HeaderInfo", ctx).Return(header.Info{Time: currentTime})
 		mockRouter.On("Invoke", ctx, mock.Anything).Return(&liquidityincentivetypes.QueryParamsResponse{
 			Params: liquidityincentivetypes.Params{
-				StakingRewardRatio: math.LegacyNewDecWithPrec(30, 2),
+				StakingRewardRatio: math.LegacyNewDecWithPrec(30, 2).String(),
 			},
 		}, nil)
 		mockBank.On("MintCoins", ctx, minttypes.ModuleName, mock.Anything).Return(nil)

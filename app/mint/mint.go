@@ -84,7 +84,11 @@ func ProvideMintFn(bankKeeper BankKeeper) minttypes.MintFn {
 			if !ok {
 				return fmt.Errorf("unexpected response type: %T", res)
 			}
-			feeProvision := liquidityIncentiveParamsRes.Params.StakingRewardRatio.MulInt(blockProvision).TruncateInt()
+			stakingRewardRatio, err := math.LegacyNewDecFromStr(liquidityIncentiveParamsRes.Params.StakingRewardRatio)
+			if err != nil {
+				return err
+			}
+			feeProvision := stakingRewardRatio.MulInt(blockProvision).TruncateInt()
 			bondProvision := blockProvision.Sub(feeProvision)
 
 			if feeProvision.IsPositive() {
