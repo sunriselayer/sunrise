@@ -25,6 +25,10 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	// <sunsise>
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	// </sunrise>
 )
 
 var (
@@ -347,14 +351,21 @@ func sendMessage(ctx context.Context, msg proto.Message) ([]*codectypes.Any, err
 	return accountstd.ExecModuleAnys(ctx, []*codectypes.Any{asAny})
 }
 
+// <sunrise />
 func getStakingDenom(ctx context.Context) (string, error) {
-	// Query account balance for the sent denom
-	resp, err := accountstd.QueryModule[*stakingtypes.QueryParamsResponse](ctx, &stakingtypes.QueryParamsRequest{})
+	// // Query account balance for the sent denom
+	// resp, err := accountstd.QueryModule[*stakingtypes.QueryParamsResponse](ctx, &stakingtypes.QueryParamsRequest{})
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	// return resp.Params.BondDenom, nil
+	resp, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
 	if err != nil {
 		return "", err
 	}
 
-	return resp.Params.BondDenom, nil
+	return resp.Params.FeeDenom, nil
 }
 
 // checkUnbondingEntriesMature iterates through all the unbonding entries and check if any of the entries are matured and handled.
