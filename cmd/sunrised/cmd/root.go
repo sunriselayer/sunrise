@@ -29,7 +29,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/sunriselayer/sunrise/app/custom"
-	customtypes "github.com/sunriselayer/sunrise/app/custom/types"
 )
 
 // NewRootCmd creates a new root command for sunrised. It is called once in the main function.
@@ -39,9 +38,7 @@ func NewRootCmd() *cobra.Command {
 		moduleManager *module.Manager
 		clientCtx     client.Context
 
-		appCodec             codec.Codec
-		stakingKeeper        customtypes.StakingKeeper
-		tokenConverterKeeper customtypes.TokenConverterKeeper
+		appCodec codec.Codec
 	)
 
 	if err := depinject.Inject(
@@ -56,8 +53,6 @@ func NewRootCmd() *cobra.Command {
 		&clientCtx,
 
 		&appCodec,
-		&stakingKeeper,
-		&tokenConverterKeeper,
 	); err != nil {
 		panic(err)
 	}
@@ -102,7 +97,7 @@ func NewRootCmd() *cobra.Command {
 		autoCliOpts.Modules[name] = mod
 	}
 	// <sunrise>
-	custom.ReplaceCustomModules(moduleManager, appCodec, stakingKeeper, tokenConverterKeeper)
+	custom.ReplaceCustomModules(moduleManager, appCodec)
 	// </sunrise>
 	initRootCmd(rootCmd, moduleManager)
 

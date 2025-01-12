@@ -23,15 +23,11 @@ import (
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
-
-	customtypes "github.com/sunriselayer/sunrise/app/custom/types"
 )
 
 func ReplaceCustomModules(
 	manager *module.Manager,
 	cdc codec.Codec,
-	stakingKeeper customtypes.StakingKeeper,
-	tokenConverterKeeper customtypes.TokenConverterKeeper,
 ) {
 	sdk.DefaultBondDenom = consts.BondDenom
 
@@ -73,10 +69,8 @@ func ReplaceCustomModules(
 	// staking
 	oldStakingModule, _ := manager.Modules[stakingtypes.ModuleName].(staking.AppModule)
 	manager.Modules[stakingtypes.ModuleName] = CustomStakingModule{
-		AppModule:            oldStakingModule,
-		cdc:                  cdc,
-		keeper:               stakingKeeper,
-		tokenconverterKeeper: tokenConverterKeeper,
+		AppModule: oldStakingModule,
+		cdc:       cdc,
 	}
 
 	// tokenconverter

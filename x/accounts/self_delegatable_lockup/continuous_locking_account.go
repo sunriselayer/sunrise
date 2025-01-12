@@ -12,6 +12,10 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	// <sunsise>
+	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
+	// </sunrise>
 )
 
 // Compile-time type assertions
@@ -60,16 +64,23 @@ func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.M
 	return cva.BaseLockup.Init(ctx, msg)
 }
 
-func (cva *ContinuousLockingAccount) Delegate(ctx context.Context, msg *lockuptypes.MsgDelegate) (
-	*lockuptypes.MsgExecuteMessagesResponse, error,
-) {
-	return cva.BaseLockup.Delegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
-}
+// func (cva *ContinuousLockingAccount) Delegate(ctx context.Context, msg *lockuptypes.MsgDelegate) (
+// 	*lockuptypes.MsgExecuteMessagesResponse, error,
+// ) {
+// 	return cva.BaseLockup.Delegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
+// }
 
 func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *lockuptypes.MsgSend) (
 	*lockuptypes.MsgExecuteMessagesResponse, error,
 ) {
 	return cva.BaseLockup.SendCoins(ctx, msg, cva.GetLockedCoinsWithDenoms)
+}
+
+// <sunrise>
+func (cva *ContinuousLockingAccount) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate) (
+	*v1.MsgSelfDelegateResponse, error,
+) {
+	return cva.BaseLockup.SelfDelegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
 }
 
 // GetLockCoinsInfo returns the total number of unlocked and locked coins.
@@ -203,9 +214,13 @@ func (cva ContinuousLockingAccount) RegisterInitHandler(builder *accountstd.Init
 }
 
 func (cva ContinuousLockingAccount) RegisterExecuteHandlers(builder *accountstd.ExecuteBuilder) {
-	accountstd.RegisterExecuteHandler(builder, cva.Delegate)
+	// accountstd.RegisterExecuteHandler(builder, cva.Delegate)
 	accountstd.RegisterExecuteHandler(builder, cva.SendCoins)
 	cva.BaseLockup.RegisterExecuteHandlers(builder)
+
+	// <sunrise>
+	accountstd.RegisterExecuteHandler(builder, cva.SelfDelegate)
+	// </sunrise>
 }
 
 func (cva ContinuousLockingAccount) RegisterQueryHandlers(builder *accountstd.QueryBuilder) {

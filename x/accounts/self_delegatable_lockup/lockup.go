@@ -18,7 +18,7 @@ import (
 	"cosmossdk.io/x/accounts/accountstd"
 	lockuptypes "cosmossdk.io/x/accounts/defaults/lockup/v1"
 	banktypes "cosmossdk.io/x/bank/types"
-	distrtypes "cosmossdk.io/x/distribution/types"
+	// distrtypes "cosmossdk.io/x/distribution/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -27,6 +27,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	// <sunsise>
+	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// </sunrise>
 )
@@ -128,159 +129,159 @@ func (bva *BaseLockup) Init(ctx context.Context, msg *lockuptypes.MsgInitLockupA
 	return &lockuptypes.MsgInitLockupAccountResponse{}, nil
 }
 
-func (bva *BaseLockup) Delegate(
-	ctx context.Context, msg *lockuptypes.MsgDelegate, getLockedCoinsFunc getLockedCoinsFunc,
-) (
-	*lockuptypes.MsgExecuteMessagesResponse, error,
-) {
-	err := bva.checkSender(ctx, msg.Sender)
-	if err != nil {
-		return nil, err
-	}
-	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
-	if err != nil {
-		return nil, err
-	}
+// func (bva *BaseLockup) Delegate(
+// 	ctx context.Context, msg *lockuptypes.MsgDelegate, getLockedCoinsFunc getLockedCoinsFunc,
+// ) (
+// 	*lockuptypes.MsgExecuteMessagesResponse, error,
+// ) {
+// 	err := bva.checkSender(ctx, msg.Sender)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	whoami := accountstd.Whoami(ctx)
+// 	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	hs := bva.headerService.HeaderInfo(ctx)
+// 	hs := bva.headerService.HeaderInfo(ctx)
 
-	balance, err := bva.getBalance(ctx, delegatorAddress, msg.Amount.Denom)
-	if err != nil {
-		return nil, err
-	}
-	lockedCoins, err := getLockedCoinsFunc(ctx, hs.Time, msg.Amount.Denom)
-	if err != nil {
-		return nil, err
-	}
+// 	balance, err := bva.getBalance(ctx, delegatorAddress, msg.Amount.Denom)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	lockedCoins, err := getLockedCoinsFunc(ctx, hs.Time, msg.Amount.Denom)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	// refresh ubd entries to make sure delegation locking amount is up to date
-	err = bva.checkUnbondingEntriesMature(ctx)
-	if err != nil {
-		return nil, err
-	}
+// 	// refresh ubd entries to make sure delegation locking amount is up to date
+// 	err = bva.checkUnbondingEntriesMature(ctx)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	err = bva.TrackDelegation(
-		ctx,
-		sdk.Coins{*balance},
-		lockedCoins,
-		sdk.Coins{msg.Amount},
-	)
-	if err != nil {
-		return nil, err
-	}
+// 	err = bva.TrackDelegation(
+// 		ctx,
+// 		sdk.Coins{*balance},
+// 		lockedCoins,
+// 		sdk.Coins{msg.Amount},
+// 	)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	msgDelegate := &stakingtypes.MsgDelegate{
-		DelegatorAddress: delegatorAddress,
-		ValidatorAddress: msg.ValidatorAddress,
-		Amount:           msg.Amount,
-	}
-	resp, err := sendMessage(ctx, msgDelegate)
-	if err != nil {
-		return nil, err
-	}
+// 	msgDelegate := &stakingtypes.MsgDelegate{
+// 		DelegatorAddress: delegatorAddress,
+// 		ValidatorAddress: msg.ValidatorAddress,
+// 		Amount:           msg.Amount,
+// 	}
+// 	resp, err := sendMessage(ctx, msgDelegate)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
-}
+// 	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
+// }
 
-func (bva *BaseLockup) Undelegate(
-	ctx context.Context, msg *lockuptypes.MsgUndelegate,
-) (
-	*lockuptypes.MsgExecuteMessagesResponse, error,
-) {
-	err := bva.checkSender(ctx, msg.Sender)
-	if err != nil {
-		return nil, err
-	}
-	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
-	if err != nil {
-		return nil, err
-	}
+// func (bva *BaseLockup) Undelegate(
+// 	ctx context.Context, msg *lockuptypes.MsgUndelegate,
+// ) (
+// 	*lockuptypes.MsgExecuteMessagesResponse, error,
+// ) {
+// 	err := bva.checkSender(ctx, msg.Sender)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	whoami := accountstd.Whoami(ctx)
+// 	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	msgUndelegate := &stakingtypes.MsgUndelegate{
-		DelegatorAddress: delegatorAddress,
-		ValidatorAddress: msg.ValidatorAddress,
-		Amount:           msg.Amount,
-	}
-	resp, err := sendMessage(ctx, msgUndelegate)
-	if err != nil {
-		return nil, err
-	}
+// 	msgUndelegate := &stakingtypes.MsgUndelegate{
+// 		DelegatorAddress: delegatorAddress,
+// 		ValidatorAddress: msg.ValidatorAddress,
+// 		Amount:           msg.Amount,
+// 	}
+// 	resp, err := sendMessage(ctx, msgUndelegate)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	header := bva.headerService.HeaderInfo(ctx)
+// 	header := bva.headerService.HeaderInfo(ctx)
 
-	msgUndelegateResp, err := accountstd.UnpackAny[stakingtypes.MsgUndelegateResponse](resp[0])
-	if err != nil {
-		return nil, err
-	}
+// 	msgUndelegateResp, err := accountstd.UnpackAny[stakingtypes.MsgUndelegateResponse](resp[0])
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	isNewEntry := true
-	entries, err := bva.UnbondEntries.Get(ctx, msg.ValidatorAddress)
-	if err != nil {
-		if errorsmod.IsOf(err, collections.ErrNotFound) {
-			entries = lockuptypes.UnbondingEntries{
-				Entries: []*lockuptypes.UnbondingEntry{},
-			}
-		} else {
-			return nil, err
-		}
-	}
+// 	isNewEntry := true
+// 	entries, err := bva.UnbondEntries.Get(ctx, msg.ValidatorAddress)
+// 	if err != nil {
+// 		if errorsmod.IsOf(err, collections.ErrNotFound) {
+// 			entries = lockuptypes.UnbondingEntries{
+// 				Entries: []*lockuptypes.UnbondingEntry{},
+// 			}
+// 		} else {
+// 			return nil, err
+// 		}
+// 	}
 
-	for i, entry := range entries.Entries {
-		if entry.CreationHeight == header.Height && entry.EndTime.Equal(msgUndelegateResp.CompletionTime) {
-			entry.Amount = entry.Amount.Add(msg.Amount)
+// 	for i, entry := range entries.Entries {
+// 		if entry.CreationHeight == header.Height && entry.EndTime.Equal(msgUndelegateResp.CompletionTime) {
+// 			entry.Amount = entry.Amount.Add(msg.Amount)
 
-			// update the entry
-			entries.Entries[i] = entry
-			isNewEntry = false
-			break
-		}
-	}
+// 			// update the entry
+// 			entries.Entries[i] = entry
+// 			isNewEntry = false
+// 			break
+// 		}
+// 	}
 
-	if isNewEntry {
-		entries.Entries = append(entries.Entries, &lockuptypes.UnbondingEntry{
-			EndTime:          msgUndelegateResp.CompletionTime,
-			Amount:           msgUndelegateResp.Amount,
-			ValidatorAddress: msg.ValidatorAddress,
-			CreationHeight:   header.Height,
-		})
-	}
+// 	if isNewEntry {
+// 		entries.Entries = append(entries.Entries, &lockuptypes.UnbondingEntry{
+// 			EndTime:          msgUndelegateResp.CompletionTime,
+// 			Amount:           msgUndelegateResp.Amount,
+// 			ValidatorAddress: msg.ValidatorAddress,
+// 			CreationHeight:   header.Height,
+// 		})
+// 	}
 
-	err = bva.UnbondEntries.Set(ctx, msg.ValidatorAddress, entries)
-	if err != nil {
-		return nil, err
-	}
+// 	err = bva.UnbondEntries.Set(ctx, msg.ValidatorAddress, entries)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
-}
+// 	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
+// }
 
-func (bva *BaseLockup) WithdrawReward(
-	ctx context.Context, msg *lockuptypes.MsgWithdrawReward,
-) (
-	*lockuptypes.MsgExecuteMessagesResponse, error,
-) {
-	err := bva.checkSender(ctx, msg.Sender)
-	if err != nil {
-		return nil, err
-	}
-	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
-	if err != nil {
-		return nil, err
-	}
+// func (bva *BaseLockup) WithdrawReward(
+// 	ctx context.Context, msg *lockuptypes.MsgWithdrawReward,
+// ) (
+// 	*lockuptypes.MsgExecuteMessagesResponse, error,
+// ) {
+// 	err := bva.checkSender(ctx, msg.Sender)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	whoami := accountstd.Whoami(ctx)
+// 	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	msgWithdraw := &distrtypes.MsgWithdrawDelegatorReward{
-		DelegatorAddress: delegatorAddress,
-		ValidatorAddress: msg.ValidatorAddress,
-	}
-	responses, err := sendMessage(ctx, msgWithdraw)
-	if err != nil {
-		return nil, err
-	}
+// 	msgWithdraw := &distrtypes.MsgWithdrawDelegatorReward{
+// 		DelegatorAddress: delegatorAddress,
+// 		ValidatorAddress: msg.ValidatorAddress,
+// 	}
+// 	responses, err := sendMessage(ctx, msgWithdraw)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return &lockuptypes.MsgExecuteMessagesResponse{Responses: responses}, nil
-}
+// 	return &lockuptypes.MsgExecuteMessagesResponse{Responses: responses}, nil
+// }
 
 func (bva *BaseLockup) SendCoins(
 	ctx context.Context, msg *lockuptypes.MsgSend, getLockedCoinsFunc getLockedCoinsFunc,
@@ -324,6 +325,111 @@ func (bva *BaseLockup) SendCoins(
 	}
 
 	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
+}
+
+// <sunrise>
+func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate, getLockedCoinsFunc getLockedCoinsFunc) (
+	*v1.MsgSelfDelegateResponse, error,
+) {
+	err := bva.checkSender(ctx, msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+	whoami := accountstd.Whoami(ctx)
+	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+	if err != nil {
+		return nil, err
+	}
+
+	hs := bva.headerService.HeaderInfo(ctx)
+
+	res, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	if err != nil {
+		return nil, err
+	}
+	amount := sdk.NewCoin(res.Params.FeeDenom, msg.Amount)
+
+	balance, err := bva.getBalance(ctx, delegatorAddress, amount.Denom)
+	if err != nil {
+		return nil, err
+	}
+	lockedCoins, err := getLockedCoinsFunc(ctx, hs.Time, amount.Denom)
+	if err != nil {
+		return nil, err
+	}
+
+	// refresh ubd entries to make sure delegation locking amount is up to date
+	err = bva.checkUnbondingEntriesMature(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bva.TrackDelegation(
+		ctx,
+		sdk.Coins{*balance},
+		lockedCoins,
+		sdk.Coins{amount},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	msgSelfDelegate := &tokenconvertertypes.MsgSelfDelegate{
+		Sender: delegatorAddress,
+		Amount: msg.Amount,
+	}
+	_, err = sendMessage(ctx, msgSelfDelegate)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v1.MsgSelfDelegateResponse{}, nil
+}
+
+// <sunrise>
+func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *v1.MsgWithdrawSelfDelegationUnbonded) (
+	*v1.MsgWithdrawSelfDelegationUnbondedResponse, error,
+) {
+	err := bva.checkSender(ctx, msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+	whoami := accountstd.Whoami(ctx)
+	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	if err != nil {
+		return nil, err
+	}
+	amount := sdk.NewCoin(res.Params.FeeDenom, msg.Amount)
+
+	// refresh ubd entries to make sure delegation locking amount is up to date
+	err = bva.checkUnbondingEntriesMature(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bva.TrackUndelegation(
+		ctx,
+		sdk.Coins{amount},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	msgSelfDelegate := &tokenconvertertypes.MsgWithdrawSelfDelegationUnbonded{
+		Sender: delegatorAddress,
+		Amount: msg.Amount,
+	}
+	_, err = sendMessage(ctx, msgSelfDelegate)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v1.MsgWithdrawSelfDelegationUnbondedResponse{}, nil
 }
 
 func (bva *BaseLockup) checkSender(ctx context.Context, sender string) error {
@@ -768,10 +874,14 @@ func (bva BaseLockup) QuerySpendableTokens(ctx context.Context, lockedCoins sdk.
 }
 
 func (bva BaseLockup) RegisterExecuteHandlers(builder *accountstd.ExecuteBuilder) {
-	accountstd.RegisterExecuteHandler(builder, bva.Undelegate)
-	accountstd.RegisterExecuteHandler(builder, bva.WithdrawReward)
+	// accountstd.RegisterExecuteHandler(builder, bva.Undelegate)
+	// accountstd.RegisterExecuteHandler(builder, bva.WithdrawReward)
+
+	// <sunrise>
+	accountstd.RegisterExecuteHandler(builder, bva.WithdrawSelfDelegationUnbonded)
+	// </sunrise>
 }
 
 func (bva BaseLockup) RegisterQueryHandlers(builder *accountstd.QueryBuilder) {
-	accountstd.RegisterQueryHandler(builder, bva.QueryUnbondingEntries)
+	// accountstd.RegisterQueryHandler(builder, bva.QueryUnbondingEntries)
 }
