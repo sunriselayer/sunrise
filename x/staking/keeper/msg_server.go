@@ -58,7 +58,7 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 			return nil, err
 		}
 
-		var owner []byte
+		var rootOwner []byte
 		switch accType {
 		// Case of lockup accounts
 		case lockup.CONTINUOUS_LOCKING_ACCOUNT,
@@ -70,20 +70,20 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 			if err != nil {
 				return nil, err
 			}
-			owner, err = m.addressCodec.StringToBytes(res.(*lockuptypes.QueryLockupAccountInfoResponse).Owner)
+			rootOwner, err = m.addressCodec.StringToBytes(res.(*lockuptypes.QueryLockupAccountInfoResponse).Owner)
 			if err != nil {
 				return nil, err
 			}
 		default:
-			owner = delegator
+			rootOwner = delegator
 		}
 		// Convert to val address
-		ownerValAddress, err := m.valAddressCodec.BytesToString(owner)
+		rootOwnerValAddress, err := m.valAddressCodec.BytesToString(rootOwner)
 		if err != nil {
 			return nil, err
 		}
 
-		if ownerValAddress != msg.ValidatorAddress {
+		if rootOwnerValAddress != msg.ValidatorAddress {
 			return nil, errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "delegation with denom %s is only for self delegation", params.FeeDenom)
 		}
 
@@ -99,14 +99,19 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 				return nil, err
 			}
 		} else {
+			rootOwnerString, err := m.addressCodec.BytesToString(rootOwner)
+			if err != nil {
+				return nil, err
+			}
+
 			// Create proxy account
 			_, proxyAddrBytes, err = m.accountKeeper.Init(
 				ctx,
 				selfdelegationproxy.SELF_DELEGATION_PROXY_ACCOUNT,
 				delegator, // Must be delegator, not owner
 				&selfdelegationproxytypes.MsgInit{
-					// TODO: Owner
-					// TODO: Parent
+					Owner:     msg.DelegatorAddress,
+					RootOwner: rootOwnerString,
 				},
 				sdk.NewCoins(msg.Amount),
 				[]byte{},
@@ -133,7 +138,7 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 		}
 		res, err := m.Keeper.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
 			DelegatorAddress: proxyAddr,
-			ValidatorAddress: ownerValAddress,
+			ValidatorAddress: rootOwnerValAddress,
 			Amount:           sdk.NewCoin(params.BondDenom, msg.Amount.Amount),
 		})
 
