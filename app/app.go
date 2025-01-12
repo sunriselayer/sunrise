@@ -67,9 +67,10 @@ import (
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	basedepinject "cosmossdk.io/x/accounts/defaults/base/depinject"
-	lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
+	// lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
 	multisigdepinject "cosmossdk.io/x/accounts/defaults/multisig/depinject"
 
+	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
 	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
 )
 
@@ -180,11 +181,12 @@ func New(
 			),
 			depinject.Provide(
 				basedepinject.ProvideAccount,
-				lockupdepinject.ProvideAllLockupAccounts,
+				//lockupdepinject.ProvideAllLockupAccounts,
 				multisigdepinject.ProvideAccount,
 
 				basedepinject.ProvideSecp256K1PubKey,
 
+				selfdelegatablelockupdepinject.ProvideAllLockupAccounts,
 				selfdelegationproxydepinject.ProvideAccount,
 			),
 		)
