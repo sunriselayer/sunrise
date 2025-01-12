@@ -45,10 +45,9 @@ func (a SelfDelegationProxyAccount) RegisterInitHandler(builder *accountstd.Init
 }
 
 func (a SelfDelegationProxyAccount) RegisterExecuteHandlers(builder *accountstd.ExecuteBuilder) {
-	accountstd.RegisterExecuteHandler(builder, a.Undelegate)
-	accountstd.RegisterExecuteHandler(builder, a.CancelUnbonding)
 	accountstd.RegisterExecuteHandler(builder, a.WithdrawReward)
 	accountstd.RegisterExecuteHandler(builder, a.Send)
+	accountstd.RegisterExecuteHandler(builder, a.WithdrawUnbonded)
 }
 
 func (a SelfDelegationProxyAccount) RegisterQueryHandlers(builder *accountstd.QueryBuilder) {

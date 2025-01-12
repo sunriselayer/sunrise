@@ -37,16 +37,7 @@ func (m msgServer) EditValidator(ctx context.Context, msg *stakingtypes.MsgEditV
 }
 
 func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) (*stakingtypes.MsgDelegateResponse, error) {
-	feeDenom, err := m.tokenconverterKeeper.GetFeeDenom(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	// If the amount is in the fee denom
-	if msg.Amount.Denom == feeDenom {
-		return m.tokenconverterKeeper.SelfDelegate(ctx, msg)
-	}
-	return m.StakingMsgServer().Delegate(ctx, msg)
+	return m.tokenconverterKeeper.DelegateOrSelfDelegate(ctx, msg, m.StakingMsgServer().Delegate)
 }
 
 func (m msgServer) BeginRedelegate(ctx context.Context, msg *stakingtypes.MsgBeginRedelegate) (*stakingtypes.MsgBeginRedelegateResponse, error) {
@@ -54,7 +45,7 @@ func (m msgServer) BeginRedelegate(ctx context.Context, msg *stakingtypes.MsgBeg
 }
 
 func (m msgServer) Undelegate(ctx context.Context, msg *stakingtypes.MsgUndelegate) (*stakingtypes.MsgUndelegateResponse, error) {
-	return m.StakingMsgServer().Undelegate(ctx, msg)
+	return m.tokenconverterKeeper.UndelegateOrSelfUndelegate(ctx, msg, m.StakingMsgServer().Undelegate)
 }
 
 func (m msgServer) CancelUnbondingDelegation(ctx context.Context, msg *stakingtypes.MsgCancelUnbondingDelegation) (*stakingtypes.MsgCancelUnbondingDelegationResponse, error) {

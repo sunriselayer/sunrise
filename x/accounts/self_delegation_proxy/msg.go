@@ -10,7 +10,6 @@ import (
 
 	banktypes "cosmossdk.io/x/bank/types"
 	distrtypes "cosmossdk.io/x/distribution/types"
-	stakingtypes "cosmossdk.io/x/staking/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/v1"
@@ -36,83 +35,6 @@ func (a SelfDelegationProxyAccount) Init(ctx context.Context, msg *v1.MsgInit) (
 	}
 
 	return &v1.MsgInitResponse{}, nil
-}
-
-func (a SelfDelegationProxyAccount) Undelegate(ctx context.Context, msg *v1.MsgUndelegate) (*v1.MsgUndelegateResponse, error) {
-	err := a.checkSender(ctx, msg.Sender)
-	if err != nil {
-		return nil, err
-	}
-	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := a.addressCodec.BytesToString(whoami)
-	if err != nil {
-		return nil, err
-	}
-
-	rootOwner, err := a.RootOwner.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-	validatorAddress, err := a.validatorAddressCodec.BytesToString(rootOwner)
-	if err != nil {
-		return nil, err
-	}
-
-	bondDenom, err := getBondDenom(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	msgUndelegate := &stakingtypes.MsgUndelegate{
-		DelegatorAddress: delegatorAddress,
-		ValidatorAddress: validatorAddress,
-		Amount:           sdk.NewCoin(bondDenom, msg.Amount),
-	}
-	_, err = accountstd.ExecModule[*stakingtypes.MsgUndelegateResponse](ctx, msgUndelegate)
-	if err != nil {
-		return nil, err
-	}
-
-	return &v1.MsgUndelegateResponse{}, nil
-}
-
-func (a SelfDelegationProxyAccount) CancelUnbonding(ctx context.Context, msg *v1.MsgCancelUnbonding) (*v1.MsgCancelUnbondingResponse, error) {
-	err := a.checkSender(ctx, msg.Sender)
-	if err != nil {
-		return nil, err
-	}
-	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := a.addressCodec.BytesToString(whoami)
-	if err != nil {
-		return nil, err
-	}
-
-	rootOwner, err := a.RootOwner.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-	validatorAddress, err := a.validatorAddressCodec.BytesToString(rootOwner)
-	if err != nil {
-		return nil, err
-	}
-
-	bondDenom, err := getBondDenom(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	msgCancelUnbonding := &stakingtypes.MsgCancelUnbondingDelegation{
-		DelegatorAddress: delegatorAddress,
-		ValidatorAddress: validatorAddress,
-		Amount:           sdk.NewCoin(bondDenom, msg.Amount),
-		CreationHeight:   msg.CreationHeight,
-	}
-	_, err = accountstd.ExecModule[*stakingtypes.MsgCancelUnbondingDelegationResponse](ctx, msgCancelUnbonding)
-	if err != nil {
-		return nil, err
-	}
-
-	return &v1.MsgCancelUnbondingResponse{}, nil
 }
 
 func (a SelfDelegationProxyAccount) WithdrawReward(ctx context.Context, msg *v1.MsgWithdrawReward) (*v1.MsgWithdrawRewardResponse, error) {

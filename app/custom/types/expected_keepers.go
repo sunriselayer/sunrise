@@ -16,8 +16,14 @@ type StakingKeeper interface {
 }
 
 type TokenConverterKeeper interface {
-	GetFeeDenom(ctx context.Context) (string, error)
-	GetBondDenom(ctx context.Context) (string, error)
-
-	SelfDelegate(ctx context.Context, msg *stakingtypes.MsgDelegate) (*stakingtypes.MsgDelegateResponse, error)
+	DelegateOrSelfDelegate(
+		ctx context.Context,
+		msg *stakingtypes.MsgDelegate,
+		originalFunc func(ctx context.Context, msg *stakingtypes.MsgDelegate) (*stakingtypes.MsgDelegateResponse, error),
+	) (*stakingtypes.MsgDelegateResponse, error)
+	UndelegateOrSelfUndelegate(
+		ctx context.Context,
+		msg *stakingtypes.MsgUndelegate,
+		originalFunc func(ctx context.Context, msg *stakingtypes.MsgUndelegate) (*stakingtypes.MsgUndelegateResponse, error),
+	) (*stakingtypes.MsgUndelegateResponse, error)
 }
