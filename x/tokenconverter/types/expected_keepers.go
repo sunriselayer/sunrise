@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/core/transaction"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -13,6 +14,20 @@ import (
 // AccountKeeper defines the expected account keeper (noalias)
 type AccountKeeper interface {
 	GetModuleAddress(name string) sdk.AccAddress
+
+	Init(
+		ctx context.Context,
+		accountType string,
+		creator []byte,
+		initRequest transaction.Msg,
+		funds sdk.Coins,
+		addressSeed []byte,
+	) (transaction.Msg, []byte, error)
+	Query(
+		ctx context.Context,
+		accountAddr []byte,
+		queryRequest transaction.Msg,
+	) (transaction.Msg, error)
 }
 
 // BankKeeper defines the expected interface for the Bank module.
