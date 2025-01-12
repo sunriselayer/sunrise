@@ -13,18 +13,26 @@ import (
 	minttypes "cosmossdk.io/x/mint/types"
 	"cosmossdk.io/x/protocolpool"
 	protocolpooltypes "cosmossdk.io/x/protocolpool/types"
+
 	"cosmossdk.io/x/staking"
+	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
 	fee "github.com/sunriselayer/sunrise/x/fee/module"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
+	tokenconverterkeepet "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	tokenconverter "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
-func ReplaceCustomModules(manager *module.Manager, cdc codec.Codec) {
+func ReplaceCustomModules(
+	manager *module.Manager,
+	cdc codec.Codec,
+	stakingKeeper *stakingkeeper.Keeper,
+	tokenConverterKeeper *tokenconverterkeepet.Keeper,
+) {
 	sdk.DefaultBondDenom = consts.BondDenom
 
 	// bank
@@ -65,8 +73,10 @@ func ReplaceCustomModules(manager *module.Manager, cdc codec.Codec) {
 	// staking
 	oldStakingModule, _ := manager.Modules[stakingtypes.ModuleName].(staking.AppModule)
 	manager.Modules[stakingtypes.ModuleName] = CustomStakingModule{
-		AppModule: oldStakingModule,
-		cdc:       cdc,
+		AppModule:            oldStakingModule,
+		cdc:                  cdc,
+		keeper:               stakingKeeper,
+		tokenconverterKeeper: tokenConverterKeeper,
 	}
 
 	// tokenconverter
