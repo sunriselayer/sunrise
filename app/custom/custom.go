@@ -15,23 +15,23 @@ import (
 	protocolpooltypes "cosmossdk.io/x/protocolpool/types"
 
 	"cosmossdk.io/x/staking"
-	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
 	fee "github.com/sunriselayer/sunrise/x/fee/module"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
-	tokenconverterkeepet "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	tokenconverter "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
+
+	customtypes "github.com/sunriselayer/sunrise/app/custom/types"
 )
 
 func ReplaceCustomModules(
 	manager *module.Manager,
 	cdc codec.Codec,
-	stakingKeeper *stakingkeeper.Keeper,
-	tokenConverterKeeper *tokenconverterkeepet.Keeper,
+	stakingKeeper customtypes.StakingKeeper,
+	tokenConverterKeeper customtypes.TokenConverterKeeper,
 ) {
 	sdk.DefaultBondDenom = consts.BondDenom
 

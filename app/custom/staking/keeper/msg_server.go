@@ -6,58 +6,65 @@ import (
 	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
-	tokenconverterkeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	customtypes "github.com/sunriselayer/sunrise/app/custom/types"
 )
 
 type msgServer struct {
-	*stakingkeeper.Keeper
-	tokenconverterKeeper *tokenconverterkeeper.Keeper
+	stakingKeeper        customtypes.StakingKeeper
+	tokenconverterKeeper customtypes.TokenConverterKeeper
 }
 
-func NewMsgServerImpl(keeper *stakingkeeper.Keeper, tokenconverterKeeper *tokenconverterkeeper.Keeper) stakingtypes.MsgServer {
+func NewMsgServerImpl(
+	stakingKeeper customtypes.StakingKeeper,
+	tokenconverterKeeper customtypes.TokenConverterKeeper,
+) stakingtypes.MsgServer {
 	return &msgServer{
-		Keeper:               keeper,
+		stakingKeeper:        stakingKeeper,
 		tokenconverterKeeper: tokenconverterKeeper,
 	}
 }
 
+func (m msgServer) StakingMsgServer() stakingtypes.MsgServer {
+	return stakingkeeper.NewMsgServerImpl(m.stakingKeeper.(*stakingkeeper.Keeper))
+}
+
 func (m msgServer) CreateValidator(ctx context.Context, msg *stakingtypes.MsgCreateValidator) (*stakingtypes.MsgCreateValidatorResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).CreateValidator(ctx, msg)
+	return m.StakingMsgServer().CreateValidator(ctx, msg)
 }
 
 func (m msgServer) EditValidator(ctx context.Context, msg *stakingtypes.MsgEditValidator) (*stakingtypes.MsgEditValidatorResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).EditValidator(ctx, msg)
+	return m.StakingMsgServer().EditValidator(ctx, msg)
 }
 
 func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) (*stakingtypes.MsgDelegateResponse, error) {
-	params, err := m.tokenconverterKeeper.Params.Get(ctx)
+	feeDenom, err := m.tokenconverterKeeper.GetFeeDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	// If the amount is in the fee denom
-	if msg.Amount.Denom == params.FeeDenom {
+	if msg.Amount.Denom == feeDenom {
 		return m.tokenconverterKeeper.SelfDelegate(ctx, msg)
 	}
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).Delegate(ctx, msg)
+	return m.StakingMsgServer().Delegate(ctx, msg)
 }
 
 func (m msgServer) BeginRedelegate(ctx context.Context, msg *stakingtypes.MsgBeginRedelegate) (*stakingtypes.MsgBeginRedelegateResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).BeginRedelegate(ctx, msg)
+	return m.StakingMsgServer().BeginRedelegate(ctx, msg)
 }
 
 func (m msgServer) Undelegate(ctx context.Context, msg *stakingtypes.MsgUndelegate) (*stakingtypes.MsgUndelegateResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).Undelegate(ctx, msg)
+	return m.StakingMsgServer().Undelegate(ctx, msg)
 }
 
 func (m msgServer) CancelUnbondingDelegation(ctx context.Context, msg *stakingtypes.MsgCancelUnbondingDelegation) (*stakingtypes.MsgCancelUnbondingDelegationResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).CancelUnbondingDelegation(ctx, msg)
+	return m.StakingMsgServer().CancelUnbondingDelegation(ctx, msg)
 }
 
 func (m msgServer) UpdateParams(ctx context.Context, msg *stakingtypes.MsgUpdateParams) (*stakingtypes.MsgUpdateParamsResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).UpdateParams(ctx, msg)
+	return m.StakingMsgServer().UpdateParams(ctx, msg)
 }
 
 func (m msgServer) RotateConsPubKey(ctx context.Context, msg *stakingtypes.MsgRotateConsPubKey) (*stakingtypes.MsgRotateConsPubKeyResponse, error) {
-	return stakingkeeper.NewMsgServerImpl(m.Keeper).RotateConsPubKey(ctx, msg)
+	return m.StakingMsgServer().RotateConsPubKey(ctx, msg)
 }
