@@ -17,11 +17,11 @@ var (
 	RootOwnerPrefix = collections.NewPrefix(1)
 )
 
-func NewAccount(name string) accountstd.AccountCreatorFunc {
+func NewAccount(name string, validatorAddressCodec address.ValidatorAddressCodec) accountstd.AccountCreatorFunc {
 	return func(deps accountstd.Dependencies) (string, accountstd.Interface, error) {
 		acc := SelfDelegationProxyAccount{
 			addressCodec:          deps.AddressCodec,
-			validatorAddressCodec: nil, // TODO
+			validatorAddressCodec: validatorAddressCodec,
 
 			Owner:     collections.NewItem(deps.SchemaBuilder, OwnerPrefix, "owner", collections.BytesValue),
 			RootOwner: collections.NewItem(deps.SchemaBuilder, RootOwnerPrefix, "root_owner", collections.BytesValue),
