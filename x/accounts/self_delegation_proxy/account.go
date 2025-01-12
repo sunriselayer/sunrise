@@ -2,19 +2,29 @@ package selfdelegationproxy
 
 import (
 	"cosmossdk.io/collections"
+	"cosmossdk.io/core/address"
 	"cosmossdk.io/x/accounts/accountstd"
 )
 
 var _ accountstd.Interface = (*SelfDelegationProxyAccount)(nil)
 
+const (
+	SELF_DELEGATION_PROXY_ACCOUNT = "self-delegation-proxy"
+)
+
 var (
-	ParentPrefix = collections.NewPrefix(0)
+	OwnerPrefix     = collections.NewPrefix(0)
+	RootOwnerPrefix = collections.NewPrefix(1)
 )
 
 func NewAccount(name string) accountstd.AccountCreatorFunc {
 	return func(deps accountstd.Dependencies) (string, accountstd.Interface, error) {
 		acc := SelfDelegationProxyAccount{
-			Parent: collections.NewItem(deps.SchemaBuilder, ParentPrefix, "parent", collections.BytesValue),
+			addressCodec:          deps.AddressCodec,
+			validatorAddressCodec: nil, // TODO
+
+			Owner:     collections.NewItem(deps.SchemaBuilder, OwnerPrefix, "owner", collections.BytesValue),
+			RootOwner: collections.NewItem(deps.SchemaBuilder, RootOwnerPrefix, "root_owner", collections.BytesValue),
 		}
 
 		return name, acc, nil
@@ -22,10 +32,12 @@ func NewAccount(name string) accountstd.AccountCreatorFunc {
 }
 
 type SelfDelegationProxyAccount struct {
-	// BaseAccount
-	Owner collections.Item[[]byte]
+	addressCodec          address.Codec
+	validatorAddressCodec address.ValidatorAddressCodec
 	// BaseAccount or LockupAccount
-	Parent collections.Item[[]byte]
+	Owner collections.Item[[]byte]
+	// BaseAccount
+	RootOwner collections.Item[[]byte]
 }
 
 func (a SelfDelegationProxyAccount) RegisterInitHandler(builder *accountstd.InitBuilder) {

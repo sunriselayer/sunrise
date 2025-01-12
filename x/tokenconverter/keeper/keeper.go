@@ -20,8 +20,9 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema              collections.Schema
+	Params              collections.Item[types.Params]
+	SelfDelegationProxy collections.Map[[]byte, []byte]
 
 	accountKeeper      types.AccountKeeper
 	bankKeeper         types.BankKeeper
@@ -51,7 +52,8 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		SelfDelegationProxy: collections.NewMap(sb, types.SelfDelegationProxyKey, "self_delegation_proxy", collections.BytesKey, collections.BytesValue),
 
 		accountKeeper:      accountKeeper,
 		bankKeeper:         bankKeeper,

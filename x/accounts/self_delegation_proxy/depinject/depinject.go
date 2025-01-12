@@ -12,5 +12,7 @@ type Inputs struct {
 }
 
 func ProvideAccount(in Inputs) accountstd.DepinjectAccount {
-	return accountstd.DepinjectAccount{MakeAccount: selfdelegationproxy.NewAccount("self-delegation-proxy")}
+	return accountstd.DepinjectAccount{
+		MakeAccount: selfdelegationproxy.NewAccount(selfdelegationproxy.SELF_DELEGATION_PROXY_ACCOUNT),
+	}
 }

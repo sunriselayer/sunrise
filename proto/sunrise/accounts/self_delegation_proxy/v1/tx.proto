@@ -9,7 +9,10 @@ import "gogoproto/gogo.proto";
 option go_package = "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/v1";
 
 // MsgInit
-message MsgInit {}
+message MsgInit {
+  string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string root_owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
 
 // MsgInitResponse is the response returned after base account initialization.
 // This is empty.
@@ -55,7 +58,12 @@ message MsgWithdrawReward {
 }
 
 // MsgWithdrawRewardResponse
-message MsgWithdrawRewardResponse {}
+message MsgWithdrawRewardResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
 
 // MsgSend
 message MsgSend {

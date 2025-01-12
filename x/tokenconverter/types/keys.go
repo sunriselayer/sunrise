@@ -17,3 +17,5 @@ const (
 
 // ParamsKey is the prefix to retrieve all Params
 var ParamsKey = collections.NewPrefix("p_tokenconverter")
+
+var SelfDelegationProxyKey = collections.NewPrefix("self_delegation_proxy")

@@ -10,8 +10,11 @@ import (
 	lockuptypes "cosmossdk.io/x/accounts/defaults/lockup/v1"
 	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	stakingtypes "cosmossdk.io/x/staking/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	selfdelegationproxy "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy"
+	selfdelegationproxytypes "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/v1"
 	tokenconverterkeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 )
 
@@ -44,6 +47,7 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 		return nil, err
 	}
 
+	// If the amount is in the fee denom
 	if msg.Amount.Denom == params.FeeDenom {
 		delegator, err := m.addressCodec.StringToBytes(msg.DelegatorAddress)
 		if err != nil {
@@ -56,23 +60,24 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 
 		var owner []byte
 		switch accType {
+		// Case of lockup accounts
 		case lockup.CONTINUOUS_LOCKING_ACCOUNT,
 			lockup.DELAYED_LOCKING_ACCOUNT,
 			lockup.PERIODIC_LOCKING_ACCOUNT,
 			lockup.PERMANENT_LOCKING_ACCOUNT:
 
-			resI, err := m.accountKeeper.Query(ctx, delegator, &lockuptypes.QueryLockupAccountInfoRequest{})
+			res, err := m.accountKeeper.Query(ctx, delegator, &lockuptypes.QueryLockupAccountInfoRequest{})
 			if err != nil {
 				return nil, err
 			}
-			res, _ := resI.(*lockuptypes.QueryLockupAccountInfoResponse)
-			owner, err = m.addressCodec.StringToBytes(res.Owner)
+			owner, err = m.addressCodec.StringToBytes(res.(*lockuptypes.QueryLockupAccountInfoResponse).Owner)
 			if err != nil {
 				return nil, err
 			}
 		default:
 			owner = delegator
 		}
+		// Convert to val address
 		ownerValAddress, err := m.valAddressCodec.BytesToString(owner)
 		if err != nil {
 			return nil, err
@@ -83,18 +88,56 @@ func (m msgServer) Delegate(ctx context.Context, msg *stakingtypes.MsgDelegate) 
 		}
 
 		// Check proxy account existence
-		var exist bool
-		if !exist {
+		has, err := m.tokenconverterKeeper.SelfDelegationProxy.Has(ctx, delegator)
+		if err != nil {
+			return nil, err
+		}
+		var proxyAddrBytes []byte
+		if has {
+			proxyAddrBytes, err = m.tokenconverterKeeper.SelfDelegationProxy.Get(ctx, delegator)
+			if err != nil {
+				return nil, err
+			}
+		} else {
 			// Create proxy account
-
+			_, proxyAddrBytes, err = m.accountKeeper.Init(
+				ctx,
+				selfdelegationproxy.SELF_DELEGATION_PROXY_ACCOUNT,
+				delegator, // Must be delegator, not owner
+				&selfdelegationproxytypes.MsgInit{
+					// TODO: Owner
+					// TODO: Parent
+				},
+				sdk.NewCoins(msg.Amount),
+				[]byte{},
+			)
+			if err != nil {
+				return nil, err
+			}
+			err = m.tokenconverterKeeper.SelfDelegationProxy.Set(ctx, delegator, proxyAddrBytes)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		// ConvertReverse
-
-		// Move tokens to proxy account
+		err = m.tokenconverterKeeper.Convert(ctx, msg.Amount.Amount, proxyAddrBytes)
+		if err != nil {
+			return nil, err
+		}
 
 		// Delegate from proxy account
+		proxyAddr, err := m.addressCodec.BytesToString(proxyAddrBytes)
+		if err != nil {
+			return nil, err
+		}
+		res, err := m.Keeper.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
+			DelegatorAddress: proxyAddr,
+			ValidatorAddress: ownerValAddress,
+			Amount:           sdk.NewCoin(params.BondDenom, msg.Amount.Amount),
+		})
 
+		return res.(*stakingtypes.MsgDelegateResponse), err
 	}
 	return stakingkeeper.NewMsgServerImpl(m.Keeper).Delegate(ctx, msg)
 }
