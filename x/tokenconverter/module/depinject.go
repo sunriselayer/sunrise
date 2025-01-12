@@ -33,6 +33,7 @@ type ModuleInputs struct {
 	AddressCodec          address.Codec
 	ValidatorAddressCodec address.ValidatorAddressCodec
 
+	AccountsKeeper     types.AccountsKeeper
 	AccountKeeper      types.AccountKeeper
 	BankKeeper         types.BankKeeper
 	StakingKeeper      types.StakingKeeper
@@ -58,6 +59,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AddressCodec,
 		in.ValidatorAddressCodec,
 		authority,
+		in.AccountsKeeper,
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.StakingKeeper,

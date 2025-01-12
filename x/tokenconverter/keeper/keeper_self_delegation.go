@@ -44,7 +44,7 @@ func (k Keeper) SelfDelegate(ctx context.Context, msg *stakingtypes.MsgDelegate)
 			lockup.PERIODIC_LOCKING_ACCOUNT,
 			lockup.PERMANENT_LOCKING_ACCOUNT:
 
-			res, err := k.accountKeeper.Query(ctx, delegator, &lockuptypes.QueryLockupAccountInfoRequest{})
+			res, err := k.accountsKeeper.Query(ctx, delegator, &lockuptypes.QueryLockupAccountInfoRequest{})
 			if err != nil {
 				return nil, err
 			}
@@ -83,7 +83,7 @@ func (k Keeper) SelfDelegate(ctx context.Context, msg *stakingtypes.MsgDelegate)
 			}
 
 			// Create proxy account
-			_, proxyAddrBytes, err = k.accountKeeper.Init(
+			_, proxyAddrBytes, err = k.accountsKeeper.Init(
 				ctx,
 				selfdelegationproxy.SELF_DELEGATION_PROXY_ACCOUNT,
 				delegator, // Must be delegator, not owner

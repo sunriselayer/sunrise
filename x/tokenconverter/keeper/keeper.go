@@ -25,6 +25,7 @@ type Keeper struct {
 	Params              collections.Item[types.Params]
 	SelfDelegationProxy collections.Map[[]byte, []byte]
 
+	accountsKeeper     types.AccountsKeeper
 	accountKeeper      types.AccountKeeper
 	bankKeeper         types.BankKeeper
 	stakingKeeper      types.StakingKeeper
@@ -37,6 +38,7 @@ func NewKeeper(
 	addressCodec address.Codec,
 	validatorAddressCodec address.ValidatorAddressCodec,
 	authority []byte,
+	accountsKeeper types.AccountsKeeper,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
@@ -58,6 +60,7 @@ func NewKeeper(
 		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		SelfDelegationProxy: collections.NewMap(sb, types.SelfDelegationProxyKey, "self_delegation_proxy", collections.BytesKey, collections.BytesValue),
 
+		accountsKeeper:     accountsKeeper,
 		accountKeeper:      accountKeeper,
 		bankKeeper:         bankKeeper,
 		stakingKeeper:      stakingKeeper,

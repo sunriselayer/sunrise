@@ -11,10 +11,7 @@ import (
 	stakingtypes "cosmossdk.io/x/staking/types"
 )
 
-// AccountKeeper defines the expected account keeper (noalias)
-type AccountKeeper interface {
-	GetModuleAddress(name string) sdk.AccAddress
-
+type AccountsKeeper interface {
 	Init(
 		ctx context.Context,
 		accountType string,
@@ -23,11 +20,17 @@ type AccountKeeper interface {
 		funds sdk.Coins,
 		addressSeed []byte,
 	) (transaction.Msg, []byte, error)
+
 	Query(
 		ctx context.Context,
 		accountAddr []byte,
 		queryRequest transaction.Msg,
 	) (transaction.Msg, error)
+}
+
+// AccountKeeper defines the expected account keeper (noalias)
+type AccountKeeper interface {
+	GetModuleAddress(name string) sdk.AccAddress
 }
 
 // BankKeeper defines the expected interface for the Bank module.
