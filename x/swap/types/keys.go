@@ -18,6 +18,11 @@ const (
 // ParamsKey is the prefix to retrieve all Params
 var ParamsKey = collections.NewPrefix("params")
 
+var (
+	IncomingInFlightPacketsKey = collections.NewPrefix("incoming_in_flight_packets")
+	OutgoingInFlightPacketsKey = collections.NewPrefix("outgoing_in_flight_packets")
+)
+
 // deprecated
 func KeyPrefix(p string) []byte {
 	return []byte(p)
