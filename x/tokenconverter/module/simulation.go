@@ -43,6 +43,5 @@ func (am AppModule) ProposalMsgsX(weights simsx.WeightSource, reg simsx.Registry
 // WeightedOperationsX returns the all the module operations with their respective weights.
 func (am AppModule) WeightedOperationsX(weights simsx.WeightSource, reg simsx.Registry) {
 	reg.Add(weights.Get("msg__convert", 100), simulation.MsgConvertFactory(am.keeper))
-	reg.Add(weights.Get("msg__self_delegate", 100), simulation.MsgSelfDelegateFactory(am.keeper))
 
 }

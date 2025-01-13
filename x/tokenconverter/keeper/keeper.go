@@ -14,15 +14,18 @@ import (
 type Keeper struct {
 	appmodule.Environment
 
-	cdc          codec.BinaryCodec
-	addressCodec address.Codec
+	cdc                   codec.BinaryCodec
+	addressCodec          address.Codec
+	validatorAddressCodec address.ValidatorAddressCodec
 	// Address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema              collections.Schema
+	Params              collections.Item[types.Params]
+	SelfDelegationProxy collections.Map[[]byte, []byte]
 
+	accountsKeeper     types.AccountsKeeper
 	accountKeeper      types.AccountKeeper
 	bankKeeper         types.BankKeeper
 	stakingKeeper      types.StakingKeeper
@@ -33,7 +36,9 @@ func NewKeeper(
 	env appmodule.Environment,
 	cdc codec.BinaryCodec,
 	addressCodec address.Codec,
+	validatorAddressCodec address.ValidatorAddressCodec,
 	authority []byte,
+	accountsKeeper types.AccountsKeeper,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
@@ -46,13 +51,16 @@ func NewKeeper(
 	sb := collections.NewSchemaBuilder(env.KVStoreService)
 
 	k := Keeper{
-		Environment:  env,
-		cdc:          cdc,
-		addressCodec: addressCodec,
-		authority:    authority,
+		Environment:           env,
+		cdc:                   cdc,
+		addressCodec:          addressCodec,
+		validatorAddressCodec: validatorAddressCodec,
+		authority:             authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		SelfDelegationProxy: collections.NewMap(sb, types.SelfDelegationProxyKey, "self_delegation_proxy", collections.BytesKey, collections.BytesValue),
 
+		accountsKeeper:     accountsKeeper,
 		accountKeeper:      accountKeeper,
 		bankKeeper:         bankKeeper,
 		stakingKeeper:      stakingKeeper,

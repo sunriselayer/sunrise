@@ -25,7 +25,7 @@ const (
 )
 
 // ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_liquiditypool")
+var ParamsKey = collections.NewPrefix("params")
 
 // TODO: use collections
 

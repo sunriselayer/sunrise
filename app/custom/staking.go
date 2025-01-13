@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"cosmossdk.io/x/staking"
+	staking "cosmossdk.io/x/staking"
 	stakingtypes "cosmossdk.io/x/staking/types"
 )
 

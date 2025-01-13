@@ -10,7 +10,6 @@ import (
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgConvert{},
-		&MsgSelfDelegate{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),

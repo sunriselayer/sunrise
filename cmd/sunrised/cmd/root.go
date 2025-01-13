@@ -28,7 +28,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/sunriselayer/sunrise/cmd/sunrised/cmd/custom"
+	"github.com/sunriselayer/sunrise/app/custom"
 )
 
 // NewRootCmd creates a new root command for sunrised. It is called once in the main function.

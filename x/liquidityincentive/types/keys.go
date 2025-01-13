@@ -16,7 +16,7 @@ const (
 )
 
 // ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_liquidityincentive")
+var ParamsKey = collections.NewPrefix("params")
 
 // TODO: use collections
 func KeyPrefix(p string) []byte {

@@ -21,7 +21,7 @@ const (
 )
 
 // ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_da")
+var ParamsKey = collections.NewPrefix("params")
 
 // should be changed to use collections
 var (
