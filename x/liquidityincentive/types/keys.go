@@ -18,14 +18,14 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("params")
-
 var (
-	EpochsKeyPrefix = collections.NewPrefix("epochs")
-	EpochIdKey      = collections.NewPrefix("epoch_id")
-	GaugesKeyPrefix = collections.NewPrefix("gauges")
-	VotesKeyPrefix  = collections.NewPrefix("votes")
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
+
+	EpochsKeyPrefix = collections.NewPrefix("epochs/")
+	EpochIdKey      = collections.NewPrefix("epoch_id/")
+	GaugesKeyPrefix = collections.NewPrefix("gauges/")
+	VotesKeyPrefix  = collections.NewPrefix("votes/")
 )
 
 var (

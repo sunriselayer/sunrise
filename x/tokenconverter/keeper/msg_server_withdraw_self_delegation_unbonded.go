@@ -14,7 +14,7 @@ func (k msgServer) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *type
 		return nil, err
 	}
 
-	proxyAddrBytes, err := k.SelfDelegationProxy.Get(ctx, delegator)
+	proxyAddrBytes, err := k.SelfDelegationProxies.Get(ctx, delegator)
 	if err != nil {
 		return nil, err
 	}
