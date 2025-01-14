@@ -421,11 +421,11 @@ func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *
 		return nil, err
 	}
 
-	msgSelfDelegate := &tokenconvertertypes.MsgWithdrawSelfDelegationUnbonded{
+	msgWithdraw := &tokenconvertertypes.MsgWithdrawSelfDelegationUnbonded{
 		Sender: delegatorAddress,
 		Amount: msg.Amount,
 	}
-	_, err = sendMessage(ctx, msgSelfDelegate)
+	_, err = sendMessage(ctx, msgWithdraw)
 	if err != nil {
 		return nil, err
 	}

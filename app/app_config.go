@@ -110,7 +110,7 @@ var (
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
 		{Account: damoduletypes.ModuleName},
-		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
