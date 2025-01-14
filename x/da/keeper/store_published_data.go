@@ -3,74 +3,77 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	bz := store.Get(types.PublishedDataKey(metadataUri))
-	if bz == nil {
+	has, err := k.PublishedData.Has(ctx, metadataUri)
+	if err != nil {
+		panic(err)
+	}
+
+	if !has {
 		return data
 	}
 
-	k.cdc.MustUnmarshal(bz, &data)
-	return data
+	val, err := k.PublishedData.Get(ctx, metadataUri)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
 }
 
 // SetParams set the params
 func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) error {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	bz, err := k.cdc.Marshal(&data)
+	err := k.PublishedData.Set(ctx, data.MetadataUri, data)
 	if err != nil {
 		return err
 	}
-	store.Set(types.PublishedDataKey(data.MetadataUri), bz)
 
-	if data.Status == "verified" || data.Status == "rejected" {
-		store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
-	} else {
-		store.Set(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri), []byte(data.MetadataUri))
-	}
 	return nil
 }
 
 func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store.Delete(types.PublishedDataKey(data.MetadataUri))
-	store.Delete(types.UnverifiedDataByTimeKey(uint64(data.Timestamp.Unix()), data.MetadataUri))
+	err := k.PublishedData.Remove(ctx, data.MetadataUri)
+	if err != nil {
+		panic(err)
+	}
 }
 
-func (k Keeper) GetAllPublishedData(ctx context.Context) []types.PublishedData {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	iter := storetypes.KVStorePrefixIterator(store, types.PublishedDataKeyPrefix)
-	defer iter.Close()
-
-	data := []types.PublishedData{}
-	for ; iter.Valid(); iter.Next() {
-		da := types.PublishedData{}
-		k.cdc.MustUnmarshal(iter.Value(), &da)
-		data = append(data, da)
+func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.PublishedData) {
+	err := k.PublishedData.Walk(
+		ctx,
+		nil,
+		func(key string, value types.PublishedData) (bool, error) {
+			list = append(list, value)
+			return false, nil
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
-	return data
+
+	return
 }
 
-func (k Keeper) GetUnverifiedDataBeforeTime(ctx sdk.Context, timestamp uint64) ([]types.PublishedData, error) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	prefixStore := prefix.NewStore(store, types.UnverifiedDataByTimeKeyPrefix)
+func (k Keeper) GetUnverifiedDataBeforeTime(ctx sdk.Context, timestamp int64) (list []types.PublishedData, err error) {
+	err = k.PublishedData.Indexes.StatusTime.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[collections.Pair[string, int64], string](
+			collections.PairPrefix[string, int64]("unverified"),
+		),
+		func(key collections.Pair[string, int64], metadataUri string) (bool, error) {
+			if key.K2() > timestamp {
+				return true, nil
+			}
+			list = append(list, k.GetPublishedData(ctx, metadataUri))
+			return false, nil
+		},
+	)
 
-	iterator := prefixStore.Iterator(nil, sdk.Uint64ToBigEndian(timestamp))
-	defer iterator.Close()
-
-	dataArray := []types.PublishedData{}
-	for ; iterator.Valid(); iterator.Next() {
-		metadataUri := string(iterator.Value())
-		data := k.GetPublishedData(ctx, metadataUri)
-		dataArray = append(dataArray, data)
-	}
-	return dataArray, nil
+	return
 }
