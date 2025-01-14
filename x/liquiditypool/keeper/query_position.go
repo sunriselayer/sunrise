@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) types.PositionInfo {
@@ -36,20 +35,14 @@ func (q queryServer) Positions(ctx context.Context, req *types.QueryPositionsReq
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var positions []types.PositionInfo
-
-	store := runtime.KVStoreAdapter(q.k.KVStoreService.OpenKVStore(ctx))
-	positionStore := prefix.NewStore(store, types.KeyPrefix(types.PositionKey))
-
-	pageRes, err := query.Paginate(positionStore, req.Pagination, func(key []byte, value []byte) error {
-		var position types.Position
-		if err := q.k.cdc.Unmarshal(value, &position); err != nil {
-			return err
-		}
-
-		positions = append(positions, q.k.WrapPositionInfo(ctx, position))
-		return nil
-	})
+	positions, pageRes, err := query.CollectionPaginate(
+		ctx,
+		q.k.Positions,
+		req.Pagination,
+		func(_ uint64, value types.Position) (types.PositionInfo, error) {
+			return q.k.WrapPositionInfo(ctx, value), nil
+		},
+	)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -90,8 +83,13 @@ func (q queryServer) AddressPositions(ctx context.Context, req *types.QueryAddre
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	addr, err := q.k.addressCodec.StringToBytes(req.Address)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
 	positionInfos := []types.PositionInfo{}
-	positions := q.k.GetPositionsByAddress(ctx, req.Address)
+	positions := q.k.GetPositionsByAddress(ctx, addr)
 	for _, position := range positions {
 		positionInfos = append(positionInfos, q.k.WrapPositionInfo(ctx, position))
 	}
