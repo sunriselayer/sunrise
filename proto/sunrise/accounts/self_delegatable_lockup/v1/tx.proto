@@ -2,6 +2,8 @@ syntax = "proto3";
 package sunrise.accounts.self_delegatable_lockup.v1;
 
 import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
@@ -85,6 +87,22 @@ message MsgWithdrawSelfDelegationUnbonded {
 
 // MsgWithdrawSelfDelegationUnbondedResponse
 message MsgWithdrawSelfDelegationUnbondedResponse {}
+
+// MsgSend defines a message that enable lockup account to execute send message
+message MsgSend {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string to_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
 
 // MsgExecuteMessagesResponse defines the response for lockup execute operations
 message MsgExecuteMessagesResponse {
