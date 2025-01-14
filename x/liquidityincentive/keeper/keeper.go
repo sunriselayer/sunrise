@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -20,8 +21,12 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema  collections.Schema
+	Params  collections.Item[types.Params]
+	Epochs  collections.Map[uint64, types.Epoch]
+	EpochId collections.Sequence
+	Gauges  collections.Map[collections.Pair[uint64, uint64], types.Gauge]
+	Votes   collections.Map[sdk.AccAddress, types.Vote]
 
 	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
@@ -51,7 +56,11 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params:  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Epochs:  collections.NewMap(sb, types.EpochsKeyPrefix, "epochs", types.EpochsKeyCodec, codec.CollValue[types.Epoch](cdc)),
+		EpochId: collections.NewSequence(sb, types.EpochIdKey, "epoch_id"),
+		Gauges:  collections.NewMap(sb, types.GaugesKeyPrefix, "gauges", types.GaugesKeyCodec, codec.CollValue[types.Gauge](cdc)),
+		Votes:   collections.NewMap(sb, types.VotesKeyPrefix, "votes", types.VotesKeyCodec, codec.CollValue[types.Vote](cdc)),
 
 		accountKeeper:       authKeeper,
 		bankKeeper:          bankKeeper,
