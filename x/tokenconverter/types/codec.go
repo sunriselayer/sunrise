@@ -5,11 +5,13 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
+	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 )
 
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgConvert{},
+		&v1.MsgSelfDelegate{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
