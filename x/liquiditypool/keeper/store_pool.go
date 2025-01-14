@@ -2,103 +2,92 @@ package keeper
 
 import (
 	"context"
-	"encoding/binary"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // GetPoolCount get the total number of pool
 func (k Keeper) GetPoolCount(ctx context.Context) uint64 {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, []byte{})
-	byteKey := types.KeyPrefix(types.PoolCountKey)
-	bz := store.Get(byteKey)
-
-	// Count doesn't exist: no element
-	if bz == nil {
-		return 0
+	val, err := k.PoolId.Peek(ctx)
+	if err != nil {
+		panic(err)
 	}
 
-	// Parse bytes
-	return binary.BigEndian.Uint64(bz)
+	return val
 }
 
 // SetPoolCount set the total number of pool
 func (k Keeper) SetPoolCount(ctx context.Context, count uint64) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, []byte{})
-	byteKey := types.KeyPrefix(types.PoolCountKey)
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, count)
-	store.Set(byteKey, bz)
+	err := k.PoolId.Set(ctx, count)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // AppendPool appends a pool in the store with a new id and update the count
 func (k Keeper) AppendPool(ctx context.Context, pool types.Pool) uint64 {
 	// Create the pool
-	count := k.GetPoolCount(ctx)
+	id, err := k.PoolId.Next(ctx)
+	if err != nil {
+		panic(err)
+	}
 
 	// Set the ID of the appended value
-	pool.Id = count
+	pool.Id = id
 	k.SetPool(ctx, pool)
 
-	// Update pool count
-	k.SetPoolCount(ctx, count+1)
-
-	return count
+	return id
 }
 
 // SetPool set a specific pool in the store
 func (k Keeper) SetPool(ctx context.Context, pool types.Pool) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
-	b := k.cdc.MustMarshal(&pool)
-	store.Set(GetPoolIDBytes(pool.Id), b)
+	err := k.Pools.Set(ctx, pool.Id, pool)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // GetPool returns a pool from its id
 func (k Keeper) GetPool(ctx context.Context, id uint64) (val types.Pool, found bool) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
-	b := store.Get(GetPoolIDBytes(id))
-	if b == nil {
+	has, err := k.Pools.Has(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+
+	if !has {
 		return val, false
 	}
-	k.cdc.MustUnmarshal(b, &val)
+
+	val, err = k.Pools.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+
 	return val, true
 }
 
 // RemovePool removes a pool from the store
 func (k Keeper) RemovePool(ctx context.Context, id uint64) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
-	store.Delete(GetPoolIDBytes(id))
+	err := k.Pools.Remove(ctx, id)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // GetAllPools returns all pool
 func (k Keeper) GetAllPools(ctx context.Context) (list []types.Pool) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PoolKey))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+	err := k.Pools.Walk(
+		ctx,
+		nil,
+		func(key uint64, value types.Pool) (bool, error) {
+			list = append(list, value)
 
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Pool
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
+			return false, nil
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
 
 	return
-}
-
-// GetPoolIDBytes returns the byte representation of the ID
-func GetPoolIDBytes(id uint64) []byte {
-	bz := types.KeyPrefix(types.PoolKey)
-	bz = append(bz, []byte("/")...)
-	bz = binary.BigEndian.AppendUint64(bz, id)
-	return bz
 }

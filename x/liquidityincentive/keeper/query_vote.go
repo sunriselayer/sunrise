@@ -3,12 +3,12 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 func (q queryServer) Votes(ctx context.Context, req *types.QueryVotesRequest) (*types.QueryVotesResponse, error) {
@@ -16,19 +16,14 @@ func (q queryServer) Votes(ctx context.Context, req *types.QueryVotesRequest) (*
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var votes []types.Vote
-
-	storeAdapter := runtime.KVStoreAdapter(q.k.KVStoreService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.VoteKeyPrefix))
-	pageRes, err := query.Paginate(store, req.Pagination, func(key []byte, value []byte) error {
-		var vote types.Vote
-		if err := q.k.cdc.Unmarshal(value, &vote); err != nil {
-			return err
-		}
-
-		votes = append(votes, vote)
-		return nil
-	})
+	votes, pageRes, err := query.CollectionPaginate(
+		ctx,
+		q.k.Votes,
+		req.Pagination,
+		func(key sdk.AccAddress, value types.Vote) (types.Vote, error) {
+			return value, nil
+		},
+	)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

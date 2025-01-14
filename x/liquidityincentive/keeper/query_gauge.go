@@ -3,12 +3,12 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 func (q queryServer) Gauges(ctx context.Context, req *types.QueryGaugesRequest) (*types.QueryGaugesResponse, error) {
@@ -16,20 +16,14 @@ func (q queryServer) Gauges(ctx context.Context, req *types.QueryGaugesRequest) 
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var gauges []types.Gauge
-
-	store := runtime.KVStoreAdapter(q.k.KVStoreService.OpenKVStore(ctx))
-	gaugeStore := prefix.NewStore(store, types.GaugeKeyPrefixByPreviousEpochId(req.PreviousEpochId))
-
-	pageRes, err := query.Paginate(gaugeStore, req.Pagination, func(key []byte, value []byte) error {
-		var gauge types.Gauge
-		if err := q.k.cdc.Unmarshal(value, &gauge); err != nil {
-			return err
-		}
-
-		gauges = append(gauges, gauge)
-		return nil
-	})
+	gauges, pageRes, err := query.CollectionPaginate(
+		ctx,
+		q.k.Gauges,
+		req.Pagination,
+		func(key collections.Pair[uint64, uint64], value types.Gauge) (types.Gauge, error) {
+			return value, nil
+		},
+	)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

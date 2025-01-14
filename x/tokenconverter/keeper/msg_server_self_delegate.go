@@ -24,13 +24,13 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 	}
 
 	// Check proxy account existence
-	has, err := k.SelfDelegationProxy.Has(ctx, delegator)
+	has, err := k.SelfDelegationProxies.Has(ctx, delegator)
 	if err != nil {
 		return nil, err
 	}
 	var proxyAddrBytes []byte
 	if has {
-		proxyAddrBytes, err = k.SelfDelegationProxy.Get(ctx, delegator)
+		proxyAddrBytes, err = k.SelfDelegationProxies.Get(ctx, delegator)
 		if err != nil {
 			return nil, err
 		}
@@ -50,7 +50,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		if err != nil {
 			return nil, err
 		}
-		err = k.SelfDelegationProxy.Set(ctx, delegator, proxyAddrBytes)
+		err = k.SelfDelegationProxies.Set(ctx, delegator, proxyAddrBytes)
 		if err != nil {
 			return nil, err
 		}

@@ -13,7 +13,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	// TODO: error handling
 	params, _ := k.Params.Get(ctx)
 	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
-	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, uint64(sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix()))
+	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
@@ -35,7 +35,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
-	proofPeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, uint64(sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix()))
+	proofPeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
@@ -164,7 +164,12 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			// Clean up proofs data
 			for _, proof := range proofs {
-				k.DeleteProof(sdkCtx, proof.MetadataUri, proof.Sender)
+				addr, err := k.addressCodec.StringToBytes(proof.Sender)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
+				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
 			}
 		}
 	}

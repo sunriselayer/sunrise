@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
@@ -21,9 +22,9 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema              collections.Schema
-	Params              collections.Item[types.Params]
-	SelfDelegationProxy collections.Map[[]byte, []byte]
+	Schema                collections.Schema
+	Params                collections.Item[types.Params]
+	SelfDelegationProxies collections.Map[sdk.AccAddress, []byte]
 
 	accountsKeeper     types.AccountsKeeper
 	accountKeeper      types.AccountKeeper
@@ -57,8 +58,8 @@ func NewKeeper(
 		validatorAddressCodec: validatorAddressCodec,
 		authority:             authority,
 
-		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		SelfDelegationProxy: collections.NewMap(sb, types.SelfDelegationProxyKey, "self_delegation_proxy", collections.BytesKey, collections.BytesValue),
+		Params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		SelfDelegationProxies: collections.NewMap(sb, types.SelfDelegationProxiesKeyPrefix, "self_delegation_proxies", types.SelfDelegationProxiesKeyCodec, collections.BytesValue),
 
 		accountsKeeper:     accountsKeeper,
 		accountKeeper:      accountKeeper,

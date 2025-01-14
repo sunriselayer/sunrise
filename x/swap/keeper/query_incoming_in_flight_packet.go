@@ -3,12 +3,12 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise/x/swap/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 func (q queryServer) IncomingInFlightPackets(ctx context.Context, req *types.QueryIncomingInFlightPacketsRequest) (*types.QueryIncomingInFlightPacketsResponse, error) {
@@ -16,20 +16,14 @@ func (q queryServer) IncomingInFlightPackets(ctx context.Context, req *types.Que
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var incomingPackets []types.IncomingInFlightPacket
-
-	store := runtime.KVStoreAdapter(q.k.KVStoreService.OpenKVStore(ctx))
-	incomingPacketStore := prefix.NewStore(store, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
-
-	pageRes, err := query.Paginate(incomingPacketStore, req.Pagination, func(key []byte, value []byte) error {
-		var incomingPacket types.IncomingInFlightPacket
-		if err := q.k.cdc.Unmarshal(value, &incomingPacket); err != nil {
-			return err
-		}
-
-		incomingPackets = append(incomingPackets, incomingPacket)
-		return nil
-	})
+	incomingPackets, pageRes, err := query.CollectionPaginate(
+		ctx,
+		q.k.IncomingInFlightPackets,
+		req.Pagination,
+		func(key collections.Triple[string, string, uint64], value types.IncomingInFlightPacket) (types.IncomingInFlightPacket, error) {
+			return value, nil
+		},
+	)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

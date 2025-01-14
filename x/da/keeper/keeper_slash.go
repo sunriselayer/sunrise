@@ -4,46 +4,53 @@ import (
 	"context"
 
 	"cosmossdk.io/math"
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	bz := store.Get(types.GetFaultCounterKey(operator))
-	if bz == nil {
+	has, err := k.FaultCounts.Has(ctx, operator)
+	if err != nil {
+		panic(err)
+	}
+
+	if !has {
 		return 0
 	}
 
-	return sdk.BigEndianToUint64(bz)
+	val, err := k.FaultCounts.Get(ctx, operator)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
 }
 
 func (k Keeper) SetFaultCounter(ctx context.Context, operator sdk.ValAddress, faultCounter uint64) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store.Set(types.GetFaultCounterKey(operator), sdk.Uint64ToBigEndian(faultCounter))
+	err := k.FaultCounts.Set(ctx, operator, faultCounter)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (k Keeper) DeleteFaultCounter(ctx context.Context, operator sdk.ValAddress) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store.Delete(types.GetFaultCounterKey(operator))
+	err := k.FaultCounts.Remove(ctx, operator)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (k Keeper) IterateFaultCounters(ctx context.Context,
 	handler func(operator sdk.ValAddress, faultCount uint64) (stop bool),
 ) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	prefixStore := prefix.NewStore(storeAdapter, types.FaultCounterKeyPrefix)
-	iter := storetypes.KVStorePrefixIterator(prefixStore, []byte{})
-	defer iter.Close()
-	for ; iter.Valid(); iter.Next() {
-		operator := sdk.ValAddress(iter.Key())
-
-		if handler(operator, sdk.BigEndianToUint64(iter.Value())) {
-			break
-		}
+	err := k.FaultCounts.Walk(
+		ctx,
+		nil,
+		func(key []byte, value uint64) (bool, error) {
+			return handler(key, value), nil
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
 }
 

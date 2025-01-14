@@ -21,8 +21,10 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema                  collections.Schema
+	Params                  collections.Item[types.Params]
+	IncomingInFlightPackets collections.Map[collections.Triple[string, string, uint64], types.IncomingInFlightPacket]
+	OutgoingInFlightPackets collections.Map[collections.Triple[string, string, uint64], types.OutgoingInFlightPacket]
 
 	AccountKeeper       types.AccountKeeper
 	BankKeeper          types.BankKeeper
@@ -56,6 +58,20 @@ func NewKeeper(
 		authority:    authority,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		IncomingInFlightPackets: collections.NewMap(
+			sb,
+			types.IncomingInFlightPacketsKeyPrefix,
+			"incoming_in_flight_packets",
+			types.IncomingInFlightPacketsKeyCodec,
+			codec.CollValue[types.IncomingInFlightPacket](cdc),
+		),
+		OutgoingInFlightPackets: collections.NewMap(
+			sb,
+			types.OutgoingInFlightPacketsKeyPrefix,
+			"outgoing_in_flight_packets",
+			types.OutgoingInFlightPacketsKeyCodec,
+			codec.CollValue[types.OutgoingInFlightPacket](cdc),
+		),
 
 		AccountKeeper:       accountKeeper,
 		BankKeeper:          bankKeeper,

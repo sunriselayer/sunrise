@@ -20,8 +20,12 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema     collections.Schema
+	Params     collections.Item[types.Params]
+	Pools      collections.Map[uint64, types.Pool]
+	PoolId     collections.Sequence
+	Positions  *collections.IndexedMap[uint64, types.Position, types.PositionsIndexes]
+	PositionId collections.Sequence
 
 	bankKeeper types.BankKeeper
 }
@@ -46,6 +50,17 @@ func NewKeeper(
 		authority:    authority,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Pools:  collections.NewMap(sb, types.PoolsKeyPrefix, "pools", types.PoolsKeyCodec, codec.CollValue[types.Pool](cdc)),
+		PoolId: collections.NewSequence(sb, types.PoolIdKey, "pool_id"),
+		Positions: collections.NewIndexedMap(
+			sb,
+			types.PositionsKeyPrefix,
+			"positions",
+			types.PositionsKeyCodec,
+			codec.CollValue[types.Position](cdc),
+			types.NewPositionsIndexes(sb, addressCodec),
+		),
+		PositionId: collections.NewSequence(sb, types.PositionIdKey, "position_id"),
 
 		bankKeeper: bankKeeper,
 	}

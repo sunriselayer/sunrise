@@ -1,13 +1,14 @@
 package types
 
-import "cosmossdk.io/collections"
-
 import (
 	"encoding/binary"
 	"fmt"
 	"strconv"
 	"strings"
 
+	"cosmossdk.io/collections"
+	"cosmossdk.io/collections/indexes"
+	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -24,35 +25,72 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("params")
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
 
-// TODO: use collections
+	PoolsKeyPrefix              = collections.NewPrefix("pools/")
+	PoolIdKey                   = collections.NewPrefix("pool_id/")
+	PositionsKeyPrefix          = collections.NewPrefix("positions/")
+	PositionIdKey               = collections.NewPrefix("position_id/")
+	PositionsPoolIdIndexPrefix  = collections.NewPrefix("positions_by_pool_id/")
+	PositionsAddressIndexPrefix = collections.NewPrefix("positions_by_address/")
+)
+
+type PositionsIndexes struct {
+	PoolId  *indexes.Multi[uint64, uint64, Position]
+	Address *indexes.Multi[sdk.AccAddress, uint64, Position]
+}
+
+func (i PositionsIndexes) IndexesList() []collections.Index[uint64, Position] {
+	return []collections.Index[uint64, Position]{
+		i.PoolId,
+		i.Address,
+	}
+}
+
+func NewPositionsIndexes(sb *collections.SchemaBuilder, addressCodec address.Codec) PositionsIndexes {
+	return PositionsIndexes{
+		PoolId: indexes.NewMulti(
+			sb,
+			PositionsPoolIdIndexPrefix,
+			"positions_by_pool_id",
+			collections.Uint64Key,
+			collections.Uint64Key,
+			func(_ uint64, v Position) (uint64, error) {
+				return v.PoolId, nil
+			},
+		),
+		Address: indexes.NewMulti(
+			sb,
+			PositionsAddressIndexPrefix,
+			"positions_by_address",
+			sdk.AccAddressKey,
+			collections.Uint64Key,
+			func(_ uint64, v Position) (sdk.AccAddress, error) {
+				return addressCodec.StringToBytes(v.Address)
+			},
+		),
+	}
+}
+
+var (
+	PoolsKeyCodec     = collections.Uint64Key
+	PositionsKeyCodec = collections.Uint64Key
+)
 
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
 
 const (
-	PoolKey      = "Pool/value/"
-	PoolCountKey = "Pool/count/"
-)
-
-const (
-	PositionKey       = "Position/value/"
-	PositionCountKey  = "Position/count/"
-	PositionByPool    = "PositionByPool/"
-	PositionByAddress = "PositionByAddress/"
-)
-
-const (
-	TickInfoKey                  = "TickInfo/value/"
+	TickInfoKey                  = "tick_info/"
 	TickNegativePrefix           = "N"
 	TickPositivePrefix           = "P"
-	FeePositionAccumulatorPrefix = "FeePositionAccumulator/value/"
-	KeyFeePoolAccumulatorPrefix  = "FeePoolAccumulator/value/"
-	KeyAccumPrefix               = "Accumulator/Acc/value/"
-	KeyAccumulatorPositionPrefix = "Accumulator/Pos/value/"
+	FeePositionAccumulatorPrefix = "fee_position_accumulator/"
+	KeyFeePoolAccumulatorPrefix  = "fee_pool_accumulator/"
+	KeyAccumPrefix               = "accumulator/"
+	KeyAccumulatorPositionPrefix = "accumulator_position/"
 	KeySeparator                 = "||"
 )
 
@@ -91,7 +129,6 @@ func GetTickInfoIDBytes(poolId uint64, tickIndex int64) []byte {
 
 func KeyTickPrefixByPoolId(poolId uint64) []byte {
 	bz := KeyPrefix(TickInfoKey)
-	bz = append(bz, []byte("/")...)
 	bz = binary.BigEndian.AppendUint64(bz, poolId)
 	return bz
 }
@@ -103,7 +140,7 @@ func KeyFeePositionAccumulator(positionId uint64) string {
 // This is guaranteed to not contain "||" so it can be used as an accumulator name.
 func KeyFeePoolAccumulator(poolId uint64) string {
 	poolIdStr := strconv.FormatUint(poolId, 10)
-	return strings.Join([]string{string(KeyFeePoolAccumulatorPrefix), poolIdStr}, "/")
+	return KeyFeePoolAccumulatorPrefix + poolIdStr
 }
 
 func FormatKeyAccumPrefix(accumName string) []byte {
@@ -112,12 +149,4 @@ func FormatKeyAccumPrefix(accumName string) []byte {
 
 func FormatKeyAccumulatorPositionPrefix(accumName, name string) []byte {
 	return []byte(fmt.Sprintf(KeyAccumulatorPositionPrefix+"%s"+KeySeparator+"%s", accumName, name))
-}
-
-func PositionByPoolPrefix(poolId uint64) []byte {
-	return append([]byte(PositionByPool), sdk.Uint64ToBigEndian(poolId)...)
-}
-
-func PositionByAddressPrefix(addr string) []byte {
-	return append([]byte(PositionByAddress), addr...)
 }
