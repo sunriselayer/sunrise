@@ -60,16 +60,16 @@ func NewKeeper(
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		IncomingInFlightPackets: collections.NewMap(
 			sb,
-			types.IncomingInFlightPacketsKey,
+			types.IncomingInFlightPacketsKeyPrefix,
 			"incoming_in_flight_packets",
-			collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key),
+			types.IncomingInFlightPacketsKeyCodec,
 			codec.CollValue[types.IncomingInFlightPacket](cdc),
 		),
 		OutgoingInFlightPackets: collections.NewMap(
 			sb,
-			types.OutgoingInFlightPacketsKey,
+			types.OutgoingInFlightPacketsKeyPrefix,
 			"outgoing_in_flight_packets",
-			collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key),
+			types.OutgoingInFlightPacketsKeyCodec,
 			codec.CollValue[types.OutgoingInFlightPacket](cdc),
 		),
 

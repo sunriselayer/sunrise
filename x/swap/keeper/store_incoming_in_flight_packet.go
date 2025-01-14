@@ -12,7 +12,7 @@ import (
 func (k Keeper) SetIncomingInFlightPacket(ctx context.Context, incomingPacket types.IncomingInFlightPacket) {
 	err := k.IncomingInFlightPackets.Set(
 		ctx,
-		collections.Join3(incomingPacket.Index.PortId, incomingPacket.Index.ChannelId, incomingPacket.Index.Sequence),
+		types.IncomingInFlightPacketsKey(incomingPacket.Index),
 		incomingPacket,
 	)
 	if err != nil {
@@ -27,7 +27,7 @@ func (k Keeper) GetIncomingInFlightPacket(
 	srcChannelId string,
 	sequence uint64,
 ) (val types.IncomingInFlightPacket, found bool) {
-	key := collections.Join3(srcPortId, srcChannelId, sequence)
+	key := types.IncomingInFlightPacketsKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence))
 	has, err := k.IncomingInFlightPackets.Has(
 		ctx,
 		key,
@@ -57,7 +57,7 @@ func (k Keeper) RemoveIncomingInFlightPacket(
 ) {
 	err := k.IncomingInFlightPackets.Remove(
 		ctx,
-		collections.Join3(srcPortId, srcChannelId, sequence),
+		types.IncomingInFlightPacketsKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence)),
 	)
 	if err != nil {
 		panic(err)

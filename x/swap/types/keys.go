@@ -19,11 +19,19 @@ const (
 var ParamsKey = collections.NewPrefix("params")
 
 var (
-	IncomingInFlightPacketsKey = collections.NewPrefix("incoming_in_flight_packets")
-	OutgoingInFlightPacketsKey = collections.NewPrefix("outgoing_in_flight_packets")
+	IncomingInFlightPacketsKeyPrefix = collections.NewPrefix("incoming_in_flight_packets")
+	OutgoingInFlightPacketsKeyPrefix = collections.NewPrefix("outgoing_in_flight_packets")
 )
 
-// deprecated
-func KeyPrefix(p string) []byte {
-	return []byte(p)
+var (
+	IncomingInFlightPacketsKeyCodec = collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key)
+	OutgoingInFlightPacketsKeyCodec = collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key)
+)
+
+func IncomingInFlightPacketsKey(index PacketIndex) collections.Triple[string, string, uint64] {
+	return collections.Join3(index.PortId, index.ChannelId, index.Sequence)
+}
+
+func OutgoingInFlightPacketsKey(index PacketIndex) collections.Triple[string, string, uint64] {
+	return collections.Join3(index.PortId, index.ChannelId, index.Sequence)
 }
