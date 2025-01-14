@@ -17,7 +17,7 @@ const (
 
 var (
 	// ParamsKey is the prefix to retrieve all Params
-	ParamsKey = collections.NewPrefix("params")
+	ParamsKey = collections.NewPrefix("params/")
 
 	IncomingInFlightPacketsKeyPrefix = collections.NewPrefix("incoming_in_flight_packets/")
 	OutgoingInFlightPacketsKeyPrefix = collections.NewPrefix("outgoing_in_flight_packets/")
