@@ -18,6 +18,7 @@ import (
 	"cosmossdk.io/x/accounts/accountstd"
 	lockuptypes "cosmossdk.io/x/accounts/defaults/lockup/v1"
 	banktypes "cosmossdk.io/x/bank/types"
+
 	// distrtypes "cosmossdk.io/x/distribution/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
@@ -82,8 +83,8 @@ type BaseLockup struct {
 	EndTime collections.Item[time.Time]
 }
 
-func (bva *BaseLockup) Init(ctx context.Context, msg *lockuptypes.MsgInitLockupAccount) (
-	*lockuptypes.MsgInitLockupAccountResponse, error,
+func (bva *BaseLockup) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableLockupAccount) (
+	*v1.MsgInitSelfDelegatableLockupAccountResponse, error,
 ) {
 	owner, err := bva.addressCodec.StringToBytes(msg.Owner)
 	if err != nil {
@@ -126,7 +127,7 @@ func (bva *BaseLockup) Init(ctx context.Context, msg *lockuptypes.MsgInitLockupA
 		return nil, err
 	}
 
-	return &lockuptypes.MsgInitLockupAccountResponse{}, nil
+	return &v1.MsgInitSelfDelegatableLockupAccountResponse{}, nil
 }
 
 // func (bva *BaseLockup) Delegate(
@@ -284,9 +285,9 @@ func (bva *BaseLockup) Init(ctx context.Context, msg *lockuptypes.MsgInitLockupA
 // }
 
 func (bva *BaseLockup) SendCoins(
-	ctx context.Context, msg *lockuptypes.MsgSend, getLockedCoinsFunc getLockedCoinsFunc,
+	ctx context.Context, msg *v1.MsgSend, getLockedCoinsFunc getLockedCoinsFunc,
 ) (
-	*lockuptypes.MsgExecuteMessagesResponse, error,
+	*v1.MsgExecuteMessagesResponse, error,
 ) {
 	err := bva.checkSender(ctx, msg.Sender)
 	if err != nil {
@@ -324,7 +325,7 @@ func (bva *BaseLockup) SendCoins(
 		return nil, err
 	}
 
-	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
+	return &v1.MsgExecuteMessagesResponse{Responses: resp}, nil
 }
 
 // <sunrise>
