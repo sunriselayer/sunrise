@@ -11,6 +11,9 @@ import (
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgConvert{},
+		&MsgSelfDelegate{},
+		&MsgWithdrawSelfDelegationUnbonded{},
+		// TEMP: sunrise.accounts.self_delegatable_lockup.v1
 		&v1.MsgSelfDelegate{},
 		&v1.MsgWithdrawSelfDelegationUnbonded{},
 		&v1.MsgSend{},
