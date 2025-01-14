@@ -7,17 +7,23 @@ import (
 	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
+	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
+	any "github.com/cosmos/gogoproto/types/any"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -25,23 +31,28 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgInit
-type MsgInit struct {
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+// MsgInitSelfDelegatableLockupAccount defines a message that enables creating a self-delegatable lockup account.
+type MsgInitSelfDelegatableLockupAccount struct {
+	// owner of the vesting account
+	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	// end_time is end of lockup
+	EndTime time.Time `protobuf:"bytes,2,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
+	// start_time is start of lockup
+	StartTime time.Time `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
 }
 
-func (m *MsgInit) Reset()         { *m = MsgInit{} }
-func (m *MsgInit) String() string { return proto.CompactTextString(m) }
-func (*MsgInit) ProtoMessage()    {}
-func (*MsgInit) Descriptor() ([]byte, []int) {
+func (m *MsgInitSelfDelegatableLockupAccount) Reset()         { *m = MsgInitSelfDelegatableLockupAccount{} }
+func (m *MsgInitSelfDelegatableLockupAccount) String() string { return proto.CompactTextString(m) }
+func (*MsgInitSelfDelegatableLockupAccount) ProtoMessage()    {}
+func (*MsgInitSelfDelegatableLockupAccount) Descriptor() ([]byte, []int) {
 	return fileDescriptor_25d3a964c38f184e, []int{0}
 }
-func (m *MsgInit) XXX_Unmarshal(b []byte) error {
+func (m *MsgInitSelfDelegatableLockupAccount) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgInit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgInitSelfDelegatableLockupAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgInit.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgInitSelfDelegatableLockupAccount.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -51,42 +62,59 @@ func (m *MsgInit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *MsgInit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgInit.Merge(m, src)
+func (m *MsgInitSelfDelegatableLockupAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgInitSelfDelegatableLockupAccount.Merge(m, src)
 }
-func (m *MsgInit) XXX_Size() int {
+func (m *MsgInitSelfDelegatableLockupAccount) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgInit) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgInit.DiscardUnknown(m)
+func (m *MsgInitSelfDelegatableLockupAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgInitSelfDelegatableLockupAccount.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgInit proto.InternalMessageInfo
+var xxx_messageInfo_MsgInitSelfDelegatableLockupAccount proto.InternalMessageInfo
 
-func (m *MsgInit) GetSender() string {
+func (m *MsgInitSelfDelegatableLockupAccount) GetOwner() string {
 	if m != nil {
-		return m.Sender
+		return m.Owner
 	}
 	return ""
 }
 
-// MsgInitResponse is the response returned after base account initialization.
-// This is empty.
-type MsgInitResponse struct {
+func (m *MsgInitSelfDelegatableLockupAccount) GetEndTime() time.Time {
+	if m != nil {
+		return m.EndTime
+	}
+	return time.Time{}
 }
 
-func (m *MsgInitResponse) Reset()         { *m = MsgInitResponse{} }
-func (m *MsgInitResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgInitResponse) ProtoMessage()    {}
-func (*MsgInitResponse) Descriptor() ([]byte, []int) {
+func (m *MsgInitSelfDelegatableLockupAccount) GetStartTime() time.Time {
+	if m != nil {
+		return m.StartTime
+	}
+	return time.Time{}
+}
+
+// MsgInitSelfDelegatableLockupAccountResponse defines the Msg/InitSelfDelegatableLockupAccount response type.
+type MsgInitSelfDelegatableLockupAccountResponse struct {
+}
+
+func (m *MsgInitSelfDelegatableLockupAccountResponse) Reset() {
+	*m = MsgInitSelfDelegatableLockupAccountResponse{}
+}
+func (m *MsgInitSelfDelegatableLockupAccountResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MsgInitSelfDelegatableLockupAccountResponse) ProtoMessage() {}
+func (*MsgInitSelfDelegatableLockupAccountResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_25d3a964c38f184e, []int{1}
 }
-func (m *MsgInitResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgInitResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgInitResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgInitSelfDelegatableLockupAccountResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -96,17 +124,127 @@ func (m *MsgInitResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *MsgInitResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgInitResponse.Merge(m, src)
+func (m *MsgInitSelfDelegatableLockupAccountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgInitSelfDelegatableLockupAccountResponse.Merge(m, src)
 }
-func (m *MsgInitResponse) XXX_Size() int {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgInitResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgInitResponse.DiscardUnknown(m)
+func (m *MsgInitSelfDelegatableLockupAccountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgInitSelfDelegatableLockupAccountResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgInitResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgInitSelfDelegatableLockupAccountResponse proto.InternalMessageInfo
+
+// MsgInitSelfDelegatablePeriodicLockingAccount defines a message that enables creating a self-delegatable periodic locking
+// account.
+type MsgInitSelfDelegatablePeriodicLockingAccount struct {
+	// owner of the lockup account
+	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	// start of lockup
+	StartTime      time.Time `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
+	LockingPeriods []Period  `protobuf:"bytes,3,rep,name=locking_periods,json=lockingPeriods,proto3" json:"locking_periods"`
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) Reset() {
+	*m = MsgInitSelfDelegatablePeriodicLockingAccount{}
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MsgInitSelfDelegatablePeriodicLockingAccount) ProtoMessage() {}
+func (*MsgInitSelfDelegatablePeriodicLockingAccount) Descriptor() ([]byte, []int) {
+	return fileDescriptor_25d3a964c38f184e, []int{2}
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccount.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccount.Merge(m, src)
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccount.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccount proto.InternalMessageInfo
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) GetStartTime() time.Time {
+	if m != nil {
+		return m.StartTime
+	}
+	return time.Time{}
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) GetLockingPeriods() []Period {
+	if m != nil {
+		return m.LockingPeriods
+	}
+	return nil
+}
+
+// MsgInitSelfDelegatablePeriodicLockingAccountResponse defines the Msg/InitSelfDelegatablePeriodicLockingAccount
+// response type.
+type MsgInitSelfDelegatablePeriodicLockingAccountResponse struct {
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) Reset() {
+	*m = MsgInitSelfDelegatablePeriodicLockingAccountResponse{}
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MsgInitSelfDelegatablePeriodicLockingAccountResponse) ProtoMessage() {}
+func (*MsgInitSelfDelegatablePeriodicLockingAccountResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_25d3a964c38f184e, []int{3}
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccountResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccountResponse.Merge(m, src)
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccountResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgInitSelfDelegatablePeriodicLockingAccountResponse proto.InternalMessageInfo
 
 // MsgSelfDelegate
 type MsgSelfDelegate struct {
@@ -119,7 +257,7 @@ func (m *MsgSelfDelegate) Reset()         { *m = MsgSelfDelegate{} }
 func (m *MsgSelfDelegate) String() string { return proto.CompactTextString(m) }
 func (*MsgSelfDelegate) ProtoMessage()    {}
 func (*MsgSelfDelegate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_25d3a964c38f184e, []int{2}
+	return fileDescriptor_25d3a964c38f184e, []int{4}
 }
 func (m *MsgSelfDelegate) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -163,7 +301,7 @@ func (m *MsgSelfDelegateResponse) Reset()         { *m = MsgSelfDelegateResponse
 func (m *MsgSelfDelegateResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgSelfDelegateResponse) ProtoMessage()    {}
 func (*MsgSelfDelegateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_25d3a964c38f184e, []int{3}
+	return fileDescriptor_25d3a964c38f184e, []int{5}
 }
 func (m *MsgSelfDelegateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -203,7 +341,7 @@ func (m *MsgWithdrawSelfDelegationUnbonded) Reset()         { *m = MsgWithdrawSe
 func (m *MsgWithdrawSelfDelegationUnbonded) String() string { return proto.CompactTextString(m) }
 func (*MsgWithdrawSelfDelegationUnbonded) ProtoMessage()    {}
 func (*MsgWithdrawSelfDelegationUnbonded) Descriptor() ([]byte, []int) {
-	return fileDescriptor_25d3a964c38f184e, []int{4}
+	return fileDescriptor_25d3a964c38f184e, []int{6}
 }
 func (m *MsgWithdrawSelfDelegationUnbonded) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -251,7 +389,7 @@ func (m *MsgWithdrawSelfDelegationUnbondedResponse) String() string {
 }
 func (*MsgWithdrawSelfDelegationUnbondedResponse) ProtoMessage() {}
 func (*MsgWithdrawSelfDelegationUnbondedResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_25d3a964c38f184e, []int{5}
+	return fileDescriptor_25d3a964c38f184e, []int{7}
 }
 func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -280,13 +418,61 @@ func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgWithdrawSelfDelegationUnbondedResponse proto.InternalMessageInfo
 
+// MsgExecuteMessagesResponse defines the response for lockup execute operations
+type MsgExecuteMessagesResponse struct {
+	Responses []*any.Any `protobuf:"bytes,1,rep,name=responses,proto3" json:"responses,omitempty"`
+}
+
+func (m *MsgExecuteMessagesResponse) Reset()         { *m = MsgExecuteMessagesResponse{} }
+func (m *MsgExecuteMessagesResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgExecuteMessagesResponse) ProtoMessage()    {}
+func (*MsgExecuteMessagesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_25d3a964c38f184e, []int{8}
+}
+func (m *MsgExecuteMessagesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgExecuteMessagesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgExecuteMessagesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgExecuteMessagesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgExecuteMessagesResponse.Merge(m, src)
+}
+func (m *MsgExecuteMessagesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgExecuteMessagesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgExecuteMessagesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgExecuteMessagesResponse proto.InternalMessageInfo
+
+func (m *MsgExecuteMessagesResponse) GetResponses() []*any.Any {
+	if m != nil {
+		return m.Responses
+	}
+	return nil
+}
+
 func init() {
-	proto.RegisterType((*MsgInit)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgInit")
-	proto.RegisterType((*MsgInitResponse)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgInitResponse")
+	proto.RegisterType((*MsgInitSelfDelegatableLockupAccount)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgInitSelfDelegatableLockupAccount")
+	proto.RegisterType((*MsgInitSelfDelegatableLockupAccountResponse)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgInitSelfDelegatableLockupAccountResponse")
+	proto.RegisterType((*MsgInitSelfDelegatablePeriodicLockingAccount)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgInitSelfDelegatablePeriodicLockingAccount")
+	proto.RegisterType((*MsgInitSelfDelegatablePeriodicLockingAccountResponse)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgInitSelfDelegatablePeriodicLockingAccountResponse")
 	proto.RegisterType((*MsgSelfDelegate)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgSelfDelegate")
 	proto.RegisterType((*MsgSelfDelegateResponse)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgSelfDelegateResponse")
 	proto.RegisterType((*MsgWithdrawSelfDelegationUnbonded)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgWithdrawSelfDelegationUnbonded")
 	proto.RegisterType((*MsgWithdrawSelfDelegationUnbondedResponse)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgWithdrawSelfDelegationUnbondedResponse")
+	proto.RegisterType((*MsgExecuteMessagesResponse)(nil), "sunrise.accounts.self_delegatable_lockup.v1.MsgExecuteMessagesResponse")
 }
 
 func init() {
@@ -294,33 +480,80 @@ func init() {
 }
 
 var fileDescriptor_25d3a964c38f184e = []byte{
-	// 357 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x92, 0xb1, 0x4e, 0x2a, 0x41,
-	0x14, 0x86, 0x77, 0x6f, 0xc1, 0xcd, 0x9d, 0xe6, 0xe6, 0x12, 0x6e, 0x04, 0x8a, 0x45, 0xb7, 0xd2,
-	0x10, 0x76, 0x24, 0xda, 0x59, 0x89, 0x5a, 0x50, 0xd0, 0x40, 0x8c, 0x89, 0xcd, 0x66, 0x77, 0xe7,
-	0xb0, 0x6c, 0xd8, 0x9d, 0x21, 0x73, 0x66, 0x11, 0xdf, 0xc0, 0xd2, 0xda, 0xe7, 0xe0, 0x21, 0x28,
-	0x09, 0x95, 0xb1, 0x20, 0x06, 0x5e, 0xc4, 0xb0, 0x3b, 0x18, 0x63, 0x62, 0xd4, 0xca, 0xee, 0x9c,
-	0x3f, 0xe7, 0xfb, 0xf3, 0x9f, 0xe4, 0x27, 0xc7, 0x98, 0x72, 0x19, 0x21, 0x50, 0x2f, 0x08, 0x44,
-	0xca, 0x15, 0x52, 0x84, 0xb8, 0xef, 0x32, 0x88, 0x21, 0xf4, 0x94, 0xe7, 0xc7, 0xe0, 0xc6, 0x22,
-	0x18, 0xa6, 0x23, 0x3a, 0x6e, 0x52, 0x35, 0x71, 0x46, 0x52, 0x28, 0x51, 0xac, 0x6b, 0xca, 0xd9,
-	0x52, 0xce, 0x07, 0x94, 0x33, 0x6e, 0x56, 0x2b, 0x81, 0xc0, 0x44, 0xa0, 0x9b, 0xa1, 0x34, 0x5f,
-	0x72, 0x9f, 0x6a, 0x29, 0x14, 0xa1, 0xc8, 0xf5, 0xcd, 0x94, 0xab, 0xf6, 0x09, 0xf9, 0xdd, 0xc1,
-	0xb0, 0xcd, 0x23, 0x55, 0x3c, 0x24, 0x05, 0x04, 0xce, 0x40, 0x96, 0xcd, 0x5d, 0x73, 0xff, 0x4f,
-	0xab, 0xbc, 0x98, 0x36, 0x4a, 0xda, 0xe2, 0x94, 0x31, 0x09, 0x88, 0x3d, 0x25, 0x23, 0x1e, 0x76,
-	0xf5, 0x9d, 0xfd, 0x8f, 0xfc, 0xd5, 0x70, 0x17, 0x70, 0x24, 0x38, 0x82, 0x7d, 0x67, 0x66, 0x5a,
-	0x0f, 0xe2, 0xfe, 0x79, 0x9e, 0x10, 0xbe, 0x6f, 0x5c, 0x3c, 0x23, 0x05, 0x2f, 0xd9, 0x3c, 0x5b,
-	0xfe, 0x95, 0x11, 0xf5, 0xd9, 0xb2, 0x66, 0x3c, 0x2d, 0x6b, 0xff, 0x73, 0x0a, 0xd9, 0xd0, 0x89,
-	0x04, 0x4d, 0x3c, 0x35, 0x70, 0xda, 0x5c, 0x2d, 0xa6, 0x0d, 0xa2, 0xed, 0xda, 0x5c, 0x75, 0x35,
-	0x6a, 0x57, 0xc8, 0xce, 0xbb, 0x24, 0xaf, 0x29, 0x1f, 0x4c, 0xb2, 0xd7, 0xc1, 0xf0, 0x2a, 0x52,
-	0x03, 0x26, 0xbd, 0x9b, 0x37, 0x37, 0x91, 0xe0, 0x97, 0xdc, 0x17, 0x9c, 0x01, 0xfb, 0xa9, 0xdc,
-	0x75, 0x72, 0xf0, 0x69, 0xb6, 0xed, 0x27, 0x2d, 0x77, 0xb6, 0xb2, 0xcc, 0xf9, 0xca, 0x32, 0x9f,
-	0x57, 0x96, 0x79, 0xbf, 0xb6, 0x8c, 0xf9, 0xda, 0x32, 0x1e, 0xd7, 0x96, 0x71, 0x7d, 0x11, 0x46,
-	0x6a, 0x90, 0xfa, 0x4e, 0x20, 0x12, 0xaa, 0x2b, 0x14, 0x7b, 0xb7, 0x20, 0xb7, 0x0b, 0x9d, 0x7c,
-	0xa5, 0x87, 0x7e, 0x21, 0xeb, 0xc9, 0xd1, 0x4b, 0x00, 0x00, 0x00, 0xff, 0xff, 0x71, 0xe4, 0x09,
-	0x52, 0xbd, 0x02, 0x00, 0x00,
+	// 627 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x54, 0x4f, 0x4f, 0x13, 0x41,
+	0x1c, 0xed, 0x96, 0x88, 0x76, 0x88, 0x12, 0x37, 0x18, 0x4b, 0x0f, 0x5d, 0xac, 0x31, 0xa9, 0xd4,
+	0xce, 0xca, 0x9f, 0x18, 0xc3, 0x8d, 0x0a, 0x89, 0x24, 0x36, 0x21, 0x45, 0x63, 0xe2, 0xa5, 0x99,
+	0xee, 0x0c, 0xc3, 0x84, 0xdd, 0x99, 0x66, 0x7f, 0x53, 0xfe, 0x7c, 0x03, 0xe3, 0x45, 0xce, 0x9e,
+	0x38, 0x7a, 0xe4, 0xc0, 0x17, 0xf0, 0xc6, 0x91, 0x70, 0x32, 0x1e, 0xd0, 0xc0, 0x01, 0x3e, 0x86,
+	0xd9, 0x9d, 0x29, 0x7f, 0x35, 0xb6, 0x5c, 0xbc, 0x34, 0x33, 0x7d, 0xef, 0xfd, 0xe6, 0xbd, 0x97,
+	0x5f, 0x16, 0x4d, 0x43, 0x47, 0xc6, 0x02, 0x98, 0x4f, 0x82, 0x40, 0x75, 0xa4, 0x06, 0x1f, 0x58,
+	0xb8, 0xdc, 0xa4, 0x2c, 0x64, 0x9c, 0x68, 0xd2, 0x0a, 0x59, 0x33, 0x54, 0xc1, 0x6a, 0xa7, 0xed,
+	0xaf, 0x4d, 0xf8, 0x7a, 0x03, 0xb7, 0x63, 0xa5, 0x95, 0x5b, 0xb1, 0x2a, 0xdc, 0x55, 0xe1, 0xbf,
+	0xa8, 0xf0, 0xda, 0x44, 0xe1, 0x3e, 0x89, 0x84, 0x54, 0x7e, 0xfa, 0x6b, 0xf4, 0x85, 0xd1, 0x40,
+	0x41, 0xa4, 0xa0, 0x99, 0xde, 0x7c, 0x73, 0xb1, 0xd0, 0x08, 0x57, 0x5c, 0x99, 0xff, 0x93, 0x53,
+	0x57, 0xc0, 0x95, 0xe2, 0x21, 0xf3, 0xd3, 0x5b, 0xab, 0xb3, 0xec, 0x13, 0xb9, 0x69, 0x21, 0xef,
+	0x2a, 0xa4, 0x45, 0xc4, 0x40, 0x93, 0xa8, 0x6d, 0x09, 0x2f, 0xfb, 0x89, 0x68, 0x6d, 0xa7, 0xca,
+	0xd2, 0xe7, 0x2c, 0x7a, 0x5c, 0x07, 0xbe, 0x20, 0x85, 0x5e, 0x62, 0xe1, 0xf2, 0xdc, 0xb9, 0xe2,
+	0x4d, 0x4a, 0x9b, 0x35, 0x03, 0x5d, 0x8c, 0x6e, 0xa9, 0x75, 0xc9, 0xe2, 0xbc, 0x33, 0xe6, 0x94,
+	0x73, 0xb5, 0xfc, 0xc1, 0x6e, 0x75, 0xc4, 0x86, 0x9a, 0xa5, 0x34, 0x66, 0x00, 0x4b, 0x3a, 0x16,
+	0x92, 0x37, 0x0c, 0xcd, 0x9d, 0x43, 0x77, 0x98, 0xa4, 0xcd, 0xc4, 0x68, 0x3e, 0x3b, 0xe6, 0x94,
+	0x87, 0x26, 0x0b, 0xd8, 0xa4, 0xc0, 0xdd, 0x14, 0xf8, 0x6d, 0x37, 0x45, 0xed, 0xee, 0xde, 0xa1,
+	0x97, 0xd9, 0xfa, 0xe9, 0x39, 0x5f, 0x4f, 0x76, 0xc6, 0x9d, 0xc6, 0x6d, 0x26, 0x69, 0x02, 0xba,
+	0xaf, 0x11, 0x02, 0x4d, 0x62, 0x6d, 0xe6, 0x0c, 0xf4, 0x3b, 0x27, 0x97, 0x8a, 0x13, 0x78, 0xa6,
+	0x7c, 0xba, 0xed, 0x39, 0x9f, 0x4e, 0x76, 0xc6, 0x3d, 0xe3, 0xba, 0x0a, 0x74, 0xd5, 0xb7, 0xc1,
+	0x2f, 0x25, 0x2d, 0x55, 0x51, 0xa5, 0x87, 0x42, 0x1a, 0x0c, 0xda, 0x4a, 0x02, 0x2b, 0x7d, 0xcb,
+	0xa2, 0x67, 0x7f, 0xe6, 0x2f, 0xb2, 0x58, 0x28, 0x2a, 0x82, 0x44, 0x27, 0x24, 0xbf, 0x69, 0x93,
+	0x97, 0x3b, 0xc8, 0xde, 0xbc, 0x03, 0x97, 0xa3, 0xe1, 0xd0, 0x78, 0x69, 0xb6, 0x53, 0x6f, 0x90,
+	0x1f, 0x18, 0x1b, 0x28, 0x0f, 0x4d, 0x4e, 0xe1, 0x3e, 0x96, 0x1d, 0x9b, 0x5c, 0xb5, 0x5c, 0xf2,
+	0x8e, 0x79, 0xe3, 0x9e, 0x1d, 0x6b, 0x10, 0x98, 0xc1, 0xa7, 0xdb, 0x5e, 0x26, 0x29, 0xfb, 0xc9,
+	0xf5, 0xb2, 0x0d, 0xe7, 0x72, 0xe5, 0x2f, 0xd0, 0x74, 0x3f, 0x15, 0x9e, 0x75, 0xff, 0xd1, 0x41,
+	0xc3, 0x75, 0xe0, 0x17, 0x44, 0xcc, 0x7d, 0x8e, 0x06, 0x81, 0x49, 0xda, 0x43, 0xbf, 0x96, 0xe7,
+	0xbe, 0x42, 0x83, 0x24, 0x4a, 0xe6, 0xa6, 0xe5, 0xe6, 0x6a, 0x95, 0x24, 0xd8, 0x8f, 0x43, 0xef,
+	0x81, 0x51, 0x01, 0x5d, 0xc5, 0x42, 0xf9, 0x11, 0xd1, 0x2b, 0x78, 0x41, 0xea, 0x83, 0xdd, 0x2a,
+	0xb2, 0xe3, 0x16, 0xa4, 0x6e, 0x58, 0x69, 0x69, 0x14, 0x3d, 0xbc, 0xe2, 0xe4, 0xcc, 0xe5, 0x17,
+	0x07, 0x3d, 0xaa, 0x03, 0x7f, 0x2f, 0xf4, 0x0a, 0x8d, 0xc9, 0xfa, 0x05, 0x8e, 0x50, 0xf2, 0x9d,
+	0x6c, 0x29, 0x49, 0x19, 0xfd, 0x5f, 0xbe, 0x2b, 0xe8, 0xe9, 0x3f, 0xbd, 0x9d, 0x25, 0x59, 0x44,
+	0x85, 0x3a, 0xf0, 0xf9, 0x0d, 0x16, 0x74, 0x34, 0xab, 0x33, 0x00, 0xc2, 0x19, 0x74, 0x51, 0x77,
+	0x12, 0xe5, 0x62, 0x7b, 0x86, 0xbc, 0x93, 0x2e, 0xd6, 0xc8, 0xb5, 0x3d, 0x9d, 0x95, 0x9b, 0x8d,
+	0x73, 0x5a, 0xad, 0xb9, 0x77, 0x54, 0x74, 0xf6, 0x8f, 0x8a, 0xce, 0xaf, 0xa3, 0xa2, 0xb3, 0x75,
+	0x5c, 0xcc, 0xec, 0x1f, 0x17, 0x33, 0xdf, 0x8f, 0x8b, 0x99, 0x0f, 0xf3, 0x5c, 0xe8, 0x95, 0x4e,
+	0x0b, 0x07, 0x2a, 0xf2, 0xed, 0x76, 0x86, 0x64, 0x93, 0xc5, 0xdd, 0x8b, 0xbf, 0xd1, 0xcb, 0xc7,
+	0xae, 0x35, 0x98, 0xbe, 0x3c, 0xf5, 0x3b, 0x00, 0x00, 0xff, 0xff, 0xd7, 0xc4, 0x01, 0xef, 0x05,
+	0x06, 0x00, 0x00,
 }
 
-func (m *MsgInit) Marshal() (dAtA []byte, err error) {
+func (this *MsgInitSelfDelegatableLockupAccount) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgInitSelfDelegatableLockupAccount)
+	if !ok {
+		that2, ok := that.(MsgInitSelfDelegatableLockupAccount)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Owner != that1.Owner {
+		return false
+	}
+	if !this.EndTime.Equal(that1.EndTime) {
+		return false
+	}
+	if !this.StartTime.Equal(that1.StartTime) {
+		return false
+	}
+	return true
+}
+func (m *MsgInitSelfDelegatableLockupAccount) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -330,27 +563,43 @@ func (m *MsgInit) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgInit) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgInitSelfDelegatableLockupAccount) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgInit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgInitSelfDelegatableLockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+	n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
+	if err1 != nil {
+		return 0, err1
+	}
+	i -= n1
+	i = encodeVarintTx(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x1a
+	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.EndTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.EndTime):])
+	if err2 != nil {
+		return 0, err2
+	}
+	i -= n2
+	i = encodeVarintTx(dAtA, i, uint64(n2))
+	i--
+	dAtA[i] = 0x12
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Owner)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgInitResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -360,12 +609,87 @@ func (m *MsgInitResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgInitResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgInitResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.LockingPeriods) > 0 {
+		for iNdEx := len(m.LockingPeriods) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.LockingPeriods[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
+	if err3 != nil {
+		return 0, err3
+	}
+	i -= n3
+	i = encodeVarintTx(dAtA, i, uint64(n3))
+	i--
+	dAtA[i] = 0x12
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -499,6 +823,43 @@ func (m *MsgWithdrawSelfDelegationUnbondedResponse) MarshalToSizedBuffer(dAtA []
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgExecuteMessagesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgExecuteMessagesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgExecuteMessagesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Responses) > 0 {
+		for iNdEx := len(m.Responses) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Responses[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -510,20 +871,54 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgInit) Size() (n int) {
+func (m *MsgInitSelfDelegatableLockupAccount) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Sender)
+	l = len(m.Owner)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.EndTime)
+	n += 1 + l + sovTx(uint64(l))
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime)
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgInitSelfDelegatableLockupAccountResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime)
+	n += 1 + l + sovTx(uint64(l))
+	if len(m.LockingPeriods) > 0 {
+		for _, e := range m.LockingPeriods {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
 	}
 	return n
 }
 
-func (m *MsgInitResponse) Size() (n int) {
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -580,13 +975,28 @@ func (m *MsgWithdrawSelfDelegationUnbondedResponse) Size() (n int) {
 	return n
 }
 
+func (m *MsgExecuteMessagesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Responses) > 0 {
+		for _, e := range m.Responses {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovTx(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgInit) Unmarshal(dAtA []byte) error {
+func (m *MsgInitSelfDelegatableLockupAccount) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -609,15 +1019,15 @@ func (m *MsgInit) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgInit: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgInitSelfDelegatableLockupAccount: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgInit: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgInitSelfDelegatableLockupAccount: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -645,7 +1055,73 @@ func (m *MsgInit) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.EndTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.StartTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -668,7 +1144,7 @@ func (m *MsgInit) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgInitResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgInitSelfDelegatableLockupAccountResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -691,10 +1167,209 @@ func (m *MsgInitResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgInitResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgInitSelfDelegatableLockupAccountResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgInitResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgInitSelfDelegatableLockupAccountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccount) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgInitSelfDelegatablePeriodicLockingAccount: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgInitSelfDelegatablePeriodicLockingAccount: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.StartTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LockingPeriods", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LockingPeriods = append(m.LockingPeriods, Period{})
+			if err := m.LockingPeriods[len(m.LockingPeriods)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgInitSelfDelegatablePeriodicLockingAccountResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgInitSelfDelegatablePeriodicLockingAccountResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgInitSelfDelegatablePeriodicLockingAccountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1029,6 +1704,90 @@ func (m *MsgWithdrawSelfDelegationUnbondedResponse) Unmarshal(dAtA []byte) error
 			return fmt.Errorf("proto: MsgWithdrawSelfDelegationUnbondedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgExecuteMessagesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgExecuteMessagesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgExecuteMessagesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Responses", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Responses = append(m.Responses, &any.Any{})
+			if err := m.Responses[len(m.Responses)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
