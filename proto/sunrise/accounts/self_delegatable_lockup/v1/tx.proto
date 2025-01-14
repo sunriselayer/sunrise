@@ -6,14 +6,53 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1";
 
-// MsgInit
-message MsgInit {
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+// MsgInitSelfDelegatableLockupAccount defines a message that enables creating a self-delegatable lockup account.
+message MsgInitSelfDelegatableLockupAccount {
+  option (amino.name) = "cosmos-sdk/MsgInitLockupAccount";
+  option (gogoproto.equal) = true;
+
+  // owner of the vesting account
+  string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // end_time is end of lockup
+  google.protobuf.Timestamp end_time = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdtime) = true
+  ];
+  // start_time is start of lockup
+  google.protobuf.Timestamp start_time = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdtime) = true
+  ];
 }
 
-// MsgInitResponse is the response returned after base account initialization.
-// This is empty.
-message MsgInitResponse {}
+// MsgInitSelfDelegatableLockupAccountResponse defines the Msg/InitSelfDelegatableLockupAccount response type.
+message MsgInitSelfDelegatableLockupAccountResponse {}
+
+// MsgInitSelfDelegatablePeriodicLockingAccount defines a message that enables creating a self-delegatable periodic locking
+// account.
+message MsgInitSelfDelegatablePeriodicLockingAccount {
+  option (amino.name) = "cosmos-sdk/MsgInitPeriodLockupAccount";
+  option (gogoproto.equal) = false;
+
+  // owner of the lockup account
+  string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // start of lockup
+  google.protobuf.Timestamp start_time = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdtime) = true
+  ];
+  repeated Period locking_periods = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// MsgInitSelfDelegatablePeriodicLockingAccountResponse defines the Msg/InitSelfDelegatablePeriodicLockingAccount
+// response type.
+message MsgInitSelfDelegatablePeriodicLockingAccountResponse {}
 
 // MsgSelfDelegate
 message MsgSelfDelegate {
@@ -42,3 +81,8 @@ message MsgWithdrawSelfDelegationUnbonded {
 
 // MsgWithdrawSelfDelegationUnbondedResponse
 message MsgWithdrawSelfDelegationUnbondedResponse {}
+
+// MsgExecuteMessagesResponse defines the response for lockup execute operations
+message MsgExecuteMessagesResponse {
+  repeated google.protobuf.Any responses = 1;
+}
