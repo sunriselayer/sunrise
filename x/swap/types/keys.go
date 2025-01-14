@@ -28,10 +28,10 @@ var (
 	OutgoingInFlightPacketsKeyCodec = collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key)
 )
 
-func IncomingInFlightPacketsKey(index PacketIndex) collections.Triple[string, string, uint64] {
+func IncomingInFlightPacketKey(index PacketIndex) collections.Triple[string, string, uint64] {
 	return collections.Join3(index.PortId, index.ChannelId, index.Sequence)
 }
 
-func OutgoingInFlightPacketsKey(index PacketIndex) collections.Triple[string, string, uint64] {
+func OutgoingInFlightPacketKey(index PacketIndex) collections.Triple[string, string, uint64] {
 	return collections.Join3(index.PortId, index.ChannelId, index.Sequence)
 }

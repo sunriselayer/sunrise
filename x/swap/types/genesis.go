@@ -18,7 +18,7 @@ func (gs GenesisState) Validate() error {
 	incomingPacketIndexMap := make(map[string]struct{})
 
 	for _, elem := range gs.IncomingInFlightPackets {
-		index := IncomingInFlightPacketsKeyCodec.Stringify(IncomingInFlightPacketsKey(elem.Index))
+		index := IncomingInFlightPacketsKeyCodec.Stringify(IncomingInFlightPacketKey(elem.Index))
 		if _, ok := incomingPacketIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for incomingInFlightPacket")
 		}
@@ -28,7 +28,7 @@ func (gs GenesisState) Validate() error {
 	outgoingInFlightPacketIndexMap := make(map[string]struct{})
 
 	for _, elem := range gs.OutgoingInFlightPackets {
-		index := OutgoingInFlightPacketsKeyCodec.Stringify(OutgoingInFlightPacketsKey(elem.Index))
+		index := OutgoingInFlightPacketsKeyCodec.Stringify(OutgoingInFlightPacketKey(elem.Index))
 		if _, ok := outgoingInFlightPacketIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for outgoingInFlightPacket")
 		}
