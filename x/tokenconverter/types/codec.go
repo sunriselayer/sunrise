@@ -12,6 +12,8 @@ func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgConvert{},
 		&v1.MsgSelfDelegate{},
+		&v1.MsgWithdrawSelfDelegationUnbonded{},
+		&v1.MsgSend{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
