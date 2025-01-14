@@ -1,8 +1,12 @@
 syntax = "proto3";
 package sunrise.accounts.self_delegatable_lockup.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "sunrise/accounts/self_delegatable_lockup/v1/lockup.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1";
 
