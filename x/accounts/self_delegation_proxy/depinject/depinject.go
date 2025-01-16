@@ -5,7 +5,7 @@ import (
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/x/accounts/accountstd"
 
-	"github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy"
+	selfdelegationproxy "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy"
 )
 
 type Inputs struct {
