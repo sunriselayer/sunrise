@@ -245,12 +245,11 @@ var (
 						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
-
+						tokenconvertermoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
-						tokenconvertermoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 					// SkipStoreKeys is an optional list of store keys to skip when constructing the
