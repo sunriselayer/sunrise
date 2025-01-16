@@ -110,7 +110,7 @@ var (
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
 		{Account: damoduletypes.ModuleName},
-		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
@@ -212,9 +212,12 @@ var (
 					// NOTE: The genutils module must also occur after auth so that it can access the params from auth.
 					InitGenesis: []string{
 						consensustypes.ModuleName,
+						// <sunrise>
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						stakingtypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
+						// </sunrise>
 						accounts.ModuleName,
 						distrtypes.ModuleName,
 						slashingtypes.ModuleName,
@@ -238,7 +241,7 @@ var (
 						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
-						tokenconvertermoduletypes.ModuleName,
+
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,

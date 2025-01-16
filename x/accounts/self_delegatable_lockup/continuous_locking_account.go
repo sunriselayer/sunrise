@@ -40,7 +40,7 @@ type ContinuousLockingAccount struct {
 	StartTime collections.Item[time.Time]
 }
 
-func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.MsgInitLockupAccount) (*lockuptypes.MsgInitLockupAccountResponse, error) {
+func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableLockupAccount) (*v1.MsgInitSelfDelegatableLockupAccountResponse, error) {
 	if msg.EndTime.IsZero() {
 		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid end time %s", msg.EndTime.String())
 	}
@@ -70,8 +70,8 @@ func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.M
 // 	return cva.BaseLockup.Delegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
 // }
 
-func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *lockuptypes.MsgSend) (
-	*lockuptypes.MsgExecuteMessagesResponse, error,
+func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *v1.MsgSend) (
+	*v1.MsgExecuteMessagesResponse, error,
 ) {
 	return cva.BaseLockup.SendCoins(ctx, msg, cva.GetLockedCoinsWithDenoms)
 }
