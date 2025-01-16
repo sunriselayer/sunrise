@@ -5,6 +5,7 @@ import (
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 
 	"fmt"
+
 	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/consts"
 )

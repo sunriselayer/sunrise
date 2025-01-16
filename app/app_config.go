@@ -85,6 +85,8 @@ import (
 	liquidityincentivemoduletypes "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module"
 	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	_ "github.com/sunriselayer/sunrise/x/selfdelegation/module"
+	selfdelegationmoduletypes "github.com/sunriselayer/sunrise/x/selfdelegation/types"
 	_ "github.com/sunriselayer/sunrise/x/swap/module"
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module"
@@ -174,6 +176,7 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
+						selfdelegationmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -194,6 +197,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
+						selfdelegationmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -246,6 +250,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
+						selfdelegationmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 					// SkipStoreKeys is an optional list of store keys to skip when constructing the
@@ -369,6 +374,10 @@ var (
 			{
 				Name:   feemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&feemoduletypes.Module{}),
+			},
+			{
+				Name:   selfdelegationmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&selfdelegationmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

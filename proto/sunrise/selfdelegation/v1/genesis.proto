@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.selfdelegation.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/selfdelegation/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/selfdelegation/types";
+
+// GenesisState defines the selfdelegation module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
