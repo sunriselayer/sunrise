@@ -34,18 +34,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a convert tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
-				{
-					RpcMethod:      "SelfDelegate",
-					Use:            "self-delegate",
-					Short:          "Send a self-delegate tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
-				},
-				{
-					RpcMethod:      "WithdrawSelfDelegationUnbonded",
-					Use:            "withdraw-self-delegation-unbonded",
-					Short:          "Send a withdraw-self-delegation-unbonded tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
-				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
