@@ -220,7 +220,7 @@ var (
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						stakingtypes.ModuleName,
-						tokenconvertermoduletypes.ModuleName,
+						selfdelegationmoduletypes.ModuleName,
 						// </sunrise>
 						accounts.ModuleName,
 						distrtypes.ModuleName,
@@ -250,7 +250,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
-						selfdelegationmoduletypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 					// SkipStoreKeys is an optional list of store keys to skip when constructing the
