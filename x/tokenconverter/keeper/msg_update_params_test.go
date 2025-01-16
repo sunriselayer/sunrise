@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"testing"
 
-	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
@@ -41,9 +40,8 @@ func TestMsgUpdateParams(t *testing.T) {
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
 				Params: types.Params{
-					BondDenom:         "stake",
-					FeeDenom:          "fee",
-					SelfDelegationCap: math.NewInt(1),
+					BondDenom: "stake",
+					FeeDenom:  "fee",
 				},
 			},
 			expErr: false,

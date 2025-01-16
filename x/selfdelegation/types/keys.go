@@ -1,6 +1,9 @@
 package types
 
-import "cosmossdk.io/collections"
+import (
+	"cosmossdk.io/collections"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 const (
 	// ModuleName defines the module name
@@ -15,5 +18,13 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_selfdelegation")
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
+
+	SelfDelegationProxiesKeyPrefix = collections.NewPrefix("self_delegation_proxies/")
+)
+
+var (
+	SelfDelegationProxiesKeyCodec = sdk.AccAddressKey
+)

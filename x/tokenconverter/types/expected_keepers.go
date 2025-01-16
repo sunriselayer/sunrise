@@ -3,30 +3,10 @@ package types
 import (
 	"context"
 
-	"cosmossdk.io/core/transaction"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	banktypes "cosmossdk.io/x/bank/types"
-	stakingtypes "cosmossdk.io/x/staking/types"
 )
-
-type AccountsKeeper interface {
-	Init(
-		ctx context.Context,
-		accountType string,
-		creator []byte,
-		initRequest transaction.Msg,
-		funds sdk.Coins,
-		addressSeed []byte,
-	) (transaction.Msg, []byte, error)
-
-	Query(
-		ctx context.Context,
-		accountAddr []byte,
-		queryRequest transaction.Msg,
-	) (transaction.Msg, error)
-}
 
 // AccountKeeper defines the expected account keeper (noalias)
 type AccountKeeper interface {
@@ -55,14 +35,4 @@ type BankKeeper interface {
 	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
 	BurnCoins(ctx context.Context, address []byte, amt sdk.Coins) error
-}
-
-// StakingKeeper is expected keeper for staking module
-type StakingKeeper interface {
-	GetValidator(ctx context.Context, addr sdk.ValAddress) (stakingtypes.Validator, error)
-	GetDelegatorBonded(ctx context.Context, delegator sdk.AccAddress) (math.Int, error)
-}
-
-type DistributionKeeper interface {
-	SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAddr sdk.AccAddress) error
 }

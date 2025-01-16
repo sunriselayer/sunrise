@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/selfdelegation/types"
 )
 
 func (k msgServer) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *types.MsgWithdrawSelfDelegationUnbonded) (*types.MsgWithdrawSelfDelegationUnbondedResponse, error) {
@@ -19,12 +19,12 @@ func (k msgServer) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *type
 		return nil, err
 	}
 
-	err = k.Keeper.Convert(ctx, msg.Amount, proxyAddrBytes)
+	err = k.tokenConverterKeeper.Convert(ctx, msg.Amount, proxyAddrBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	params, err := k.Params.Get(ctx)
+	params, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}
