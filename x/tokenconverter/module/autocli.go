@@ -30,12 +30,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Convert",
-					Use:       "convert [sender] [min-amount] [max-amount]",
+					Use:       "convert [sender] [amount]",
 					Short:     "Send a convert tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "sender"},
-						{ProtoField: "min_amount"},
-						{ProtoField: "max_amount"},
+						{ProtoField: "amount"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
