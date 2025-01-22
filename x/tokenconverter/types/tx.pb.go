@@ -292,25 +292,25 @@ func (m *MsgSelfDelegateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSelfDelegateResponse proto.InternalMessageInfo
 
-// MsgSelfUndelegate
-type MsgSelfUndelegate struct {
+// MsgWithdrawSelfDelegationUnbonded
+type MsgWithdrawSelfDelegationUnbonded struct {
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// Amount of bond denom
 	Amount cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
 }
 
-func (m *MsgSelfUndelegate) Reset()         { *m = MsgSelfUndelegate{} }
-func (m *MsgSelfUndelegate) String() string { return proto.CompactTextString(m) }
-func (*MsgSelfUndelegate) ProtoMessage()    {}
-func (*MsgSelfUndelegate) Descriptor() ([]byte, []int) {
+func (m *MsgWithdrawSelfDelegationUnbonded) Reset()         { *m = MsgWithdrawSelfDelegationUnbonded{} }
+func (m *MsgWithdrawSelfDelegationUnbonded) String() string { return proto.CompactTextString(m) }
+func (*MsgWithdrawSelfDelegationUnbonded) ProtoMessage()    {}
+func (*MsgWithdrawSelfDelegationUnbonded) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1c06db355649ac70, []int{6}
 }
-func (m *MsgSelfUndelegate) XXX_Unmarshal(b []byte) error {
+func (m *MsgWithdrawSelfDelegationUnbonded) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSelfUndelegate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgWithdrawSelfDelegationUnbonded) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSelfUndelegate.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgWithdrawSelfDelegationUnbonded.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -320,41 +320,45 @@ func (m *MsgSelfUndelegate) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *MsgSelfUndelegate) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSelfUndelegate.Merge(m, src)
+func (m *MsgWithdrawSelfDelegationUnbonded) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgWithdrawSelfDelegationUnbonded.Merge(m, src)
 }
-func (m *MsgSelfUndelegate) XXX_Size() int {
+func (m *MsgWithdrawSelfDelegationUnbonded) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSelfUndelegate) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSelfUndelegate.DiscardUnknown(m)
+func (m *MsgWithdrawSelfDelegationUnbonded) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgWithdrawSelfDelegationUnbonded.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSelfUndelegate proto.InternalMessageInfo
+var xxx_messageInfo_MsgWithdrawSelfDelegationUnbonded proto.InternalMessageInfo
 
-func (m *MsgSelfUndelegate) GetSender() string {
+func (m *MsgWithdrawSelfDelegationUnbonded) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-// MsgSelfUndelegateResponse
-type MsgSelfUndelegateResponse struct {
+// MsgWithdrawSelfDelegationUnbondedResponse
+type MsgWithdrawSelfDelegationUnbondedResponse struct {
 }
 
-func (m *MsgSelfUndelegateResponse) Reset()         { *m = MsgSelfUndelegateResponse{} }
-func (m *MsgSelfUndelegateResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSelfUndelegateResponse) ProtoMessage()    {}
-func (*MsgSelfUndelegateResponse) Descriptor() ([]byte, []int) {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) Reset() {
+	*m = MsgWithdrawSelfDelegationUnbondedResponse{}
+}
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MsgWithdrawSelfDelegationUnbondedResponse) ProtoMessage() {}
+func (*MsgWithdrawSelfDelegationUnbondedResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1c06db355649ac70, []int{7}
 }
-func (m *MsgSelfUndelegateResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSelfUndelegateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSelfUndelegateResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgWithdrawSelfDelegationUnbondedResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -364,277 +368,17 @@ func (m *MsgSelfUndelegateResponse) XXX_Marshal(b []byte, deterministic bool) ([
 		return b[:n], nil
 	}
 }
-func (m *MsgSelfUndelegateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSelfUndelegateResponse.Merge(m, src)
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgWithdrawSelfDelegationUnbondedResponse.Merge(m, src)
 }
-func (m *MsgSelfUndelegateResponse) XXX_Size() int {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSelfUndelegateResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSelfUndelegateResponse.DiscardUnknown(m)
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgWithdrawSelfDelegationUnbondedResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSelfUndelegateResponse proto.InternalMessageInfo
-
-// MsgSelfCancelUnbonding
-type MsgSelfCancelUnbonding struct {
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// Amount of bond denom
-	Amount         cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
-	CreationHeight int64                 `protobuf:"varint,3,opt,name=creation_height,json=creationHeight,proto3" json:"creation_height,omitempty"`
-}
-
-func (m *MsgSelfCancelUnbonding) Reset()         { *m = MsgSelfCancelUnbonding{} }
-func (m *MsgSelfCancelUnbonding) String() string { return proto.CompactTextString(m) }
-func (*MsgSelfCancelUnbonding) ProtoMessage()    {}
-func (*MsgSelfCancelUnbonding) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c06db355649ac70, []int{8}
-}
-func (m *MsgSelfCancelUnbonding) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgSelfCancelUnbonding) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSelfCancelUnbonding.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgSelfCancelUnbonding) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSelfCancelUnbonding.Merge(m, src)
-}
-func (m *MsgSelfCancelUnbonding) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSelfCancelUnbonding) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSelfCancelUnbonding.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgSelfCancelUnbonding proto.InternalMessageInfo
-
-func (m *MsgSelfCancelUnbonding) GetSender() string {
-	if m != nil {
-		return m.Sender
-	}
-	return ""
-}
-
-func (m *MsgSelfCancelUnbonding) GetCreationHeight() int64 {
-	if m != nil {
-		return m.CreationHeight
-	}
-	return 0
-}
-
-// MsgSelfCancelUnbondingResponse
-type MsgSelfCancelUnbondingResponse struct {
-}
-
-func (m *MsgSelfCancelUnbondingResponse) Reset()         { *m = MsgSelfCancelUnbondingResponse{} }
-func (m *MsgSelfCancelUnbondingResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSelfCancelUnbondingResponse) ProtoMessage()    {}
-func (*MsgSelfCancelUnbondingResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c06db355649ac70, []int{9}
-}
-func (m *MsgSelfCancelUnbondingResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgSelfCancelUnbondingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSelfCancelUnbondingResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgSelfCancelUnbondingResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSelfCancelUnbondingResponse.Merge(m, src)
-}
-func (m *MsgSelfCancelUnbondingResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSelfCancelUnbondingResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSelfCancelUnbondingResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgSelfCancelUnbondingResponse proto.InternalMessageInfo
-
-// MsgWithdrawSelfDelegationRewards
-type MsgWithdrawSelfDelegationRewards struct {
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-}
-
-func (m *MsgWithdrawSelfDelegationRewards) Reset()         { *m = MsgWithdrawSelfDelegationRewards{} }
-func (m *MsgWithdrawSelfDelegationRewards) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawSelfDelegationRewards) ProtoMessage()    {}
-func (*MsgWithdrawSelfDelegationRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c06db355649ac70, []int{10}
-}
-func (m *MsgWithdrawSelfDelegationRewards) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgWithdrawSelfDelegationRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawSelfDelegationRewards.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgWithdrawSelfDelegationRewards) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawSelfDelegationRewards.Merge(m, src)
-}
-func (m *MsgWithdrawSelfDelegationRewards) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawSelfDelegationRewards) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawSelfDelegationRewards.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgWithdrawSelfDelegationRewards proto.InternalMessageInfo
-
-func (m *MsgWithdrawSelfDelegationRewards) GetSender() string {
-	if m != nil {
-		return m.Sender
-	}
-	return ""
-}
-
-// MsgWithdrawSelfDelegationRewardsResponse
-type MsgWithdrawSelfDelegationRewardsResponse struct {
-}
-
-func (m *MsgWithdrawSelfDelegationRewardsResponse) Reset() {
-	*m = MsgWithdrawSelfDelegationRewardsResponse{}
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawSelfDelegationRewardsResponse) ProtoMessage()    {}
-func (*MsgWithdrawSelfDelegationRewardsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c06db355649ac70, []int{11}
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawSelfDelegationRewardsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawSelfDelegationRewardsResponse.Merge(m, src)
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawSelfDelegationRewardsResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgWithdrawSelfDelegationRewardsResponse proto.InternalMessageInfo
-
-// MsgWithdrawSelfUnbonded
-type MsgWithdrawSelfUnbonded struct {
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// Amount of bond denom in proxy account
-	Amount cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
-}
-
-func (m *MsgWithdrawSelfUnbonded) Reset()         { *m = MsgWithdrawSelfUnbonded{} }
-func (m *MsgWithdrawSelfUnbonded) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawSelfUnbonded) ProtoMessage()    {}
-func (*MsgWithdrawSelfUnbonded) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c06db355649ac70, []int{12}
-}
-func (m *MsgWithdrawSelfUnbonded) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgWithdrawSelfUnbonded) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawSelfUnbonded.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgWithdrawSelfUnbonded) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawSelfUnbonded.Merge(m, src)
-}
-func (m *MsgWithdrawSelfUnbonded) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawSelfUnbonded) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawSelfUnbonded.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgWithdrawSelfUnbonded proto.InternalMessageInfo
-
-func (m *MsgWithdrawSelfUnbonded) GetSender() string {
-	if m != nil {
-		return m.Sender
-	}
-	return ""
-}
-
-// MsgWithdrawSelfUnbondedResponse
-type MsgWithdrawSelfUnbondedResponse struct {
-}
-
-func (m *MsgWithdrawSelfUnbondedResponse) Reset()         { *m = MsgWithdrawSelfUnbondedResponse{} }
-func (m *MsgWithdrawSelfUnbondedResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawSelfUnbondedResponse) ProtoMessage()    {}
-func (*MsgWithdrawSelfUnbondedResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1c06db355649ac70, []int{13}
-}
-func (m *MsgWithdrawSelfUnbondedResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgWithdrawSelfUnbondedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawSelfUnbondedResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgWithdrawSelfUnbondedResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawSelfUnbondedResponse.Merge(m, src)
-}
-func (m *MsgWithdrawSelfUnbondedResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawSelfUnbondedResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawSelfUnbondedResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgWithdrawSelfUnbondedResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgWithdrawSelfDelegationUnbondedResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.tokenconverter.v1.MsgUpdateParams")
@@ -643,14 +387,8 @@ func init() {
 	proto.RegisterType((*MsgConvertResponse)(nil), "sunrise.tokenconverter.v1.MsgConvertResponse")
 	proto.RegisterType((*MsgSelfDelegate)(nil), "sunrise.tokenconverter.v1.MsgSelfDelegate")
 	proto.RegisterType((*MsgSelfDelegateResponse)(nil), "sunrise.tokenconverter.v1.MsgSelfDelegateResponse")
-	proto.RegisterType((*MsgSelfUndelegate)(nil), "sunrise.tokenconverter.v1.MsgSelfUndelegate")
-	proto.RegisterType((*MsgSelfUndelegateResponse)(nil), "sunrise.tokenconverter.v1.MsgSelfUndelegateResponse")
-	proto.RegisterType((*MsgSelfCancelUnbonding)(nil), "sunrise.tokenconverter.v1.MsgSelfCancelUnbonding")
-	proto.RegisterType((*MsgSelfCancelUnbondingResponse)(nil), "sunrise.tokenconverter.v1.MsgSelfCancelUnbondingResponse")
-	proto.RegisterType((*MsgWithdrawSelfDelegationRewards)(nil), "sunrise.tokenconverter.v1.MsgWithdrawSelfDelegationRewards")
-	proto.RegisterType((*MsgWithdrawSelfDelegationRewardsResponse)(nil), "sunrise.tokenconverter.v1.MsgWithdrawSelfDelegationRewardsResponse")
-	proto.RegisterType((*MsgWithdrawSelfUnbonded)(nil), "sunrise.tokenconverter.v1.MsgWithdrawSelfUnbonded")
-	proto.RegisterType((*MsgWithdrawSelfUnbondedResponse)(nil), "sunrise.tokenconverter.v1.MsgWithdrawSelfUnbondedResponse")
+	proto.RegisterType((*MsgWithdrawSelfDelegationUnbonded)(nil), "sunrise.tokenconverter.v1.MsgWithdrawSelfDelegationUnbonded")
+	proto.RegisterType((*MsgWithdrawSelfDelegationUnbondedResponse)(nil), "sunrise.tokenconverter.v1.MsgWithdrawSelfDelegationUnbondedResponse")
 }
 
 func init() {
@@ -658,50 +396,41 @@ func init() {
 }
 
 var fileDescriptor_1c06db355649ac70 = []byte{
-	// 687 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x96, 0xcf, 0x6b, 0x13, 0x4d,
-	0x18, 0xc7, 0x33, 0x6f, 0xdf, 0x37, 0x2f, 0x7d, 0x5a, 0x5a, 0xde, 0x7d, 0xa3, 0x4d, 0x56, 0xdc,
-	0xa6, 0x01, 0x35, 0x44, 0xbb, 0x6b, 0xa3, 0x14, 0xac, 0x07, 0x31, 0xf1, 0x60, 0x0f, 0x81, 0x92,
-	0x52, 0x04, 0x2f, 0x65, 0x9a, 0x1d, 0x27, 0x4b, 0xb3, 0x33, 0x61, 0x66, 0xd2, 0x1f, 0x37, 0x51,
-	0xf0, 0xdc, 0x8b, 0x08, 0x82, 0x07, 0xff, 0x83, 0x1e, 0xfa, 0x2f, 0x08, 0x3d, 0x96, 0x9e, 0xc4,
-	0x43, 0x91, 0xf6, 0xd0, 0xff, 0xc0, 0xb3, 0x24, 0x3b, 0xbb, 0xf9, 0x61, 0x9a, 0x34, 0x78, 0xb0,
-	0xb7, 0xcc, 0xcc, 0xf7, 0xfb, 0x7d, 0x3e, 0xcf, 0x66, 0xe7, 0x61, 0x21, 0x23, 0x1b, 0x4c, 0x78,
-	0x92, 0x38, 0x8a, 0x6f, 0x12, 0x56, 0xe1, 0x6c, 0x8b, 0x08, 0x45, 0x84, 0xb3, 0xb5, 0xe0, 0xa8,
-	0x1d, 0xbb, 0x2e, 0xb8, 0xe2, 0x46, 0x4a, 0x6b, 0xec, 0x6e, 0x8d, 0xbd, 0xb5, 0x60, 0xce, 0x54,
-	0xb8, 0xf4, 0xb9, 0x74, 0x7c, 0x49, 0x9b, 0x16, 0x5f, 0xd2, 0xc0, 0x63, 0xa6, 0x82, 0x83, 0xf5,
-	0xd6, 0xca, 0x09, 0x16, 0xfa, 0x28, 0x41, 0x39, 0xe5, 0xc1, 0x7e, 0xf3, 0x97, 0xde, 0xbd, 0x7d,
-	0x31, 0x48, 0x1d, 0x0b, 0xec, 0x6b, 0x77, 0xe6, 0x23, 0x82, 0xe9, 0x92, 0xa4, 0x6b, 0x75, 0x17,
-	0x2b, 0xb2, 0xd2, 0x3a, 0x31, 0x16, 0x61, 0x1c, 0x37, 0x54, 0x95, 0x0b, 0x4f, 0xed, 0x26, 0x51,
-	0x1a, 0x65, 0xc7, 0x0b, 0xc9, 0xe3, 0x83, 0xf9, 0x84, 0x2e, 0xfb, 0xd4, 0x75, 0x05, 0x91, 0x72,
-	0x55, 0x09, 0x8f, 0xd1, 0x72, 0x5b, 0x6a, 0x3c, 0x81, 0x78, 0x90, 0x9d, 0xfc, 0x2b, 0x8d, 0xb2,
-	0x13, 0xf9, 0x39, 0xfb, 0xc2, 0x4e, 0xed, 0xa0, 0x54, 0xe1, 0xef, 0xc3, 0x93, 0xd9, 0x58, 0x59,
-	0xdb, 0x96, 0xa6, 0xde, 0x9c, 0xef, 0xe7, 0xda, 0x81, 0x99, 0x14, 0xcc, 0xf4, 0xb0, 0x95, 0x89,
-	0xac, 0x73, 0x26, 0x49, 0x66, 0x0f, 0x01, 0x94, 0x24, 0x2d, 0x06, 0x99, 0xc6, 0x7d, 0x88, 0x4b,
-	0xc2, 0x5c, 0x22, 0x86, 0xf2, 0x6a, 0x9d, 0x51, 0x84, 0x38, 0xf6, 0x79, 0x83, 0xa9, 0x16, 0xec,
-	0x78, 0xe1, 0x6e, 0x93, 0xe4, 0xdb, 0xc9, 0xec, 0xb5, 0xc0, 0x25, 0xdd, 0x4d, 0xdb, 0xe3, 0x8e,
-	0x8f, 0x55, 0xd5, 0x5e, 0x66, 0xea, 0xf8, 0x60, 0x1e, 0x74, 0xdc, 0x32, 0x53, 0x65, 0x6d, 0x5d,
-	0x9a, 0x68, 0x02, 0xeb, 0xc4, 0x4c, 0x02, 0x8c, 0x36, 0x51, 0x04, 0xfa, 0x3e, 0x78, 0xc0, 0xab,
-	0xa4, 0xf6, 0xea, 0x19, 0xa9, 0x11, 0x8a, 0x15, 0xb9, 0x12, 0xb4, 0xc1, 0xb3, 0xed, 0xc4, 0x8a,
-	0x90, 0x3f, 0x20, 0xf8, 0x4f, 0x9f, 0xad, 0x31, 0xf7, 0x2a, 0x41, 0xdf, 0x80, 0xd4, 0x2f, 0x60,
-	0x11, 0xf6, 0x17, 0x04, 0xd7, 0xf5, 0x69, 0x11, 0xb3, 0x0a, 0xa9, 0xad, 0xb1, 0x0d, 0xce, 0x5c,
-	0x8f, 0xd1, 0x3f, 0xc4, 0x6e, 0xdc, 0x81, 0xe9, 0x8a, 0x20, 0x58, 0x79, 0x9c, 0xad, 0x57, 0x89,
-	0x47, 0xab, 0x2a, 0x39, 0x96, 0x46, 0xd9, 0xb1, 0xf2, 0x54, 0xb8, 0xfd, 0xbc, 0xb5, 0xdb, 0xdd,
-	0x64, 0x1a, 0xac, 0xfe, 0x6d, 0x44, 0x9d, 0x62, 0x48, 0x97, 0x24, 0x7d, 0xe1, 0xa9, 0xaa, 0x2b,
-	0xf0, 0x76, 0xc7, 0x7f, 0xe8, 0x71, 0x56, 0x26, 0xdb, 0x58, 0xb8, 0x72, 0xf4, 0x96, 0xbb, 0x21,
-	0x72, 0x90, 0x1d, 0x56, 0x22, 0xc2, 0xf9, 0x84, 0x5a, 0xef, 0x52, 0xa7, 0x38, 0x60, 0x26, 0xee,
-	0x95, 0x78, 0x6b, 0xe6, 0x60, 0xf6, 0x02, 0xbc, 0xb0, 0x85, 0xfc, 0x8f, 0x38, 0x8c, 0x95, 0x24,
-	0x35, 0x18, 0x4c, 0x76, 0x8d, 0xc2, 0xdc, 0x80, 0x11, 0xd6, 0x33, 0x9a, 0xcc, 0xfc, 0xe5, 0xb5,
-	0x61, 0x5d, 0x63, 0x1d, 0xfe, 0x0d, 0x47, 0xd8, 0xad, 0xc1, 0x76, 0x2d, 0x33, 0xe7, 0x2f, 0x25,
-	0x8b, 0x0a, 0x30, 0x98, 0xec, 0x1a, 0x3d, 0x43, 0x1a, 0xea, 0xd4, 0x0e, 0x6b, 0xa8, 0xdf, 0xec,
-	0x30, 0x14, 0x4c, 0xf5, 0xcc, 0x8d, 0x7b, 0xc3, 0x53, 0xda, 0x6a, 0xf3, 0xe1, 0x28, 0xea, 0xa8,
-	0xea, 0x5b, 0x04, 0xff, 0xf7, 0xbb, 0xf7, 0x0b, 0xc3, 0xd3, 0x7a, 0x2c, 0xe6, 0xa3, 0x91, 0x2d,
-	0x11, 0xc5, 0x67, 0x04, 0x37, 0x07, 0x5f, 0xca, 0xc7, 0x83, 0xc3, 0x07, 0x9a, 0xcd, 0xe2, 0x6f,
-	0x98, 0x23, 0xc6, 0x77, 0x08, 0x12, 0x7d, 0x2f, 0x6a, 0xfe, 0xf2, 0xe9, 0xa1, 0xc7, 0x5c, 0x1a,
-	0xdd, 0x13, 0x82, 0x98, 0xff, 0xbc, 0x3e, 0xdf, 0xcf, 0xa1, 0xc2, 0xca, 0xe1, 0xa9, 0x85, 0x8e,
-	0x4e, 0x2d, 0xf4, 0xfd, 0xd4, 0x42, 0x7b, 0x67, 0x56, 0xec, 0xe8, 0xcc, 0x8a, 0x7d, 0x3d, 0xb3,
-	0x62, 0x2f, 0x17, 0xa9, 0xa7, 0xaa, 0x8d, 0x0d, 0xbb, 0xc2, 0x7d, 0x47, 0x97, 0xa9, 0xe1, 0x5d,
-	0x22, 0xc2, 0x85, 0xb3, 0xd3, 0xfb, 0x6d, 0xa3, 0x76, 0xeb, 0x44, 0x6e, 0xc4, 0x5b, 0x1f, 0x36,
-	0x0f, 0x7e, 0x06, 0x00, 0x00, 0xff, 0xff, 0x8f, 0xc8, 0x97, 0x15, 0x8b, 0x09, 0x00, 0x00,
+	// 536 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x94, 0x4f, 0x6b, 0x13, 0x41,
+	0x18, 0xc6, 0x33, 0x56, 0x23, 0x79, 0x5b, 0x14, 0x96, 0x48, 0x93, 0x3d, 0x6c, 0xdb, 0x80, 0x52,
+	0x53, 0xb2, 0x6b, 0x23, 0xf4, 0x50, 0x04, 0x31, 0xed, 0xa5, 0x87, 0x40, 0x49, 0x29, 0x82, 0x97,
+	0x32, 0xc9, 0x8e, 0x93, 0xa5, 0xd9, 0x99, 0x65, 0x66, 0x12, 0x9b, 0x9b, 0xf8, 0x09, 0x7a, 0xf1,
+	0xe2, 0x59, 0xf0, 0xda, 0x43, 0x3f, 0x44, 0x8f, 0xa5, 0x27, 0xf1, 0x50, 0x24, 0x39, 0xf4, 0x0b,
+	0xf8, 0x01, 0x24, 0x99, 0xd9, 0xfc, 0xc3, 0x66, 0x0b, 0x5e, 0x7a, 0xdb, 0xd9, 0xf7, 0x79, 0xde,
+	0xf7, 0xf7, 0x0e, 0x0f, 0x03, 0x05, 0xd9, 0x66, 0x22, 0x90, 0xc4, 0x53, 0xfc, 0x98, 0xb0, 0x06,
+	0x67, 0x1d, 0x22, 0x14, 0x11, 0x5e, 0x67, 0xd3, 0x53, 0x27, 0x6e, 0x24, 0xb8, 0xe2, 0x56, 0xde,
+	0x68, 0xdc, 0x69, 0x8d, 0xdb, 0xd9, 0xb4, 0x97, 0x1b, 0x5c, 0x86, 0x5c, 0x7a, 0xa1, 0xa4, 0x03,
+	0x4b, 0x28, 0xa9, 0xf6, 0xd8, 0x79, 0x5d, 0x38, 0x1a, 0x9e, 0x3c, 0x7d, 0x30, 0xa5, 0x2c, 0xe5,
+	0x94, 0xeb, 0xff, 0x83, 0x2f, 0xf3, 0xf7, 0xc5, 0xed, 0x20, 0x11, 0x16, 0x38, 0x34, 0xee, 0xc2,
+	0x37, 0x04, 0x4f, 0xab, 0x92, 0x1e, 0x46, 0x3e, 0x56, 0x64, 0x7f, 0x58, 0xb1, 0xb6, 0x20, 0x83,
+	0xdb, 0xaa, 0xc9, 0x45, 0xa0, 0xba, 0x39, 0xb4, 0x8a, 0xd6, 0x33, 0x95, 0xdc, 0xd5, 0x79, 0x29,
+	0x6b, 0xc6, 0xbe, 0xf3, 0x7d, 0x41, 0xa4, 0x3c, 0x50, 0x22, 0x60, 0xb4, 0x36, 0x96, 0x5a, 0x6f,
+	0x21, 0xad, 0x7b, 0xe7, 0x1e, 0xac, 0xa2, 0xf5, 0xc5, 0xf2, 0x9a, 0x7b, 0xeb, 0xa6, 0xae, 0x1e,
+	0x55, 0x79, 0x78, 0x71, 0xbd, 0x92, 0xaa, 0x19, 0xdb, 0xf6, 0x93, 0x2f, 0x37, 0x67, 0xc5, 0x71,
+	0xc3, 0x42, 0x1e, 0x96, 0x67, 0xd8, 0x6a, 0x44, 0x46, 0x9c, 0x49, 0x52, 0x38, 0x45, 0x00, 0x55,
+	0x49, 0x77, 0x74, 0x4f, 0xeb, 0x15, 0xa4, 0x25, 0x61, 0x3e, 0x11, 0x89, 0xbc, 0x46, 0x67, 0xed,
+	0x40, 0x1a, 0x87, 0xbc, 0xcd, 0xd4, 0x10, 0x36, 0x53, 0xd9, 0x18, 0x90, 0xfc, 0xba, 0x5e, 0x79,
+	0xa6, 0x5d, 0xd2, 0x3f, 0x76, 0x03, 0xee, 0x85, 0x58, 0x35, 0xdd, 0x3d, 0xa6, 0xae, 0xce, 0x4b,
+	0x60, 0xda, 0xed, 0x31, 0x55, 0x33, 0xd6, 0xed, 0xc5, 0x01, 0xb0, 0xe9, 0x58, 0xc8, 0x82, 0x35,
+	0x26, 0x1a, 0x81, 0x7e, 0xd5, 0x17, 0x7c, 0x40, 0x5a, 0x1f, 0x77, 0x49, 0x8b, 0x50, 0xac, 0xc8,
+	0xbd, 0xa0, 0xd5, 0x77, 0x3b, 0x89, 0x35, 0x42, 0xfe, 0x81, 0x60, 0xad, 0x2a, 0xe9, 0xfb, 0x40,
+	0x35, 0x7d, 0x81, 0x3f, 0x4d, 0x68, 0x02, 0xce, 0x0e, 0x59, 0x9d, 0x33, 0x9f, 0xf8, 0xf7, 0x62,
+	0x89, 0x0d, 0x78, 0x99, 0x08, 0x1a, 0xaf, 0x55, 0xfe, 0xb3, 0x00, 0x0b, 0x55, 0x49, 0x2d, 0x06,
+	0x4b, 0x53, 0x71, 0x2f, 0xce, 0x89, 0xe9, 0x4c, 0xfc, 0xec, 0xf2, 0xdd, 0xb5, 0xf1, 0x5c, 0xeb,
+	0x08, 0x1e, 0xc7, 0x31, 0x7d, 0x3e, 0xdf, 0x6e, 0x64, 0x76, 0xe9, 0x4e, 0xb2, 0xd1, 0x00, 0x06,
+	0x4b, 0x53, 0xf1, 0x4a, 0x58, 0x68, 0x52, 0x9b, 0xb4, 0xd0, 0xbf, 0xf2, 0x61, 0x7d, 0x47, 0xe0,
+	0x24, 0x84, 0xe3, 0xcd, 0xfc, 0xb6, 0xf3, 0xdd, 0xf6, 0xee, 0xff, 0xb8, 0x63, 0x4c, 0xfb, 0xd1,
+	0xe7, 0x9b, 0xb3, 0x22, 0xaa, 0xec, 0x5f, 0xf4, 0x1c, 0x74, 0xd9, 0x73, 0xd0, 0xef, 0x9e, 0x83,
+	0x4e, 0xfb, 0x4e, 0xea, 0xb2, 0xef, 0xa4, 0x7e, 0xf6, 0x9d, 0xd4, 0x87, 0x2d, 0x1a, 0xa8, 0x66,
+	0xbb, 0xee, 0x36, 0x78, 0xe8, 0x99, 0x81, 0x2d, 0xdc, 0x25, 0x22, 0x3e, 0x78, 0x27, 0xb3, 0xaf,
+	0xa7, 0xea, 0x46, 0x44, 0xd6, 0xd3, 0xc3, 0xa7, 0xf3, 0xf5, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x25, 0x8d, 0xaf, 0x56, 0xed, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -723,14 +452,8 @@ type MsgClient interface {
 	Convert(ctx context.Context, in *MsgConvert, opts ...grpc.CallOption) (*MsgConvertResponse, error)
 	// SelfDelegate
 	SelfDelegate(ctx context.Context, in *MsgSelfDelegate, opts ...grpc.CallOption) (*MsgSelfDelegateResponse, error)
-	// SelfUndelegate
-	SelfUndelegate(ctx context.Context, in *MsgSelfUndelegate, opts ...grpc.CallOption) (*MsgSelfUndelegateResponse, error)
-	// SelfCancelUnbonding
-	SelfCancelUnbonding(ctx context.Context, in *MsgSelfCancelUnbonding, opts ...grpc.CallOption) (*MsgSelfCancelUnbondingResponse, error)
-	// WithdrawSelfDelegationRewards
-	WithdrawSelfDelegationRewards(ctx context.Context, in *MsgWithdrawSelfDelegationRewards, opts ...grpc.CallOption) (*MsgWithdrawSelfDelegationRewardsResponse, error)
-	// WithdrawSelfUnbonded
-	WithdrawSelfUnbonded(ctx context.Context, in *MsgWithdrawSelfUnbonded, opts ...grpc.CallOption) (*MsgWithdrawSelfUnbondedResponse, error)
+	// WithdrawSelfDelegationUnbonded
+	WithdrawSelfDelegationUnbonded(ctx context.Context, in *MsgWithdrawSelfDelegationUnbonded, opts ...grpc.CallOption) (*MsgWithdrawSelfDelegationUnbondedResponse, error)
 }
 
 type msgClient struct {
@@ -768,36 +491,9 @@ func (c *msgClient) SelfDelegate(ctx context.Context, in *MsgSelfDelegate, opts 
 	return out, nil
 }
 
-func (c *msgClient) SelfUndelegate(ctx context.Context, in *MsgSelfUndelegate, opts ...grpc.CallOption) (*MsgSelfUndelegateResponse, error) {
-	out := new(MsgSelfUndelegateResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.v1.Msg/SelfUndelegate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) SelfCancelUnbonding(ctx context.Context, in *MsgSelfCancelUnbonding, opts ...grpc.CallOption) (*MsgSelfCancelUnbondingResponse, error) {
-	out := new(MsgSelfCancelUnbondingResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.v1.Msg/SelfCancelUnbonding", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) WithdrawSelfDelegationRewards(ctx context.Context, in *MsgWithdrawSelfDelegationRewards, opts ...grpc.CallOption) (*MsgWithdrawSelfDelegationRewardsResponse, error) {
-	out := new(MsgWithdrawSelfDelegationRewardsResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.v1.Msg/WithdrawSelfDelegationRewards", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) WithdrawSelfUnbonded(ctx context.Context, in *MsgWithdrawSelfUnbonded, opts ...grpc.CallOption) (*MsgWithdrawSelfUnbondedResponse, error) {
-	out := new(MsgWithdrawSelfUnbondedResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.v1.Msg/WithdrawSelfUnbonded", in, out, opts...)
+func (c *msgClient) WithdrawSelfDelegationUnbonded(ctx context.Context, in *MsgWithdrawSelfDelegationUnbonded, opts ...grpc.CallOption) (*MsgWithdrawSelfDelegationUnbondedResponse, error) {
+	out := new(MsgWithdrawSelfDelegationUnbondedResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.tokenconverter.v1.Msg/WithdrawSelfDelegationUnbonded", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -813,14 +509,8 @@ type MsgServer interface {
 	Convert(context.Context, *MsgConvert) (*MsgConvertResponse, error)
 	// SelfDelegate
 	SelfDelegate(context.Context, *MsgSelfDelegate) (*MsgSelfDelegateResponse, error)
-	// SelfUndelegate
-	SelfUndelegate(context.Context, *MsgSelfUndelegate) (*MsgSelfUndelegateResponse, error)
-	// SelfCancelUnbonding
-	SelfCancelUnbonding(context.Context, *MsgSelfCancelUnbonding) (*MsgSelfCancelUnbondingResponse, error)
-	// WithdrawSelfDelegationRewards
-	WithdrawSelfDelegationRewards(context.Context, *MsgWithdrawSelfDelegationRewards) (*MsgWithdrawSelfDelegationRewardsResponse, error)
-	// WithdrawSelfUnbonded
-	WithdrawSelfUnbonded(context.Context, *MsgWithdrawSelfUnbonded) (*MsgWithdrawSelfUnbondedResponse, error)
+	// WithdrawSelfDelegationUnbonded
+	WithdrawSelfDelegationUnbonded(context.Context, *MsgWithdrawSelfDelegationUnbonded) (*MsgWithdrawSelfDelegationUnbondedResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -836,17 +526,8 @@ func (*UnimplementedMsgServer) Convert(ctx context.Context, req *MsgConvert) (*M
 func (*UnimplementedMsgServer) SelfDelegate(ctx context.Context, req *MsgSelfDelegate) (*MsgSelfDelegateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SelfDelegate not implemented")
 }
-func (*UnimplementedMsgServer) SelfUndelegate(ctx context.Context, req *MsgSelfUndelegate) (*MsgSelfUndelegateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SelfUndelegate not implemented")
-}
-func (*UnimplementedMsgServer) SelfCancelUnbonding(ctx context.Context, req *MsgSelfCancelUnbonding) (*MsgSelfCancelUnbondingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SelfCancelUnbonding not implemented")
-}
-func (*UnimplementedMsgServer) WithdrawSelfDelegationRewards(ctx context.Context, req *MsgWithdrawSelfDelegationRewards) (*MsgWithdrawSelfDelegationRewardsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawSelfDelegationRewards not implemented")
-}
-func (*UnimplementedMsgServer) WithdrawSelfUnbonded(ctx context.Context, req *MsgWithdrawSelfUnbonded) (*MsgWithdrawSelfUnbondedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawSelfUnbonded not implemented")
+func (*UnimplementedMsgServer) WithdrawSelfDelegationUnbonded(ctx context.Context, req *MsgWithdrawSelfDelegationUnbonded) (*MsgWithdrawSelfDelegationUnbondedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WithdrawSelfDelegationUnbonded not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -907,74 +588,20 @@ func _Msg_SelfDelegate_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SelfUndelegate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSelfUndelegate)
+func _Msg_WithdrawSelfDelegationUnbonded_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgWithdrawSelfDelegationUnbonded)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SelfUndelegate(ctx, in)
+		return srv.(MsgServer).WithdrawSelfDelegationUnbonded(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.tokenconverter.v1.Msg/SelfUndelegate",
+		FullMethod: "/sunrise.tokenconverter.v1.Msg/WithdrawSelfDelegationUnbonded",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SelfUndelegate(ctx, req.(*MsgSelfUndelegate))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SelfCancelUnbonding_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSelfCancelUnbonding)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SelfCancelUnbonding(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.tokenconverter.v1.Msg/SelfCancelUnbonding",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SelfCancelUnbonding(ctx, req.(*MsgSelfCancelUnbonding))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_WithdrawSelfDelegationRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgWithdrawSelfDelegationRewards)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).WithdrawSelfDelegationRewards(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.tokenconverter.v1.Msg/WithdrawSelfDelegationRewards",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).WithdrawSelfDelegationRewards(ctx, req.(*MsgWithdrawSelfDelegationRewards))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_WithdrawSelfUnbonded_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgWithdrawSelfUnbonded)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).WithdrawSelfUnbonded(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.tokenconverter.v1.Msg/WithdrawSelfUnbonded",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).WithdrawSelfUnbonded(ctx, req.(*MsgWithdrawSelfUnbonded))
+		return srv.(MsgServer).WithdrawSelfDelegationUnbonded(ctx, req.(*MsgWithdrawSelfDelegationUnbonded))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -997,20 +624,8 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SelfDelegate_Handler,
 		},
 		{
-			MethodName: "SelfUndelegate",
-			Handler:    _Msg_SelfUndelegate_Handler,
-		},
-		{
-			MethodName: "SelfCancelUnbonding",
-			Handler:    _Msg_SelfCancelUnbonding_Handler,
-		},
-		{
-			MethodName: "WithdrawSelfDelegationRewards",
-			Handler:    _Msg_WithdrawSelfDelegationRewards_Handler,
-		},
-		{
-			MethodName: "WithdrawSelfUnbonded",
-			Handler:    _Msg_WithdrawSelfUnbonded_Handler,
+			MethodName: "WithdrawSelfDelegationUnbonded",
+			Handler:    _Msg_WithdrawSelfDelegationUnbonded_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1206,7 +821,7 @@ func (m *MsgSelfDelegateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSelfUndelegate) Marshal() (dAtA []byte, err error) {
+func (m *MsgWithdrawSelfDelegationUnbonded) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1216,12 +831,12 @@ func (m *MsgSelfUndelegate) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSelfUndelegate) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgWithdrawSelfDelegationUnbonded) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSelfUndelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgWithdrawSelfDelegationUnbonded) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1246,7 +861,7 @@ func (m *MsgSelfUndelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSelfUndelegateResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1256,196 +871,12 @@ func (m *MsgSelfUndelegateResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSelfUndelegateResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSelfUndelegateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgSelfCancelUnbonding) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgSelfCancelUnbonding) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgSelfCancelUnbonding) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CreationHeight != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.CreationHeight))
-		i--
-		dAtA[i] = 0x18
-	}
-	{
-		size := m.Amount.Size()
-		i -= size
-		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgSelfCancelUnbondingResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgSelfCancelUnbondingResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgSelfCancelUnbondingResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgWithdrawSelfDelegationRewards) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgWithdrawSelfDelegationRewards) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgWithdrawSelfDelegationRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgWithdrawSelfDelegationRewardsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgWithdrawSelfDelegationRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgWithdrawSelfDelegationRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgWithdrawSelfUnbonded) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgWithdrawSelfUnbonded) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgWithdrawSelfUnbonded) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size := m.Amount.Size()
-		i -= size
-		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgWithdrawSelfUnbondedResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgWithdrawSelfUnbondedResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgWithdrawSelfUnbondedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1536,7 +967,7 @@ func (m *MsgSelfDelegateResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgSelfUndelegate) Size() (n int) {
+func (m *MsgWithdrawSelfDelegationUnbonded) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1551,80 +982,7 @@ func (m *MsgSelfUndelegate) Size() (n int) {
 	return n
 }
 
-func (m *MsgSelfUndelegateResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgSelfCancelUnbonding) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.Amount.Size()
-	n += 1 + l + sovTx(uint64(l))
-	if m.CreationHeight != 0 {
-		n += 1 + sovTx(uint64(m.CreationHeight))
-	}
-	return n
-}
-
-func (m *MsgSelfCancelUnbondingResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgWithdrawSelfDelegationRewards) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgWithdrawSelfDelegationRewardsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgWithdrawSelfUnbonded) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.Amount.Size()
-	n += 1 + l + sovTx(uint64(l))
-	return n
-}
-
-func (m *MsgWithdrawSelfUnbondedResponse) Size() (n int) {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2136,7 +1494,7 @@ func (m *MsgSelfDelegateResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSelfUndelegate) Unmarshal(dAtA []byte) error {
+func (m *MsgWithdrawSelfDelegationUnbonded) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2159,10 +1517,10 @@ func (m *MsgSelfUndelegate) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSelfUndelegate: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgWithdrawSelfDelegationUnbonded: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSelfUndelegate: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgWithdrawSelfDelegationUnbonded: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2252,7 +1610,7 @@ func (m *MsgSelfUndelegate) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSelfUndelegateResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgWithdrawSelfDelegationUnbondedResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2275,493 +1633,10 @@ func (m *MsgSelfUndelegateResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSelfUndelegateResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgWithdrawSelfDelegationUnbondedResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSelfUndelegateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgSelfCancelUnbonding) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSelfCancelUnbonding: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSelfCancelUnbonding: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreationHeight", wireType)
-			}
-			m.CreationHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CreationHeight |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgSelfCancelUnbondingResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSelfCancelUnbondingResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSelfCancelUnbondingResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgWithdrawSelfDelegationRewards) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawSelfDelegationRewards: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawSelfDelegationRewards: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgWithdrawSelfDelegationRewardsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawSelfDelegationRewardsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawSelfDelegationRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgWithdrawSelfUnbonded) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawSelfUnbonded: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawSelfUnbonded: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgWithdrawSelfUnbondedResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawSelfUnbondedResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawSelfUnbondedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgWithdrawSelfDelegationUnbondedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

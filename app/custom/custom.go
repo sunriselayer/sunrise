@@ -13,6 +13,7 @@ import (
 	minttypes "cosmossdk.io/x/mint/types"
 	"cosmossdk.io/x/protocolpool"
 	protocolpooltypes "cosmossdk.io/x/protocolpool/types"
+
 	"cosmossdk.io/x/staking"
 	stakingtypes "cosmossdk.io/x/staking/types"
 
@@ -24,7 +25,10 @@ import (
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
-func ReplaceCustomModules(manager *module.Manager, cdc codec.Codec) {
+func ReplaceCustomModules(
+	manager *module.Manager,
+	cdc codec.Codec,
+) {
 	sdk.DefaultBondDenom = consts.BondDenom
 
 	// bank
