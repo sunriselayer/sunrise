@@ -64,12 +64,12 @@ func TestMsgSubmitProof(t *testing.T) {
 		MetadataUri:        "ipfs://metadata1",
 		ParityShardCount:   0,
 		ShardDoubleHashes:  [][]byte{hash},
-		Timestamp:          time.Time{},
+		Timestamp:          time.Now(),
 		Status:             "challenge_for_fraud",
 		Publisher:          "publisher",
 		Challenger:         "challenger",
 		Collateral:         sdk.Coins{},
-		ChallengeTimestamp: time.Time{},
+		ChallengeTimestamp: time.Now(),
 	})
 	require.NoError(t, err)
 
