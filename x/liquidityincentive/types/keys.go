@@ -1,6 +1,9 @@
 package types
 
-import "cosmossdk.io/collections"
+import (
+	"cosmossdk.io/collections"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 const (
 	// ModuleName defines the module name
@@ -15,16 +18,22 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("params")
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
 
-// TODO: use collections
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}
-
-const (
-	EpochKey      = "Epoch/value/"
-	EpochCountKey = "Epoch/count/"
-	VoteKeyPrefix = "Vote/value"
+	EpochsKeyPrefix = collections.NewPrefix("epochs/")
+	EpochIdKey      = collections.NewPrefix("epoch_id/")
+	GaugesKeyPrefix = collections.NewPrefix("gauges/")
+	VotesKeyPrefix  = collections.NewPrefix("votes/")
 )
+
+var (
+	EpochsKeyCodec = collections.Uint64Key
+	GaugesKeyCodec = collections.PairKeyCodec(collections.Uint64Key, collections.Uint64Key)
+	VotesKeyCodec  = sdk.AccAddressKey
+)
+
+func GaugeKey(previousEpochId uint64, poolId uint64) collections.Pair[uint64, uint64] {
+	return collections.Join(previousEpochId, poolId)
+}

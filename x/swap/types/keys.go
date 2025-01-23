@@ -15,10 +15,23 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("params")
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
 
-// deprecated
-func KeyPrefix(p string) []byte {
-	return []byte(p)
+	IncomingInFlightPacketsKeyPrefix = collections.NewPrefix("incoming_in_flight_packets/")
+	OutgoingInFlightPacketsKeyPrefix = collections.NewPrefix("outgoing_in_flight_packets/")
+)
+
+var (
+	IncomingInFlightPacketsKeyCodec = collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key)
+	OutgoingInFlightPacketsKeyCodec = collections.TripleKeyCodec(collections.StringKey, collections.StringKey, collections.Uint64Key)
+)
+
+func IncomingInFlightPacketKey(index PacketIndex) collections.Triple[string, string, uint64] {
+	return collections.Join3(index.PortId, index.ChannelId, index.Sequence)
+}
+
+func OutgoingInFlightPacketKey(index PacketIndex) collections.Triple[string, string, uint64] {
+	return collections.Join3(index.PortId, index.ChannelId, index.Sequence)
 }

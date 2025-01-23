@@ -3,64 +3,81 @@ package keeper
 import (
 	"context"
 
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender string) (data types.Proof) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	bz := store.Get(types.ProofKey(metadataUri, sender))
-	if bz == nil {
+func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte) (data types.Proof) {
+	key := collections.Join(metadataUri, sender)
+	has, err := k.Proofs.Has(ctx, key)
+	if err != nil {
+		panic(err)
+	}
+
+	if !has {
 		return data
 	}
 
-	k.cdc.MustUnmarshal(bz, &data)
-	return data
+	val, err := k.Proofs.Get(ctx, key)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
 }
 
 // SetParams set the params
 func (k Keeper) SetProof(ctx context.Context, data types.Proof) error {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	bz, err := k.cdc.Marshal(&data)
+	addr, err := k.addressCodec.StringToBytes(data.Sender)
 	if err != nil {
 		return err
 	}
-	store.Set(types.ProofKey(data.MetadataUri, data.Sender), bz)
+
+	err = k.Proofs.Set(ctx, collections.Join(data.MetadataUri, addr), data)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func (k Keeper) DeleteProof(ctx sdk.Context, metadataUri string, sender string) {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	store.Delete(types.ProofKey(metadataUri, sender))
+func (k Keeper) DeleteProof(ctx sdk.Context, metadataUri string, sender []byte) {
+	err := k.Proofs.Remove(ctx, collections.Join(metadataUri, sender))
+	if err != nil {
+		panic(err)
+	}
 }
 
-func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) []types.Proof {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	iter := storetypes.KVStorePrefixIterator(store, append(types.ProofKeyPrefix, metadataUri...))
-	defer iter.Close()
-
-	data := []types.Proof{}
-	for ; iter.Valid(); iter.Next() {
-		da := types.Proof{}
-		k.cdc.MustUnmarshal(iter.Value(), &da)
-		data = append(data, da)
+func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) (list []types.Proof) {
+	err := k.Proofs.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[string, []byte](metadataUri),
+		func(key collections.Pair[string, []byte], value types.Proof) (bool, error) {
+			list = append(list, value)
+			return false, nil
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
-	return data
+
+	return
 }
 
-func (k Keeper) GetAllProofs(ctx context.Context) []types.Proof {
-	store := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
-	iter := storetypes.KVStorePrefixIterator(store, types.ProofKeyPrefix)
-	defer iter.Close()
-
-	data := []types.Proof{}
-	for ; iter.Valid(); iter.Next() {
-		da := types.Proof{}
-		k.cdc.MustUnmarshal(iter.Value(), &da)
-		data = append(data, da)
+func (k Keeper) GetAllProofs(ctx context.Context) (list []types.Proof) {
+	err := k.Proofs.Walk(
+		ctx,
+		nil,
+		func(key collections.Pair[string, []byte], value types.Proof) (bool, error) {
+			list = append(list, value)
+			return false, nil
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
-	return data
+
+	return
 }
