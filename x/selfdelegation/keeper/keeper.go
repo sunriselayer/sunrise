@@ -7,7 +7,6 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/selfdelegation/types"
 )
@@ -24,7 +23,7 @@ type Keeper struct {
 
 	Schema                collections.Schema
 	Params                collections.Item[types.Params]
-	SelfDelegationProxies collections.Map[sdk.AccAddress, []byte]
+	SelfDelegationProxies collections.Map[[]byte, []byte]
 
 	accountsKeeper       types.AccountsKeeper
 	bankKeeper           types.BankKeeper
@@ -55,7 +54,7 @@ func NewKeeper(
 		authority:             authority,
 
 		Params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		SelfDelegationProxies: collections.NewMap(sb, types.SelfDelegationProxiesKeyPrefix, "self_delegation_proxies", types.SelfDelegationProxiesKeyCodec, collections.BytesValue),
+		SelfDelegationProxies: collections.NewMap(sb, types.SelfDelegationProxiesKeyPrefix, "self_delegation_proxies", collections.BytesKey, collections.BytesValue),
 
 		accountsKeeper:       accountsKeeper,
 		bankKeeper:           bankKeeper,
