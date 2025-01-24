@@ -16,7 +16,7 @@ message PublishedData {
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  string status = 5; // TODO: to be replaced with enum
+  Status status = 5;
   string publisher = 6;
   string challenger = 7;
   repeated cosmos.base.v1beta1.Coin collateral = 8 [
@@ -28,6 +28,22 @@ message PublishedData {
     (gogoproto.stdtime) = true
   ];
   string data_source_info = 10;
+}
+
+// PublishedDataStatus
+enum Status {
+  // Default value
+  STATUS_UNSPECIFIED = 0;
+  // Verified
+  STATUS_VERIFIED = 1;
+  // Rejected
+  STATUS_REJECTED = 2;
+  // after processing in the msg_server
+  STATUS_MSG_SERVER = 3;
+  // accept the votes from the validators (after preBlocker)
+  STATUS_VOTE_EXTENSION = 4;
+  // reported as fraud (after received ChallengeForFraud tx)
+  STATUS_CHALLENGE_FOR_FRAUD = 5;
 }
 
 // Proof
