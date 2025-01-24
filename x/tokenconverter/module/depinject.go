@@ -27,17 +27,13 @@ func init() {
 type ModuleInputs struct {
 	depinject.In
 
-	Config                *types.Module
-	Environment           appmodule.Environment
-	Cdc                   codec.Codec
-	AddressCodec          address.Codec
-	ValidatorAddressCodec address.ValidatorAddressCodec
+	Config       *types.Module
+	Environment  appmodule.Environment
+	Cdc          codec.Codec
+	AddressCodec address.Codec
 
-	AccountsKeeper     types.AccountsKeeper
-	AccountKeeper      types.AccountKeeper
-	BankKeeper         types.BankKeeper
-	StakingKeeper      types.StakingKeeper
-	DistributionKeeper types.DistributionKeeper
+	AccountKeeper types.AccountKeeper
+	BankKeeper    types.BankKeeper
 }
 
 type ModuleOutputs struct {
@@ -57,13 +53,9 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Environment,
 		in.Cdc,
 		in.AddressCodec,
-		in.ValidatorAddressCodec,
 		authority,
-		in.AccountsKeeper,
 		in.AccountKeeper,
 		in.BankKeeper,
-		in.StakingKeeper,
-		in.DistributionKeeper,
 	)
 	m := NewAppModule(in.Cdc, k)
 

@@ -9,7 +9,7 @@ import (
 
 	selfdelegationproxy "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy"
 	selfdelegationproxytypes "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/v1"
-	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	"github.com/sunriselayer/sunrise/x/selfdelegation/types"
 )
 
 func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate) (*types.MsgSelfDelegateResponse, error) {
@@ -56,7 +56,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		}
 	}
 
-	params, err := k.Params.Get(ctx)
+	params, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 	}
 
 	// ConvertReverse
-	err = k.ConvertReverse(ctx, msg.Amount, proxyAddrBytes)
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, msg.Amount, proxyAddrBytes)
 	if err != nil {
 		return nil, err
 	}

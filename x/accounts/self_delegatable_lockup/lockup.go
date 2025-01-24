@@ -29,6 +29,7 @@ import (
 
 	// <sunsise>
 	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
+	selfdelegationtypes "github.com/sunriselayer/sunrise/x/selfdelegation/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// </sunrise>
 )
@@ -375,7 +376,7 @@ func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate
 		return nil, err
 	}
 
-	msgSelfDelegate := &tokenconvertertypes.MsgSelfDelegate{
+	msgSelfDelegate := &selfdelegationtypes.MsgSelfDelegate{
 		Sender: delegatorAddress,
 		Amount: msg.Amount,
 	}
@@ -421,7 +422,7 @@ func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *
 		return nil, err
 	}
 
-	msgWithdraw := &tokenconvertertypes.MsgWithdrawSelfDelegationUnbonded{
+	msgWithdraw := &selfdelegationtypes.MsgWithdrawSelfDelegationUnbonded{
 		Sender: delegatorAddress,
 		Amount: msg.Amount,
 	}

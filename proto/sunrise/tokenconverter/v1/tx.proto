@@ -19,11 +19,6 @@ service Msg {
 
   // Convert
   rpc Convert(MsgConvert) returns (MsgConvertResponse);
-
-  // SelfDelegate
-  rpc SelfDelegate(MsgSelfDelegate) returns (MsgSelfDelegateResponse);
-  // WithdrawSelfDelegationUnbonded
-  rpc WithdrawSelfDelegationUnbonded(MsgWithdrawSelfDelegationUnbonded) returns (MsgWithdrawSelfDelegationUnbondedResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -57,33 +52,3 @@ message MsgConvert {
 
 // MsgConvertResponse
 message MsgConvertResponse {}
-
-// MsgSelfDelegate
-message MsgSelfDelegate {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of fee denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
-// MsgSelfDelegateResponse
-message MsgSelfDelegateResponse {}
-
-// MsgWithdrawSelfDelegationUnbonded
-message MsgWithdrawSelfDelegationUnbonded {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of bond denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
-// MsgWithdrawSelfDelegationUnbondedResponse
-message MsgWithdrawSelfDelegationUnbondedResponse {}

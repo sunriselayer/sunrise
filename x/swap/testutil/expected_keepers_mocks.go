@@ -11,8 +11,8 @@ import (
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
 	types0 "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
-	gomock "go.uber.org/mock/gomock"
 	types1 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.

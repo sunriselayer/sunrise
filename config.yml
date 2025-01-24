@@ -1,28 +1,30 @@
-version: 1
 validation: sovereign
-accounts: 
-- name: alice
-  coins:
-  - 20000urise
-  - 200000000uvrise
-- name: bob
-  coins:
-  - 10000urise
-  - 100000000uvrise
-client:
-  openapi:
-    path: docs/static/openapi.json
+version: 1
+accounts:
+    - name: alice
+      coins:
+        - 20000urise
+        - 200000000uvrise
+    - name: bob
+      coins:
+        - 10000urise
+        - 100000000uvrise
 faucet:
-  name: bob
-  coins:
-  - 5urise
-  - 100000uvrise
+    name: bob
+    coins:
+        - 5urise
+        - 100000uvrise
+client:
+    typescript:
+        path: ts-client
+    openapi:
+        path: docs/static/openapi.json
 validators:
-- name: alice
-  bonded: 100000000uvrise
-- name: validator1
-  bonded: 100000000uvrise
-- name: validator2
-  bonded: 200000000uvrise
-- name: validator3
-  bonded: 300000000uvrise
+    - name: alice
+      bonded: 100000000uvrise
+    - name: validator1
+      bonded: 100000000uvrise
+    - name: validator2
+      bonded: 200000000uvrise
+    - name: validator3
+      bonded: 300000000uvrise

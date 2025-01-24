@@ -10,8 +10,8 @@ import (
 
 	store "cosmossdk.io/core/store"
 	math "cosmossdk.io/math"
-	types "github.com/cosmos/cosmos-sdk/types"
 	types0 "cosmossdk.io/x/staking/types"
+	types "github.com/cosmos/cosmos-sdk/types"
 	gomock "go.uber.org/mock/gomock"
 )
 

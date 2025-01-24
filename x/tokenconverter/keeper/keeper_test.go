@@ -31,7 +31,6 @@ func initFixture(t *testing.T) *fixture {
 
 	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
 	addressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
-	validatorAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	env := runtime.NewEnvironment(runtime.NewKVStoreService(storeKey), log.NewTestLogger(t))
@@ -43,11 +42,7 @@ func initFixture(t *testing.T) *fixture {
 		env,
 		encCfg.Codec,
 		addressCodec,
-		validatorAddressCodec,
 		authority,
-		nil,
-		nil,
-		nil,
 		nil,
 		nil,
 	)

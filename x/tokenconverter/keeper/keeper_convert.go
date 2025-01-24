@@ -9,6 +9,10 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
+func (k Keeper) GetParams(ctx context.Context) (types.Params, error) {
+	return k.Params.Get(ctx)
+}
+
 func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
