@@ -20,8 +20,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 
 	for _, data := range challengePeriodData {
-		if data.Status == "vote_extension" {
-			data.Status = "verified"
+		if data.Status == types.Status_STATUS_VOTE_EXTENSION {
+			data.Status = types.Status_STATUS_VERIFIED
 		}
 		if err = k.SetPublishedData(ctx, data); err != nil {
 			return
@@ -76,7 +76,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	faultValidators := make(map[string]sdk.ValAddress)
 
 	for _, data := range proofPeriodData {
-		if data.Status == "challenge_for_fraud" {
+		if data.Status == types.Status_STATUS_CHALLENGE_FOR_FRAUD {
 			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
 			// if err != nil {
 			// 	k.Logger().Error(err.Error())
@@ -128,7 +128,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			// valid_shards < data_shard_count
 			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				// TODO: might require rejected records as well
-				data.Status = "rejected"
+				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())
@@ -143,7 +143,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					return
 				}
 			} else {
-				data.Status = "verified"
+				data.Status = types.Status_STATUS_VERIFIED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())

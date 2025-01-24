@@ -34,7 +34,7 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 		Collateral:        params.ChallengeCollateral,
 		Timestamp:         sdkCtx.BlockTime(),
 		DataSourceInfo:    msg.DataSourceInfo,
-		Status:            "msg_server",
+		Status:            types.Status_STATUS_MSG_SERVER,
 	})
 	if err != nil {
 		return nil, err
