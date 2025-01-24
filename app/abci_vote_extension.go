@@ -392,7 +392,7 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 			published.MetadataUri = data.MetadataUri
 			published.ParityShardCount = data.ParityShardCount
 			published.ShardDoubleHashes = data.ShardDoubleHashes
-			published.Status = "vote_extension"
+			published.Status = types.Status_STATUS_VOTE_EXTENSION
 			if err := h.keeper.SetPublishedData(ctx, published); err != nil {
 				panic(err)
 			}

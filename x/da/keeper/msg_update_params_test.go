@@ -36,26 +36,16 @@ func TestMsgUpdateParams(t *testing.T) {
 			expErrMsg: "invalid authority",
 		},
 		{
-			name: "send enabled param",
+			name: "invalid input",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params: types.Params{
-					VoteThreshold:     "0.67",
-					SlashEpoch:        1,
-					EpochMaxFault:     1,
-					SlashFraction:     "0.001",
-					ReplicationFactor: "3",
-					MinShardCount:     2,
-					MaxShardCount:     3,
-					MaxShardSize:      1000000000000000000,
-					ChallengePeriod:   1,
-					ProofPeriod:       1,
-				},
+				Params:    types.Params{},
 			},
-			expErr: false,
+			expErr:    true,
+			expErrMsg: "cannot be empty",
 		},
 		{
-			name: "all good",
+			name: "default params",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
 				Params:    params,

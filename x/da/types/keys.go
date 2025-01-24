@@ -54,7 +54,7 @@ func NewPublishedDataIndexes(sb *collections.SchemaBuilder) PublishedDataIndexes
 			collections.PairKeyCodec(collections.StringKey, collections.Int64Key),
 			collections.StringKey,
 			func(_ string, v PublishedData) (collections.Pair[string, int64], error) {
-				return collections.Join(v.Status, v.Timestamp.Unix()), nil
+				return collections.Join(v.Status.String(), v.Timestamp.Unix()), nil
 			},
 		),
 	}
