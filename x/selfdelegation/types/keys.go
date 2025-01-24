@@ -2,7 +2,6 @@ package types
 
 import (
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -26,5 +25,5 @@ var (
 )
 
 var (
-	SelfDelegationProxiesKeyCodec = sdk.AccAddressKey
+	SelfDelegationProxiesKeyCodec = collections.BytesKey
 )
