@@ -61,3 +61,29 @@ Supported URIs are below
 
 - `ipfs://`: IPFS
 - `ar://`: Arweave
+
+## Status
+
+PublishedData sent from the L2 chain to the DA layer changes status depending on the transmission of Tx and the passage of time.
+
+```protobuf
+enum Status {
+  // Default value
+  STATUS_UNSPECIFIED = 0;
+  // Verified
+  STATUS_VERIFIED = 1;
+  // Rejected
+  STATUS_REJECTED = 2;
+  // after processing in the msg_server
+  STATUS_MSG_SERVER = 3;
+  // accept the votes from the validators (after preBlocker)
+  STATUS_VOTE_EXTENSION = 4;
+  // reported as fraud (after received ChallengeForFraud tx)
+  STATUS_CHALLENGE_FOR_FRAUD = 5;
+}
+```
+
+1. A L2 chain sends the MsgPublishData transaction via sunrise-data, etc. If Tx is successful, it is registered with `MSG_SERVER` status.
+1. Registered PublishedData will be changed to `VOTE_EXTENSION` status in PreBlocker.
+1. During `VOTE_EXTENSION`, the status can be changed to `CHALLENGE_FOR_FRAUD` status through MsgChallengeForFraud Tx by anyone.
+1. In EndBlocker, `VOTE_EXTENSION` that has passed ChallengePeriod become `VERIFIED`. `CHALLENGE_FOR_FRAUD` will become `REJECTED` if valid_shards < data_shard_count. Otherwise, it will become `VERIFIED`.
