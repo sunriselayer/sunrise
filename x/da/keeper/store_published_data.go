@@ -62,7 +62,6 @@ func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.Published
 
 func (k Keeper) GetUnverifiedDataBeforeTime(ctx sdk.Context, timestamp int64) (list []types.PublishedData, err error) {
 	statuses := []string{
-		types.Status_STATUS_MSG_SERVER.String(),
 		types.Status_STATUS_VOTE_EXTENSION.String(),
 		types.Status_STATUS_CHALLENGE_FOR_FRAUD.String(),
 	}
