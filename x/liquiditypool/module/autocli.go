@@ -70,18 +70,19 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "CreatePool",
-					Use:            "create-pool [lowerTick] [upperTick]",
+					Use:            "create-pool",
 					Short:          "Create pool",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						// {ProtoField: "denom_base"},
 						// {ProtoField: "denom_quote"},
 						// {ProtoField: "fee_rate"},
-						// {ProtoField: "tick_params"},
+						// {ProtoField: "price_ratio"},
+						// {ProtoField: "base_offset"},
 					},
 				},
 				{
 					RpcMethod:      "CreatePosition",
-					Use:            "create-position ",
+					Use:            "create-position",
 					Short:          "Create position",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						// {ProtoField: "pool_id"},
