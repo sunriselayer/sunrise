@@ -128,6 +128,22 @@ func (bva *BaseLockup) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableL
 		return nil, err
 	}
 
+	// Set Lockup account to selfdelegation keeper's collection
+	whoami := accountstd.Whoami(ctx)
+	lockupAddress, err := bva.addressCodec.BytesToString(whoami)
+	if err != nil {
+		return nil, err
+	}
+
+	msgRegister := &selfdelegationtypes.MsgRegisterLockupAccount{
+		Sender: lockupAddress,
+		Owner:  msg.Owner,
+	}
+	_, err = sendMessage(ctx, msgRegister)
+	if err != nil {
+		return nil, err
+	}
+
 	return &v1.MsgInitSelfDelegatableLockupAccountResponse{}, nil
 }
 
@@ -338,7 +354,7 @@ func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate
 		return nil, err
 	}
 	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+	lockupAddress, err := bva.addressCodec.BytesToString(whoami)
 	if err != nil {
 		return nil, err
 	}
@@ -351,7 +367,7 @@ func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate
 	}
 	amount := sdk.NewCoin(res.Params.FeeDenom, msg.Amount)
 
-	balance, err := bva.getBalance(ctx, delegatorAddress, amount.Denom)
+	balance, err := bva.getBalance(ctx, lockupAddress, amount.Denom)
 	if err != nil {
 		return nil, err
 	}
@@ -377,7 +393,7 @@ func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate
 	}
 
 	msgSelfDelegate := &selfdelegationtypes.MsgSelfDelegate{
-		Sender: delegatorAddress,
+		Sender: lockupAddress, // Must be lockup, not owner
 		Amount: msg.Amount,
 	}
 	_, err = sendMessage(ctx, msgSelfDelegate)
@@ -397,7 +413,7 @@ func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *
 		return nil, err
 	}
 	whoami := accountstd.Whoami(ctx)
-	delegatorAddress, err := bva.addressCodec.BytesToString(whoami)
+	lockupAddress, err := bva.addressCodec.BytesToString(whoami)
 	if err != nil {
 		return nil, err
 	}
@@ -423,7 +439,7 @@ func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *
 	}
 
 	msgWithdraw := &selfdelegationtypes.MsgWithdrawSelfDelegationUnbonded{
-		Sender: delegatorAddress,
+		Sender: lockupAddress, // Must be lockup, not owner
 		Amount: msg.Amount,
 	}
 	_, err = sendMessage(ctx, msgWithdraw)

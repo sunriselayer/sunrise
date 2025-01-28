@@ -73,3 +73,14 @@ message MsgWithdrawSelfDelegationUnbonded {
 
 // MsgWithdrawSelfDelegationUnbondedResponse
 message MsgWithdrawSelfDelegationUnbondedResponse {}
+
+// MsgRegisterLockupAccount
+message MsgRegisterLockupAccount {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // owner of the lockup account
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgRegisterLockupAccountResponse
+message MsgRegisterLockupAccountResponse {}

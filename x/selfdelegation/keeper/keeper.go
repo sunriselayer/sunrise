@@ -23,7 +23,8 @@ type Keeper struct {
 
 	Schema                collections.Schema
 	Params                collections.Item[types.Params]
-	SelfDelegationProxies collections.Map[[]byte, []byte]
+	LockupAccounts        collections.Map[[]byte, []byte] // owner address -> lockup account address
+	SelfDelegationProxies collections.Map[[]byte, []byte] // owner address -> self-delegation proxy address
 
 	accountsKeeper       types.AccountsKeeper
 	bankKeeper           types.BankKeeper
