@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/selfdelegation/types"
 )
 
-func (q queryServer) QuerySelfDelegationProxyAccountByOwner(ctx context.Context, req *types.QuerySelfDelegationProxyAccountByOwnerRequest) (*types.QuerySelfDelegationProxyAccountByOwnerResponse, error) {
+func (q queryServer) SelfDelegationProxyAccountByOwner(ctx context.Context, req *types.QuerySelfDelegationProxyAccountByOwnerRequest) (*types.QuerySelfDelegationProxyAccountByOwnerResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
