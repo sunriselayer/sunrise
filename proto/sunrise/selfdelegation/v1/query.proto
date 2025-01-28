@@ -14,9 +14,9 @@ service Query {
     option (google.api.http).get = "/sunrise/selfdelegation/v1/params";
   }
 
-  // SelfDelegationProxyAccountByRootOwner queries the SelfDelegationProxyAccount by root owner address.
-  rpc SelfDelegationProxyAccountByRootOwner(QuerySelfDelegationProxyAccountByRootOwnerRequest) returns (QuerySelfDelegationProxyAccountByRootOwnerResponse) {
-    option (google.api.http).get = "/sunrise/selfdelegation/v1/self_delegation_proxy_account_by_root_owner/{root_owner_address}";
+  // SelfDelegationProxyAccountByOwner queries the SelfDelegationProxyAccount by owner address.
+  rpc SelfDelegationProxyAccountByOwner(QuerySelfDelegationProxyAccountByOwnerRequest) returns (QuerySelfDelegationProxyAccountByOwnerResponse) {
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/self_delegation_proxy_account_by_owner/{owner_address}";
   }
 }
 
@@ -29,12 +29,12 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-// QuerySelfDelegationProxyAccountByRootOwnerRequest is request type for the Query/SelfDelegationProxyAccountByRootOwner RPC method.
-message QuerySelfDelegationProxyAccountByRootOwnerRequest {
-  string root_owner_address = 1;
+// QuerySelfDelegationProxyAccountByOwnerRequest is request type for the Query/SelfDelegationProxyAccountByOwner RPC method.
+message QuerySelfDelegationProxyAccountByOwnerRequest {
+  string owner_address = 1;
 }
 
-// QuerySelfDelegationProxyAccountByRootOwnerResponse is response type for the Query/SelfDelegationProxyAccountByRootOwner RPC method.
-message QuerySelfDelegationProxyAccountByRootOwnerResponse {
+// QuerySelfDelegationProxyAccountByOwnerResponse is response type for the Query/SelfDelegationProxyAccountByOwner RPC method.
+message QuerySelfDelegationProxyAccountByOwnerResponse {
   string self_delegation_proxy_account_address = 1;
 }
