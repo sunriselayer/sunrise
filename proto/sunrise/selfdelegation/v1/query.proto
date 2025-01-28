@@ -9,9 +9,14 @@ option go_package = "github.com/sunriselayer/sunrise/x/selfdelegation/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Parameters queries the parameters of the module.
+  // Params queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/selfdelegation/v1/params";
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/params";
+  }
+
+  // SelfDelegationProxyAccountByRootOwner queries the SelfDelegationProxyAccount by root owner address.
+  rpc SelfDelegationProxyAccountByRootOwner(QuerySelfDelegationProxyAccountByRootOwnerRequest) returns (QuerySelfDelegationProxyAccountByRootOwnerResponse) {
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/self_delegation_proxy_account_by_root_owner/{root_owner_address}";
   }
 }
 
@@ -22,4 +27,14 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QuerySelfDelegationProxyAccountByRootOwnerRequest is request type for the Query/SelfDelegationProxyAccountByRootOwner RPC method.
+message QuerySelfDelegationProxyAccountByRootOwnerRequest {
+  string root_owner_address = 1;
+}
+
+// QuerySelfDelegationProxyAccountByRootOwnerResponse is response type for the Query/SelfDelegationProxyAccountByRootOwner RPC method.
+message QuerySelfDelegationProxyAccountByRootOwnerResponse {
+  string self_delegation_proxy_account_address = 1;
 }
