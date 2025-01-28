@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"bytes"
 	"context"
 
 	"google.golang.org/grpc/codes"
@@ -9,7 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/selfdelegation/types"
 )
 
-func (q queryServer) LockupAccountByOwner(ctx context.Context, req *types.QueryLockupAccountByOwnerRequest) (*types.QueryLockupAccountByOwnerResponse, error) {
+func (q queryServer) LockupAccountsByOwner(ctx context.Context, req *types.QueryLockupAccountsByOwnerRequest) (*types.QueryLockupAccountsByOwnerResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -19,15 +20,21 @@ func (q queryServer) LockupAccountByOwner(ctx context.Context, req *types.QueryL
 		return nil, status.Error(codes.InvalidArgument, "invalid owner address")
 	}
 
-	lockupAddress, err := q.k.LockupAccounts.Get(ctx, ownerAddress)
+	var lockupAccountAddresses []string
+	err = q.k.LockupAccounts.Walk(ctx, nil, func(key []byte, val []byte) (stop bool, err error) {
+		if bytes.Equal(val, ownerAddress) { // if owner address matches
+			lockupAddressString, err := q.k.addressCodec.BytesToString(key)
+			if err != nil {
+				// continue walking and skip current lockup account
+				return true, nil
+			}
+			lockupAccountAddresses = append(lockupAccountAddresses, lockupAddressString)
+		}
+		return false, nil // continue walking to find all lockup accounts for the owner
+	})
 	if err != nil {
-		return nil, status.Error(codes.NotFound, "lockup account not found")
+		return nil, status.Error(codes.Internal, "failed to walk lockup accounts")
 	}
 
-	LockupAddressString, err := q.k.addressCodec.BytesToString(lockupAddress)
-	if err != nil {
-		return nil, status.Error(codes.Internal, "failed to convert lockup account address to string")
-	}
-
-	return &types.QueryLockupAccountByOwnerResponse{LockupAccountAddress: LockupAddressString}, nil
+	return &types.QueryLockupAccountsByOwnerResponse{LockupAccountAddresses: lockupAccountAddresses}, nil
 }

@@ -24,9 +24,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "owner_address"}},
 				},
 				{
-					RpcMethod:      "LockupAccountByOwner",
-					Use:            "lockup-account-by-owner [owner_address]",
-					Short:          "Shows the lockup account by owner address",
+					RpcMethod:      "LockupAccountsByOwner",
+					Use:            "lockup-accounts-by-owner [owner_address]",
+					Short:          "Shows the lockup accounts by owner address",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "owner_address"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query

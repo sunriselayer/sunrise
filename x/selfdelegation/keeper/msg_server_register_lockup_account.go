@@ -17,7 +17,7 @@ func (k msgServer) RegisterLockupAccount(ctx context.Context, msg *types.MsgRegi
 	if err != nil {
 		return nil, errors.Wrap(err, "invalid owner address")
 	}
-	err = k.LockupAccounts.Set(ctx, ownerBytes, lockupBytes)
+	err = k.LockupAccounts.Set(ctx, lockupBytes, ownerBytes)
 	if err != nil {
 		return nil, err
 	}

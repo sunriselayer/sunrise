@@ -23,7 +23,7 @@ type Keeper struct {
 
 	Schema                collections.Schema
 	Params                collections.Item[types.Params]
-	LockupAccounts        collections.Map[[]byte, []byte] // owner address -> lockup account address
+	LockupAccounts        collections.Map[[]byte, []byte] // lockup account address -> owner address
 	SelfDelegationProxies collections.Map[[]byte, []byte] // owner address -> self-delegation proxy address
 
 	accountsKeeper       types.AccountsKeeper
@@ -55,6 +55,7 @@ func NewKeeper(
 		authority:             authority,
 
 		Params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		LockupAccounts:        collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", collections.BytesKey, collections.BytesValue),
 		SelfDelegationProxies: collections.NewMap(sb, types.SelfDelegationProxiesKeyPrefix, "self_delegation_proxies", collections.BytesKey, collections.BytesValue),
 
 		accountsKeeper:       accountsKeeper,
