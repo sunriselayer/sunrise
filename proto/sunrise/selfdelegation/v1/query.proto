@@ -19,9 +19,9 @@ service Query {
     option (google.api.http).get = "/sunrise/selfdelegation/v1/self_delegation_proxy_account_by_owner/{owner_address}";
   }
 
-  // LockupAccountByOwner queries the LockupAccount by owner address.
-  rpc LockupAccountByOwner(QueryLockupAccountByOwnerRequest) returns (QueryLockupAccountByOwnerResponse) {
-    option (google.api.http).get = "/sunrise/selfdelegation/v1/lockup_account_by_owner/{owner_address}";
+  // LockupAccountsByOwner queries the LockupAccounts by owner address.
+  rpc LockupAccountsByOwner(QueryLockupAccountsByOwnerRequest) returns (QueryLockupAccountsByOwnerResponse) {
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/lockup_accounts_by_owner/{owner_address}";
   }
 }
 
@@ -44,12 +44,12 @@ message QuerySelfDelegationProxyAccountByOwnerResponse {
   string self_delegation_proxy_account_address = 1;
 }
 
-// QueryLockupAccountByOwnerRequest is request type for the Query/LockupAccountByOwner RPC method.
-message QueryLockupAccountByOwnerRequest {
+// QueryLockupAccountsByOwnerRequest is request type for the Query/LockupAccountsByOwner RPC method.
+message QueryLockupAccountsByOwnerRequest {
   string owner_address = 1;
 }
 
-// QueryLockupAccountByOwnerResponse is response type for the Query/LockupAccountByOwner RPC method.
-message QueryLockupAccountByOwnerResponse {
-  string lockup_account_address = 1;
+// QueryLockupAccountsByOwnerResponse is response type for the Query/LockupAccountsByOwner RPC method.
+message QueryLockupAccountsByOwnerResponse {
+  repeated string lockup_account_addresses = 1;
 }
