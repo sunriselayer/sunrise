@@ -21,6 +21,8 @@ service Msg {
   rpc SelfDelegate(MsgSelfDelegate) returns (MsgSelfDelegateResponse);
   // WithdrawSelfDelegationUnbonded
   rpc WithdrawSelfDelegationUnbonded(MsgWithdrawSelfDelegationUnbonded) returns (MsgWithdrawSelfDelegationUnbondedResponse);
+  // RegisterLockupAccount
+  rpc RegisterLockupAccount(MsgRegisterLockupAccount) returns (MsgRegisterLockupAccountResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
