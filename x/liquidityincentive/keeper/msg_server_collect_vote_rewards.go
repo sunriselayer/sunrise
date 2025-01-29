@@ -13,7 +13,7 @@ import (
 
 func (k msgServer) CollectVoteRewards(ctx context.Context, msg *types.MsgCollectVoteRewards) (*types.MsgCollectVoteRewardsResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	// Currently BeginBlocker distributes a portion of vRISE to the gauge voters

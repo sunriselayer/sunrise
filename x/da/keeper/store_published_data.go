@@ -61,19 +61,36 @@ func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.Published
 }
 
 func (k Keeper) GetUnverifiedDataBeforeTime(ctx sdk.Context, timestamp int64) (list []types.PublishedData, err error) {
+	statuses := []string{
+		types.Status_STATUS_CHALLENGE_PERIOD.String(),
+		types.Status_STATUS_CHALLENGING.String(),
+	}
 	err = k.PublishedData.Indexes.StatusTime.Walk(
 		ctx,
 		collections.NewPrefixedPairRange[collections.Pair[string, int64], string](
-			collections.PairPrefix[string, int64]("unverified"),
+			collections.PairPrefix[string, int64](""), // No prefix, iterate all
 		),
 		func(key collections.Pair[string, int64], metadataUri string) (bool, error) {
-			if key.K2() > timestamp {
-				return true, nil
+			status := key.K1()
+			time := key.K2()
+			if time > timestamp {
+				return true, nil // Stop if timestamp is after the given timestamp
 			}
-			list = append(list, k.GetPublishedData(ctx, metadataUri))
+			foundStatus := false
+			for _, s := range statuses {
+				if status == s {
+					foundStatus = true
+					break
+				}
+			}
+			if foundStatus {
+				list = append(list, k.GetPublishedData(ctx, metadataUri))
+			}
 			return false, nil
 		},
 	)
-
+	if err != nil {
+		return nil, err
+	}
 	return
 }

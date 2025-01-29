@@ -20,8 +20,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 
 	for _, data := range challengePeriodData {
-		if data.Status == "vote_extension" {
-			data.Status = "verified"
+		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
+			data.Status = types.Status_STATUS_VERIFIED
 		}
 		if err = k.SetPublishedData(ctx, data); err != nil {
 			return
@@ -76,7 +76,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	faultValidators := make(map[string]sdk.ValAddress)
 
 	for _, data := range proofPeriodData {
-		if data.Status == "challenge_for_fraud" {
+		if data.Status == types.Status_STATUS_CHALLENGING {
 			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
 			// if err != nil {
 			// 	k.Logger().Error(err.Error())
@@ -89,23 +89,23 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			shardProofCount := make(map[int64]int64)
 			shardProofSubmitted := make(map[int64]map[string]bool)
 			for _, proof := range proofs {
-				for _, indice := range proof.Indices {
-					shardProofCount[indice]++
-					shardProofSubmitted[indice][proof.Sender] = true
+				for _, index := range proof.Indices {
+					shardProofCount[index]++
+					shardProofSubmitted[index][proof.Sender] = true
 				}
 			}
 
 			threshold := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
-			indiceValidators := make(map[int64][]sdk.ValAddress)
+			indexedValidators := make(map[int64][]sdk.ValAddress)
 			for _, valAddr := range activeValidators {
 				indices := types.ShardIndicesForValidator(valAddr, int64(threshold), int64(len(data.ShardDoubleHashes)))
-				for _, indice := range indices {
-					indiceValidators[indice] = append(indiceValidators[indice], valAddr)
+				for _, index := range indices {
+					indexedValidators[index] = append(indexedValidators[index], valAddr)
 				}
 			}
 
 			safeShardCount := int64(0)
-			for indice, proofCount := range shardProofCount {
+			for index, proofCount := range shardProofCount {
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
 				replicationFactorWithParity := replicationFactor.
 					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
@@ -117,8 +117,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 						MulInt64(2).
 						QuoInt64(3)) {
 					safeShardCount++
-					for _, valAddr := range indiceValidators[indice] {
-						if !shardProofSubmitted[indice][sdk.AccAddress(valAddr).String()] {
+					for _, valAddr := range indexedValidators[index] {
+						if !shardProofSubmitted[index][sdk.AccAddress(valAddr).String()] {
 							faultValidators[valAddr.String()] = valAddr
 						}
 					}
@@ -128,7 +128,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			// valid_shards < data_shard_count
 			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				// TODO: might require rejected records as well
-				data.Status = "rejected"
+				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())
@@ -143,7 +143,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					return
 				}
 			} else {
-				data.Status = "verified"
+				data.Status = types.Status_STATUS_VERIFIED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())

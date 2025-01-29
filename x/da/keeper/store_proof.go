@@ -28,7 +28,7 @@ func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte)
 	return val
 }
 
-// SetParams set the params
+// SetProof set the proof of the PublishedData
 func (k Keeper) SetProof(ctx context.Context, data types.Proof) error {
 	addr, err := k.addressCodec.StringToBytes(data.Sender)
 	if err != nil {
