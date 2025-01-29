@@ -52,5 +52,4 @@ message Proof {
   string sender = 2;
   repeated int64 indices = 3;
   repeated bytes proofs = 4;
-  bool is_valid_data = 5;
 }
