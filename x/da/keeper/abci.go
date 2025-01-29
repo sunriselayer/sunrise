@@ -20,7 +20,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 
 	for _, data := range challengePeriodData {
-		if data.Status == types.Status_STATUS_VOTE_EXTENSION {
+		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
 			data.Status = types.Status_STATUS_VERIFIED
 		}
 		if err = k.SetPublishedData(ctx, data); err != nil {
@@ -76,7 +76,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	faultValidators := make(map[string]sdk.ValAddress)
 
 	for _, data := range proofPeriodData {
-		if data.Status == types.Status_STATUS_CHALLENGE_FOR_FRAUD {
+		if data.Status == types.Status_STATUS_CHALLENGING {
 			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
 			// if err != nil {
 			// 	k.Logger().Error(err.Error())

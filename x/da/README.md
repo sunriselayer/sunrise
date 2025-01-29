@@ -74,16 +74,16 @@ enum Status {
   STATUS_VERIFIED = 1;
   // Rejected
   STATUS_REJECTED = 2;
-  // after processing in the msg_server
-  STATUS_MSG_SERVER = 3;
-  // accept the votes from the validators (after preBlocker)
-  STATUS_VOTE_EXTENSION = 4;
-  // reported as fraud (after received ChallengeForFraud tx)
-  STATUS_CHALLENGE_FOR_FRAUD = 5;
+  // After processing in the msg_server
+  STATUS_VOTING = 3;
+  // Verified the votes from the validators. Challenge can be received (after preBlocker)
+  STATUS_CHALLENGE_PERIOD = 4;
+  // reported as fraud. SubmitProof tx can be received (after received ChallengeForFraud tx)
+  STATUS_CHALLENGING = 5;
 }
 ```
 
-1. A L2 chain sends the MsgPublishData transaction via sunrise-data, etc. If Tx is successful, it is registered with `MSG_SERVER` status.
-1. Registered PublishedData will be changed to `VOTE_EXTENSION` status in PreBlocker.
-1. During `VOTE_EXTENSION`, the status can be changed to `CHALLENGE_FOR_FRAUD` status through MsgChallengeForFraud Tx by anyone.
-1. In EndBlocker, `VOTE_EXTENSION` that has passed ChallengePeriod become `VERIFIED`. `CHALLENGE_FOR_FRAUD` will become `REJECTED` if valid_shards < data_shard_count. Otherwise, it will become `VERIFIED`.
+1. A L2 chain sends the MsgPublishData transaction via sunrise-data, etc. If Tx is successful, it is registered with `VOTING` status.
+1. Registered PublishedData will be changed to `CHALLENGE_PERIOD` status in PreBlocker.
+1. During `CHALLENGE_PERIOD`, the status can be changed to `CHALLENGING` status through MsgChallengeForFraud Tx by anyone.
+1. In EndBlocker, `CHALLENGE_PERIOD` that has passed ChallengePeriod become `VERIFIED`. `CHALLENGING` will become `REJECTED` if `valid_shards < data_shard_count`. Otherwise, it will become `VERIFIED`.

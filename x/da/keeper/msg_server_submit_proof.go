@@ -30,7 +30,7 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
-	if publishedData.Status != types.Status_STATUS_CHALLENGE_FOR_FRAUD {
+	if publishedData.Status != types.Status_STATUS_CHALLENGING {
 		return nil, types.ErrDataNotInChallenge
 	}
 

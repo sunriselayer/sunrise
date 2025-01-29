@@ -65,7 +65,7 @@ func TestMsgSubmitProof(t *testing.T) {
 		ParityShardCount:   0,
 		ShardDoubleHashes:  [][]byte{hash},
 		Timestamp:          time.Now(),
-		Status:             types.Status_STATUS_CHALLENGE_FOR_FRAUD,
+		Status:             types.Status_STATUS_CHALLENGING,
 		Publisher:          "publisher",
 		Challenger:         "challenger",
 		Collateral:         sdk.Coins{},
