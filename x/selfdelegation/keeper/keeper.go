@@ -56,7 +56,7 @@ func NewKeeper(
 
 		Params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		LockupAccounts:        collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", collections.BytesKey, collections.BytesValue),
-		SelfDelegationProxies: collections.NewMap(sb, types.SelfDelegationProxiesKeyPrefix, "self_delegation_proxies", collections.BytesKey, collections.BytesValue),
+		SelfDelegationProxies: collections.NewMap(sb, types.SelfDelegationProxiesKeyPrefix, "self_delegation_proxies", types.SelfDelegationProxiesKeyCodec, collections.BytesValue),
 
 		accountsKeeper:       accountsKeeper,
 		bankKeeper:           bankKeeper,

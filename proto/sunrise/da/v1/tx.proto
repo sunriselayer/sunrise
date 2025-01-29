@@ -78,7 +78,6 @@ message MsgSubmitProof {
   string metadata_uri = 2;
   repeated int64 indices = 3;
   repeated bytes proofs = 4;
-  bool is_valid_data = 5;
 }
 
 // MsgSubmitProofResponse

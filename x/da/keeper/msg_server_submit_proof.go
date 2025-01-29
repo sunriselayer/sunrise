@@ -19,7 +19,7 @@ import (
 
 func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (*types.MsgSubmitProofResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 	// check number of proofs <> indices
 	if len(msg.Indices) != len(msg.Proofs) {
@@ -30,7 +30,7 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
-	if publishedData.Status != types.Status_STATUS_CHALLENGE_FOR_FRAUD {
+	if publishedData.Status != types.Status_STATUS_CHALLENGING {
 		return nil, types.ErrDataNotInChallenge
 	}
 
@@ -44,44 +44,43 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 	}
 
 	// check proof
-	if msg.IsValidData {
-		// TODO: check number of proofs (threshold)
-		vk, err := zkp.UnmarshalVerifyingKey(params.ZkpVerifyingKey)
+	// TODO: check number of proofs (threshold)
+	vk, err := zkp.UnmarshalVerifyingKey(params.ZkpVerifyingKey)
+	if err != nil {
+		return nil, err
+	}
+
+	// groth16: Prove & Verify
+	for i, j := range msg.Indices {
+		proof := &groth16bn254.Proof{}
+		_, err := proof.ReadFrom(bytes.NewReader(msg.Proofs[i]))
 		if err != nil {
 			return nil, err
 		}
 
-		// groth16: Prove & Verify
-		for i, j := range msg.Indices {
-			proof := &groth16bn254.Proof{}
-			_, err := proof.ReadFrom(bytes.NewReader(msg.Proofs[i]))
-			if err != nil {
-				return nil, err
-			}
-
-			if len(publishedData.ShardDoubleHashes) <= int(j) {
-				return nil, types.ErrProofIndiceOverflow
-			}
-
-			assignment := zkp.ValidityProofCircuit{
-				ShardHash:       big.NewInt(1),
-				ShardDoubleHash: publishedData.ShardDoubleHashes[j],
-			}
-			witness, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
-			if err != nil {
-				return nil, err
-			}
-
-			pubWitness, err := witness.Public()
-			if err != nil {
-				return nil, err
-			}
-
-			err = groth16.Verify(proof, vk, pubWitness)
-			if err != nil {
-				return nil, err
-			}
+		if len(publishedData.ShardDoubleHashes) <= int(j) {
+			return nil, types.ErrProofIndiceOverflow
 		}
+
+		assignment := zkp.ValidityProofCircuit{
+			ShardHash:       big.NewInt(1),
+			ShardDoubleHash: publishedData.ShardDoubleHashes[j],
+		}
+		witness, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
+		if err != nil {
+			return nil, err
+		}
+
+		pubWitness, err := witness.Public()
+		if err != nil {
+			return nil, err
+		}
+
+		err = groth16.Verify(proof, vk, pubWitness)
+		if err != nil {
+			return nil, err
+		}
+
 	}
 
 	// save proof in the storage
@@ -90,7 +89,6 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 		Sender:      msg.Sender,
 		Indices:     msg.Indices,
 		Proofs:      msg.Proofs,
-		IsValidData: msg.IsValidData,
 	})
 	if err != nil {
 		return nil, err

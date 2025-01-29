@@ -38,12 +38,12 @@ enum Status {
   STATUS_VERIFIED = 1;
   // Rejected
   STATUS_REJECTED = 2;
-  // after processing in the msg_server
-  STATUS_MSG_SERVER = 3;
-  // accept the votes from the validators (after preBlocker)
-  STATUS_VOTE_EXTENSION = 4;
-  // reported as fraud (after received ChallengeForFraud tx)
-  STATUS_CHALLENGE_FOR_FRAUD = 5;
+  // After processing in the msg_server
+  STATUS_VOTING = 3;
+  // Verified the votes from the validators. Challenge can be received (after preBlocker)
+  STATUS_CHALLENGE_PERIOD = 4;
+  // reported as fraud. SubmitProof tx can be received (after received ChallengeForFraud tx)
+  STATUS_CHALLENGING = 5;
 }
 
 // Proof
@@ -52,5 +52,4 @@ message Proof {
   string sender = 2;
   repeated int64 indices = 3;
   repeated bytes proofs = 4;
-  bool is_valid_data = 5;
 }

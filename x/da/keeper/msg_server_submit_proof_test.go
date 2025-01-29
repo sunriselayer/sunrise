@@ -65,7 +65,7 @@ func TestMsgSubmitProof(t *testing.T) {
 		ParityShardCount:   0,
 		ShardDoubleHashes:  [][]byte{hash},
 		Timestamp:          time.Now(),
-		Status:             types.Status_STATUS_CHALLENGE_FOR_FRAUD,
+		Status:             types.Status_STATUS_CHALLENGING,
 		Publisher:          "publisher",
 		Challenger:         "challenger",
 		Collateral:         sdk.Coins{},
@@ -80,13 +80,12 @@ func TestMsgSubmitProof(t *testing.T) {
 		expErrMsg string
 	}{
 		{
-			name: "invalid data hash",
+			name: "empty proof",
 			input: &types.MsgSubmitProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{},
 				Proofs:      [][]byte{},
-				IsValidData: false,
 			},
 			expErr: false,
 		},
@@ -97,7 +96,6 @@ func TestMsgSubmitProof(t *testing.T) {
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
 				Proofs:      [][]byte{proofBytes},
-				IsValidData: true,
 			},
 			expErr: false,
 		},
@@ -108,7 +106,6 @@ func TestMsgSubmitProof(t *testing.T) {
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
 				Proofs:      [][]byte{{0x0}},
-				IsValidData: true,
 			},
 			expErr:    true,
 			expErrMsg: "unexpected EOF",

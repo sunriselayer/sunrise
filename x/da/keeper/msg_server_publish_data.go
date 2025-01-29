@@ -12,7 +12,7 @@ import (
 
 func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (*types.MsgPublishDataResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	if msg.ParityShardCount >= uint64(len(msg.ShardDoubleHashes)) {
@@ -34,7 +34,7 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 		Collateral:        params.ChallengeCollateral,
 		Timestamp:         sdkCtx.BlockTime(),
 		DataSourceInfo:    msg.DataSourceInfo,
-		Status:            types.Status_STATUS_MSG_SERVER,
+		Status:            types.Status_STATUS_VOTING,
 	})
 	if err != nil {
 		return nil, err
