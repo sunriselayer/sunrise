@@ -13,7 +13,7 @@ import (
 )
 
 func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate) (*types.MsgSelfDelegateResponse, error) {
-	delegator, err := k.addressCodec.StringToBytes(msg.Sender)
+	delegatorBytes, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, err
 	}
@@ -24,13 +24,13 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 	}
 
 	// Check proxy account existence
-	has, err := k.SelfDelegationProxies.Has(ctx, delegator)
+	has, err := k.SelfDelegationProxies.Has(ctx, delegatorBytes)
 	if err != nil {
 		return nil, err
 	}
 	var proxyAddrBytes []byte
 	if has {
-		proxyAddrBytes, err = k.SelfDelegationProxies.Get(ctx, delegator)
+		proxyAddrBytes, err = k.SelfDelegationProxies.Get(ctx, delegatorBytes)
 		if err != nil {
 			return nil, err
 		}
@@ -39,7 +39,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		_, proxyAddrBytes, err = k.accountsKeeper.Init(
 			ctx,
 			selfdelegationproxy.SELF_DELEGATION_PROXY_ACCOUNT,
-			delegator, // Must be delegator, not owner
+			delegatorBytes, // Must be delegator, not owner
 			&selfdelegationproxytypes.MsgInit{
 				Owner:     msg.Sender,
 				RootOwner: rootOwnerAcc,
@@ -50,7 +50,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		if err != nil {
 			return nil, err
 		}
-		err = k.SelfDelegationProxies.Set(ctx, delegator, proxyAddrBytes)
+		err = k.SelfDelegationProxies.Set(ctx, delegatorBytes, proxyAddrBytes)
 		if err != nil {
 			return nil, err
 		}
@@ -61,7 +61,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		return nil, err
 	}
 
-	err = k.bankKeeper.SendCoins(ctx, delegator, proxyAddrBytes, sdk.NewCoins(sdk.NewCoin(params.FeeDenom, msg.Amount)))
+	err = k.bankKeeper.SendCoins(ctx, delegatorBytes, proxyAddrBytes, sdk.NewCoins(sdk.NewCoin(params.FeeDenom, msg.Amount)))
 	if err != nil {
 		return nil, err
 	}

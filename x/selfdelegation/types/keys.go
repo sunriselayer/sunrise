@@ -19,11 +19,12 @@ const (
 
 var (
 	// ParamsKey is the prefix to retrieve all Params
-	ParamsKey = collections.NewPrefix("params/")
-
+	ParamsKey                      = collections.NewPrefix("params/")
+	LockupAccountsKeyPrefix        = collections.NewPrefix("lockup_accounts/")
 	SelfDelegationProxiesKeyPrefix = collections.NewPrefix("self_delegation_proxies/")
 )
 
 var (
+	LockupAccountsKeyCodec        = collections.BytesKey
 	SelfDelegationProxiesKeyCodec = collections.BytesKey
 )

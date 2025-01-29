@@ -17,6 +17,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod:      "SelfDelegationProxyAccountByOwner",
+					Use:            "self-delegation-proxy-account-by-owner [owner_address]",
+					Short:          "Shows the self-delegation proxy account by owner address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "owner_address"}},
+				},
+				{
+					RpcMethod:      "LockupAccountsByOwner",
+					Use:            "lockup-accounts-by-owner [owner_address]",
+					Short:          "Shows the lockup accounts by owner address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "owner_address"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -39,6 +51,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:            "withdraw-self-delegation-unbonded",
 					Short:          "Send a withdraw-self-delegation-unbonded tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod: "RegisterLockupAccount",
+					Skip:      true,
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

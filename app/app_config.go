@@ -220,6 +220,7 @@ var (
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						stakingtypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
 						// </sunrise>
 						accounts.ModuleName,
@@ -245,7 +246,6 @@ var (
 						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
-						tokenconvertermoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
