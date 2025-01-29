@@ -25,5 +25,6 @@ var (
 )
 
 var (
+	LockupAccountsKeyCodec        = collections.BytesKey
 	SelfDelegationProxiesKeyCodec = collections.BytesKey
 )
