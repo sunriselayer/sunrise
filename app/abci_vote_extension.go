@@ -31,22 +31,48 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-const flagDAShardHashesAPI = "da.shard_hashes_api"
+const flagSunriseDataBaseUrl = "da.sunrise_data_base_url"
 
 type DAConfig struct {
-	ShardHashesAPI string `mapstructure:"shard_hashes_api"`
+	SunriseDataBaseUrl string `mapstructure:"sunrise_data_base_url"`
 }
 
 type DAShardHashesResponse struct {
 	ShardHashes []string `json:"shard_hashes"`
 }
 
+type SunriseDataClient struct {
+	BaseUrl string
+}
+
+func (client SunriseDataClient) GetShardHashes(metadataUri string, indices []int64) ([]string, error) {
+	url := fmt.Sprintf("%s/api/shared_hases?metadata_uri=%s&indices=%s", client.BaseUrl, metadataUri, strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	daShardHashes := DAShardHashesResponse{}
+	err = json.Unmarshal(resBody, &daShardHashes)
+	if err != nil {
+		return nil, err
+	}
+
+	return daShardHashes.ShardHashes, nil
+}
+
 // ReadOracleConfig reads the wasm specifig configuration
 func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 	cfg := DAConfig{}
 	var err error
-	if v := opts.Get(flagDAShardHashesAPI); v != nil {
-		if cfg.ShardHashesAPI, err = cast.ToStringE(v); err != nil {
+	if v := opts.Get(flagSunriseDataBaseUrl); v != nil {
+		if cfg.SunriseDataBaseUrl, err = cast.ToStringE(v); err != nil {
 			return cfg, err
 		}
 	}
@@ -56,26 +82,13 @@ func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 
 func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64, valAddr sdk.ValAddress) ([]int64, [][]byte, error) {
 	indices := types.ShardIndicesForValidator(valAddr, n, threshold)
-	url := daConfig.ShardHashesAPI + "?metadata_uri=" + metadataUri + "&indices=" + strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]")
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer res.Body.Close()
-
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	daShardHashes := DAShardHashesResponse{}
-	err = json.Unmarshal(resBody, &daShardHashes)
+	daShardHashes, err := SunriseDataClient{BaseUrl: daConfig.SunriseDataBaseUrl}.GetShardHashes(metadataUri, indices)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	shares := [][]byte{}
-	for _, shareEncoded := range daShardHashes.ShardHashes {
+	for _, shareEncoded := range daShardHashes {
 		share, err := base64.StdEncoding.DecodeString(shareEncoded)
 		if err != nil {
 			continue
