@@ -47,7 +47,7 @@ type SunriseDataClient struct {
 }
 
 func (client SunriseDataClient) GetShardHashes(metadataUri string, indices []int64) ([]string, error) {
-	url := fmt.Sprintf("%s/api/shared_hases?metadata_uri=%s&indices=%s", client.BaseUrl, metadataUri, strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
+	url := fmt.Sprintf("%s/api/shard-hashes?metadata_uri=%s&indices=%s", client.BaseUrl, metadataUri, strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
