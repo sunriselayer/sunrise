@@ -559,7 +559,7 @@ func ApplyNotVotedValidators(
 			if !ok {
 				continue
 			}
-
+			// if the dataHash exists in dataHashVoterMap, add the voter to the map
 			dataHashVoterMap[dataHash][dataVote.Voter.String()] = true
 		}
 	}
@@ -569,7 +569,7 @@ func ApplyNotVotedValidators(
 			_, ok := dataHashVoterMap[dataHash][valPower.ValAddr.String()]
 			if !ok {
 				faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
-				break
+				// break
 			}
 		}
 	}
