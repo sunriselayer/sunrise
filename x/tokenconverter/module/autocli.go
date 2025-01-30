@@ -30,7 +30,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Convert",
-					Use:       "convert [sender] [amount]",
+					Use:       "convert <sender> <amount>",
 					Short:     "Send a convert tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "sender"},
