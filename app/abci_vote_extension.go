@@ -81,6 +81,7 @@ func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 	return cfg, nil
 }
 
+// GET shard hashes from sunrise data api
 func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64, valAddr sdk.ValAddress) ([]int64, [][]byte, error) {
 	indices := types.ShardIndicesForValidator(valAddr, n, threshold)
 	daShardHashes, err := SunriseDataClient{BaseUrl: daConfig.SunriseDataBaseUrl}.GetShardHashes(metadataUri, indices)
@@ -157,6 +158,7 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 		}
 
 		txs := req.Txs
+		// parallelize GetDataShardHashes processing
 		var wg sync.WaitGroup
 		var mu sync.Mutex
 		for _, tx := range txs {
@@ -498,41 +500,46 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 	return
 }
 
+// GetAboveThresholdVotedData returns the data that has been voted by validators with power above the threshold and fault validators list.
 func GetAboveThresholdVotedData(
 	dataVotes DataVotes, thresholdPower int64,
-	valPowerMap map[string]ValidatorPower, faultValidators map[string]sdk.ValAddress,
-) (types.PublishedData, bool) {
-	lastPublishedData := types.PublishedData{}
-	lastPower := int64(0)
-
+	valPowerMap map[string]ValidatorPower,
+	faultValidators map[string]sdk.ValAddress,
+) (validData types.PublishedData,
+	err error,
+) {
+	// tally the voting power for each data
+	powerMap := make(map[string]int64)
 	for _, vote := range dataVotes {
-		if lastPublishedData.String() == vote.Data.String() {
-			lastPower += vote.Power
-			if lastPower >= thresholdPower {
-				break
-			}
-			continue
+		key := vote.Data.String()
+		powerMap[key] += vote.Power
+	}
+
+	validDataString := ""
+	validPower := int64(0)
+	for key, power := range powerMap {
+		if power > validPower {
+			validDataString = key
+			validPower = power
 		}
-		lastPublishedData = vote.Data
-		lastPower = vote.Power
+	}
+	// check if the data has been voted by validators with power above the threshold
+	if validPower < thresholdPower {
+		return types.PublishedData{}, errors.New("data voting power is below threshold")
 	}
 
-	if lastPower < thresholdPower {
-		return lastPublishedData, false
-	}
-
+	// record the fault validators
 	for _, vote := range dataVotes {
 		key := vote.Voter.String()
 		valPower := valPowerMap[key]
-		if lastPublishedData.String() == vote.Data.String() {
-			valPower := valPowerMap[key]
-			valPowerMap[key] = valPower
+		if validDataString == vote.Data.String() {
+			validData = vote.Data
 		} else {
 			faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
 		}
 	}
 
-	return lastPublishedData, true
+	return validData, nil
 }
 
 func ApplyNotVotedValidators(
@@ -625,12 +632,12 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		}
 		thresholdPower := voteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 
-		publishedData, aboveThreshold := GetAboveThresholdVotedData(dataVote, thresholdPower, valPowerMap, faultValidators)
-		if !aboveThreshold {
+		validData, err := GetAboveThresholdVotedData(dataVote, thresholdPower, valPowerMap, faultValidators)
+		if err != nil {
 			return nil, nil, err
 		}
 
-		votedData[dataHash] = &publishedData
+		votedData[dataHash] = &validData
 	}
 
 	ApplyNotVotedValidators(votedData, dataVotesMap, valPowerMap, faultValidators)
