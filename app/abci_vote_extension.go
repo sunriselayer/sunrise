@@ -564,13 +564,17 @@ func ApplyNotVotedValidators(
 		}
 	}
 
+	// record as fault validator only if any voting has not been done
 	for _, valPower := range valPowerMap {
+		voted := false
 		for dataHash := range votedData {
-			_, ok := dataHashVoterMap[dataHash][valPower.ValAddr.String()]
-			if !ok {
-				faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
-				// break
+			if _, ok := dataHashVoterMap[dataHash][valPower.ValAddr.String()]; ok {
+				voted = true
+				break
 			}
+		}
+		if !voted {
+			faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
 		}
 	}
 }
