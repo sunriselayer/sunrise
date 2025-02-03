@@ -11,7 +11,6 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-	"sync"
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
@@ -48,6 +47,7 @@ type SunriseDataClient struct {
 
 func (client SunriseDataClient) GetShardHashes(metadataUri string, indices []int64) ([]string, error) {
 	url := fmt.Sprintf("%s/api/shard-hashes?metadata_uri=%s&indices=%s", client.BaseUrl, metadataUri, strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
+	fmt.Println("url", url)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -159,9 +159,6 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 		}
 
 		txs := req.Txs
-		// parallelize GetDataShardHashes processing
-		var wg sync.WaitGroup
-		var mu sync.Mutex
 		for _, tx := range txs {
 			sdkTx, err := dec(tx)
 			if err != nil {
@@ -184,44 +181,38 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 
 			msgs := sdkTx.GetMsgs()
 			for _, msg := range msgs {
-				wg.Add(1)
-				go func(msg sdk.Msg) {
-					defer wg.Done()
-					switch msg := msg.(type) {
-					case *types.MsgPublishData:
-						replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor)
-						if err != nil {
-							return
-						}
-						threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
-						if threshold > int64(len(msg.ShardDoubleHashes)) {
-							threshold = int64(len(msg.ShardDoubleHashes))
-						}
-
-						indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
-						if err != nil {
-							return
-						}
-
-						// filter zkp verified data
-						err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
-						if err != nil {
-							return
-						}
-
-						mu.Lock()
-						voteExt.Data = append(voteExt.Data, &types.PublishedData{
-							MetadataUri:       msg.MetadataUri,
-							ParityShardCount:  msg.ParityShardCount,
-							ShardDoubleHashes: msg.ShardDoubleHashes,
-						})
-						// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
-						// 	Indices: indices,
-						// 	Shares:  shares,
-						// })
-						mu.Unlock()
+				switch msg := msg.(type) {
+				case *types.MsgPublishData:
+					replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
+					if err != nil {
+						continue
 					}
-				}(msg)
+					threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					if threshold > int64(len(msg.ShardDoubleHashes)) {
+						threshold = int64(len(msg.ShardDoubleHashes))
+					}
+
+					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
+					if err != nil {
+						continue
+					}
+
+					// filter zkp verified data
+					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
+					if err != nil {
+						continue
+					}
+
+					voteExt.Data = append(voteExt.Data, &types.PublishedData{
+						MetadataUri:       msg.MetadataUri,
+						ParityShardCount:  msg.ParityShardCount,
+						ShardDoubleHashes: msg.ShardDoubleHashes,
+					})
+					// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
+					// 	Indices: indices,
+					// 	Shares:  shares,
+					// })
+				}
 			}
 		}
 
