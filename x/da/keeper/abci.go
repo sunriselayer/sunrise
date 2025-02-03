@@ -10,8 +10,11 @@ import (
 
 func (k Keeper) EndBlocker(ctx context.Context) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	// TODO: error handling
-	params, _ := k.Params.Get(ctx)
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
 	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
 	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
