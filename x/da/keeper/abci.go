@@ -15,7 +15,6 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		k.Logger.Error(err.Error())
 		return
 	}
-	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
 	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
@@ -76,6 +75,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
+	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
 	faultValidators := make(map[string]sdk.ValAddress)
 
 	for _, data := range challengingData {
