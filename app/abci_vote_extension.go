@@ -137,6 +137,7 @@ func (h *VoteExtHandler) ValidatorsInfo(ctx sdk.Context, consAddr []byte) (int64
 
 func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder, handler sdk.AnteHandler, daKeeper damodulekeeper.Keeper) sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.ExtendVoteRequest) (*abci.ExtendVoteResponse, error) {
+		fmt.Println("vote_extension ExtendVoteHandler")
 		voteExt := types.VoteExtension{
 			Data: []*types.PublishedData{},
 			// Shares: []*types.DataShares{},
@@ -169,21 +170,25 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 				case *types.MsgPublishData:
 					replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
 					if err != nil {
+						fmt.Println("failed to parse replication factor: %w", err)
 						continue
 					}
 					threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
 					if threshold > int64(len(msg.ShardDoubleHashes)) {
+						fmt.Println("threshold is greater than the number of shard hashes")
 						threshold = int64(len(msg.ShardDoubleHashes))
 					}
 
 					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
 					if err != nil {
+						fmt.Println("failed to get data shard hashes: %w", err)
 						continue
 					}
 
 					// filter zkp verified data
 					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
 					if err != nil {
+						fmt.Println("failed to verify data: %w", err)
 						continue
 					}
 
@@ -192,6 +197,7 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 						ParityShardCount:  msg.ParityShardCount,
 						ShardDoubleHashes: msg.ShardDoubleHashes,
 					})
+					fmt.Println("OK vote_extension ExtendVoteHandler", voteExt.Data)
 					// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
 					// 	Indices: indices,
 					// 	Shares:  shares,
@@ -286,19 +292,23 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 		proposalTxs := defaultResponse.Txs
 
-		cp := ctx.ConsensusParams()
-		voteExtEnabled := cp.Abci != nil && req.Height > cp.Abci.VoteExtensionsEnableHeight && cp.Abci.VoteExtensionsEnableHeight != 0
-		if !voteExtEnabled {
-			return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
-		}
+		// This code is repeated in cosmos/cosmos-sdk/baseapp/abci_utils.go
+		// cp := ctx.ConsensusParams()
+		// voteExtEnabled := cp.Abci != nil && req.Height > cp.Abci.VoteExtensionsEnableHeight && cp.Abci.VoteExtensionsEnableHeight != 0
+		// if !voteExtEnabled {
+		// 	return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
+		// }
 
 		err = baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.LocalLastCommit)
 		if err != nil {
+			fmt.Println("error 1", err)
 			return nil, err
 		}
 
+		fmt.Println("last commit", req.LocalLastCommit.Votes)
 		votedData, faultValidators, err := h.GetVotedDataAndFaultValidators(ctx, req.LocalLastCommit)
 		if err != nil {
+			fmt.Println("error 2", err)
 			return nil, errors.New("failed to get voted data and fault validators")
 		}
 
@@ -307,10 +317,11 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 			FaultValidators:    faultValidators,
 			ExtendedCommitInfo: req.LocalLastCommit,
 		}
+		fmt.Println("vote_extension PrepareProposal", voteExtTx.VotedData)
 
 		bz, err := json.Marshal(voteExtTx)
 		if err != nil {
-			h.logger.Error("failed to marshal vote extension tx", "err", err)
+			h.logger.Error("failed to marshal vote extension tx err", err)
 			return nil, errors.New("failed to marshal vote extension tx")
 		}
 
@@ -353,10 +364,12 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 					if err != nil {
 						return nil, fmt.Errorf("failed to marshal metadata uri: %w", err)
 					}
+					fmt.Println("vote_extension ProcessProposal", metadataUriBz)
 
 					txs = append(txs, metadataUriBz)
 				}
 			} else {
+				fmt.Println("vote_extension ProcessProposal pass through")
 				txs = append(txs, tx)
 			}
 		}
@@ -369,12 +382,14 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 }
 
 func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockRequest) error {
+	fmt.Println("vote_extension PreBlocker")
 	ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 	for _, moduleName := range h.ModuleManager.OrderPreBlockers {
 		if module, ok := h.ModuleManager.Modules[moduleName].(appmodule.HasPreBlocker); ok {
 			err := module.PreBlock(ctx)
 			if err != nil {
+				fmt.Println("preblocker error", err)
 				return err
 			}
 
@@ -384,10 +399,12 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 	for _, txBytes := range req.Txs {
 		var voteExtTx VoteExtensionTx
 		if err := json.Unmarshal(txBytes, &voteExtTx); err != nil {
+			fmt.Println("voteExtTx unmarshal error")
 			continue
 		}
 
 		for _, data := range voteExtTx.VotedData {
+			fmt.Println("vote_extension PreBlocker", data.MetadataUri)
 			published := h.keeper.GetPublishedData(ctx, data.MetadataUri)
 			published.MetadataUri = data.MetadataUri
 			published.ParityShardCount = data.ParityShardCount
@@ -447,15 +464,20 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 
 	dataVotesMap = map[string]DataVotes{}
 	for _, v := range commitInfo.Votes {
+		fmt.Println("vote", v)
+		fmt.Println("voteex", v.VoteExtension)
 		valAddr := valConsAddrMap[sdk.ConsAddress(v.Validator.Address).String()]
 		valPower, ok := valPowerMap[valAddr.String()]
+		fmt.Println("valPower ok", ok)
+
 		if ok {
 			var voteExt types.VoteExtension
 			if err := voteExt.Unmarshal(v.VoteExtension); err != nil {
 				h.logger.Error("failed to decode vote extension", "validator", valAddr.String(), "error", err)
 				return
 			}
-
+			fmt.Println("voteExt GetDataVotesMapByHash", voteExt)
+			fmt.Println("voteExt.Data GetDataVotesMapByHash", voteExt.Data)
 			for _, data := range voteExt.Data {
 				dataVote := DataVote{
 					Data:  *data,
@@ -589,7 +611,9 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		return nil, nil, err
 	}
 	faultValidators := map[string]sdk.ValAddress{}
+	fmt.Println("valPowerMap GetVotedDataAndFaultValidators", valPowerMap)
 	dataVotesMap := h.GetDataVotesMapByHash(commitInfo, valPowerMap, valConsAddrMap)
+	fmt.Println("dataVotesMap GetVotedDataAndFaultValidators", dataVotesMap)
 	for dataHash, dataVote := range dataVotesMap {
 		bondedTokens, err := h.stakingKeeper.TotalBondedTokens(ctx)
 		if err != nil {
@@ -607,7 +631,7 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		if !aboveThreshold {
 			return nil, nil, err
 		}
-
+		fmt.Println("voteData GetVotedDataAndFaultValidators", publishedData)
 		votedData[dataHash] = &publishedData
 	}
 
