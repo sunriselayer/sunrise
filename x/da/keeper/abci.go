@@ -16,7 +16,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		return
 	}
 	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
-	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
+	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
@@ -38,7 +38,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
-	proofPeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
+	challengingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGING, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
@@ -78,7 +78,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 	faultValidators := make(map[string]sdk.ValAddress)
 
-	for _, data := range proofPeriodData {
+	for _, data := range challengingData {
 		if data.Status == types.Status_STATUS_CHALLENGING {
 			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
 			// if err != nil {
