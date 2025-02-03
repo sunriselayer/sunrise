@@ -47,7 +47,6 @@ type SunriseDataClient struct {
 
 func (client SunriseDataClient) GetShardHashes(metadataUri string, indices []int64) ([]string, error) {
 	url := fmt.Sprintf("%s/api/shard-hashes?metadata_uri=%s&indices=%s", client.BaseUrl, metadataUri, strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
-	fmt.Println("url", url)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -101,15 +100,18 @@ func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int6
 }
 
 type VoteExtHandler struct {
+	logger        log.Logger
 	Keeper        keeper.Keeper
 	stakingKeeper *stakingkeeper.Keeper
 }
 
 func NewVoteExtHandler(
+	logger log.Logger,
 	keeper keeper.Keeper,
 	stakingKeeper *stakingkeeper.Keeper,
 ) *VoteExtHandler {
 	return &VoteExtHandler{
+		logger:        logger,
 		Keeper:        keeper,
 		stakingKeeper: stakingKeeper,
 	}
@@ -152,7 +154,6 @@ func (h *VoteExtHandler) ValidatorsInfo(ctx sdk.Context, consAddr []byte) (int64
 
 func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder, handler sdk.AnteHandler, daKeeper damodulekeeper.Keeper) sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *abci.ExtendVoteRequest) (*abci.ExtendVoteResponse, error) {
-		fmt.Println("vote_extension ExtendVoteHandler")
 		voteExt := types.VoteExtension{
 			Data: []*types.PublishedData{},
 			// Shares: []*types.DataShares{},
@@ -194,12 +195,14 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 
 					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
 					if err != nil {
+						h.logger.Error("failed to get shard hashes", "error", err)
 						continue
 					}
 
 					// filter zkp verified data
 					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
 					if err != nil {
+						h.logger.Error("failed to verify data", "error", err)
 						continue
 					}
 
@@ -311,14 +314,11 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 		err = baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.LocalLastCommit)
 		if err != nil {
-			fmt.Println("error 1", err)
 			return nil, err
 		}
 
-		fmt.Println("last commit", req.LocalLastCommit.Votes)
 		votedData, faultValidators, err := h.GetVotedDataAndFaultValidators(ctx, req.LocalLastCommit)
 		if err != nil {
-			fmt.Println("error 2", err)
 			return nil, errors.New("failed to get voted data and fault validators")
 		}
 
@@ -327,7 +327,6 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 			FaultValidators:    faultValidators,
 			ExtendedCommitInfo: req.LocalLastCommit,
 		}
-		fmt.Println("vote_extension PrepareProposal", voteExtTx.VotedData)
 
 		bz, err := json.Marshal(voteExtTx)
 		if err != nil {
@@ -374,12 +373,10 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 					if err != nil {
 						return nil, fmt.Errorf("failed to marshal metadata uri: %w", err)
 					}
-					fmt.Println("vote_extension ProcessProposal", metadataUriBz)
 
 					txs = append(txs, metadataUriBz)
 				}
 			} else {
-				fmt.Println("vote_extension ProcessProposal pass through")
 				txs = append(txs, tx)
 			}
 		}
@@ -392,14 +389,12 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 }
 
 func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockRequest) error {
-	fmt.Println("vote_extension PreBlocker")
 	ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 	for _, moduleName := range h.ModuleManager.OrderPreBlockers {
 		if module, ok := h.ModuleManager.Modules[moduleName].(appmodule.HasPreBlocker); ok {
 			err := module.PreBlock(ctx)
 			if err != nil {
-				fmt.Println("preblocker error", err)
 				return err
 			}
 
@@ -409,12 +404,10 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 	for _, txBytes := range req.Txs {
 		var voteExtTx VoteExtensionTx
 		if err := json.Unmarshal(txBytes, &voteExtTx); err != nil {
-			fmt.Println("voteExtTx unmarshal error")
 			continue
 		}
 
 		for _, data := range voteExtTx.VotedData {
-			fmt.Println("vote_extension PreBlocker", data.MetadataUri)
 			published := h.keeper.GetPublishedData(ctx, data.MetadataUri)
 			published.MetadataUri = data.MetadataUri
 			published.ParityShardCount = data.ParityShardCount
@@ -474,11 +467,8 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 
 	dataVotesMap = map[string]DataVotes{}
 	for _, v := range commitInfo.Votes {
-		fmt.Println("vote", v)
-		fmt.Println("voteex", v.VoteExtension)
 		valAddr := valConsAddrMap[sdk.ConsAddress(v.Validator.Address).String()]
 		valPower, ok := valPowerMap[valAddr.String()]
-		fmt.Println("valPower ok", ok)
 
 		if ok {
 			var voteExt types.VoteExtension
@@ -486,8 +476,6 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 				h.logger.Error("failed to decode vote extension", "validator", valAddr.String(), "error", err)
 				return
 			}
-			fmt.Println("voteExt GetDataVotesMapByHash", voteExt)
-			fmt.Println("voteExt.Data GetDataVotesMapByHash", voteExt.Data)
 			for _, data := range voteExt.Data {
 				dataVote := DataVote{
 					Data:  *data,
@@ -630,9 +618,7 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		return nil, nil, err
 	}
 	faultValidators := map[string]sdk.ValAddress{}
-	fmt.Println("valPowerMap GetVotedDataAndFaultValidators", valPowerMap)
 	dataVotesMap := h.GetDataVotesMapByHash(commitInfo, valPowerMap, valConsAddrMap)
-	fmt.Println("dataVotesMap GetVotedDataAndFaultValidators", dataVotesMap)
 	for dataHash, dataVote := range dataVotesMap {
 		bondedTokens, err := h.stakingKeeper.TotalBondedTokens(ctx)
 		if err != nil {
