@@ -475,6 +475,7 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 				h.logger.Error("failed to decode vote extension", "validator", valAddr.String(), "error", err)
 				return
 			}
+
 			for _, data := range voteExt.Data {
 				dataVote := DataVote{
 					Data:  *data,
