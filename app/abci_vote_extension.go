@@ -330,7 +330,7 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 		bz, err := json.Marshal(voteExtTx)
 		if err != nil {
-			h.logger.Error("failed to marshal vote extension tx err", err)
+			h.logger.Error("failed to marshal vote extension tx", "err", err)
 			return nil, errors.New("failed to marshal vote extension tx")
 		}
 
@@ -469,7 +469,6 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 	for _, v := range commitInfo.Votes {
 		valAddr := valConsAddrMap[sdk.ConsAddress(v.Validator.Address).String()]
 		valPower, ok := valPowerMap[valAddr.String()]
-
 		if ok {
 			var voteExt types.VoteExtension
 			if err := voteExt.Unmarshal(v.VoteExtension); err != nil {
