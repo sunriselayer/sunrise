@@ -10,3 +10,4 @@ release/
 build/
 data/
 ts-client/
+cmd/sunrised/__debug_*

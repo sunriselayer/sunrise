@@ -11,7 +11,6 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-	"sync"
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
@@ -101,15 +100,18 @@ func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int6
 }
 
 type VoteExtHandler struct {
+	logger        log.Logger
 	Keeper        keeper.Keeper
 	stakingKeeper *stakingkeeper.Keeper
 }
 
 func NewVoteExtHandler(
+	logger log.Logger,
 	keeper keeper.Keeper,
 	stakingKeeper *stakingkeeper.Keeper,
 ) *VoteExtHandler {
 	return &VoteExtHandler{
+		logger:        logger,
 		Keeper:        keeper,
 		stakingKeeper: stakingKeeper,
 	}
@@ -158,9 +160,6 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 		}
 
 		txs := req.Txs
-		// parallelize GetDataShardHashes processing
-		var wg sync.WaitGroup
-		var mu sync.Mutex
 		for _, tx := range txs {
 			sdkTx, err := dec(tx)
 			if err != nil {
@@ -183,44 +182,40 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 
 			msgs := sdkTx.GetMsgs()
 			for _, msg := range msgs {
-				wg.Add(1)
-				go func(msg sdk.Msg) {
-					defer wg.Done()
-					switch msg := msg.(type) {
-					case *types.MsgPublishData:
-						replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor)
-						if err != nil {
-							return
-						}
-						threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
-						if threshold > int64(len(msg.ShardDoubleHashes)) {
-							threshold = int64(len(msg.ShardDoubleHashes))
-						}
-
-						indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
-						if err != nil {
-							return
-						}
-
-						// filter zkp verified data
-						err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
-						if err != nil {
-							return
-						}
-
-						mu.Lock()
-						voteExt.Data = append(voteExt.Data, &types.PublishedData{
-							MetadataUri:       msg.MetadataUri,
-							ParityShardCount:  msg.ParityShardCount,
-							ShardDoubleHashes: msg.ShardDoubleHashes,
-						})
-						// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
-						// 	Indices: indices,
-						// 	Shares:  shares,
-						// })
-						mu.Unlock()
+				switch msg := msg.(type) {
+				case *types.MsgPublishData:
+					replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
+					if err != nil {
+						continue
 					}
-				}(msg)
+					threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					if threshold > int64(len(msg.ShardDoubleHashes)) {
+						threshold = int64(len(msg.ShardDoubleHashes))
+					}
+
+					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
+					if err != nil {
+						h.logger.Error("failed to get shard hashes", "error", err)
+						continue
+					}
+
+					// filter zkp verified data
+					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
+					if err != nil {
+						h.logger.Error("failed to verify data", "error", err)
+						continue
+					}
+
+					voteExt.Data = append(voteExt.Data, &types.PublishedData{
+						MetadataUri:       msg.MetadataUri,
+						ParityShardCount:  msg.ParityShardCount,
+						ShardDoubleHashes: msg.ShardDoubleHashes,
+					})
+					// voteExt.Shares = append(voteExt.Shares, &types.DataShares{
+					// 	Indices: indices,
+					// 	Shares:  shares,
+					// })
+				}
 			}
 		}
 
@@ -310,11 +305,12 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 		proposalTxs := defaultResponse.Txs
 
-		cp := ctx.ConsensusParams()
-		voteExtEnabled := cp.Abci != nil && req.Height > cp.Abci.VoteExtensionsEnableHeight && cp.Abci.VoteExtensionsEnableHeight != 0
-		if !voteExtEnabled {
-			return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
-		}
+		// This code is repeated in cosmos/cosmos-sdk/baseapp/abci_utils.go
+		// cp := ctx.ConsensusParams()
+		// voteExtEnabled := cp.Abci != nil && req.Height > cp.Abci.VoteExtensionsEnableHeight && cp.Abci.VoteExtensionsEnableHeight != 0
+		// if !voteExtEnabled {
+		// 	return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
+		// }
 
 		err = baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.LocalLastCommit)
 		if err != nil {
