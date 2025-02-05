@@ -31,7 +31,7 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 		MetadataUri:       msg.MetadataUri,
 		ParityShardCount:  msg.ParityShardCount,
 		ShardDoubleHashes: msg.ShardDoubleHashes,
-		Collateral:        params.ChallengeCollateral,
+		Collateral:        params.PublishDataCollateral,
 		Timestamp:         sdkCtx.BlockTime(),
 		DataSourceInfo:    msg.DataSourceInfo,
 		Status:            types.Status_STATUS_VOTING,
@@ -41,9 +41,9 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 	}
 
 	// Send collateral to module account
-	if params.ChallengeCollateral.IsAllPositive() {
+	if params.PublishDataCollateral.IsAllPositive() {
 		sender := sdk.MustAccAddressFromBech32(msg.Sender)
-		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.ChallengeCollateral)
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.PublishDataCollateral)
 		if err != nil {
 			return nil, err
 		}
