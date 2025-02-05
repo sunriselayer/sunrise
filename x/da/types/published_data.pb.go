@@ -43,7 +43,7 @@ const (
 	Status_STATUS_VOTING Status = 3
 	// Verified the votes from the validators. Challenge can be received (after preBlocker)
 	Status_STATUS_CHALLENGE_PERIOD Status = 4
-	// reported as fraud. SubmitProof tx can be received (after received ChallengeForFraud tx)
+	// A certain number of SubmitInvalidity received. Validators can send SubmitValidityProof tx.
 	Status_STATUS_CHALLENGING Status = 5
 )
 
