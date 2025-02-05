@@ -20,7 +20,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-func TestMsgSubmitProof(t *testing.T) {
+func TestMsgSubmitValidityProof(t *testing.T) {
 	k, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
 	require.NoError(t, k.Params.Set(ctx, params))
@@ -42,7 +42,7 @@ func TestMsgSubmitProof(t *testing.T) {
 	require.NoError(t, err)
 
 	// Recover proving key
-	provingKey, err := zkp.UnmarshalProvingKey(params.ZkpProvingKey)
+	provingKey, err := zkp.UnmarshalProvingKey([]byte(types.DefaultProvingKeyBase64))
 	require.NoError(t, err)
 
 	witness1, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
@@ -75,13 +75,13 @@ func TestMsgSubmitProof(t *testing.T) {
 
 	testCases := []struct {
 		name      string
-		input     *types.MsgSubmitProof
+		input     *types.MsgSubmitValidityProof
 		expErr    bool
 		expErrMsg string
 	}{
 		{
 			name: "empty proof",
-			input: &types.MsgSubmitProof{
+			input: &types.MsgSubmitValidityProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{},
@@ -91,7 +91,7 @@ func TestMsgSubmitProof(t *testing.T) {
 		},
 		{
 			name: "valid proof",
-			input: &types.MsgSubmitProof{
+			input: &types.MsgSubmitValidityProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
@@ -101,7 +101,7 @@ func TestMsgSubmitProof(t *testing.T) {
 		},
 		{
 			name: "invalid proof",
-			input: &types.MsgSubmitProof{
+			input: &types.MsgSubmitValidityProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
@@ -114,7 +114,7 @@ func TestMsgSubmitProof(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := ms.SubmitProof(wctx, tc.input)
+			_, err := ms.SubmitValidityProof(wctx, tc.input)
 
 			if tc.expErr {
 				require.Error(t, err)

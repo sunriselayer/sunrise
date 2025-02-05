@@ -17,7 +17,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (*types.MsgSubmitProofResponse, error) {
+func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmitValidityProof) (*types.MsgSubmitValidityProofResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
@@ -99,5 +99,5 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 		return nil, err
 	}
 
-	return &types.MsgSubmitProofResponse{}, nil
+	return &types.MsgSubmitValidityProofResponse{}, nil
 }
