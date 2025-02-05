@@ -42,8 +42,8 @@ func (am AppModule) ProposalMsgsX(weights simsx.WeightSource, reg simsx.Registry
 
 // WeightedOperationsX returns the all the module operations with their respective weights.
 func (am AppModule) WeightedOperationsX(weights simsx.WeightSource, reg simsx.Registry) {
-	reg.Add(weights.Get("msg__publish_data", 100), simulation.MsgPublishDataFactory(am.keeper))
-	reg.Add(weights.Get("msg__challenge_for_fraud", 100), simulation.MsgChallengeForFraudFactory(am.keeper))
-	reg.Add(weights.Get("msg__submit_proof", 100), simulation.MsgSubmitProofFactory(am.keeper))
+	reg.Add(weights.Get("msg_publish_data", 100), simulation.MsgPublishDataFactory(am.keeper))
+	reg.Add(weights.Get("msg_submit_invalidity", 100), simulation.MsgSubmitInvalidityFactory(am.keeper))
+	reg.Add(weights.Get("msg_submit_validity_proof", 100), simulation.MsgSubmitProofFactory(am.keeper))
 
 }

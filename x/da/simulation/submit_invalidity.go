@@ -9,11 +9,11 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func MsgChallengeForFraudFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgChallengeForFraud] {
-	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgChallengeForFraud) {
+func MsgSubmitInvalidityFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSubmitInvalidity] {
+	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgSubmitInvalidity) {
 		from := testData.AnyAccount(reporter)
 
-		msg := &types.MsgChallengeForFraud{
+		msg := &types.MsgSubmitInvalidity{
 			Sender: from.AddressBech32,
 		}
 
