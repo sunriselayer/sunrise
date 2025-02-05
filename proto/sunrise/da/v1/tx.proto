@@ -18,10 +18,10 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   // PublishData
   rpc PublishData(MsgPublishData) returns (MsgPublishDataResponse);
-  // ChallengeForFraud
-  rpc ChallengeForFraud(MsgChallengeForFraud) returns (MsgChallengeForFraudResponse);
-  // SubmitProof
-  rpc SubmitProof(MsgSubmitProof) returns (MsgSubmitProofResponse);
+  // SubmitInvalidity
+  rpc SubmitInvalidity(MsgSubmitInvalidity) returns (MsgSubmitInvalidityResponse);
+  // SubmitValidityProof
+  rpc SubmitValidityProof(MsgSubmitValidityProof) returns (MsgSubmitValidityProofResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -59,19 +59,20 @@ message MsgPublishData {
 // MsgPublishDataResponse
 message MsgPublishDataResponse {}
 
-// MsgChallengeForFraud
-message MsgChallengeForFraud {
+// MsgSubmitInvalidity
+message MsgSubmitInvalidity {
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string metadata_uri = 2;
+  repeated int64 indices = 3;
 }
 
-// MsgChallengeForFraudResponse
-message MsgChallengeForFraudResponse {}
+// MsgSubmitInvalidityResponse
+message MsgSubmitInvalidityResponse {}
 
-// MsgSubmitProof
-message MsgSubmitProof {
+// MsgSubmitValidityProof
+message MsgSubmitValidityProof {
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -80,5 +81,5 @@ message MsgSubmitProof {
   repeated bytes proofs = 4;
 }
 
-// MsgSubmitProofResponse
-message MsgSubmitProofResponse {}
+// MsgSubmitValidityProofResponse
+message MsgSubmitValidityProofResponse {}
