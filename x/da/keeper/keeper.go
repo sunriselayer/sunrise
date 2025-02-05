@@ -25,6 +25,7 @@ type Keeper struct {
 	PublishedData *collections.IndexedMap[string, types.PublishedData, types.PublishedDataIndexes]
 	FaultCounts   collections.Map[[]byte, uint64]
 	Proofs        collections.Map[collections.Pair[string, []byte], types.Proof]
+	Invalidities  collections.Map[collections.Pair[string, []byte], types.Invalidity]
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper

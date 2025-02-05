@@ -53,3 +53,10 @@ message Proof {
   repeated int64 indices = 3;
   repeated bytes proofs = 4;
 }
+
+// Invalidity
+message Invalidity {
+  string metadata_uri = 1;
+  string sender = 2;
+  repeated int64 indices = 3;
+}
