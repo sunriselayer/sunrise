@@ -32,21 +32,23 @@ func NewParams(
 	challengeCollateral sdk.Coins,
 	zkpProvingKey []byte,
 	zkpVerifyingKey []byte,
+	rejectedRemovalPeriod time.Duration,
 ) Params {
 	return Params{
-		VoteThreshold:       voteThreshold.String(),
-		SlashEpoch:          slashEpoch,
-		EpochMaxFault:       epochMaxFault,
-		SlashFraction:       slashFraction.String(),
-		ReplicationFactor:   replicationFactor.String(),
-		MinShardCount:       minShardCount,
-		MaxShardCount:       maxShardCount,
-		MaxShardSize:        maxShardSize,
-		ChallengePeriod:     challengePeriod,
-		ProofPeriod:         proofPeriod,
-		ChallengeCollateral: challengeCollateral,
-		ZkpProvingKey:       zkpProvingKey,
-		ZkpVerifyingKey:     zkpVerifyingKey,
+		VoteThreshold:         voteThreshold.String(),
+		SlashEpoch:            slashEpoch,
+		EpochMaxFault:         epochMaxFault,
+		SlashFraction:         slashFraction.String(),
+		ReplicationFactor:     replicationFactor.String(),
+		MinShardCount:         minShardCount,
+		MaxShardCount:         maxShardCount,
+		MaxShardSize:          maxShardSize,
+		ChallengePeriod:       challengePeriod,
+		ProofPeriod:           proofPeriod,
+		ChallengeCollateral:   challengeCollateral,
+		ZkpProvingKey:         zkpProvingKey,
+		ZkpVerifyingKey:       zkpVerifyingKey,
+		RejectedRemovalPeriod: rejectedRemovalPeriod,
 	}
 }
 
@@ -76,6 +78,7 @@ func DefaultParams() Params {
 		sdk.Coins(nil),
 		provingKey,
 		verifyingKey,
+		time.Hour*24, // 24h
 	)
 }
 

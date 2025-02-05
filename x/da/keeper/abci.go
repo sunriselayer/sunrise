@@ -150,14 +150,12 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			// valid_shards < data_shard_count
 			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
-				// TODO: might require rejected records as well
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())
 					return
 				}
-				// k.DeletePublishedData(sdkCtx, data)
 
 				// rewards collateral 2x to the challenger
 				challenger := sdk.MustAccAddressFromBech32(data.Challenger)
@@ -196,6 +194,18 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
 			}
+		}
+	}
+
+	// If STATUS_REJECTED is overtime, remove from the store
+	rejectedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_REJECTED, sdkCtx.BlockTime().Add(-params.RejectedRemovalPeriod).Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range rejectedData {
+		if data.Status == types.Status_STATUS_REJECTED {
+			k.DeletePublishedData(sdkCtx, data)
 		}
 	}
 }
