@@ -15,25 +15,45 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		k.Logger.Error(err.Error())
 		return
 	}
+	// If STATUS_VOTING remains, change to STATUS_REJECT
+	// Collateral does not refund
+	votingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VOTING, sdkCtx.BlockTime().Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range votingData {
+		if data.Status == types.Status_STATUS_VOTING {
+			data.Status = types.Status_STATUS_REJECTED
+			err = k.SetPublishedData(ctx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
+		}
+	}
+
+	// If STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
 	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
 	}
-
 	for _, data := range challengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
 			data.Status = types.Status_STATUS_VERIFIED
-		}
-		if err = k.SetPublishedData(ctx, data); err != nil {
-			return
-		}
-
-		publisher := sdk.MustAccAddressFromBech32(data.Publisher)
-		err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral)
-		if err != nil {
-			k.Logger.Error(err.Error())
-			return
+			err = k.SetPublishedData(ctx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
+			// refunds collateral to the publisher
+			publisher := sdk.MustAccAddressFromBech32(data.Publisher)
+			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
 		}
 	}
 
@@ -139,6 +159,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 				// k.DeletePublishedData(sdkCtx, data)
 
+				// rewards collateral 2x to the challenger
 				challenger := sdk.MustAccAddressFromBech32(data.Challenger)
 				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.Collateral.Add(data.Collateral...))
 				if err != nil {
@@ -152,6 +173,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					return
 				}
+				// refunds collateral to the publisher
 				publisher := sdk.MustAccAddressFromBech32(data.Publisher)
 				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral.Add(data.Collateral...))
 				if err != nil {
