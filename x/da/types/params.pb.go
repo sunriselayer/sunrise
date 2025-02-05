@@ -33,20 +33,17 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	VoteThreshold         string                                   `protobuf:"bytes,1,opt,name=vote_threshold,json=voteThreshold,proto3" json:"vote_threshold,omitempty"`
-	SlashEpoch            uint64                                   `protobuf:"varint,2,opt,name=slash_epoch,json=slashEpoch,proto3" json:"slash_epoch,omitempty"`
-	EpochMaxFault         uint64                                   `protobuf:"varint,3,opt,name=epoch_max_fault,json=epochMaxFault,proto3" json:"epoch_max_fault,omitempty"`
-	SlashFraction         string                                   `protobuf:"bytes,4,opt,name=slash_fraction,json=slashFraction,proto3" json:"slash_fraction,omitempty"`
-	ReplicationFactor     string                                   `protobuf:"bytes,5,opt,name=replication_factor,json=replicationFactor,proto3" json:"replication_factor,omitempty"`
-	MinShardCount         uint64                                   `protobuf:"varint,6,opt,name=min_shard_count,json=minShardCount,proto3" json:"min_shard_count,omitempty"`
-	MaxShardCount         uint64                                   `protobuf:"varint,7,opt,name=max_shard_count,json=maxShardCount,proto3" json:"max_shard_count,omitempty"`
-	MaxShardSize          uint64                                   `protobuf:"varint,8,opt,name=max_shard_size,json=maxShardSize,proto3" json:"max_shard_size,omitempty"`
-	ChallengePeriod       time.Duration                            `protobuf:"bytes,9,opt,name=challenge_period,json=challengePeriod,proto3,stdduration" json:"challenge_period"`
-	ProofPeriod           time.Duration                            `protobuf:"bytes,10,opt,name=proof_period,json=proofPeriod,proto3,stdduration" json:"proof_period"`
-	ChallengeCollateral   github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,11,rep,name=challenge_collateral,json=challengeCollateral,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"challenge_collateral"`
-	ZkpProvingKey         []byte                                   `protobuf:"bytes,12,opt,name=zkp_proving_key,json=zkpProvingKey,proto3" json:"zkp_proving_key,omitempty"`
-	ZkpVerifyingKey       []byte                                   `protobuf:"bytes,13,opt,name=zkp_verifying_key,json=zkpVerifyingKey,proto3" json:"zkp_verifying_key,omitempty"`
-	RejectedRemovalPeriod time.Duration                            `protobuf:"bytes,14,opt,name=rejected_removal_period,json=rejectedRemovalPeriod,proto3,stdduration" json:"rejected_removal_period"`
+	ChallengeThreshold         string                                   `protobuf:"bytes,1,opt,name=challenge_threshold,json=challengeThreshold,proto3" json:"challenge_threshold,omitempty"`
+	ReplicationFactor          string                                   `protobuf:"bytes,2,opt,name=replication_factor,json=replicationFactor,proto3" json:"replication_factor,omitempty"`
+	SlashEpoch                 uint64                                   `protobuf:"varint,3,opt,name=slash_epoch,json=slashEpoch,proto3" json:"slash_epoch,omitempty"`
+	EpochMaxFault              uint64                                   `protobuf:"varint,4,opt,name=epoch_max_fault,json=epochMaxFault,proto3" json:"epoch_max_fault,omitempty"`
+	SlashFraction              string                                   `protobuf:"bytes,5,opt,name=slash_fraction,json=slashFraction,proto3" json:"slash_fraction,omitempty"`
+	ChallengePeriod            time.Duration                            `protobuf:"bytes,6,opt,name=challenge_period,json=challengePeriod,proto3,stdduration" json:"challenge_period"`
+	ProofPeriod                time.Duration                            `protobuf:"bytes,7,opt,name=proof_period,json=proofPeriod,proto3,stdduration" json:"proof_period"`
+	RejectedRemovalPeriod      time.Duration                            `protobuf:"bytes,8,opt,name=rejected_removal_period,json=rejectedRemovalPeriod,proto3,stdduration" json:"rejected_removal_period"`
+	PublishDataCollateral      github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,9,rep,name=publish_data_collateral,json=publishDataCollateral,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"publish_data_collateral"`
+	SubmitInvalidityCollateral github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,10,rep,name=submit_invalidity_collateral,json=submitInvalidityCollateral,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"submit_invalidity_collateral"`
+	ZkpVerifyingKey            []byte                                   `protobuf:"bytes,11,opt,name=zkp_verifying_key,json=zkpVerifyingKey,proto3" json:"zkp_verifying_key,omitempty"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -82,9 +79,16 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetVoteThreshold() string {
+func (m *Params) GetChallengeThreshold() string {
 	if m != nil {
-		return m.VoteThreshold
+		return m.ChallengeThreshold
+	}
+	return ""
+}
+
+func (m *Params) GetReplicationFactor() string {
+	if m != nil {
+		return m.ReplicationFactor
 	}
 	return ""
 }
@@ -110,34 +114,6 @@ func (m *Params) GetSlashFraction() string {
 	return ""
 }
 
-func (m *Params) GetReplicationFactor() string {
-	if m != nil {
-		return m.ReplicationFactor
-	}
-	return ""
-}
-
-func (m *Params) GetMinShardCount() uint64 {
-	if m != nil {
-		return m.MinShardCount
-	}
-	return 0
-}
-
-func (m *Params) GetMaxShardCount() uint64 {
-	if m != nil {
-		return m.MaxShardCount
-	}
-	return 0
-}
-
-func (m *Params) GetMaxShardSize() uint64 {
-	if m != nil {
-		return m.MaxShardSize
-	}
-	return 0
-}
-
 func (m *Params) GetChallengePeriod() time.Duration {
 	if m != nil {
 		return m.ChallengePeriod
@@ -152,16 +128,23 @@ func (m *Params) GetProofPeriod() time.Duration {
 	return 0
 }
 
-func (m *Params) GetChallengeCollateral() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *Params) GetRejectedRemovalPeriod() time.Duration {
 	if m != nil {
-		return m.ChallengeCollateral
+		return m.RejectedRemovalPeriod
+	}
+	return 0
+}
+
+func (m *Params) GetPublishDataCollateral() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.PublishDataCollateral
 	}
 	return nil
 }
 
-func (m *Params) GetZkpProvingKey() []byte {
+func (m *Params) GetSubmitInvalidityCollateral() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
-		return m.ZkpProvingKey
+		return m.SubmitInvalidityCollateral
 	}
 	return nil
 }
@@ -173,13 +156,6 @@ func (m *Params) GetZkpVerifyingKey() []byte {
 	return nil
 }
 
-func (m *Params) GetRejectedRemovalPeriod() time.Duration {
-	if m != nil {
-		return m.RejectedRemovalPeriod
-	}
-	return 0
-}
-
 func init() {
 	proto.RegisterType((*Params)(nil), "sunrise.da.v1.Params")
 }
@@ -187,46 +163,44 @@ func init() {
 func init() { proto.RegisterFile("sunrise/da/v1/params.proto", fileDescriptor_70863a5b1732e9c8) }
 
 var fileDescriptor_70863a5b1732e9c8 = []byte{
-	// 614 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0x3f, 0x6f, 0xd3, 0x4e,
-	0x18, 0xc7, 0xe3, 0x5f, 0xfb, 0x0b, 0xed, 0xe5, 0x4f, 0xa9, 0x29, 0xc2, 0xed, 0xe0, 0x44, 0x08,
-	0xa1, 0xa8, 0x52, 0x6d, 0x02, 0x62, 0x41, 0x62, 0x49, 0x4b, 0x16, 0x04, 0xaa, 0x52, 0xc4, 0x00,
-	0x83, 0x75, 0xb1, 0x9f, 0xd8, 0x47, 0xce, 0x3e, 0xeb, 0xee, 0x62, 0x25, 0x19, 0x78, 0x0d, 0x8c,
-	0x8c, 0xcc, 0xcc, 0xbc, 0x03, 0x96, 0x8e, 0x15, 0x13, 0x13, 0x45, 0xed, 0xc2, 0xcb, 0x40, 0x77,
-	0x3e, 0xb7, 0x45, 0xea, 0xd0, 0x29, 0xb9, 0xef, 0xf3, 0x79, 0xbe, 0xcf, 0xe3, 0xe7, 0x1e, 0x1b,
-	0xed, 0x88, 0x59, 0xc6, 0x89, 0x00, 0x3f, 0xc2, 0x7e, 0xd1, 0xf7, 0x73, 0xcc, 0x71, 0x2a, 0xbc,
-	0x9c, 0x33, 0xc9, 0xec, 0x96, 0x89, 0x79, 0x11, 0xf6, 0x8a, 0xfe, 0x8e, 0x1b, 0x32, 0x91, 0x32,
-	0xe1, 0x8f, 0xb1, 0x00, 0xbf, 0xe8, 0x8f, 0x41, 0xe2, 0xbe, 0x1f, 0x32, 0x92, 0x95, 0xf8, 0xce,
-	0x76, 0x19, 0x0f, 0xf4, 0xc9, 0x2f, 0x0f, 0x26, 0xb4, 0x15, 0xb3, 0x98, 0x95, 0xba, 0xfa, 0x67,
-	0x54, 0x37, 0x66, 0x2c, 0xa6, 0xe0, 0xeb, 0xd3, 0x78, 0x36, 0xf1, 0xa3, 0x19, 0xc7, 0x92, 0x30,
-	0x63, 0x78, 0xff, 0x7b, 0x1d, 0xd5, 0x0f, 0x75, 0x43, 0xf6, 0x53, 0xd4, 0x2e, 0x98, 0x84, 0x40,
-	0x26, 0x1c, 0x44, 0xc2, 0x68, 0xe4, 0x58, 0x5d, 0xab, 0xb7, 0x3e, 0x68, 0xff, 0xf8, 0xb6, 0x87,
-	0x4c, 0xa9, 0x03, 0x08, 0x47, 0x2d, 0x45, 0xbd, 0xa9, 0x20, 0xbb, 0x83, 0x1a, 0x82, 0x62, 0x91,
-	0x04, 0x90, 0xb3, 0x30, 0x71, 0xfe, 0xeb, 0x5a, 0xbd, 0xd5, 0x11, 0xd2, 0xd2, 0x0b, 0xa5, 0xd8,
-	0x0f, 0xd1, 0x86, 0x0e, 0x05, 0x29, 0x9e, 0x07, 0x13, 0x3c, 0xa3, 0xd2, 0x59, 0xd1, 0x50, 0x4b,
-	0xcb, 0xaf, 0xf0, 0x7c, 0xa8, 0x44, 0x55, 0xbf, 0x34, 0x9a, 0x70, 0x1c, 0xaa, 0x16, 0x9d, 0xd5,
-	0xeb, 0xeb, 0x6b, 0x6a, 0x68, 0x20, 0xfb, 0x39, 0xb2, 0x39, 0xe4, 0x94, 0x84, 0xfa, 0xb1, 0x82,
-	0x09, 0x0e, 0x25, 0xe3, 0xce, 0xff, 0xd7, 0xa6, 0x6e, 0x5e, 0x21, 0x87, 0x1a, 0x54, 0xdd, 0xa5,
-	0x24, 0x0b, 0x44, 0x82, 0x79, 0x14, 0x84, 0x6c, 0x96, 0x49, 0xa7, 0x5e, 0x76, 0x97, 0x92, 0xec,
-	0x48, 0xa9, 0xfb, 0x4a, 0xd4, 0x1c, 0x9e, 0xff, 0xc3, 0xdd, 0x32, 0x1c, 0x9e, 0x5f, 0xe1, 0x1e,
-	0xa0, 0xf6, 0x25, 0x27, 0xc8, 0x12, 0x9c, 0x35, 0x8d, 0x35, 0x2b, 0xec, 0x88, 0x2c, 0xc1, 0x7e,
-	0x8d, 0x6e, 0x87, 0x09, 0xa6, 0x14, 0xb2, 0x18, 0x82, 0x1c, 0x38, 0x61, 0x91, 0xb3, 0xde, 0xb5,
-	0x7a, 0x8d, 0xc7, 0xdb, 0x5e, 0x79, 0x63, 0x5e, 0x75, 0x63, 0xde, 0x81, 0xb9, 0xb1, 0xc1, 0xda,
-	0xf1, 0xaf, 0x4e, 0xed, 0xf3, 0x69, 0xc7, 0x1a, 0x6d, 0x5c, 0x24, 0x1f, 0xea, 0x5c, 0x7b, 0x88,
-	0x9a, 0x39, 0x67, 0x6c, 0x52, 0x79, 0xa1, 0x9b, 0x7b, 0x35, 0x74, 0xa2, 0xf1, 0xf9, 0x88, 0xb6,
-	0x2e, 0xfb, 0x0a, 0x19, 0xa5, 0x58, 0x02, 0xc7, 0xd4, 0x69, 0x74, 0x57, 0xb4, 0x9f, 0x99, 0xa5,
-	0x5a, 0x4f, 0xcf, 0xac, 0xa7, 0xb7, 0xcf, 0x48, 0x36, 0x78, 0xa4, 0xfc, 0xbe, 0x9e, 0x76, 0x7a,
-	0x31, 0x91, 0xc9, 0x6c, 0xec, 0x85, 0x2c, 0x35, 0xeb, 0x69, 0x7e, 0xf6, 0x44, 0x34, 0xf5, 0xe5,
-	0x22, 0x07, 0xa1, 0x13, 0xc4, 0xe8, 0xce, 0x45, 0xa1, 0xfd, 0x8b, 0x3a, 0x6a, 0xca, 0xcb, 0x69,
-	0xae, 0xd6, 0xbb, 0x20, 0x59, 0x1c, 0x4c, 0x61, 0xe1, 0x34, 0xbb, 0x56, 0xaf, 0x39, 0x6a, 0x2d,
-	0xa7, 0xf9, 0x61, 0xa9, 0xbe, 0x84, 0x85, 0xbd, 0x8b, 0x36, 0x15, 0x57, 0x00, 0x27, 0x93, 0x45,
-	0x45, 0xb6, 0x34, 0xa9, 0x0c, 0xde, 0x56, 0xba, 0x62, 0xdf, 0xa3, 0x7b, 0x1c, 0x3e, 0x40, 0x28,
-	0x21, 0x0a, 0x38, 0xa4, 0xac, 0xc0, 0xb4, 0x1a, 0x53, 0xfb, 0xe6, 0x63, 0xba, 0x5b, 0x79, 0x8c,
-	0x4a, 0x8b, 0x72, 0x60, 0xcf, 0x56, 0xff, 0x7c, 0xe9, 0x58, 0x83, 0x83, 0xe3, 0x33, 0xd7, 0x3a,
-	0x39, 0x73, 0xad, 0xdf, 0x67, 0xae, 0xf5, 0xe9, 0xdc, 0xad, 0x9d, 0x9c, 0xbb, 0xb5, 0x9f, 0xe7,
-	0x6e, 0xed, 0xdd, 0xee, 0x95, 0x79, 0x98, 0x57, 0x9d, 0xe2, 0x05, 0xf0, 0xea, 0xe0, 0xcf, 0xd5,
-	0x57, 0x41, 0xcf, 0x65, 0x5c, 0xd7, 0xf5, 0x9f, 0xfc, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x69, 0xf2,
-	0xca, 0x6c, 0x30, 0x04, 0x00, 0x00,
+	// 588 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xbf, 0x6f, 0xd3, 0x40,
+	0x18, 0xcd, 0xd1, 0x12, 0xda, 0x4b, 0x7f, 0x50, 0x43, 0x55, 0x37, 0x42, 0x4e, 0xc4, 0x80, 0xa2,
+	0x4a, 0xb5, 0x09, 0x88, 0x05, 0x09, 0x21, 0xa5, 0x21, 0x12, 0x42, 0xa0, 0x2a, 0x42, 0x0c, 0x30,
+	0x9c, 0xce, 0xf6, 0xc5, 0x3e, 0x72, 0xf1, 0x59, 0x77, 0x67, 0xab, 0xee, 0xca, 0x8c, 0xc4, 0xc8,
+	0xc8, 0xcc, 0xcc, 0xbf, 0x80, 0xd4, 0xb1, 0x62, 0x62, 0xa2, 0xa8, 0x5d, 0xf8, 0x33, 0x90, 0xcf,
+	0xe7, 0x90, 0xa1, 0x43, 0x07, 0x26, 0xfb, 0x7b, 0xdf, 0xfb, 0xde, 0x7b, 0xfe, 0x7c, 0x36, 0x6c,
+	0xcb, 0x2c, 0x11, 0x54, 0x12, 0x2f, 0xc4, 0x5e, 0xde, 0xf7, 0x52, 0x2c, 0xf0, 0x4c, 0xba, 0xa9,
+	0xe0, 0x8a, 0x5b, 0xeb, 0xa6, 0xe7, 0x86, 0xd8, 0xcd, 0xfb, 0x6d, 0x27, 0xe0, 0x72, 0xc6, 0xa5,
+	0xe7, 0x63, 0x49, 0xbc, 0xbc, 0xef, 0x13, 0x85, 0xfb, 0x5e, 0xc0, 0x69, 0x52, 0xd1, 0xdb, 0xbb,
+	0x55, 0x1f, 0xe9, 0xca, 0xab, 0x0a, 0xd3, 0xba, 0x1d, 0xf1, 0x88, 0x57, 0x78, 0x79, 0x67, 0x50,
+	0x27, 0xe2, 0x3c, 0x62, 0xc4, 0xd3, 0x95, 0x9f, 0x4d, 0xbc, 0x30, 0x13, 0x58, 0x51, 0x6e, 0x04,
+	0xef, 0x7e, 0x6f, 0xc2, 0xe6, 0xa1, 0x0e, 0x64, 0x3d, 0x85, 0xb7, 0x82, 0x18, 0x33, 0x46, 0x92,
+	0x88, 0x20, 0x15, 0x0b, 0x22, 0x63, 0xce, 0x42, 0x1b, 0x74, 0x41, 0x6f, 0x75, 0xb0, 0xf1, 0xe3,
+	0xdb, 0x3e, 0x34, 0x7e, 0x43, 0x12, 0x8c, 0xad, 0x39, 0xf5, 0x75, 0xcd, 0xb4, 0x9e, 0x40, 0x4b,
+	0x90, 0x94, 0xd1, 0x40, 0x1b, 0xa0, 0x09, 0x0e, 0x14, 0x17, 0xf6, 0xb5, 0x4b, 0xe7, 0xb7, 0x16,
+	0x98, 0x23, 0x4d, 0xb4, 0x3a, 0xb0, 0x25, 0x19, 0x96, 0x31, 0x22, 0x29, 0x0f, 0x62, 0x7b, 0xa9,
+	0x0b, 0x7a, 0xcb, 0x63, 0xa8, 0xa1, 0x67, 0x25, 0x62, 0xdd, 0x83, 0x9b, 0xba, 0x85, 0x66, 0xf8,
+	0x08, 0x4d, 0x70, 0xc6, 0x94, 0xbd, 0xac, 0x49, 0xeb, 0x1a, 0x7e, 0x89, 0x8f, 0x46, 0x25, 0x68,
+	0x3d, 0x82, 0x1b, 0x95, 0xd0, 0x44, 0xe0, 0xa0, 0x34, 0xb0, 0xaf, 0x5f, 0x9a, 0x61, 0x5d, 0xb3,
+	0x46, 0x86, 0x64, 0xbd, 0x82, 0x37, 0xff, 0x3d, 0x7f, 0x4a, 0x04, 0xe5, 0xa1, 0xdd, 0xec, 0x82,
+	0x5e, 0xeb, 0xc1, 0xae, 0x5b, 0x6d, 0xd1, 0xad, 0xb7, 0xe8, 0x0e, 0xcd, 0x16, 0x07, 0x2b, 0x27,
+	0xbf, 0x3a, 0x8d, 0xcf, 0x67, 0x1d, 0x30, 0xde, 0x9c, 0x0f, 0x1f, 0xea, 0x59, 0x6b, 0x04, 0xd7,
+	0x52, 0xc1, 0xf9, 0xa4, 0xd6, 0xba, 0x71, 0x75, 0xad, 0x96, 0x1e, 0x34, 0x3a, 0xef, 0xe0, 0x8e,
+	0x20, 0xef, 0x49, 0xa0, 0x48, 0x88, 0x04, 0x99, 0xf1, 0x1c, 0xb3, 0x5a, 0x72, 0xe5, 0xea, 0x92,
+	0xdb, 0xb5, 0xc6, 0xb8, 0x92, 0x30, 0xe2, 0x1f, 0x00, 0xdc, 0x49, 0x33, 0x9f, 0x51, 0x19, 0xa3,
+	0x10, 0x2b, 0x8c, 0x02, 0xce, 0x18, 0x56, 0x44, 0x60, 0x66, 0xaf, 0x76, 0x97, 0xb4, 0xba, 0x59,
+	0x59, 0x79, 0x26, 0x5d, 0x73, 0x26, 0xdd, 0x03, 0x4e, 0x93, 0xc1, 0xfd, 0x52, 0xfd, 0xeb, 0x59,
+	0xa7, 0x17, 0x51, 0x15, 0x67, 0xbe, 0x1b, 0xf0, 0x99, 0x39, 0x93, 0xe6, 0xb2, 0x2f, 0xc3, 0xa9,
+	0xa7, 0x8a, 0x94, 0x48, 0x3d, 0x20, 0xc7, 0xdb, 0xc6, 0x6b, 0x88, 0x15, 0x3e, 0x98, 0x3b, 0x59,
+	0x1f, 0x01, 0xbc, 0x23, 0x33, 0x7f, 0x46, 0x15, 0xa2, 0x49, 0x8e, 0x19, 0x0d, 0xa9, 0x2a, 0x16,
+	0xa3, 0xc0, 0xff, 0x1f, 0xa5, 0x5d, 0x19, 0x3e, 0x9f, 0xfb, 0x2d, 0xe4, 0xd9, 0x83, 0x5b, 0xc7,
+	0xd3, 0x14, 0xe5, 0x44, 0xd0, 0x49, 0x41, 0x93, 0x08, 0x4d, 0x49, 0x61, 0xb7, 0xba, 0xa0, 0xb7,
+	0x36, 0xde, 0x3c, 0x9e, 0xa6, 0x6f, 0x6a, 0xfc, 0x05, 0x29, 0x1e, 0x2f, 0xff, 0xf9, 0xd2, 0x01,
+	0x83, 0xe1, 0xc9, 0xb9, 0x03, 0x4e, 0xcf, 0x1d, 0xf0, 0xfb, 0xdc, 0x01, 0x9f, 0x2e, 0x9c, 0xc6,
+	0xe9, 0x85, 0xd3, 0xf8, 0x79, 0xe1, 0x34, 0xde, 0xee, 0x2d, 0x24, 0x32, 0x1f, 0x3b, 0xc3, 0x05,
+	0x11, 0x75, 0xe1, 0x1d, 0x95, 0xff, 0x05, 0x9d, 0xcc, 0x6f, 0xea, 0x37, 0xf8, 0xf0, 0x6f, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0xd5, 0xb0, 0x6b, 0x41, 0x32, 0x04, 0x00, 0x00,
 }
 
 func (this *Params) Equal(that interface{}) bool {
@@ -248,7 +222,10 @@ func (this *Params) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.VoteThreshold != that1.VoteThreshold {
+	if this.ChallengeThreshold != that1.ChallengeThreshold {
+		return false
+	}
+	if this.ReplicationFactor != that1.ReplicationFactor {
 		return false
 	}
 	if this.SlashEpoch != that1.SlashEpoch {
@@ -260,39 +237,32 @@ func (this *Params) Equal(that interface{}) bool {
 	if this.SlashFraction != that1.SlashFraction {
 		return false
 	}
-	if this.ReplicationFactor != that1.ReplicationFactor {
-		return false
-	}
-	if this.MinShardCount != that1.MinShardCount {
-		return false
-	}
-	if this.MaxShardCount != that1.MaxShardCount {
-		return false
-	}
-	if this.MaxShardSize != that1.MaxShardSize {
-		return false
-	}
 	if this.ChallengePeriod != that1.ChallengePeriod {
 		return false
 	}
 	if this.ProofPeriod != that1.ProofPeriod {
 		return false
 	}
-	if len(this.ChallengeCollateral) != len(that1.ChallengeCollateral) {
+	if this.RejectedRemovalPeriod != that1.RejectedRemovalPeriod {
 		return false
 	}
-	for i := range this.ChallengeCollateral {
-		if !this.ChallengeCollateral[i].Equal(&that1.ChallengeCollateral[i]) {
+	if len(this.PublishDataCollateral) != len(that1.PublishDataCollateral) {
+		return false
+	}
+	for i := range this.PublishDataCollateral {
+		if !this.PublishDataCollateral[i].Equal(&that1.PublishDataCollateral[i]) {
 			return false
 		}
 	}
-	if !bytes.Equal(this.ZkpProvingKey, that1.ZkpProvingKey) {
+	if len(this.SubmitInvalidityCollateral) != len(that1.SubmitInvalidityCollateral) {
 		return false
+	}
+	for i := range this.SubmitInvalidityCollateral {
+		if !this.SubmitInvalidityCollateral[i].Equal(&that1.SubmitInvalidityCollateral[i]) {
+			return false
+		}
 	}
 	if !bytes.Equal(this.ZkpVerifyingKey, that1.ZkpVerifyingKey) {
-		return false
-	}
-	if this.RejectedRemovalPeriod != that1.RejectedRemovalPeriod {
 		return false
 	}
 	return true
@@ -317,32 +287,17 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	n1, err1 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.RejectedRemovalPeriod, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.RejectedRemovalPeriod):])
-	if err1 != nil {
-		return 0, err1
-	}
-	i -= n1
-	i = encodeVarintParams(dAtA, i, uint64(n1))
-	i--
-	dAtA[i] = 0x72
 	if len(m.ZkpVerifyingKey) > 0 {
 		i -= len(m.ZkpVerifyingKey)
 		copy(dAtA[i:], m.ZkpVerifyingKey)
 		i = encodeVarintParams(dAtA, i, uint64(len(m.ZkpVerifyingKey)))
 		i--
-		dAtA[i] = 0x6a
+		dAtA[i] = 0x5a
 	}
-	if len(m.ZkpProvingKey) > 0 {
-		i -= len(m.ZkpProvingKey)
-		copy(dAtA[i:], m.ZkpProvingKey)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.ZkpProvingKey)))
-		i--
-		dAtA[i] = 0x62
-	}
-	if len(m.ChallengeCollateral) > 0 {
-		for iNdEx := len(m.ChallengeCollateral) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.SubmitInvalidityCollateral) > 0 {
+		for iNdEx := len(m.SubmitInvalidityCollateral) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.ChallengeCollateral[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.SubmitInvalidityCollateral[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -350,9 +305,31 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintParams(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x5a
+			dAtA[i] = 0x52
 		}
 	}
+	if len(m.PublishDataCollateral) > 0 {
+		for iNdEx := len(m.PublishDataCollateral) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.PublishDataCollateral[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintParams(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	n1, err1 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.RejectedRemovalPeriod, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.RejectedRemovalPeriod):])
+	if err1 != nil {
+		return 0, err1
+	}
+	i -= n1
+	i = encodeVarintParams(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x42
 	n2, err2 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.ProofPeriod, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ProofPeriod):])
 	if err2 != nil {
 		return 0, err2
@@ -360,7 +337,7 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n2
 	i = encodeVarintParams(dAtA, i, uint64(n2))
 	i--
-	dAtA[i] = 0x52
+	dAtA[i] = 0x3a
 	n3, err3 := github_com_cosmos_gogoproto_types.StdDurationMarshalTo(m.ChallengePeriod, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ChallengePeriod):])
 	if err3 != nil {
 		return 0, err3
@@ -368,50 +345,35 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n3
 	i = encodeVarintParams(dAtA, i, uint64(n3))
 	i--
-	dAtA[i] = 0x4a
-	if m.MaxShardSize != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxShardSize))
+	dAtA[i] = 0x32
+	if len(m.SlashFraction) > 0 {
+		i -= len(m.SlashFraction)
+		copy(dAtA[i:], m.SlashFraction)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.SlashFraction)))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x2a
 	}
-	if m.MaxShardCount != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxShardCount))
+	if m.EpochMaxFault != 0 {
+		i = encodeVarintParams(dAtA, i, uint64(m.EpochMaxFault))
 		i--
-		dAtA[i] = 0x38
+		dAtA[i] = 0x20
 	}
-	if m.MinShardCount != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MinShardCount))
+	if m.SlashEpoch != 0 {
+		i = encodeVarintParams(dAtA, i, uint64(m.SlashEpoch))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x18
 	}
 	if len(m.ReplicationFactor) > 0 {
 		i -= len(m.ReplicationFactor)
 		copy(dAtA[i:], m.ReplicationFactor)
 		i = encodeVarintParams(dAtA, i, uint64(len(m.ReplicationFactor)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x12
 	}
-	if len(m.SlashFraction) > 0 {
-		i -= len(m.SlashFraction)
-		copy(dAtA[i:], m.SlashFraction)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.SlashFraction)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.EpochMaxFault != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.EpochMaxFault))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.SlashEpoch != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.SlashEpoch))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.VoteThreshold) > 0 {
-		i -= len(m.VoteThreshold)
-		copy(dAtA[i:], m.VoteThreshold)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.VoteThreshold)))
+	if len(m.ChallengeThreshold) > 0 {
+		i -= len(m.ChallengeThreshold)
+		copy(dAtA[i:], m.ChallengeThreshold)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.ChallengeThreshold)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -435,7 +397,11 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.VoteThreshold)
+	l = len(m.ChallengeThreshold)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.ReplicationFactor)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
@@ -449,39 +415,28 @@ func (m *Params) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
-	l = len(m.ReplicationFactor)
-	if l > 0 {
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.MinShardCount != 0 {
-		n += 1 + sovParams(uint64(m.MinShardCount))
-	}
-	if m.MaxShardCount != 0 {
-		n += 1 + sovParams(uint64(m.MaxShardCount))
-	}
-	if m.MaxShardSize != 0 {
-		n += 1 + sovParams(uint64(m.MaxShardSize))
-	}
 	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ChallengePeriod)
 	n += 1 + l + sovParams(uint64(l))
 	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.ProofPeriod)
 	n += 1 + l + sovParams(uint64(l))
-	if len(m.ChallengeCollateral) > 0 {
-		for _, e := range m.ChallengeCollateral {
+	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.RejectedRemovalPeriod)
+	n += 1 + l + sovParams(uint64(l))
+	if len(m.PublishDataCollateral) > 0 {
+		for _, e := range m.PublishDataCollateral {
 			l = e.Size()
 			n += 1 + l + sovParams(uint64(l))
 		}
 	}
-	l = len(m.ZkpProvingKey)
-	if l > 0 {
-		n += 1 + l + sovParams(uint64(l))
+	if len(m.SubmitInvalidityCollateral) > 0 {
+		for _, e := range m.SubmitInvalidityCollateral {
+			l = e.Size()
+			n += 1 + l + sovParams(uint64(l))
+		}
 	}
 	l = len(m.ZkpVerifyingKey)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
-	l = github_com_cosmos_gogoproto_types.SizeOfStdDuration(m.RejectedRemovalPeriod)
-	n += 1 + l + sovParams(uint64(l))
 	return n
 }
 
@@ -522,7 +477,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VoteThreshold", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeThreshold", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -550,79 +505,9 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VoteThreshold = string(dAtA[iNdEx:postIndex])
+			m.ChallengeThreshold = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SlashEpoch", wireType)
-			}
-			m.SlashEpoch = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SlashEpoch |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EpochMaxFault", wireType)
-			}
-			m.EpochMaxFault = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.EpochMaxFault |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SlashFraction", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SlashFraction = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ReplicationFactor", wireType)
 			}
@@ -654,64 +539,77 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 			m.ReplicationFactor = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SlashEpoch", wireType)
+			}
+			m.SlashEpoch = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SlashEpoch |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EpochMaxFault", wireType)
+			}
+			m.EpochMaxFault = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EpochMaxFault |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SlashFraction", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SlashFraction = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinShardCount", wireType)
-			}
-			m.MinShardCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MinShardCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxShardCount", wireType)
-			}
-			m.MaxShardCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxShardCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxShardSize", wireType)
-			}
-			m.MaxShardSize = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxShardSize |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ChallengePeriod", wireType)
 			}
@@ -744,7 +642,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 10:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ProofPeriod", wireType)
 			}
@@ -777,9 +675,9 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 11:
+		case 8:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeCollateral", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field RejectedRemovalPeriod", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -806,16 +704,15 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ChallengeCollateral = append(m.ChallengeCollateral, types.Coin{})
-			if err := m.ChallengeCollateral[len(m.ChallengeCollateral)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.RejectedRemovalPeriod, dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 12:
+		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ZkpProvingKey", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PublishDataCollateral", wireType)
 			}
-			var byteLen int
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -825,27 +722,61 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthParams
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthParams
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ZkpProvingKey = append(m.ZkpProvingKey[:0], dAtA[iNdEx:postIndex]...)
-			if m.ZkpProvingKey == nil {
-				m.ZkpProvingKey = []byte{}
+			m.PublishDataCollateral = append(m.PublishDataCollateral, types.Coin{})
+			if err := m.PublishDataCollateral[len(m.PublishDataCollateral)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
 			}
 			iNdEx = postIndex
-		case 13:
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubmitInvalidityCollateral", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubmitInvalidityCollateral = append(m.SubmitInvalidityCollateral, types.Coin{})
+			if err := m.SubmitInvalidityCollateral[len(m.SubmitInvalidityCollateral)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ZkpVerifyingKey", wireType)
 			}
@@ -877,39 +808,6 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			m.ZkpVerifyingKey = append(m.ZkpVerifyingKey[:0], dAtA[iNdEx:postIndex]...)
 			if m.ZkpVerifyingKey == nil {
 				m.ZkpVerifyingKey = []byte{}
-			}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RejectedRemovalPeriod", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_cosmos_gogoproto_types.StdDurationUnmarshal(&m.RejectedRemovalPeriod, dAtA[iNdEx:postIndex]); err != nil {
-				return err
 			}
 			iNdEx = postIndex
 		default:
