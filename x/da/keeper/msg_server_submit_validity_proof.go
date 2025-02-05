@@ -59,7 +59,7 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 		}
 
 		if len(publishedData.ShardDoubleHashes) <= int(j) {
-			return nil, types.ErrProofIndiceOverflow
+			return nil, types.ErrProofIndicesOverflow
 		}
 
 		assignment := zkp.ValidityProofCircuit{
