@@ -17,7 +17,7 @@ func MsgSubmitInvalidityFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.Ms
 			Sender: from.AddressBech32,
 		}
 
-		// TODO: Handle the ChallengeForFraud simulation
+		// TODO: Handle the SubmitInvalidity simulation
 
 		return []simsx.SimAccount{from}, msg
 	}

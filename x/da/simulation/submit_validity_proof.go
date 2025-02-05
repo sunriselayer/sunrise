@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func MsgSubmitProofFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSubmitValidityProof] {
+func MsgSubmitValidityProofFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSubmitValidityProof] {
 	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgSubmitValidityProof) {
 		from := testData.AnyAccount(reporter)
 
@@ -17,7 +17,7 @@ func MsgSubmitProofFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSubm
 			Sender: from.AddressBech32,
 		}
 
-		// TODO: Handle the SubmitProof simulation
+		// TODO: Handle the SubmitValidityProof simulation
 
 		return []simsx.SimAccount{from}, msg
 	}

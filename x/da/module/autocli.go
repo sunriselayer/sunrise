@@ -48,11 +48,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true,
 				},
 				{
-					RpcMethod: "ChallengeForFraud",
+					RpcMethod: "SubmitInvalidity",
 					Skip:      true,
 				},
 				{
-					RpcMethod: "SubmitProof",
+					RpcMethod: "SubmitValidityProof",
 					Skip:      true,
 				},
 				// this line is used by ignite scaffolding # autocli/tx

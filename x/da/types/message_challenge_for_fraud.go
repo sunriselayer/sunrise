@@ -1,7 +1,7 @@
 package types
 
-func NewMsgChallengeForFraud(sender string) *MsgChallengeForFraud {
-	return &MsgChallengeForFraud{
+func NewMsgSubmitInvalidity(sender string) *MsgSubmitInvalidity {
+	return &MsgSubmitInvalidity{
 		Sender: sender,
 	}
 }
