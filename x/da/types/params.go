@@ -23,7 +23,7 @@ func NewParams(
 	challengeThreshold math.LegacyDec,
 	replicationFactor math.LegacyDec,
 	slashEpoch uint64,
-	epochMaxFault uint64,
+	SlashFaultThreshold math.LegacyDec,
 	slashFraction math.LegacyDec,
 	challengePeriod time.Duration,
 	proofPeriod time.Duration,
@@ -36,7 +36,7 @@ func NewParams(
 		ChallengeThreshold:         challengeThreshold.String(),
 		ReplicationFactor:          replicationFactor.String(),
 		SlashEpoch:                 slashEpoch,
-		EpochMaxFault:              epochMaxFault,
+		SlashFaultThreshold:        SlashFaultThreshold.String(),
 		SlashFraction:              slashFraction.String(),
 		ChallengePeriod:            challengePeriod,
 		ProofPeriod:                proofPeriod,
@@ -58,7 +58,7 @@ func DefaultParams() Params {
 		math.LegacyNewDecWithPrec(33, 2), // 33% challenge threshold
 		math.LegacyNewDec(5),             // 5.0 replication factor
 		120960,                           // 1 week(5sec/block) slash epoch
-		100,                              // 100 max fault
+		math.LegacyNewDecWithPrec(5, 1),  // 50% slash fault threshold
 		math.LegacyNewDecWithPrec(1, 3),  // 0.1% slash fraction
 		time.Minute*4,                    // challenge 4min,
 		time.Minute*10,                   // proof 10min
@@ -120,8 +120,15 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash epoch must be positive")
 	}
 
-	if p.EpochMaxFault == 0 {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "epoch max fault must be positive")
+	SlashFaultThreshold, err := math.LegacyNewDecFromStr(p.SlashFaultThreshold)
+	if err != nil {
+		return err
+	}
+	if SlashFaultThreshold.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fault threshold must not be negative")
+	}
+	if SlashFaultThreshold.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fault threshold must be less than 1")
 	}
 
 	slashFraction, err := math.LegacyNewDecFromStr(p.SlashFraction)

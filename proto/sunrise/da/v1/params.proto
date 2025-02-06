@@ -14,7 +14,7 @@ message Params {
   string challenge_threshold = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
   string replication_factor = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
   uint64 slash_epoch = 3;
-  uint64 epoch_max_fault = 4;
+  string slash_fault_threshold = 4 [(cosmos_proto.scalar) = "cosmos.Dec"];
   string slash_fraction = 5 [(cosmos_proto.scalar) = "cosmos.Dec"];
   google.protobuf.Duration challenge_period = 6 [
     (gogoproto.nullable) = false,
