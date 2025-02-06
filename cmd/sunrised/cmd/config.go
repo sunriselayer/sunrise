@@ -6,7 +6,6 @@ import (
 
 	"fmt"
 
-	"github.com/sunriselayer/sunrise/app"
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
@@ -28,7 +27,6 @@ func initAppConfig() (string, interface{}) {
 	// The following code snippet is just for reference.
 	type CustomAppConfig struct {
 		serverconfig.Config `mapstructure:",squash"`
-		DA                  app.DAConfig `mapstructure:"da"`
 	}
 
 	// Optionally allow the chain developer to overwrite the SDK's default
@@ -53,16 +51,10 @@ func initAppConfig() (string, interface{}) {
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
-		DA: app.DAConfig{
-			SunriseDataBaseUrl: "http://localhost:8000",
-		},
 	}
 
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
-[da]
-# API to query DA v2 uploaded data shard hashes
-sunrise_data_base_url = "http://localhost:8000"
-`
+
 	// Edit the default template file
 	//
 	// customAppTemplate := serverconfig.DefaultConfigTemplate + `
