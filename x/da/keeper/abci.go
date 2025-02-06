@@ -15,31 +15,44 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		k.Logger.Error(err.Error())
 		return
 	}
-	// If STATUS_VOTING remains, change to STATUS_REJECT
-	// Collateral does not refund
-	votingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VOTING, sdkCtx.BlockTime().Unix())
-	if err != nil {
-		k.Logger.Error(err.Error())
-		return
-	}
-	for _, data := range votingData {
-		if data.Status == types.Status_STATUS_VOTING {
-			data.Status = types.Status_STATUS_REJECTED
-			err = k.SetPublishedData(ctx, data)
-			if err != nil {
-				k.Logger.Error(err.Error())
-				return
-			}
-		}
-	}
-
-	// If STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
-	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
+	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
+	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
 	}
 	for _, data := range challengePeriodData {
+		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
+			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			seen := make(map[int64]bool)
+			invalidIndices := []int64{}
+			for _, invalidity := range invalidities {
+				for _, index := range invalidity.Indices {
+					if _, ok := seen[index]; !ok {
+						seen[index] = true
+						invalidIndices = append(invalidIndices, index)
+					}
+				}
+			}
+			threshold := math.LegacyMustNewDecFromStr(params.ChallengeThreshold).MulInt64(int64(len(data.ShardDoubleHashes)))
+			if math.LegacyNewDec(int64(len(invalidIndices))).GTE(threshold) {
+				data.Status = types.Status_STATUS_CHALLENGING
+				err = k.SetPublishedData(ctx, data)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					return
+				}
+			}
+		}
+	}
+
+	// if STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
+	expiredChallengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range expiredChallengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
 			data.Status = types.Status_STATUS_VERIFIED
 			err = k.SetPublishedData(ctx, data)
@@ -49,7 +62,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 			// refunds collateral to the publisher
 			publisher := sdk.MustAccAddressFromBech32(data.Publisher)
-			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral)
+			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.PublishDataCollateral)
 			if err != nil {
 				k.Logger.Error(err.Error())
 				return
@@ -57,6 +70,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
+	// if STATUS_CHALLENGING, tally validity_proofs
 	challengingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGING, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
@@ -64,7 +78,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 
 	activeValidators := []sdk.ValAddress{}
-	numActiveValidators := int64(0)
+	// numActiveValidators := int64(0)
 	// votingPowers := make(map[string]int64)
 	// powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
@@ -91,7 +105,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			// }
 
 			// votingPowers[sdk.AccAddress(valAddr).String()] = validator.GetConsensusPower(powerReduction)
-			numActiveValidators++
+			// numActiveValidators++
 		}
 	}
 
@@ -156,13 +170,24 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					return
 				}
+				invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
 
-				// rewards collateral 2x to the challenger
-				challenger := sdk.MustAccAddressFromBech32(data.Challenger)
-				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.Collateral.Add(data.Collateral...))
-				if err != nil {
-					k.Logger.Error(err.Error())
-					return
+				// distribute publish collateral to challengers as a reward.
+				publishCollateral := data.PublishDataCollateral
+				reward := sdk.Coins{}
+				for _, coin := range publishCollateral {
+					dividedAmount := math.LegacyNewDecFromInt(coin.Amount).QuoInt64(int64(len(invalidities))).TruncateInt()
+					reward = append(reward, sdk.NewCoin(coin.Denom, dividedAmount))
+				}
+
+				// rewards collateral + reward to challengers
+				for _, invalidity := range invalidities {
+					challenger := sdk.MustAccAddressFromBech32(invalidity.Sender)
+					err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.SubmitInvalidityCollateral.Add(reward...))
+					if err != nil {
+						k.Logger.Error(err.Error())
+						continue
+					}
 				}
 			} else {
 				data.Status = types.Status_STATUS_VERIFIED
@@ -207,5 +232,10 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		if data.Status == types.Status_STATUS_REJECTED {
 			k.DeletePublishedData(sdkCtx, data)
 		}
+	}
+
+	// slash epoch moved from vote_extension
+	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
+		k.HandleSlashEpoch(sdkCtx)
 	}
 }
