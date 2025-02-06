@@ -141,7 +141,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 			}
 
-			safeShardCount := int64(0)
+			safeShardIndices := []int64{}
 			for index, proofCount := range shardProofCount {
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
 				replicationFactorWithParity := replicationFactor.
@@ -153,7 +153,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					replicationFactorWithParity.
 						MulInt64(2).
 						QuoInt64(3)) {
-					safeShardCount++
+					safeShardIndices = append(safeShardIndices, index)
 					for _, valAddr := range indexedValidators[index] {
 						if !shardProofSubmitted[index][sdk.AccAddress(valAddr).String()] {
 							faultValidators[valAddr.String()] = valAddr
@@ -163,14 +163,14 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// valid_shards < data_shard_count
-			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
+			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if int64(len(safeShardIndices))+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())
 					return
 				}
-				invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
 
 				// distribute publish collateral to challengers as a reward.
 				publishCollateral := data.PublishDataCollateral
@@ -196,9 +196,26 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					return
 				}
-				// refunds collateral to the publisher
+
+				publisherRefund := data.PublishDataCollateral
+				for _, invalidity := range invalidities {
+					challenger := sdk.MustAccAddressFromBech32(invalidity.Sender)
+					if checkCorrectInvalidity(invalidity, safeShardIndices) {
+						// if all shards in the invalidity are missing, refund to the challenger
+						err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.SubmitInvalidityCollateral)
+						if err != nil {
+							k.Logger.Error(err.Error())
+							continue
+						}
+					} else {
+						// if at least one safe shard is included, pass to the publisher
+						publisherRefund = publisherRefund.Add(data.SubmitInvalidityCollateral...)
+					}
+				}
+
+				// refunds publish collateral + fault challengers' collateral to the publisher
 				publisher := sdk.MustAccAddressFromBech32(data.Publisher)
-				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral.Add(data.Collateral...))
+				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, publisherRefund)
 				if err != nil {
 					k.Logger.Error(err.Error())
 					return
@@ -219,6 +236,16 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
 			}
+
+			// Clean up invalidity data
+			for _, invalidity := range invalidities {
+				addr, err := k.addressCodec.StringToBytes(invalidity.Sender)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
+				k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
+			}
 		}
 	}
 
@@ -238,4 +265,17 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
 		k.HandleSlashEpoch(sdkCtx)
 	}
+}
+
+func checkCorrectInvalidity(invalidity types.Invalidity, safeShardIndices []int64) bool {
+	safeIndexMap := make(map[int64]bool)
+	for _, index := range safeShardIndices {
+		safeIndexMap[index] = true
+	}
+	for _, index := range invalidity.Indices {
+		if _, ok := safeIndexMap[index]; ok {
+			return false // includes a safe shard
+		}
+	}
+	return true // all of them is invalid
 }
