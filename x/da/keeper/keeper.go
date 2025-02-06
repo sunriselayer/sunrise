@@ -20,12 +20,13 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema        collections.Schema
-	Params        collections.Item[types.Params]
-	PublishedData *collections.IndexedMap[string, types.PublishedData, types.PublishedDataIndexes]
-	FaultCounts   collections.Map[[]byte, uint64]
-	Proofs        collections.Map[collections.Pair[string, []byte], types.Proof]
-	Invalidities  collections.Map[collections.Pair[string, []byte], types.Invalidity]
+	Schema          collections.Schema
+	Params          collections.Item[types.Params]
+	PublishedData   *collections.IndexedMap[string, types.PublishedData, types.PublishedDataIndexes]
+	ChallengeCounts collections.Item[uint64]
+	FaultCounts     collections.Map[[]byte, uint64]
+	Proofs          collections.Map[collections.Pair[string, []byte], types.Proof]
+	Invalidities    collections.Map[collections.Pair[string, []byte], types.Invalidity]
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -62,8 +63,10 @@ func NewKeeper(
 			codec.CollValue[types.PublishedData](cdc),
 			types.NewPublishedDataIndexes(sb),
 		),
-		FaultCounts: collections.NewMap(sb, types.FaultCountsKeyPrefix, "fault_counts", types.FaultCounterKeyCodec, collections.Uint64Value),
-		Proofs:      collections.NewMap(sb, types.ProofKeyPrefix, "proofs", types.ProofKeyCodec, codec.CollValue[types.Proof](cdc)),
+		ChallengeCounts: collections.NewItem(sb, types.ChallengeCountsKeyPrefix, "challenge_counts", collections.Uint64Value),
+		FaultCounts:     collections.NewMap(sb, types.FaultCountsKeyPrefix, "fault_counts", types.FaultCounterKeyCodec, collections.Uint64Value),
+		Proofs:          collections.NewMap(sb, types.ProofKeyPrefix, "proofs", types.ProofKeyCodec, codec.CollValue[types.Proof](cdc)),
+		Invalidities:    collections.NewMap(sb, types.InvalidityKeyPrefix, "invalidities", types.ProofKeyCodec, codec.CollValue[types.Invalidity](cdc)),
 
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,

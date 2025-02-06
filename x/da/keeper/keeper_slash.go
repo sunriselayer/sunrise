@@ -7,6 +7,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func (k Keeper) GetChallengeCounter(ctx context.Context) uint64 {
+	val, err := k.ChallengeCounts.Get(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
+}
+
+func (k Keeper) SetChallengeCounter(ctx context.Context, count uint64) {
+	err := k.ChallengeCounts.Set(ctx, count)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
 	has, err := k.FaultCounts.Has(ctx, operator)
 	if err != nil {

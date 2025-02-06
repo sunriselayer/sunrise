@@ -222,7 +222,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 			}
 
-			// Handle fault validators
+			// Count challenge & fault validators
+			k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
 			for _, valAddr := range faultValidators {
 				k.SetFaultCounter(ctx, valAddr, k.GetFaultCounter(ctx, valAddr)+1)
 			}
