@@ -61,15 +61,16 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 	proofBytes := b.Bytes()
 
 	err = k.SetPublishedData(ctx, types.PublishedData{
-		MetadataUri:        "ipfs://metadata1",
-		ParityShardCount:   0,
-		ShardDoubleHashes:  [][]byte{hash},
-		Timestamp:          time.Now(),
-		Status:             types.Status_STATUS_CHALLENGING,
-		Publisher:          "publisher",
-		Challenger:         "challenger",
-		Collateral:         sdk.Coins{},
-		ChallengeTimestamp: time.Now(),
+		MetadataUri:                "ipfs://metadata1",
+		ParityShardCount:           0,
+		ShardDoubleHashes:          [][]byte{hash},
+		Timestamp:                  time.Now(),
+		Status:                     types.Status_STATUS_CHALLENGING,
+		Publisher:                  "publisher",
+		Challenger:                 "challenger",
+		PublishDataCollateral:      sdk.Coins{},
+		SubmitInvalidityCollateral: sdk.Coins{},
+		ChallengeTimestamp:         time.Now(),
 	})
 	require.NoError(t, err)
 

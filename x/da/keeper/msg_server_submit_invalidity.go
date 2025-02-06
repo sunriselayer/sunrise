@@ -36,9 +36,9 @@ func (k msgServer) SubmitInvalidity(ctx context.Context, msg *types.MsgSubmitInv
 	}
 
 	// Send collateral to module account
-	if params.SubmitInvalidityCollateral.IsAllPositive() {
+	if publishedData.SubmitInvalidityCollateral.IsAllPositive() {
 		sender := sdk.MustAccAddressFromBech32(msg.Sender)
-		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.SubmitInvalidityCollateral)
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, publishedData.SubmitInvalidityCollateral)
 		if err != nil {
 			return nil, err
 		}

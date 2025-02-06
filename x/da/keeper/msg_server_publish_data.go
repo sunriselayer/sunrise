@@ -27,14 +27,15 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 		return nil, err
 	}
 	err = k.SetPublishedData(ctx, types.PublishedData{
-		Publisher:         msg.Sender,
-		MetadataUri:       msg.MetadataUri,
-		ParityShardCount:  msg.ParityShardCount,
-		ShardDoubleHashes: msg.ShardDoubleHashes,
-		Collateral:        params.PublishDataCollateral,
-		Timestamp:         sdkCtx.BlockTime(),
-		DataSourceInfo:    msg.DataSourceInfo,
-		Status:            types.Status_STATUS_VOTING,
+		Publisher:                  msg.Sender,
+		MetadataUri:                msg.MetadataUri,
+		ParityShardCount:           msg.ParityShardCount,
+		ShardDoubleHashes:          msg.ShardDoubleHashes,
+		PublishDataCollateral:      params.PublishDataCollateral,
+		SubmitInvalidityCollateral: params.SubmitInvalidityCollateral,
+		Timestamp:                  sdkCtx.BlockTime(),
+		DataSourceInfo:             msg.DataSourceInfo,
+		Status:                     types.Status_STATUS_CHALLENGE_PERIOD,
 	})
 	if err != nil {
 		return nil, err
