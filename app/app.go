@@ -276,17 +276,6 @@ func New(
 	app.SetAnteHandler(anteHandler)
 	// </sunrise>
 
-	// <sunrise>
-	// Proposal handler for DA module
-	daProposalHandler := NewProposalHandler(
-		logger,
-		app.DaKeeper,
-		baseapp.NewDefaultProposalHandler(app.Mempool(), app),
-	)
-
-	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
-	// </sunrise>
-
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	overrideModules := map[string]module.AppModuleSimulation{
 		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AuthKeeper, &app.AccountsKeeper, authsims.RandomGenesisAccounts, nil),
