@@ -99,7 +99,7 @@ func VerifyDataZKP(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]
 	})
 }
 
-func VerifyData(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]byte, threshold int) error {
+func VerifyData(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]byte) error {
 	for i, j := range indices {
 		m := native_mimc.NewMiMC()
 		m.Write(shardHashes[i])

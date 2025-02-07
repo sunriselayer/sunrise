@@ -28,7 +28,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
-	"github.com/sunriselayer/sunrise/x/da/zkp"
+	// "github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
 const flagSunriseDataBaseUrl = "da.sunrise_data_base_url"
@@ -166,45 +166,47 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 				continue
 			}
 
-			ctx, err = handler(ctx, sdkTx, false)
-			if err != nil {
-				continue
-			}
+			// omit zkp in vote_extension, no need to get params
+			// ctx, err = handler(ctx, sdkTx, false)
+			// if err != nil {
+			// 	continue
+			// }
 
-			params, err := daKeeper.Params.Get(ctx)
-			if err != nil {
-				continue
-			}
-			numValidators, valAddr, err := h.ValidatorsInfo(ctx, req.ProposerAddress)
-			if err != nil {
-				continue
-			}
+			// params, err := daKeeper.Params.Get(ctx)
+			// if err != nil {
+			// 	continue
+			// }
+			// numValidators, valAddr, err := h.ValidatorsInfo(ctx, req.ProposerAddress)
+			// if err != nil {
+			// 	continue
+			// }
 
 			msgs := sdkTx.GetMsgs()
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
-					replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
-					if err != nil {
-						continue
-					}
-					threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
-					if threshold > int64(len(msg.ShardDoubleHashes)) {
-						threshold = int64(len(msg.ShardDoubleHashes))
-					}
+					// omit zkp in vote_extension
+					// replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
+					// if err != nil {
+					// 	continue
+					// }
+					// threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					// if threshold > int64(len(msg.ShardDoubleHashes)) {
+					// 	threshold = int64(len(msg.ShardDoubleHashes))
+					// }
 
-					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
-					if err != nil {
-						h.logger.Error("failed to get shard hashes", "error", err)
-						continue
-					}
+					// indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
+					// if err != nil {
+					// 	h.logger.Error("failed to get shard hashes", "error", err)
+					// 	continue
+					// }
 
-					// filter zkp verified data
-					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
-					if err != nil {
-						h.logger.Error("failed to verify data", "error", err)
-						continue
-					}
+					// // filter zkp verified data
+					// err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
+					// if err != nil {
+					// 	h.logger.Error("failed to verify data", "error", err)
+					// 	continue
+					// }
 
 					voteExt.Data = append(voteExt.Data, &types.PublishedData{
 						MetadataUri:       msg.MetadataUri,
@@ -241,7 +243,8 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper 
 			return nil, fmt.Errorf("failed to unmarshal vote extension: %w", err)
 		}
 
-		// check vote extension data with zkp
+		// omit zkp in vote_extension
+		// // check vote extension data with zkp
 		// params := daKeeper.GetParams(ctx)
 		// numValidators, _, err := h.ValidatorsInfo(ctx, req.ValidatorAddress)
 		// if err != nil {
