@@ -22,7 +22,10 @@ func (k msgServer) SubmitInvalidity(ctx context.Context, msg *types.MsgSubmitInv
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
+	publishedData, found := k.GetPublishedData(ctx, msg.MetadataUri)
+	if !found {
+		return nil, types.ErrDataNotFound
+	}
 	if publishedData.Status != types.Status_STATUS_CHALLENGE_PERIOD {
 		return nil, types.ErrCanNotOpenChallenge
 	}

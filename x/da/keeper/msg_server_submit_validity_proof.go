@@ -29,7 +29,10 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
+	publishedData, found := k.GetPublishedData(ctx, msg.MetadataUri)
+	if !found {
+		return nil, types.ErrDataNotFound
+	}
 	if publishedData.Status != types.Status_STATUS_CHALLENGING {
 		return nil, types.ErrDataNotInChallenge
 	}
