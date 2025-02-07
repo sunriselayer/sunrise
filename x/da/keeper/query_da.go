@@ -15,7 +15,10 @@ func (q queryServer) PublishedData(goCtx context.Context, req *types.QueryPublis
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	data := q.k.GetPublishedData(ctx, req.MetadataUri)
+	data, found := q.k.GetPublishedData(ctx, req.MetadataUri)
+	if !found {
+		return nil, types.ErrDataNotFound
+	}
 	return &types.QueryPublishedDataResponse{Data: data}, nil
 }
 

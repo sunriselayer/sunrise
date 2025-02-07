@@ -10,8 +10,8 @@ import (
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgPublishData{},
-		&MsgChallengeForFraud{},
-		&MsgSubmitProof{},
+		&MsgSubmitInvalidity{},
+		&MsgSubmitValidityProof{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),

@@ -87,8 +87,8 @@ func VerifyDataZKP(indices []int64, shardHashes [][]byte, shardDoubleHashes [][]
 		shardDoubleHashesFrontend = append(shardDoubleHashesFrontend, shardDoubleHash)
 	}
 
-	for _, indice := range indices {
-		indicesFrontend = append(indicesFrontend, indice)
+	for _, index := range indices {
+		indicesFrontend = append(indicesFrontend, index)
 	}
 
 	return ProveAndVerify(Circuit{

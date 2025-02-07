@@ -22,28 +22,38 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
+	// check duplicate data
+	has, err := k.PublishedData.Has(ctx, msg.MetadataUri)
+	if err != nil {
+		return nil, err
+	}
+	if has {
+		return nil, types.ErrDataAlreadyExist
+	}
+
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
 	err = k.SetPublishedData(ctx, types.PublishedData{
-		Publisher:         msg.Sender,
-		MetadataUri:       msg.MetadataUri,
-		ParityShardCount:  msg.ParityShardCount,
-		ShardDoubleHashes: msg.ShardDoubleHashes,
-		Collateral:        params.ChallengeCollateral,
-		Timestamp:         sdkCtx.BlockTime(),
-		DataSourceInfo:    msg.DataSourceInfo,
-		Status:            types.Status_STATUS_VOTING,
+		Publisher:                  msg.Sender,
+		MetadataUri:                msg.MetadataUri,
+		ParityShardCount:           msg.ParityShardCount,
+		ShardDoubleHashes:          msg.ShardDoubleHashes,
+		PublishDataCollateral:      params.PublishDataCollateral,
+		SubmitInvalidityCollateral: params.SubmitInvalidityCollateral,
+		Timestamp:                  sdkCtx.BlockTime(),
+		DataSourceInfo:             msg.DataSourceInfo,
+		Status:                     types.Status_STATUS_CHALLENGE_PERIOD,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	// Send collateral to module account
-	if params.ChallengeCollateral.IsAllPositive() {
+	if params.PublishDataCollateral.IsAllPositive() {
 		sender := sdk.MustAccAddressFromBech32(msg.Sender)
-		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.ChallengeCollateral)
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, params.PublishDataCollateral)
 		if err != nil {
 			return nil, err
 		}

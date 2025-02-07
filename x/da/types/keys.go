@@ -25,14 +25,17 @@ var (
 
 	PublishedDataKeyPrefix             = collections.NewPrefix("published_data/")
 	PublishedDataStatusTimeIndexPrefix = collections.NewPrefix("published_data_by_status_time/")
+	ChallengeCountsKeyPrefix           = collections.NewPrefix("challenge_counts/")
 	FaultCountsKeyPrefix               = collections.NewPrefix("fault_counts/")
 	ProofKeyPrefix                     = collections.NewPrefix("proofs/")
+	InvalidityKeyPrefix                = collections.NewPrefix("invalidities/")
 )
 
 var (
 	PublishedDataKeyCodec = collections.StringKey
 	FaultCounterKeyCodec  = collections.BytesKey
 	ProofKeyCodec         = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
+	InvalidityKeyCodec    = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
 )
 
 type PublishedDataIndexes struct {

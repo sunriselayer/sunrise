@@ -18,9 +18,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "PublishedData",
-					Use:       "published-data",
-					Short:     "Shows published data",
+					RpcMethod:      "PublishedData",
+					Use:            "published-data <metadata_uri>",
+					Short:          "Shows published data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}},
 				},
 				{
 					RpcMethod: "AllPublishedData",
@@ -28,9 +29,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows all published data",
 				},
 				{
-					RpcMethod: "ZkpProofThreshold",
-					Use:       "zkp-proof-threshold",
-					Short:     "Shows threshold number of proof",
+					RpcMethod:      "ZkpProofThreshold",
+					Use:            "zkp-proof-threshold <shard_count>",
+					Short:          "Shows threshold number of proof",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "shard_count"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
@@ -48,11 +50,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true,
 				},
 				{
-					RpcMethod: "ChallengeForFraud",
+					RpcMethod: "SubmitInvalidity",
 					Skip:      true,
 				},
 				{
-					RpcMethod: "SubmitProof",
+					RpcMethod: "SubmitValidityProof",
 					Skip:      true,
 				},
 				// this line is used by ignite scaffolding # autocli/tx

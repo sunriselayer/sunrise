@@ -9,14 +9,14 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData) {
+func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData, found bool) {
 	has, err := k.PublishedData.Has(ctx, metadataUri)
 	if err != nil {
 		panic(err)
 	}
 
 	if !has {
-		return data
+		return data, false
 	}
 
 	val, err := k.PublishedData.Get(ctx, metadataUri)
@@ -24,7 +24,7 @@ func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data 
 		panic(err)
 	}
 
-	return val
+	return val, true
 }
 
 // SetParams set the params
@@ -70,7 +70,8 @@ func (k Keeper) GetSpecificStatusDataBeforeTime(ctx sdk.Context, status types.St
 			if key.K2() > timestamp {
 				return true, nil
 			}
-			list = append(list, k.GetPublishedData(ctx, metadataUri))
+			data,_ := k.PublishedData.Get(ctx, metadataUri)
+			list = append(list, data)
 			return false, nil
 		},
 	)
