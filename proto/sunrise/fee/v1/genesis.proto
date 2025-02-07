@@ -1,0 +1,13 @@
+syntax = "proto3";
+package sunrise.fee.v1;
+
+import "gogoproto/gogo.proto";
+import "sunrise/fee/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/fee/types";
+
+// GenesisState defines the fee module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}

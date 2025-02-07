@@ -6,13 +6,15 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestAccumulatorStore(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := f.ctx
+	k := f.keeper
 
 	err := k.InitAccumulator(ctx, "accumulator1")
 	require.NoError(t, err)
@@ -54,7 +56,9 @@ func TestAccumulatorStore(t *testing.T) {
 }
 
 func TestAccumulatorPositionStore(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := f.ctx
+	k := f.keeper
 
 	// Get not available position
 	_, err := k.GetAccumulatorPosition(ctx, "accumulator", "index")
@@ -105,7 +109,9 @@ func TestAccumulatorPositionStore(t *testing.T) {
 }
 
 func TestNewPositionIntervalAccumulation(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := f.ctx
+	k := f.keeper
 	// when accumulator does not exist
 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	err := k.NewPositionIntervalAccumulation(ctx, "accumulator", "index", math.LegacyOneDec(), accmulatorValuePerShare)
@@ -135,7 +141,9 @@ func TestNewPositionIntervalAccumulation(t *testing.T) {
 }
 
 func TestAddToPositionIntervalAccumulation(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := f.ctx
+	k := f.keeper
 	// when new shares is negative
 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	err := k.AddToPositionIntervalAccumulation(ctx, "accumulator", "index", math.LegacyOneDec().Neg(), accmulatorValuePerShare)
@@ -178,7 +186,9 @@ func TestAddToPositionIntervalAccumulation(t *testing.T) {
 }
 
 func TestRemoveFromPositionIntervalAccumulation(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := f.ctx
+	k := f.keeper
 	// when new shares is negative
 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	err := k.RemoveFromPositionIntervalAccumulation(ctx, "accumulator", "index", math.LegacyOneDec().Neg(), accmulatorValuePerShare)
@@ -311,7 +321,9 @@ func TestGetTotalRewards(t *testing.T) {
 // }
 
 func TestClaimRewards(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := f.ctx
+	k := f.keeper
 	// when new shares is negative
 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	_, _, err := k.ClaimRewards(ctx, "accumulator", "index")

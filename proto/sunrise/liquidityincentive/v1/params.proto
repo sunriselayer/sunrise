@@ -1,0 +1,15 @@
+syntax = "proto3";
+package sunrise.liquidityincentive.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.equal) = true;
+
+  int64 epoch_blocks = 1;
+  string staking_reward_ratio = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+}

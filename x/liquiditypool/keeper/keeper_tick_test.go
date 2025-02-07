@@ -5,15 +5,17 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"go.uber.org/mock/gomock"
+
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestTickInfoStore(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
 
 	// Not available tick
 	_, err := k.GetTickInfo(ctx, 1, 1)
@@ -223,7 +225,10 @@ func TestDecodeTickBytes(t *testing.T) {
 }
 
 func TestCrossTick(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
+
 	oneDecCoins := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	twoDecCoins := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(2)))
 	threeDecCoins := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(3)))

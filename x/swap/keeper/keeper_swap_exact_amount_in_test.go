@@ -4,17 +4,17 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"github.com/sunriselayer/sunrise/testutil/sample"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 func TestSwapExactAmountIn(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sample.AccAddress()
 	senderAcc := sdk.MustAccAddressFromBech32(sender)
 	tests := []struct {
 		desc              string
@@ -172,7 +172,11 @@ func TestSwapExactAmountIn(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			keeper, mocks, ctx := keepertest.SwapKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			keeper := f.keeper
+			mocks := getMocks(t)
+
 			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountIn(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 

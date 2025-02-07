@@ -1,40 +1,17 @@
 package keeper
 
 import (
-	"context"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/da/types"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
-var _ types.QueryServer = Keeper{}
+var _ types.QueryServer = queryServer{}
 
-func (k Keeper) PublishedData(goCtx context.Context, req *types.QueryPublishedDataRequest) (*types.QueryPublishedDataResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	data := k.GetPublishedData(ctx, req.MetadataUri)
-	return &types.QueryPublishedDataResponse{Data: data}, nil
+// NewQueryServerImpl returns an implementation of the QueryServer interface
+// for the provided Keeper.
+func NewQueryServerImpl(k Keeper) types.QueryServer {
+	return queryServer{k}
 }
 
-func (k Keeper) AllPublishedData(goCtx context.Context, req *types.QueryAllPublishedDataRequest) (*types.QueryAllPublishedDataResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	return &types.QueryAllPublishedDataResponse{Data: k.GetAllPublishedData(ctx)}, nil
-}
-
-func (k Keeper) ZkpProofThreshold(goCtx context.Context, req *types.QueryZkpProofThresholdRequest) (*types.QueryZkpProofThresholdResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	return &types.QueryZkpProofThresholdResponse{Threshold: k.GetZkpThreshold(ctx, req.ShardCount)}, nil
+type queryServer struct {
+	k Keeper
 }

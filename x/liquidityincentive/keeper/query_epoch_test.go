@@ -9,14 +9,15 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 func TestEpochQuerySingle(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	msgs := createNEpoch(keeper, ctx, 2)
+	f := initFixture(t)
+	qs := keeper.NewQueryServerImpl(f.keeper)
+	msgs := createNEpoch(f.keeper, f.ctx, 2)
 	tests := []struct {
 		desc     string
 		request  *types.QueryEpochRequest
@@ -45,7 +46,7 @@ func TestEpochQuerySingle(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Epoch(ctx, tc.request)
+			response, err := qs.Epoch(f.ctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -60,8 +61,9 @@ func TestEpochQuerySingle(t *testing.T) {
 }
 
 func TestEpochQueryPaginated(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	msgs := createNEpoch(keeper, ctx, 5)
+	f := initFixture(t)
+	qs := keeper.NewQueryServerImpl(f.keeper)
+	msgs := createNEpoch(f.keeper, f.ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryEpochsRequest {
 		return &types.QueryEpochsRequest{
@@ -76,7 +78,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.Epochs(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := qs.Epochs(f.ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Epochs), step)
 			require.Subset(t,
@@ -89,7 +91,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.Epochs(ctx, request(next, 0, uint64(step), false))
+			resp, err := qs.Epochs(f.ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Epochs), step)
 			require.Subset(t,
@@ -100,7 +102,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.Epochs(ctx, request(nil, 0, 0, true))
+		resp, err := qs.Epochs(f.ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
@@ -109,7 +111,7 @@ func TestEpochQueryPaginated(t *testing.T) {
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.Epochs(ctx, nil)
+		_, err := qs.Epochs(f.ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }

@@ -11,12 +11,12 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryCalculationCreatePositionRequest) (*types.QueryCalculationCreatePositionResponse, error) {
+func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.QueryCalculationCreatePositionRequest) (*types.QueryCalculationCreatePositionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	pool, found := k.GetPool(ctx, req.PoolId)
+	pool, found := q.k.GetPool(ctx, req.PoolId)
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}
@@ -29,7 +29,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 	if !ok {
 		return nil, types.ErrInvalidTickers
 	}
-	err := checkTicks(lowerTick.Int64(), upperTick.Int64())
+	err := types.CheckTicks(lowerTick.Int64(), upperTick.Int64())
 	if err != nil {
 		return nil, types.ErrInvalidTickers
 	}
@@ -67,7 +67,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 	}
 }
 
-func (k Keeper) CalculationIncreaseLiquidity(ctx context.Context, req *types.QueryCalculationIncreaseLiquidityRequest) (*types.QueryCalculationIncreaseLiquidityResponse, error) {
+func (q queryServer) CalculationIncreaseLiquidity(ctx context.Context, req *types.QueryCalculationIncreaseLiquidityRequest) (*types.QueryCalculationIncreaseLiquidityResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -85,11 +85,11 @@ func (k Keeper) CalculationIncreaseLiquidity(ctx context.Context, req *types.Que
 		return nil, types.ErrInvalidTokenAmounts
 	}
 
-	position, found := k.GetPosition(ctx, req.Id)
+	position, found := q.k.GetPosition(ctx, req.Id)
 	if !found {
 		return nil, types.ErrPositionNotFound
 	}
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found := q.k.GetPool(ctx, position.PoolId)
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}

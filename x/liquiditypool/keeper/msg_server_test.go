@@ -4,16 +4,20 @@ import (
 	"context"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/testutil"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func setupMsgServer(t *testing.T) (keeper.Keeper, *testutil.MockBankKeeper, types.MsgServer, context.Context) {
-	k, bk, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
+	bk := testutil.NewMockBankKeeper(gomock.NewController(t))
 	return k, bk, keeper.NewMsgServerImpl(k), ctx
 }
 

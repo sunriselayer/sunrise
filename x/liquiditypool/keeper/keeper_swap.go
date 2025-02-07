@@ -297,7 +297,7 @@ func (k Keeper) computeOutAmtGivenIn(
 
 	swapState := newSwapState(minTokenIn.Amount, p, swapHelper)
 
-	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.storeService, poolId, swapState.tick)
+	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.KVStoreService, poolId, swapState.tick)
 	defer nextInitTickIter.Close()
 
 	swapNoProgressIterationCount := 0
@@ -394,7 +394,7 @@ func (k Keeper) computeInAmtGivenOut(
 
 	swapState := newSwapState(desiredTokenOut.Amount, p, swapHelper)
 
-	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.storeService, poolId, swapState.tick)
+	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.KVStoreService, poolId, swapState.tick)
 	defer nextInitTickIter.Close()
 
 	swapNoProgressIterationCount := 0
@@ -642,7 +642,7 @@ func (k Keeper) ComputeMaxInAmtGivenMaxTicksCrossed(
 	balance := k.bankKeeper.GetBalance(ctx, p.GetAddress(), denomOut)
 	swapState := newSwapState(balance.Amount, p, swapHelper)
 
-	nextInitTickIter := swapHelper.NextTickIterator(cacheCtx, k.storeService, poolId, swapState.tick)
+	nextInitTickIter := swapHelper.NextTickIterator(cacheCtx, k.KVStoreService, poolId, swapState.tick)
 	defer nextInitTickIter.Close()
 
 	totalTokenOut := math.LegacyZeroDec()

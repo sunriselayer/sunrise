@@ -4,24 +4,20 @@ import (
 	"encoding/base64"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/consensys/gnark-crypto/ecc"
 	groth16 "github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
+
+	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-var _ paramtypes.ParamSet = (*Params)(nil)
-
-// ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// NewParams creates a new Params instance
+// NewParams creates a new Params instance.
 func NewParams(
 	voteThreshold math.LegacyDec,
 	slashEpoch uint64,
@@ -36,25 +32,27 @@ func NewParams(
 	challengeCollateral sdk.Coins,
 	zkpProvingKey []byte,
 	zkpVerifyingKey []byte,
+	rejectedRemovalPeriod time.Duration,
 ) Params {
 	return Params{
-		VoteThreshold:       voteThreshold,
-		SlashEpoch:          slashEpoch,
-		EpochMaxFault:       epochMaxFault,
-		SlashFraction:       slashFraction,
-		ReplicationFactor:   replicationFactor,
-		MinShardCount:       minShardCount,
-		MaxShardCount:       maxShardCount,
-		MaxShardSize:        maxShardSize,
-		ChallengePeriod:     challengePeriod,
-		ProofPeriod:         proofPeriod,
-		ChallengeCollateral: challengeCollateral,
-		ZkpProvingKey:       zkpProvingKey,
-		ZkpVerifyingKey:     zkpVerifyingKey,
+		VoteThreshold:         voteThreshold.String(),
+		SlashEpoch:            slashEpoch,
+		EpochMaxFault:         epochMaxFault,
+		SlashFraction:         slashFraction.String(),
+		ReplicationFactor:     replicationFactor.String(),
+		MinShardCount:         minShardCount,
+		MaxShardCount:         maxShardCount,
+		MaxShardSize:          maxShardSize,
+		ChallengePeriod:       challengePeriod,
+		ProofPeriod:           proofPeriod,
+		ChallengeCollateral:   challengeCollateral,
+		ZkpProvingKey:         zkpProvingKey,
+		ZkpVerifyingKey:       zkpVerifyingKey,
+		RejectedRemovalPeriod: rejectedRemovalPeriod,
 	}
 }
 
-// DefaultParams returns a default set of parameters
+// DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	provingKey, err := base64.StdEncoding.DecodeString(DefaultProvingKeyBase64)
 	if err != nil {
@@ -80,6 +78,7 @@ func DefaultParams() Params {
 		sdk.Coins(nil),
 		provingKey,
 		verifyingKey,
+		time.Hour*24, // 24h
 	)
 }
 
@@ -109,12 +108,81 @@ func GenerateZkpKeys() (string, string) {
 	return provingKeyBase64, verifyingKeyBase64
 }
 
-// ParamSetPairs get the params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{}
-}
-
-// Validate validates the set of params
+// Validate validates the set of params.
 func (p Params) Validate() error {
+	voteThreshold, err := math.LegacyNewDecFromStr(p.VoteThreshold)
+	if err != nil {
+		return err
+	}
+	if voteThreshold.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote threshold must not be negative")
+	}
+	if voteThreshold.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "vote threshold must be less than 1")
+	}
+
+	if p.SlashEpoch == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash epoch must be positive")
+	}
+
+	if p.EpochMaxFault == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "epoch max fault must be positive")
+	}
+
+	slashFraction, err := math.LegacyNewDecFromStr(p.SlashFraction)
+	if err != nil {
+		return err
+	}
+	if slashFraction.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must not be negative")
+	}
+	if slashFraction.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must be less than 1")
+	}
+
+	replicationFactor, err := math.LegacyNewDecFromStr(p.ReplicationFactor)
+	if err != nil {
+		return err
+	}
+	if !replicationFactor.IsPositive() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must be negative")
+	}
+
+	if p.MinShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "min shard count must be positive")
+	}
+
+	if p.MaxShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be positive")
+	}
+
+	if p.MaxShardCount < p.MinShardCount {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be greater than or equal to min shard count")
+	}
+
+	if p.MaxShardSize == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard size must be positive")
+	}
+
+	if p.ChallengePeriod == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge period must be positive")
+	}
+
+	if p.ProofPeriod == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "proof period must be positive")
+	}
+
+	if !p.ChallengeCollateral.IsValid() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge collateral must be valid")
+	}
+
+	if len(p.ZkpProvingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp proving key must not be empty")
+	}
+
+	if len(p.ZkpVerifyingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp verifying key must not be empty")
+	}
+
 	return nil
 }

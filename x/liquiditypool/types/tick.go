@@ -7,6 +7,20 @@ import (
 	"cosmossdk.io/math"
 )
 
+func CheckTicks(tickLower, tickUpper int64) error {
+	if tickLower >= tickUpper {
+		return errors.New("tickLower should be less than tickUpper")
+	}
+	if tickLower < TICK_MIN {
+		return errors.New("tickLower is out of range")
+	}
+
+	if tickUpper > TICK_MAX {
+		return errors.New("tickUpper is out of range")
+	}
+	return nil
+}
+
 func TicksToSqrtPrice(lowerTick, upperTick int64, tickParams TickParams) (math.LegacyDec, math.LegacyDec, error) {
 	if lowerTick >= upperTick {
 		return math.LegacyDec{}, math.LegacyDec{}, errors.New("tickLower should be less than tickUpper")

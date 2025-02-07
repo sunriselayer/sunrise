@@ -5,9 +5,9 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"go.uber.org/mock/gomock"
+
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -433,7 +433,9 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 }
 
 func TestGetValidatedPoolAndAccumulator(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
 	// when pool does not exist
 	_, _, err := k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.Error(t, err)

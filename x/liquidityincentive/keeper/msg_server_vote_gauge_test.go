@@ -4,9 +4,10 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
@@ -15,7 +16,7 @@ func TestMsgVoteGauge(t *testing.T) {
 	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
 	k, mocks, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
-	require.NoError(t, k.SetParams(ctx, params))
+	require.NoError(t, k.Params.Set(ctx, params))
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(1)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
@@ -71,9 +72,14 @@ func TestMsgVoteGauge(t *testing.T) {
 
 func TestMsgVoteGaugePartial(t *testing.T) {
 	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
-	k, mocks, ms, ctx := setupMsgServer(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
+	ms := keeper.NewMsgServerImpl(k)
+	mocks := getMocks(t)
+
 	params := types.DefaultParams()
-	require.NoError(t, k.SetParams(ctx, params))
+	require.NoError(t, k.Params.Set(ctx, params))
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(1)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()

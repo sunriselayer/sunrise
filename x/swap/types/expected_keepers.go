@@ -5,7 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
+	transfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
 	lptypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -29,9 +29,8 @@ type BankKeeper interface {
 // TransferKeeper defines the expected interface for the IBC Transfer module.
 type TransferKeeper interface {
 	Transfer(ctx context.Context, msg *transfertypes.MsgTransfer) (*transfertypes.MsgTransferResponse, error)
-	DenomPathFromHash(ctx sdk.Context, denom string) (string, error)
-	GetTotalEscrowForDenom(ctx sdk.Context, denom string) sdk.Coin
-	SetTotalEscrowForDenom(ctx sdk.Context, coin sdk.Coin)
+	GetTotalEscrowForDenom(ctx context.Context, denom string) sdk.Coin
+	SetTotalEscrowForDenom(ctx context.Context, coin sdk.Coin)
 }
 
 // LiquidityPoolKeeper defines the expected interface for the liquidity pool module.
@@ -41,10 +40,4 @@ type LiquidityPoolKeeper interface {
 	CalculateResultExactAmountOut(ctx sdk.Context, pool lptypes.Pool, tokenOut sdk.Coin, denomIn string, feeEnabled bool) (amountIn math.Int, err error)
 	SwapExactAmountIn(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string, feeEnabled bool) (amountOut math.Int, err error)
 	SwapExactAmountOut(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenOut sdk.Coin, denomIn string, feeEnabled bool) (amountIn math.Int, err error)
-}
-
-// ParamSubspace defines the expected Subspace interface for parameters.
-type ParamSubspace interface {
-	Get(context.Context, []byte, interface{})
-	Set(context.Context, []byte, interface{})
 }

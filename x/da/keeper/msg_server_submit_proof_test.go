@@ -9,6 +9,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+	"github.com/sunriselayer/sunrise/testutil/sample"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	native_mimc "github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
@@ -22,7 +23,7 @@ import (
 func TestMsgSubmitProof(t *testing.T) {
 	k, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
-	require.NoError(t, k.SetParams(ctx, params))
+	require.NoError(t, k.Params.Set(ctx, params))
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	preImage1 := big.NewInt(111)
@@ -63,12 +64,12 @@ func TestMsgSubmitProof(t *testing.T) {
 		MetadataUri:        "ipfs://metadata1",
 		ParityShardCount:   0,
 		ShardDoubleHashes:  [][]byte{hash},
-		Timestamp:          time.Time{},
-		Status:             "challenge_for_fraud",
+		Timestamp:          time.Now(),
+		Status:             types.Status_STATUS_CHALLENGING,
 		Publisher:          "publisher",
 		Challenger:         "challenger",
 		Collateral:         sdk.Coins{},
-		ChallengeTimestamp: time.Time{},
+		ChallengeTimestamp: time.Now(),
 	})
 	require.NoError(t, err)
 
@@ -79,35 +80,32 @@ func TestMsgSubmitProof(t *testing.T) {
 		expErrMsg string
 	}{
 		{
-			name: "invalid data hash",
+			name: "empty proof",
 			input: &types.MsgSubmitProof{
-				Sender:      "sender",
+				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{},
 				Proofs:      [][]byte{},
-				IsValidData: false,
 			},
 			expErr: false,
 		},
 		{
 			name: "valid proof",
 			input: &types.MsgSubmitProof{
-				Sender:      "sender",
+				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
 				Proofs:      [][]byte{proofBytes},
-				IsValidData: true,
 			},
 			expErr: false,
 		},
 		{
 			name: "invalid proof",
 			input: &types.MsgSubmitProof{
-				Sender:      "sender",
+				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
 				Proofs:      [][]byte{{0x0}},
-				IsValidData: true,
 			},
 			expErr:    true,
 			expErrMsg: "unexpected EOF",

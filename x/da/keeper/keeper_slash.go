@@ -3,51 +3,61 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	bz := store.Get(types.GetFaultCounterKey(operator))
-	if bz == nil {
+	has, err := k.FaultCounts.Has(ctx, operator)
+	if err != nil {
+		panic(err)
+	}
+
+	if !has {
 		return 0
 	}
 
-	return sdk.BigEndianToUint64(bz)
+	val, err := k.FaultCounts.Get(ctx, operator)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
 }
 
 func (k Keeper) SetFaultCounter(ctx context.Context, operator sdk.ValAddress, faultCounter uint64) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store.Set(types.GetFaultCounterKey(operator), sdk.Uint64ToBigEndian(faultCounter))
+	err := k.FaultCounts.Set(ctx, operator, faultCounter)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (k Keeper) DeleteFaultCounter(ctx context.Context, operator sdk.ValAddress) {
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store.Delete(types.GetFaultCounterKey(operator))
+	err := k.FaultCounts.Remove(ctx, operator)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (k Keeper) IterateFaultCounters(ctx context.Context,
 	handler func(operator sdk.ValAddress, faultCount uint64) (stop bool),
 ) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	prefixStore := prefix.NewStore(storeAdapter, types.FaultCounterKeyPrefix)
-	iter := storetypes.KVStorePrefixIterator(prefixStore, []byte{})
-	defer iter.Close()
-	for ; iter.Valid(); iter.Next() {
-		operator := sdk.ValAddress(iter.Key())
-
-		if handler(operator, sdk.BigEndianToUint64(iter.Value())) {
-			break
-		}
+	err := k.FaultCounts.Walk(
+		ctx,
+		nil,
+		func(key []byte, value uint64) (bool, error) {
+			return handler(key, value), nil
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
 }
 
 func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
-	params := k.GetParams(ctx)
+	// TODO: error handling
+	params, _ := k.Params.Get(ctx)
+	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction) // TODO: remove with Dec
 	powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
 		validator, err := k.StakingKeeper.Validator(ctx, operator)
@@ -70,7 +80,7 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 		}
 
 		err = k.SlashingKeeper.Slash(
-			ctx, consAddr, params.SlashFraction,
+			ctx, consAddr, slashFraction,
 			validator.GetConsensusPower(powerReduction),
 			ctx.BlockHeight()-sdk.ValidatorUpdateDelay-1,
 		)
