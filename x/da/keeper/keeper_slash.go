@@ -80,6 +80,8 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 	slashFaultThreshold := math.LegacyMustNewDecFromStr(params.SlashFaultThreshold) // TODO: remove with Dec
 	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction)             // TODO: remove with Dec
 	challengeCount := k.GetChallengeCounter(ctx)
+	// reset counter
+	k.SetChallengeCounter(ctx, 0)
 	threshold := slashFaultThreshold.MulInt64(int64(challengeCount)).TruncateInt().Uint64()
 	powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
