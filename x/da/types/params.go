@@ -31,6 +31,10 @@ func NewParams(
 	publishDataCollateral sdk.Coins,
 	submitInvalidityCollateral sdk.Coins,
 	zkpVerifyingKey []byte,
+	zkpProvingKey []byte,
+	minShardCount uint64,
+	maxShardCount uint64,
+	maxShardSize uint64,
 ) Params {
 	return Params{
 		ChallengeThreshold:         challengeThreshold.String(),
@@ -44,12 +48,21 @@ func NewParams(
 		PublishDataCollateral:      publishDataCollateral,
 		SubmitInvalidityCollateral: submitInvalidityCollateral,
 		ZkpVerifyingKey:            zkpVerifyingKey,
+		ZkpProvingKey:              zkpProvingKey,
+		MinShardCount:              minShardCount,
+		MaxShardCount:              maxShardCount,
+		MaxShardSize:               maxShardSize,
 	}
 }
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	verifyingKey, err := base64.StdEncoding.DecodeString(DefaultVerifyingKeyBase64)
+	if err != nil {
+		panic(err)
+	}
+
+	provingKey, err := base64.StdEncoding.DecodeString(DefaultProvingKeyBase64)
 	if err != nil {
 		panic(err)
 	}
@@ -66,6 +79,10 @@ func DefaultParams() Params {
 		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(1_000_000_000))), // publish data collateral 1000RISE
 		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(100_000_000))),   // submit invalidity collateral 100RISE
 		verifyingKey,
+		provingKey,
+		10,
+		255,
+		1000000, // 1MB
 	)
 }
 
@@ -161,6 +178,26 @@ func (p Params) Validate() error {
 
 	if len(p.ZkpVerifyingKey) == 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp verifying key must not be empty")
+	}
+
+	if len(p.ZkpProvingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp proving key must not be empty")
+	}
+
+	if p.MinShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "min shard count must be positive")
+	}
+
+	if p.MaxShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be positive")
+	}
+
+	if p.MaxShardCount < p.MinShardCount {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be greater than or equal to min shard count")
+	}
+
+	if p.MaxShardSize == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard size must be positive")
 	}
 
 	return nil
