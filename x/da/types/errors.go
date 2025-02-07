@@ -17,4 +17,5 @@ var (
 	ErrIndicesAndProofsMismatch = errors.Register(ModuleName, 1106, "indices and proofs count mismatch")
 	ErrParityShardCountGTETotal = errors.Register(ModuleName, 1107, "parity shard count is greater than total")
 	ErrInvalidIndices           = errors.Register(ModuleName, 1108, "invalid indices")
+	ErrDataAlreadyExist         = errors.Register(ModuleName, 1109, "published data already exist")
 )

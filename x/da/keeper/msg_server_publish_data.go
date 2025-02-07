@@ -22,6 +22,15 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
+	// check duplicate data
+	has, err := k.PublishedData.Has(ctx, msg.MetadataUri)
+	if err != nil {
+		return nil, err
+	}
+	if has {
+		return nil, types.ErrDataAlreadyExist
+	}
+
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
