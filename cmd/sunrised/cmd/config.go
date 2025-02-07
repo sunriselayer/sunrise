@@ -53,7 +53,7 @@ func initAppConfig() (string, interface{}) {
 		Config: *srvCfg,
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate + `
+	customAppTemplate := serverconfig.DefaultConfigTemplate
 
 	// Edit the default template file
 	//
