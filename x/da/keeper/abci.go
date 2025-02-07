@@ -10,32 +10,54 @@ import (
 
 func (k Keeper) EndBlocker(ctx context.Context) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	// TODO: error handling
-	params, _ := k.Params.Get(ctx)
-	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
-	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
+	params, err := k.Params.Get(ctx)
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
 	}
-
-	for _, data := range challengePeriodData {
-		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
-			data.Status = types.Status_STATUS_VERIFIED
-		}
-		if err = k.SetPublishedData(ctx, data); err != nil {
-			return
-		}
-
-		publisher := sdk.MustAccAddressFromBech32(data.Publisher)
-		err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral)
-		if err != nil {
-			k.Logger.Error(err.Error())
-			return
+	// If STATUS_VOTING remains, change to STATUS_REJECT
+	// Collateral does not refund
+	votingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VOTING, sdkCtx.BlockTime().Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range votingData {
+		if data.Status == types.Status_STATUS_VOTING {
+			data.Status = types.Status_STATUS_REJECTED
+			err = k.SetPublishedData(ctx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
 		}
 	}
 
-	proofPeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
+	// If STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
+	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range challengePeriodData {
+		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
+			data.Status = types.Status_STATUS_VERIFIED
+			err = k.SetPublishedData(ctx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
+			// refunds collateral to the publisher
+			publisher := sdk.MustAccAddressFromBech32(data.Publisher)
+			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
+		}
+	}
+
+	challengingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGING, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
 	if err != nil {
 		k.Logger.Error(err.Error())
 		return
@@ -73,9 +95,10 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
+	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
 	faultValidators := make(map[string]sdk.ValAddress)
 
-	for _, data := range proofPeriodData {
+	for _, data := range challengingData {
 		if data.Status == types.Status_STATUS_CHALLENGING {
 			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
 			// if err != nil {
@@ -127,15 +150,14 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			// valid_shards < data_shard_count
 			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
-				// TODO: might require rejected records as well
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())
 					return
 				}
-				// k.DeletePublishedData(sdkCtx, data)
 
+				// rewards collateral 2x to the challenger
 				challenger := sdk.MustAccAddressFromBech32(data.Challenger)
 				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.Collateral.Add(data.Collateral...))
 				if err != nil {
@@ -149,6 +171,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					return
 				}
+				// refunds collateral to the publisher
 				publisher := sdk.MustAccAddressFromBech32(data.Publisher)
 				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral.Add(data.Collateral...))
 				if err != nil {
@@ -171,6 +194,18 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
 			}
+		}
+	}
+
+	// If STATUS_REJECTED is overtime, remove from the store
+	rejectedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_REJECTED, sdkCtx.BlockTime().Add(-params.RejectedRemovalPeriod).Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range rejectedData {
+		if data.Status == types.Status_STATUS_REJECTED {
+			k.DeletePublishedData(sdkCtx, data)
 		}
 	}
 }

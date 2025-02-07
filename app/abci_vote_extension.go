@@ -28,25 +28,51 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
-	"github.com/sunriselayer/sunrise/x/da/zkp"
+	// "github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-const flagDAShardHashesAPI = "da.shard_hashes_api"
+const flagSunriseDataBaseUrl = "da.sunrise_data_base_url"
 
 type DAConfig struct {
-	ShardHashesAPI string `mapstructure:"shard_hashes_api"`
+	SunriseDataBaseUrl string `mapstructure:"sunrise_data_base_url"`
 }
 
 type DAShardHashesResponse struct {
 	ShardHashes []string `json:"shard_hashes"`
 }
 
+type SunriseDataClient struct {
+	BaseUrl string
+}
+
+func (client SunriseDataClient) GetShardHashes(metadataUri string, indices []int64) ([]string, error) {
+	url := fmt.Sprintf("%s/api/shard-hashes?metadata_uri=%s&indices=%s", client.BaseUrl, metadataUri, strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]"))
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	daShardHashes := DAShardHashesResponse{}
+	err = json.Unmarshal(resBody, &daShardHashes)
+	if err != nil {
+		return nil, err
+	}
+
+	return daShardHashes.ShardHashes, nil
+}
+
 // ReadOracleConfig reads the wasm specifig configuration
 func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 	cfg := DAConfig{}
 	var err error
-	if v := opts.Get(flagDAShardHashesAPI); v != nil {
-		if cfg.ShardHashesAPI, err = cast.ToStringE(v); err != nil {
+	if v := opts.Get(flagSunriseDataBaseUrl); v != nil {
+		if cfg.SunriseDataBaseUrl, err = cast.ToStringE(v); err != nil {
 			return cfg, err
 		}
 	}
@@ -54,28 +80,16 @@ func ReadDAConfig(opts servertypes.AppOptions) (DAConfig, error) {
 	return cfg, nil
 }
 
+// GET shard hashes from sunrise data api
 func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int64, valAddr sdk.ValAddress) ([]int64, [][]byte, error) {
 	indices := types.ShardIndicesForValidator(valAddr, n, threshold)
-	url := daConfig.ShardHashesAPI + "?metadata_uri=" + metadataUri + "&indices=" + strings.Trim(strings.Replace(fmt.Sprint(indices), " ", ",", -1), "[]")
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer res.Body.Close()
-
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	daShardHashes := DAShardHashesResponse{}
-	err = json.Unmarshal(resBody, &daShardHashes)
+	daShardHashes, err := SunriseDataClient{BaseUrl: daConfig.SunriseDataBaseUrl}.GetShardHashes(metadataUri, indices)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	shares := [][]byte{}
-	for _, shareEncoded := range daShardHashes.ShardHashes {
+	for _, shareEncoded := range daShardHashes {
 		share, err := base64.StdEncoding.DecodeString(shareEncoded)
 		if err != nil {
 			continue
@@ -86,15 +100,18 @@ func GetDataShardHashes(daConfig DAConfig, metadataUri string, n, threshold int6
 }
 
 type VoteExtHandler struct {
+	logger        log.Logger
 	Keeper        keeper.Keeper
 	stakingKeeper *stakingkeeper.Keeper
 }
 
 func NewVoteExtHandler(
+	logger log.Logger,
 	keeper keeper.Keeper,
 	stakingKeeper *stakingkeeper.Keeper,
 ) *VoteExtHandler {
 	return &VoteExtHandler{
+		logger:        logger,
 		Keeper:        keeper,
 		stakingKeeper: stakingKeeper,
 	}
@@ -149,43 +166,47 @@ func (h *VoteExtHandler) ExtendVoteHandler(daConfig DAConfig, dec sdk.TxDecoder,
 				continue
 			}
 
-			ctx, err = handler(ctx, sdkTx, false)
-			if err != nil {
-				continue
-			}
+			// omit zkp in vote_extension, no need to get params
+			// ctx, err = handler(ctx, sdkTx, false)
+			// if err != nil {
+			// 	continue
+			// }
 
-			params, err := daKeeper.Params.Get(ctx)
-			if err != nil {
-				continue
-			}
-			numValidators, valAddr, err := h.ValidatorsInfo(ctx, req.ProposerAddress)
-			if err != nil {
-				continue
-			}
+			// params, err := daKeeper.Params.Get(ctx)
+			// if err != nil {
+			// 	continue
+			// }
+			// numValidators, valAddr, err := h.ValidatorsInfo(ctx, req.ProposerAddress)
+			// if err != nil {
+			// 	continue
+			// }
 
 			msgs := sdkTx.GetMsgs()
 			for _, msg := range msgs {
 				switch msg := msg.(type) {
 				case *types.MsgPublishData:
-					replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
-					if err != nil {
-						continue
-					}
-					threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
-					if threshold > int64(len(msg.ShardDoubleHashes)) {
-						threshold = int64(len(msg.ShardDoubleHashes))
-					}
+					// omit zkp in vote_extension
+					// replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with math.Dec
+					// if err != nil {
+					// 	continue
+					// }
+					// threshold := replicationFactor.QuoInt64(numValidators).MulInt64(int64(len(msg.ShardDoubleHashes))).RoundInt64()
+					// if threshold > int64(len(msg.ShardDoubleHashes)) {
+					// 	threshold = int64(len(msg.ShardDoubleHashes))
+					// }
 
-					indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
-					if err != nil {
-						continue
-					}
+					// indices, shares, err := GetDataShardHashes(daConfig, msg.MetadataUri, int64(len(msg.ShardDoubleHashes)), threshold, valAddr)
+					// if err != nil {
+					// 	h.logger.Error("failed to get shard hashes", "error", err)
+					// 	continue
+					// }
 
-					// filter zkp verified data
-					err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
-					if err != nil {
-						continue
-					}
+					// // filter zkp verified data
+					// err = zkp.VerifyData(indices, shares, msg.ShardDoubleHashes, int(threshold))
+					// if err != nil {
+					// 	h.logger.Error("failed to verify data", "error", err)
+					// 	continue
+					// }
 
 					voteExt.Data = append(voteExt.Data, &types.PublishedData{
 						MetadataUri:       msg.MetadataUri,
@@ -222,7 +243,8 @@ func (h *VoteExtHandler) VerifyVoteExtensionHandler(daConfig DAConfig, daKeeper 
 			return nil, fmt.Errorf("failed to unmarshal vote extension: %w", err)
 		}
 
-		// check vote extension data with zkp
+		// omit zkp in vote_extension
+		// // check vote extension data with zkp
 		// params := daKeeper.GetParams(ctx)
 		// numValidators, _, err := h.ValidatorsInfo(ctx, req.ValidatorAddress)
 		// if err != nil {
@@ -286,11 +308,12 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 		proposalTxs := defaultResponse.Txs
 
-		cp := ctx.ConsensusParams()
-		voteExtEnabled := cp.Abci != nil && req.Height > cp.Abci.VoteExtensionsEnableHeight && cp.Abci.VoteExtensionsEnableHeight != 0
-		if !voteExtEnabled {
-			return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
-		}
+		// This code is repeated in cosmos/cosmos-sdk/baseapp/abci_utils.go
+		// cp := ctx.ConsensusParams()
+		// voteExtEnabled := cp.Abci != nil && req.Height > cp.Abci.VoteExtensionsEnableHeight && cp.Abci.VoteExtensionsEnableHeight != 0
+		// if !voteExtEnabled {
+		// 	return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
+		// }
 
 		err = baseapp.ValidateVoteExtensions(ctx, h.stakingKeeper, req.LocalLastCommit)
 		if err != nil {
@@ -476,41 +499,46 @@ func (h *ProposalHandler) GetDataVotesMapByHash(
 	return
 }
 
+// GetAboveThresholdVotedData returns the data that has been voted by validators with power above the threshold and fault validators list.
 func GetAboveThresholdVotedData(
 	dataVotes DataVotes, thresholdPower int64,
-	valPowerMap map[string]ValidatorPower, faultValidators map[string]sdk.ValAddress,
-) (types.PublishedData, bool) {
-	lastPublishedData := types.PublishedData{}
-	lastPower := int64(0)
-
+	valPowerMap map[string]ValidatorPower,
+	faultValidators map[string]sdk.ValAddress,
+) (validData types.PublishedData,
+	err error,
+) {
+	// tally the voting power for each data
+	powerMap := make(map[string]int64)
 	for _, vote := range dataVotes {
-		if lastPublishedData.String() == vote.Data.String() {
-			lastPower += vote.Power
-			if lastPower >= thresholdPower {
-				break
-			}
-			continue
+		key := vote.Data.String()
+		powerMap[key] += vote.Power
+	}
+
+	validDataString := ""
+	validPower := int64(0)
+	for key, power := range powerMap {
+		if power > validPower {
+			validDataString = key
+			validPower = power
 		}
-		lastPublishedData = vote.Data
-		lastPower = vote.Power
+	}
+	// check if the data has been voted by validators with power above the threshold
+	if validPower < thresholdPower {
+		return types.PublishedData{}, errors.New("data voting power is below threshold")
 	}
 
-	if lastPower < thresholdPower {
-		return lastPublishedData, false
-	}
-
+	// record the fault validators
 	for _, vote := range dataVotes {
 		key := vote.Voter.String()
 		valPower := valPowerMap[key]
-		if lastPublishedData.String() == vote.Data.String() {
-			valPower := valPowerMap[key]
-			valPowerMap[key] = valPower
+		if validDataString == vote.Data.String() {
+			validData = vote.Data
 		} else {
 			faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
 		}
 	}
 
-	return lastPublishedData, true
+	return validData, nil
 }
 
 func ApplyNotVotedValidators(
@@ -530,18 +558,22 @@ func ApplyNotVotedValidators(
 			if !ok {
 				continue
 			}
-
+			// if the dataHash exists in dataHashVoterMap, add the voter to the map
 			dataHashVoterMap[dataHash][dataVote.Voter.String()] = true
 		}
 	}
 
+	// record as fault validator only if any voting has not been done
 	for _, valPower := range valPowerMap {
+		voted := false
 		for dataHash := range votedData {
-			_, ok := dataHashVoterMap[dataHash][valPower.ValAddr.String()]
-			if !ok {
-				faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
+			if _, ok := dataHashVoterMap[dataHash][valPower.ValAddr.String()]; ok {
+				voted = true
 				break
 			}
+		}
+		if !voted {
+			faultValidators[valPower.ValAddr.String()] = valPower.ValAddr
 		}
 	}
 }
@@ -603,12 +635,12 @@ func (h *ProposalHandler) GetVotedDataAndFaultValidators(ctx sdk.Context, commit
 		}
 		thresholdPower := voteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 
-		publishedData, aboveThreshold := GetAboveThresholdVotedData(dataVote, thresholdPower, valPowerMap, faultValidators)
-		if !aboveThreshold {
+		validData, err := GetAboveThresholdVotedData(dataVote, thresholdPower, valPowerMap, faultValidators)
+		if err != nil {
 			return nil, nil, err
 		}
 
-		votedData[dataHash] = &publishedData
+		votedData[dataHash] = &validData
 	}
 
 	ApplyNotVotedValidators(votedData, dataVotesMap, valPowerMap, faultValidators)

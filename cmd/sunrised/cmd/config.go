@@ -54,14 +54,14 @@ func initAppConfig() (string, interface{}) {
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
 		DA: app.DAConfig{
-			ShardHashesAPI: "http://localhost:8000/api/shard_hashes",
+			SunriseDataBaseUrl: "http://localhost:8000",
 		},
 	}
 
 	customAppTemplate := serverconfig.DefaultConfigTemplate + `
 [da]
 # API to query DA v2 uploaded data shard hashes
-shard_hashes_api = "http://localhost:8000/api/shard_hashes"
+sunrise_data_base_url = "http://localhost:8000"
 `
 	// Edit the default template file
 	//
