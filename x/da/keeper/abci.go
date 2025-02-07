@@ -37,6 +37,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			threshold := math.LegacyMustNewDecFromStr(params.ChallengeThreshold).MulInt64(int64(len(data.ShardDoubleHashes)))
 			if math.LegacyNewDec(int64(len(invalidIndices))).GTE(threshold) {
 				data.Status = types.Status_STATUS_CHALLENGING
+				data.ChallengeTimestamp = sdkCtx.BlockTime()
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
 					k.Logger.Error(err.Error())
