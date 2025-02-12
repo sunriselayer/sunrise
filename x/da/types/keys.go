@@ -29,13 +29,15 @@ var (
 	FaultCountsKeyPrefix               = collections.NewPrefix("fault_counts/")
 	ProofKeyPrefix                     = collections.NewPrefix("proofs/")
 	InvalidityKeyPrefix                = collections.NewPrefix("invalidities/")
+	ValidatorDeputiesKeyPrefix         = collections.NewPrefix("validator_deputies/")
 )
 
 var (
-	PublishedDataKeyCodec = collections.StringKey
-	FaultCounterKeyCodec  = collections.BytesKey
-	ProofKeyCodec         = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
-	InvalidityKeyCodec    = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
+	PublishedDataKeyCodec   = collections.StringKey
+	FaultCounterKeyCodec    = collections.BytesKey
+	ProofKeyCodec           = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
+	InvalidityKeyCodec      = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
+	ValidatorDeputyKeyCodec = collections.BytesKey
 )
 
 type PublishedDataIndexes struct {
