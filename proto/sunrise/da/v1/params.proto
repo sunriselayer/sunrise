@@ -34,21 +34,25 @@ message Params {
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  repeated cosmos.base.v1beta1.Coin publish_data_collateral = 9 [
+  google.protobuf.Duration verified_removal_period = 9 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+  repeated cosmos.base.v1beta1.Coin publish_data_collateral = 10 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  repeated cosmos.base.v1beta1.Coin submit_invalidity_collateral = 10 [
+  repeated cosmos.base.v1beta1.Coin submit_invalidity_collateral = 11 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  bytes zkp_verifying_key = 11;
+  bytes zkp_verifying_key = 12;
   // proving key used in sunrise-data
-  bytes zkp_proving_key = 12;
+  bytes zkp_proving_key = 13;
   // min_shard_count used in sunrise-data
-  uint64 min_shard_count = 13;
+  uint64 min_shard_count = 14;
   // max_shard_count used in sunrise-data
-  uint64 max_shard_count = 14;
+  uint64 max_shard_count = 15;
   // max_shard_size used in sunrise-data
-  uint64 max_shard_size = 15;
+  uint64 max_shard_size = 16;
 }

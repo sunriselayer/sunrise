@@ -28,6 +28,7 @@ func NewParams(
 	challengePeriod time.Duration,
 	proofPeriod time.Duration,
 	rejectedRemovalPeriod time.Duration,
+	verifiedRemovalPeriod time.Duration,
 	publishDataCollateral sdk.Coins,
 	submitInvalidityCollateral sdk.Coins,
 	zkpVerifyingKey []byte,
@@ -45,6 +46,7 @@ func NewParams(
 		ChallengePeriod:            challengePeriod,
 		ProofPeriod:                proofPeriod,
 		RejectedRemovalPeriod:      rejectedRemovalPeriod,
+		VerifiedRemovalPeriod:      verifiedRemovalPeriod,
 		PublishDataCollateral:      publishDataCollateral,
 		SubmitInvalidityCollateral: submitInvalidityCollateral,
 		ZkpVerifyingKey:            zkpVerifyingKey,
@@ -75,7 +77,8 @@ func DefaultParams() Params {
 		math.LegacyNewDecWithPrec(1, 3),  // 0.1% slash fraction
 		time.Minute*4,                    // challenge 4min,
 		time.Minute*10,                   // proof 10min
-		time.Hour*24,                     // remove 24h
+		time.Hour*24,                     // rejected remove 24h
+		time.Hour*72,                     // verified remove 72h
 		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(1_000_000_000))), // publish data collateral 1000RISE
 		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(100_000_000))),   // submit invalidity collateral 100RISE
 		verifyingKey,
