@@ -339,10 +339,11 @@ var xxx_messageInfo_MsgSubmitInvalidityResponse proto.InternalMessageInfo
 
 // MsgSubmitValidityProof
 type MsgSubmitValidityProof struct {
-	Sender      string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	MetadataUri string   `protobuf:"bytes,2,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
-	Indices     []int64  `protobuf:"varint,3,rep,packed,name=indices,proto3" json:"indices,omitempty"`
-	Proofs      [][]byte `protobuf:"bytes,4,rep,name=proofs,proto3" json:"proofs,omitempty"`
+	Sender           string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ValidatorAddress string   `protobuf:"bytes,2,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
+	MetadataUri      string   `protobuf:"bytes,3,opt,name=metadata_uri,json=metadataUri,proto3" json:"metadata_uri,omitempty"`
+	Indices          []int64  `protobuf:"varint,4,rep,packed,name=indices,proto3" json:"indices,omitempty"`
+	Proofs           [][]byte `protobuf:"bytes,5,rep,name=proofs,proto3" json:"proofs,omitempty"`
 }
 
 func (m *MsgSubmitValidityProof) Reset()         { *m = MsgSubmitValidityProof{} }
@@ -381,6 +382,13 @@ var xxx_messageInfo_MsgSubmitValidityProof proto.InternalMessageInfo
 func (m *MsgSubmitValidityProof) GetSender() string {
 	if m != nil {
 		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgSubmitValidityProof) GetValidatorAddress() string {
+	if m != nil {
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -443,6 +451,178 @@ func (m *MsgSubmitValidityProofResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitValidityProofResponse proto.InternalMessageInfo
 
+// MsgSetProofDeputy
+type MsgSetProofDeputy struct {
+	Sender        string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	DeputyAddress string `protobuf:"bytes,2,opt,name=deputy_address,json=deputyAddress,proto3" json:"deputy_address,omitempty"`
+}
+
+func (m *MsgSetProofDeputy) Reset()         { *m = MsgSetProofDeputy{} }
+func (m *MsgSetProofDeputy) String() string { return proto.CompactTextString(m) }
+func (*MsgSetProofDeputy) ProtoMessage()    {}
+func (*MsgSetProofDeputy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8776d5690e46d2ba, []int{8}
+}
+func (m *MsgSetProofDeputy) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetProofDeputy.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetProofDeputy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetProofDeputy.Merge(m, src)
+}
+func (m *MsgSetProofDeputy) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetProofDeputy) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetProofDeputy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetProofDeputy proto.InternalMessageInfo
+
+func (m *MsgSetProofDeputy) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgSetProofDeputy) GetDeputyAddress() string {
+	if m != nil {
+		return m.DeputyAddress
+	}
+	return ""
+}
+
+// MsgSetProofDeputyResponse
+type MsgSetProofDeputyResponse struct {
+}
+
+func (m *MsgSetProofDeputyResponse) Reset()         { *m = MsgSetProofDeputyResponse{} }
+func (m *MsgSetProofDeputyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSetProofDeputyResponse) ProtoMessage()    {}
+func (*MsgSetProofDeputyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8776d5690e46d2ba, []int{9}
+}
+func (m *MsgSetProofDeputyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetProofDeputyResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetProofDeputyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetProofDeputyResponse.Merge(m, src)
+}
+func (m *MsgSetProofDeputyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetProofDeputyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetProofDeputyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetProofDeputyResponse proto.InternalMessageInfo
+
+// MsgDeleteProofDeputy
+type MsgDeleteProofDeputy struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+}
+
+func (m *MsgDeleteProofDeputy) Reset()         { *m = MsgDeleteProofDeputy{} }
+func (m *MsgDeleteProofDeputy) String() string { return proto.CompactTextString(m) }
+func (*MsgDeleteProofDeputy) ProtoMessage()    {}
+func (*MsgDeleteProofDeputy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8776d5690e46d2ba, []int{10}
+}
+func (m *MsgDeleteProofDeputy) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeleteProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeleteProofDeputy.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeleteProofDeputy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeleteProofDeputy.Merge(m, src)
+}
+func (m *MsgDeleteProofDeputy) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeleteProofDeputy) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeleteProofDeputy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeleteProofDeputy proto.InternalMessageInfo
+
+func (m *MsgDeleteProofDeputy) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+// MsgDeleteProofDeputyResponse
+type MsgDeleteProofDeputyResponse struct {
+}
+
+func (m *MsgDeleteProofDeputyResponse) Reset()         { *m = MsgDeleteProofDeputyResponse{} }
+func (m *MsgDeleteProofDeputyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgDeleteProofDeputyResponse) ProtoMessage()    {}
+func (*MsgDeleteProofDeputyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8776d5690e46d2ba, []int{11}
+}
+func (m *MsgDeleteProofDeputyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeleteProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeleteProofDeputyResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeleteProofDeputyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeleteProofDeputyResponse.Merge(m, src)
+}
+func (m *MsgDeleteProofDeputyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeleteProofDeputyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeleteProofDeputyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeleteProofDeputyResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.da.v1.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.da.v1.MsgUpdateParamsResponse")
@@ -452,52 +632,65 @@ func init() {
 	proto.RegisterType((*MsgSubmitInvalidityResponse)(nil), "sunrise.da.v1.MsgSubmitInvalidityResponse")
 	proto.RegisterType((*MsgSubmitValidityProof)(nil), "sunrise.da.v1.MsgSubmitValidityProof")
 	proto.RegisterType((*MsgSubmitValidityProofResponse)(nil), "sunrise.da.v1.MsgSubmitValidityProofResponse")
+	proto.RegisterType((*MsgSetProofDeputy)(nil), "sunrise.da.v1.MsgSetProofDeputy")
+	proto.RegisterType((*MsgSetProofDeputyResponse)(nil), "sunrise.da.v1.MsgSetProofDeputyResponse")
+	proto.RegisterType((*MsgDeleteProofDeputy)(nil), "sunrise.da.v1.MsgDeleteProofDeputy")
+	proto.RegisterType((*MsgDeleteProofDeputyResponse)(nil), "sunrise.da.v1.MsgDeleteProofDeputyResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/da/v1/tx.proto", fileDescriptor_8776d5690e46d2ba) }
 
 var fileDescriptor_8776d5690e46d2ba = []byte{
-	// 638 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x54, 0xcf, 0x4f, 0xd4, 0x40,
-	0x14, 0xde, 0x5a, 0x58, 0xb3, 0xb3, 0x88, 0x30, 0x20, 0x94, 0x2a, 0x75, 0xdd, 0x04, 0xb3, 0xd9,
-	0x48, 0x2b, 0x98, 0x18, 0xc3, 0x4d, 0xe4, 0x20, 0x87, 0x4d, 0x48, 0x37, 0x70, 0xf0, 0xb2, 0x99,
-	0xdd, 0x0e, 0xed, 0xc4, 0x6d, 0xa7, 0x99, 0x99, 0x12, 0xb8, 0x19, 0x8f, 0x9c, 0xf4, 0xbf, 0xf0,
-	0xe0, 0x81, 0x03, 0x7f, 0x04, 0x47, 0xe2, 0xc9, 0x93, 0x31, 0x70, 0xe0, 0x7f, 0xf0, 0x64, 0x3a,
-	0x9d, 0x2e, 0x74, 0x59, 0xc1, 0x8b, 0x5e, 0x9a, 0xbe, 0xef, 0xfb, 0xde, 0x7b, 0xdf, 0x9b, 0x5f,
-	0x60, 0x8e, 0x27, 0x11, 0x23, 0x1c, 0x3b, 0x1e, 0x72, 0xf6, 0x56, 0x1c, 0xb1, 0x6f, 0xc7, 0x8c,
-	0x0a, 0x0a, 0xef, 0x29, 0xdc, 0xf6, 0x90, 0xbd, 0xb7, 0x62, 0x4e, 0xa3, 0x90, 0x44, 0xd4, 0x91,
-	0xdf, 0x4c, 0x61, 0xce, 0xf7, 0x28, 0x0f, 0x29, 0x77, 0x42, 0xee, 0xa7, 0x99, 0x21, 0xf7, 0x15,
-	0xb1, 0x90, 0x11, 0x1d, 0x19, 0x39, 0x59, 0xa0, 0xa8, 0x59, 0x9f, 0xfa, 0x34, 0xc3, 0xd3, 0x3f,
-	0x85, 0x9a, 0x45, 0x0f, 0x31, 0x62, 0x28, 0x54, 0x19, 0xf5, 0x63, 0x0d, 0xdc, 0x6f, 0x71, 0x7f,
-	0x3b, 0xf6, 0x90, 0xc0, 0x5b, 0x92, 0x81, 0x2f, 0x41, 0x05, 0x25, 0x22, 0xa0, 0x8c, 0x88, 0x03,
-	0x43, 0xab, 0x69, 0x8d, 0xca, 0xba, 0xf1, 0xed, 0x78, 0x79, 0x56, 0xb5, 0x7a, 0xed, 0x79, 0x0c,
-	0x73, 0xde, 0x16, 0x8c, 0x44, 0xbe, 0x7b, 0x29, 0x85, 0xaf, 0x40, 0x39, 0xab, 0x6d, 0xdc, 0xa9,
-	0x69, 0x8d, 0xea, 0xea, 0x03, 0xbb, 0x30, 0xa4, 0x9d, 0x95, 0x5f, 0xaf, 0x9c, 0xfc, 0x78, 0x5c,
-	0xfa, 0x72, 0x71, 0xd4, 0xd4, 0x5c, 0xa5, 0x5f, 0x73, 0x3e, 0x5e, 0x1c, 0x35, 0x2f, 0x2b, 0x1d,
-	0x5e, 0x1c, 0x35, 0x1f, 0xe5, 0xa6, 0xf7, 0x53, 0xdb, 0x43, 0x16, 0xeb, 0x0b, 0x60, 0x7e, 0x08,
-	0x72, 0x31, 0x8f, 0x69, 0xc4, 0x71, 0xfd, 0x97, 0x06, 0x26, 0x5b, 0xdc, 0xdf, 0x4a, 0xba, 0x7d,
-	0xc2, 0x83, 0x0d, 0x24, 0x10, 0x7c, 0x0e, 0xca, 0x1c, 0x47, 0x1e, 0x66, 0xb7, 0x4e, 0xa3, 0x74,
-	0xf0, 0x09, 0x98, 0x08, 0xb1, 0x40, 0x1e, 0x12, 0xa8, 0x93, 0x30, 0x22, 0x07, 0xaa, 0xb8, 0xd5,
-	0x1c, 0xdb, 0x66, 0x04, 0x3e, 0x03, 0x30, 0x46, 0xa9, 0xdb, 0x0e, 0x0f, 0x10, 0xf3, 0x3a, 0x3d,
-	0x9a, 0x44, 0xc2, 0xd0, 0x6b, 0x5a, 0x63, 0xcc, 0x9d, 0xca, 0x98, 0x76, 0x4a, 0xbc, 0x49, 0x71,
-	0x68, 0x83, 0x99, 0x4c, 0xe6, 0xd1, 0xa4, 0xdb, 0xc7, 0x9d, 0x00, 0xf1, 0x00, 0x73, 0x63, 0xac,
-	0xa6, 0x37, 0x26, 0xdc, 0x69, 0x49, 0x6d, 0x48, 0xe6, 0xad, 0x24, 0x60, 0x03, 0x4c, 0xc9, 0xe6,
-	0x9c, 0x26, 0xac, 0x87, 0x3b, 0x24, 0xda, 0xa5, 0xc6, 0xb8, 0x34, 0x31, 0x99, 0xe2, 0x6d, 0x09,
-	0x6f, 0x46, 0xbb, 0x74, 0xad, 0x9a, 0xae, 0x9d, 0xf2, 0x5d, 0x37, 0xc0, 0x5c, 0x71, 0xf6, 0xc1,
-	0xb2, 0x7c, 0xd6, 0xc0, 0x4c, 0x8b, 0xfb, 0xed, 0xa4, 0x1b, 0x12, 0xb1, 0x19, 0xed, 0xa1, 0x3e,
-	0xf1, 0xd2, 0x4d, 0xfb, 0x27, 0x6b, 0x63, 0x80, 0xbb, 0x24, 0xf2, 0x48, 0x0f, 0x73, 0x43, 0xaf,
-	0xe9, 0x0d, 0xdd, 0xcd, 0xc3, 0xa2, 0xdb, 0x45, 0xf0, 0x70, 0x84, 0xa5, 0x81, 0xe5, 0xaf, 0x9a,
-	0x9c, 0x26, 0xe3, 0x77, 0x14, 0xbb, 0xc5, 0x28, 0xdd, 0xfd, 0xcf, 0xae, 0xe1, 0x1c, 0x28, 0xc7,
-	0x69, 0xdf, 0x7c, 0xc3, 0x54, 0x54, 0x9c, 0xa6, 0x06, 0xac, 0xd1, 0x6e, 0xf3, 0x81, 0x56, 0x0f,
-	0x75, 0xa0, 0xb7, 0xb8, 0x0f, 0x77, 0xc0, 0x44, 0xe1, 0xc2, 0x59, 0x43, 0x17, 0x65, 0xe8, 0x68,
-	0x9b, 0x4f, 0x6f, 0xe6, 0xf3, 0xfa, 0xb0, 0x0d, 0xaa, 0x57, 0x8f, 0xfd, 0xe2, 0xf5, 0xb4, 0x2b,
-	0xb4, 0xb9, 0x74, 0x23, 0x3d, 0x28, 0xda, 0x05, 0x53, 0xd7, 0x0e, 0x4d, 0xfd, 0x7a, 0xea, 0xb0,
-	0xc6, 0x6c, 0xde, 0xae, 0x19, 0xf4, 0x78, 0x0f, 0x66, 0x46, 0xed, 0xf2, 0xd2, 0x9f, 0x4a, 0x14,
-	0x64, 0xe6, 0xf2, 0x5f, 0xc9, 0xf2, 0x66, 0xe6, 0xf8, 0x87, 0xf4, 0xed, 0x59, 0xdf, 0x38, 0x39,
-	0xb3, 0xb4, 0xd3, 0x33, 0x4b, 0xfb, 0x79, 0x66, 0x69, 0x9f, 0xce, 0xad, 0xd2, 0xe9, 0xb9, 0x55,
-	0xfa, 0x7e, 0x6e, 0x95, 0xde, 0x35, 0x7d, 0x22, 0x82, 0xa4, 0x6b, 0xf7, 0x68, 0xe8, 0xa8, 0xca,
-	0x7d, 0x74, 0x80, 0x99, 0x53, 0x78, 0x92, 0xc4, 0x41, 0x8c, 0x79, 0xb7, 0x2c, 0x9f, 0xd1, 0x17,
-	0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0xf5, 0xc5, 0x59, 0x45, 0xe8, 0x05, 0x00, 0x00,
+	// 776 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0x4d, 0x4f, 0xdb, 0x58,
+	0x14, 0x8d, 0x27, 0x21, 0xa3, 0xdc, 0x40, 0x26, 0x31, 0x0c, 0x18, 0x03, 0x9e, 0x90, 0x11, 0xa3,
+	0x28, 0x33, 0xc4, 0x03, 0x23, 0x8d, 0x46, 0x6c, 0x46, 0x4d, 0xb3, 0x28, 0x8b, 0x54, 0x28, 0x11,
+	0x2c, 0xaa, 0x4a, 0xd1, 0x4b, 0xfc, 0x70, 0xac, 0xc6, 0x7e, 0x96, 0xdf, 0x73, 0x04, 0xbb, 0xaa,
+	0xcb, 0xae, 0x5a, 0xf5, 0x4f, 0x74, 0xc9, 0x82, 0x1f, 0xc1, 0xae, 0x88, 0x55, 0x57, 0x55, 0x05,
+	0x0b, 0xfe, 0x43, 0xd5, 0x45, 0xe5, 0x67, 0xc7, 0x60, 0x3b, 0x7c, 0x88, 0xaa, 0x9b, 0x28, 0xef,
+	0x9e, 0x73, 0xcf, 0x3d, 0xf7, 0xfa, 0x7d, 0xc0, 0x3c, 0x75, 0x2d, 0xc7, 0xa0, 0x58, 0xd5, 0x90,
+	0x3a, 0xda, 0x50, 0xd9, 0x41, 0xdd, 0x76, 0x08, 0x23, 0xe2, 0x4c, 0x10, 0xaf, 0x6b, 0xa8, 0x3e,
+	0xda, 0x90, 0x4b, 0xc8, 0x34, 0x2c, 0xa2, 0xf2, 0x5f, 0x9f, 0x21, 0x2f, 0xf4, 0x09, 0x35, 0x09,
+	0x55, 0x4d, 0xaa, 0x7b, 0x99, 0x26, 0xd5, 0x03, 0x60, 0xd1, 0x07, 0xba, 0x7c, 0xa5, 0xfa, 0x8b,
+	0x00, 0x9a, 0xd3, 0x89, 0x4e, 0xfc, 0xb8, 0xf7, 0x2f, 0x88, 0xca, 0x51, 0x0f, 0x36, 0x72, 0x90,
+	0x19, 0x64, 0x54, 0x8e, 0x05, 0xf8, 0xa5, 0x45, 0xf5, 0x5d, 0x5b, 0x43, 0x0c, 0xef, 0x70, 0x44,
+	0xfc, 0x17, 0x72, 0xc8, 0x65, 0x03, 0xe2, 0x18, 0xec, 0x50, 0x12, 0xca, 0x42, 0x35, 0xd7, 0x90,
+	0xce, 0x8e, 0xd7, 0xe7, 0x82, 0x52, 0x8f, 0x34, 0xcd, 0xc1, 0x94, 0x76, 0x98, 0x63, 0x58, 0x7a,
+	0xfb, 0x8a, 0x2a, 0xfe, 0x07, 0x59, 0x5f, 0x5b, 0xfa, 0xa9, 0x2c, 0x54, 0xf3, 0x9b, 0xbf, 0xd6,
+	0x23, 0x4d, 0xd6, 0x7d, 0xf9, 0x46, 0xee, 0xe4, 0xd3, 0x6f, 0xa9, 0xf7, 0x97, 0x47, 0x35, 0xa1,
+	0x1d, 0xf0, 0xb7, 0xd4, 0x57, 0x97, 0x47, 0xb5, 0x2b, 0xa5, 0xd7, 0x97, 0x47, 0xb5, 0xe5, 0xb1,
+	0xe9, 0x03, 0xcf, 0x76, 0xcc, 0x62, 0x65, 0x11, 0x16, 0x62, 0xa1, 0x36, 0xa6, 0x36, 0xb1, 0x28,
+	0xae, 0x7c, 0x11, 0xa0, 0xd0, 0xa2, 0xfa, 0x8e, 0xdb, 0x1b, 0x1a, 0x74, 0xd0, 0x44, 0x0c, 0x89,
+	0x7f, 0x43, 0x96, 0x62, 0x4b, 0xc3, 0xce, 0x9d, 0xdd, 0x04, 0x3c, 0x71, 0x15, 0xa6, 0x4d, 0xcc,
+	0x90, 0x86, 0x18, 0xea, 0xba, 0x8e, 0xc1, 0x1b, 0xca, 0xb5, 0xf3, 0xe3, 0xd8, 0xae, 0x63, 0x88,
+	0x7f, 0x81, 0x68, 0x23, 0xcf, 0x6d, 0x97, 0x0e, 0x90, 0xa3, 0x75, 0xfb, 0xc4, 0xb5, 0x98, 0x94,
+	0x2e, 0x0b, 0xd5, 0x4c, 0xbb, 0xe8, 0x23, 0x1d, 0x0f, 0x78, 0xec, 0xc5, 0xc5, 0x3a, 0xcc, 0xfa,
+	0x34, 0x8d, 0xb8, 0xbd, 0x21, 0xee, 0x0e, 0x10, 0x1d, 0x60, 0x2a, 0x65, 0xca, 0xe9, 0xea, 0x74,
+	0xbb, 0xc4, 0xa1, 0x26, 0x47, 0x9e, 0x70, 0x40, 0xac, 0x42, 0x91, 0x17, 0xa7, 0xc4, 0x75, 0xfa,
+	0xb8, 0x6b, 0x58, 0xfb, 0x44, 0x9a, 0xe2, 0x26, 0x0a, 0x5e, 0xbc, 0xc3, 0xc3, 0xdb, 0xd6, 0x3e,
+	0xd9, 0xca, 0x7b, 0xb3, 0x0b, 0x7c, 0x57, 0x24, 0x98, 0x8f, 0xf6, 0x1e, 0x8e, 0xe5, 0xad, 0x00,
+	0xb3, 0x2d, 0xaa, 0x77, 0xdc, 0x9e, 0x69, 0xb0, 0x6d, 0x6b, 0x84, 0x86, 0x86, 0xe6, 0x7d, 0xb4,
+	0x1f, 0x32, 0x1b, 0x09, 0x7e, 0x36, 0x2c, 0xcd, 0xe8, 0x63, 0x2a, 0xa5, 0xcb, 0xe9, 0x6a, 0xba,
+	0x3d, 0x5e, 0x46, 0xdd, 0xae, 0xc0, 0xd2, 0x04, 0x4b, 0xa1, 0xe5, 0xaf, 0x02, 0xef, 0xc6, 0xc7,
+	0xf7, 0x02, 0x74, 0xc7, 0x21, 0x64, 0xff, 0x01, 0xae, 0x9f, 0x42, 0x89, 0x17, 0x40, 0x8c, 0x38,
+	0x5d, 0xe4, 0x53, 0x7c, 0xeb, 0x8d, 0xd5, 0xb3, 0xe3, 0xf5, 0x95, 0x20, 0x79, 0x6f, 0xcc, 0x89,
+	0xaa, 0x14, 0x47, 0xb1, 0x78, 0x62, 0x0a, 0xe9, 0x5b, 0xa7, 0x90, 0x89, 0x4c, 0x41, 0x9c, 0x87,
+	0xac, 0xed, 0xf5, 0x41, 0xa5, 0x29, 0xbe, 0x01, 0x82, 0x55, 0x74, 0x3a, 0x65, 0x50, 0x26, 0x77,
+	0x1f, 0x0e, 0xe8, 0x9d, 0x00, 0x25, 0x8f, 0x82, 0x19, 0x8f, 0x37, 0xb1, 0xed, 0x3e, 0xe8, 0x8b,
+	0xfe, 0x0f, 0x05, 0x8d, 0xe7, 0xc6, 0x06, 0x73, 0x73, 0xe6, 0x8c, 0xcf, 0x0f, 0x82, 0x51, 0xdf,
+	0x4b, 0xb0, 0x98, 0x30, 0x15, 0x5a, 0xde, 0x85, 0xb9, 0x16, 0xd5, 0x9b, 0x78, 0x88, 0x19, 0xfe,
+	0x2e, 0xd3, 0xd1, 0x9a, 0x0a, 0x2c, 0x4f, 0x92, 0x1d, 0x97, 0xdd, 0xfc, 0x90, 0x81, 0x74, 0x8b,
+	0xea, 0xe2, 0x1e, 0x4c, 0x47, 0xae, 0x3a, 0x25, 0x76, 0x45, 0xc5, 0x2e, 0x15, 0xf9, 0x8f, 0xdb,
+	0xf1, 0xb1, 0xbe, 0xd8, 0x81, 0xfc, 0xf5, 0x0b, 0x67, 0x25, 0x99, 0x76, 0x0d, 0x96, 0xd7, 0x6e,
+	0x85, 0x43, 0xd1, 0x1e, 0x14, 0x13, 0xc7, 0xb5, 0x92, 0x4c, 0x8d, 0x73, 0xe4, 0xda, 0xdd, 0x9c,
+	0xb0, 0xc6, 0x0b, 0x98, 0x9d, 0x74, 0xbe, 0xd6, 0x6e, 0x92, 0x88, 0xd0, 0xe4, 0xf5, 0x7b, 0xd1,
+	0xc2, 0x62, 0xcf, 0xa1, 0x10, 0xdb, 0xab, 0xe5, 0x09, 0x02, 0x11, 0x86, 0x5c, 0xbd, 0x8b, 0x11,
+	0xaa, 0x63, 0x28, 0x25, 0xf7, 0xd5, 0xef, 0xc9, 0xf4, 0x04, 0x49, 0xfe, 0xf3, 0x1e, 0xa4, 0x71,
+	0x19, 0x79, 0xea, 0xa5, 0xf7, 0x74, 0x35, 0x9a, 0x27, 0xe7, 0x8a, 0x70, 0x7a, 0xae, 0x08, 0x9f,
+	0xcf, 0x15, 0xe1, 0xcd, 0x85, 0x92, 0x3a, 0xbd, 0x50, 0x52, 0x1f, 0x2f, 0x94, 0xd4, 0xb3, 0x9a,
+	0x6e, 0xb0, 0x81, 0xdb, 0xab, 0xf7, 0x89, 0xa9, 0x06, 0xba, 0x43, 0x74, 0x88, 0x1d, 0x35, 0xf2,
+	0xa2, 0xb1, 0x43, 0x1b, 0xd3, 0x5e, 0x96, 0xbf, 0xc2, 0xff, 0x7c, 0x0b, 0x00, 0x00, 0xff, 0xff,
+	0xf8, 0xcd, 0x7c, 0x44, 0x27, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -521,6 +714,10 @@ type MsgClient interface {
 	SubmitInvalidity(ctx context.Context, in *MsgSubmitInvalidity, opts ...grpc.CallOption) (*MsgSubmitInvalidityResponse, error)
 	// SubmitValidityProof
 	SubmitValidityProof(ctx context.Context, in *MsgSubmitValidityProof, opts ...grpc.CallOption) (*MsgSubmitValidityProofResponse, error)
+	// SetProofDeputy
+	SetProofDeputy(ctx context.Context, in *MsgSetProofDeputy, opts ...grpc.CallOption) (*MsgSetProofDeputyResponse, error)
+	// DeleteProofDeputy
+	DeleteProofDeputy(ctx context.Context, in *MsgDeleteProofDeputy, opts ...grpc.CallOption) (*MsgDeleteProofDeputyResponse, error)
 }
 
 type msgClient struct {
@@ -567,6 +764,24 @@ func (c *msgClient) SubmitValidityProof(ctx context.Context, in *MsgSubmitValidi
 	return out, nil
 }
 
+func (c *msgClient) SetProofDeputy(ctx context.Context, in *MsgSetProofDeputy, opts ...grpc.CallOption) (*MsgSetProofDeputyResponse, error) {
+	out := new(MsgSetProofDeputyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/SetProofDeputy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeleteProofDeputy(ctx context.Context, in *MsgDeleteProofDeputy, opts ...grpc.CallOption) (*MsgDeleteProofDeputyResponse, error) {
+	out := new(MsgDeleteProofDeputyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/DeleteProofDeputy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
@@ -578,6 +793,10 @@ type MsgServer interface {
 	SubmitInvalidity(context.Context, *MsgSubmitInvalidity) (*MsgSubmitInvalidityResponse, error)
 	// SubmitValidityProof
 	SubmitValidityProof(context.Context, *MsgSubmitValidityProof) (*MsgSubmitValidityProofResponse, error)
+	// SetProofDeputy
+	SetProofDeputy(context.Context, *MsgSetProofDeputy) (*MsgSetProofDeputyResponse, error)
+	// DeleteProofDeputy
+	DeleteProofDeputy(context.Context, *MsgDeleteProofDeputy) (*MsgDeleteProofDeputyResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -595,6 +814,12 @@ func (*UnimplementedMsgServer) SubmitInvalidity(ctx context.Context, req *MsgSub
 }
 func (*UnimplementedMsgServer) SubmitValidityProof(ctx context.Context, req *MsgSubmitValidityProof) (*MsgSubmitValidityProofResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitValidityProof not implemented")
+}
+func (*UnimplementedMsgServer) SetProofDeputy(ctx context.Context, req *MsgSetProofDeputy) (*MsgSetProofDeputyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetProofDeputy not implemented")
+}
+func (*UnimplementedMsgServer) DeleteProofDeputy(ctx context.Context, req *MsgDeleteProofDeputy) (*MsgDeleteProofDeputyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProofDeputy not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -673,6 +898,42 @@ func _Msg_SubmitValidityProof_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetProofDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetProofDeputy)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetProofDeputy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/SetProofDeputy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetProofDeputy(ctx, req.(*MsgSetProofDeputy))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeleteProofDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeleteProofDeputy)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeleteProofDeputy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/DeleteProofDeputy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeleteProofDeputy(ctx, req.(*MsgDeleteProofDeputy))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.da.v1.Msg",
@@ -693,6 +954,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitValidityProof",
 			Handler:    _Msg_SubmitValidityProof_Handler,
+		},
+		{
+			MethodName: "SetProofDeputy",
+			Handler:    _Msg_SetProofDeputy_Handler,
+		},
+		{
+			MethodName: "DeleteProofDeputy",
+			Handler:    _Msg_DeleteProofDeputy_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -948,7 +1217,7 @@ func (m *MsgSubmitValidityProof) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 			copy(dAtA[i:], m.Proofs[iNdEx])
 			i = encodeVarintTx(dAtA, i, uint64(len(m.Proofs[iNdEx])))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x2a
 		}
 	}
 	if len(m.Indices) > 0 {
@@ -968,12 +1237,19 @@ func (m *MsgSubmitValidityProof) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		copy(dAtA[i:], dAtA5[:j4])
 		i = encodeVarintTx(dAtA, i, uint64(j4))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x22
 	}
 	if len(m.MetadataUri) > 0 {
 		i -= len(m.MetadataUri)
 		copy(dAtA[i:], m.MetadataUri)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.MetadataUri)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1003,6 +1279,119 @@ func (m *MsgSubmitValidityProofResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *MsgSubmitValidityProofResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSetProofDeputy) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetProofDeputy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DeputyAddress) > 0 {
+		i -= len(m.DeputyAddress)
+		copy(dAtA[i:], m.DeputyAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.DeputyAddress)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSetProofDeputyResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetProofDeputyResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeleteProofDeputy) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeleteProofDeputy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeleteProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeleteProofDeputyResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeleteProofDeputyResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeleteProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1127,6 +1516,10 @@ func (m *MsgSubmitValidityProof) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	l = len(m.ValidatorAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
 	l = len(m.MetadataUri)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1148,6 +1541,54 @@ func (m *MsgSubmitValidityProof) Size() (n int) {
 }
 
 func (m *MsgSubmitValidityProofResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSetProofDeputy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.DeputyAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgSetProofDeputyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgDeleteProofDeputy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgDeleteProofDeputyResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1877,6 +2318,38 @@ func (m *MsgSubmitValidityProof) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MetadataUri", wireType)
 			}
 			var stringLen uint64
@@ -1907,7 +2380,7 @@ func (m *MsgSubmitValidityProof) Unmarshal(dAtA []byte) error {
 			}
 			m.MetadataUri = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType == 0 {
 				var v int64
 				for shift := uint(0); ; shift += 7 {
@@ -1983,7 +2456,7 @@ func (m *MsgSubmitValidityProof) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field Indices", wireType)
 			}
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Proofs", wireType)
 			}
@@ -2063,6 +2536,302 @@ func (m *MsgSubmitValidityProofResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgSubmitValidityProofResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetProofDeputy) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetProofDeputy: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetProofDeputy: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeputyAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeputyAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetProofDeputyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetProofDeputyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetProofDeputyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeleteProofDeputy) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeleteProofDeputy: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeleteProofDeputy: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeleteProofDeputyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeleteProofDeputyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeleteProofDeputyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
