@@ -53,7 +53,6 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 			}
 
 			txs = append(txs, metadataUriBz)
-			h.keeper.DeletePublishedData(ctx, data)
 		}
 
 		defaultReq := *req

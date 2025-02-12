@@ -263,6 +263,20 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
+	// If VerifiedRemovalPeriod id positive and STATUS_VERIFIED is overtime, remove from store
+	if params.VerifiedRemovalPeriod > 0 {
+		verifiedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VERIFIED, sdkCtx.BlockTime().Add(-params.VerifiedRemovalPeriod).Unix())
+		if err != nil {
+			k.Logger.Error(err.Error())
+			return
+		}
+		for _, data := range verifiedData {
+			if data.Status == types.Status_STATUS_VERIFIED {
+				k.DeletePublishedData(sdkCtx, data)
+			}
+		}
+	}
+
 	// slash epoch moved from vote_extension
 	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
 		k.HandleSlashEpoch(sdkCtx)
