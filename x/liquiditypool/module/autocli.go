@@ -119,7 +119,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "ClaimRewards",
-					Use:       "claim-rewards <position_id>...",
+					Use:       "claim-rewards <position_id>,<position_id>...",
 					Short:     "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "position_ids"},

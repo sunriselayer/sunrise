@@ -34,6 +34,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Shows threshold number of proof",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "shard_count"}},
 				},
+				{
+					RpcMethod:      "ProofDeputy",
+					Use:            "proof-deputy <validator_address>",
+					Short:          "Shows proof deputy of the validator",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "validator_address"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -50,12 +56,26 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true,
 				},
 				{
-					RpcMethod: "SubmitInvalidity",
-					Skip:      true,
+					RpcMethod:      "SubmitInvalidity",
+					Use:            "submit-invalidity <metadata_uri> <index>,<index>...",
+					Short:          "Submit invalidity to the data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "indices"}},
 				},
 				{
 					RpcMethod: "SubmitValidityProof",
 					Skip:      true,
+				},
+				{
+					RpcMethod:      "RegisterProofDeputy",
+					Use:            "register-proof-deputy <deputy_address>",
+					Short:          "Register proof deputy",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "deputy_address"}},
+				},
+				{
+					RpcMethod:      "UnregisterProofDeputy",
+					Use:            "unregister-proof-deputy",
+					Short:          "Unregister proof deputy",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
