@@ -31,15 +31,16 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 	if err != nil {
 		return nil, err
 	}
-	deputy, found := k.GetProofDeputy(ctx, validator)
-	if !found {
-		return nil, types.ErrDeputyNotFound
-	}
-	if !bytes.Equal(deputy, sender) {
-		return nil, types.ErrInvalidDeputy
+	if !bytes.Equal(sender, validator) {
+		deputy, found := k.GetProofDeputy(ctx, validator)
+		if !found {
+			return nil, types.ErrDeputyNotFound
+		}
+		if !bytes.Equal(deputy, sender) {
+			return nil, types.ErrInvalidDeputy
+		}
 	}
 
-	// static validation
 	// check number of proofs <> indices
 	if len(msg.Indices) != len(msg.Proofs) {
 		return nil, types.ErrIndicesAndProofsMismatch
