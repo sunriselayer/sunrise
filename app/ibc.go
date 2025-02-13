@@ -4,10 +4,6 @@ import (
 	"cosmossdk.io/core/appmodule"
 	storetypes "cosmossdk.io/store/types"
 	govtypes "cosmossdk.io/x/gov/types"
-	govv1beta1 "cosmossdk.io/x/gov/types/v1beta1"
-	params "cosmossdk.io/x/params"
-	paramskeeper "cosmossdk.io/x/params/keeper"
-	paramstypes "cosmossdk.io/x/params/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -41,32 +37,18 @@ import (
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
-func (app *App) GetSubspace(moduleName string) paramstypes.Subspace {
-	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
-	return subspace
-}
-
 // registerIBCModules register IBC keepers and non dependency inject modules.
-func (app *App) registerIBCModules() {
+func (app *App) registerIBCModules() error {
 	// set up non depinject support modules store keys
 	if err := app.RegisterStores(
-		storetypes.NewKVStoreKey(paramstypes.StoreKey),
 		storetypes.NewKVStoreKey(ibcexported.StoreKey),
 		storetypes.NewKVStoreKey(ibctransfertypes.StoreKey),
 		storetypes.NewKVStoreKey(ibcfeetypes.StoreKey),
 		storetypes.NewKVStoreKey(icahosttypes.StoreKey),
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
-		storetypes.NewTransientStoreKey(paramstypes.TStoreKey),
 	); err != nil {
 		panic(err)
 	}
-
-	app.ParamsKeeper = paramskeeper.NewKeeper(
-		app.appCodec,
-		app.LegacyAmino(),
-		app.GetKey(paramstypes.StoreKey),
-		storetypes.NewTransientStoreKeys(paramstypes.TStoreKey)[paramstypes.TStoreKey],
-	)
 
 	// register the key tables for legacy param subspaces
 	keyTable := ibcclienttypes.ParamKeyTable()
@@ -76,67 +58,67 @@ func (app *App) registerIBCModules() {
 	app.ParamsKeeper.Subspace(icacontrollertypes.SubModuleName).WithKeyTable(icacontrollertypes.ParamKeyTable())
 	app.ParamsKeeper.Subspace(icahosttypes.SubModuleName).WithKeyTable(icahosttypes.ParamKeyTable())
 
+	govModuleAddr, _ := app.AuthKeeper.AddressCodec().BytesToString(authtypes.NewModuleAddress(govtypes.ModuleName))
+
 	// Create IBC keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		app.appCodec,
-		runtime.NewKVStoreService(app.GetKey(ibcexported.StoreKey)),
+		runtime.NewEnvironment(
+			runtime.NewKVStoreService(app.GetKey(ibcexported.StoreKey)), app.Logger().With(log.ModuleKey, "x/ibc"),
+			runtime.EnvWithMsgRouterService(app.MsgServiceRouter())),
 		app.GetSubspace(ibcexported.ModuleName),
 		app.UpgradeKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govModuleAddr,
 	)
 
-	// Register the proposal types
-	// Deprecated: Avoid adding new handlers, instead use the new proposal flow
-	// by granting the governance module the right to execute the message.
-	// See: https://docs.cosmos.network/main/modules/gov#proposal-messages
-	govRouter := govv1beta1.NewRouter()
-	govRouter.AddRoute(govtypes.RouterKey, govv1beta1.ProposalHandler)
-
 	app.IBCFeeKeeper = ibcfeekeeper.NewKeeper(
-		app.appCodec, runtime.NewKVStoreService(app.GetKey(ibcfeetypes.StoreKey)),
-		app.IBCKeeper.ChannelKeeper, // IBC middleware
+		app.appCodec,
+		runtime.NewEnvironment(
+			runtime.NewKVStoreService(app.GetKey(ibcfeetypes.StoreKey)), app.Logger().With(log.ModuleKey, "x/transfer"),
+			runtime.EnvWithMsgRouterService(app.MsgServiceRouter())),
+		app.IBCKeeper.ChannelKeeper, // may be replaced with IBC middleware
 		app.IBCKeeper.ChannelKeeper,
-		app.AuthKeeper, app.BankKeeper,
+		app.AuthKeeper,
+		app.BankKeeper,
 	)
 
 	// Create IBC transfer keeper
 	app.TransferKeeper = ibctransferkeeper.NewKeeper(
 		app.appCodec,
-		runtime.NewKVStoreService(app.GetKey(ibctransfertypes.StoreKey)),
+		runtime.NewEnvironment(
+			runtime.NewKVStoreService(app.GetKey(ibctransfertypes.StoreKey)), app.Logger().With(log.ModuleKey, "x/transfer"),
+			runtime.EnvWithMsgRouterService(app.MsgServiceRouter())),
 		app.GetSubspace(ibctransfertypes.ModuleName),
 		app.IBCFeeKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		app.AuthKeeper,
 		app.BankKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govModuleAddr,
 	)
 
 	// Create interchain account keepers
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
 		app.appCodec,
-		runtime.NewKVStoreService(app.GetKey(icahosttypes.StoreKey)),
+		runtime.NewEnvironment(
+			runtime.NewKVStoreService(app.GetKey(icahosttypes.StoreKey)), app.Logger().With(log.ModuleKey, "x/icacontroller"),
+			runtime.EnvWithMsgRouterService(app.MsgServiceRouter())),
 		app.GetSubspace(icahosttypes.SubModuleName),
-		app.IBCFeeKeeper, // use ics29 fee as ics4Wrapper in middleware stack
+		app.IBCKeeper.ChannelKeeper, // ICS4Wrapper
 		app.IBCKeeper.ChannelKeeper,
 		app.AuthKeeper,
-		app.MsgServiceRouter(),
-		app.GRPCQueryRouter(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govModuleAddr,
 	)
 
 	app.ICAControllerKeeper = icacontrollerkeeper.NewKeeper(
 		app.appCodec,
 		runtime.NewEnvironment(
-			runtime.NewKVStoreService(app.GetKey(icacontrollertypes.StoreKey)),
-			app.Logger().With(log.ModuleKey, "x/icacontroller"),
-			runtime.EnvWithMsgRouterService(app.MsgServiceRouter()),
-		),
+			runtime.NewKVStoreService(app.GetKey(icacontrollertypes.StoreKey)), app.Logger().With(log.ModuleKey, "x/icacontroller"),
+			runtime.EnvWithMsgRouterService(app.MsgServiceRouter())),
 		app.GetSubspace(icacontrollertypes.SubModuleName),
 		app.IBCFeeKeeper, // use ics29 fee as ics4Wrapper in middleware stack
 		app.IBCKeeper.ChannelKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govModuleAddr,
 	)
-	app.GovKeeper.SetLegacyRouter(govRouter)
 
 	// Create IBC modules with ibcfee middleware
 	// transferIBCModule := ibcfee.NewIBCMiddleware(ibctransfer.NewIBCModule(app.TransferKeeper), app.IBCFeeKeeper)
@@ -161,48 +143,41 @@ func (app *App) registerIBCModules() {
 
 	app.IBCKeeper.SetRouter(ibcRouter)
 
-	clientKeeper := app.IBCKeeper.ClientKeeper
 	storeProvider := app.IBCKeeper.ClientKeeper.GetStoreProvider()
-
 	tmLightClientModule := ibctm.NewLightClientModule(app.appCodec, storeProvider)
-	clientKeeper.AddRoute(ibctm.ModuleName, &tmLightClientModule)
-
-	smLightClientModule := solomachine.NewLightClientModule(app.appCodec, storeProvider)
-	clientKeeper.AddRoute(solomachine.ModuleName, &smLightClientModule)
+	soloLightClientModule := solomachine.NewLightClientModule(app.appCodec, storeProvider)
 
 	// register IBC modules
 	if err := app.RegisterModules(
-		params.NewAppModule(app.ParamsKeeper),
 		ibc.NewAppModule(app.appCodec, app.IBCKeeper),
 		ibctransfer.NewAppModule(app.appCodec, app.TransferKeeper),
 		ibcfee.NewAppModule(app.appCodec, app.IBCFeeKeeper),
 		icamodule.NewAppModule(app.appCodec, &app.ICAControllerKeeper, &app.ICAHostKeeper),
-		ibctm.AppModule{},
-		solomachine.AppModule{},
+		ibctm.NewAppModule(tmLightClientModule),
+		solomachine.NewAppModule(soloLightClientModule),
 	); err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 // Since the IBC modules don't support dependency injection, we need to
 // manually register the modules on the client side.
 // This needs to be removed after IBC supports App Wiring.
-func RegisterIBC(registry cdctypes.InterfaceRegistry, appCodec codec.Codec) map[string]appmodule.AppModule {
+func RegisterIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
 	modules := map[string]appmodule.AppModule{
-		paramstypes.ModuleName:      params.AppModule{},
-		ibcexported.ModuleName:      ibc.NewAppModule(appCodec, nil),
-		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(appCodec, ibctransferkeeper.Keeper{}),
-		ibcfeetypes.ModuleName:      ibcfee.NewAppModule(appCodec, ibcfeekeeper.Keeper{}),
-		icatypes.ModuleName:         icamodule.NewAppModule(appCodec, nil, nil),
-		ibctm.ModuleName:            ibctm.AppModule{},
-		solomachine.ModuleName:      solomachine.AppModule{},
+		ibcexported.ModuleName:      ibc.NewAppModule(cdc, &ibckeeper.Keeper{}),
+		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(cdc, ibctransferkeeper.Keeper{}),
+		ibcfeetypes.ModuleName:      ibcfee.NewAppModule(cdc, ibcfeekeeper.Keeper{}),
+		icatypes.ModuleName:         icamodule.NewAppModule(cdc, &icacontrollerkeeper.Keeper{}, &icahostkeeper.Keeper{}),
+		ibctm.ModuleName:            ibctm.NewAppModule(ibctm.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
+		solomachine.ModuleName:      solomachine.NewAppModule(solomachine.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 	}
 
-	for _, module := range modules {
-		if mod, ok := module.(interface {
-			RegisterInterfaces(registry cdctypes.InterfaceRegistry)
-		}); ok {
-			mod.RegisterInterfaces(registry)
+	for _, m := range modules {
+		if mr, ok := m.(appmodule.HasRegisterInterfaces); ok {
+			mr.RegisterInterfaces(registry)
 		}
 	}
 

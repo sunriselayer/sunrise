@@ -24,6 +24,8 @@ import (
 	groupkeeper "cosmossdk.io/x/group/keeper"
 	mintkeeper "cosmossdk.io/x/mint/keeper"
 	nftkeeper "cosmossdk.io/x/nft/keeper"
+	paramskeeper "cosmossdk.io/x/params/keeper"
+	paramstypes "cosmossdk.io/x/params/types"
 	_ "cosmossdk.io/x/protocolpool"
 	poolkeeper "cosmossdk.io/x/protocolpool/keeper"
 	slashingkeeper "cosmossdk.io/x/slashing/keeper"
@@ -48,7 +50,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	paramskeeper "cosmossdk.io/x/params/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/controller/keeper"
 	icahostkeeper "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/host/keeper"
 	ibcfeekeeper "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/keeper"
@@ -99,6 +100,8 @@ type App struct {
 	interfaceRegistry codectypes.InterfaceRegistry
 
 	// keepers
+	// only keepers required by the app are exposed
+	// the list of all modules is available in the app_config
 	AccountsKeeper        accounts.Keeper
 	AuthKeeper            authkeeper.AccountKeeper
 	BankKeeper            bankkeeper.Keeper
@@ -117,10 +120,10 @@ type App struct {
 	CircuitBreakerKeeper  circuitkeeper.Keeper
 	PoolKeeper            poolkeeper.Keeper
 	EpochsKeeper          *epochskeeper.Keeper
+	ParamsKeeper          paramskeeper.Keeper
 
-	// IBC
-	ParamsKeeper        paramskeeper.Keeper
-	IBCKeeper           *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+	// ibc keepers
+	IBCKeeper           *ibckeeper.Keeper
 	IBCFeeKeeper        ibcfeekeeper.Keeper
 	ICAControllerKeeper icacontrollerkeeper.Keeper
 	ICAHostKeeper       icahostkeeper.Keeper
@@ -220,6 +223,7 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.PoolKeeper,
 		&app.EpochsKeeper,
+		&app.ParamsKeeper,
 		&app.DaKeeper,
 		&app.TokenconverterKeeper,
 		&app.LiquiditypoolKeeper,
@@ -239,7 +243,9 @@ func New(
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
 	// Register legacy modules
-	app.registerIBCModules()
+	if err := app.registerIBCModules(); err != nil {
+		panic(err)
+	}
 
 	// <sunrise>
 	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
@@ -337,6 +343,12 @@ func New(
 	}
 
 	return app
+}
+
+// GetSubspace returns a param subspace for a given module name.
+func (app *App) GetSubspace(moduleName string) paramstypes.Subspace {
+	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
+	return subspace
 }
 
 // LegacyAmino returns App's amino codec.
