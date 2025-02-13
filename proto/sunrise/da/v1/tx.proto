@@ -22,10 +22,10 @@ service Msg {
   rpc SubmitInvalidity(MsgSubmitInvalidity) returns (MsgSubmitInvalidityResponse);
   // SubmitValidityProof
   rpc SubmitValidityProof(MsgSubmitValidityProof) returns (MsgSubmitValidityProofResponse);
-  // SetProofDeputy
-  rpc SetProofDeputy(MsgSetProofDeputy) returns (MsgSetProofDeputyResponse);
-  // DeleteProofDeputy
-  rpc DeleteProofDeputy(MsgDeleteProofDeputy) returns (MsgDeleteProofDeputyResponse);
+  // RegisterProofDeputy
+  rpc RegisterProofDeputy(MsgRegisterProofDeputy) returns (MsgRegisterProofDeputyResponse);
+  // UnregisterProofDeputy
+  rpc UnregisterProofDeputy(MsgUnregisterProofDeputy) returns (MsgUnregisterProofDeputyResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -89,21 +89,21 @@ message MsgSubmitValidityProof {
 // MsgSubmitValidityProofResponse
 message MsgSubmitValidityProofResponse {}
 
-// MsgSetProofDeputy
-message MsgSetProofDeputy {
+// MsgRegisterProofDeputy
+message MsgRegisterProofDeputy {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string deputy_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
-// MsgSetProofDeputyResponse
-message MsgSetProofDeputyResponse {}
+// MsgRegisterProofDeputyResponse
+message MsgRegisterProofDeputyResponse {}
 
-// MsgDeleteProofDeputy
-message MsgDeleteProofDeputy {
+// MsgUnregisterProofDeputy
+message MsgUnregisterProofDeputy {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
-// MsgDeleteProofDeputyResponse
-message MsgDeleteProofDeputyResponse {}
+// MsgUnregisterProofDeputyResponse
+message MsgUnregisterProofDeputyResponse {}

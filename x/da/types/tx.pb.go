@@ -451,24 +451,24 @@ func (m *MsgSubmitValidityProofResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubmitValidityProofResponse proto.InternalMessageInfo
 
-// MsgSetProofDeputy
-type MsgSetProofDeputy struct {
+// MsgRegisterProofDeputy
+type MsgRegisterProofDeputy struct {
 	Sender        string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	DeputyAddress string `protobuf:"bytes,2,opt,name=deputy_address,json=deputyAddress,proto3" json:"deputy_address,omitempty"`
 }
 
-func (m *MsgSetProofDeputy) Reset()         { *m = MsgSetProofDeputy{} }
-func (m *MsgSetProofDeputy) String() string { return proto.CompactTextString(m) }
-func (*MsgSetProofDeputy) ProtoMessage()    {}
-func (*MsgSetProofDeputy) Descriptor() ([]byte, []int) {
+func (m *MsgRegisterProofDeputy) Reset()         { *m = MsgRegisterProofDeputy{} }
+func (m *MsgRegisterProofDeputy) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterProofDeputy) ProtoMessage()    {}
+func (*MsgRegisterProofDeputy) Descriptor() ([]byte, []int) {
 	return fileDescriptor_8776d5690e46d2ba, []int{8}
 }
-func (m *MsgSetProofDeputy) XXX_Unmarshal(b []byte) error {
+func (m *MsgRegisterProofDeputy) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSetProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRegisterProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSetProofDeputy.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRegisterProofDeputy.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -478,48 +478,48 @@ func (m *MsgSetProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *MsgSetProofDeputy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSetProofDeputy.Merge(m, src)
+func (m *MsgRegisterProofDeputy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterProofDeputy.Merge(m, src)
 }
-func (m *MsgSetProofDeputy) XXX_Size() int {
+func (m *MsgRegisterProofDeputy) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSetProofDeputy) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSetProofDeputy.DiscardUnknown(m)
+func (m *MsgRegisterProofDeputy) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterProofDeputy.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSetProofDeputy proto.InternalMessageInfo
+var xxx_messageInfo_MsgRegisterProofDeputy proto.InternalMessageInfo
 
-func (m *MsgSetProofDeputy) GetSender() string {
+func (m *MsgRegisterProofDeputy) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgSetProofDeputy) GetDeputyAddress() string {
+func (m *MsgRegisterProofDeputy) GetDeputyAddress() string {
 	if m != nil {
 		return m.DeputyAddress
 	}
 	return ""
 }
 
-// MsgSetProofDeputyResponse
-type MsgSetProofDeputyResponse struct {
+// MsgRegisterProofDeputyResponse
+type MsgRegisterProofDeputyResponse struct {
 }
 
-func (m *MsgSetProofDeputyResponse) Reset()         { *m = MsgSetProofDeputyResponse{} }
-func (m *MsgSetProofDeputyResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSetProofDeputyResponse) ProtoMessage()    {}
-func (*MsgSetProofDeputyResponse) Descriptor() ([]byte, []int) {
+func (m *MsgRegisterProofDeputyResponse) Reset()         { *m = MsgRegisterProofDeputyResponse{} }
+func (m *MsgRegisterProofDeputyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterProofDeputyResponse) ProtoMessage()    {}
+func (*MsgRegisterProofDeputyResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_8776d5690e46d2ba, []int{9}
 }
-func (m *MsgSetProofDeputyResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgRegisterProofDeputyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgSetProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRegisterProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgSetProofDeputyResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRegisterProofDeputyResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -529,35 +529,35 @@ func (m *MsgSetProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([
 		return b[:n], nil
 	}
 }
-func (m *MsgSetProofDeputyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSetProofDeputyResponse.Merge(m, src)
+func (m *MsgRegisterProofDeputyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterProofDeputyResponse.Merge(m, src)
 }
-func (m *MsgSetProofDeputyResponse) XXX_Size() int {
+func (m *MsgRegisterProofDeputyResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgSetProofDeputyResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSetProofDeputyResponse.DiscardUnknown(m)
+func (m *MsgRegisterProofDeputyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterProofDeputyResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgSetProofDeputyResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgRegisterProofDeputyResponse proto.InternalMessageInfo
 
-// MsgDeleteProofDeputy
-type MsgDeleteProofDeputy struct {
+// MsgUnregisterProofDeputy
+type MsgUnregisterProofDeputy struct {
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 }
 
-func (m *MsgDeleteProofDeputy) Reset()         { *m = MsgDeleteProofDeputy{} }
-func (m *MsgDeleteProofDeputy) String() string { return proto.CompactTextString(m) }
-func (*MsgDeleteProofDeputy) ProtoMessage()    {}
-func (*MsgDeleteProofDeputy) Descriptor() ([]byte, []int) {
+func (m *MsgUnregisterProofDeputy) Reset()         { *m = MsgUnregisterProofDeputy{} }
+func (m *MsgUnregisterProofDeputy) String() string { return proto.CompactTextString(m) }
+func (*MsgUnregisterProofDeputy) ProtoMessage()    {}
+func (*MsgUnregisterProofDeputy) Descriptor() ([]byte, []int) {
 	return fileDescriptor_8776d5690e46d2ba, []int{10}
 }
-func (m *MsgDeleteProofDeputy) XXX_Unmarshal(b []byte) error {
+func (m *MsgUnregisterProofDeputy) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgDeleteProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUnregisterProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgDeleteProofDeputy.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUnregisterProofDeputy.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -567,41 +567,41 @@ func (m *MsgDeleteProofDeputy) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *MsgDeleteProofDeputy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeleteProofDeputy.Merge(m, src)
+func (m *MsgUnregisterProofDeputy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUnregisterProofDeputy.Merge(m, src)
 }
-func (m *MsgDeleteProofDeputy) XXX_Size() int {
+func (m *MsgUnregisterProofDeputy) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgDeleteProofDeputy) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeleteProofDeputy.DiscardUnknown(m)
+func (m *MsgUnregisterProofDeputy) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUnregisterProofDeputy.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgDeleteProofDeputy proto.InternalMessageInfo
+var xxx_messageInfo_MsgUnregisterProofDeputy proto.InternalMessageInfo
 
-func (m *MsgDeleteProofDeputy) GetSender() string {
+func (m *MsgUnregisterProofDeputy) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-// MsgDeleteProofDeputyResponse
-type MsgDeleteProofDeputyResponse struct {
+// MsgUnregisterProofDeputyResponse
+type MsgUnregisterProofDeputyResponse struct {
 }
 
-func (m *MsgDeleteProofDeputyResponse) Reset()         { *m = MsgDeleteProofDeputyResponse{} }
-func (m *MsgDeleteProofDeputyResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgDeleteProofDeputyResponse) ProtoMessage()    {}
-func (*MsgDeleteProofDeputyResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUnregisterProofDeputyResponse) Reset()         { *m = MsgUnregisterProofDeputyResponse{} }
+func (m *MsgUnregisterProofDeputyResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUnregisterProofDeputyResponse) ProtoMessage()    {}
+func (*MsgUnregisterProofDeputyResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_8776d5690e46d2ba, []int{11}
 }
-func (m *MsgDeleteProofDeputyResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUnregisterProofDeputyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgDeleteProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUnregisterProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgDeleteProofDeputyResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUnregisterProofDeputyResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -611,17 +611,17 @@ func (m *MsgDeleteProofDeputyResponse) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *MsgDeleteProofDeputyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeleteProofDeputyResponse.Merge(m, src)
+func (m *MsgUnregisterProofDeputyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUnregisterProofDeputyResponse.Merge(m, src)
 }
-func (m *MsgDeleteProofDeputyResponse) XXX_Size() int {
+func (m *MsgUnregisterProofDeputyResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgDeleteProofDeputyResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeleteProofDeputyResponse.DiscardUnknown(m)
+func (m *MsgUnregisterProofDeputyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUnregisterProofDeputyResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgDeleteProofDeputyResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUnregisterProofDeputyResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.da.v1.MsgUpdateParams")
@@ -632,65 +632,64 @@ func init() {
 	proto.RegisterType((*MsgSubmitInvalidityResponse)(nil), "sunrise.da.v1.MsgSubmitInvalidityResponse")
 	proto.RegisterType((*MsgSubmitValidityProof)(nil), "sunrise.da.v1.MsgSubmitValidityProof")
 	proto.RegisterType((*MsgSubmitValidityProofResponse)(nil), "sunrise.da.v1.MsgSubmitValidityProofResponse")
-	proto.RegisterType((*MsgSetProofDeputy)(nil), "sunrise.da.v1.MsgSetProofDeputy")
-	proto.RegisterType((*MsgSetProofDeputyResponse)(nil), "sunrise.da.v1.MsgSetProofDeputyResponse")
-	proto.RegisterType((*MsgDeleteProofDeputy)(nil), "sunrise.da.v1.MsgDeleteProofDeputy")
-	proto.RegisterType((*MsgDeleteProofDeputyResponse)(nil), "sunrise.da.v1.MsgDeleteProofDeputyResponse")
+	proto.RegisterType((*MsgRegisterProofDeputy)(nil), "sunrise.da.v1.MsgRegisterProofDeputy")
+	proto.RegisterType((*MsgRegisterProofDeputyResponse)(nil), "sunrise.da.v1.MsgRegisterProofDeputyResponse")
+	proto.RegisterType((*MsgUnregisterProofDeputy)(nil), "sunrise.da.v1.MsgUnregisterProofDeputy")
+	proto.RegisterType((*MsgUnregisterProofDeputyResponse)(nil), "sunrise.da.v1.MsgUnregisterProofDeputyResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/da/v1/tx.proto", fileDescriptor_8776d5690e46d2ba) }
 
 var fileDescriptor_8776d5690e46d2ba = []byte{
-	// 776 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0x4d, 0x4f, 0xdb, 0x58,
-	0x14, 0x8d, 0x27, 0x21, 0xa3, 0xdc, 0x40, 0x26, 0x31, 0x0c, 0x18, 0x03, 0x9e, 0x90, 0x11, 0xa3,
-	0x28, 0x33, 0xc4, 0x03, 0x23, 0x8d, 0x46, 0x6c, 0x46, 0x4d, 0xb3, 0x28, 0x8b, 0x54, 0x28, 0x11,
-	0x2c, 0xaa, 0x4a, 0xd1, 0x4b, 0xfc, 0x70, 0xac, 0xc6, 0x7e, 0x96, 0xdf, 0x73, 0x04, 0xbb, 0xaa,
-	0xcb, 0xae, 0x5a, 0xf5, 0x4f, 0x74, 0xc9, 0x82, 0x1f, 0xc1, 0xae, 0x88, 0x55, 0x57, 0x55, 0x05,
-	0x0b, 0xfe, 0x43, 0xd5, 0x45, 0xe5, 0x67, 0xc7, 0x60, 0x3b, 0x7c, 0x88, 0xaa, 0x9b, 0x28, 0xef,
-	0x9e, 0x73, 0xcf, 0x3d, 0xf7, 0xfa, 0x7d, 0xc0, 0x3c, 0x75, 0x2d, 0xc7, 0xa0, 0x58, 0xd5, 0x90,
-	0x3a, 0xda, 0x50, 0xd9, 0x41, 0xdd, 0x76, 0x08, 0x23, 0xe2, 0x4c, 0x10, 0xaf, 0x6b, 0xa8, 0x3e,
-	0xda, 0x90, 0x4b, 0xc8, 0x34, 0x2c, 0xa2, 0xf2, 0x5f, 0x9f, 0x21, 0x2f, 0xf4, 0x09, 0x35, 0x09,
-	0x55, 0x4d, 0xaa, 0x7b, 0x99, 0x26, 0xd5, 0x03, 0x60, 0xd1, 0x07, 0xba, 0x7c, 0xa5, 0xfa, 0x8b,
-	0x00, 0x9a, 0xd3, 0x89, 0x4e, 0xfc, 0xb8, 0xf7, 0x2f, 0x88, 0xca, 0x51, 0x0f, 0x36, 0x72, 0x90,
-	0x19, 0x64, 0x54, 0x8e, 0x05, 0xf8, 0xa5, 0x45, 0xf5, 0x5d, 0x5b, 0x43, 0x0c, 0xef, 0x70, 0x44,
-	0xfc, 0x17, 0x72, 0xc8, 0x65, 0x03, 0xe2, 0x18, 0xec, 0x50, 0x12, 0xca, 0x42, 0x35, 0xd7, 0x90,
-	0xce, 0x8e, 0xd7, 0xe7, 0x82, 0x52, 0x8f, 0x34, 0xcd, 0xc1, 0x94, 0x76, 0x98, 0x63, 0x58, 0x7a,
-	0xfb, 0x8a, 0x2a, 0xfe, 0x07, 0x59, 0x5f, 0x5b, 0xfa, 0xa9, 0x2c, 0x54, 0xf3, 0x9b, 0xbf, 0xd6,
-	0x23, 0x4d, 0xd6, 0x7d, 0xf9, 0x46, 0xee, 0xe4, 0xd3, 0x6f, 0xa9, 0xf7, 0x97, 0x47, 0x35, 0xa1,
-	0x1d, 0xf0, 0xb7, 0xd4, 0x57, 0x97, 0x47, 0xb5, 0x2b, 0xa5, 0xd7, 0x97, 0x47, 0xb5, 0xe5, 0xb1,
-	0xe9, 0x03, 0xcf, 0x76, 0xcc, 0x62, 0x65, 0x11, 0x16, 0x62, 0xa1, 0x36, 0xa6, 0x36, 0xb1, 0x28,
-	0xae, 0x7c, 0x11, 0xa0, 0xd0, 0xa2, 0xfa, 0x8e, 0xdb, 0x1b, 0x1a, 0x74, 0xd0, 0x44, 0x0c, 0x89,
-	0x7f, 0x43, 0x96, 0x62, 0x4b, 0xc3, 0xce, 0x9d, 0xdd, 0x04, 0x3c, 0x71, 0x15, 0xa6, 0x4d, 0xcc,
-	0x90, 0x86, 0x18, 0xea, 0xba, 0x8e, 0xc1, 0x1b, 0xca, 0xb5, 0xf3, 0xe3, 0xd8, 0xae, 0x63, 0x88,
-	0x7f, 0x81, 0x68, 0x23, 0xcf, 0x6d, 0x97, 0x0e, 0x90, 0xa3, 0x75, 0xfb, 0xc4, 0xb5, 0x98, 0x94,
-	0x2e, 0x0b, 0xd5, 0x4c, 0xbb, 0xe8, 0x23, 0x1d, 0x0f, 0x78, 0xec, 0xc5, 0xc5, 0x3a, 0xcc, 0xfa,
-	0x34, 0x8d, 0xb8, 0xbd, 0x21, 0xee, 0x0e, 0x10, 0x1d, 0x60, 0x2a, 0x65, 0xca, 0xe9, 0xea, 0x74,
-	0xbb, 0xc4, 0xa1, 0x26, 0x47, 0x9e, 0x70, 0x40, 0xac, 0x42, 0x91, 0x17, 0xa7, 0xc4, 0x75, 0xfa,
-	0xb8, 0x6b, 0x58, 0xfb, 0x44, 0x9a, 0xe2, 0x26, 0x0a, 0x5e, 0xbc, 0xc3, 0xc3, 0xdb, 0xd6, 0x3e,
-	0xd9, 0xca, 0x7b, 0xb3, 0x0b, 0x7c, 0x57, 0x24, 0x98, 0x8f, 0xf6, 0x1e, 0x8e, 0xe5, 0xad, 0x00,
-	0xb3, 0x2d, 0xaa, 0x77, 0xdc, 0x9e, 0x69, 0xb0, 0x6d, 0x6b, 0x84, 0x86, 0x86, 0xe6, 0x7d, 0xb4,
-	0x1f, 0x32, 0x1b, 0x09, 0x7e, 0x36, 0x2c, 0xcd, 0xe8, 0x63, 0x2a, 0xa5, 0xcb, 0xe9, 0x6a, 0xba,
-	0x3d, 0x5e, 0x46, 0xdd, 0xae, 0xc0, 0xd2, 0x04, 0x4b, 0xa1, 0xe5, 0xaf, 0x02, 0xef, 0xc6, 0xc7,
-	0xf7, 0x02, 0x74, 0xc7, 0x21, 0x64, 0xff, 0x01, 0xae, 0x9f, 0x42, 0x89, 0x17, 0x40, 0x8c, 0x38,
-	0x5d, 0xe4, 0x53, 0x7c, 0xeb, 0x8d, 0xd5, 0xb3, 0xe3, 0xf5, 0x95, 0x20, 0x79, 0x6f, 0xcc, 0x89,
-	0xaa, 0x14, 0x47, 0xb1, 0x78, 0x62, 0x0a, 0xe9, 0x5b, 0xa7, 0x90, 0x89, 0x4c, 0x41, 0x9c, 0x87,
-	0xac, 0xed, 0xf5, 0x41, 0xa5, 0x29, 0xbe, 0x01, 0x82, 0x55, 0x74, 0x3a, 0x65, 0x50, 0x26, 0x77,
-	0x1f, 0x0e, 0xe8, 0x9d, 0x00, 0x25, 0x8f, 0x82, 0x19, 0x8f, 0x37, 0xb1, 0xed, 0x3e, 0xe8, 0x8b,
-	0xfe, 0x0f, 0x05, 0x8d, 0xe7, 0xc6, 0x06, 0x73, 0x73, 0xe6, 0x8c, 0xcf, 0x0f, 0x82, 0x51, 0xdf,
-	0x4b, 0xb0, 0x98, 0x30, 0x15, 0x5a, 0xde, 0x85, 0xb9, 0x16, 0xd5, 0x9b, 0x78, 0x88, 0x19, 0xfe,
-	0x2e, 0xd3, 0xd1, 0x9a, 0x0a, 0x2c, 0x4f, 0x92, 0x1d, 0x97, 0xdd, 0xfc, 0x90, 0x81, 0x74, 0x8b,
-	0xea, 0xe2, 0x1e, 0x4c, 0x47, 0xae, 0x3a, 0x25, 0x76, 0x45, 0xc5, 0x2e, 0x15, 0xf9, 0x8f, 0xdb,
-	0xf1, 0xb1, 0xbe, 0xd8, 0x81, 0xfc, 0xf5, 0x0b, 0x67, 0x25, 0x99, 0x76, 0x0d, 0x96, 0xd7, 0x6e,
-	0x85, 0x43, 0xd1, 0x1e, 0x14, 0x13, 0xc7, 0xb5, 0x92, 0x4c, 0x8d, 0x73, 0xe4, 0xda, 0xdd, 0x9c,
-	0xb0, 0xc6, 0x0b, 0x98, 0x9d, 0x74, 0xbe, 0xd6, 0x6e, 0x92, 0x88, 0xd0, 0xe4, 0xf5, 0x7b, 0xd1,
-	0xc2, 0x62, 0xcf, 0xa1, 0x10, 0xdb, 0xab, 0xe5, 0x09, 0x02, 0x11, 0x86, 0x5c, 0xbd, 0x8b, 0x11,
-	0xaa, 0x63, 0x28, 0x25, 0xf7, 0xd5, 0xef, 0xc9, 0xf4, 0x04, 0x49, 0xfe, 0xf3, 0x1e, 0xa4, 0x71,
-	0x19, 0x79, 0xea, 0xa5, 0xf7, 0x74, 0x35, 0x9a, 0x27, 0xe7, 0x8a, 0x70, 0x7a, 0xae, 0x08, 0x9f,
-	0xcf, 0x15, 0xe1, 0xcd, 0x85, 0x92, 0x3a, 0xbd, 0x50, 0x52, 0x1f, 0x2f, 0x94, 0xd4, 0xb3, 0x9a,
-	0x6e, 0xb0, 0x81, 0xdb, 0xab, 0xf7, 0x89, 0xa9, 0x06, 0xba, 0x43, 0x74, 0x88, 0x1d, 0x35, 0xf2,
-	0xa2, 0xb1, 0x43, 0x1b, 0xd3, 0x5e, 0x96, 0xbf, 0xc2, 0xff, 0x7c, 0x0b, 0x00, 0x00, 0xff, 0xff,
-	0xf8, 0xcd, 0x7c, 0x44, 0x27, 0x08, 0x00, 0x00,
+	// 768 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0xcf, 0x4f, 0x13, 0x41,
+	0x14, 0xee, 0xda, 0x52, 0xd3, 0x29, 0x60, 0x59, 0x7e, 0x2d, 0xab, 0xac, 0xa5, 0x09, 0xda, 0x34,
+	0xd2, 0x15, 0x4c, 0x8c, 0xe1, 0x62, 0xac, 0x3d, 0xc8, 0xa1, 0x86, 0x6c, 0x03, 0x89, 0x5e, 0x9a,
+	0x69, 0x77, 0xd8, 0x6e, 0xec, 0xee, 0xac, 0x33, 0xb3, 0x0d, 0xdc, 0x8c, 0x47, 0x4f, 0x7a, 0xf3,
+	0x4f, 0xf0, 0xc8, 0x81, 0x3f, 0x82, 0x23, 0xe1, 0xe4, 0xc9, 0x18, 0x38, 0x90, 0xf8, 0x27, 0x18,
+	0x0f, 0x66, 0x67, 0xa7, 0x85, 0x6d, 0x97, 0x42, 0x88, 0x5e, 0x9a, 0xce, 0xfb, 0xbe, 0xf7, 0xde,
+	0xf7, 0xbe, 0x9d, 0x1f, 0x60, 0x8e, 0xfa, 0x2e, 0xb1, 0x29, 0xd2, 0x4d, 0xa8, 0x77, 0x57, 0x75,
+	0xb6, 0x5b, 0xf6, 0x08, 0x66, 0x58, 0x9e, 0x10, 0xf1, 0xb2, 0x09, 0xcb, 0xdd, 0x55, 0x75, 0x0a,
+	0x3a, 0xb6, 0x8b, 0x75, 0xfe, 0x1b, 0x32, 0xd4, 0xf9, 0x16, 0xa6, 0x0e, 0xa6, 0xba, 0x43, 0xad,
+	0x20, 0xd3, 0xa1, 0x96, 0x00, 0x16, 0x42, 0xa0, 0xc1, 0x57, 0x7a, 0xb8, 0x10, 0xd0, 0x8c, 0x85,
+	0x2d, 0x1c, 0xc6, 0x83, 0x7f, 0x22, 0xaa, 0x46, 0x35, 0x78, 0x90, 0x40, 0x47, 0x64, 0x14, 0x0e,
+	0x24, 0x70, 0xa7, 0x46, 0xad, 0x2d, 0xcf, 0x84, 0x0c, 0x6d, 0x72, 0x44, 0x7e, 0x0a, 0x32, 0xd0,
+	0x67, 0x6d, 0x4c, 0x6c, 0xb6, 0xa7, 0x48, 0x79, 0xa9, 0x98, 0xa9, 0x28, 0xc7, 0x07, 0x2b, 0x33,
+	0xa2, 0xd5, 0x0b, 0xd3, 0x24, 0x88, 0xd2, 0x3a, 0x23, 0xb6, 0x6b, 0x19, 0xe7, 0x54, 0xf9, 0x19,
+	0x48, 0x87, 0xb5, 0x95, 0x5b, 0x79, 0xa9, 0x98, 0x5d, 0x9b, 0x2d, 0x47, 0x86, 0x2c, 0x87, 0xe5,
+	0x2b, 0x99, 0xc3, 0x1f, 0xf7, 0x13, 0xdf, 0xce, 0xf6, 0x4b, 0x92, 0x21, 0xf8, 0xeb, 0xfa, 0xc7,
+	0xb3, 0xfd, 0xd2, 0x79, 0xa5, 0x4f, 0x67, 0xfb, 0xa5, 0x7b, 0x3d, 0xd1, 0xbb, 0x81, 0xec, 0x01,
+	0x89, 0x85, 0x05, 0x30, 0x3f, 0x10, 0x32, 0x10, 0xf5, 0xb0, 0x4b, 0x51, 0xe1, 0xb7, 0x04, 0x26,
+	0x6b, 0xd4, 0xda, 0xf4, 0x9b, 0x1d, 0x9b, 0xb6, 0xab, 0x90, 0x41, 0xf9, 0x31, 0x48, 0x53, 0xe4,
+	0x9a, 0x88, 0x5c, 0x39, 0x8d, 0xe0, 0xc9, 0x4b, 0x60, 0xdc, 0x41, 0x0c, 0x9a, 0x90, 0xc1, 0x86,
+	0x4f, 0x6c, 0x3e, 0x50, 0xc6, 0xc8, 0xf6, 0x62, 0x5b, 0xc4, 0x96, 0x1f, 0x01, 0xd9, 0x83, 0x81,
+	0xda, 0x06, 0x6d, 0x43, 0x62, 0x36, 0x5a, 0xd8, 0x77, 0x99, 0x92, 0xcc, 0x4b, 0xc5, 0x94, 0x91,
+	0x0b, 0x91, 0x7a, 0x00, 0xbc, 0x0c, 0xe2, 0x72, 0x19, 0x4c, 0x87, 0x34, 0x13, 0xfb, 0xcd, 0x0e,
+	0x6a, 0xb4, 0x21, 0x6d, 0x23, 0xaa, 0xa4, 0xf2, 0xc9, 0xe2, 0xb8, 0x31, 0xc5, 0xa1, 0x2a, 0x47,
+	0x5e, 0x71, 0x40, 0x2e, 0x82, 0x1c, 0x6f, 0x4e, 0xb1, 0x4f, 0x5a, 0xa8, 0x61, 0xbb, 0x3b, 0x58,
+	0x19, 0xe3, 0x22, 0x26, 0x83, 0x78, 0x9d, 0x87, 0x37, 0xdc, 0x1d, 0xbc, 0x9e, 0x0d, 0xbc, 0x13,
+	0xba, 0x0b, 0x0a, 0x98, 0x8b, 0xce, 0xde, 0xb7, 0xe5, 0x8b, 0x04, 0xa6, 0x6b, 0xd4, 0xaa, 0xfb,
+	0x4d, 0xc7, 0x66, 0x1b, 0x6e, 0x17, 0x76, 0x6c, 0x33, 0xf8, 0x68, 0xff, 0xc5, 0x1b, 0x05, 0xdc,
+	0xb6, 0x5d, 0xd3, 0x6e, 0x21, 0xaa, 0x24, 0xf3, 0xc9, 0x62, 0xd2, 0xe8, 0x2d, 0xa3, 0x6a, 0x17,
+	0xc1, 0xdd, 0x18, 0x49, 0x7d, 0xc9, 0x7f, 0x24, 0x3e, 0x4d, 0x88, 0x6f, 0x0b, 0x74, 0x93, 0x60,
+	0xbc, 0x73, 0x03, 0xd5, 0xaf, 0xc1, 0x14, 0x6f, 0x00, 0x19, 0x26, 0x0d, 0x18, 0x52, 0x42, 0xe9,
+	0x95, 0xa5, 0xe3, 0x83, 0x95, 0x45, 0x91, 0xbc, 0xdd, 0xe3, 0x44, 0xab, 0xe4, 0xba, 0x03, 0xf1,
+	0x21, 0x17, 0x92, 0x23, 0x5d, 0x48, 0x45, 0x5c, 0x90, 0xe7, 0x40, 0xda, 0x0b, 0xe6, 0xa0, 0xca,
+	0x18, 0xdf, 0x00, 0x62, 0x15, 0x75, 0x27, 0x0f, 0xb4, 0xf8, 0xe9, 0xfb, 0x06, 0x7d, 0x0d, 0x0d,
+	0x32, 0x90, 0x65, 0x53, 0x86, 0x08, 0x07, 0xab, 0xc8, 0xf3, 0x6f, 0xf4, 0x59, 0x9f, 0x83, 0x49,
+	0x93, 0xe7, 0x0e, 0xb8, 0x73, 0x79, 0xe6, 0x44, 0xc8, 0x17, 0xc1, 0x38, 0xf1, 0x31, 0xca, 0xfa,
+	0xe2, 0xdf, 0x00, 0x25, 0x38, 0xc2, 0x2e, 0xf9, 0x17, 0xea, 0xa3, 0xcd, 0x0b, 0x20, 0x7f, 0x59,
+	0xe9, 0x5e, 0xfb, 0xb5, 0x5f, 0x29, 0x90, 0xac, 0x51, 0x4b, 0xde, 0x06, 0xe3, 0x91, 0xcb, 0x4f,
+	0x1b, 0xb8, 0xb4, 0x06, 0xae, 0x19, 0xf5, 0xc1, 0x68, 0xbc, 0x57, 0x5f, 0xae, 0x83, 0xec, 0xc5,
+	0x2b, 0x68, 0x71, 0x38, 0xed, 0x02, 0xac, 0x2e, 0x8f, 0x84, 0xfb, 0x45, 0x9b, 0x20, 0x37, 0x74,
+	0x80, 0x0b, 0xc3, 0xa9, 0x83, 0x1c, 0xb5, 0x74, 0x35, 0xa7, 0xdf, 0xe3, 0x1d, 0x98, 0x8e, 0x3b,
+	0x71, 0xcb, 0x97, 0x95, 0x88, 0xd0, 0xd4, 0x95, 0x6b, 0xd1, 0x2e, 0x36, 0x8b, 0xdb, 0xbd, 0x31,
+	0xcd, 0x62, 0x68, 0x71, 0xcd, 0x46, 0xec, 0x38, 0xf9, 0x3d, 0x98, 0x8d, 0xdf, 0x6e, 0x0f, 0x63,
+	0xbe, 0x69, 0x1c, 0x51, 0xd5, 0xaf, 0x49, 0xec, 0xb5, 0x54, 0xc7, 0x3e, 0x04, 0xef, 0x5c, 0xa5,
+	0x7a, 0x78, 0xa2, 0x49, 0x47, 0x27, 0x9a, 0xf4, 0xf3, 0x44, 0x93, 0x3e, 0x9f, 0x6a, 0x89, 0xa3,
+	0x53, 0x2d, 0xf1, 0xfd, 0x54, 0x4b, 0xbc, 0x2d, 0x59, 0x36, 0x6b, 0xfb, 0xcd, 0x72, 0x0b, 0x3b,
+	0xba, 0xa8, 0xdd, 0x81, 0x7b, 0x88, 0xe8, 0x91, 0xe7, 0x8f, 0xed, 0x79, 0x88, 0x36, 0xd3, 0xfc,
+	0xc9, 0x7e, 0xf2, 0x37, 0x00, 0x00, 0xff, 0xff, 0x93, 0xd3, 0xea, 0xae, 0x54, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -714,10 +713,10 @@ type MsgClient interface {
 	SubmitInvalidity(ctx context.Context, in *MsgSubmitInvalidity, opts ...grpc.CallOption) (*MsgSubmitInvalidityResponse, error)
 	// SubmitValidityProof
 	SubmitValidityProof(ctx context.Context, in *MsgSubmitValidityProof, opts ...grpc.CallOption) (*MsgSubmitValidityProofResponse, error)
-	// SetProofDeputy
-	SetProofDeputy(ctx context.Context, in *MsgSetProofDeputy, opts ...grpc.CallOption) (*MsgSetProofDeputyResponse, error)
-	// DeleteProofDeputy
-	DeleteProofDeputy(ctx context.Context, in *MsgDeleteProofDeputy, opts ...grpc.CallOption) (*MsgDeleteProofDeputyResponse, error)
+	// RegisterProofDeputy
+	RegisterProofDeputy(ctx context.Context, in *MsgRegisterProofDeputy, opts ...grpc.CallOption) (*MsgRegisterProofDeputyResponse, error)
+	// UnregisterProofDeputy
+	UnregisterProofDeputy(ctx context.Context, in *MsgUnregisterProofDeputy, opts ...grpc.CallOption) (*MsgUnregisterProofDeputyResponse, error)
 }
 
 type msgClient struct {
@@ -764,18 +763,18 @@ func (c *msgClient) SubmitValidityProof(ctx context.Context, in *MsgSubmitValidi
 	return out, nil
 }
 
-func (c *msgClient) SetProofDeputy(ctx context.Context, in *MsgSetProofDeputy, opts ...grpc.CallOption) (*MsgSetProofDeputyResponse, error) {
-	out := new(MsgSetProofDeputyResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/SetProofDeputy", in, out, opts...)
+func (c *msgClient) RegisterProofDeputy(ctx context.Context, in *MsgRegisterProofDeputy, opts ...grpc.CallOption) (*MsgRegisterProofDeputyResponse, error) {
+	out := new(MsgRegisterProofDeputyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/RegisterProofDeputy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) DeleteProofDeputy(ctx context.Context, in *MsgDeleteProofDeputy, opts ...grpc.CallOption) (*MsgDeleteProofDeputyResponse, error) {
-	out := new(MsgDeleteProofDeputyResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/DeleteProofDeputy", in, out, opts...)
+func (c *msgClient) UnregisterProofDeputy(ctx context.Context, in *MsgUnregisterProofDeputy, opts ...grpc.CallOption) (*MsgUnregisterProofDeputyResponse, error) {
+	out := new(MsgUnregisterProofDeputyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/UnregisterProofDeputy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -793,10 +792,10 @@ type MsgServer interface {
 	SubmitInvalidity(context.Context, *MsgSubmitInvalidity) (*MsgSubmitInvalidityResponse, error)
 	// SubmitValidityProof
 	SubmitValidityProof(context.Context, *MsgSubmitValidityProof) (*MsgSubmitValidityProofResponse, error)
-	// SetProofDeputy
-	SetProofDeputy(context.Context, *MsgSetProofDeputy) (*MsgSetProofDeputyResponse, error)
-	// DeleteProofDeputy
-	DeleteProofDeputy(context.Context, *MsgDeleteProofDeputy) (*MsgDeleteProofDeputyResponse, error)
+	// RegisterProofDeputy
+	RegisterProofDeputy(context.Context, *MsgRegisterProofDeputy) (*MsgRegisterProofDeputyResponse, error)
+	// UnregisterProofDeputy
+	UnregisterProofDeputy(context.Context, *MsgUnregisterProofDeputy) (*MsgUnregisterProofDeputyResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -815,11 +814,11 @@ func (*UnimplementedMsgServer) SubmitInvalidity(ctx context.Context, req *MsgSub
 func (*UnimplementedMsgServer) SubmitValidityProof(ctx context.Context, req *MsgSubmitValidityProof) (*MsgSubmitValidityProofResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitValidityProof not implemented")
 }
-func (*UnimplementedMsgServer) SetProofDeputy(ctx context.Context, req *MsgSetProofDeputy) (*MsgSetProofDeputyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetProofDeputy not implemented")
+func (*UnimplementedMsgServer) RegisterProofDeputy(ctx context.Context, req *MsgRegisterProofDeputy) (*MsgRegisterProofDeputyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterProofDeputy not implemented")
 }
-func (*UnimplementedMsgServer) DeleteProofDeputy(ctx context.Context, req *MsgDeleteProofDeputy) (*MsgDeleteProofDeputyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteProofDeputy not implemented")
+func (*UnimplementedMsgServer) UnregisterProofDeputy(ctx context.Context, req *MsgUnregisterProofDeputy) (*MsgUnregisterProofDeputyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnregisterProofDeputy not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -898,38 +897,38 @@ func _Msg_SubmitValidityProof_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_SetProofDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSetProofDeputy)
+func _Msg_RegisterProofDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRegisterProofDeputy)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).SetProofDeputy(ctx, in)
+		return srv.(MsgServer).RegisterProofDeputy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.da.v1.Msg/SetProofDeputy",
+		FullMethod: "/sunrise.da.v1.Msg/RegisterProofDeputy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SetProofDeputy(ctx, req.(*MsgSetProofDeputy))
+		return srv.(MsgServer).RegisterProofDeputy(ctx, req.(*MsgRegisterProofDeputy))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_DeleteProofDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeleteProofDeputy)
+func _Msg_UnregisterProofDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUnregisterProofDeputy)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).DeleteProofDeputy(ctx, in)
+		return srv.(MsgServer).UnregisterProofDeputy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.da.v1.Msg/DeleteProofDeputy",
+		FullMethod: "/sunrise.da.v1.Msg/UnregisterProofDeputy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeleteProofDeputy(ctx, req.(*MsgDeleteProofDeputy))
+		return srv.(MsgServer).UnregisterProofDeputy(ctx, req.(*MsgUnregisterProofDeputy))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -956,12 +955,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_SubmitValidityProof_Handler,
 		},
 		{
-			MethodName: "SetProofDeputy",
-			Handler:    _Msg_SetProofDeputy_Handler,
+			MethodName: "RegisterProofDeputy",
+			Handler:    _Msg_RegisterProofDeputy_Handler,
 		},
 		{
-			MethodName: "DeleteProofDeputy",
-			Handler:    _Msg_DeleteProofDeputy_Handler,
+			MethodName: "UnregisterProofDeputy",
+			Handler:    _Msg_UnregisterProofDeputy_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1286,7 +1285,7 @@ func (m *MsgSubmitValidityProofResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSetProofDeputy) Marshal() (dAtA []byte, err error) {
+func (m *MsgRegisterProofDeputy) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1296,12 +1295,12 @@ func (m *MsgSetProofDeputy) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSetProofDeputy) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRegisterProofDeputy) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSetProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRegisterProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1323,7 +1322,7 @@ func (m *MsgSetProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgSetProofDeputyResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgRegisterProofDeputyResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1333,12 +1332,12 @@ func (m *MsgSetProofDeputyResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgSetProofDeputyResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRegisterProofDeputyResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgSetProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRegisterProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1346,7 +1345,7 @@ func (m *MsgSetProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgDeleteProofDeputy) Marshal() (dAtA []byte, err error) {
+func (m *MsgUnregisterProofDeputy) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1356,12 +1355,12 @@ func (m *MsgDeleteProofDeputy) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgDeleteProofDeputy) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUnregisterProofDeputy) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgDeleteProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUnregisterProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1376,7 +1375,7 @@ func (m *MsgDeleteProofDeputy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgDeleteProofDeputyResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUnregisterProofDeputyResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1386,12 +1385,12 @@ func (m *MsgDeleteProofDeputyResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgDeleteProofDeputyResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUnregisterProofDeputyResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgDeleteProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUnregisterProofDeputyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1549,7 +1548,7 @@ func (m *MsgSubmitValidityProofResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgSetProofDeputy) Size() (n int) {
+func (m *MsgRegisterProofDeputy) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1566,7 +1565,7 @@ func (m *MsgSetProofDeputy) Size() (n int) {
 	return n
 }
 
-func (m *MsgSetProofDeputyResponse) Size() (n int) {
+func (m *MsgRegisterProofDeputyResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1575,7 +1574,7 @@ func (m *MsgSetProofDeputyResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgDeleteProofDeputy) Size() (n int) {
+func (m *MsgUnregisterProofDeputy) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1588,7 +1587,7 @@ func (m *MsgDeleteProofDeputy) Size() (n int) {
 	return n
 }
 
-func (m *MsgDeleteProofDeputyResponse) Size() (n int) {
+func (m *MsgUnregisterProofDeputyResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2559,7 +2558,7 @@ func (m *MsgSubmitValidityProofResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSetProofDeputy) Unmarshal(dAtA []byte) error {
+func (m *MsgRegisterProofDeputy) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2582,10 +2581,10 @@ func (m *MsgSetProofDeputy) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSetProofDeputy: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRegisterProofDeputy: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSetProofDeputy: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRegisterProofDeputy: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2673,7 +2672,7 @@ func (m *MsgSetProofDeputy) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgSetProofDeputyResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgRegisterProofDeputyResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2696,10 +2695,10 @@ func (m *MsgSetProofDeputyResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSetProofDeputyResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRegisterProofDeputyResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSetProofDeputyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRegisterProofDeputyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -2723,7 +2722,7 @@ func (m *MsgSetProofDeputyResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgDeleteProofDeputy) Unmarshal(dAtA []byte) error {
+func (m *MsgUnregisterProofDeputy) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2746,10 +2745,10 @@ func (m *MsgDeleteProofDeputy) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeleteProofDeputy: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUnregisterProofDeputy: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeleteProofDeputy: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUnregisterProofDeputy: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2805,7 +2804,7 @@ func (m *MsgDeleteProofDeputy) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgDeleteProofDeputyResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUnregisterProofDeputyResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2828,10 +2827,10 @@ func (m *MsgDeleteProofDeputyResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeleteProofDeputyResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUnregisterProofDeputyResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeleteProofDeputyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUnregisterProofDeputyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
