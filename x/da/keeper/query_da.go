@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/da/types"
 	"google.golang.org/grpc/codes"
@@ -38,4 +39,22 @@ func (q queryServer) ZkpProofThreshold(goCtx context.Context, req *types.QueryZk
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	return &types.QueryZkpProofThresholdResponse{Threshold: q.k.GetZkpThreshold(ctx, req.ShardCount)}, nil
+}
+
+func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDeputyRequest) (*types.QueryProofDeputyResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	validator, err := q.k.addressCodec.StringToBytes(req.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+	deputy, found := q.k.GetProofDeputy(ctx, validator)
+	if !found {
+		return nil, types.ErrDeputyNotFound
+	}
+
+	return &types.QueryProofDeputyResponse{DeputyAddress: sdk.AccAddress(deputy).String()}, nil
 }
