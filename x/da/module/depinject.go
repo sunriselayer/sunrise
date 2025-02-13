@@ -27,10 +27,11 @@ func init() {
 type ModuleInputs struct {
 	depinject.In
 
-	Config       *types.Module
-	Environment  appmodule.Environment
-	Cdc          codec.Codec
-	AddressCodec address.Codec
+	Config                *types.Module
+	Environment           appmodule.Environment
+	Cdc                   codec.Codec
+	AddressCodec          address.Codec
+	ValidatorAddressCodec address.ValidatorAddressCodec
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -54,6 +55,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Environment,
 		in.Cdc,
 		in.AddressCodec,
+		in.ValidatorAddressCodec,
 		authority,
 		in.BankKeeper,
 		in.StakingKeeper,

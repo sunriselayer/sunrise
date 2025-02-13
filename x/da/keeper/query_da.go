@@ -47,7 +47,7 @@ func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDep
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	validator, err := q.k.addressCodec.StringToBytes(req.ValidatorAddress)
+	validator, err := q.k.validatorAddressCodec.StringToBytes(req.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}

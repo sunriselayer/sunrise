@@ -14,8 +14,9 @@ import (
 type Keeper struct {
 	appmodule.Environment
 
-	cdc          codec.BinaryCodec
-	addressCodec address.Codec
+	cdc                   codec.BinaryCodec
+	addressCodec          address.Codec
+	validatorAddressCodec address.ValidatorAddressCodec
 	// Address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
 	authority []byte
@@ -38,6 +39,7 @@ func NewKeeper(
 	env appmodule.Environment,
 	cdc codec.BinaryCodec,
 	addressCodec address.Codec,
+	validatorAddressCodec address.ValidatorAddressCodec,
 	authority []byte,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
@@ -50,10 +52,11 @@ func NewKeeper(
 	sb := collections.NewSchemaBuilder(env.KVStoreService)
 
 	k := Keeper{
-		Environment:  env,
-		cdc:          cdc,
-		addressCodec: addressCodec,
-		authority:    authority,
+		Environment:           env,
+		cdc:                   cdc,
+		addressCodec:          addressCodec,
+		validatorAddressCodec: validatorAddressCodec,
+		authority:             authority,
 
 		Params:          collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		PublishedData:   collections.NewIndexedMap(sb, types.PublishedDataKeyPrefix, "published_data", types.PublishedDataKeyCodec, codec.CollValue[types.PublishedData](cdc), types.NewPublishedDataIndexes(sb)),
