@@ -18,9 +18,28 @@ import (
 )
 
 func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmitValidityProof) (*types.MsgSubmitValidityProofResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
+	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
+	validator, err := k.addressCodec.StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+	valAddr := sdk.ValAddress(validator)
+	_, err = k.StakingKeeper.Validator(ctx, valAddr)
+	if err != nil {
+		return nil, err
+	}
+	deputy, found := k.GetProofDeputy(ctx, validator)
+	if !found {
+		return nil, types.ErrDeputyNotFound
+	}
+	if !bytes.Equal(deputy, sender) {
+		return nil, types.ErrInvalidDeputy
+	}
+
+	// static validation
 	// check number of proofs <> indices
 	if len(msg.Indices) != len(msg.Proofs) {
 		return nil, types.ErrIndicesAndProofsMismatch
@@ -89,7 +108,7 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 	// save proof in the storage
 	err = k.SetProof(ctx, types.Proof{
 		MetadataUri: msg.MetadataUri,
-		Sender:      msg.Sender,
+		Sender:      sdk.AccAddress(validator).String(),
 		Indices:     msg.Indices,
 		Proofs:      msg.Proofs,
 	})
