@@ -22,7 +22,7 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
-	validator, err := k.addressCodec.StringToBytes(msg.ValidatorAddress)
+	validator, err := k.validatorAddressCodec.StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
