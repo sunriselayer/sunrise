@@ -19,11 +19,6 @@ func (k msgServer) RegisterProofDeputy(ctx context.Context, msg *types.MsgRegist
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid deputy address")
 	}
-	valAddr := sdk.ValAddress(sender)
-	_, err = k.StakingKeeper.Validator(ctx, valAddr)
-	if err != nil {
-		return nil, err
-	}
 	err = k.SetProofDeputy(ctx, sender, deputy)
 	if err != nil {
 		return nil, err
@@ -40,11 +35,6 @@ func (k msgServer) UnregisterProofDeputy(ctx context.Context, msg *types.MsgUnre
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
-	}
-	valAddr := sdk.ValAddress(sender)
-	_, err = k.StakingKeeper.Validator(ctx, valAddr)
-	if err != nil {
-		return nil, err
 	}
 	_, found := k.GetProofDeputy(ctx, sender)
 	if !found {
