@@ -29,6 +29,30 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows all published data",
 				},
 				{
+					RpcMethod:      "ValidityProof",
+					Use:            "validity-proof <metadata_uri> <validator_address>",
+					Short:          "Shows the validity proof of the data by validator",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "validator_address"}},
+				},
+				{
+					RpcMethod:      "AllValidityProofs",
+					Use:            "all-validity-proofs <metadata_uri>",
+					Short:          "Shows all validity proofs of the data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}},
+				},
+				{
+					RpcMethod:      "Invalidity",
+					Use:            "invalidity <metadata_uri> <sender_address>",
+					Short:          "Shows invalidity of the data by sender",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "sender_address"}},
+				},
+				{
+					RpcMethod:      "AllInvalidity",
+					Use:            "all-invalidity <metadata_uri>",
+					Short:          "Shows all invalidity of the data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}},
+				},
+				{
 					RpcMethod:      "ZkpProofThreshold",
 					Use:            "zkp-proof-threshold <shard_count>",
 					Short:          "Shows threshold number of proof",
