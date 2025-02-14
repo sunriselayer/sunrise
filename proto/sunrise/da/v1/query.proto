@@ -33,7 +33,7 @@ service Query {
     option (google.api.http).get = "/sunriselayer/sunrise/v1/da/all-validity-proofs";
   }
   // Invalidity queries invalidity report
-  rpc Invalidity(QueryValidityProofRequest) returns (QueryInvalidityResponse) {
+  rpc Invalidity(QueryInvalidityRequest) returns (QueryInvalidityResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/v1/da/invalidity";
   }
   // AllInvalidity queries all invalidity reports
