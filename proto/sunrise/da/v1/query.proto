@@ -87,7 +87,8 @@ message QueryAllPublishedDataResponse {
 // QueryValidityProofRequest is request type for the Query/ValidityProof RPC
 // method.
 message QueryValidityProofRequest {
-  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string metadata_uri = 1;
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
 }
 
 // QueryValidityProofResponse is response type for the Query/ValidityProof RPC
@@ -98,7 +99,9 @@ message QueryValidityProofResponse {
 
 // QueryAllValidityProofsRequest is request type for the Query/AllValidityProofs RPC
 // method.
-message QueryAllValidityProofsRequest {}
+message QueryAllValidityProofsRequest {
+  string metadata_uri = 1;
+}
 
 // QueryAllValidityProofsResponse is response type for the Query/AllValidityProofs RPC
 // method.
@@ -109,7 +112,8 @@ message QueryAllValidityProofsResponse {
 // QueryInvalidityProofRequest is request type for the Query/Invalidity RPC
 // method.
 message QueryInvalidityRequest {
-  string sender_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string metadata_uri = 1;
+  string sender_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryInvalidityResponse is response type for the Query/Invalidity RPC
@@ -120,7 +124,9 @@ message QueryInvalidityResponse {
 
 // QueryAllInvalidityProofRequest is request type for the Query/AllInvalidity RPC
 // method.
-message QueryAllInvalidityRequest {}
+message QueryAllInvalidityRequest {
+  string metadata_uri = 1;
+}
 
 // QueryAllInvalidityResponse is response type for the Query/AllInvalidity RPC
 // method.

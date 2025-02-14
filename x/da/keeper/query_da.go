@@ -58,3 +58,16 @@ func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDep
 
 	return &types.QueryProofDeputyResponse{DeputyAddress: sdk.AccAddress(deputy).String()}, nil
 }
+
+func (q queryServer) ValidityProof(goCtx context.Context, req *types.QueryValidityProofRequest) (*types.QueryValidityProofResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	validator, err := q.k.validatorAddressCodec.StringToBytes(req.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+	q.k.GetProof()
+}
