@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte) (data types.Proof) {
+func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte) (proof types.Proof, found bool) {
 	key := collections.Join(metadataUri, sender)
 	has, err := k.Proofs.Has(ctx, key)
 	if err != nil {
@@ -17,7 +17,7 @@ func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte)
 	}
 
 	if !has {
-		return data
+		return proof, false
 	}
 
 	val, err := k.Proofs.Get(ctx, key)
@@ -25,7 +25,7 @@ func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte)
 		panic(err)
 	}
 
-	return val
+	return val, true
 }
 
 // SetProof set the proof of the PublishedData

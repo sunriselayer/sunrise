@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []byte) (data types.Invalidity) {
+func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []byte) (invalidity types.Invalidity, found bool) {
 	key := collections.Join(metadataUri, sender)
 	has, err := k.Invalidities.Has(ctx, key)
 	if err != nil {
@@ -17,7 +17,7 @@ func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []
 	}
 
 	if !has {
-		return data
+		return invalidity, false
 	}
 
 	val, err := k.Invalidities.Get(ctx, key)
@@ -25,7 +25,7 @@ func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []
 		panic(err)
 	}
 
-	return val
+	return val, true
 }
 
 // SetInvalidity set the Invalidity of the PublishedData

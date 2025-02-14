@@ -69,5 +69,46 @@ func (q queryServer) ValidityProof(goCtx context.Context, req *types.QueryValidi
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
-	q.k.GetProof()
+	proof, found := q.k.GetProof(ctx, req.MetadataUri, validator)
+	if !found {
+		return nil, types.ErrProofNotFound
+	}
+
+	return &types.QueryValidityProofResponse{Proof: proof}, nil
+}
+
+func (q queryServer) AllValidityProofs(goCtx context.Context, req *types.QueryAllValidityProofsRequest) (*types.QueryAllValidityProofsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryAllValidityProofsResponse{Proofs: q.k.GetAllProofs(ctx)}, nil
+}
+
+func (q queryServer) Invalidity(goCtx context.Context, req *types.QueryInvalidityRequest) (*types.QueryInvalidityResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	sender, err := q.k.addressCodec.StringToBytes(req.SenderAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	invalidity, found := q.k.GetInvalidity(ctx, req.MetadataUri, sender)
+	if !found {
+		return nil, types.ErrProofNotFound
+	}
+
+	return &types.QueryInvalidityResponse{Invalidity: invalidity}, nil
+}
+
+func (q queryServer) AllInvalidity(goCtx context.Context, req *types.QueryAllInvalidityRequest) (*types.QueryAllInvalidityResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryAllInvalidityResponse{Invalidity: q.k.GetAllInvalidities(ctx)}, nil
 }
