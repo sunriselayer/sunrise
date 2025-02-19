@@ -13,19 +13,19 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 service Query {
   // Params queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/v1/da/params";
+    option (google.api.http).get = "/sunrise/v1/da/params";
   }
   // PublishedData queries published data
   rpc PublishedData(QueryPublishedDataRequest) returns (QueryPublishedDataResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/v1/da/published-data";
+    option (google.api.http).get = "/sunrise/v1/da/published-data";
   }
   // AllPublishedData queries published data
   rpc AllPublishedData(QueryAllPublishedDataRequest) returns (QueryAllPublishedDataResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/v1/da/all-published-data";
+    option (google.api.http).get = "/sunrise/v1/da/all-published-data";
   }
   // ZkpProofThreshold
   rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/v1/da/zkp-proof-threshold";
+    option (google.api.http).get = "/sunrise/v1/da/zkp-proof-threshold";
   }
 }
 
