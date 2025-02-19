@@ -7,6 +7,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func (k Keeper) GetChallengeCounter(ctx context.Context) uint64 {
+	val, err := k.ChallengeCounts.Get(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
+}
+
+func (k Keeper) SetChallengeCounter(ctx context.Context, count uint64) {
+	err := k.ChallengeCounts.Set(ctx, count)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
 	has, err := k.FaultCounts.Has(ctx, operator)
 	if err != nil {
@@ -50,14 +66,23 @@ func (k Keeper) IterateFaultCounters(ctx context.Context,
 		},
 	)
 	if err != nil {
-		panic(err)
+		k.Logger.Error(err.Error())
+		return
 	}
 }
 
 func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
-	// TODO: error handling
-	params, _ := k.Params.Get(ctx)
-	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction) // TODO: remove with Dec
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	slashFaultThreshold := math.LegacyMustNewDecFromStr(params.SlashFaultThreshold) // TODO: remove with Dec
+	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction)             // TODO: remove with Dec
+	challengeCount := k.GetChallengeCounter(ctx)
+	// reset counter
+	k.SetChallengeCounter(ctx, 0)
+	threshold := slashFaultThreshold.MulInt64(int64(challengeCount)).TruncateInt().Uint64()
 	powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
 		validator, err := k.StakingKeeper.Validator(ctx, operator)
@@ -70,7 +95,7 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 			return false
 		}
 
-		if faultCount <= params.EpochMaxFault {
+		if faultCount <= threshold {
 			return false
 		}
 

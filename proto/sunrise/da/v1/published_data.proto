@@ -19,15 +19,19 @@ message PublishedData {
   Status status = 5;
   string publisher = 6;
   string challenger = 7;
-  repeated cosmos.base.v1beta1.Coin collateral = 8 [
+  repeated cosmos.base.v1beta1.Coin publish_data_collateral = 8 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  google.protobuf.Timestamp challenge_timestamp = 9 [
+  repeated cosmos.base.v1beta1.Coin submit_invalidity_collateral = 9 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+  google.protobuf.Timestamp challenge_timestamp = 10 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  string data_source_info = 10;
+  string data_source_info = 11;
 }
 
 // PublishedDataStatus
@@ -38,12 +42,10 @@ enum Status {
   STATUS_VERIFIED = 1;
   // Rejected
   STATUS_REJECTED = 2;
-  // After processing in the msg_server
-  STATUS_VOTING = 3;
   // Verified the votes from the validators. Challenge can be received (after preBlocker)
-  STATUS_CHALLENGE_PERIOD = 4;
-  // reported as fraud. SubmitProof tx can be received (after received ChallengeForFraud tx)
-  STATUS_CHALLENGING = 5;
+  STATUS_CHALLENGE_PERIOD = 3;
+  // A certain number of SubmitInvalidity received. Validators can send SubmitValidityProof tx.
+  STATUS_CHALLENGING = 4;
 }
 
 // Proof
@@ -52,4 +54,11 @@ message Proof {
   string sender = 2;
   repeated int64 indices = 3;
   repeated bytes proofs = 4;
+}
+
+// Invalidity
+message Invalidity {
+  string metadata_uri = 1;
+  string sender = 2;
+  repeated int64 indices = 3;
 }
