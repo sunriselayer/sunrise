@@ -13,23 +13,12 @@ message RoutePool {
 }
 
 message RouteSeries {
-  repeated Route routes = 1 [
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
+  repeated Route routes = 1 [(gogoproto.nullable) = false];
 }
 
 message RouteParallel {
-  repeated Route routes = 1 [
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
-  repeated string weights = 2 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false,
-    (amino.dont_omitempty) = true
-  ];
+  repeated Route routes = 1 [(gogoproto.nullable) = false];
+  repeated string weights = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
 
 message Route {

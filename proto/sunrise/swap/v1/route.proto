@@ -20,11 +20,7 @@ message RouteSeries {
 // RouteParallel
 message RouteParallel {
   repeated Route routes = 1 [(gogoproto.nullable) = false];
-  repeated string weights = 2 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  repeated string weights = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
 
 // Route
