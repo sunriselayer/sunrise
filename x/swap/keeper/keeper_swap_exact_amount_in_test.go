@@ -117,7 +117,7 @@ func TestSwapExactAmountIn(t *testing.T) {
 								},
 							},
 						},
-						Weights: []math.LegacyDec{math.LegacyOneDec()},
+						Weights: []string{math.LegacyOneDec().String()},
 					},
 				},
 			},
