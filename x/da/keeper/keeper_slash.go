@@ -10,7 +10,7 @@ import (
 func (k Keeper) GetChallengeCounter(ctx context.Context) uint64 {
 	val, err := k.ChallengeCounts.Get(ctx)
 	if err != nil {
-		panic(err)
+		return 0
 	}
 
 	return val
