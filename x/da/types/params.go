@@ -162,13 +162,13 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must be less than 1")
 	}
 
-	if p.ChallengePeriod == 0 {
+	if p.ChallengePeriod <= 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge period must be positive")
 	}
-	if p.ProofPeriod == 0 {
+	if p.ProofPeriod <= 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "proof period must be positive")
 	}
-	if p.RejectedRemovalPeriod == 0 {
+	if p.RejectedRemovalPeriod <= 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "rejected removal period must be positive")
 	}
 
