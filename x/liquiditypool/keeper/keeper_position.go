@@ -27,7 +27,7 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 		return err
 	}
 
-	pool.CurrentSqrtPrice = initialSqrtPrice
+	pool.CurrentSqrtPrice = initialSqrtPrice.String()
 	pool.CurrentTick = initialTick
 
 	k.SetPool(ctx, pool)
@@ -36,7 +36,7 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 }
 
 func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) {
-	pool.CurrentSqrtPrice = math.LegacyZeroDec()
+	pool.CurrentSqrtPrice = math.LegacyZeroDec().String()
 	pool.CurrentTick = 0
 
 	k.SetPool(ctx, pool)
@@ -64,13 +64,18 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 	}
 
 	// Update position liquidity
-	position.Liquidity = position.Liquidity.Add(liquidityDelta)
-	if position.Liquidity.IsNegative() {
+	liquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, err
+	}
+	liquidity = liquidity.Add(liquidityDelta)
+	if liquidity.IsNegative() {
 		return math.Int{}, math.Int{}, false, false, types.ErrNegativeLiquidity
 	}
-	if position.Liquidity.IsZero() {
+	if liquidity.IsZero() {
 		k.RemovePosition(ctx, position.Id)
 	} else {
+		position.Liquidity = liquidity.String()
 		k.SetPosition(ctx, position)
 	}
 
@@ -82,7 +87,14 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 	if !k.PoolHasPosition(ctx, poolId) {
 		k.resetPool(ctx, pool)
 	} else {
-		pool.UpdateLiquidityIfActivePosition(ctx, lowerTick, upperTick, liquidityDelta)
+		// update liquidity, if position is active
+		if pool.IsCurrentTickInRange(lowerTick, upperTick) {
+			currentTickLiquidity, err := math.LegacyNewDecFromStr(pool.CurrentTickLiquidity)
+			if err != nil {
+				return math.Int{}, math.Int{}, false, false, err
+			}
+			pool.CurrentTickLiquidity = currentTickLiquidity.Add(liquidityDelta).String()
+		}
 
 		k.SetPool(ctx, pool)
 	}
@@ -112,7 +124,11 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 		return math.Int{}, math.Int{}, types.ErrNegativeTokenAmount
 	}
 
-	if position.Liquidity.LT(liquidity) {
+	positionLiquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
+	if err != nil {
+		return math.Int{}, math.Int{}, err
+	}
+	if positionLiquidity.LT(liquidity) {
 		return math.Int{}, math.Int{}, types.ErrInsufficientLiquidity
 	}
 

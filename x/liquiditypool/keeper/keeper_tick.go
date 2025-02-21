@@ -17,17 +17,25 @@ func (k Keeper) UpsertTick(ctx context.Context, poolId uint64, tickIndex int64, 
 		return false, err
 	}
 
-	liquidityBefore := tickInfo.LiquidityGross
-	liquidityAfter := liquidityBefore.Add(liquidityDelta)
-	tickInfo.LiquidityGross = liquidityAfter
-
-	if upper {
-		tickInfo.LiquidityNet.SubMut(liquidityDelta)
-	} else {
-		tickInfo.LiquidityNet.AddMut(liquidityDelta)
+	liquidityBefore, err := math.LegacyNewDecFromStr(tickInfo.LiquidityGross)
+	if err != nil {
+		return false, err
 	}
+	liquidityAfter := liquidityBefore.Add(liquidityDelta)
+	tickInfo.LiquidityGross = liquidityAfter.String()
 
-	if tickInfo.LiquidityGross.IsZero() && tickInfo.LiquidityNet.IsZero() {
+	liquidityNet, err := math.LegacyNewDecFromStr(tickInfo.LiquidityNet)
+	if err != nil {
+		return false, err
+	}
+	if upper {
+		liquidityNet.SubMut(liquidityDelta)
+	} else {
+		liquidityNet.AddMut(liquidityDelta)
+	}
+	tickInfo.LiquidityNet = liquidityNet.String()
+
+	if liquidityAfter.IsZero() && liquidityNet.IsZero() {
 		tickIsEmpty = true
 	}
 
@@ -64,8 +72,8 @@ func (k Keeper) NewTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 	return types.TickInfo{
 		PoolId:         poolId,
 		TickIndex:      tickIndex,
-		LiquidityGross: math.LegacyZeroDec(),
-		LiquidityNet:   math.LegacyZeroDec(),
+		LiquidityGross: math.LegacyZeroDec().String(),
+		LiquidityNet:   math.LegacyZeroDec().String(),
 		FeeGrowth:      initialFeeGrowth,
 	}, nil
 }
