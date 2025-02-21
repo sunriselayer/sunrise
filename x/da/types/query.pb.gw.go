@@ -759,21 +759,21 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_PublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "published-data"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_PublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "published-data"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AllPublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "all-published-data"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AllPublishedData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "all-published-data"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ValidityProof_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "validity-proof"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ValidityProof_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "validity-proof"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AllValidityProofs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "all-validity-proofs"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AllValidityProofs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "all-validity-proofs"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Invalidity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "invalidity"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Invalidity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "invalidity"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AllInvalidity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "all-invalidity"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AllInvalidity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "all-invalidity"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ZkpProofThreshold_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "zkp-proof-threshold"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ZkpProofThreshold_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "zkp-proof-threshold"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_ProofDeputy_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "proof-deputy"}, "", runtime.AssumeColonVerbOpt(false)))
 )
