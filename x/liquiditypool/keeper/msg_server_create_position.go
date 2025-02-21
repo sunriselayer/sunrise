@@ -67,7 +67,11 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 	}
 
 	// Calculate the amount of liquidity that will be added to the pool when this position is created.
-	liquidityDelta := types.GetLiquidityFromAmounts(pool.CurrentSqrtPrice, sqrtPriceLowerTick, sqrtPriceUpperTick, amountBaseDesired, amountQuoteDesired)
+	currentSqrtPrice, err := math.LegacyNewDecFromStr(pool.CurrentSqrtPrice)
+	if err != nil {
+		return nil, err
+	}
+	liquidityDelta := types.GetLiquidityFromAmounts(currentSqrtPrice, sqrtPriceLowerTick, sqrtPriceUpperTick, amountBaseDesired, amountQuoteDesired)
 	if liquidityDelta.IsZero() {
 		return nil, errorsmod.Wrap(types.ErrZeroLiquidity, `liquidityDelta got 0 value unexpectedly`)
 	}
@@ -78,7 +82,7 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		Address:   msg.Sender,
 		LowerTick: msg.LowerTick,
 		UpperTick: msg.UpperTick,
-		Liquidity: math.LegacyZeroDec(),
+		Liquidity: math.LegacyZeroDec().String(),
 	}
 	positionId := k.AppendPosition(ctx, position)
 
@@ -115,7 +119,7 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		PoolId:     msg.PoolId,
 		LowerTick:  msg.LowerTick,
 		UpperTick:  msg.UpperTick,
-		Liquidity:  position.Liquidity.String(),
+		Liquidity:  position.Liquidity,
 	}); err != nil {
 		return nil, err
 	}

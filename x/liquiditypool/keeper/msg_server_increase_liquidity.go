@@ -6,6 +6,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -41,7 +42,12 @@ func (k msgServer) IncreaseLiquidity(ctx context.Context, msg *types.MsgIncrease
 	if err != nil {
 		return nil, err
 	}
-	amountBaseWithdrawn, amountQuoteWithdrawn, err := k.Keeper.DecreaseLiquidity(sdkCtx, sender, msg.Id, position.Liquidity)
+	liquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
+	if err != nil {
+		return nil, err
+	}
+
+	amountBaseWithdrawn, amountQuoteWithdrawn, err := k.Keeper.DecreaseLiquidity(sdkCtx, sender, msg.Id, liquidity)
 	if err != nil {
 		return nil, err
 	}
