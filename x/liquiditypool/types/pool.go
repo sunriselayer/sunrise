@@ -46,7 +46,10 @@ func (p Pool) CalcActualAmounts(lowerTick, upperTick int64, liquidityDelta math.
 	)
 
 	if p.IsCurrentTickInRange(lowerTick, upperTick) {
-		currentSqrtPrice := p.CurrentSqrtPrice
+		currentSqrtPrice, err := math.LegacyNewDecFromStr(p.CurrentSqrtPrice)
+		if err != nil {
+			return math.LegacyDec{}, math.LegacyDec{}, err
+		}
 		actualAmountBase = CalcAmountBaseDelta(liquidityDelta, currentSqrtPrice, sqrtPriceUpperTick, roundUp)
 		actualAmountQuote = CalcAmountQuoteDelta(liquidityDelta, currentSqrtPrice, sqrtPriceLowerTick, roundUp)
 	} else if p.CurrentTick < lowerTick {
@@ -61,18 +64,14 @@ func (p Pool) CalcActualAmounts(lowerTick, upperTick int64, liquidityDelta math.
 }
 
 func (p Pool) HasPosition(ctx sdk.Context) bool {
-	if p.CurrentSqrtPrice.IsZero() && p.GetCurrentTick() == 0 {
+	currentSqrtPrice, err := math.LegacyNewDecFromStr(p.CurrentSqrtPrice)
+	if err != nil {
+		return false
+	}
+	if currentSqrtPrice.IsZero() && p.GetCurrentTick() == 0 {
 		return false
 	}
 	return true
-}
-
-func (p *Pool) UpdateLiquidityIfActivePosition(ctx sdk.Context, lowerTick, upperTick int64, liquidityDelta math.LegacyDec) bool {
-	if p.IsCurrentTickInRange(lowerTick, upperTick) {
-		p.CurrentTickLiquidity = p.CurrentTickLiquidity.Add(liquidityDelta)
-		return true
-	}
-	return false
 }
 
 func (p *Pool) ApplySwap(newLiquidity math.LegacyDec, newCurrentTick int64, newCurrentSqrtPrice math.LegacyDec) error {
@@ -90,9 +89,9 @@ func (p *Pool) ApplySwap(newLiquidity math.LegacyDec, newCurrentTick int64, newC
 		return ErrTickIndexOutOfBoundaries
 	}
 
-	p.CurrentTickLiquidity = newLiquidity
+	p.CurrentTickLiquidity = newLiquidity.String()
 	p.CurrentTick = newCurrentTick
-	p.CurrentSqrtPrice = newCurrentSqrtPrice
+	p.CurrentSqrtPrice = newCurrentSqrtPrice.String()
 
 	return nil
 }
