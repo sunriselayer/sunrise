@@ -143,7 +143,7 @@ message QueryZkpProofThresholdRequest {
 // QueryZkpProofThresholdResponse is response type for the
 // Query/ZkpProofThreshold RPC method.
 message QueryZkpProofThresholdResponse {
-  uint64 threshold = 2;
+  uint64 threshold = 2 [(amino.dont_omitempty) = true];
 }
 
 // QueryProofDeputyRequest is request type for the
