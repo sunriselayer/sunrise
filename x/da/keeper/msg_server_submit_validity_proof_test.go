@@ -42,7 +42,7 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 	require.NoError(t, err)
 
 	// Recover proving key
-	provingKey, err := zkp.UnmarshalProvingKey([]byte(types.DefaultProvingKeyBase64))
+	provingKey, err := zkp.UnmarshalProvingKey(params.ZkpProvingKey)
 	require.NoError(t, err)
 
 	witness1, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())

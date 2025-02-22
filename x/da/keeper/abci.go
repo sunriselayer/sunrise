@@ -144,6 +144,10 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			safeShardIndices := []int64{}
 			for index, proofCount := range shardProofCount {
+				if len(data.ShardDoubleHashes) < int(data.ParityShardCount) {
+					k.Logger.Error("parity shard count is greater than total shard count")
+					continue
+				}
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
 				replicationFactorWithParity := replicationFactor.
 					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
