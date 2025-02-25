@@ -19,29 +19,29 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Pools",
-					Use:       "list-pools",
+					Use:       "all-pools",
 					Short:     "List all pools",
 				},
 				{
 					RpcMethod:      "Pool",
-					Use:            "show-pool <id>",
+					Use:            "pool <id>",
 					Short:          "Shows a pool by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
 					RpcMethod: "Positions",
-					Use:       "list-positions",
+					Use:       "all-positions",
 					Short:     "List all positions",
 				},
 				{
 					RpcMethod:      "Position",
-					Use:            "show-position <id>",
+					Use:            "position <id>",
 					Short:          "Shows a position by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
 					RpcMethod:      "PoolPositions",
-					Use:            "show-pool-positions <pool_id>",
+					Use:            "pool-positions <pool_id>",
 					Short:          "List positions by pool id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "pool_id"}},
 				},
@@ -53,7 +53,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "PositionFees",
-					Use:            "show-position-fees <id>",
+					Use:            "position-fees <id>",
 					Short:          "Shows fees in a position by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
