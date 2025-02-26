@@ -14,7 +14,6 @@ import (
 
 	// <sunsise>
 	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
-	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	// </sunrise>
 )
 
@@ -71,14 +70,14 @@ func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.M
 // }
 
 func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *lockuptypes.MsgSend) (
-	*v1.MsgExecuteMessagesResponse, error,
+	*lockuptypes.MsgExecuteMessagesResponse, error,
 ) {
 	return cva.BaseLockup.SendCoins(ctx, msg, cva.GetLockedCoinsWithDenoms)
 }
 
 // <sunrise>
 func (cva *ContinuousLockingAccount) SelfDelegate(ctx context.Context, msg *lockuptypes.MsgSelfDelegate) (
-	*v1.MsgSelfDelegateResponse, error,
+	*lockuptypes.MsgSelfDelegateResponse, error,
 ) {
 	return cva.BaseLockup.SelfDelegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
 }
