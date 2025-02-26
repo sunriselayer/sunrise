@@ -16,7 +16,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	"cosmossdk.io/x/accounts/accountstd"
-	lockuptypes "cosmossdk.io/x/accounts/defaults/lockup/v1"
 	banktypes "cosmossdk.io/x/bank/types"
 
 	// distrtypes "cosmossdk.io/x/distribution/types"
@@ -28,6 +27,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	// <sunsise>
+	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	selfdelegationtypes "github.com/sunriselayer/sunrise/x/selfdelegation/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"

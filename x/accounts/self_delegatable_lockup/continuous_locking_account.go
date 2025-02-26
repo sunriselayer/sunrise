@@ -8,12 +8,12 @@ import (
 	collcodec "cosmossdk.io/collections/codec"
 	"cosmossdk.io/math"
 	"cosmossdk.io/x/accounts/accountstd"
-	lockuptypes "cosmossdk.io/x/accounts/defaults/lockup/v1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	// <sunsise>
+	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	// </sunrise>
 )
@@ -40,7 +40,7 @@ type ContinuousLockingAccount struct {
 	StartTime collections.Item[time.Time]
 }
 
-func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableLockupAccount) (*v1.MsgInitSelfDelegatableLockupAccountResponse, error) {
+func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.MsgInitSelfDelegatableLockupAccount) (*lockuptypes.MsgInitSelfDelegatableLockupAccountResponse, error) {
 	if msg.EndTime.IsZero() {
 		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid end time %s", msg.EndTime.String())
 	}
@@ -70,14 +70,14 @@ func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *v1.MsgInitSel
 // 	return cva.BaseLockup.Delegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
 // }
 
-func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *v1.MsgSend) (
+func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *lockuptypes.MsgSend) (
 	*v1.MsgExecuteMessagesResponse, error,
 ) {
 	return cva.BaseLockup.SendCoins(ctx, msg, cva.GetLockedCoinsWithDenoms)
 }
 
 // <sunrise>
-func (cva *ContinuousLockingAccount) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate) (
+func (cva *ContinuousLockingAccount) SelfDelegate(ctx context.Context, msg *lockuptypes.MsgSelfDelegate) (
 	*v1.MsgSelfDelegateResponse, error,
 ) {
 	return cva.BaseLockup.SelfDelegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
