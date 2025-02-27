@@ -43,9 +43,13 @@ func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.Q
 		return nil, err
 	}
 
+	currentSqrtPrice, err := math.LegacyNewDecFromStr(pool.CurrentSqrtPrice)
+	if err != nil {
+		return nil, err
+	}
 	var liquidityDelta math.LegacyDec
 	if req.Denom == pool.DenomBase {
-		liquidityDelta = types.LiquidityBase(amount, pool.CurrentSqrtPrice, sqrtPriceUpperTick)
+		liquidityDelta = types.LiquidityBase(amount, currentSqrtPrice, sqrtPriceUpperTick)
 		_, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)
 		if err != nil {
 			return nil, err
@@ -54,7 +58,7 @@ func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.Q
 			Amount: sdk.NewCoin(pool.DenomQuote, actualAmountQuote.TruncateInt()),
 		}, nil
 	} else if req.Denom == pool.DenomQuote {
-		liquidityDelta = types.LiquidityQuote(amount, pool.CurrentSqrtPrice, sqrtPriceLowerTick)
+		liquidityDelta = types.LiquidityQuote(amount, currentSqrtPrice, sqrtPriceLowerTick)
 		actualAmountBase, _, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)
 		if err != nil {
 			return nil, err
@@ -93,7 +97,11 @@ func (q queryServer) CalculationIncreaseLiquidity(ctx context.Context, req *type
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}
-	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, position.Liquidity)
+	liquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
+	if err != nil {
+		return nil, err
+	}
+	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, liquidity)
 	if err != nil {
 		return nil, err
 	}

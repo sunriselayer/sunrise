@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.liquidityincentive.v1;
 
+import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/liquidityincentive/v1/gauge.proto";
 
@@ -8,8 +9,8 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 // Epoch
 message Epoch {
-  uint64 id = 1;
-  int64 start_block = 2;
-  int64 end_block = 3;
+  uint64 id = 1 [(amino.dont_omitempty) = true];
+  int64 start_block = 2 [(amino.dont_omitempty) = true];
+  int64 end_block = 3 [(amino.dont_omitempty) = true];
   repeated Gauge gauges = 4 [(gogoproto.nullable) = false];
 }

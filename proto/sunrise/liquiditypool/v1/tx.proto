@@ -98,11 +98,7 @@ message MsgCreatePositionResponse {
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-  string liquidity = 4 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string liquidity = 4 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
 
 // MsgIncreaseLiquidity
