@@ -105,7 +105,7 @@ func GenerateZkpKeys() (string, string) {
 		panic(err)
 	}
 
-	zkpVerifyingKeyBz, err := zkp.MarshalProvingKey(verifyingKey)
+	zkpVerifyingKeyBz, err := zkp.MarshalVerifyingKey(verifyingKey)
 	if err != nil {
 		panic(err)
 	}
