@@ -41,14 +41,14 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	var pool = types.Pool{
 		DenomBase:  msg.DenomBase,
 		DenomQuote: msg.DenomQuote,
-		FeeRate:    feeRate,
+		FeeRate:    feeRate.String(),
 		TickParams: types.TickParams{
-			PriceRatio: priceRatio,
-			BaseOffset: baseOffset,
+			PriceRatio: priceRatio.String(),
+			BaseOffset: baseOffset.String(),
 		},
 		CurrentTick:          0,
-		CurrentTickLiquidity: math.LegacyZeroDec(),
-		CurrentSqrtPrice:     math.LegacyZeroDec(),
+		CurrentTickLiquidity: math.LegacyZeroDec().String(),
+		CurrentSqrtPrice:     math.LegacyZeroDec().String(),
 	}
 	id := k.AppendPool(ctx, pool)
 	if err := k.createFeeAccumulator(ctx, id); err != nil {

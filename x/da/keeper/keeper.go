@@ -14,17 +14,21 @@ import (
 type Keeper struct {
 	appmodule.Environment
 
-	cdc          codec.BinaryCodec
-	addressCodec address.Codec
+	cdc                   codec.BinaryCodec
+	addressCodec          address.Codec
+	validatorAddressCodec address.ValidatorAddressCodec
 	// Address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema        collections.Schema
-	Params        collections.Item[types.Params]
-	PublishedData *collections.IndexedMap[string, types.PublishedData, types.PublishedDataIndexes]
-	FaultCounts   collections.Map[[]byte, uint64]
-	Proofs        collections.Map[collections.Pair[string, []byte], types.Proof]
+	Schema          collections.Schema
+	Params          collections.Item[types.Params]
+	PublishedData   *collections.IndexedMap[string, types.PublishedData, types.PublishedDataIndexes]
+	ChallengeCounts collections.Item[uint64]
+	FaultCounts     collections.Map[[]byte, uint64]
+	Proofs          collections.Map[collections.Pair[string, []byte], types.Proof]
+	Invalidities    collections.Map[collections.Pair[string, []byte], types.Invalidity]
+	ProofDeputies   collections.Map[[]byte, []byte]
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -35,6 +39,7 @@ func NewKeeper(
 	env appmodule.Environment,
 	cdc codec.BinaryCodec,
 	addressCodec address.Codec,
+	validatorAddressCodec address.ValidatorAddressCodec,
 	authority []byte,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
@@ -47,22 +52,19 @@ func NewKeeper(
 	sb := collections.NewSchemaBuilder(env.KVStoreService)
 
 	k := Keeper{
-		Environment:  env,
-		cdc:          cdc,
-		addressCodec: addressCodec,
-		authority:    authority,
+		Environment:           env,
+		cdc:                   cdc,
+		addressCodec:          addressCodec,
+		validatorAddressCodec: validatorAddressCodec,
+		authority:             authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		PublishedData: collections.NewIndexedMap(
-			sb,
-			types.PublishedDataKeyPrefix,
-			"published_data",
-			types.PublishedDataKeyCodec,
-			codec.CollValue[types.PublishedData](cdc),
-			types.NewPublishedDataIndexes(sb),
-		),
-		FaultCounts: collections.NewMap(sb, types.FaultCountsKeyPrefix, "fault_counts", types.FaultCounterKeyCodec, collections.Uint64Value),
-		Proofs:      collections.NewMap(sb, types.ProofKeyPrefix, "proofs", types.ProofKeyCodec, codec.CollValue[types.Proof](cdc)),
+		Params:          collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		PublishedData:   collections.NewIndexedMap(sb, types.PublishedDataKeyPrefix, "published_data", types.PublishedDataKeyCodec, codec.CollValue[types.PublishedData](cdc), types.NewPublishedDataIndexes(sb)),
+		ChallengeCounts: collections.NewItem(sb, types.ChallengeCountsKeyPrefix, "challenge_counts", collections.Uint64Value),
+		FaultCounts:     collections.NewMap(sb, types.FaultCountsKeyPrefix, "fault_counts", types.FaultCounterKeyCodec, collections.Uint64Value),
+		Proofs:          collections.NewMap(sb, types.ProofKeyPrefix, "proofs", types.ProofKeyCodec, codec.CollValue[types.Proof](cdc)),
+		Invalidities:    collections.NewMap(sb, types.InvalidityKeyPrefix, "invalidities", types.InvalidityKeyCodec, codec.CollValue[types.Invalidity](cdc)),
+		ProofDeputies:   collections.NewMap(sb, types.ProofDeputiesKeyPrefix, "proof_deputy", types.ProofDeputyKeyCodec, collections.BytesValue),
 
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,

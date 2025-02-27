@@ -45,7 +45,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	require.Equal(t, resp.Id, uint64(0))
 	require.Equal(t, resp.AmountBase.String(), "10001")
 	require.Equal(t, resp.AmountQuote.String(), "0")
-	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
+	require.Equal(t, resp.Liquidity, "200020000.062502249619530703")
 
 	// Create 2nd position with same tick
 	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
@@ -62,7 +62,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	require.Equal(t, resp.Id, uint64(1))
 	require.Equal(t, resp.AmountBase.String(), "10001")
 	require.Equal(t, resp.AmountQuote.String(), "0")
-	require.Equal(t, resp.Liquidity.String(), "200020000.062502249619530703")
+	require.Equal(t, resp.Liquidity, "200020000.062502249619530703")
 
 	// Create 3rd position with different tick
 	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
@@ -79,7 +79,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	require.Equal(t, resp.Id, uint64(2))
 	require.Equal(t, resp.AmountBase.String(), "10000")
 	require.Equal(t, resp.AmountQuote.String(), "9048")
-	require.Equal(t, resp.Liquidity.String(), "19053571.850177307210510444")
+	require.Equal(t, resp.Liquidity, "19053571.850177307210510444")
 }
 
 func TestMsgServerIncreaseLiquidity(t *testing.T) {
@@ -209,7 +209,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    sender,
 				Id:        0,
-				Liquidity: resp.Liquidity.String(),
+				Liquidity: resp.Liquidity,
 			},
 		},
 		{
@@ -217,7 +217,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    "B",
 				Id:        0,
-				Liquidity: resp.Liquidity.String(),
+				Liquidity: resp.Liquidity,
 			},
 			err: sdkerrors.ErrUnauthorized,
 		},
@@ -226,7 +226,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 			request: &types.MsgDecreaseLiquidity{
 				Sender:    sender,
 				Id:        10,
-				Liquidity: resp.Liquidity.String(),
+				Liquidity: resp.Liquidity,
 			},
 			err: sdkerrors.ErrKeyNotFound,
 		},

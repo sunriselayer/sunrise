@@ -17,10 +17,30 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (*types.MsgSubmitProofResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmitValidityProof) (*types.MsgSubmitValidityProofResponse, error) {
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
+	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
+	validator, err := k.validatorAddressCodec.StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+	valAddr := sdk.ValAddress(validator)
+	_, err = k.StakingKeeper.Validator(ctx, valAddr)
+	if err != nil {
+		return nil, err
+	}
+	if !bytes.Equal(sender, validator) {
+		deputy, found := k.GetProofDeputy(ctx, validator)
+		if !found {
+			return nil, types.ErrDeputyNotFound
+		}
+		if !bytes.Equal(deputy, sender) {
+			return nil, types.ErrInvalidDeputy
+		}
+	}
+
 	// check number of proofs <> indices
 	if len(msg.Indices) != len(msg.Proofs) {
 		return nil, types.ErrIndicesAndProofsMismatch
@@ -29,7 +49,10 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
+	publishedData, found := k.GetPublishedData(ctx, msg.MetadataUri)
+	if !found {
+		return nil, types.ErrDataNotFound
+	}
 	if publishedData.Status != types.Status_STATUS_CHALLENGING {
 		return nil, types.ErrDataNotInChallenge
 	}
@@ -39,7 +62,7 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 	if err != nil {
 		return nil, err
 	}
-	if publishedData.ChallengeTimestamp.Add(params.ProofPeriod).Before(sdkCtx.BlockTime()) {
+	if publishedData.Timestamp.Add(params.ChallengePeriod).Add(params.ProofPeriod).Before(sdkCtx.BlockTime()) {
 		return nil, types.ErrProofPeriodIsOver
 	}
 
@@ -59,7 +82,7 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 		}
 
 		if len(publishedData.ShardDoubleHashes) <= int(j) {
-			return nil, types.ErrProofIndiceOverflow
+			return nil, types.ErrProofIndicesOverflow
 		}
 
 		assignment := zkp.ValidityProofCircuit{
@@ -86,7 +109,7 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 	// save proof in the storage
 	err = k.SetProof(ctx, types.Proof{
 		MetadataUri: msg.MetadataUri,
-		Sender:      msg.Sender,
+		Sender:      sdk.AccAddress(validator).String(),
 		Indices:     msg.Indices,
 		Proofs:      msg.Proofs,
 	})
@@ -99,5 +122,5 @@ func (k msgServer) SubmitProof(ctx context.Context, msg *types.MsgSubmitProof) (
 		return nil, err
 	}
 
-	return &types.MsgSubmitProofResponse{}, nil
+	return &types.MsgSubmitValidityProofResponse{}, nil
 }

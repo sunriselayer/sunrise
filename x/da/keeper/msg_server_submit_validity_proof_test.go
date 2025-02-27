@@ -20,7 +20,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-func TestMsgSubmitProof(t *testing.T) {
+func TestMsgSubmitValidityProof(t *testing.T) {
 	k, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
 	require.NoError(t, k.Params.Set(ctx, params))
@@ -61,27 +61,28 @@ func TestMsgSubmitProof(t *testing.T) {
 	proofBytes := b.Bytes()
 
 	err = k.SetPublishedData(ctx, types.PublishedData{
-		MetadataUri:        "ipfs://metadata1",
-		ParityShardCount:   0,
-		ShardDoubleHashes:  [][]byte{hash},
-		Timestamp:          time.Now(),
-		Status:             types.Status_STATUS_CHALLENGING,
-		Publisher:          "publisher",
-		Challenger:         "challenger",
-		Collateral:         sdk.Coins{},
-		ChallengeTimestamp: time.Now(),
+		MetadataUri:                "ipfs://metadata1",
+		ParityShardCount:           0,
+		ShardDoubleHashes:          [][]byte{hash},
+		Timestamp:                  time.Now(),
+		Status:                     types.Status_STATUS_CHALLENGING,
+		Publisher:                  "publisher",
+		Challenger:                 "challenger",
+		PublishDataCollateral:      sdk.Coins{},
+		SubmitInvalidityCollateral: sdk.Coins{},
+		ChallengeTimestamp:         time.Now(),
 	})
 	require.NoError(t, err)
 
 	testCases := []struct {
 		name      string
-		input     *types.MsgSubmitProof
+		input     *types.MsgSubmitValidityProof
 		expErr    bool
 		expErrMsg string
 	}{
 		{
 			name: "empty proof",
-			input: &types.MsgSubmitProof{
+			input: &types.MsgSubmitValidityProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{},
@@ -91,7 +92,7 @@ func TestMsgSubmitProof(t *testing.T) {
 		},
 		{
 			name: "valid proof",
-			input: &types.MsgSubmitProof{
+			input: &types.MsgSubmitValidityProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
@@ -101,7 +102,7 @@ func TestMsgSubmitProof(t *testing.T) {
 		},
 		{
 			name: "invalid proof",
-			input: &types.MsgSubmitProof{
+			input: &types.MsgSubmitValidityProof{
 				Sender:      sample.AccAddress(),
 				MetadataUri: "ipfs://metadata1",
 				Indices:     []int64{0},
@@ -114,7 +115,7 @@ func TestMsgSubmitProof(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := ms.SubmitProof(wctx, tc.input)
+			_, err := ms.SubmitValidityProof(wctx, tc.input)
 
 			if tc.expErr {
 				require.Error(t, err)

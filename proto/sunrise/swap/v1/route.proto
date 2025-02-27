@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.swap.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -9,7 +10,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 // RoutePool
 message RoutePool {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
 }
 
 // RouteSeries
@@ -20,11 +21,7 @@ message RouteSeries {
 // RouteParallel
 message RouteParallel {
   repeated Route routes = 1 [(gogoproto.nullable) = false];
-  repeated string weights = 2 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  repeated string weights = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
 
 // Route
@@ -41,7 +38,7 @@ message Route {
 
 // RouteResultPool
 message RouteResultPool {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
 }
 
 // RouteResultSeries

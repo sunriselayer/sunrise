@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -29,7 +30,11 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 	}
 	// Set all accumulator positions
 	for _, elem := range genState.AccumulatorPositions {
-		k.SetAccumulatorPosition(ctx, elem.Name, elem.AccumValuePerShare, elem.Index, elem.NumShares, elem.UnclaimedRewardsTotal)
+		numShares, err := math.LegacyNewDecFromStr(elem.NumShares)
+		if err != nil {
+			panic(err)
+		}
+		k.SetAccumulatorPosition(ctx, elem.Name, elem.AccumValuePerShare, elem.Index, numShares, elem.UnclaimedRewardsTotal)
 	}
 
 	return k.Params.Set(ctx, genState.Params)

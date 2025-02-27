@@ -68,7 +68,7 @@ import (
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	basedepinject "cosmossdk.io/x/accounts/defaults/base/depinject"
-	// lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
+	lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
 	multisigdepinject "cosmossdk.io/x/accounts/defaults/multisig/depinject"
 
 	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
@@ -186,7 +186,7 @@ func New(
 			),
 			depinject.Provide(
 				basedepinject.ProvideAccount,
-				//lockupdepinject.ProvideAllLockupAccounts,
+				lockupdepinject.ProvideAllLockupAccounts,
 				multisigdepinject.ProvideAccount,
 
 				basedepinject.ProvideSecp256K1PubKey,
@@ -287,27 +287,10 @@ func New(
 	daProposalHandler := NewProposalHandler(
 		logger,
 		app.DaKeeper,
-		app.StakingKeeper,
-		app.ModuleManager,
 		baseapp.NewDefaultProposalHandler(app.Mempool(), app),
 	)
 
-	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
-	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
-	// </sunrise>
-
-	// <sunrise>
-	// Vote extension
-	voteExtHandler := NewVoteExtHandler(logger, app.DaKeeper, app.StakingKeeper)
-
-	daConfig, err := ReadDAConfig(appOpts)
-	if err != nil {
-		panic(err)
-	}
-
-	app.App.BaseApp.SetExtendVoteHandler(voteExtHandler.ExtendVoteHandler(daConfig, app.txConfig.TxDecoder(), anteHandler, app.DaKeeper))
-	app.App.BaseApp.SetVerifyVoteExtensionHandler(voteExtHandler.VerifyVoteExtensionHandler(daConfig, app.DaKeeper))
 	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations

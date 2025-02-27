@@ -10,15 +10,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k msgServer) ChallengeForFraud(ctx context.Context, msg *types.MsgChallengeForFraud) (*types.MsgChallengeForFraudResponse, error) {
+func (k msgServer) SubmitInvalidity(ctx context.Context, msg *types.MsgSubmitInvalidity) (*types.MsgSubmitInvalidityResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// check number of indices
+	if len(msg.Indices) > 0 {
+		return nil, types.ErrInvalidIndices
 	}
 	// end static validation
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	publishedData := k.GetPublishedData(ctx, msg.MetadataUri)
+	publishedData, found := k.GetPublishedData(ctx, msg.MetadataUri)
+	if !found {
+		return nil, types.ErrDataNotFound
+	}
 	if publishedData.Status != types.Status_STATUS_CHALLENGE_PERIOD {
 		return nil, types.ErrCanNotOpenChallenge
 	}
@@ -32,18 +39,20 @@ func (k msgServer) ChallengeForFraud(ctx context.Context, msg *types.MsgChalleng
 	}
 
 	// Send collateral to module account
-	if publishedData.Collateral.IsAllPositive() {
+	if publishedData.SubmitInvalidityCollateral.IsAllPositive() {
 		sender := sdk.MustAccAddressFromBech32(msg.Sender)
-		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, publishedData.Collateral)
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, publishedData.SubmitInvalidityCollateral)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	publishedData.Status = types.Status_STATUS_CHALLENGING
-	publishedData.Challenger = msg.Sender
-	publishedData.ChallengeTimestamp = sdkCtx.BlockTime()
-	err = k.SetPublishedData(ctx, publishedData)
+	// save invalidity in the storage
+	err = k.SetInvalidity(ctx, types.Invalidity{
+		MetadataUri: msg.MetadataUri,
+		Sender:      msg.Sender,
+		Indices:     msg.Indices,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -53,5 +62,5 @@ func (k msgServer) ChallengeForFraud(ctx context.Context, msg *types.MsgChalleng
 		return nil, err
 	}
 
-	return &types.MsgChallengeForFraudResponse{}, nil
+	return &types.MsgSubmitInvalidityResponse{}, nil
 }

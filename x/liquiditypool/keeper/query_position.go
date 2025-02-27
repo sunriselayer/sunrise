@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -18,7 +19,11 @@ func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) t
 		return types.PositionInfo{Position: position}
 	}
 
-	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, position.Liquidity)
+	liquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
+	if err != nil {
+		return types.PositionInfo{Position: position}
+	}
+	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, liquidity)
 	if err != nil {
 		return types.PositionInfo{Position: position}
 	}

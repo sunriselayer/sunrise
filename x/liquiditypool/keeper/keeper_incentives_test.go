@@ -102,7 +102,7 @@ func TestAllocateIncentive(t *testing.T) {
 				resp, err := k.GetFeeAccumulator(wctx, tc.poolId)
 				require.NoError(t, err)
 				require.Equal(t, resp.AccumValue.String(), tc.expAccumulation)
-				require.Equal(t, resp.TotalShares.String(), "19053571.850177307210510444")
+				require.Equal(t, resp.TotalShares, "19053571.850177307210510444")
 			}
 		})
 	}

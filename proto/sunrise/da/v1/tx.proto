@@ -18,10 +18,14 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   // PublishData
   rpc PublishData(MsgPublishData) returns (MsgPublishDataResponse);
-  // ChallengeForFraud
-  rpc ChallengeForFraud(MsgChallengeForFraud) returns (MsgChallengeForFraudResponse);
-  // SubmitProof
-  rpc SubmitProof(MsgSubmitProof) returns (MsgSubmitProofResponse);
+  // SubmitInvalidity
+  rpc SubmitInvalidity(MsgSubmitInvalidity) returns (MsgSubmitInvalidityResponse);
+  // SubmitValidityProof
+  rpc SubmitValidityProof(MsgSubmitValidityProof) returns (MsgSubmitValidityProofResponse);
+  // RegisterProofDeputy
+  rpc RegisterProofDeputy(MsgRegisterProofDeputy) returns (MsgRegisterProofDeputyResponse);
+  // UnregisterProofDeputy
+  rpc UnregisterProofDeputy(MsgUnregisterProofDeputy) returns (MsgUnregisterProofDeputyResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -59,26 +63,47 @@ message MsgPublishData {
 // MsgPublishDataResponse
 message MsgPublishDataResponse {}
 
-// MsgChallengeForFraud
-message MsgChallengeForFraud {
-  option (cosmos.msg.v1.signer) = "sender";
-
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string metadata_uri = 2;
-}
-
-// MsgChallengeForFraudResponse
-message MsgChallengeForFraudResponse {}
-
-// MsgSubmitProof
-message MsgSubmitProof {
+// MsgSubmitInvalidity
+message MsgSubmitInvalidity {
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string metadata_uri = 2;
   repeated int64 indices = 3;
-  repeated bytes proofs = 4;
 }
 
-// MsgSubmitProofResponse
-message MsgSubmitProofResponse {}
+// MsgSubmitInvalidityResponse
+message MsgSubmitInvalidityResponse {}
+
+// MsgSubmitValidityProof
+message MsgSubmitValidityProof {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string metadata_uri = 3;
+  repeated int64 indices = 4;
+  repeated bytes proofs = 5;
+}
+
+// MsgSubmitValidityProofResponse
+message MsgSubmitValidityProofResponse {}
+
+// MsgRegisterProofDeputy
+message MsgRegisterProofDeputy {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string deputy_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgRegisterProofDeputyResponse
+message MsgRegisterProofDeputyResponse {}
+
+// MsgUnregisterProofDeputy
+message MsgUnregisterProofDeputy {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgUnregisterProofDeputyResponse
+message MsgUnregisterProofDeputyResponse {}

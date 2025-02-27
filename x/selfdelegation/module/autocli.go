@@ -42,15 +42,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "SelfDelegate",
-					Use:            "self-delegate",
+					Use:            "self-delegate <amount>",
 					Short:          "Send a self-delegate tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "amount"}},
 				},
 				{
 					RpcMethod:      "WithdrawSelfDelegationUnbonded",
-					Use:            "withdraw-self-delegation-unbonded",
+					Use:            "withdraw-self-delegation-unbonded <amount>",
 					Short:          "Send a withdraw-self-delegation-unbonded tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "amount"}},
 				},
 				{
 					RpcMethod: "RegisterLockupAccount",

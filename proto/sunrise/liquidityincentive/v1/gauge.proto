@@ -9,8 +9,8 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 // Gauge
 message Gauge {
-  uint64 previous_epoch_id = 1;
-  uint64 pool_id = 2;
+  uint64 previous_epoch_id = 1 [(amino.dont_omitempty) = true];
+  uint64 pool_id = 2 [(amino.dont_omitempty) = true];
   string count = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
@@ -21,7 +21,7 @@ message Gauge {
 
 // TallyResult
 message TallyResult {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
   string count = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
@@ -32,12 +32,12 @@ message TallyResult {
 
 // PoolWeight
 message PoolWeight {
-  uint64 pool_id = 1;
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
   string weight = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
 
 // Vote
 message Vote {
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated PoolWeight pool_weights = 2 [(gogoproto.nullable) = false];
 }

@@ -16,7 +16,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	"cosmossdk.io/x/accounts/accountstd"
-	lockuptypes "cosmossdk.io/x/accounts/defaults/lockup/v1"
 	banktypes "cosmossdk.io/x/bank/types"
 
 	// distrtypes "cosmossdk.io/x/distribution/types"
@@ -28,7 +27,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	// <sunsise>
-	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
+	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
 	selfdelegationtypes "github.com/sunriselayer/sunrise/x/selfdelegation/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// </sunrise>
@@ -84,8 +83,8 @@ type BaseLockup struct {
 	EndTime collections.Item[time.Time]
 }
 
-func (bva *BaseLockup) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableLockupAccount) (
-	*v1.MsgInitSelfDelegatableLockupAccountResponse, error,
+func (bva *BaseLockup) Init(ctx context.Context, msg *lockuptypes.MsgInitSelfDelegatableLockupAccount) (
+	*lockuptypes.MsgInitSelfDelegatableLockupAccountResponse, error,
 ) {
 	owner, err := bva.addressCodec.StringToBytes(msg.Owner)
 	if err != nil {
@@ -144,7 +143,7 @@ func (bva *BaseLockup) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableL
 		return nil, err
 	}
 
-	return &v1.MsgInitSelfDelegatableLockupAccountResponse{}, nil
+	return &lockuptypes.MsgInitSelfDelegatableLockupAccountResponse{}, nil
 }
 
 // func (bva *BaseLockup) Delegate(
@@ -302,9 +301,9 @@ func (bva *BaseLockup) Init(ctx context.Context, msg *v1.MsgInitSelfDelegatableL
 // }
 
 func (bva *BaseLockup) SendCoins(
-	ctx context.Context, msg *v1.MsgSend, getLockedCoinsFunc getLockedCoinsFunc,
+	ctx context.Context, msg *lockuptypes.MsgSend, getLockedCoinsFunc getLockedCoinsFunc,
 ) (
-	*v1.MsgExecuteMessagesResponse, error,
+	*lockuptypes.MsgExecuteMessagesResponse, error,
 ) {
 	err := bva.checkSender(ctx, msg.Sender)
 	if err != nil {
@@ -342,12 +341,12 @@ func (bva *BaseLockup) SendCoins(
 		return nil, err
 	}
 
-	return &v1.MsgExecuteMessagesResponse{Responses: resp}, nil
+	return &lockuptypes.MsgExecuteMessagesResponse{Responses: resp}, nil
 }
 
 // <sunrise>
-func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate, getLockedCoinsFunc getLockedCoinsFunc) (
-	*v1.MsgSelfDelegateResponse, error,
+func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *lockuptypes.MsgSelfDelegate, getLockedCoinsFunc getLockedCoinsFunc) (
+	*lockuptypes.MsgSelfDelegateResponse, error,
 ) {
 	err := bva.checkSender(ctx, msg.Sender)
 	if err != nil {
@@ -401,12 +400,12 @@ func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *v1.MsgSelfDelegate
 		return nil, err
 	}
 
-	return &v1.MsgSelfDelegateResponse{}, nil
+	return &lockuptypes.MsgSelfDelegateResponse{}, nil
 }
 
 // <sunrise>
-func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *v1.MsgWithdrawSelfDelegationUnbonded) (
-	*v1.MsgWithdrawSelfDelegationUnbondedResponse, error,
+func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *lockuptypes.MsgWithdrawSelfDelegationUnbonded) (
+	*lockuptypes.MsgWithdrawSelfDelegationUnbondedResponse, error,
 ) {
 	err := bva.checkSender(ctx, msg.Sender)
 	if err != nil {
@@ -447,7 +446,7 @@ func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *
 		return nil, err
 	}
 
-	return &v1.MsgWithdrawSelfDelegationUnbondedResponse{}, nil
+	return &lockuptypes.MsgWithdrawSelfDelegationUnbondedResponse{}, nil
 }
 
 func (bva *BaseLockup) checkSender(ctx context.Context, sender string) error {

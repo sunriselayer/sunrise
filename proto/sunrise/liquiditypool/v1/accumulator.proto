@@ -2,6 +2,7 @@ syntax = "proto3";
 package sunrise.liquiditypool.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
@@ -13,20 +14,14 @@ message AccumulatorObject {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
-  string total_shares = 3 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string total_shares = 3 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
 
 // AccumulatorPosition
 message AccumulatorPosition {
   string name = 1;
   string index = 2;
-  string num_shares = 3 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  string num_shares = 3 [(cosmos_proto.scalar) = "cosmos.Dec"];
   repeated cosmos.base.v1beta1.DecCoin accum_value_per_share = 4 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false

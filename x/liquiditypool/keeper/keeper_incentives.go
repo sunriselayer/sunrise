@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,7 +15,11 @@ func (k Keeper) AllocateIncentive(ctx sdk.Context, poolId uint64, sender sdk.Acc
 	if err != nil {
 		return err
 	}
-	feeGrowth := sdk.NewDecCoinsFromCoins(incentiveCoins...).QuoDecTruncate(pool.CurrentTickLiquidity)
+	liquidity, err := math.LegacyNewDecFromStr(pool.CurrentTickLiquidity)
+	if err != nil {
+		return err
+	}
+	feeGrowth := sdk.NewDecCoinsFromCoins(incentiveCoins...).QuoDecTruncate(liquidity)
 	k.AddToAccumulator(ctx, feeAccumulator, feeGrowth)
 
 	return k.bankKeeper.SendCoins(ctx, sender, pool.GetFeesAddress(), incentiveCoins)
