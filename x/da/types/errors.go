@@ -23,4 +23,5 @@ var (
 	ErrInvalidDeputy            = errors.Register(ModuleName, 1112, "invalid proof deputy")
 	ErrProofNotFound            = errors.Register(ModuleName, 1113, "validity proof not found")
 	ErrInvalidityNotFound       = errors.Register(ModuleName, 1114, "invalidity not found")
+	ErrValidatorNotBonded       = errors.Register(ModuleName, 1115, "validator is not bonded")
 )
