@@ -9,22 +9,22 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData, found bool) {
+func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData, found bool, err error) {
 	has, err := k.PublishedData.Has(ctx, metadataUri)
 	if err != nil {
-		panic(err)
+		return data, false, err
 	}
 
 	if !has {
-		return data, false
+		return data, false, nil
 	}
 
 	val, err := k.PublishedData.Get(ctx, metadataUri)
 	if err != nil {
-		panic(err)
+		return data, false, err
 	}
 
-	return val, true
+	return val, true, nil
 }
 
 // SetParams set the params
@@ -37,15 +37,12 @@ func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) 
 	return nil
 }
 
-func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) {
-	err := k.PublishedData.Remove(ctx, data.MetadataUri)
-	if err != nil {
-		panic(err)
-	}
+func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) error {
+	return k.PublishedData.Remove(ctx, data.MetadataUri)
 }
 
-func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.PublishedData) {
-	err := k.PublishedData.Walk(
+func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.PublishedData, err error) {
+	err = k.PublishedData.Walk(
 		ctx,
 		nil,
 		func(key string, value types.PublishedData) (bool, error) {
@@ -54,10 +51,9 @@ func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.Published
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
-	return
+	return list, nil
 }
 
 func (k Keeper) GetSpecificStatusDataBeforeTime(ctx sdk.Context, status types.Status, timestamp int64) (list []types.PublishedData, err error) {
@@ -70,11 +66,16 @@ func (k Keeper) GetSpecificStatusDataBeforeTime(ctx sdk.Context, status types.St
 			if key.K2() > timestamp {
 				return true, nil
 			}
-			data,_ := k.PublishedData.Get(ctx, metadataUri)
+			data, err := k.PublishedData.Get(ctx, metadataUri)
+			if err != nil {
+				return false, err
+			}
 			list = append(list, data)
 			return false, nil
 		},
 	)
-
-	return
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
 }

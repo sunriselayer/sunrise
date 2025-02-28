@@ -36,12 +36,19 @@ func (k msgServer) UnregisterProofDeputy(ctx context.Context, msg *types.MsgUnre
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
-	_, found := k.GetProofDeputy(ctx, sender)
+
+	_, found, err := k.GetProofDeputy(ctx, sender)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get proof deputy")
+	}
 	if !found {
 		return nil, types.ErrDeputyNotFound
 	}
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	k.DeleteProofDeputy(sdkCtx, sender)
+	if err := k.DeleteProofDeputy(sdkCtx, sender); err != nil {
+		return nil, errorsmod.Wrap(err, "failed to delete proof deputy")
+	}
 
 	err = sdkCtx.EventManager().EmitTypedEvent(msg)
 	if err != nil {

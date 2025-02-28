@@ -12,18 +12,22 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger.Error("failed to get params", "error", err)
 		return
 	}
 	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
 	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Unix())
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger.Error("failed to get challenge period data", "error", err)
 		return
 	}
 	for _, data := range challengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
-			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get invalidities", "error", err, "metadata_uri", data.MetadataUri)
+				continue
+			}
 			seen := make(map[int64]bool)
 			invalidIndices := []int64{}
 			for _, invalidity := range invalidities {
@@ -40,8 +44,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				data.ChallengeTimestamp = sdkCtx.BlockTime()
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
-					k.Logger.Error(err.Error())
-					return
+					k.Logger.Error("failed to set published data", "error", err, "metadata_uri", data.MetadataUri)
+					continue
 				}
 			}
 		}
@@ -50,7 +54,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	// if STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
 	expiredChallengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger.Error("failed to get expired challenge period data", "error", err)
 		return
 	}
 	for _, data := range expiredChallengePeriodData {
@@ -58,15 +62,15 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			data.Status = types.Status_STATUS_VERIFIED
 			err = k.SetPublishedData(ctx, data)
 			if err != nil {
-				k.Logger.Error(err.Error())
-				return
+				k.Logger.Error("failed to set published data", "error", err, "metadata_uri", data.MetadataUri)
+				continue
 			}
 			// refunds collateral to the publisher
 			publisher := sdk.MustAccAddressFromBech32(data.Publisher)
 			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.PublishDataCollateral)
 			if err != nil {
-				k.Logger.Error(err.Error())
-				return
+				k.Logger.Error("failed to refund collateral", "error", err, "publisher", data.Publisher)
+				continue
 			}
 		}
 	}
@@ -123,7 +127,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			// totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, k.StakingKeeper.PowerReduction(ctx))
 			// thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
-			proofs := k.GetProofs(sdkCtx, data.MetadataUri)
+			proofs, err := k.GetProofs(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get proofs", "error", err)
+				continue
+			}
 			shardProofCount := make(map[int64]int64)
 			shardProofSubmitted := make(map[int64]map[string]bool)
 			for _, proof := range proofs {
@@ -168,7 +176,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// valid_shards < data_shard_count
-			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get invalidities", "error", err)
+				continue
+			}
 			if int64(len(safeShardIndices))+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
@@ -237,20 +249,24 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			for _, proof := range proofs {
 				addr, err := k.addressCodec.StringToBytes(proof.Sender)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to convert address", "error", err)
 					continue
 				}
-				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
+				if err := k.DeleteProof(sdkCtx, proof.MetadataUri, addr); err != nil {
+					k.Logger.Error("failed to delete proof", "error", err)
+				}
 			}
 
 			// Clean up invalidity data
 			for _, invalidity := range invalidities {
 				addr, err := k.addressCodec.StringToBytes(invalidity.Sender)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to convert address", "error", err)
 					continue
 				}
-				k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
+				if err := k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr); err != nil {
+					k.Logger.Error("failed to delete invalidity", "error", err)
+				}
 			}
 		}
 	}
@@ -267,16 +283,20 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 	}
 
-	// If VerifiedRemovalPeriod id positive and STATUS_VERIFIED is overtime, remove from store
+	// If VerifiedRemovalPeriod is positive and STATUS_VERIFIED is overtime, remove from store
 	if params.VerifiedRemovalPeriod > 0 {
 		verifiedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VERIFIED, sdkCtx.BlockTime().Add(-params.VerifiedRemovalPeriod).Unix())
 		if err != nil {
-			k.Logger.Error(err.Error())
+			k.Logger.Error("failed to get verified data", "error", err)
 			return
 		}
 		for _, data := range verifiedData {
 			if data.Status == types.Status_STATUS_VERIFIED {
-				k.DeletePublishedData(sdkCtx, data)
+				err := k.DeletePublishedData(sdkCtx, data)
+				if err != nil {
+					k.Logger.Error("failed to delete published data", "error", err, "metadata_uri", data.MetadataUri)
+					continue
+				}
 			}
 		}
 	}
