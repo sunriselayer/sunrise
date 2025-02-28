@@ -72,7 +72,10 @@ func (q queryServer) ValidityProof(goCtx context.Context, req *types.QueryValidi
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
-	proof, found := q.k.GetProof(ctx, req.MetadataUri, validator)
+	proof, found, err := q.k.GetProof(ctx, req.MetadataUri, validator)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrProofNotFound
 	}
@@ -86,7 +89,11 @@ func (q queryServer) AllValidityProofs(goCtx context.Context, req *types.QueryAl
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryAllValidityProofsResponse{Proofs: q.k.GetAllProofs(ctx)}, nil
+	proofs, err := q.k.GetAllProofs(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &types.QueryAllValidityProofsResponse{Proofs: proofs}, nil
 }
 
 func (q queryServer) Invalidity(goCtx context.Context, req *types.QueryInvalidityRequest) (*types.QueryInvalidityResponse, error) {

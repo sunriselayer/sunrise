@@ -127,7 +127,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			// totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, k.StakingKeeper.PowerReduction(ctx))
 			// thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
-			proofs := k.GetProofs(sdkCtx, data.MetadataUri)
+			proofs, err := k.GetProofs(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				continue
+			}
 			shardProofCount := make(map[int64]int64)
 			shardProofSubmitted := make(map[int64]map[string]bool)
 			for _, proof := range proofs {
@@ -248,7 +252,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					continue
 				}
-				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
+				err = k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 
 			// Clean up invalidity data

@@ -33,7 +33,10 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 	}
 
 	genesis.PublishedData = k.GetAllPublishedData(ctx)
-	genesis.Proofs = k.GetAllProofs(ctx)
+	genesis.Proofs, err = k.GetAllProofs(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	return genesis, nil
 }
