@@ -27,9 +27,12 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 	valAddr := sdk.ValAddress(validator)
-	_, err = k.StakingKeeper.Validator(ctx, valAddr)
+	sdkVal, err := k.StakingKeeper.Validator(ctx, valAddr)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "validator not exists")
+	}
+	if !sdkVal.IsBonded() {
+		return nil, types.ErrValidatorNotBonded
 	}
 	if !bytes.Equal(sender, validator) {
 		deputy, found, err := k.GetProofDeputy(ctx, validator)
