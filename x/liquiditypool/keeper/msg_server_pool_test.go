@@ -26,7 +26,8 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	require.Equal(t, uint64(0), resp.Id)
 
 	// check created pool and status
-	pool, found := k.GetPool(ctx, resp.Id)
+	pool, found, err := k.GetPool(ctx, resp.Id)
+	require.NoError(t, err)
 	require.True(t, found)
 	require.Equal(t, pool.TickParams.PriceRatio, "1.000100000000000000")
 	require.Equal(t, pool.TickParams.BaseOffset, "0.500000000000000000")

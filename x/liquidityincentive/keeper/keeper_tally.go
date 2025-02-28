@@ -45,7 +45,10 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		return []types.TallyResult{}, err
 	}
 
-	votes := k.GetAllVotes(ctx)
+	votes, err := k.GetAllVotes(ctx)
+	if err != nil {
+		return []types.TallyResult{}, err
+	}
 	for _, vote := range votes {
 		// if validator, just record it in the map
 		voter, err := k.accountKeeper.AddressCodec().StringToBytes(vote.Sender)

@@ -9,15 +9,17 @@ import (
 )
 
 // SetOutgoingInFlightPacket set a specific outgoingInFlightPacket in the store from its index
-func (k Keeper) SetOutgoingInFlightPacket(ctx context.Context, outgoingInFlightPacket types.OutgoingInFlightPacket) {
+func (k Keeper) SetOutgoingInFlightPacket(ctx context.Context, outgoingInFlightPacket types.OutgoingInFlightPacket) error {
 	err := k.OutgoingInFlightPackets.Set(
 		ctx,
 		types.OutgoingInFlightPacketKey(outgoingInFlightPacket.Index),
 		outgoingInFlightPacket,
 	)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 // OutgoingInFlightPacket returns a outgoingInFlightPacket from its index
@@ -26,26 +28,26 @@ func (k Keeper) GetOutgoingInFlightPacket(
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
-) (val types.OutgoingInFlightPacket, found bool) {
+) (val types.OutgoingInFlightPacket, found bool, err error) {
 	key := types.OutgoingInFlightPacketKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence))
 	has, err := k.OutgoingInFlightPackets.Has(
 		ctx,
 		key,
 	)
 	if err != nil {
-		panic(err)
+		return val, false, err
 	}
 
 	if !has {
-		return val, false
+		return val, false, nil
 	}
 
 	val, err = k.OutgoingInFlightPackets.Get(ctx, key)
 	if err != nil {
-		panic(err)
+		return val, false, err
 	}
 
-	return val, true
+	return val, true, nil
 }
 
 // RemoveOutgoingInFlightPacket removes a outgoingInFlightPacket from the store
@@ -54,19 +56,21 @@ func (k Keeper) RemoveOutgoingInFlightPacket(
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
-) {
+) error {
 	err := k.OutgoingInFlightPackets.Remove(
 		ctx,
 		types.OutgoingInFlightPacketKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence)),
 	)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 // OutgoingInFlightPackets returns all outgoingInFlightPacket
-func (k Keeper) GetOutgoingInFlightPackets(ctx context.Context) (list []types.OutgoingInFlightPacket) {
-	err := k.OutgoingInFlightPackets.Walk(
+func (k Keeper) GetOutgoingInFlightPackets(ctx context.Context) (list []types.OutgoingInFlightPacket, err error) {
+	err = k.OutgoingInFlightPackets.Walk(
 		ctx,
 		nil,
 		func(key collections.Triple[string, string, uint64], value types.OutgoingInFlightPacket) (bool, error) {
@@ -76,8 +80,8 @@ func (k Keeper) GetOutgoingInFlightPackets(ctx context.Context) (list []types.Ou
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }

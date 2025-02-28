@@ -37,11 +37,14 @@ func (q queryServer) Gauge(ctx context.Context, req *types.QueryGaugeRequest) (*
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := q.k.GetGauge(
+	val, found, err := q.k.GetGauge(
 		ctx,
 		req.PreviousEpochId,
 		req.PoolId,
 	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}

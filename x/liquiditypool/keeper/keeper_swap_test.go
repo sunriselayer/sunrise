@@ -122,7 +122,8 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountIn(wctx, sender, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
@@ -131,7 +132,8 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, amountOut.String(), tc.expAmountOut.String())
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
@@ -210,7 +212,8 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountIn(wctx, sender, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
@@ -220,7 +223,8 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, amountOut.String(), tc.expAmountOut.String())
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
 			}
@@ -326,7 +330,8 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountIn, err := k.SwapExactAmountOut(wctx, sender, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -335,7 +340,8 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, amountIn.String(), tc.expAmountIn.String())
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
@@ -414,7 +420,8 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountIn, err := k.SwapExactAmountOut(wctx, sender, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -424,7 +431,8 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, amountIn.String(), tc.expAmountIn.String())
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
 			}
@@ -441,7 +449,7 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 	require.Error(t, err)
 
 	// when accumulator does not exist
-	k.SetPool(ctx, types.Pool{
+	err = k.SetPool(ctx, types.Pool{
 		Id:                   1,
 		DenomBase:            "base",
 		DenomQuote:           "quote",
@@ -451,6 +459,9 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 		CurrentTickLiquidity: math.LegacyOneDec().String(),
 		CurrentSqrtPrice:     math.LegacyOneDec().String(),
 	})
+	if err != nil {
+		t.Fatalf("failed to set pool: %v", err)
+	}
 	_, _, err = k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.Error(t, err)
 
@@ -573,7 +584,8 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountIn, err := k.CalculateResultExactAmountOut(wctx, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -685,7 +697,8 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountOut, err := k.CalculateResultExactAmountIn(wctx, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)

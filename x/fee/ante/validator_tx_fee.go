@@ -62,7 +62,7 @@ func (dfd *DeductFeeDecorator) checkTxFeeWithValidatorMinGasPrices(ctx context.C
 			glDec := sdkmath.LegacyNewDec(int64(gas))
 			for i, gp := range minGasPrices {
 				fee := gp.Amount.Mul(glDec)
-				requiredFees[i] = sdk.NewCoin(gp.Denom, fee.Ceil().RoundInt())
+				requiredFees[i] = sdk.NewCoin(gp.Denom, fee.Ceil().TruncateInt())
 			}
 
 			if !feeCoins.IsAnyGTE(requiredFees) {

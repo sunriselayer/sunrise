@@ -384,7 +384,10 @@ func (k Keeper) computeOutAmtGivenIn(
 
 	if updateAccumulators {
 		feeGrowth := sdk.DecCoin{Denom: minTokenIn.Denom, Amount: swapState.globalFeeGrowthPerUnitLiquidity}
-		k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(feeGrowth))
+		err = k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(feeGrowth))
+		if err != nil {
+			return SwapResult{}, PoolUpdates{}, err
+		}
 	}
 
 	amountIn := minTokenIn.Amount.ToLegacyDec().SubMut(swapState.amountSpecifiedRemaining).Ceil().TruncateInt()
@@ -483,7 +486,10 @@ func (k Keeper) computeInAmtGivenOut(
 	}
 
 	if updateAccumulators {
-		k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(sdk.NewDecCoinFromDec(denomIn, swapState.globalFeeGrowthPerUnitLiquidity)))
+		err = k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(sdk.NewDecCoinFromDec(denomIn, swapState.globalFeeGrowthPerUnitLiquidity)))
+		if err != nil {
+			return SwapResult{}, PoolUpdates{}, err
+		}
 	}
 
 	amountIn := swapState.amountCalculated.Ceil().TruncateInt()
@@ -571,9 +577,12 @@ func (k Keeper) updatePoolForSwap(
 		return fmt.Errorf("error applying swap: %w", err)
 	}
 
-	k.SetPool(ctx, pool)
+	err = k.SetPool(ctx, pool)
+	if err != nil {
+		return err
+	}
 
-	return err
+	return nil
 }
 
 func isBaseForQuote(inDenom, assetBase string) bool {
@@ -618,7 +627,10 @@ func (k Keeper) setupSwapHelper(p types.Pool, feeRate math.LegacyDec, denomIn st
 }
 
 func (k Keeper) getPoolForSwap(ctx sdk.Context, poolId uint64) (types.Pool, error) {
-	p, found := k.GetPool(ctx, poolId)
+	p, found, err := k.GetPool(ctx, poolId)
+	if err != nil {
+		return p, err
+	}
 	if !found {
 		return p, types.ErrPoolNotFound
 	}

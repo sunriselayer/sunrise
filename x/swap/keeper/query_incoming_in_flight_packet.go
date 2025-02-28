@@ -37,10 +37,13 @@ func (q queryServer) IncomingInFlightPacket(ctx context.Context, req *types.Quer
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := q.k.GetIncomingInFlightPacket(
+	val, found, err := q.k.GetIncomingInFlightPacket(
 		ctx,
 		req.SrcPortId, req.SrcChannelId, req.Sequence,
 	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}

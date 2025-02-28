@@ -125,11 +125,11 @@ func TestGetSqrtPriceFromQuoteBase(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, sqrtPrice.String(), "0.100000000000000000")
 
-	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.RoundInt())
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.TruncateInt())
 	require.NoError(t, err)
 	require.Equal(t, sqrtPrice.String(), "0.000000001000000000")
 
-	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.Mul(Multiplier).RoundInt())
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.Mul(Multiplier).TruncateInt())
 	require.NoError(t, err)
 	require.Equal(t, sqrtPrice.String(), "0.000000000000000001")
 }

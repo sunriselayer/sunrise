@@ -39,10 +39,13 @@ func (k msgServer) VoteGauge(ctx context.Context, msg *types.MsgVoteGauge) (*typ
 		}
 	}
 
-	k.SetVote(ctx, types.Vote{
+	err := k.SetVote(ctx, types.Vote{
 		Sender:      msg.Sender,
 		PoolWeights: msg.PoolWeights,
 	})
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to set vote")
+	}
 
 	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventVoteGauge{
 		Address:     msg.Sender,

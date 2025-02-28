@@ -22,7 +22,7 @@ func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gaug
 		items[i].PoolId = uint64(i)
 		items[i].Count = math.OneInt()
 
-		keeper.SetGauge(ctx, items[i])
+		_ = keeper.SetGauge(ctx, items[i])
 	}
 	return items
 }
@@ -31,7 +31,8 @@ func TestGaugeGet(t *testing.T) {
 	f := initFixture(t)
 	items := createNGauge(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		rst, found := f.keeper.GetGauge(f.ctx, item.PreviousEpochId, item.PoolId)
+		rst, found, err := f.keeper.GetGauge(f.ctx, item.PreviousEpochId, item.PoolId)
+		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -43,11 +44,13 @@ func TestGaugeRemove(t *testing.T) {
 	f := initFixture(t)
 	items := createNGauge(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		f.keeper.RemoveGauge(f.ctx, item.PreviousEpochId, item.PoolId)
-		_, found := f.keeper.GetGauge(f.ctx,
+		err := f.keeper.RemoveGauge(f.ctx, item.PreviousEpochId, item.PoolId)
+		require.NoError(t, err)
+		_, found, err := f.keeper.GetGauge(f.ctx,
 			item.PreviousEpochId,
 			item.PoolId,
 		)
+		require.NoError(t, err)
 		require.False(t, found)
 	}
 }
@@ -55,21 +58,27 @@ func TestGaugeRemove(t *testing.T) {
 func TestGaugeGetAll(t *testing.T) {
 	f := initFixture(t)
 	items := createNGauge(f.keeper, f.ctx, 10)
+	gauges, err := f.keeper.GetAllGauges(f.ctx)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(f.keeper.GetAllGauges(f.ctx)),
+		nullify.Fill(gauges),
 	)
 }
 
 func TestGetAllGaugeByPreviousEpochId(t *testing.T) {
 	f := initFixture(t)
 	items := createNGauge(f.keeper, f.ctx, 10)
+	gauges, err := f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 1)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 1)),
+		nullify.Fill(gauges),
 	)
+	gauges, err = f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 2)
+	require.NoError(t, err)
 	require.Len(t,
-		f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 2),
+		gauges,
 		0,
 	)
 }

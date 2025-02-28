@@ -8,46 +8,48 @@ import (
 )
 
 // SetVote set a specific vote in the store from its index
-func (k Keeper) SetVote(ctx context.Context, vote types.Vote) {
+func (k Keeper) SetVote(ctx context.Context, vote types.Vote) error {
 	addr := sdk.MustAccAddressFromBech32(vote.Sender)
 	err := k.Votes.Set(ctx, addr, vote)
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
 // GetVote returns a vote from its index
-func (k Keeper) GetVote(ctx context.Context, sender string) (val types.Vote, found bool) {
+func (k Keeper) GetVote(ctx context.Context, sender string) (val types.Vote, found bool, err error) {
 	addr := sdk.MustAccAddressFromBech32(sender)
 	has, err := k.Votes.Has(ctx, addr)
 	if err != nil {
-		panic(err)
+		return val, false, err
 	}
 
 	if !has {
-		return val, false
+		return val, false, nil
 	}
 
 	val, err = k.Votes.Get(ctx, addr)
 	if err != nil {
-		panic(err)
+		return val, false, err
 	}
 
-	return val, true
+	return val, true, nil
 }
 
 // RemoveVote removes a vote from the store
-func (k Keeper) RemoveVote(ctx context.Context, sender string) {
+func (k Keeper) RemoveVote(ctx context.Context, sender string) error {
 	addr := sdk.MustAccAddressFromBech32(sender)
 	err := k.Votes.Remove(ctx, addr)
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
 // GetAllVotes returns all vote
-func (k Keeper) GetAllVotes(ctx context.Context) (list []types.Vote) {
-	err := k.Votes.Walk(
+func (k Keeper) GetAllVotes(ctx context.Context) (list []types.Vote, err error) {
+	err = k.Votes.Walk(
 		ctx,
 		nil,
 		func(key sdk.AccAddress, value types.Vote) (bool, error) {
@@ -57,8 +59,8 @@ func (k Keeper) GetAllVotes(ctx context.Context) (list []types.Vote) {
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }

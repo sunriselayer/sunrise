@@ -241,7 +241,10 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	acknowledgement []byte,
 	outgoingPacket types.OutgoingInFlightPacket,
 ) error {
-	incomingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+	incomingPacket, found, err := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+	if err != nil {
+		return err
+	}
 	if found {
 		k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
 	} else {
@@ -317,7 +320,10 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 		// - However it contains error acknowledgement of change / forward packet
 		ack := channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrUnknownRequest, "Retry count on timeout exceeds"))
 
-		waitingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+		waitingPacket, found, err := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+		if err != nil {
+			return err
+		}
 		if !found {
 			return nil
 		}
@@ -399,9 +405,9 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 	}
 
 	// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.Index.PortId, packet.Index.ChannelId)
-	if err != nil {
-		return false, errors.Wrap(err, "could not retrieve module from port-id")
-	}
+	// if err != nil {
+	// 	return false, errors.Wrap(err, "could not retrieve module from port-id")
+	// }
 	if err := k.IbcKeeperFn().ChannelKeeper.WriteAcknowledgement(
 		ctx,
 		// chanCap,

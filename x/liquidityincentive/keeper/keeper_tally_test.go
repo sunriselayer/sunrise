@@ -36,10 +36,11 @@ var (
 		s.mocks.StakingKeeper.EXPECT().TotalBondedTokens(gomock.Any()).Return(sdkmath.NewInt(n), nil)
 	}
 	delegatorVote = func(s tallyFixture, voter sdk.AccAddress, delegations []stakingtypes.Delegation, weights []types.PoolWeight) {
-		s.keeper.SetVote(s.ctx, types.Vote{
+		err := s.keeper.SetVote(s.ctx, types.Vote{
 			Sender:      voter.String(),
 			PoolWeights: weights,
 		})
+		require.NoError(s.t, err)
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
 			DoAndReturn(

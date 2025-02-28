@@ -14,7 +14,10 @@ import (
 )
 
 func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) types.PositionInfo {
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found, err := k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return types.PositionInfo{Position: position}
+	}
 	if !found {
 		return types.PositionInfo{Position: position}
 	}
@@ -61,7 +64,10 @@ func (q queryServer) Position(ctx context.Context, req *types.QueryPositionReque
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	position, found := q.k.GetPosition(ctx, req.Id)
+	position, found, err := q.k.GetPosition(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, sdkerrors.ErrKeyNotFound
 	}
@@ -75,7 +81,10 @@ func (q queryServer) PoolPositions(ctx context.Context, req *types.QueryPoolPosi
 	}
 
 	positionInfos := []types.PositionInfo{}
-	positions := q.k.GetPositionsByPool(ctx, req.PoolId)
+	positions, err := q.k.GetPositionsByPool(ctx, req.PoolId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	for _, position := range positions {
 		positionInfos = append(positionInfos, q.k.WrapPositionInfo(ctx, position))
 	}
@@ -94,7 +103,10 @@ func (q queryServer) AddressPositions(ctx context.Context, req *types.QueryAddre
 	}
 
 	positionInfos := []types.PositionInfo{}
-	positions := q.k.GetPositionsByAddress(ctx, addr)
+	positions, err := q.k.GetPositionsByAddress(ctx, addr)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	for _, position := range positions {
 		positionInfos = append(positionInfos, q.k.WrapPositionInfo(ctx, position))
 	}

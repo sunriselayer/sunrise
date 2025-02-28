@@ -16,7 +16,10 @@ func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.Q
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	pool, found := q.k.GetPool(ctx, req.PoolId)
+	pool, found, err := q.k.GetPool(ctx, req.PoolId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}
@@ -29,7 +32,7 @@ func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.Q
 	if !ok {
 		return nil, types.ErrInvalidTickers
 	}
-	err := types.CheckTicks(lowerTick.Int64(), upperTick.Int64())
+	err = types.CheckTicks(lowerTick.Int64(), upperTick.Int64())
 	if err != nil {
 		return nil, types.ErrInvalidTickers
 	}
@@ -89,11 +92,17 @@ func (q queryServer) CalculationIncreaseLiquidity(ctx context.Context, req *type
 		return nil, types.ErrInvalidTokenAmounts
 	}
 
-	position, found := q.k.GetPosition(ctx, req.Id)
+	position, found, err := q.k.GetPosition(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPositionNotFound
 	}
-	pool, found := q.k.GetPool(ctx, position.PoolId)
+	pool, found, err := q.k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}
