@@ -69,7 +69,10 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", poolId)
 	}
 
-	position, found := k.GetPosition(ctx, positionId)
+	position, found, err := k.GetPosition(ctx, positionId)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(err, "failed to get position: %d", positionId)
+	}
 	if !found {
 		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(types.ErrPositionNotFound, "position id: %d", positionId)
 	}
@@ -84,10 +87,16 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 		return math.Int{}, math.Int{}, false, false, types.ErrNegativeLiquidity
 	}
 	if liquidity.IsZero() {
-		k.RemovePosition(ctx, position.Id)
+		err = k.RemovePosition(ctx, position.Id)
+		if err != nil {
+			return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(err, "failed to remove position: %d", position.Id)
+		}
 	} else {
 		position.Liquidity = liquidity.String()
-		k.SetPosition(ctx, position)
+		err = k.SetPosition(ctx, position)
+		if err != nil {
+			return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(err, "failed to set position: %d", position.Id)
+		}
 	}
 
 	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick, upperTick, liquidityDelta)
@@ -95,7 +104,11 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 		return math.Int{}, math.Int{}, false, false, err
 	}
 
-	if !k.PoolHasPosition(ctx, poolId) {
+	hasPosition, err := k.PoolHasPosition(ctx, poolId)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(err, "failed to check if pool has position: %d", poolId)
+	}
+	if !hasPosition {
 		err = k.resetPool(ctx, pool)
 		if err != nil {
 			return math.Int{}, math.Int{}, false, false, err
@@ -126,7 +139,10 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 
 func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positionId uint64, liquidity math.LegacyDec) (amountBase math.Int, amountQuote math.Int, err error) {
 	// Checks that the element exists
-	position, found := k.GetPosition(ctx, positionId)
+	position, found, err := k.GetPosition(ctx, positionId)
+	if err != nil {
+		return math.Int{}, math.Int{}, errorsmod.Wrapf(err, "failed to get position: %d", positionId)
+	}
 	if !found {
 		return math.Int{}, math.Int{}, errorsmod.Wrapf(types.ErrPositionNotFound, "id: %d", positionId)
 	}

@@ -22,9 +22,15 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 	}
 
 	// Set all the position
-	k.SetPositionCount(ctx, genState.PositionCount)
+	err = k.SetPositionCount(ctx, genState.PositionCount)
+	if err != nil {
+		return err
+	}
 	for _, elem := range genState.Positions {
-		k.SetPosition(ctx, elem)
+		err = k.SetPosition(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Set all accumulators
@@ -67,8 +73,14 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 	if err != nil {
 		return nil, err
 	}
-	genesis.Positions = k.GetAllPositions(ctx)
-	genesis.PositionCount = k.GetPositionCount(ctx)
+	genesis.Positions, err = k.GetAllPositions(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.PositionCount, err = k.GetPositionCount(ctx)
+	if err != nil {
+		return nil, err
+	}
 	genesis.Accumulators = k.GetAllAccumulators(ctx)
 	genesis.AccumulatorPositions = k.GetAllAccumulatorPositions(ctx)
 

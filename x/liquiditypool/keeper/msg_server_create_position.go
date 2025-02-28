@@ -93,7 +93,10 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		UpperTick: msg.UpperTick,
 		Liquidity: math.LegacyZeroDec().String(),
 	}
-	positionId := k.AppendPosition(ctx, position)
+	positionId, err := k.AppendPosition(ctx, position)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to append position")
+	}
 
 	// Initialize / update the position in the pool based on the provided tick range and liquidity delta.
 	amountBase, amountQuote, _, _, err := k.UpdatePosition(sdkCtx, position.PoolId, sender, position.LowerTick, position.UpperTick, liquidityDelta, positionId)
@@ -120,7 +123,10 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		return nil, errorsmod.Wrap(err, "failed to send coins")
 	}
 
-	position, _ = k.GetPosition(ctx, positionId)
+	position, _, err = k.GetPosition(ctx, positionId)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get position")
+	}
 
 	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventCreatePosition{
 		PositionId: positionId,

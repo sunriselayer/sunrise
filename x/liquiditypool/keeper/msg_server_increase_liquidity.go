@@ -20,7 +20,10 @@ func (k msgServer) IncreaseLiquidity(ctx context.Context, msg *types.MsgIncrease
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	position, found := k.GetPosition(ctx, msg.Id)
+	position, found, err := k.GetPosition(ctx, msg.Id)
+	if err != nil {
+		return nil, errorsmod.Wrapf(err, "failed to get position: %d", msg.Id)
+	}
 	if !found {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrKeyNotFound, "key %d doesn't exist", msg.Id)
 	}

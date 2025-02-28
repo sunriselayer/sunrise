@@ -92,7 +92,10 @@ func (q queryServer) CalculationIncreaseLiquidity(ctx context.Context, req *type
 		return nil, types.ErrInvalidTokenAmounts
 	}
 
-	position, found := q.k.GetPosition(ctx, req.Id)
+	position, found, err := q.k.GetPosition(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPositionNotFound
 	}

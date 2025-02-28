@@ -109,18 +109,21 @@ func (k Keeper) getInitialFeeGrowth(ctx context.Context, pool types.Pool, tick i
 }
 
 func (k Keeper) collectFees(ctx sdk.Context, sender sdk.AccAddress, positionId uint64) (sdk.Coins, error) {
-	position, found := k.GetPosition(ctx, positionId)
+	position, found, err := k.GetPosition(ctx, positionId)
+	if err != nil {
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get position: %d", positionId)
+	}
 	if !found {
-		return sdk.Coins{}, types.ErrPositionNotFound
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrPositionNotFound, "position id: %d", positionId)
 	}
 
 	if sender.String() != position.Address {
-		return sdk.Coins{}, types.ErrNotPositionOwner
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrNotPositionOwner, "sender: %s, position owner: %s", sender.String(), position.Address)
 	}
 
 	feesClaimed, err := k.prepareClaimableFees(ctx, positionId)
 	if err != nil {
-		return sdk.Coins{}, err
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to prepare claimable fees: %d", positionId)
 	}
 
 	if feesClaimed.IsZero() {
@@ -155,14 +158,17 @@ func (k Keeper) GetClaimableFees(ctx sdk.Context, positionId uint64) (sdk.Coins,
 }
 
 func (k Keeper) prepareClaimableFees(ctx sdk.Context, positionId uint64) (sdk.Coins, error) {
-	position, found := k.GetPosition(ctx, positionId)
+	position, found, err := k.GetPosition(ctx, positionId)
+	if err != nil {
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get position: %d", positionId)
+	}
 	if !found {
-		return nil, types.ErrPositionNotFound
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrPositionNotFound, "position id: %d", positionId)
 	}
 
 	feeAccumulator, err := k.GetFeeAccumulator(ctx, position.PoolId)
 	if err != nil {
-		return nil, err
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get fee accumulator: %d", position.PoolId)
 	}
 
 	positionKey := types.KeyFeePositionAccumulator(positionId)
