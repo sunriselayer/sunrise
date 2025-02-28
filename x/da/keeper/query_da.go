@@ -45,7 +45,11 @@ func (q queryServer) ZkpProofThreshold(goCtx context.Context, req *types.QueryZk
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryZkpProofThresholdResponse{Threshold: q.k.GetZkpThreshold(ctx, req.ShardCount)}, nil
+	threshold, err := q.k.GetZkpThreshold(ctx, req.ShardCount)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &types.QueryZkpProofThresholdResponse{Threshold: threshold}, nil
 }
 
 func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDeputyRequest) (*types.QueryProofDeputyResponse, error) {

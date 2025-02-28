@@ -141,7 +141,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 			}
 
-			threshold := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
+			threshold, err := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
+			if err != nil {
+				k.Logger.Error(err.Error())
+				continue
+			}
 			indexedValidators := make(map[int64][]sdk.ValAddress)
 			for _, valAddr := range activeValidators {
 				indices := types.ShardIndicesForValidator(valAddr, int64(threshold), int64(len(data.ShardDoubleHashes)))
