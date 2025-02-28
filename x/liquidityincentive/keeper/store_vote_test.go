@@ -27,21 +27,25 @@ func createNVote(keeper keeper.Keeper, ctx context.Context, n int) []types.Vote 
 			},
 		}
 
-		keeper.SetVote(ctx, items[i])
+		_ = keeper.SetVote(ctx, items[i])
 	}
 	return items
 }
 
 func TestVoteSet(t *testing.T) {
 	f := initFixture(t)
-	f.keeper.SetVote(f.ctx, types.Vote{
+	err := f.keeper.SetVote(f.ctx, types.Vote{
 		Sender:      "sender1",
 		PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}, {PoolId: 2, Weight: "1"}},
 	})
-	f.keeper.SetVote(f.ctx, types.Vote{
+	require.NoError(t, err)
+	err = f.keeper.SetVote(f.ctx, types.Vote{
 		Sender:      "sender2",
 		PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}},
 	})
+	require.NoError(t, err)
+	votes, err := f.keeper.GetAllVotes(f.ctx)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill([]types.Vote{{
 			Sender:      "sender1",
@@ -50,7 +54,7 @@ func TestVoteSet(t *testing.T) {
 			Sender:      "sender2",
 			PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}},
 		}}),
-		nullify.Fill(f.keeper.GetAllVotes(f.ctx)),
+		nullify.Fill(votes),
 	)
 }
 
@@ -59,7 +63,8 @@ func TestVoteGet(t *testing.T) {
 	items := createNVote(f.keeper, f.ctx, 10)
 	for i, item := range items {
 		address := sdk.AccAddress(fmt.Sprintf("sender%d", i)).String()
-		rst, found := f.keeper.GetVote(f.ctx, address)
+		rst, found, err := f.keeper.GetVote(f.ctx, address)
+		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -72,8 +77,10 @@ func TestVoteRemove(t *testing.T) {
 	items := createNVote(f.keeper, f.ctx, 10)
 	for i := range items {
 		address := sdk.AccAddress(fmt.Sprintf("sender%d", i)).String()
-		f.keeper.RemoveVote(f.ctx, address)
-		_, found := f.keeper.GetVote(f.ctx, address)
+		err := f.keeper.RemoveVote(f.ctx, address)
+		require.NoError(t, err)
+		_, found, err := f.keeper.GetVote(f.ctx, address)
+		require.NoError(t, err)
 		require.False(t, found)
 	}
 }
@@ -81,8 +88,10 @@ func TestVoteRemove(t *testing.T) {
 func TestVoteGetAll(t *testing.T) {
 	f := initFixture(t)
 	items := createNVote(f.keeper, f.ctx, 10)
+	votes, err := f.keeper.GetAllVotes(f.ctx)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(f.keeper.GetAllVotes(f.ctx)),
+		nullify.Fill(votes),
 	)
 }

@@ -30,7 +30,10 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 	}
 	// Set all the votes
 	for _, vote := range genState.Votes {
-		k.SetVote(ctx, vote)
+		err := k.SetVote(ctx, vote)
+		if err != nil {
+			return err
+		}
 	}
 
 	return k.Params.Set(ctx, genState.Params)
@@ -58,7 +61,10 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 	if err != nil {
 		return nil, err
 	}
-	genesis.Votes = k.GetAllVotes(ctx)
+	genesis.Votes, err = k.GetAllVotes(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	return genesis, nil
 }
