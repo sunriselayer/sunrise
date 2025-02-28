@@ -8,24 +8,22 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) EndBlocker(ctx context.Context) {
+func (k Keeper) EndBlocker(ctx context.Context) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return
+		return err
 	}
 	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
 	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Unix())
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return
+		return err
 	}
 	for _, data := range challengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
 			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
 			if err != nil {
-				k.Logger.Error("failed to get invalidities", "error", err)
+				k.Logger.Error("failed to get invalidity", "metadata_uri", data.MetadataUri, "error", err)
 				continue
 			}
 			seen := make(map[int64]bool)
@@ -44,8 +42,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				data.ChallengeTimestamp = sdkCtx.BlockTime()
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
-					k.Logger.Error(err.Error())
-					return
+					k.Logger.Error("failed to set published data", "metadata_uri", data.MetadataUri, "error", err)
+					continue
 				}
 			}
 		}
@@ -54,23 +52,22 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	// if STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
 	expiredChallengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return
+		return err
 	}
 	for _, data := range expiredChallengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
 			data.Status = types.Status_STATUS_VERIFIED
 			err = k.SetPublishedData(ctx, data)
 			if err != nil {
-				k.Logger.Error(err.Error())
-				return
+				k.Logger.Error("failed to set published data", "metadata_uri", data.MetadataUri, "error", err)
+				continue
 			}
 			// refunds collateral to the publisher
 			publisher := sdk.MustAccAddressFromBech32(data.Publisher)
 			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.PublishDataCollateral)
 			if err != nil {
-				k.Logger.Error(err.Error())
-				return
+				k.Logger.Error("failed to send coins to publisher", "publisher", publisher.String(), "metadata_uri", data.MetadataUri, "error", err)
+				continue
 			}
 		}
 	}
@@ -78,23 +75,21 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	// if STATUS_CHALLENGING, tally validity_proofs
 	challengingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGING, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return
+		return err
 	}
 
 	activeValidators := []sdk.ValAddress{}
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return
+		return err
 	}
 
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		validator, err := k.StakingKeeper.Validator(ctx, iterator.Value())
 		if err != nil {
-			k.Logger.Error(err.Error())
-			return
+			k.Logger.Error("failed to get validator", "error", err)
+			continue
 		}
 		if validator.IsBonded() {
 			activeValidators = append(activeValidators, sdk.ValAddress(iterator.Value()))
@@ -108,7 +103,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		if data.Status == types.Status_STATUS_CHALLENGING {
 			proofs, err := k.GetProofs(sdkCtx, data.MetadataUri)
 			if err != nil {
-				k.Logger.Error(err.Error())
+				k.Logger.Error("failed to get proofs", "metadata_uri", data.MetadataUri, "error", err)
 				continue
 			}
 			shardProofCount := make(map[int64]int64)
@@ -122,7 +117,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 			threshold, err := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
 			if err != nil {
-				k.Logger.Error(err.Error())
+				k.Logger.Error("failed to get zkp threshold", "metadata_uri", data.MetadataUri, "error", err)
 				continue
 			}
 			indexedValidators := make(map[int64][]sdk.ValAddress)
@@ -136,7 +131,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			safeShardIndices := []int64{}
 			for index, proofCount := range shardProofCount {
 				if len(data.ShardDoubleHashes) < int(data.ParityShardCount) {
-					k.Logger.Error("parity shard count is greater than total shard count")
+					k.Logger.Error("parity shard count is greater than total shard count", "metadata_uri", data.MetadataUri)
 					continue
 				}
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
@@ -161,15 +156,15 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			// valid_shards < data_shard_count
 			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
 			if err != nil {
-				k.Logger.Error("failed to get invalidities", "error", err)
+				k.Logger.Error("failed to get invalidity", "metadata_uri", data.MetadataUri, "error", err)
 				continue
 			}
 			if int64(len(safeShardIndices))+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
-					k.Logger.Error(err.Error())
-					return
+					k.Logger.Error("failed to set published data", "metadata_uri", data.MetadataUri, "error", err)
+					continue
 				}
 
 				// distribute publish collateral to challengers as a reward.
@@ -185,7 +180,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					challenger := sdk.MustAccAddressFromBech32(invalidity.Sender)
 					err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.SubmitInvalidityCollateral.Add(reward...))
 					if err != nil {
-						k.Logger.Error(err.Error())
+						k.Logger.Error("failed to send coins to challenger", "challenger", challenger.String(), "metadata_uri", data.MetadataUri, "error", err)
 						continue
 					}
 				}
@@ -193,8 +188,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				data.Status = types.Status_STATUS_VERIFIED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
-					k.Logger.Error(err.Error())
-					return
+					k.Logger.Error("failed to set published data", "metadata_uri", data.MetadataUri, "error", err)
+					continue
 				}
 
 				publisherRefund := data.PublishDataCollateral
@@ -204,7 +199,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 						// if all shards in the invalidity are missing, refund to the challenger
 						err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.SubmitInvalidityCollateral)
 						if err != nil {
-							k.Logger.Error(err.Error())
+							k.Logger.Error("failed to send coins to challenger", "challenger", challenger.String(), "metadata_uri", data.MetadataUri, "error", err)
 							continue
 						}
 					} else {
@@ -217,26 +212,26 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				publisher := sdk.MustAccAddressFromBech32(data.Publisher)
 				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, publisherRefund)
 				if err != nil {
-					k.Logger.Error(err.Error())
-					return
+					k.Logger.Error("failed to send coins to publisher", "publisher", publisher.String(), "metadata_uri", data.MetadataUri, "error", err)
+					continue
 				}
 			}
 
 			// Count challenge & fault validators
 			err = k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
 			if err != nil {
-				k.Logger.Error(err.Error())
-				return
+				k.Logger.Error("failed to set challenge counter", "error", err)
+				continue
 			}
 			for _, valAddr := range faultValidators {
 				count, err := k.GetFaultCounter(ctx, valAddr)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to get fault counter", "validator", valAddr.String(), "error", err)
 					continue
 				}
 				err = k.SetFaultCounter(ctx, valAddr, count+1)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to set fault counter", "validator", valAddr.String(), "error", err)
 					continue
 				}
 			}
@@ -245,12 +240,12 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			for _, proof := range proofs {
 				addr, err := k.addressCodec.StringToBytes(proof.Sender)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to convert sender to bytes", "sender", proof.Sender, "error", err)
 					continue
 				}
 				err = k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to delete proof", "metadata_uri", proof.MetadataUri, "sender", proof.Sender, "error", err)
 					continue
 				}
 			}
@@ -259,12 +254,12 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			for _, invalidity := range invalidities {
 				addr, err := k.addressCodec.StringToBytes(invalidity.Sender)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to convert sender to bytes", "sender", invalidity.Sender, "error", err)
 					continue
 				}
 				err = k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to delete invalidity", "metadata_uri", invalidity.MetadataUri, "sender", invalidity.Sender, "error", err)
 					continue
 				}
 			}
@@ -274,14 +269,13 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	// If STATUS_REJECTED is overtime, remove from the store
 	rejectedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_REJECTED, sdkCtx.BlockTime().Add(-params.RejectedRemovalPeriod).Unix())
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return
+		return err
 	}
 	for _, data := range rejectedData {
 		if data.Status == types.Status_STATUS_REJECTED {
 			err = k.DeletePublishedData(sdkCtx, data)
 			if err != nil {
-				k.Logger.Error(err.Error())
+				k.Logger.Error("failed to delete published data", "metadata_uri", data.MetadataUri, "error", err)
 				continue
 			}
 		}
@@ -291,14 +285,13 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	if params.VerifiedRemovalPeriod > 0 {
 		verifiedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VERIFIED, sdkCtx.BlockTime().Add(-params.VerifiedRemovalPeriod).Unix())
 		if err != nil {
-			k.Logger.Error(err.Error())
-			return
+			return err
 		}
 		for _, data := range verifiedData {
 			if data.Status == types.Status_STATUS_VERIFIED {
 				err = k.DeletePublishedData(sdkCtx, data)
 				if err != nil {
-					k.Logger.Error(err.Error())
+					k.Logger.Error("failed to delete published data", "metadata_uri", data.MetadataUri, "error", err)
 					continue
 				}
 			}
@@ -309,6 +302,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
 		k.HandleSlashEpoch(sdkCtx)
 	}
+	return nil
 }
 
 func checkCorrectInvalidity(invalidity types.Invalidity, safeShardIndices []int64) bool {
