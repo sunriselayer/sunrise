@@ -240,9 +240,22 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// Count challenge & fault validators
-			k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
+			err = k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
 			for _, valAddr := range faultValidators {
-				k.SetFaultCounter(ctx, valAddr, k.GetFaultCounter(ctx, valAddr)+1)
+				count, err := k.GetFaultCounter(ctx, valAddr)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
+				err = k.SetFaultCounter(ctx, valAddr, count+1)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 
 			// Clean up proofs data
