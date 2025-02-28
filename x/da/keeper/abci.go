@@ -83,9 +83,6 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 
 	activeValidators := []sdk.ValAddress{}
-	// numActiveValidators := int64(0)
-	// votingPowers := make(map[string]int64)
-	// powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
 		k.Logger.Error(err.Error())
@@ -99,18 +96,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			k.Logger.Error(err.Error())
 			return
 		}
-
 		if validator.IsBonded() {
 			activeValidators = append(activeValidators, sdk.ValAddress(iterator.Value()))
-			// valAddrStr := validator.GetOperator()
-			// valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
-			// if err != nil {
-			// 	k.Logger().Error(err.Error())
-			// 	return
-			// }
-
-			// votingPowers[sdk.AccAddress(valAddr).String()] = validator.GetConsensusPower(powerReduction)
-			// numActiveValidators++
 		}
 	}
 
@@ -119,14 +106,6 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 	for _, data := range challengingData {
 		if data.Status == types.Status_STATUS_CHALLENGING {
-			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
-			// if err != nil {
-			// 	k.Logger().Error(err.Error())
-			// 	return
-			// }
-
-			// totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, k.StakingKeeper.PowerReduction(ctx))
-			// thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
 			proofs, err := k.GetProofs(sdkCtx, data.MetadataUri)
 			if err != nil {
 				k.Logger.Error(err.Error())
