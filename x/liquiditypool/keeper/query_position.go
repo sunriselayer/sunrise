@@ -14,7 +14,10 @@ import (
 )
 
 func (k Keeper) WrapPositionInfo(ctx context.Context, position types.Position) types.PositionInfo {
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found, err := k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return types.PositionInfo{Position: position}
+	}
 	if !found {
 		return types.PositionInfo{Position: position}
 	}

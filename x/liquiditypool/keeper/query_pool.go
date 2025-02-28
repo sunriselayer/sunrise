@@ -47,7 +47,10 @@ func (q queryServer) Pool(ctx context.Context, req *types.QueryPoolRequest) (*ty
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	pool, found := q.k.GetPool(ctx, req.Id)
+	pool, found, err := q.k.GetPool(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, sdkerrors.ErrKeyNotFound
 	}

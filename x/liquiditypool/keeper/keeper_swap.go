@@ -577,9 +577,12 @@ func (k Keeper) updatePoolForSwap(
 		return fmt.Errorf("error applying swap: %w", err)
 	}
 
-	k.SetPool(ctx, pool)
+	err = k.SetPool(ctx, pool)
+	if err != nil {
+		return err
+	}
 
-	return err
+	return nil
 }
 
 func isBaseForQuote(inDenom, assetBase string) bool {
@@ -624,7 +627,10 @@ func (k Keeper) setupSwapHelper(p types.Pool, feeRate math.LegacyDec, denomIn st
 }
 
 func (k Keeper) getPoolForSwap(ctx sdk.Context, poolId uint64) (types.Pool, error) {
-	p, found := k.GetPool(ctx, poolId)
+	p, found, err := k.GetPool(ctx, poolId)
+	if err != nil {
+		return p, err
+	}
 	if !found {
 		return p, types.ErrPoolNotFound
 	}

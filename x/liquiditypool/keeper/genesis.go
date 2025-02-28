@@ -10,9 +10,15 @@ import (
 // InitGenesis initializes the module's state from a provided genesis state.
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) error {
 	// Set all the pool
-	k.SetPoolCount(ctx, genState.PoolCount)
+	err := k.SetPoolCount(ctx, genState.PoolCount)
+	if err != nil {
+		return err
+	}
 	for _, elem := range genState.Pools {
-		k.SetPool(ctx, elem)
+		err = k.SetPool(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Set all the position
@@ -53,8 +59,14 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 
-	genesis.Pools = k.GetAllPools(ctx)
-	genesis.PoolCount = k.GetPoolCount(ctx)
+	genesis.Pools, err = k.GetAllPools(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.PoolCount, err = k.GetPoolCount(ctx)
+	if err != nil {
+		return nil, err
+	}
 	genesis.Positions = k.GetAllPositions(ctx)
 	genesis.PositionCount = k.GetPositionCount(ctx)
 	genesis.Accumulators = k.GetAllAccumulators(ctx)

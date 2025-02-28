@@ -30,37 +30,48 @@ func (k Keeper) initFirstPositionForPool(ctx sdk.Context, pool types.Pool, amoun
 	pool.CurrentSqrtPrice = initialSqrtPrice.String()
 	pool.CurrentTick = initialTick
 
-	k.SetPool(ctx, pool)
+	err = k.SetPool(ctx, pool)
+	if err != nil {
+		return errorsmod.Wrapf(err, "failed to set pool: %d", pool.Id)
+	}
 
 	return nil
 }
 
-func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) {
+func (k Keeper) resetPool(ctx sdk.Context, pool types.Pool) error {
 	pool.CurrentSqrtPrice = math.LegacyZeroDec().String()
 	pool.CurrentTick = 0
 
-	k.SetPool(ctx, pool)
+	err := k.SetPool(ctx, pool)
+	if err != nil {
+		return errorsmod.Wrapf(err, "failed to set pool: %d", pool.Id)
+	}
+
+	return nil
 }
 
 func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddress, lowerTick, upperTick int64, liquidityDelta math.LegacyDec, positionId uint64) (amountBase math.Int, amountQuote math.Int, lowerTickEmpty bool, upperTickEmpty bool, err error) {
 	lowerTickIsEmpty, err := k.UpsertTick(ctx, poolId, lowerTick, liquidityDelta, false)
 	if err != nil {
-		return math.Int{}, math.Int{}, false, false, err
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrap(err, "failed to upsert lower tick")
 	}
 
 	upperTickIsEmpty, err := k.UpsertTick(ctx, poolId, upperTick, liquidityDelta, true)
 	if err != nil {
-		return math.Int{}, math.Int{}, false, false, err
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrap(err, "failed to upsert upper tick")
 	}
 
-	pool, found := k.GetPool(ctx, poolId)
+	pool, found, err := k.GetPool(ctx, poolId)
+	if err != nil {
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(err, "failed to get pool: %d", poolId)
+	}
 	if !found {
-		return math.Int{}, math.Int{}, false, false, types.ErrPoolNotFound
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", poolId)
 	}
 
 	position, found := k.GetPosition(ctx, positionId)
 	if !found {
-		return math.Int{}, math.Int{}, false, false, types.ErrPositionNotFound
+		return math.Int{}, math.Int{}, false, false, errorsmod.Wrapf(types.ErrPositionNotFound, "position id: %d", positionId)
 	}
 
 	// Update position liquidity
@@ -85,7 +96,10 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 	}
 
 	if !k.PoolHasPosition(ctx, poolId) {
-		k.resetPool(ctx, pool)
+		err = k.resetPool(ctx, pool)
+		if err != nil {
+			return math.Int{}, math.Int{}, false, false, err
+		}
 	} else {
 		// update liquidity, if position is active
 		if pool.IsCurrentTickInRange(lowerTick, upperTick) {
@@ -96,7 +110,10 @@ func (k Keeper) UpdatePosition(ctx sdk.Context, poolId uint64, owner sdk.AccAddr
 			pool.CurrentTickLiquidity = currentTickLiquidity.Add(liquidityDelta).String()
 		}
 
-		k.SetPool(ctx, pool)
+		err = k.SetPool(ctx, pool)
+		if err != nil {
+			return math.Int{}, math.Int{}, false, false, err
+		}
 	}
 
 	// update fee accumulator
@@ -132,7 +149,10 @@ func (k Keeper) DecreaseLiquidity(ctx sdk.Context, sender sdk.AccAddress, positi
 		return math.Int{}, math.Int{}, types.ErrInsufficientLiquidity
 	}
 
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found, err := k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return math.Int{}, math.Int{}, errorsmod.Wrapf(err, "failed to get pool: %d", position.PoolId)
+	}
 	if !found {
 		return math.Int{}, math.Int{}, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", position.PoolId)
 	}

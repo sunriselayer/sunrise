@@ -40,21 +40,24 @@ func (k msgServer) IncreaseLiquidity(ctx context.Context, msg *types.MsgIncrease
 	// Remove full position liquidity
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 	liquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "invalid liquidity")
 	}
 
 	amountBaseWithdrawn, amountQuoteWithdrawn, err := k.Keeper.DecreaseLiquidity(sdkCtx, sender, msg.Id, liquidity)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to decrease liquidity")
 	}
 
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found, err := k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get pool")
+	}
 	if !found {
-		return nil, types.ErrPoolNotFound
+		return nil, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", position.PoolId)
 	}
 
 	// Create a new position with combined liquidity
@@ -74,7 +77,7 @@ func (k msgServer) IncreaseLiquidity(ctx context.Context, msg *types.MsgIncrease
 		MinAmountQuote: minAmountQuote,
 	})
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to create position")
 	}
 
 	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventIncreaseLiquidity{
