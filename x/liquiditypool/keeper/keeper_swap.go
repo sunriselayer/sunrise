@@ -384,7 +384,10 @@ func (k Keeper) computeOutAmtGivenIn(
 
 	if updateAccumulators {
 		feeGrowth := sdk.DecCoin{Denom: minTokenIn.Denom, Amount: swapState.globalFeeGrowthPerUnitLiquidity}
-		k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(feeGrowth))
+		err = k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(feeGrowth))
+		if err != nil {
+			return SwapResult{}, PoolUpdates{}, err
+		}
 	}
 
 	amountIn := minTokenIn.Amount.ToLegacyDec().SubMut(swapState.amountSpecifiedRemaining).Ceil().TruncateInt()
@@ -483,7 +486,10 @@ func (k Keeper) computeInAmtGivenOut(
 	}
 
 	if updateAccumulators {
-		k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(sdk.NewDecCoinFromDec(denomIn, swapState.globalFeeGrowthPerUnitLiquidity)))
+		err = k.AddToAccumulator(ctx, feeAccumulator, sdk.NewDecCoins(sdk.NewDecCoinFromDec(denomIn, swapState.globalFeeGrowthPerUnitLiquidity)))
+		if err != nil {
+			return SwapResult{}, PoolUpdates{}, err
+		}
 	}
 
 	amountIn := swapState.amountCalculated.Ceil().TruncateInt()

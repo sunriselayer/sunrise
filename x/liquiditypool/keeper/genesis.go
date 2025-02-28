@@ -34,7 +34,10 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 		if err != nil {
 			panic(err)
 		}
-		k.SetAccumulatorPosition(ctx, elem.Name, elem.AccumValuePerShare, elem.Index, numShares, elem.UnclaimedRewardsTotal)
+		err = k.SetAccumulatorPosition(ctx, elem.Name, elem.AccumValuePerShare, elem.Index, numShares, elem.UnclaimedRewardsTotal)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return k.Params.Set(ctx, genState.Params)
