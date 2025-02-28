@@ -99,7 +99,10 @@ func (q queryServer) Invalidity(goCtx context.Context, req *types.QueryInvalidit
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
-	invalidity, found := q.k.GetInvalidity(ctx, req.MetadataUri, sender)
+	invalidity, found, err := q.k.GetInvalidity(ctx, req.MetadataUri, sender)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrProofNotFound
 	}
@@ -113,5 +116,10 @@ func (q queryServer) AllInvalidity(goCtx context.Context, req *types.QueryAllInv
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryAllInvalidityResponse{Invalidity: q.k.GetAllInvalidities(ctx)}, nil
+	invalidities, err := q.k.GetAllInvalidities(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryAllInvalidityResponse{Invalidity: invalidities}, nil
 }

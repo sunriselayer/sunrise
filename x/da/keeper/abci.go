@@ -23,7 +23,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 	for _, data := range challengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
-			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get invalidities", "error", err)
+				continue
+			}
 			seen := make(map[int64]bool)
 			invalidIndices := []int64{}
 			for _, invalidity := range invalidities {
@@ -168,7 +172,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// valid_shards < data_shard_count
-			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get invalidities", "error", err)
+				continue
+			}
 			if int64(len(safeShardIndices))+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
@@ -250,7 +258,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					continue
 				}
-				k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
+				err = k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 		}
 	}
