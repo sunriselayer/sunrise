@@ -141,6 +141,7 @@ func (app *App) registerIBCModules() error {
 
 	// this line is used by starport scaffolding # ibc/app/module
 
+	// Seal the IBC Router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	clientKeeper := app.IBCKeeper.ClientKeeper
