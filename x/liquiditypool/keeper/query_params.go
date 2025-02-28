@@ -2,29 +2,26 @@ package keeper
 
 import (
 	"context"
-	"errors"
-
-	"cosmossdk.io/collections"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func (q queryServer) Params(ctx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (k Keeper) Params(goCtx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	params, err := q.k.Params.Get(ctx)
+	count, err := k.GetPoolCount(ctx)
 	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
-			return nil, status.Error(codes.NotFound, "not found")
-		}
-
-		return nil, status.Error(codes.Internal, "internal error")
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryParamsResponse{Params: params}, nil
+	return &types.QueryParamsResponse{
+		Params: types.NewParams(count),
+	}, nil
 }

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 
 	"cosmossdk.io/collections"
@@ -77,4 +78,12 @@ func NewKeeper(
 // GetAuthority returns the module's authority.
 func (k Keeper) GetAuthority() []byte {
 	return k.authority
+}
+
+func (k Keeper) GetNextPoolID(ctx context.Context) (uint64, error) {
+	count, err := k.GetPoolCount(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return count + 1, nil
 }

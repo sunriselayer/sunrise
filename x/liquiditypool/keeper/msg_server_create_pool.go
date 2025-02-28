@@ -11,7 +11,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
+func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	if _, err := k.addressCodec.StringToBytes(msg.Authority); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
@@ -38,7 +40,7 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 		return nil, err
 	}
 
-	var pool = types.Pool{
+	pool := types.Pool{
 		DenomBase:  msg.DenomBase,
 		DenomQuote: msg.DenomQuote,
 		FeeRate:    feeRate.String(),
@@ -49,13 +51,19 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 		CurrentTick:          0,
 		CurrentTickLiquidity: math.LegacyZeroDec().String(),
 		CurrentSqrtPrice:     math.LegacyZeroDec().String(),
+		Creator:              msg.Creator,
 	}
-	id := k.AppendPool(ctx, pool)
+
+	id, err := k.AppendPool(ctx, pool)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to append pool")
+	}
+
 	if err := k.createFeeAccumulator(ctx, id); err != nil {
 		return nil, err
 	}
 
-	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventCreatePool{
+	if err := ctx.EventManager().EmitTypedEvent(&types.EventCreatePool{
 		PoolId:     id,
 		DenomBase:  msg.DenomBase,
 		DenomQuote: msg.DenomQuote,

@@ -7,87 +7,66 @@ import (
 )
 
 // GetPoolCount get the total number of pool
-func (k Keeper) GetPoolCount(ctx context.Context) uint64 {
-	val, err := k.PoolId.Peek(ctx)
-	if err != nil {
-		panic(err)
-	}
-
-	return val
+func (k Keeper) GetPoolCount(ctx context.Context) (uint64, error) {
+	return k.PoolId.Peek(ctx)
 }
 
 // SetPoolCount set the total number of pool
-func (k Keeper) SetPoolCount(ctx context.Context, count uint64) {
-	err := k.PoolId.Set(ctx, count)
-	if err != nil {
-		panic(err)
-	}
+func (k Keeper) SetPoolCount(ctx context.Context, count uint64) error {
+	return k.PoolId.Set(ctx, count)
 }
 
 // AppendPool appends a pool in the store with a new id and update the count
-func (k Keeper) AppendPool(ctx context.Context, pool types.Pool) uint64 {
+func (k Keeper) AppendPool(ctx context.Context, pool types.Pool) (uint64, error) {
 	// Create the pool
 	id, err := k.PoolId.Next(ctx)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	// Set the ID of the appended value
 	pool.Id = id
-	k.SetPool(ctx, pool)
+	if err := k.SetPool(ctx, pool); err != nil {
+		return 0, err
+	}
 
-	return id
+	return id, nil
 }
 
 // SetPool set a specific pool in the store
-func (k Keeper) SetPool(ctx context.Context, pool types.Pool) {
-	err := k.Pools.Set(ctx, pool.Id, pool)
-	if err != nil {
-		panic(err)
-	}
+func (k Keeper) SetPool(ctx context.Context, pool types.Pool) error {
+	return k.Pools.Set(ctx, pool.Id, pool)
 }
 
-// GetPool returns a pool from its id
-func (k Keeper) GetPool(ctx context.Context, id uint64) (val types.Pool, found bool) {
+// GetPool returns the pool for the given id
+func (k Keeper) GetPool(ctx context.Context, id uint64) (pool types.Pool, found bool, err error) {
 	has, err := k.Pools.Has(ctx, id)
 	if err != nil {
-		panic(err)
+		return pool, false, err
 	}
-
 	if !has {
-		return val, false
+		return pool, false, nil
 	}
-
-	val, err = k.Pools.Get(ctx, id)
+	val, err := k.Pools.Get(ctx, id)
 	if err != nil {
-		panic(err)
+		return pool, false, err
 	}
-
-	return val, true
+	return val, true, nil
 }
 
-// RemovePool removes a pool from the store
-func (k Keeper) RemovePool(ctx context.Context, id uint64) {
-	err := k.Pools.Remove(ctx, id)
-	if err != nil {
-		panic(err)
-	}
+// DeletePool removes the pool
+func (k Keeper) DeletePool(ctx context.Context, id uint64) error {
+	return k.Pools.Remove(ctx, id)
 }
 
-// GetAllPools returns all pool
-func (k Keeper) GetAllPools(ctx context.Context) (list []types.Pool) {
-	err := k.Pools.Walk(
-		ctx,
-		nil,
-		func(key uint64, value types.Pool) (bool, error) {
-			list = append(list, value)
-
-			return false, nil
-		},
-	)
+// GetAllPools returns all pools
+func (k Keeper) GetAllPools(ctx context.Context) (list []types.Pool, err error) {
+	err = k.Pools.Walk(ctx, nil, func(key uint64, value types.Pool) (bool, error) {
+		list = append(list, value)
+		return false, nil
+	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
-	return
+	return list, nil
 }
