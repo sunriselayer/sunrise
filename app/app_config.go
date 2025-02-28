@@ -22,6 +22,7 @@ import (
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
 	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
 	nftmodulev1 "cosmossdk.io/api/cosmos/nft/module/v1"
+	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	poolmodulev1 "cosmossdk.io/api/cosmos/protocolpool/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
@@ -52,7 +53,9 @@ import (
 	_ "cosmossdk.io/x/mint"         // import for side-effects
 	minttypes "cosmossdk.io/x/mint/types"
 	"cosmossdk.io/x/nft"
-	_ "cosmossdk.io/x/nft/module"   // import for side-effects
+	_ "cosmossdk.io/x/nft/module" // import for side-effects
+	_ "cosmossdk.io/x/params"     // import for side-effects
+	paramstypes "cosmossdk.io/x/params/types"
 	_ "cosmossdk.io/x/protocolpool" // import for side-effects
 	pooltypes "cosmossdk.io/x/protocolpool/types"
 	_ "cosmossdk.io/x/slashing" // import for side-effects
@@ -61,23 +64,8 @@ import (
 	stakingtypes "cosmossdk.io/x/staking/types"
 	_ "cosmossdk.io/x/upgrade" // import for side-effects
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	_ "github.com/sunriselayer/sunrise/x/da/module"
-
-	"github.com/cosmos/cosmos-sdk/runtime"
-	_ "github.com/cosmos/cosmos-sdk/testutil/x/counter" // import for side-effects
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-
-	paramstypes "cosmossdk.io/x/params/types"
-	icatypes "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/types"
-	_ "github.com/cosmos/ibc-go/v9/modules/apps/29-fee" // import for side-effects
-	ibcfeetypes "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/types"
-	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
-	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
-
-	// module account permissions
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module"
 	feemoduletypes "github.com/sunriselayer/sunrise/x/fee/types"
@@ -91,6 +79,17 @@ import (
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+
+	"github.com/cosmos/cosmos-sdk/runtime"
+	_ "github.com/cosmos/cosmos-sdk/testutil/x/counter" // import for side-effects
+	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config"   // import for side-effects
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	icatypes "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/types"
+	_ "github.com/cosmos/ibc-go/v9/modules/apps/29-fee" // import for side-effects
+	ibcfeetypes "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/types"
+	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
+	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
 )
 
 var (
@@ -256,6 +255,8 @@ var (
 					// module's keeper. This is useful when a module does not have a store key.
 					SkipStoreKeys: []string{
 						"tx",
+						runtime.ModuleName,
+						genutiltypes.ModuleName,
 					},
 				}),
 			},
@@ -349,6 +350,10 @@ var (
 			{
 				Name:   epochstypes.ModuleName,
 				Config: appconfig.WrapAny(&epochsmodulev1.Module{}),
+			},
+			{
+				Name:   paramstypes.ModuleName,
+				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
 			},
 			{
 				Name:   damoduletypes.ModuleName,

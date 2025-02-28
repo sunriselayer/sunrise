@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 
 	authv1 "cosmossdk.io/api/cosmos/auth/module/v1"
 	stakingv1 "cosmossdk.io/api/cosmos/staking/module/v1"
@@ -22,7 +20,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/config"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -34,11 +31,10 @@ import (
 // NewRootCmd creates a new root command for sunrised. It is called once in the main function.
 func NewRootCmd() *cobra.Command {
 	var (
+		appCodec      codec.Codec
 		autoCliOpts   autocli.AppOptions
 		moduleManager *module.Manager
 		clientCtx     client.Context
-
-		appCodec codec.Codec
 	)
 
 	if err := depinject.Inject(
@@ -91,42 +87,22 @@ func NewRootCmd() *cobra.Command {
 	// Since the IBC modules don't support dependency injection, we need to
 	// manually register the modules on the client side.
 	// This needs to be removed after IBC supports App Wiring.
-	ibcModules := app.RegisterIBC(clientCtx.InterfaceRegistry, appCodec)
+	ibcModules := app.RegisterIBC(appCodec, clientCtx.InterfaceRegistry)
 	for name, mod := range ibcModules {
-		moduleManager.Modules[name] = module.CoreAppModuleAdaptor(name, mod)
+		moduleManager.Modules[name] = mod
 		autoCliOpts.Modules[name] = mod
 	}
 	// <sunrise>
 	custom.ReplaceCustomModules(moduleManager, appCodec)
 	// </sunrise>
-	initRootCmd(rootCmd, moduleManager)
 
-	overwriteFlagDefaults(rootCmd, map[string]string{
-		flags.FlagChainID:        strings.ReplaceAll(app.Name, "-", ""),
-		flags.FlagKeyringBackend: "test",
-	})
+	initRootCmd(rootCmd, moduleManager)
 
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {
 		panic(err)
 	}
 
 	return rootCmd
-}
-
-func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
-	set := func(s *pflag.FlagSet, key, val string) {
-		if f := s.Lookup(key); f != nil {
-			f.DefValue = val
-			f.Value.Set(val)
-		}
-	}
-	for key, val := range defaults {
-		set(c.Flags(), key, val)
-		set(c.PersistentFlags(), key, val)
-	}
-	for _, c := range c.Commands() {
-		overwriteFlagDefaults(c, defaults)
-	}
 }
 
 func ProvideClientContext(
