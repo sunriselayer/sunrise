@@ -89,7 +89,8 @@ func TestCreateEpoch(t *testing.T) {
 			}
 
 			if len(tt.expectedTally) > 0 {
-				epochs := k.GetAllEpoch(ctx)
+				epochs, err := k.GetAllEpoch(ctx)
+				require.NoError(t, err)
 				require.Len(t, epochs, 1)
 				require.Equal(t, epochs[0].Id, uint64(1))
 				require.Equal(t, epochs[0].StartBlock, int64(0))
@@ -193,9 +194,11 @@ func TestEndBlocker(t *testing.T) {
 			}
 
 			if len(tt.expectedTally) > 0 {
-				epochs := k.GetAllEpoch(ctx)
+				epochs, err := k.GetAllEpoch(ctx)
+				require.NoError(t, err)
 				require.GreaterOrEqual(t, len(epochs), 1)
-				epoch, found := k.GetLastEpoch(ctx)
+				epoch, found, err := k.GetLastEpoch(ctx)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.GreaterOrEqual(t, epoch.Id, uint64(1))
 				require.Equal(t, epoch.StartBlock, int64(0))

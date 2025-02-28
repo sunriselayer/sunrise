@@ -52,7 +52,10 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	vRise := k.bankKeeper.GetBalance(ctx, feeCollector, consts.BondDenom)
 	vRiseDec := sdk.NewDecCoinsFromCoins(vRise)
 
-	lastEpoch, found := k.GetLastEpoch(ctx)
+	lastEpoch, found, err := k.GetLastEpoch(ctx)
+	if err != nil {
+		return err
+	}
 	if !found {
 		return nil
 	}
@@ -89,7 +92,10 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
-	lastEpoch, found := k.GetLastEpoch(ctx)
+	lastEpoch, found, err := k.GetLastEpoch(ctx)
+	if err != nil {
+		return err
+	}
 	if !found {
 		err := k.CreateEpoch(ctx, 0, 1)
 		if err != nil {
@@ -103,7 +109,10 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 			return nil
 		}
 		// remove old epoch and gauges
-		epochs := k.GetAllEpoch(ctx)
+		epochs, err := k.GetAllEpoch(ctx)
+		if err != nil {
+			return err
+		}
 		if len(epochs) > 2 {
 			epoch := epochs[0]
 			k.RemoveEpoch(ctx, epoch.Id)

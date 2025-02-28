@@ -9,77 +9,86 @@ import (
 )
 
 // GetEpochCount get the total number of epoch
-func (k Keeper) GetEpochCount(ctx context.Context) uint64 {
+func (k Keeper) GetEpochCount(ctx context.Context) (uint64, error) {
 	val, err := k.EpochId.Peek(ctx)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
-	return val
+	return val, nil
 }
 
 // SetEpochCount set the total number of epoch
-func (k Keeper) SetEpochCount(ctx context.Context, count uint64) {
+func (k Keeper) SetEpochCount(ctx context.Context, count uint64) error {
 	err := k.EpochId.Set(ctx, count)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 // AppendEpoch appends a epoch in the store with a new id and update the count
-func (k Keeper) AppendEpoch(ctx context.Context, epoch types.Epoch) uint64 {
+func (k Keeper) AppendEpoch(ctx context.Context, epoch types.Epoch) (uint64, error) {
 	// Create the epoch
 	id, err := k.EpochId.Next(ctx)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	// Set the ID of the appended value
 	epoch.Id = id
 
-	k.SetEpoch(ctx, epoch)
+	err = k.SetEpoch(ctx, epoch)
+	if err != nil {
+		return 0, err
+	}
 
-	return id
+	return id, nil
 }
 
 // SetEpoch set a specific epoch in the store
-func (k Keeper) SetEpoch(ctx context.Context, epoch types.Epoch) {
+func (k Keeper) SetEpoch(ctx context.Context, epoch types.Epoch) error {
 	err := k.Epochs.Set(ctx, epoch.Id, epoch)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 // GetEpoch returns a epoch from its id
-func (k Keeper) GetEpoch(ctx context.Context, id uint64) (val types.Epoch, found bool) {
+func (k Keeper) GetEpoch(ctx context.Context, id uint64) (val types.Epoch, found bool, err error) {
 	has, err := k.Epochs.Has(ctx, id)
 	if err != nil {
-		panic(err)
+		return val, false, err
 	}
 
 	if !has {
-		return val, false
+		return val, false, nil
 	}
 
 	val, err = k.Epochs.Get(ctx, id)
 	if err != nil {
-		panic(err)
+		return val, false, err
 	}
 
-	return val, true
+	return val, true, nil
 }
 
 // RemoveEpoch removes a epoch from the store
-func (k Keeper) RemoveEpoch(ctx context.Context, id uint64) {
+func (k Keeper) RemoveEpoch(ctx context.Context, id uint64) error {
 	err := k.Epochs.Remove(ctx, id)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 // GetAllEpoch returns all epoch
-func (k Keeper) GetAllEpoch(ctx context.Context) (list []types.Epoch) {
-	err := k.Epochs.Walk(
+func (k Keeper) GetAllEpoch(ctx context.Context) (list []types.Epoch, err error) {
+	err = k.Epochs.Walk(
 		ctx,
 		nil,
 		func(key uint64, value types.Epoch) (bool, error) {
@@ -89,20 +98,20 @@ func (k Keeper) GetAllEpoch(ctx context.Context) (list []types.Epoch) {
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }
 
-func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool) {
+func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool, err error) {
 	has, err := k.Epochs.Has(ctx, 0)
 	if err != nil {
-		panic(err)
+		return epoch, false, err
 	}
 
 	if !has {
-		return epoch, false
+		return epoch, false, nil
 	}
 
 	err = k.Epochs.Walk(
@@ -115,8 +124,8 @@ func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool
 	)
 
 	if err != nil {
-		panic(err)
+		return epoch, false, err
 	}
 
-	return epoch, true
+	return epoch, true, nil
 }

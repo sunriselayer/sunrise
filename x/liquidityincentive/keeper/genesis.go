@@ -37,8 +37,14 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 
-	genesis.Epochs = k.GetAllEpoch(ctx)
-	genesis.EpochCount = k.GetEpochCount(ctx)
+	genesis.Epochs, err = k.GetAllEpoch(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.EpochCount, err = k.GetEpochCount(ctx)
+	if err != nil {
+		return nil, err
+	}
 	genesis.Gauges = k.GetAllGauges(ctx)
 	genesis.Votes = k.GetAllVotes(ctx)
 
