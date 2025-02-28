@@ -7,115 +7,129 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k Keeper) GetChallengeCounter(ctx context.Context) uint64 {
+// GetChallengeCounter returns the challenge counter
+func (k Keeper) GetChallengeCounter(ctx context.Context) (uint64, error) {
 	val, err := k.ChallengeCounts.Get(ctx)
 	if err != nil {
-		return 0
+		return 0, err
 	}
-
-	return val
+	return val, nil
 }
 
-func (k Keeper) SetChallengeCounter(ctx context.Context, count uint64) {
-	err := k.ChallengeCounts.Set(ctx, count)
-	if err != nil {
-		panic(err)
-	}
+// SetChallengeCounter sets the challenge counter
+func (k Keeper) SetChallengeCounter(ctx context.Context, count uint64) error {
+	return k.ChallengeCounts.Set(ctx, count)
 }
 
-func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) uint64 {
+// GetFaultCounter returns the fault counter for a validator
+func (k Keeper) GetFaultCounter(ctx context.Context, operator sdk.ValAddress) (uint64, error) {
 	has, err := k.FaultCounts.Has(ctx, operator)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	if !has {
-		return 0
+		return 0, nil
 	}
 
-	val, err := k.FaultCounts.Get(ctx, operator)
-	if err != nil {
-		panic(err)
-	}
-
-	return val
+	return k.FaultCounts.Get(ctx, operator)
 }
 
-func (k Keeper) SetFaultCounter(ctx context.Context, operator sdk.ValAddress, faultCounter uint64) {
-	err := k.FaultCounts.Set(ctx, operator, faultCounter)
-	if err != nil {
-		panic(err)
-	}
+// SetFaultCounter sets the fault counter for a validator
+func (k Keeper) SetFaultCounter(ctx context.Context, operator sdk.ValAddress, faultCounter uint64) error {
+	return k.FaultCounts.Set(ctx, operator, faultCounter)
 }
 
-func (k Keeper) DeleteFaultCounter(ctx context.Context, operator sdk.ValAddress) {
-	err := k.FaultCounts.Remove(ctx, operator)
-	if err != nil {
-		panic(err)
-	}
+// DeleteFaultCounter removes the fault counter for a validator
+func (k Keeper) DeleteFaultCounter(ctx context.Context, operator sdk.ValAddress) error {
+	return k.FaultCounts.Remove(ctx, operator)
 }
 
+// IterateFaultCounters iterates over all fault counters
 func (k Keeper) IterateFaultCounters(ctx context.Context,
-	handler func(operator sdk.ValAddress, faultCount uint64) (stop bool),
-) {
-	err := k.FaultCounts.Walk(
+	handler func(operator sdk.ValAddress, faultCount uint64) (stop bool, err error),
+) error {
+	return k.FaultCounts.Walk(
 		ctx,
 		nil,
 		func(key []byte, value uint64) (bool, error) {
-			return handler(key, value), nil
+			stop, err := handler(key, value)
+			if err != nil {
+				return false, err
+			}
+			return stop, nil
 		},
 	)
-	if err != nil {
-		k.Logger.Error(err.Error())
-		return
-	}
 }
 
+// HandleSlashEpoch handles the slash epoch
 func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger.Error("failed to get params", "error", err)
 		return
 	}
-	slashFaultThreshold := math.LegacyMustNewDecFromStr(params.SlashFaultThreshold) // TODO: remove with Dec
-	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction)             // TODO: remove with Dec
-	challengeCount := k.GetChallengeCounter(ctx)
+	slashFaultThreshold := math.LegacyMustNewDecFromStr(params.SlashFaultThreshold)
+	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction)
+
+	challengeCount, err := k.GetChallengeCounter(ctx)
+	if err != nil {
+		k.Logger.Error("failed to get challenge counter", "error", err)
+		return
+	}
+
 	// reset counter
-	k.SetChallengeCounter(ctx, 0)
+	if err := k.SetChallengeCounter(ctx, 0); err != nil {
+		k.Logger.Error("failed to reset challenge counter", "error", err)
+		return
+	}
+
 	threshold := slashFaultThreshold.MulInt64(int64(challengeCount)).TruncateInt().Uint64()
 	powerReduction := k.StakingKeeper.PowerReduction(ctx)
-	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
+
+	err = k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) (bool, error) {
 		validator, err := k.StakingKeeper.Validator(ctx, operator)
 		if err != nil {
-			panic(err)
+			k.Logger.Error("failed to get validator", "error", err, "operator", operator.String())
+			return false, nil
 		}
 
-		defer k.DeleteFaultCounter(ctx, operator)
+		if err := k.DeleteFaultCounter(ctx, operator); err != nil {
+			k.Logger.Error("failed to delete fault counter", "error", err, "operator", operator.String())
+			return false, nil
+		}
+
 		if validator.IsJailed() || !validator.IsBonded() {
-			return false
+			return false, nil
 		}
 
 		if faultCount <= threshold {
-			return false
+			return false, nil
 		}
 
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
-			panic(err)
+			k.Logger.Error("failed to get consensus address", "error", err, "operator", operator.String())
+			return false, nil
 		}
 
-		err = k.SlashingKeeper.Slash(
+		if err := k.SlashingKeeper.Slash(
 			ctx, consAddr, slashFraction,
 			validator.GetConsensusPower(powerReduction),
 			ctx.BlockHeight()-sdk.ValidatorUpdateDelay-1,
-		)
-		if err != nil {
-			panic(err)
+		); err != nil {
+			k.Logger.Error("failed to slash validator", "error", err, "operator", operator.String())
+			return false, nil
 		}
-		err = k.SlashingKeeper.Jail(ctx, consAddr)
-		if err != nil {
-			panic(err)
+
+		if err := k.SlashingKeeper.Jail(ctx, consAddr); err != nil {
+			k.Logger.Error("failed to jail validator", "error", err, "operator", operator.String())
+			return false, nil
 		}
-		return false
+
+		return false, nil
 	})
+	if err != nil {
+		k.Logger.Error("failed to iterate fault counters", "error", err)
+	}
 }

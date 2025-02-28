@@ -9,47 +9,38 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
+// GetPublishedData returns the published data for the given metadata URI
 func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data types.PublishedData, found bool, err error) {
 	has, err := k.PublishedData.Has(ctx, metadataUri)
 	if err != nil {
 		return data, false, err
 	}
-
 	if !has {
 		return data, false, nil
 	}
-
 	val, err := k.PublishedData.Get(ctx, metadataUri)
 	if err != nil {
 		return data, false, err
 	}
-
 	return val, true, nil
 }
 
-// SetParams set the params
+// SetPublishedData sets the published data
 func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) error {
-	err := k.PublishedData.Set(ctx, data.MetadataUri, data)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return k.PublishedData.Set(ctx, data.MetadataUri, data)
 }
 
-func (k Keeper) DeletePublishedData(ctx sdk.Context, data types.PublishedData) error {
+// DeletePublishedData removes the published data
+func (k Keeper) DeletePublishedData(ctx context.Context, data types.PublishedData) error {
 	return k.PublishedData.Remove(ctx, data.MetadataUri)
 }
 
+// GetAllPublishedData returns all published data
 func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.PublishedData, err error) {
-	err = k.PublishedData.Walk(
-		ctx,
-		nil,
-		func(key string, value types.PublishedData) (bool, error) {
-			list = append(list, value)
-			return false, nil
-		},
-	)
+	err = k.PublishedData.Walk(ctx, nil, func(key string, value types.PublishedData) (bool, error) {
+		list = append(list, value)
+		return false, nil
+	})
 	if err != nil {
 		return nil, err
 	}

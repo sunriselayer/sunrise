@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-// GetInvalidity returns an invalidity and whether it was found
+// GetInvalidity returns an invalidity and whether it was found for the given metadata URI and sender
 func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []byte) (invalidity types.Invalidity, found bool, err error) {
 	key := collections.Join(metadataUri, sender)
 	has, err := k.Invalidities.Has(ctx, key)
@@ -29,28 +28,23 @@ func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []
 	return val, true, nil
 }
 
-// SetInvalidity set the Invalidity of the PublishedData
+// SetInvalidity sets the invalidity of the PublishedData
 func (k Keeper) SetInvalidity(ctx context.Context, data types.Invalidity) error {
 	addr, err := k.addressCodec.StringToBytes(data.Sender)
 	if err != nil {
 		return err
 	}
 
-	err = k.Invalidities.Set(ctx, collections.Join(data.MetadataUri, addr), data)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return k.Invalidities.Set(ctx, collections.Join(data.MetadataUri, addr), data)
 }
 
-// DeleteInvalidity removes an invalidity
-func (k Keeper) DeleteInvalidity(ctx sdk.Context, metadataUri string, sender []byte) error {
+// DeleteInvalidity removes an invalidity for the given metadata URI and sender
+func (k Keeper) DeleteInvalidity(ctx context.Context, metadataUri string, sender []byte) error {
 	return k.Invalidities.Remove(ctx, collections.Join(metadataUri, sender))
 }
 
-// GetInvalidities returns all invalidities for a metadata URI
-func (k Keeper) GetInvalidities(ctx sdk.Context, metadataUri string) (list []types.Invalidity, err error) {
+// GetInvalidities returns all invalidities for a given metadata URI
+func (k Keeper) GetInvalidities(ctx context.Context, metadataUri string) (list []types.Invalidity, err error) {
 	err = k.Invalidities.Walk(
 		ctx,
 		collections.NewPrefixedPairRange[string, []byte](metadataUri),
@@ -65,7 +59,7 @@ func (k Keeper) GetInvalidities(ctx sdk.Context, metadataUri string) (list []typ
 	return list, nil
 }
 
-// GetAllInvalidities returns all invalidities
+// GetAllInvalidities returns all invalidities in the store
 func (k Keeper) GetAllInvalidities(ctx context.Context) (list []types.Invalidity, err error) {
 	err = k.Invalidities.Walk(
 		ctx,
