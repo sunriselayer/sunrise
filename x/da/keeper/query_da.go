@@ -16,7 +16,10 @@ func (q queryServer) PublishedData(goCtx context.Context, req *types.QueryPublis
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	data, found := q.k.GetPublishedData(ctx, req.MetadataUri)
+	data, found, err := q.k.GetPublishedData(ctx, req.MetadataUri)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrDataNotFound
 	}
@@ -29,7 +32,11 @@ func (q queryServer) AllPublishedData(goCtx context.Context, req *types.QueryAll
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.QueryAllPublishedDataResponse{Data: q.k.GetAllPublishedData(ctx)}, nil
+	data, err := q.k.GetAllPublishedData(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &types.QueryAllPublishedDataResponse{Data: data}, nil
 }
 
 func (q queryServer) ZkpProofThreshold(goCtx context.Context, req *types.QueryZkpProofThresholdRequest) (*types.QueryZkpProofThresholdResponse, error) {

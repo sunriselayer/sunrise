@@ -283,7 +283,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 	for _, data := range rejectedData {
 		if data.Status == types.Status_STATUS_REJECTED {
-			k.DeletePublishedData(sdkCtx, data)
+			err = k.DeletePublishedData(sdkCtx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				continue
+			}
 		}
 	}
 
@@ -296,7 +300,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 		for _, data := range verifiedData {
 			if data.Status == types.Status_STATUS_VERIFIED {
-				k.DeletePublishedData(sdkCtx, data)
+				err = k.DeletePublishedData(sdkCtx, data)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 		}
 	}
