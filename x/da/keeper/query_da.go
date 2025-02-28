@@ -51,7 +51,10 @@ func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDep
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
-	deputy, found := q.k.GetProofDeputy(ctx, validator)
+	deputy, found, err := q.k.GetProofDeputy(ctx, validator)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrDeputyNotFound
 	}
