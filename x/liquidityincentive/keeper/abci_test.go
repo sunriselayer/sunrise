@@ -97,7 +97,8 @@ func TestCreateEpoch(t *testing.T) {
 				require.Equal(t, epochs[0].EndBlock, int64(5))
 				require.Len(t, epochs[0].Gauges, 1)
 
-				gauges := k.GetAllGauges(ctx)
+				gauges, err := k.GetAllGauges(ctx)
+				require.NoError(t, err)
 				require.Len(t, gauges, 1)
 				require.Equal(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
@@ -132,12 +133,13 @@ func TestEndBlocker(t *testing.T) {
 		{
 			name: "historical epochs",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
 					Gauges:     []types.Gauge{},
 				})
+				require.NoError(t, err)
 				setTotalBonded(s, 10000000)
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
@@ -205,7 +207,8 @@ func TestEndBlocker(t *testing.T) {
 				require.Equal(t, epoch.EndBlock, int64(5))
 				require.Len(t, epoch.Gauges, 1)
 
-				gauges := k.GetAllGauges(ctx)
+				gauges, err := k.GetAllGauges(ctx)
+				require.NoError(t, err)
 				require.Len(t, gauges, 1)
 				require.GreaterOrEqual(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
@@ -231,7 +234,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "existing epochs with positive fee collector balance",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
@@ -243,7 +246,7 @@ func TestBeginBlocker(t *testing.T) {
 						},
 					},
 				})
-
+				require.NoError(t, err)
 				params, err := s.keeper.Params.Get(s.ctx)
 				require.NoError(t, err)
 				params.StakingRewardRatio = math.LegacyZeroDec().String()
@@ -258,7 +261,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "zero liquidity incentive allocation",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
@@ -270,7 +273,7 @@ func TestBeginBlocker(t *testing.T) {
 						},
 					},
 				})
-
+				require.NoError(t, err)
 				params, err := s.keeper.Params.Get(s.ctx)
 				require.NoError(t, err)
 				params.StakingRewardRatio = math.LegacyOneDec().String()
@@ -285,7 +288,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "existing epochs with empty fee collector balance",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
@@ -297,7 +300,7 @@ func TestBeginBlocker(t *testing.T) {
 						},
 					},
 				})
-
+				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).Return(sdk.Coins{}).AnyTimes()
 			},
 		},

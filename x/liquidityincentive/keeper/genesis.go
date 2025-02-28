@@ -10,14 +10,23 @@ import (
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) error {
 	// Set all the epoch
 	for _, elem := range genState.Epochs {
-		k.SetEpoch(ctx, elem)
+		err := k.SetEpoch(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Set epoch count
-	k.SetEpochCount(ctx, genState.EpochCount)
+	err := k.SetEpochCount(ctx, genState.EpochCount)
+	if err != nil {
+		return err
+	}
 	// Set all the gauges
 	for _, elem := range genState.Gauges {
-		k.SetGauge(ctx, elem)
+		err := k.SetGauge(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 	// Set all the votes
 	for _, vote := range genState.Votes {
@@ -45,7 +54,10 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 	if err != nil {
 		return nil, err
 	}
-	genesis.Gauges = k.GetAllGauges(ctx)
+	genesis.Gauges, err = k.GetAllGauges(ctx)
+	if err != nil {
+		return nil, err
+	}
 	genesis.Votes = k.GetAllVotes(ctx)
 
 	return genesis, nil

@@ -26,7 +26,10 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 			PoolId:          result.PoolId,
 			Count:           result.Count,
 		}
-		k.SetGauge(ctx, gauge)
+		err := k.SetGauge(ctx, gauge)
+		if err != nil {
+			return err
+		}
 		gauges = append(gauges, gauge)
 	}
 
@@ -40,7 +43,10 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 		EndBlock:   ctx.BlockHeight() + params.EpochBlocks,
 		Gauges:     gauges,
 	}
-	k.SetEpoch(ctx, epoch)
+	err = k.SetEpoch(ctx, epoch)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -115,9 +121,15 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 		}
 		if len(epochs) > 2 {
 			epoch := epochs[0]
-			k.RemoveEpoch(ctx, epoch.Id)
+			err := k.RemoveEpoch(ctx, epoch.Id)
+			if err != nil {
+				return err
+			}
 			for _, gauge := range epoch.Gauges {
-				k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
+				err := k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
