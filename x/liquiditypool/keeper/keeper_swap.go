@@ -223,7 +223,7 @@ func (k Keeper) CalculateResultExactAmountIn(
 	tokenIn sdk.Coin,
 	denomOut string,
 	feeEnabled bool,
-) (tokenOut math.Int, err error) {
+) (amountOut math.Int, err error) {
 	cacheCtx, _ := ctx.CacheContext()
 	feeRate := math.LegacyZeroDec()
 	if feeEnabled {
@@ -245,7 +245,7 @@ func (k Keeper) CalculateResultExactAmountOut(
 	tokenOut sdk.Coin,
 	denomIn string,
 	feeEnabled bool,
-) (tokenIn math.Int, err error) {
+) (amountIn math.Int, err error) {
 	cacheCtx, _ := ctx.CacheContext()
 	feeRate := math.LegacyZeroDec()
 	if feeEnabled {
