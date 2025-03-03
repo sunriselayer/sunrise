@@ -155,5 +155,5 @@ func GetSqrtPriceFromQuoteBase(quoteAmount math.Int, baseAmount math.Int) (math.
 		return math.LegacyZeroDec(), err
 	}
 	sqrtPrice := sqrtPriceMultiplied.Quo(MultiplierSqrt)
-	return sqrtPrice, err
+	return sqrtPrice, nil
 }
