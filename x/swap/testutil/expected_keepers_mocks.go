@@ -174,7 +174,7 @@ func (m *MockTransferKeeper) EXPECT() *MockTransferKeeperMockRecorder {
 }
 
 // DenomPathFromHash mocks base method.
-func (m *MockTransferKeeper) DenomPathFromHash(ctx types.Context, denom string) (string, error) {
+func (m *MockTransferKeeper) DenomPathFromHash(ctx context.Context, denom string) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DenomPathFromHash", ctx, denom)
 	ret0, _ := ret[0].(string)
@@ -189,7 +189,7 @@ func (mr *MockTransferKeeperMockRecorder) DenomPathFromHash(ctx, denom interface
 }
 
 // GetTotalEscrowForDenom mocks base method.
-func (m *MockTransferKeeper) GetTotalEscrowForDenom(ctx types.Context, denom string) types.Coin {
+func (m *MockTransferKeeper) GetTotalEscrowForDenom(ctx context.Context, denom string) types.Coin {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTotalEscrowForDenom", ctx, denom)
 	ret0, _ := ret[0].(types.Coin)
@@ -203,7 +203,7 @@ func (mr *MockTransferKeeperMockRecorder) GetTotalEscrowForDenom(ctx, denom inte
 }
 
 // SetTotalEscrowForDenom mocks base method.
-func (m *MockTransferKeeper) SetTotalEscrowForDenom(ctx types.Context, coin types.Coin) {
+func (m *MockTransferKeeper) SetTotalEscrowForDenom(ctx context.Context, coin types.Coin) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "SetTotalEscrowForDenom", ctx, coin)
 }
@@ -283,12 +283,13 @@ func (mr *MockLiquidityPoolKeeperMockRecorder) CalculateResultExactAmountOut(ctx
 }
 
 // GetPool mocks base method.
-func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64) (types1.Pool, bool) {
+func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64, ) (types1.Pool, bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPool", ctx, id)
 	ret0, _ := ret[0].(types1.Pool)
 	ret1, _ := ret[1].(bool)
-	return ret0, ret1
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
 // GetPool indicates an expected call of GetPool.

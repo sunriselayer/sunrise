@@ -8,14 +8,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	"github.com/sunriselayer/sunrise/testutil/sample"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 func TestSwapExactAmountIn(t *testing.T) {
-	sender := sample.AccAddress()
-	senderAcc := sdk.MustAccAddressFromBech32(sender)
+	sender := sdk.AccAddress("sender")
 	tests := []struct {
 		desc              string
 		interfaceProvider string
@@ -175,12 +173,12 @@ func TestSwapExactAmountIn(t *testing.T) {
 			f := initFixture(t)
 			ctx := sdk.UnwrapSDKContext(f.ctx)
 			keeper := f.keeper
-			mocks := getMocks(t)
+			mocks := f.mocks
 
-			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
+			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountIn(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 
-			result, interfaceFee, err := keeper.SwapExactAmountIn(ctx, senderAcc, tc.interfaceProvider, tc.route, tc.amountIn, tc.minAmountOut)
+			result, interfaceFee, err := keeper.SwapExactAmountIn(ctx, sender, tc.interfaceProvider, tc.route, tc.amountIn, tc.minAmountOut)
 			if tc.expErr != nil {
 				require.ErrorIs(t, err, tc.expErr)
 			} else {
