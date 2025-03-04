@@ -466,7 +466,7 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 	require.Error(t, err)
 
 	// When both accumulator and pool exist
-	err = k.InitAccumulator(ctx, "FeePoolAccumulator/value//1")
+	err = k.InitAccumulator(ctx, "fee_pool_accumulator/1")
 	require.NoError(t, err)
 	pool, accumulator, err := k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.NoError(t, err)
@@ -478,7 +478,7 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 	require.Equal(t, pool.CurrentTickLiquidity, "1.000000000000000000")
 	require.Equal(t, pool.CurrentSqrtPrice, "1.000000000000000000")
 	require.Equal(t, accumulator.AccumValue.String(), "")
-	require.Equal(t, accumulator.Name, "FeePoolAccumulator/value//1")
+	require.Equal(t, accumulator.Name, "fee_pool_accumulator/1")
 	require.Equal(t, accumulator.TotalShares, "0.000000000000000000")
 
 	// When invalid denom's put

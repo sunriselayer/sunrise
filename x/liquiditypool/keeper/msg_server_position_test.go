@@ -83,6 +83,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 }
 
 func TestMsgServerIncreaseLiquidity(t *testing.T) {
+	initFixture(t)
 	sender := sdk.AccAddress("sender")
 
 	tests := []struct {
@@ -104,7 +105,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 		{
 			desc: "Unauthorized",
 			request: &types.MsgIncreaseLiquidity{
-				Sender:         "B",
+				Sender:         sdk.AccAddress("hoge").String(),
 				Id:             0,
 				AmountBase:     math.NewInt(100000),
 				AmountQuote:    math.NewInt(100000),
@@ -114,7 +115,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 			err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc: "Unauthorized",
+			desc: "Invalid ID",
 			request: &types.MsgIncreaseLiquidity{
 				Sender:         sender.String(),
 				Id:             10,
@@ -147,8 +148,8 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
 				PoolId:         0,
-				LowerTick:      -10,
-				UpperTick:      10,
+				LowerTick:      -4155,
+				UpperTick:      4054,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
 				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
 				MinAmountBase:  math.NewInt(0),
@@ -161,8 +162,8 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, resp.AmountBase.String(), "110000")
-				require.Equal(t, resp.AmountQuote.String(), "99527")
+				require.Equal(t, resp.AmountBase.String(), "106468")
+				require.Equal(t, resp.AmountQuote.String(), "110000")
 				require.Equal(t, resp.PositionId, uint64(1))
 			}
 		})
