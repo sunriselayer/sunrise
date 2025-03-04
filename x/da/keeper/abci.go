@@ -10,42 +10,81 @@ import (
 
 func (k Keeper) EndBlocker(ctx context.Context) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	params := k.GetParams(ctx)
-	challengePeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, uint64(sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix()))
+	params, err := k.Params.Get(ctx)
 	if err != nil {
-		k.Logger().Error(err.Error())
+		k.Logger.Error(err.Error())
 		return
 	}
-
+	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
+	challengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
 	for _, data := range challengePeriodData {
-		if data.Status == "vote_extension" {
-			data.Status = "verified"
-		}
-		if err = k.SetPublishedData(ctx, data); err != nil {
-			return
-		}
-
-		publisher := sdk.MustAccAddressFromBech32(data.Publisher)
-		err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral)
-		if err != nil {
-			k.Logger().Error(err.Error())
-			return
+		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
+			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			seen := make(map[int64]bool)
+			invalidIndices := []int64{}
+			for _, invalidity := range invalidities {
+				for _, index := range invalidity.Indices {
+					if _, ok := seen[index]; !ok {
+						seen[index] = true
+						invalidIndices = append(invalidIndices, index)
+					}
+				}
+			}
+			threshold := math.LegacyMustNewDecFromStr(params.ChallengeThreshold).MulInt64(int64(len(data.ShardDoubleHashes)))
+			if math.LegacyNewDec(int64(len(invalidIndices))).GTE(threshold) {
+				data.Status = types.Status_STATUS_CHALLENGING
+				data.ChallengeTimestamp = sdkCtx.BlockTime()
+				err = k.SetPublishedData(ctx, data)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					return
+				}
+			}
 		}
 	}
 
-	proofPeriodData, err := k.GetUnverifiedDataBeforeTime(sdkCtx, uint64(sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix()))
+	// if STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
+	expiredChallengePeriodData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD, sdkCtx.BlockTime().Add(-params.ChallengePeriod).Unix())
 	if err != nil {
-		k.Logger().Error(err.Error())
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range expiredChallengePeriodData {
+		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
+			data.Status = types.Status_STATUS_VERIFIED
+			err = k.SetPublishedData(ctx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
+			// refunds collateral to the publisher
+			publisher := sdk.MustAccAddressFromBech32(data.Publisher)
+			err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.PublishDataCollateral)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
+		}
+	}
+
+	// if STATUS_CHALLENGING, tally validity_proofs
+	challengingData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_CHALLENGING, sdkCtx.BlockTime().Add(-params.ChallengePeriod-params.ProofPeriod).Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
 		return
 	}
 
 	activeValidators := []sdk.ValAddress{}
-	numActiveValidators := int64(0)
+	// numActiveValidators := int64(0)
 	// votingPowers := make(map[string]int64)
 	// powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
-		k.Logger().Error(err.Error())
+		k.Logger.Error(err.Error())
 		return
 	}
 
@@ -53,7 +92,7 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	for ; iterator.Valid(); iterator.Next() {
 		validator, err := k.StakingKeeper.Validator(ctx, iterator.Value())
 		if err != nil {
-			k.Logger().Error(err.Error())
+			k.Logger.Error(err.Error())
 			return
 		}
 
@@ -67,14 +106,15 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			// }
 
 			// votingPowers[sdk.AccAddress(valAddr).String()] = validator.GetConsensusPower(powerReduction)
-			numActiveValidators++
+			// numActiveValidators++
 		}
 	}
 
+	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
 	faultValidators := make(map[string]sdk.ValAddress)
 
-	for _, data := range proofPeriodData {
-		if data.Status == "challenge_for_fraud" {
+	for _, data := range challengingData {
+		if data.Status == types.Status_STATUS_CHALLENGING {
 			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
 			// if err != nil {
 			// 	k.Logger().Error(err.Error())
@@ -87,25 +127,29 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			shardProofCount := make(map[int64]int64)
 			shardProofSubmitted := make(map[int64]map[string]bool)
 			for _, proof := range proofs {
-				for _, indice := range proof.Indices {
-					shardProofCount[indice]++
-					shardProofSubmitted[indice][proof.Sender] = true
+				for _, index := range proof.Indices {
+					shardProofCount[index]++
+					shardProofSubmitted[index][proof.Sender] = true
 				}
 			}
 
 			threshold := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
-			indiceValidators := make(map[int64][]sdk.ValAddress)
+			indexedValidators := make(map[int64][]sdk.ValAddress)
 			for _, valAddr := range activeValidators {
 				indices := types.ShardIndicesForValidator(valAddr, int64(threshold), int64(len(data.ShardDoubleHashes)))
-				for _, indice := range indices {
-					indiceValidators[indice] = append(indiceValidators[indice], valAddr)
+				for _, index := range indices {
+					indexedValidators[index] = append(indexedValidators[index], valAddr)
 				}
 			}
 
-			safeShardCount := int64(0)
-			for indice, proofCount := range shardProofCount {
+			safeShardIndices := []int64{}
+			for index, proofCount := range shardProofCount {
+				if len(data.ShardDoubleHashes) < int(data.ParityShardCount) {
+					k.Logger.Error("parity shard count is greater than total shard count")
+					continue
+				}
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
-				replicationFactorWithParity := params.ReplicationFactor.
+				replicationFactorWithParity := replicationFactor.
 					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
 					QuoInt64(int64(len(data.ShardDoubleHashes)))
 
@@ -114,9 +158,9 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					replicationFactorWithParity.
 						MulInt64(2).
 						QuoInt64(3)) {
-					safeShardCount++
-					for _, valAddr := range indiceValidators[indice] {
-						if !shardProofSubmitted[indice][sdk.AccAddress(valAddr).String()] {
+					safeShardIndices = append(safeShardIndices, index)
+					for _, valAddr := range indexedValidators[index] {
+						if !shardProofSubmitted[index][sdk.AccAddress(valAddr).String()] {
 							faultValidators[valAddr.String()] = valAddr
 						}
 					}
@@ -124,46 +168,134 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// valid_shards < data_shard_count
-			if safeShardCount+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
-				// TODO: might require rejected records as well
-				data.Status = "rejected"
+			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if int64(len(safeShardIndices))+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
+				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
-					k.Logger().Error(err.Error())
+					k.Logger.Error(err.Error())
 					return
 				}
-				// k.DeletePublishedData(sdkCtx, data)
 
-				challenger := sdk.MustAccAddressFromBech32(data.Challenger)
-				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.Collateral.Add(data.Collateral...))
-				if err != nil {
-					k.Logger().Error(err.Error())
-					return
+				// distribute publish collateral to challengers as a reward.
+				publishCollateral := data.PublishDataCollateral
+				reward := sdk.Coins{}
+				for _, coin := range publishCollateral {
+					dividedAmount := math.LegacyNewDecFromInt(coin.Amount).QuoInt64(int64(len(invalidities))).TruncateInt()
+					reward = append(reward, sdk.NewCoin(coin.Denom, dividedAmount))
+				}
+
+				// rewards collateral + reward to challengers
+				for _, invalidity := range invalidities {
+					challenger := sdk.MustAccAddressFromBech32(invalidity.Sender)
+					err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.SubmitInvalidityCollateral.Add(reward...))
+					if err != nil {
+						k.Logger.Error(err.Error())
+						continue
+					}
 				}
 			} else {
-				data.Status = "verified"
+				data.Status = types.Status_STATUS_VERIFIED
 				err = k.SetPublishedData(ctx, data)
 				if err != nil {
-					k.Logger().Error(err.Error())
+					k.Logger.Error(err.Error())
 					return
 				}
+
+				publisherRefund := data.PublishDataCollateral
+				for _, invalidity := range invalidities {
+					challenger := sdk.MustAccAddressFromBech32(invalidity.Sender)
+					if checkCorrectInvalidity(invalidity, safeShardIndices) {
+						// if all shards in the invalidity are missing, refund to the challenger
+						err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, challenger, data.SubmitInvalidityCollateral)
+						if err != nil {
+							k.Logger.Error(err.Error())
+							continue
+						}
+					} else {
+						// if at least one safe shard is included, pass to the publisher
+						publisherRefund = publisherRefund.Add(data.SubmitInvalidityCollateral...)
+					}
+				}
+
+				// refunds publish collateral + fault challengers' collateral to the publisher
 				publisher := sdk.MustAccAddressFromBech32(data.Publisher)
-				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, data.Collateral.Add(data.Collateral...))
+				err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, publisher, publisherRefund)
 				if err != nil {
-					k.Logger().Error(err.Error())
+					k.Logger.Error(err.Error())
 					return
 				}
 			}
 
-			// Handle fault validators
+			// Count challenge & fault validators
+			k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
 			for _, valAddr := range faultValidators {
 				k.SetFaultCounter(ctx, valAddr, k.GetFaultCounter(ctx, valAddr)+1)
 			}
 
 			// Clean up proofs data
 			for _, proof := range proofs {
-				k.DeleteProof(sdkCtx, proof.MetadataUri, proof.Sender)
+				addr, err := k.addressCodec.StringToBytes(proof.Sender)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
+				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
+			}
+
+			// Clean up invalidity data
+			for _, invalidity := range invalidities {
+				addr, err := k.addressCodec.StringToBytes(invalidity.Sender)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
+				k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
 			}
 		}
 	}
+
+	// If STATUS_REJECTED is overtime, remove from the store
+	rejectedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_REJECTED, sdkCtx.BlockTime().Add(-params.RejectedRemovalPeriod).Unix())
+	if err != nil {
+		k.Logger.Error(err.Error())
+		return
+	}
+	for _, data := range rejectedData {
+		if data.Status == types.Status_STATUS_REJECTED {
+			k.DeletePublishedData(sdkCtx, data)
+		}
+	}
+
+	// If VerifiedRemovalPeriod id positive and STATUS_VERIFIED is overtime, remove from store
+	if params.VerifiedRemovalPeriod > 0 {
+		verifiedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VERIFIED, sdkCtx.BlockTime().Add(-params.VerifiedRemovalPeriod).Unix())
+		if err != nil {
+			k.Logger.Error(err.Error())
+			return
+		}
+		for _, data := range verifiedData {
+			if data.Status == types.Status_STATUS_VERIFIED {
+				k.DeletePublishedData(sdkCtx, data)
+			}
+		}
+	}
+
+	// slash epoch moved from vote_extension
+	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
+		k.HandleSlashEpoch(sdkCtx)
+	}
+}
+
+func checkCorrectInvalidity(invalidity types.Invalidity, safeShardIndices []int64) bool {
+	safeIndexMap := make(map[int64]bool)
+	for _, index := range safeShardIndices {
+		safeIndexMap[index] = true
+	}
+	for _, index := range invalidity.Indices {
+		if _, ok := safeIndexMap[index]; ok {
+			return false // includes a safe shard
+		}
+	}
+	return true // all of them is invalid
 }

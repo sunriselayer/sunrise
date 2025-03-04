@@ -3,16 +3,38 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+
+	errorsmod "cosmossdk.io/errors"
+
+	math "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func (k msgServer) VoteGauge(goCtx context.Context, msg *types.MsgVoteGauge) (*types.MsgVoteGaugeResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+func (k msgServer) VoteGauge(ctx context.Context, msg *types.MsgVoteGauge) (*types.MsgVoteGaugeResponse, error) {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+
+	totalWeight := math.LegacyZeroDec()
+	for _, poolWeight := range msg.PoolWeights {
+		weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
+		if err != nil {
+			return nil, errorsmod.Wrapf(types.ErrInvalidWeight, "invalid weight (pool %d): %s", poolWeight.PoolId, err)
+		}
+		if weight.IsNegative() {
+			return nil, errorsmod.Wrapf(types.ErrInvalidWeight, "negative weight (pool %d)", poolWeight.PoolId)
+		}
+		totalWeight = totalWeight.Add(weight)
+	}
+	if totalWeight.GT(math.LegacyOneDec()) {
+		return nil, errorsmod.Wrapf(types.ErrTotalWeightGTOne, "total weight: %s", totalWeight.String())
+	}
+	// end static validation
 
 	for _, poolWeight := range msg.PoolWeights {
-		if _, found := k.liquidityPoolKeeper.GetPool(goCtx, poolWeight.PoolId); !found {
+		if _, found := k.liquidityPoolKeeper.GetPool(ctx, poolWeight.PoolId); !found {
 			return nil, liquiditypooltypes.ErrPoolNotFound
 		}
 	}

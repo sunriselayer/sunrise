@@ -3,14 +3,14 @@ package liquidityincentive
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquidityincentive"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
 func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 	return &autocliv1.ModuleOptions{
 		Query: &autocliv1.ServiceCommandDescriptor{
-			Service: modulev1.Query_ServiceDesc.ServiceName,
+			Service: types.Query_serviceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "Params",
@@ -19,35 +19,35 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Epochs",
-					Use:       "list-epochs",
+					Use:       "all-epochs",
 					Short:     "List all epoch",
 				},
 				{
 					RpcMethod:      "Epoch",
-					Use:            "show-epoch [id]",
+					Use:            "epoch <id>",
 					Short:          "Shows a epoch by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
 					RpcMethod:      "Gauges",
-					Use:            "list-gauges [previous_epoch_id]",
+					Use:            "all-gauges <previous_epoch_id]",
 					Short:          "List all gauge",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
 				},
 				{
 					RpcMethod:      "Gauge",
-					Use:            "show-gauge [previous_epoch_id] [pool_id]",
+					Use:            "gauge <previous_epoch_id> <pool_id>",
 					Short:          "Shows a gauge",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
 				},
 				{
 					RpcMethod: "Votes",
-					Use:       "list-votes",
+					Use:       "all-votes",
 					Short:     "List all gauge votes",
 				},
 				{
 					RpcMethod:      "Vote",
-					Use:            "show-vote [address]",
+					Use:            "vote <address>",
 					Short:          "Shows a gauge vote",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
 				},
@@ -55,7 +55,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
-			Service:              modulev1.Msg_ServiceDesc.ServiceName,
+			Service:              types.Msg_serviceDesc.ServiceName,
 			EnhanceCustomCommand: true, // only required if you want to use the custom command
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{

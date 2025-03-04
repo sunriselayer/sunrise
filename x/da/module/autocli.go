@@ -3,14 +3,14 @@ package da
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/da"
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
 func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 	return &autocliv1.ModuleOptions{
 		Query: &autocliv1.ServiceCommandDescriptor{
-			Service: modulev1.Query_ServiceDesc.ServiceName,
+			Service: types.Query_serviceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "Params",
@@ -18,9 +18,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				{
-					RpcMethod: "PublishedData",
-					Use:       "published-data",
-					Short:     "Shows published data",
+					RpcMethod:      "PublishedData",
+					Use:            "published-data <metadata_uri>",
+					Short:          "Shows published data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}},
 				},
 				{
 					RpcMethod: "AllPublishedData",
@@ -28,15 +29,46 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows all published data",
 				},
 				{
-					RpcMethod: "ZkpProofThreshold",
-					Use:       "zkp-proof-threshold",
-					Short:     "Shows threshold number of proof",
+					RpcMethod:      "ValidityProof",
+					Use:            "validity-proof <metadata_uri> <validator_address>",
+					Short:          "Shows the validity proof of the data by validator",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "validator_address"}},
+				},
+				{
+					RpcMethod:      "AllValidityProofs",
+					Use:            "all-validity-proofs <metadata_uri>",
+					Short:          "Shows all validity proofs of the data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}},
+				},
+				{
+					RpcMethod:      "Invalidity",
+					Use:            "invalidity <metadata_uri> <sender_address>",
+					Short:          "Shows invalidity of the data by sender",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "sender_address"}},
+				},
+				{
+					RpcMethod:      "AllInvalidity",
+					Use:            "all-invalidity <metadata_uri>",
+					Short:          "Shows all invalidity of the data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}},
+				},
+				{
+					RpcMethod:      "ZkpProofThreshold",
+					Use:            "zkp-proof-threshold <shard_count>",
+					Short:          "Shows threshold number of proof",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "shard_count"}},
+				},
+				{
+					RpcMethod:      "ProofDeputy",
+					Use:            "proof-deputy <validator_address>",
+					Short:          "Shows proof deputy of the validator",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "validator_address"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
-			Service:              modulev1.Msg_ServiceDesc.ServiceName,
+			Service:              types.Msg_serviceDesc.ServiceName,
 			EnhanceCustomCommand: true, // only required if you want to use the custom command
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
@@ -44,9 +76,29 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "PublishData",
-					Use:            "publish-data",
-					Short:          "Send a publish-data tx",
+					RpcMethod: "PublishData",
+					Skip:      true,
+				},
+				{
+					RpcMethod:      "SubmitInvalidity",
+					Use:            "submit-invalidity <metadata_uri> <index>,<index>...",
+					Short:          "Submit invalidity to the data",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "indices"}},
+				},
+				{
+					RpcMethod: "SubmitValidityProof",
+					Skip:      true,
+				},
+				{
+					RpcMethod:      "RegisterProofDeputy",
+					Use:            "register-proof-deputy <deputy_address>",
+					Short:          "Register proof deputy",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "deputy_address"}},
+				},
+				{
+					RpcMethod:      "UnregisterProofDeputy",
+					Use:            "unregister-proof-deputy",
+					Short:          "Unregister proof deputy",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

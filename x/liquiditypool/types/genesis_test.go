@@ -3,8 +3,9 @@ package types_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenesisState_Validate(t *testing.T) {
@@ -21,81 +22,10 @@ func TestGenesisState_Validate(t *testing.T) {
 		{
 			desc: "valid genesis state",
 			genState: &types.GenesisState{
-				Pools: []types.Pool{
-					{
-						Id: 0,
-					},
-					{
-						Id: 1,
-					},
-				},
-				PoolCount: 2,
-				Positions: []types.Position{
-					{
-						Id: 0,
-					},
-					{
-						Id: 1,
-					},
-				},
-				PositionCount: 2,
-				// this line is used by starport scaffolding # types/genesis/validField
+				Params: types.DefaultParams(),
 			},
 			valid: true,
 		},
-		{
-			desc: "duplicated pool",
-			genState: &types.GenesisState{
-				Pools: []types.Pool{
-					{
-						Id: 0,
-					},
-					{
-						Id: 0,
-					},
-				},
-			},
-			valid: false,
-		},
-		{
-			desc: "invalid pool count",
-			genState: &types.GenesisState{
-				Pools: []types.Pool{
-					{
-						Id: 1,
-					},
-				},
-				PoolCount: 0,
-			},
-			valid: false,
-		},
-		{
-			desc: "duplicated position",
-			genState: &types.GenesisState{
-				Positions: []types.Position{
-					{
-						Id: 0,
-					},
-					{
-						Id: 0,
-					},
-				},
-			},
-			valid: false,
-		},
-		{
-			desc: "invalid position count",
-			genState: &types.GenesisState{
-				Positions: []types.Position{
-					{
-						Id: 1,
-					},
-				},
-				PositionCount: 0,
-			},
-			valid: false,
-		},
-		// this line is used by starport scaffolding # types/genesis/testcase
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {

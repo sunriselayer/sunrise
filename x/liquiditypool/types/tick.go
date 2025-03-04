@@ -7,6 +7,20 @@ import (
 	"cosmossdk.io/math"
 )
 
+func CheckTicks(tickLower, tickUpper int64) error {
+	if tickLower >= tickUpper {
+		return errors.New("tickLower should be less than tickUpper")
+	}
+	if tickLower < TICK_MIN {
+		return errors.New("tickLower is out of range")
+	}
+
+	if tickUpper > TICK_MAX {
+		return errors.New("tickUpper is out of range")
+	}
+	return nil
+}
+
 func TicksToSqrtPrice(lowerTick, upperTick int64, tickParams TickParams) (math.LegacyDec, math.LegacyDec, error) {
 	if lowerTick >= upperTick {
 		return math.LegacyDec{}, math.LegacyDec{}, errors.New("tickLower should be less than tickUpper")
@@ -37,7 +51,15 @@ func TickToSqrtPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, er
 }
 
 func TickToMultipliedPrice(tickIndex int64, tickParams TickParams) (math.LegacyDec, error) {
-	offsetPrice := Pow(tickParams.PriceRatio, tickParams.BaseOffset)
+	priceRatio, err := math.LegacyNewDecFromStr(tickParams.PriceRatio)
+	if err != nil {
+		return math.LegacyDec{}, err
+	}
+	baseOffset, err := math.LegacyNewDecFromStr(tickParams.BaseOffset)
+	if err != nil {
+		return math.LegacyDec{}, err
+	}
+	offsetPrice := Pow(priceRatio, baseOffset)
 	if tickIndex == 0 {
 		return offsetPrice.Mul(Multiplier), nil
 	}
@@ -48,9 +70,9 @@ func TickToMultipliedPrice(tickIndex int64, tickParams TickParams) (math.LegacyD
 
 	var multipliedPrice math.LegacyDec
 	if tickIndex > 0 {
-		multipliedPrice = Multiplier.Mul(Pow(tickParams.PriceRatio, math.LegacyNewDec(tickIndex)))
+		multipliedPrice = Multiplier.Mul(Pow(priceRatio, math.LegacyNewDec(tickIndex)))
 	} else {
-		multipliedPrice = Multiplier.Quo(Pow(tickParams.PriceRatio, math.LegacyNewDec(-tickIndex)))
+		multipliedPrice = Multiplier.Quo(Pow(priceRatio, math.LegacyNewDec(-tickIndex)))
 	}
 
 	multipliedPrice = multipliedPrice.Mul(offsetPrice)
@@ -68,7 +90,15 @@ func CalculateMultipliedPriceToTick(multipliedPrice math.LegacyDec, tickParams T
 	if multipliedPrice.GT(MaxMultipliedSpotPrice) || multipliedPrice.LT(MinMultipliedSpotPrice) {
 		return 0, ErrPriceOutOfBound
 	}
-	multipliedOffsetPrice := Multiplier.Mul(Pow(tickParams.PriceRatio, tickParams.BaseOffset))
+	priceRatio, err := math.LegacyNewDecFromStr(tickParams.PriceRatio)
+	if err != nil {
+		return 0, err
+	}
+	baseOffset, err := math.LegacyNewDecFromStr(tickParams.BaseOffset)
+	if err != nil {
+		return 0, err
+	}
+	multipliedOffsetPrice := Multiplier.Mul(Pow(priceRatio, baseOffset))
 	if multipliedPrice.Equal(multipliedOffsetPrice) {
 		return 0, nil
 	}
@@ -76,12 +106,12 @@ func CalculateMultipliedPriceToTick(multipliedPrice math.LegacyDec, tickParams T
 	tickIndex = 0
 	if multipliedPrice.GT(multipliedOffsetPrice) {
 		for multipliedPrice.GT(multipliedOffsetPrice) {
-			multipliedPrice = multipliedPrice.Quo(tickParams.PriceRatio)
+			multipliedPrice = multipliedPrice.Quo(priceRatio)
 			tickIndex++
 		}
 	} else {
 		for multipliedPrice.LT(multipliedOffsetPrice) {
-			multipliedPrice = multipliedPrice.Mul(tickParams.PriceRatio)
+			multipliedPrice = multipliedPrice.Mul(priceRatio)
 			tickIndex--
 		}
 	}

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
@@ -20,10 +19,10 @@ func createNEpoch(keeper keeper.Keeper, ctx context.Context, n int) []types.Epoc
 }
 
 func TestEpochGet(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNEpoch(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNEpoch(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		got, found := keeper.GetEpoch(ctx, item.Id)
+		got, found := f.keeper.GetEpoch(f.ctx, item.Id)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -33,35 +32,35 @@ func TestEpochGet(t *testing.T) {
 }
 
 func TestEpochRemove(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNEpoch(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNEpoch(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		keeper.RemoveEpoch(ctx, item.Id)
-		_, found := keeper.GetEpoch(ctx, item.Id)
+		f.keeper.RemoveEpoch(f.ctx, item.Id)
+		_, found := f.keeper.GetEpoch(f.ctx, item.Id)
 		require.False(t, found)
 	}
 }
 
 func TestEpochGetAll(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNEpoch(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNEpoch(f.keeper, f.ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllEpoch(ctx)),
+		nullify.Fill(f.keeper.GetAllEpoch(f.ctx)),
 	)
 }
 
 func TestEpochCount(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNEpoch(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNEpoch(f.keeper, f.ctx, 10)
 	count := uint64(len(items))
-	require.Equal(t, count, keeper.GetEpochCount(ctx))
+	require.Equal(t, count, f.keeper.GetEpochCount(f.ctx))
 }
 
 func TestGetLastEpoch(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNEpoch(keeper, ctx, 10)
-	got, found := keeper.GetLastEpoch(ctx)
+	f := initFixture(t)
+	items := createNEpoch(f.keeper, f.ctx, 10)
+	got, found := f.keeper.GetLastEpoch(f.ctx)
 	require.True(t, found)
 	require.Equal(t,
 		nullify.Fill(&items[len(items)-1]),

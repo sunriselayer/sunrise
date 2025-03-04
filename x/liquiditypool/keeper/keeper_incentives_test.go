@@ -5,14 +5,16 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
+
+	"github.com/sunriselayer/sunrise/testutil/sample"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestAllocateIncentive(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sample.AccAddress()
 	senderAcc := sdk.MustAccAddressFromBech32(sender)
 
 	tests := []struct {
@@ -100,7 +102,7 @@ func TestAllocateIncentive(t *testing.T) {
 				resp, err := k.GetFeeAccumulator(wctx, tc.poolId)
 				require.NoError(t, err)
 				require.Equal(t, resp.AccumValue.String(), tc.expAccumulation)
-				require.Equal(t, resp.TotalShares.String(), "19053571.850177307210510444")
+				require.Equal(t, resp.TotalShares, "19053571.850177307210510444")
 			}
 		})
 	}

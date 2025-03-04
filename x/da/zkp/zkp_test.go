@@ -109,7 +109,7 @@ func TestVerifyData_BigSize(t *testing.T) {
 		shardHashes = append(shardHashes, shardHash.Bytes())
 		shardDoubleHashes = append(shardDoubleHashes, shardDoubleHash)
 	}
-	err := VerifyData(indices, shardHashes, shardDoubleHashes, threshold)
+	err := VerifyData(indices, shardHashes, shardDoubleHashes)
 	require.NoError(t, err)
 }
 

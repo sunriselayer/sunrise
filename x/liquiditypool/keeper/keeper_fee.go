@@ -181,8 +181,10 @@ func (k Keeper) prepareClaimableFees(ctx sdk.Context, positionId uint64) (sdk.Co
 			return nil, err
 		}
 
-		totalSharesRemaining := feeAccumulator.TotalShares
-
+		totalSharesRemaining, err := math.LegacyNewDecFromStr(feeAccumulator.TotalShares)
+		if err != nil {
+			return nil, err
+		}
 		if !totalSharesRemaining.IsZero() {
 			forfeitedDustPerShareScaled := forfeitedDust.QuoDecTruncate(totalSharesRemaining)
 			k.AddToAccumulator(ctx, feeAccumulator, forfeitedDustPerShareScaled)

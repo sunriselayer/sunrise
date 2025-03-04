@@ -75,11 +75,14 @@ func (route *Route) validateRecursive() error {
 			if r.DenomOut != route.DenomOut {
 				return fmt.Errorf("invalid denom out: %s", r)
 			}
-
-			if parallel.Weights[i].IsNil() {
+			weight, err := math.LegacyNewDecFromStr(parallel.Weights[i])
+			if err != nil {
+				return err
+			}
+			if weight.IsNil() {
 				return fmt.Errorf("nil weight")
 			}
-			if !parallel.Weights[i].IsPositive() {
+			if !weight.IsPositive() {
 				return fmt.Errorf("non-positive weight: %s", parallel.Weights[i])
 			}
 		}
@@ -191,7 +194,11 @@ func (route *Route) InspectRoute(
 		// Calculate the sum of the weights
 		weightSum := math.LegacyZeroDec()
 		for _, w := range strategy.Parallel.Weights {
-			weightSum.AddMut(w)
+			weight, err := math.LegacyNewDecFromStr(w)
+			if err != nil {
+				return math.Int{}, RouteResult{}, err
+			}
+			weightSum.AddMut(weight)
 		}
 
 		// Calculate the amount of input for each route
@@ -200,7 +207,11 @@ func (route *Route) InspectRoute(
 		length := len(strategy.Parallel.Weights)
 
 		for i, w := range strategy.Parallel.Weights[:length-1] {
-			amountsExact[i] = w.MulInt(amountExact).Quo(weightSum).TruncateInt()
+			weight, err := math.LegacyNewDecFromStr(w)
+			if err != nil {
+				return math.Int{}, RouteResult{}, err
+			}
+			amountsExact[i] = weight.MulInt(amountExact).Quo(weightSum).TruncateInt()
 		}
 		// For avoiding rounding errors
 		amountsExact[length-1] = amountExact.Sub(amountsExactSum)

@@ -1,0 +1,27 @@
+syntax = "proto3";
+package sunrise.liquiditypool.v1;
+
+import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
+
+// TickInfo
+message TickInfo {
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
+  int64 tick_index = 2 [(amino.dont_omitempty) = true];
+  string liquidity_gross = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.moretags) = "yaml:\"liquidity_gross\""
+  ];
+  string liquidity_net = 4 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.moretags) = "yaml:\"liquidity_net\""
+  ];
+  repeated cosmos.base.v1beta1.DecCoin fee_growth = 5 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}

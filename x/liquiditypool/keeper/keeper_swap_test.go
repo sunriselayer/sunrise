@@ -5,9 +5,9 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"go.uber.org/mock/gomock"
+
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -433,7 +433,9 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 }
 
 func TestGetValidatedPoolAndAccumulator(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
 	// when pool does not exist
 	_, _, err := k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.Error(t, err)
@@ -443,11 +445,11 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 		Id:                   1,
 		DenomBase:            "base",
 		DenomQuote:           "quote",
-		FeeRate:              math.LegacyZeroDec(),
+		FeeRate:              math.LegacyZeroDec().String(),
 		TickParams:           types.TickParams{},
 		CurrentTick:          0,
-		CurrentTickLiquidity: math.LegacyOneDec(),
-		CurrentSqrtPrice:     math.LegacyOneDec(),
+		CurrentTickLiquidity: math.LegacyOneDec().String(),
+		CurrentSqrtPrice:     math.LegacyOneDec().String(),
 	})
 	_, _, err = k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.Error(t, err)
@@ -460,13 +462,13 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 	require.Equal(t, pool.Id, uint64(1))
 	require.Equal(t, pool.DenomBase, "base")
 	require.Equal(t, pool.DenomQuote, "quote")
-	require.Equal(t, pool.FeeRate.String(), "0.000000000000000000")
+	require.Equal(t, pool.FeeRate, "0.000000000000000000")
 	require.Equal(t, pool.CurrentTick, int64(0))
-	require.Equal(t, pool.CurrentTickLiquidity.String(), "1.000000000000000000")
-	require.Equal(t, pool.CurrentSqrtPrice.String(), "1.000000000000000000")
+	require.Equal(t, pool.CurrentTickLiquidity, "1.000000000000000000")
+	require.Equal(t, pool.CurrentSqrtPrice, "1.000000000000000000")
 	require.Equal(t, accumulator.AccumValue.String(), "")
 	require.Equal(t, accumulator.Name, "FeePoolAccumulator/value//1")
-	require.Equal(t, accumulator.TotalShares.String(), "0.000000000000000000")
+	require.Equal(t, accumulator.TotalShares, "0.000000000000000000")
 
 	// When invalid denom's put
 	_, _, err = k.GetValidatedPoolAndAccumulator(ctx, 1, "invalid_denom", "quote")

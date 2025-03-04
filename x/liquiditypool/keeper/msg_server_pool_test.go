@@ -28,12 +28,12 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	// check created pool and status
 	pool, found := k.GetPool(ctx, resp.Id)
 	require.True(t, found)
-	require.Equal(t, pool.TickParams.PriceRatio.String(), "1.000100000000000000")
-	require.Equal(t, pool.TickParams.BaseOffset.String(), "0.500000000000000000")
-	require.Equal(t, pool.FeeRate.String(), "0.010000000000000000")
+	require.Equal(t, pool.TickParams.PriceRatio, "1.000100000000000000")
+	require.Equal(t, pool.TickParams.BaseOffset, "0.500000000000000000")
+	require.Equal(t, pool.FeeRate, "0.010000000000000000")
 	require.Equal(t, pool.CurrentTick, int64(0))
-	require.Equal(t, pool.CurrentTickLiquidity.String(), "0.000000000000000000")
-	require.Equal(t, pool.CurrentSqrtPrice.String(), "0.000000000000000000")
+	require.Equal(t, pool.CurrentTickLiquidity, "0.000000000000000000")
+	require.Equal(t, pool.CurrentSqrtPrice, "0.000000000000000000")
 	require.Equal(t, pool.DenomBase, "base")
 	require.Equal(t, pool.DenomQuote, "quote")
 

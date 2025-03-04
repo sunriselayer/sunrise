@@ -1,406 +1,284 @@
 package cmd
 
 import (
-	"bufio"
-	"encoding/json"
 	"fmt"
-	"net"
+	"io"
 	"os"
-	"path/filepath"
+	"strings"
 
-	"cosmossdk.io/math"
-	tmconfig "github.com/cometbft/cometbft/config"
-	tmos "github.com/cometbft/cometbft/libs/os"
-	tmrand "github.com/cometbft/cometbft/libs/rand"
-	"github.com/cometbft/cometbft/types"
-	tmtime "github.com/cometbft/cometbft/types/time"
-	"github.com/cosmos/cosmos-sdk/runtime"
-	"github.com/cosmos/cosmos-sdk/testutil"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/client"
+	"cosmossdk.io/collections"
+	corestore "cosmossdk.io/core/store"
+	"cosmossdk.io/log"
+	"cosmossdk.io/math"
+	storetypes "cosmossdk.io/store/types"
+	distrtypes "cosmossdk.io/x/distribution/types"
+	minttypes "cosmossdk.io/x/mint/types"
+	slashingtypes "cosmossdk.io/x/slashing/types"
+	stakingtypes "cosmossdk.io/x/staking/types"
+
+	cmtproto "github.com/cometbft/cometbft/api/cometbft/types/v1"
+	"github.com/cometbft/cometbft/crypto"
+	"github.com/cometbft/cometbft/libs/bytes"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	"github.com/cosmos/cosmos-sdk/server"
-	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/sunriselayer/sunrise/app/consts"
+
+	"github.com/sunriselayer/sunrise/app"
+)
+
+const (
+	valVotingPower int64 = 900000000000000
 )
 
 var (
-	flagNodeDirPrefix     = "node-dir-prefix"
-	flagNumValidators     = "v"
-	flagOutputDir         = "output-dir"
-	flagNodeDaemonHome    = "node-daemon-home"
-	flagStartingIPAddress = "starting-ip-address"
+	flagAccountsToFund = "accounts-to-fund"
 )
 
-// get cmd to initialize all files for tendermint testnet and application
-func testnetCmd(mbm module.BasicManager, genBalIterator banktypes.GenesisBalancesIterator) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "testnet",
-		Short: "Initialize files for a simapp testnet",
-		Long: `testnet will create "v" number of directories and populate each with
-necessary files (private validator, genesis, config, etc.).
+type valArgs struct {
+	newValAddr         bytes.HexBytes
+	newOperatorAddress string
+	newValPubKey       crypto.PubKey
+	accountsToFund     []string
+	upgradeToTrigger   string
+	homeDir            string
+}
 
-Note, strict routability for addresses is turned off in the config file.
+func NewInPlaceTestnetCmd() *cobra.Command {
+	cmd := server.InPlaceTestnetCreator(newTestnetApp)
+	cmd.Short = "Updates chain's application and consensus state with provided validator info and starts the node"
+	cmd.Long = `The test command modifies both application and consensus stores within a local mainnet node and starts the node,
+with the aim of facilitating testing procedures. This command replaces existing validator data with updated information,
+thereby removing the old validator set and introducing a new set suitable for local testing purposes. By altering the state extracted from the mainnet node,
+it enables developers to configure their local environments to reflect mainnet conditions more accurately.`
 
-Example:
-    sunrised testnet --v 4 --output-dir ./output --starting-ip-address 192.168.10.2
-    `,
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-			serverCtx := server.GetServerContextFromCmd(cmd)
-			config := serverCtx.Config
+	cmd.Example = fmt.Sprintf(`%sd in-place-testnet testing-1 cosmosvaloper1w7f3xx7e75p4l7qdym5msqem9rd4dyc4mq79dm --home $HOME/.%sd/validator1 --validator-privkey=6dq+/KHNvyiw2TToCgOpUpQKIzrLs69Rb8Az39xvmxPHNoPxY1Cil8FY+4DhT9YwD6s0tFABMlLcpaylzKKBOg== --accounts-to-fund="cosmos1f7twgcq4ypzg7y24wuywy06xmdet8pc4473tnq,cosmos1qvuhm5m644660nd8377d6l7yz9e9hhm9evmx3x"`, "sunrise", "sunrise")
 
-			outputDir, _ := cmd.Flags().GetString(flagOutputDir)
-			keyringBackend, _ := cmd.Flags().GetString(flags.FlagKeyringBackend)
-			chainID, _ := cmd.Flags().GetString(flags.FlagChainID)
-			minGasPrices, _ := cmd.Flags().GetString(server.FlagMinGasPrices)
-			nodeDirPrefix, _ := cmd.Flags().GetString(flagNodeDirPrefix)
-			nodeDaemonHome, _ := cmd.Flags().GetString(flagNodeDaemonHome)
-			startingIPAddress, _ := cmd.Flags().GetString(flagStartingIPAddress)
-			numValidators, _ := cmd.Flags().GetInt(flagNumValidators)
-			algo, _ := cmd.Flags().GetString(flags.FlagKeyType)
-
-			return InitTestnet(
-				clientCtx, cmd, config, mbm, genBalIterator, outputDir, chainID, minGasPrices,
-				nodeDirPrefix, nodeDaemonHome, startingIPAddress, keyringBackend, algo, numValidators,
-			)
-		},
-	}
-
-	cmd.Flags().Int(flagNumValidators, 4, "Number of validators to initialize the testnet with")
-	cmd.Flags().StringP(flagOutputDir, "o", "./mytestnet", "Directory to store initialization data for the testnet")
-	cmd.Flags().String(flagNodeDirPrefix, "node", "Prefix the directory name for each node with (node results in node0, node1, ...)")
-	cmd.Flags().String(flagNodeDaemonHome, "sunrised", "Home directory of the node's daemon configuration")
-	cmd.Flags().String(flagStartingIPAddress, "192.168.0.1", "Starting IP address (192.168.0.1 results in persistent peers list ID0@192.168.0.1:46656, ID1@192.168.0.2:46656, ...)")
-	cmd.Flags().String(flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
-	cmd.Flags().String(server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", consts.BondDenom), "Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)")
-	cmd.Flags().String(flags.FlagKeyringBackend, flags.DefaultKeyringBackend, "Select keyring's backend (os|file|test)")
-	cmd.Flags().String(flags.FlagKeyType, string(hd.Secp256k1Type), "Key signing algorithm to generate keys for")
-
+	cmd.Flags().String(flagAccountsToFund, "", "Comma-separated list of account addresses that will be funded for testing purposes")
 	return cmd
 }
 
-const nodeDirPerm = 0755
-
-// Initialize the testnet
-func InitTestnet(
-	clientCtx client.Context,
-	cmd *cobra.Command,
-	nodeConfig *tmconfig.Config,
-	mbm module.BasicManager,
-	genBalIterator banktypes.GenesisBalancesIterator,
-	outputDir,
-	chainID,
-	minGasPrices,
-	nodeDirPrefix,
-	nodeDaemonHome,
-	startingIPAddress,
-	keyringBackend,
-	algoStr string,
-	numValidators int,
-) error {
-
-	if chainID == "" {
-		chainID = "chain-" + tmrand.NewRand().Str(6)
+// newTestnetApp starts by running the normal newApp method. From there, the app interface returned is modified in order
+// for a testnet to be created from the provided app.
+func newTestnetApp(logger log.Logger, db corestore.KVStoreWithBatch, traceStore io.Writer, appOpts servertypes.AppOptions) servertypes.Application {
+	// Create an app and type cast to an App
+	newApp := newApp(logger, db, traceStore, appOpts)
+	testApp, ok := newApp.(*app.App)
+	if !ok {
+		panic("app created from newApp is not of type App")
 	}
 
-	nodeIDs := make([]string, numValidators)
-	valPubKeys := make([]cryptotypes.PubKey, numValidators)
-
-	_, appConfig := InitAppConfig()
-	appConfig.MinGasPrices = minGasPrices
-	appConfig.API.Enable = true
-	appConfig.Telemetry.Enabled = true
-	appConfig.Telemetry.PrometheusRetentionTime = 60
-	appConfig.Telemetry.EnableHostnameLabel = false
-	appConfig.Telemetry.GlobalLabels = [][]string{{"chain_id", chainID}}
-
-	var (
-		genAccounts []authtypes.GenesisAccount
-		genBalances []banktypes.Balance
-		genFiles    []string
-	)
-
-	inBuf := bufio.NewReader(cmd.InOrStdin())
-	// generate private keys, node IDs, and initial transactions
-	for i := 0; i < numValidators; i++ {
-		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
-		nodeDir := filepath.Join(outputDir, nodeDirName, nodeDaemonHome)
-		gentxsDir := filepath.Join(outputDir, "gentxs")
-
-		nodeConfig.SetRoot(nodeDir)
-		nodeConfig.RPC.ListenAddress = "tcp://0.0.0.0:26657"
-
-		if err := os.MkdirAll(filepath.Join(nodeDir, "config"), nodeDirPerm); err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		nodeConfig.Moniker = nodeDirName
-
-		ip, err := getIP(i, startingIPAddress)
-		if err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		nodeIDs[i], valPubKeys[i], err = genutil.InitializeNodeValidatorFiles(nodeConfig)
-		if err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
-		genFiles = append(genFiles, nodeConfig.GenesisFile())
-
-		kb, err := keyring.New(sdk.KeyringServiceName(), keyringBackend, nodeDir, inBuf, clientCtx.Codec)
-		if err != nil {
-			return err
-		}
-
-		keyringAlgos, _ := kb.SupportedAlgorithms()
-		algo, err := keyring.NewSigningAlgoFromString(algoStr, keyringAlgos)
-		if err != nil {
-			return err
-		}
-
-		addr, secret, err := testutil.GenerateSaveCoinKey(kb, nodeDirName, "", true, algo)
-		if err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		info := map[string]string{"secret": secret}
-
-		cliPrint, err := json.Marshal(info)
-		if err != nil {
-			return err
-		}
-
-		// save private key seed words
-		if err := writeFile(fmt.Sprintf("%v.json", "key_seed"), nodeDir, cliPrint); err != nil {
-			return err
-		}
-
-		accTokens := sdk.TokensFromConsensusPower(1000, sdk.DefaultPowerReduction)
-		accStakingTokens := sdk.TokensFromConsensusPower(500, sdk.DefaultPowerReduction)
-		coins := sdk.Coins{
-			sdk.NewCoin(fmt.Sprintf("%stoken", nodeDirName), accTokens),
-			sdk.NewCoin(consts.BondDenom, accStakingTokens),
-		}
-
-		genBalances = append(genBalances, banktypes.Balance{Address: addr.String(), Coins: coins.Sort()})
-		genAccounts = append(genAccounts, authtypes.NewBaseAccount(addr, nil, 0, 0))
-
-		valTokens := sdk.TokensFromConsensusPower(100, sdk.DefaultPowerReduction)
-		createValMsg, err := stakingtypes.NewMsgCreateValidator(
-			sdk.ValAddress(addr).String(),
-			valPubKeys[i],
-			sdk.NewCoin(consts.BondDenom, valTokens),
-			stakingtypes.NewDescription(nodeDirName, "", "", "", ""),
-			stakingtypes.NewCommissionRates(math.LegacyOneDec(), math.LegacyOneDec(), math.LegacyOneDec()),
-			math.OneInt(),
-		)
-		if err != nil {
-			return err
-		}
-
-		txBuilder := clientCtx.TxConfig.NewTxBuilder()
-		if err := txBuilder.SetMsgs(createValMsg); err != nil {
-			return err
-		}
-
-		txBuilder.SetMemo(memo)
-
-		txFactory := tx.Factory{}
-		txFactory = txFactory.
-			WithChainID(chainID).
-			WithMemo(memo).
-			WithKeybase(kb).
-			WithTxConfig(clientCtx.TxConfig)
-
-		if err := tx.Sign(cmd.Context(), txFactory, nodeDirName, txBuilder, true); err != nil {
-			return err
-		}
-
-		txBz, err := clientCtx.TxConfig.TxJSONEncoder()(txBuilder.GetTx())
-		if err != nil {
-			return err
-		}
-
-		if err := writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBz); err != nil {
-			return err
-		}
-
-		srvconfig.WriteConfigFile(filepath.Join(nodeDir, "config/app.toml"), appConfig)
-	}
-
-	if err := initGenFiles(clientCtx, mbm, chainID, genAccounts, genBalances, genFiles, numValidators); err != nil {
-		return err
-	}
-
-	err := collectGenFiles(
-		clientCtx, nodeConfig, chainID, nodeIDs, valPubKeys, numValidators,
-		outputDir, nodeDirPrefix, nodeDaemonHome, genBalIterator,
-		clientCtx.TxConfig.SigningContext().ValidatorAddressCodec(),
-	)
+	// Get command args
+	args, err := getCommandArgs(appOpts)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
-	cmd.PrintErrf("Successfully initialized %d node directories\n", numValidators)
-	return nil
+	return initAppForTestnet(testApp, args)
 }
 
-func initGenFiles(
-	clientCtx client.Context, mbm module.BasicManager, chainID string,
-	genAccounts []authtypes.GenesisAccount, genBalances []banktypes.Balance,
-	genFiles []string, numValidators int,
-) error {
+func initAppForTestnet(app *app.App, args valArgs) *app.App {
+	// Required Changes:
+	//
+	ctx := app.App.NewUncachedContext(true, cmtproto.Header{})
 
-	appGenState := mbm.DefaultGenesis(clientCtx.Codec)
-
-	// set the accounts in the genesis state
-	var authGenState authtypes.GenesisState
-	clientCtx.Codec.MustUnmarshalJSON(appGenState[authtypes.ModuleName], &authGenState)
-
-	accounts, err := authtypes.PackAccounts(genAccounts)
+	pubkey := &ed25519.PubKey{Key: args.newValPubKey.Bytes()}
+	pubkeyAny, err := codectypes.NewAnyWithValue(pubkey)
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
 
-	authGenState.Accounts = accounts
-	appGenState[authtypes.ModuleName] = clientCtx.Codec.MustMarshalJSON(&authGenState)
+	// STAKING
+	//
 
-	// set the balances in the genesis state
-	var bankGenState banktypes.GenesisState
-	clientCtx.Codec.MustUnmarshalJSON(appGenState[banktypes.ModuleName], &bankGenState)
-	bankGenState.Balances = banktypes.SanitizeGenesisBalances(genBalances)
-	for _, bal := range bankGenState.Balances {
-		bankGenState.Supply = bankGenState.Supply.Add(bal.Coins...)
+	// Create Validator struct for our new validator.
+	newVal := stakingtypes.Validator{
+		OperatorAddress: args.newOperatorAddress,
+		ConsensusPubkey: pubkeyAny,
+		Jailed:          false,
+		Status:          stakingtypes.Bonded,
+		Tokens:          math.NewInt(valVotingPower),
+		DelegatorShares: math.LegacyMustNewDecFromStr("10000000"),
+		Description: stakingtypes.Description{
+			Moniker: "Testnet Validator",
+		},
+		Commission: stakingtypes.Commission{
+			CommissionRates: stakingtypes.CommissionRates{
+				Rate:          math.LegacyMustNewDecFromStr("0.05"),
+				MaxRate:       math.LegacyMustNewDecFromStr("0.1"),
+				MaxChangeRate: math.LegacyMustNewDecFromStr("0.05"),
+			},
+		},
+		MinSelfDelegation: math.OneInt(),
 	}
-	appGenState[banktypes.ModuleName] = clientCtx.Codec.MustMarshalJSON(&bankGenState)
 
-	appGenStateJSON, err := json.MarshalIndent(appGenState, "", "  ")
+	validator, err := app.StakingKeeper.ValidatorAddressCodec().StringToBytes(newVal.GetOperator())
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
 
-	genDoc := types.GenesisDoc{
-		ChainID:    chainID,
-		AppState:   appGenStateJSON,
-		Validators: nil,
+	// Remove all validators from power store
+	stakingKey := app.GetKey(stakingtypes.ModuleName)
+	stakingStore := ctx.KVStore(stakingKey)
+	iterator, err := app.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
+	for ; iterator.Valid(); iterator.Next() {
+		stakingStore.Delete(iterator.Key())
+	}
+	iterator.Close()
+
+	// Remove all valdiators from last validators store
+	if err := app.StakingKeeper.LastValidatorPower.Clear(ctx, nil); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
 
-	// generate empty genesis files for each validator and save
-	for i := 0; i < numValidators; i++ {
-		if err := genDoc.SaveAs(genFiles[i]); err != nil {
-			return err
-		}
+	// Remove all validators from validators store
+	iterator = stakingStore.Iterator(stakingtypes.ValidatorsKey, storetypes.PrefixEndBytes(stakingtypes.ValidatorsKey))
+	for ; iterator.Valid(); iterator.Next() {
+		stakingStore.Delete(iterator.Key())
 	}
-	return nil
-}
+	iterator.Close()
 
-func collectGenFiles(
-	clientCtx client.Context, nodeConfig *tmconfig.Config, chainID string,
-	nodeIDs []string, valPubKeys []cryptotypes.PubKey, numValidators int,
-	outputDir, nodeDirPrefix, nodeDaemonHome string, genBalIterator banktypes.GenesisBalancesIterator,
-	valAddrCodec runtime.ValidatorAddressCodec,
-) error {
+	// Remove all validators from unbonding queue
+	iterator = stakingStore.Iterator(stakingtypes.ValidatorQueueKey, storetypes.PrefixEndBytes(stakingtypes.ValidatorQueueKey))
+	for ; iterator.Valid(); iterator.Next() {
+		stakingStore.Delete(iterator.Key())
+	}
+	iterator.Close()
 
-	var appState json.RawMessage
-	genTime := tmtime.Now()
+	// Add our validator to power and last validators store
+	handleErr(app.StakingKeeper.SetValidator(ctx, newVal))
+	handleErr(app.StakingKeeper.SetValidatorByConsAddr(ctx, newVal))
+	handleErr(app.StakingKeeper.SetValidatorByPowerIndex(ctx, newVal))
+	handleErr(app.StakingKeeper.SetLastValidatorPower(ctx, validator, 0))
+	handleErr(app.StakingKeeper.Hooks().AfterValidatorCreated(ctx, validator))
 
-	for i := 0; i < numValidators; i++ {
-		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
-		nodeDir := filepath.Join(outputDir, nodeDirName, nodeDaemonHome)
-		gentxsDir := filepath.Join(outputDir, "gentxs")
-		nodeConfig.Moniker = nodeDirName
+	// DISTRIBUTION
+	//
 
-		nodeConfig.SetRoot(nodeDir)
+	// Initialize records for this validator across all distribution stores
+	handleErr(app.DistrKeeper.ValidatorHistoricalRewards.Set(
+		ctx,
+		collections.Join(sdk.ValAddress(validator), uint64(0)),
+		distrtypes.NewValidatorHistoricalRewards(sdk.DecCoins{}, 1),
+	))
 
-		nodeID, valPubKey := nodeIDs[i], valPubKeys[i]
-		initCfg := genutiltypes.NewInitConfig(chainID, gentxsDir, nodeID, valPubKey)
+	handleErr(app.DistrKeeper.ValidatorCurrentRewards.Set(
+		ctx,
+		validator,
+		distrtypes.NewValidatorCurrentRewards(sdk.DecCoins{}, 1),
+	))
 
-		appGenesis, err := genutiltypes.AppGenesisFromFile(nodeConfig.GenesisFile())
+	handleErr(app.DistrKeeper.ValidatorsAccumulatedCommission.Set(
+		ctx, validator, distrtypes.InitialValidatorAccumulatedCommission(),
+	))
+
+	handleErr(app.DistrKeeper.ValidatorOutstandingRewards.Set(
+		ctx,
+		validator,
+		distrtypes.ValidatorOutstandingRewards{Rewards: sdk.DecCoins{}},
+	))
+
+	// SLASHING
+	//
+
+	// Set validator signing info for our new validator.
+	newConsAddr := sdk.ConsAddress(args.newValAddr.Bytes())
+	newValidatorSigningInfo := slashingtypes.ValidatorSigningInfo{
+		Address:     newConsAddr.String(),
+		StartHeight: app.App.LastBlockHeight() - 1,
+		Tombstoned:  false,
+	}
+	app.SlashingKeeper.ValidatorSigningInfo.Set(ctx, newConsAddr, newValidatorSigningInfo)
+
+	// BANK
+	//
+	bondDenom, err := app.StakingKeeper.BondDenom(ctx)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
+
+	defaultCoins := sdk.NewCoins(sdk.NewInt64Coin(bondDenom, 1000000000))
+
+	// Fund local accounts
+	for _, accountStr := range args.accountsToFund {
+		err := app.BankKeeper.MintCoins(ctx, minttypes.ModuleName, defaultCoins)
 		if err != nil {
-			return err
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
 		}
 
-		nodeAppState, err := genutil.GenAppStateFromConfig(clientCtx.Codec, clientCtx.TxConfig, nodeConfig, initCfg, appGenesis, genBalIterator, genutiltypes.DefaultMessageValidator,
-			valAddrCodec)
+		account, err := app.AuthKeeper.AddressCodec().StringToBytes(accountStr)
 		if err != nil {
-			return err
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
 		}
 
-		if appState == nil {
-			// set the canonical application state (they should not differ)
-			appState = nodeAppState
-		}
-
-		genFile := nodeConfig.GenesisFile()
-
-		// overwrite each validator's genesis file to have a canonical genesis time
-		if err := genutil.ExportGenesisFileWithTime(genFile, chainID, nil, appState, genTime); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func getIP(i int, startingIPAddr string) (ip string, err error) {
-	if len(startingIPAddr) == 0 {
-		ip, err = server.ExternalIP()
+		err = app.BankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, account, defaultCoins)
 		if err != nil {
-			return "", err
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
 		}
-		return ip, nil
 	}
-	return calculateIP(startingIPAddr, i)
+
+	return app
 }
 
-func calculateIP(ip string, i int) (string, error) {
-	ipv4 := net.ParseIP(ip).To4()
-	if ipv4 == nil {
-		return "", fmt.Errorf("%v: non ipv4 address", ip)
-	}
+// parse the input flags and returns valArgs
+func getCommandArgs(appOpts servertypes.AppOptions) (valArgs, error) {
+	args := valArgs{}
 
-	for j := 0; j < i; j++ {
-		ipv4[3]++
+	newValAddr, ok := appOpts.Get(server.KeyNewValAddr).(bytes.HexBytes)
+	if !ok {
+		panic("newValAddr is not of type bytes.HexBytes")
 	}
+	args.newValAddr = newValAddr
+	newValPubKey, ok := appOpts.Get(server.KeyUserPubKey).(crypto.PubKey)
+	if !ok {
+		panic("newValPubKey is not of type crypto.PubKey")
+	}
+	args.newValPubKey = newValPubKey
+	newOperatorAddress, ok := appOpts.Get(server.KeyNewOpAddr).(string)
+	if !ok {
+		panic("newOperatorAddress is not of type string")
+	}
+	args.newOperatorAddress = newOperatorAddress
+	upgradeToTrigger, ok := appOpts.Get(server.KeyTriggerTestnetUpgrade).(string)
+	if !ok {
+		panic("upgradeToTrigger is not of type string")
+	}
+	args.upgradeToTrigger = upgradeToTrigger
 
-	return ipv4.String(), nil
+	// parsing  and set accounts to fund
+	accountsString := cast.ToString(appOpts.Get(flagAccountsToFund))
+	args.accountsToFund = append(args.accountsToFund, strings.Split(accountsString, ",")...)
+
+	// home dir
+	homeDir := cast.ToString(appOpts.Get(flags.FlagHome))
+	if homeDir == "" {
+		return args, fmt.Errorf("invalid home dir")
+	}
+	args.homeDir = homeDir
+
+	return args, nil
 }
 
-func writeFile(name string, dir string, contents []byte) error {
-	writePath := filepath.Join(dir)
-	file := filepath.Join(writePath, name)
-
-	err := tmos.EnsureDir(writePath, 0755)
+// handleErr prints the error and exits the program if the error is not nil
+func handleErr(err error) {
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
-
-	err = tmos.WriteFile(file, contents, 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

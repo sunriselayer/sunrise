@@ -3,14 +3,14 @@ package liquiditypool
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/sunriselayer/sunrise/api/sunrise/liquiditypool"
+	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
 func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 	return &autocliv1.ModuleOptions{
 		Query: &autocliv1.ServiceCommandDescriptor{
-			Service: modulev1.Query_ServiceDesc.ServiceName,
+			Service: types.Query_serviceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "Params",
@@ -19,41 +19,41 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Pools",
-					Use:       "list-pools",
+					Use:       "all-pools",
 					Short:     "List all pools",
 				},
 				{
 					RpcMethod:      "Pool",
-					Use:            "show-pool [id]",
+					Use:            "pool <id>",
 					Short:          "Shows a pool by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
 					RpcMethod: "Positions",
-					Use:       "list-positions",
+					Use:       "all-positions",
 					Short:     "List all positions",
 				},
 				{
 					RpcMethod:      "Position",
-					Use:            "show-position [id]",
+					Use:            "position <id>",
 					Short:          "Shows a position by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
 					RpcMethod:      "PoolPositions",
-					Use:            "show-pool-positions [pool_id]",
+					Use:            "pool-positions <pool_id>",
 					Short:          "List positions by pool id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "pool_id"}},
 				},
 				{
 					RpcMethod:      "AddressPositions",
-					Use:            "address-positions [address]",
+					Use:            "address-positions <address>",
 					Short:          "List positions by address",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
 				},
 				{
 					RpcMethod:      "PositionFees",
-					Use:            "show-position-fees [id]",
+					Use:            "position-fees <id>",
 					Short:          "Shows fees in a position by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
@@ -61,7 +61,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
-			Service:              modulev1.Msg_ServiceDesc.ServiceName,
+			Service:              types.Msg_serviceDesc.ServiceName,
 			EnhanceCustomCommand: true, // only required if you want to use the custom command
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
@@ -69,57 +69,60 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "CreatePool",
-					Use:            "create-pool [lowerTick] [upperTick]",
-					Short:          "Create pool",
+					RpcMethod: "CreatePool",
+					Use:       "create-pool <denom_base> <denom_quote> <fee_rate> <price_ratio> <base_offset>",
+					Short:     "Create pool",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						// {ProtoField: "denom_base"},
-						// {ProtoField: "denom_quote"},
-						// {ProtoField: "fee_rate"},
-						// {ProtoField: "tick_params"},
+						{ProtoField: "denom_base"},
+						{ProtoField: "denom_quote"},
+						{ProtoField: "fee_rate"},
+						{ProtoField: "price_ratio"},
+						{ProtoField: "base_offset"},
 					},
 				},
 				{
-					RpcMethod:      "CreatePosition",
-					Use:            "create-position ",
-					Short:          "Create position",
+					RpcMethod: "CreatePosition",
+					Use:       "create-position <pool_id> <lower_tick> <upper_tick> <token_base.amount> <token_base.denom> <token_quote.amount> <token_quote.denom> <min_amount_base> <min_amount_quote>",
+					Short:     "Create position",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						// {ProtoField: "pool_id"},
-						// {ProtoField: "lower_tick"},
-						// {ProtoField: "upper_tick"},
-						// {ProtoField: "token_base"},
-						// {ProtoField: "token_quote"},
-						// {ProtoField: "min_amount_base"},
-						// {ProtoField: "min_amount_quote"},
+						{ProtoField: "pool_id"},
+						{ProtoField: "lower_tick"},
+						{ProtoField: "upper_tick"},
+						{ProtoField: "token_base.amount"},
+						{ProtoField: "token_base.denom"},
+						{ProtoField: "token_quote.amount"},
+						{ProtoField: "token_quote.denom"},
+						{ProtoField: "min_amount_base"},
+						{ProtoField: "min_amount_quote"},
 					},
 				},
 				{
-					RpcMethod:      "IncreaseLiquidity",
-					Use:            "increase-liquidity",
-					Short:          "Increase liquidity",
+					RpcMethod: "IncreaseLiquidity",
+					Use:       "increase-liquidity <id> <amount_base> <amount_quote> <min_amount_base> <min_amount_quote>",
+					Short:     "Increase liquidity",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						// {ProtoField: "id"},
-						// {ProtoField: "amount_base"},
-						// {ProtoField: "amount_quote"},
-						// {ProtoField: "min_amount_base"},
-						// {ProtoField: "min_amount_quote"},
+						{ProtoField: "id"},
+						{ProtoField: "amount_base"},
+						{ProtoField: "amount_quote"},
+						{ProtoField: "min_amount_base"},
+						{ProtoField: "min_amount_quote"},
 					},
 				},
 				{
-					RpcMethod:      "DecreaseLiquidity",
-					Use:            "decrease-liquidity",
-					Short:          "Decrease liquidity",
+					RpcMethod: "DecreaseLiquidity",
+					Use:       "decrease-liquidity <id> <liquidity>",
+					Short:     "Decrease liquidity",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						// {ProtoField: "id"},
-						// {ProtoField: "liquidity"},
+						{ProtoField: "id"},
+						{ProtoField: "liquidity"},
 					},
 				},
 				{
-					RpcMethod:      "ClaimRewards",
-					Use:            "claim-rewards",
-					Short:          "Send a claim-rewards tx",
+					RpcMethod: "ClaimRewards",
+					Use:       "claim-rewards <position_id>,<position_id>...",
+					Short:     "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						// {ProtoField: "position_ids"},
+						{ProtoField: "position_ids"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

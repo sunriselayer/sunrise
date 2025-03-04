@@ -4,14 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
@@ -26,7 +25,7 @@ type tallyFixture struct {
 	delAddrs []sdk.AccAddress
 	keeper   *keeper.Keeper
 	ctx      sdk.Context
-	mocks    keepertest.LiquidityIncentiveMocks
+	mocks    LiquidityIncentiveMocks
 }
 
 var (
@@ -44,7 +43,7 @@ var (
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
 			DoAndReturn(
-				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.Delegation) bool) error {
 					for i, d := range delegations {
 						fn(int64(i), d)
 					}
@@ -161,7 +160,10 @@ func TestTally_Standard(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			k := f.keeper
+			mocks := getMocks(t)
 
 			var (
 				numVals       = 10
@@ -174,7 +176,7 @@ func TestTally_Standard(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.Validator) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -313,7 +315,11 @@ func TestTally_MultipleChoice(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			k := f.keeper
+			mocks := getMocks(t)
+
 			var (
 				numVals       = 10
 				numDelegators = 5
@@ -325,7 +331,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.Validator) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)

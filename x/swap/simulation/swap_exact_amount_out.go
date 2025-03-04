@@ -1,29 +1,24 @@
 package simulation
 
 import (
-	"math/rand"
+	"context"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/cosmos/cosmos-sdk/simsx"
+
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-func SimulateMsgSwapExactAmountOut(
-	ak types.AccountKeeper,
-	bk types.BankKeeper,
-	k keeper.Keeper,
-) simtypes.Operation {
-	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
-	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-		simAccount, _ := simtypes.RandomAcc(r, accs)
+func MsgSwapExactAmountOutFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgSwapExactAmountOut] {
+	return func(ctx context.Context, testData *simsx.ChainDataSource, reporter simsx.SimulationReporter) ([]simsx.SimAccount, *types.MsgSwapExactAmountOut) {
+		from := testData.AnyAccount(reporter)
+
 		msg := &types.MsgSwapExactAmountOut{
-			Sender: simAccount.Address.String(),
+			Sender: from.AddressBech32,
 		}
 
-		// TODO: Handling the SwapExactAmountOut simulation
+		// TODO: Handle the SwapExactAmountOut simulation
 
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "SwapExactAmountOut simulation not implemented"), nil, nil
+		return []simsx.SimAccount{from}, msg
 	}
 }

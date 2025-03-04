@@ -7,7 +7,6 @@ import (
 
 	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
@@ -29,10 +28,10 @@ func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gaug
 }
 
 func TestGaugeGet(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetGauge(ctx, item.PreviousEpochId, item.PoolId)
+		rst, found := f.keeper.GetGauge(f.ctx, item.PreviousEpochId, item.PoolId)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -41,11 +40,11 @@ func TestGaugeGet(t *testing.T) {
 	}
 }
 func TestGaugeRemove(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		keeper.RemoveGauge(ctx, item.PreviousEpochId, item.PoolId)
-		_, found := keeper.GetGauge(ctx,
+		f.keeper.RemoveGauge(f.ctx, item.PreviousEpochId, item.PoolId)
+		_, found := f.keeper.GetGauge(f.ctx,
 			item.PreviousEpochId,
 			item.PoolId,
 		)
@@ -54,23 +53,23 @@ func TestGaugeRemove(t *testing.T) {
 }
 
 func TestGaugeGetAll(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllGauges(ctx)),
+		nullify.Fill(f.keeper.GetAllGauges(f.ctx)),
 	)
 }
 
 func TestGetAllGaugeByPreviousEpochId(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllGaugeByPreviousEpochId(ctx, 1)),
+		nullify.Fill(f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 1)),
 	)
 	require.Len(t,
-		keeper.GetAllGaugeByPreviousEpochId(ctx, 2),
+		f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 2),
 		0,
 	)
 }

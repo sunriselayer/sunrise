@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -18,8 +18,9 @@ import (
 var _ = strconv.IntSize
 
 func TestGaugeQuerySingle(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	msgs := createNGauge(keeper, ctx, 2)
+	f := initFixture(t)
+	qs := keeper.NewQueryServerImpl(f.keeper)
+	msgs := createNGauge(f.keeper, f.ctx, 2)
 	tests := []struct {
 		desc     string
 		request  *types.QueryGaugeRequest
@@ -57,7 +58,7 @@ func TestGaugeQuerySingle(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Gauge(ctx, tc.request)
+			response, err := qs.Gauge(f.ctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -72,8 +73,9 @@ func TestGaugeQuerySingle(t *testing.T) {
 }
 
 func TestGaugeQueryPaginated(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	msgs := createNGauge(keeper, ctx, 5)
+	f := initFixture(t)
+	qs := keeper.NewQueryServerImpl(f.keeper)
+	msgs := createNGauge(f.keeper, f.ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryGaugesRequest {
 		return &types.QueryGaugesRequest{
@@ -89,7 +91,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.Gauges(ctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := qs.Gauges(f.ctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Gauge), step)
 			require.Subset(t,
@@ -102,7 +104,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.Gauges(ctx, request(next, 0, uint64(step), false))
+			resp, err := qs.Gauges(f.ctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Gauge), step)
 			require.Subset(t,
@@ -113,7 +115,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.Gauges(ctx, request(nil, 0, 0, true))
+		resp, err := qs.Gauges(f.ctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
@@ -122,7 +124,7 @@ func TestGaugeQueryPaginated(t *testing.T) {
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.Gauges(ctx, nil)
+		_, err := qs.Gauges(f.ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }

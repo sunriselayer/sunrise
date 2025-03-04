@@ -11,7 +11,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-func (k Keeper) CalculationSwapExactAmountIn(goCtx context.Context, req *types.QueryCalculationSwapExactAmountInRequest) (*types.QueryCalculationSwapExactAmountInResponse, error) {
+func (q queryServer) CalculationSwapExactAmountIn(goCtx context.Context, req *types.QueryCalculationSwapExactAmountInRequest) (*types.QueryCalculationSwapExactAmountInResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -21,7 +21,7 @@ func (k Keeper) CalculationSwapExactAmountIn(goCtx context.Context, req *types.Q
 	if !ok {
 		return nil, types.ErrInvalidAmount
 	}
-	result, interfaceProviderFee, err := k.CalculateResultExactAmountIn(ctx, req.HasInterfaceFee, *req.Route, amountIn)
+	result, interfaceProviderFee, err := q.k.CalculateResultExactAmountIn(ctx, req.HasInterfaceFee, *req.Route, amountIn)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (k Keeper) CalculationSwapExactAmountIn(goCtx context.Context, req *types.Q
 	}, nil
 }
 
-func (k Keeper) CalculationSwapExactAmountOut(goCtx context.Context, req *types.QueryCalculationSwapExactAmountOutRequest) (*types.QueryCalculationSwapExactAmountOutResponse, error) {
+func (q queryServer) CalculationSwapExactAmountOut(goCtx context.Context, req *types.QueryCalculationSwapExactAmountOutRequest) (*types.QueryCalculationSwapExactAmountOutResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -43,7 +43,7 @@ func (k Keeper) CalculationSwapExactAmountOut(goCtx context.Context, req *types.
 	if !ok {
 		return nil, types.ErrInvalidAmount
 	}
-	result, interfaceProviderFee, err := k.CalculateResultExactAmountOut(ctx, req.HasInterfaceFee, *req.Route, amountOut)
+	result, interfaceProviderFee, err := q.k.CalculateResultExactAmountOut(ctx, req.HasInterfaceFee, *req.Route, amountOut)
 	if err != nil {
 		return nil, err
 	}

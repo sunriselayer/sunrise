@@ -8,7 +8,6 @@ import (
 	"go.uber.org/mock/gomock"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
@@ -117,7 +116,7 @@ func TestSwapExactAmountOut(t *testing.T) {
 								},
 							},
 						},
-						Weights: []math.LegacyDec{math.LegacyOneDec()},
+						Weights: []string{math.LegacyOneDec().String()},
 					},
 				},
 			},
@@ -172,7 +171,11 @@ func TestSwapExactAmountOut(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			keeper, mocks, ctx := keepertest.SwapKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			keeper := f.keeper
+			mocks := getMocks(t)
+
 			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().CalculateResultExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
@@ -314,8 +317,7 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 								},
 							},
 						},
-						Weights: []math.LegacyDec{math.LegacyOneDec()},
-					},
+						Weights: []string{math.LegacyOneDec().String()}},
 				},
 			},
 			amountOut: math.OneInt(),
@@ -366,7 +368,11 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			keeper, mocks, ctx := keepertest.SwapKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			keeper := f.keeper
+			mocks := getMocks(t)
+
 			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().CalculateResultExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.NewInt(1), nil).AnyTimes()

@@ -61,3 +61,43 @@ Supported URIs are below
 
 - `ipfs://`: IPFS
 - `ar://`: Arweave
+
+## Status
+
+PublishedData sent from the L2 chain to the DA layer changes status depending on the transmission of Tx and the passage of time.
+
+```protobuf
+enum Status {
+  // Default value
+  STATUS_UNSPECIFIED = 0;
+  // Verified
+  STATUS_VERIFIED = 1;
+  // Rejected
+  STATUS_REJECTED = 2;
+  // Verified the votes from the validators. Challenge can be received (after preBlocker)
+  STATUS_CHALLENGE_PERIOD = 3;
+  // A certain number of SubmitInvalidity received. Validators can send SubmitValidityProof tx.
+  STATUS_CHALLENGING = 4;
+}
+```
+
+1. A L2 chain sends the MsgPublishData transaction via sunrise-data, etc. If Tx is successful, it is registered with `CHALLENGE_PERIOD` status.
+1. During `CHALLENGE_PERIOD`, the status can be changed to `CHALLENGING` status through MsgChallengeForFraud Tx by anyone.
+1. In EndBlocker, `CHALLENGE_PERIOD` that has passed ChallengePeriod become `VERIFIED`. `CHALLENGING` will become `REJECTED` if `valid_shards < data_shard_count`. Otherwise, it will become `VERIFIED`.
+
+## Slash
+
+Validators should run [sunrise-data](https://github.com/sunriselayer/sunrise-data) with `sunrised` and vote on PublishedData in the Data Availability layer.
+
+If the Voting Power of the voted validator exceeds the `VoteThreshold` in the params, it become a valid data and the status changes to `CHALLENGE_PERIOD`.
+
+Validators that did not vote or voted fraudulently will be slashed.
+Slashing is done every `SlashEpoch` and validators whose count is greater than `EpochMaxFault` are targeted.
+
+The count is increased by 1 if either of the following conditions applies.
+The count may increase for each block, but will not be duplicated.
+
+1. When the vote made on the PublishedData exceeds the `VoteThreshold` and becomes `CHALLENGE_PERIOD`, a validators voted differently.
+1. When there is some data in the block for which voting is valid, a validator did not voted for any of them.
+
+The slash fraction (percentage of staking to be reduced) is determined by the `SlashFraction` in the params, which is executed by the slashing module of the Cosmos SDK. See [Cosmos SDK slashing documentation](https://docs.cosmos.network/v0.52/build/modules/slashing) for more details.

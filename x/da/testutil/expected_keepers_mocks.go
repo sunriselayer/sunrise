@@ -10,9 +10,9 @@ import (
 
 	store "cosmossdk.io/core/store"
 	math "cosmossdk.io/math"
+	types0 "cosmossdk.io/x/staking/types"
 	types "github.com/cosmos/cosmos-sdk/types"
-	types0 "github.com/cosmos/cosmos-sdk/x/staking/types"
-	gomock "github.com/golang/mock/gomock"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -282,10 +282,10 @@ func (mr *MockStakingKeeperMockRecorder) TotalBondedTokens(ctx interface{}) *gom
 }
 
 // Validator mocks base method.
-func (m *MockStakingKeeper) Validator(ctx context.Context, address types.ValAddress) (types0.ValidatorI, error) {
+func (m *MockStakingKeeper) Validator(ctx context.Context, address types.ValAddress) (types0.Validator, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Validator", ctx, address)
-	ret0, _ := ret[0].(types0.ValidatorI)
+	ret0, _ := ret[0].(types0.Validator)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

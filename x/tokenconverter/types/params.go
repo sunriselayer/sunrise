@@ -1,17 +1,10 @@
 package types
 
 import (
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ paramtypes.ParamSet = (*Params)(nil)
-
-// ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// NewParams creates a new Params instance
+// NewParams creates a new Params instance.
 func NewParams(bondDenom string, feeDenom string) Params {
 	return Params{
 		BondDenom: bondDenom,
@@ -19,27 +12,22 @@ func NewParams(bondDenom string, feeDenom string) Params {
 	}
 }
 
-// DefaultParams returns a default set of parameters
+// DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		"stake",
-		"fee",
+		sdk.DefaultBondDenom,
+		"token",
 	)
 }
 
-// ParamSetPairs get the params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{}
-}
-
-// Validate validates the set of params
+// Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.BondDenom == "" {
-		return ErrEmptyBondDenom
+	if err := sdk.ValidateDenom(p.BondDenom); err != nil {
+		return err
 	}
 
-	if p.FeeDenom == "" {
-		return ErrEmptyFeeDenom
+	if err := sdk.ValidateDenom(p.FeeDenom); err != nil {
+		return err
 	}
 
 	return nil
