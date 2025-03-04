@@ -86,7 +86,7 @@ func TestTickInfoStore(t *testing.T) {
 }
 
 func TestUpsertTick(t *testing.T) {
-	k, bk, srv, ctx := setupMsgServer(t)
+	k, mocks, srv, ctx := setupMsgServer(t)
 
 	// When pool does not exist
 	_, err := k.UpsertTick(ctx, 1, 0, math.LegacyNewDec(10), true)
@@ -95,8 +95,8 @@ func TestUpsertTick(t *testing.T) {
 	// When pool exist
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
@@ -152,7 +152,7 @@ func TestUpsertTick(t *testing.T) {
 }
 
 func TestNewTickInfo(t *testing.T) {
-	k, bk, srv, ctx := setupMsgServer(t)
+	k, mocks, srv, ctx := setupMsgServer(t)
 
 	// When pool does not exist
 	_, err := k.NewTickInfo(ctx, 1, 0)
@@ -161,8 +161,8 @@ func TestNewTickInfo(t *testing.T) {
 	// When empty pool exist
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{

@@ -44,7 +44,7 @@ var (
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
 			DoAndReturn(
-				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.Delegation) bool) error {
+				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d sdk.DelegationI) bool) error {
 					for i, d := range delegations {
 						fn(int64(i), d)
 					}
@@ -164,7 +164,7 @@ func TestTally_Standard(t *testing.T) {
 			f := initFixture(t)
 			ctx := sdk.UnwrapSDKContext(f.ctx)
 			k := f.keeper
-			mocks := getMocks(t)
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -177,7 +177,7 @@ func TestTally_Standard(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.Validator) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -319,7 +319,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 			f := initFixture(t)
 			ctx := sdk.UnwrapSDKContext(f.ctx)
 			k := f.keeper
-			mocks := getMocks(t)
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -332,7 +332,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.Validator) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)

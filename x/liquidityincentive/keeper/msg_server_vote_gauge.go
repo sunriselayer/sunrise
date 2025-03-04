@@ -34,7 +34,11 @@ func (k msgServer) VoteGauge(ctx context.Context, msg *types.MsgVoteGauge) (*typ
 	// end static validation
 
 	for _, poolWeight := range msg.PoolWeights {
-		if _, found := k.liquidityPoolKeeper.GetPool(ctx, poolWeight.PoolId); !found {
+		_, found, err := k.liquidityPoolKeeper.GetPool(ctx, poolWeight.PoolId)
+		if err != nil {
+			return nil, err
+		}
+		if !found {
 			return nil, liquiditypooltypes.ErrPoolNotFound
 		}
 	}

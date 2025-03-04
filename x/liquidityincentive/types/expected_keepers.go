@@ -44,6 +44,6 @@ type StakingKeeper interface {
 }
 
 type LiquidityPoolKeeper interface {
-	GetPool(ctx context.Context, id uint64) (val liquiditypooltypes.Pool, found bool)
+	GetPool(ctx context.Context, id uint64) (val liquiditypooltypes.Pool, found bool, err error)
 	AllocateIncentive(ctx sdk.Context, poolId uint64, sender sdk.AccAddress, incentiveCoins sdk.Coins) error
 }

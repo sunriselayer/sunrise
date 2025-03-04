@@ -181,7 +181,10 @@ func (k Keeper) ProcessSwappedFund(
 	}
 
 	if waiting {
-		k.SetIncomingInFlightPacket(ctx, *waitingPacket)
+		err = k.SetIncomingInFlightPacket(ctx, *waitingPacket)
+		if err != nil {
+			return nil, err
+		}
 
 		return waitingPacket, nil
 	}
@@ -230,7 +233,10 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		RetriesRemaining: int32(retries),
 	}
 
-	k.SetOutgoingInFlightPacket(ctx, packet)
+	err = k.SetOutgoingInFlightPacket(ctx, packet)
+	if err != nil {
+		return packet, err
+	}
 
 	return packet, nil
 }
@@ -246,7 +252,10 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		return err
 	}
 	if found {
-		k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+		err = k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+		if err != nil {
+			return err
+		}
 	} else {
 		return nil
 	}
@@ -257,9 +266,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
 			AckChange: acknowledgement,
 		}
-		break
-	case *types.IncomingInFlightPacket_AckChange:
-		break
+		// case *types.IncomingInFlightPacket_AckChange:
 	}
 
 	// The pattern of waitingPacket.Forward == nil is not handled here
@@ -268,9 +275,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 			AckForward: acknowledgement,
 		}
-		break
-	case *types.IncomingInFlightPacket_AckForward:
-		break
+		// case *types.IncomingInFlightPacket_AckForward:
 	}
 
 	deleted, err := k.ShouldDeleteCompletedWaitingPacket(ctx, incomingPacket)
@@ -278,7 +283,10 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		return err
 	}
 	if !deleted {
-		k.SetIncomingInFlightPacket(ctx, incomingPacket)
+		err = k.SetIncomingInFlightPacket(ctx, incomingPacket)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -289,7 +297,10 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 	packet channeltypes.Packet,
 	outgoingPacket types.OutgoingInFlightPacket,
 ) error {
-	k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+	err := k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+	if err != nil {
+		return err
+	}
 	outgoingPacket.RetriesRemaining--
 
 	if outgoingPacket.RetriesRemaining > 0 {
@@ -313,7 +324,10 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		// Set the new sequence number
 		outgoingPacket.Index.Sequence = sequence
-		k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
+		err = k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
+		if err != nil {
+			return err
+		}
 	} else {
 		// If remaining retry count is zero:
 		// - Returning non error acknowledgement to the origin
@@ -335,9 +349,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 					AckChange: ack.Acknowledgement(),
 				}
 			}
-			break
-		case *types.IncomingInFlightPacket_AckChange:
-			break
+			// case *types.IncomingInFlightPacket_AckChange:
 		}
 
 		switch packetForward := waitingPacket.Forward.(type) {
@@ -347,9 +359,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 					AckForward: ack.Acknowledgement(),
 				}
 			}
-			break
-		case *types.IncomingInFlightPacket_AckForward:
-			break
+			// case *types.IncomingInFlightPacket_AckForward:
 		}
 
 		deleted, err := k.ShouldDeleteCompletedWaitingPacket(ctx, waitingPacket)
@@ -357,7 +367,10 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			return err
 		}
 		if !deleted {
-			k.SetIncomingInFlightPacket(ctx, waitingPacket)
+			err = k.SetIncomingInFlightPacket(ctx, waitingPacket)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -426,7 +439,10 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		return false, err
 	}
 
-	k.RemoveIncomingInFlightPacket(ctx, packet.Index.PortId, packet.Index.ChannelId, packet.Index.Sequence)
+	err = k.RemoveIncomingInFlightPacket(ctx, packet.Index.PortId, packet.Index.ChannelId, packet.Index.Sequence)
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }

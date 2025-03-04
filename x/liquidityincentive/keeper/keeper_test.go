@@ -26,13 +26,19 @@ type fixture struct {
 	ctx          context.Context
 	keeper       keeper.Keeper
 	addressCodec address.Codec
+	mocks        LiquidityIncentiveMocks
 }
 
 func initFixture(t *testing.T) *fixture {
 	t.Helper()
 
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
+	config.SetBech32PrefixForConsensusNode("sunrisevalcons", "sunrisevalconspub")
+
 	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
-	addressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
+	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	env := runtime.NewEnvironment(runtime.NewKVStoreService(storeKey), log.NewTestLogger(t))
@@ -40,15 +46,17 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	mocks := getMocks(t)
+
 	k := keeper.NewKeeper(
 		env,
 		encCfg.Codec,
 		addressCodec,
 		authority,
-		nil,
-		nil,
-		nil,
-		nil,
+		mocks.AcctKeeper,
+		mocks.BankKeeper,
+		mocks.StakingKeeper,
+		mocks.LiquiditypoolKeeper,
 	)
 
 	// Initialize params
@@ -60,6 +68,7 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+		mocks:        mocks,
 	}
 }
 

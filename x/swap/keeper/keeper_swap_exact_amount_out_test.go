@@ -13,8 +13,7 @@ import (
 )
 
 func TestSwapExactAmountOut(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
-	senderAcc := sdk.MustAccAddressFromBech32(sender)
+	sender := sdk.AccAddress("sender")
 	tests := []struct {
 		desc              string
 		interfaceProvider string
@@ -174,13 +173,13 @@ func TestSwapExactAmountOut(t *testing.T) {
 			f := initFixture(t)
 			ctx := sdk.UnwrapSDKContext(f.ctx)
 			keeper := f.keeper
-			mocks := getMocks(t)
+			mocks := f.mocks
 
-			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
+			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().CalculateResultExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 
-			result, interfaceFee, err := keeper.SwapExactAmountOut(ctx, senderAcc, tc.interfaceProvider, tc.route, tc.maxAmountIn, tc.amountOut)
+			result, interfaceFee, err := keeper.SwapExactAmountOut(ctx, sender, tc.interfaceProvider, tc.route, tc.maxAmountIn, tc.amountOut)
 			if tc.expErr != nil {
 				require.ErrorIs(t, err, tc.expErr)
 			} else {
@@ -367,16 +366,16 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 		},
 	}
 	for _, tc := range tests {
+		f := initFixture(t)
+		ctx := sdk.UnwrapSDKContext(f.ctx)
+		keeper := f.keeper
+		mocks := f.mocks
+
+		mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
+		mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
+		mocks.LiquiditypoolKeeper.EXPECT().CalculateResultExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.NewInt(1), nil).AnyTimes()
+
 		t.Run(tc.desc, func(t *testing.T) {
-			f := initFixture(t)
-			ctx := sdk.UnwrapSDKContext(f.ctx)
-			keeper := f.keeper
-			mocks := getMocks(t)
-
-			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
-			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
-			mocks.LiquiditypoolKeeper.EXPECT().CalculateResultExactAmountOut(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.NewInt(1), nil).AnyTimes()
-
 			result, interfaceFee, err := keeper.CalculateResultExactAmountOut(ctx, tc.interfaceFee, tc.route, tc.amountOut)
 			if tc.expErr != nil {
 				require.ErrorIs(t, err, tc.expErr)

@@ -10,11 +10,17 @@ import (
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) error {
 	// Set all the incomingPacket
 	for _, elem := range genState.IncomingInFlightPackets {
-		k.SetIncomingInFlightPacket(ctx, elem)
+		err := k.SetIncomingInFlightPacket(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 	// Set all the outgoingInFlightPacket
 	for _, elem := range genState.OutgoingInFlightPackets {
-		k.SetOutgoingInFlightPacket(ctx, elem)
+		err := k.SetOutgoingInFlightPacket(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	return k.Params.Set(ctx, genState.Params)

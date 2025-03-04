@@ -41,7 +41,8 @@ func TestMsgUpdateParams(t *testing.T) {
 				Authority: authorityStr,
 				Params:    types.Params{},
 			},
-			expErr: false,
+			expErr:    true,
+			expErrMsg: "epoch blocks must be positive: invalid request",
 		},
 		{
 			name: "all good",
