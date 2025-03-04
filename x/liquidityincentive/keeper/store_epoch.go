@@ -105,20 +105,12 @@ func (k Keeper) GetAllEpoch(ctx context.Context) (list []types.Epoch, err error)
 }
 
 func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool, err error) {
-	has, err := k.Epochs.Has(ctx, 0)
-	if err != nil {
-		return epoch, false, err
-	}
-
-	if !has {
-		return epoch, false, nil
-	}
-
 	err = k.Epochs.Walk(
 		ctx,
 		new(collections.Range[uint64]).Descending(),
 		func(key uint64, value types.Epoch) (bool, error) {
 			epoch = value
+			found = true
 			return true, nil
 		},
 	)
@@ -127,5 +119,5 @@ func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool
 		return epoch, false, err
 	}
 
-	return epoch, true, nil
+	return epoch, found, nil
 }
