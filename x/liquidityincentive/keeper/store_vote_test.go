@@ -35,12 +35,12 @@ func createNVote(keeper keeper.Keeper, ctx context.Context, n int) []types.Vote 
 func TestVoteSet(t *testing.T) {
 	f := initFixture(t)
 	err := f.keeper.SetVote(f.ctx, types.Vote{
-		Sender:      "sender1",
+		Sender:      sdk.AccAddress("sender1").String(),
 		PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}, {PoolId: 2, Weight: "1"}},
 	})
 	require.NoError(t, err)
 	err = f.keeper.SetVote(f.ctx, types.Vote{
-		Sender:      "sender2",
+		Sender:      sdk.AccAddress("sender2").String(),
 		PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}},
 	})
 	require.NoError(t, err)
@@ -48,10 +48,10 @@ func TestVoteSet(t *testing.T) {
 	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill([]types.Vote{{
-			Sender:      "sender1",
+			Sender:      sdk.AccAddress("sender1").String(),
 			PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}, {PoolId: 2, Weight: "1"}},
 		}, {
-			Sender:      "sender2",
+			Sender:      sdk.AccAddress("sender2").String(),
 			PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}},
 		}}),
 		nullify.Fill(votes),

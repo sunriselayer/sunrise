@@ -44,7 +44,7 @@ func TestCreateEpoch(t *testing.T) {
 			fixture := initFixture(t)
 			ctx := fixture.ctx
 			k := fixture.keeper
-			mocks := getMocks(t)
+			mocks := fixture.mocks
 
 			var (
 				numVals       = 10
@@ -57,7 +57,7 @@ func TestCreateEpoch(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.Validator) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -102,7 +102,7 @@ func TestCreateEpoch(t *testing.T) {
 				require.Len(t, gauges, 1)
 				require.Equal(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Count, tt.expectedTally[0].Weight)
+				require.Equal(t, gauges[0].Count.String(), tt.expectedTally[0].Weight)
 			}
 		})
 	}
@@ -148,10 +148,10 @@ func TestEndBlocker(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fixture := initFixture(t)
-			ctx := fixture.ctx
-			k := fixture.keeper
-			mocks := getMocks(t)
+			f := initFixture(t)
+			ctx := f.ctx
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -164,7 +164,7 @@ func TestEndBlocker(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.Validator) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -212,7 +212,11 @@ func TestEndBlocker(t *testing.T) {
 				require.Len(t, gauges, 1)
 				require.GreaterOrEqual(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Count, tt.expectedTally[0].Weight)
+				require.Equal(t, gauges[0].Count.String(), tt.expectedTally[0].Weight)
+			} else {
+				_, found, err := k.GetLastEpoch(ctx)
+				require.NoError(t, err)
+				require.False(t, found)
 			}
 		})
 	}
@@ -227,8 +231,8 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "empty epochs",
 			setup: func(s tallyFixture) {
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
 			},
 		},
 		{
@@ -252,8 +256,8 @@ func TestBeginBlocker(t *testing.T) {
 				params.StakingRewardRatio = math.LegacyZeroDec().String()
 				err = s.keeper.Params.Set(s.ctx, params)
 				require.NoError(t, err)
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
 				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
 			},
@@ -279,8 +283,8 @@ func TestBeginBlocker(t *testing.T) {
 				params.StakingRewardRatio = math.LegacyOneDec().String()
 				err = s.keeper.Params.Set(s.ctx, params)
 				require.NoError(t, err)
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
 				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
 			},
@@ -301,16 +305,17 @@ func TestBeginBlocker(t *testing.T) {
 					},
 				})
 				require.NoError(t, err)
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).Return(sdk.Coins{}).AnyTimes()
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 0)).AnyTimes()
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fixture := initFixture(t)
-			ctx := fixture.ctx
-			k := fixture.keeper
-			mocks := getMocks(t)
+			f := initFixture(t)
+			ctx := f.ctx
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
