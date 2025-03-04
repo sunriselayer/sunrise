@@ -173,21 +173,6 @@ func (m *MockTransferKeeper) EXPECT() *MockTransferKeeperMockRecorder {
 	return m.recorder
 }
 
-// DenomPathFromHash mocks base method.
-func (m *MockTransferKeeper) DenomPathFromHash(ctx context.Context, denom string) (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DenomPathFromHash", ctx, denom)
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// DenomPathFromHash indicates an expected call of DenomPathFromHash.
-func (mr *MockTransferKeeperMockRecorder) DenomPathFromHash(ctx, denom interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DenomPathFromHash", reflect.TypeOf((*MockTransferKeeper)(nil).DenomPathFromHash), ctx, denom)
-}
-
 // GetTotalEscrowForDenom mocks base method.
 func (m *MockTransferKeeper) GetTotalEscrowForDenom(ctx context.Context, denom string) types.Coin {
 	m.ctrl.T.Helper()
@@ -283,7 +268,7 @@ func (mr *MockLiquidityPoolKeeperMockRecorder) CalculateResultExactAmountOut(ctx
 }
 
 // GetPool mocks base method.
-func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64, ) (types1.Pool, bool, error) {
+func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64) (types1.Pool, bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPool", ctx, id)
 	ret0, _ := ret[0].(types1.Pool)
@@ -326,51 +311,4 @@ func (m *MockLiquidityPoolKeeper) SwapExactAmountOut(ctx types.Context, sender t
 func (mr *MockLiquidityPoolKeeperMockRecorder) SwapExactAmountOut(ctx, sender, pool, tokenOut, denomIn, feeEnabled interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SwapExactAmountOut", reflect.TypeOf((*MockLiquidityPoolKeeper)(nil).SwapExactAmountOut), ctx, sender, pool, tokenOut, denomIn, feeEnabled)
-}
-
-// MockParamSubspace is a mock of ParamSubspace interface.
-type MockParamSubspace struct {
-	ctrl     *gomock.Controller
-	recorder *MockParamSubspaceMockRecorder
-}
-
-// MockParamSubspaceMockRecorder is the mock recorder for MockParamSubspace.
-type MockParamSubspaceMockRecorder struct {
-	mock *MockParamSubspace
-}
-
-// NewMockParamSubspace creates a new mock instance.
-func NewMockParamSubspace(ctrl *gomock.Controller) *MockParamSubspace {
-	mock := &MockParamSubspace{ctrl: ctrl}
-	mock.recorder = &MockParamSubspaceMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockParamSubspace) EXPECT() *MockParamSubspaceMockRecorder {
-	return m.recorder
-}
-
-// Get mocks base method.
-func (m *MockParamSubspace) Get(arg0 context.Context, arg1 []byte, arg2 interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Get", arg0, arg1, arg2)
-}
-
-// Get indicates an expected call of Get.
-func (mr *MockParamSubspaceMockRecorder) Get(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockParamSubspace)(nil).Get), arg0, arg1, arg2)
-}
-
-// Set mocks base method.
-func (m *MockParamSubspace) Set(arg0 context.Context, arg1 []byte, arg2 interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Set", arg0, arg1, arg2)
-}
-
-// Set indicates an expected call of Set.
-func (mr *MockParamSubspaceMockRecorder) Set(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockParamSubspace)(nil).Set), arg0, arg1, arg2)
 }
