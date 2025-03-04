@@ -14,6 +14,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	liquiditypooltestutil "github.com/sunriselayer/sunrise/x/liquiditypool/testutil"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	module "github.com/sunriselayer/sunrise/x/liquiditypool/module"
@@ -24,13 +26,19 @@ type fixture struct {
 	ctx          context.Context
 	keeper       keeper.Keeper
 	addressCodec address.Codec
+	mocks        LiquidityPoolMocks
 }
 
 func initFixture(t *testing.T) *fixture {
 	t.Helper()
 
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
+	config.SetBech32PrefixForConsensusNode("sunrisevalcons", "sunrisevalconspub")
+
 	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
-	addressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
+	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	env := runtime.NewEnvironment(runtime.NewKVStoreService(storeKey), log.NewTestLogger(t))
@@ -38,12 +46,14 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	mocks := getMocks(t)
+
 	k := keeper.NewKeeper(
 		env,
 		encCfg.Codec,
 		addressCodec,
 		authority,
-		nil,
+		mocks.BankKeeper,
 	)
 
 	// Initialize params
@@ -55,5 +65,18 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+		mocks:        mocks,
+	}
+}
+
+type LiquidityPoolMocks struct {
+	BankKeeper *liquiditypooltestutil.MockBankKeeper
+}
+
+func getMocks(t *testing.T) LiquidityPoolMocks {
+	ctrl := gomock.NewController(t)
+
+	return LiquidityPoolMocks{
+		BankKeeper: liquiditypooltestutil.NewMockBankKeeper(ctrl),
 	}
 }

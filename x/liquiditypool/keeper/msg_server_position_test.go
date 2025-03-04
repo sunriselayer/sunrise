@@ -13,7 +13,7 @@ import (
 )
 
 func TestMsgServerCreatePosition(t *testing.T) {
-	_, bk, srv, ctx := setupMsgServer(t)
+	_, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	sender := sdk.AccAddress("sender")
@@ -27,8 +27,8 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 	// Create 1st position
 	resp, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
@@ -83,7 +83,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 }
 
 func TestMsgServerIncreaseLiquidity(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sdk.AccAddress("sender")
 
 	tests := []struct {
 		desc    string
@@ -93,7 +93,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 		{
 			desc: "Completed",
 			request: &types.MsgIncreaseLiquidity{
-				Sender:         sender,
+				Sender:         sender.String(),
 				Id:             0,
 				AmountBase:     math.NewInt(100000),
 				AmountQuote:    math.NewInt(100000),
@@ -116,7 +116,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 		{
 			desc: "Unauthorized",
 			request: &types.MsgIncreaseLiquidity{
-				Sender:         sender,
+				Sender:         sender.String(),
 				Id:             10,
 				AmountBase:     math.NewInt(100000),
 				AmountQuote:    math.NewInt(100000),
@@ -128,14 +128,14 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			_, bk, srv, ctx := setupMsgServer(t)
+			_, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender,
+				Authority:  sender.String(),
 				DenomBase:  "base",
 				DenomQuote: "quote",
 				FeeRate:    "0.01",
@@ -145,7 +145,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 			require.NoError(t, err)
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
-				Sender:         sender,
+				Sender:         sender.String(),
 				PoolId:         0,
 				LowerTick:      -10,
 				UpperTick:      10,
@@ -170,15 +170,16 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 }
 
 func TestMsgServerDecreaseLiquidity(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
-	_, bk, srv, ctx := setupMsgServer(t)
+	initFixture(t)
+	sender := sdk.AccAddress("sender")
+	_, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender,
+		Authority:  sender.String(),
 		DenomBase:  "base",
 		DenomQuote: "quote",
 		FeeRate:    "0.01",
@@ -188,7 +189,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 	require.NoError(t, err)
 
 	resp, err := srv.CreatePosition(wctx, &types.MsgCreatePosition{
-		Sender:         sender,
+		Sender:         sender.String(),
 		PoolId:         0,
 		LowerTick:      -10,
 		UpperTick:      10,
@@ -207,7 +208,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 		{
 			desc: "Successful deduction",
 			request: &types.MsgDecreaseLiquidity{
-				Sender:    sender,
+				Sender:    sender.String(),
 				Id:        0,
 				Liquidity: resp.Liquidity,
 			},
@@ -224,7 +225,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 		{
 			desc: "Position not found",
 			request: &types.MsgDecreaseLiquidity{
-				Sender:    sender,
+				Sender:    sender.String(),
 				Id:        10,
 				Liquidity: resp.Liquidity,
 			},
