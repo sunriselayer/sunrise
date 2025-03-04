@@ -14,9 +14,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	module "github.com/sunriselayer/sunrise/x/da/module"
+	datestutil "github.com/sunriselayer/sunrise/x/da/testutil"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
@@ -29,8 +31,13 @@ type fixture struct {
 func initFixture(t *testing.T) *fixture {
 	t.Helper()
 
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
+	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
+	config.SetBech32PrefixForConsensusNode("sunrisevalcons", "sunrisevalconspub")
+
 	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
-	addressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
+	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
 	validatorAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
@@ -39,15 +46,17 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	mocks := getMocks(t)
+
 	k := keeper.NewKeeper(
 		env,
 		encCfg.Codec,
 		addressCodec,
 		validatorAddressCodec,
 		authority,
-		nil,
-		nil,
-		nil,
+		mocks.BankKeeper,
+		mocks.StakingKeeper,
+		mocks.SlashingKeeper,
 	)
 
 	// Initialize params
@@ -59,5 +68,21 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+	}
+}
+
+type DaMocks struct {
+	BankKeeper     *datestutil.MockBankKeeper
+	StakingKeeper  *datestutil.MockStakingKeeper
+	SlashingKeeper *datestutil.MockSlashingKeeper
+}
+
+func getMocks(t *testing.T) DaMocks {
+
+	ctrl := gomock.NewController(t)
+	return DaMocks{
+		BankKeeper:     datestutil.NewMockBankKeeper(ctrl),
+		StakingKeeper:  datestutil.NewMockStakingKeeper(ctrl),
+		SlashingKeeper: datestutil.NewMockSlashingKeeper(ctrl),
 	}
 }
