@@ -26,6 +26,7 @@ type fixture struct {
 	ctx          context.Context
 	keeper       keeper.Keeper
 	addressCodec address.Codec
+	mocks        DaMocks
 }
 
 func initFixture(t *testing.T) *fixture {
@@ -68,6 +69,7 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+		mocks:        mocks,
 	}
 }
 
