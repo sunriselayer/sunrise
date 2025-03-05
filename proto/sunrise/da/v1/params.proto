@@ -34,10 +34,10 @@ message Params {
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  google.protobuf.Duration verified_removal_period = 9 [
-    (gogoproto.nullable) = false,
-    (gogoproto.stdduration) = true
-  ];
+  // google.protobuf.Duration verified_removal_period = 9 [
+  //   (gogoproto.nullable) = false,
+  //   (gogoproto.stdduration) = true
+  // ];
   repeated cosmos.base.v1beta1.Coin publish_data_collateral = 10 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
