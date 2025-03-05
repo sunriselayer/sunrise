@@ -83,10 +83,9 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 		Timestamp:                  time.Now(),
 		Status:                     types.Status_STATUS_CHALLENGING,
 		Publisher:                  "publisher",
-		Challenger:                 "challenger",
 		PublishDataCollateral:      sdk.Coins{},
 		SubmitInvalidityCollateral: sdk.Coins{},
-		ChallengeTimestamp:         time.Now(),
+		PublishedTimestamp:         time.Now(),
 	})
 	require.NoError(t, err)
 
