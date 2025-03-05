@@ -37,7 +37,7 @@ func NewProposalHandler(
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.ProcessProposalRequest) (*abci.ProcessProposalResponse, error) {
 		txs := req.Txs
-		verifiedData, err := h.keeper.GetSpecificStatusDataBeforeTime(ctx, types.Status_STATUS_VERIFIED, ctx.BlockTime().Unix())
+		verifiedData, err := h.keeper.GetSpecificStatusData(ctx, types.Status_STATUS_VERIFIED)
 		if err != nil {
 			return nil, err
 		}
