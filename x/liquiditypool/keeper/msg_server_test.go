@@ -20,8 +20,9 @@ func setupMsgServer(t *testing.T) (keeper.Keeper, LiquidityPoolMocks, types.MsgS
 }
 
 func TestMsgServer(t *testing.T) {
-	k, _, ms, ctx := setupMsgServer(t)
+	k, mocks, ms, ctx := setupMsgServer(t)
 	require.NotNil(t, ms)
 	require.NotNil(t, ctx)
 	require.NotEmpty(t, k)
+	require.NotNil(t, mocks)
 }

@@ -62,6 +62,28 @@ func (k Keeper) GetAllPublishedData(ctx context.Context) (list []types.Published
 	return list, nil
 }
 
+func (k Keeper) GetSpecificStatusData(ctx sdk.Context, status types.Status) (list []types.PublishedData, err error) {
+	err = k.PublishedData.Indexes.StatusTime.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[collections.Pair[string, int64], string](
+			collections.PairPrefix[string, int64](status.String()),
+		),
+		func(key collections.Pair[string, int64], metadataUri string) (bool, error) {
+			data, err := k.PublishedData.Get(ctx, metadataUri)
+			if err != nil {
+				return false, err
+			}
+			list = append(list, data)
+			return false, nil
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
+
 func (k Keeper) GetSpecificStatusDataBeforeTime(ctx sdk.Context, status types.Status, timestamp int64) (list []types.PublishedData, err error) {
 	err = k.PublishedData.Indexes.StatusTime.Walk(
 		ctx,

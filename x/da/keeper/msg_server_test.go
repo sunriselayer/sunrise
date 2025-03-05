@@ -11,16 +11,18 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func setupMsgServer(t *testing.T) (keeper.Keeper, types.MsgServer, context.Context) {
+func setupMsgServer(t *testing.T) (keeper.Keeper, DaMocks, types.MsgServer, context.Context) {
 	f := initFixture(t)
 	ctx := sdk.UnwrapSDKContext(f.ctx)
 	k := f.keeper
-	return k, keeper.NewMsgServerImpl(k), ctx
+	mocks := f.mocks
+	return k, mocks, keeper.NewMsgServerImpl(k), ctx
 }
 
 func TestMsgServer(t *testing.T) {
-	k, ms, ctx := setupMsgServer(t)
+	k, mocks, ms, ctx := setupMsgServer(t)
 	require.NotNil(t, ms)
 	require.NotNil(t, ctx)
 	require.NotEmpty(t, k)
+	require.NotNil(t, mocks)
 }
