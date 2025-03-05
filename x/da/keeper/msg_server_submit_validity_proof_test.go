@@ -131,6 +131,17 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 			expErr: false,
 		},
 		{
+			name: "valid proof from validator",
+			input: &types.MsgSubmitValidityProof{
+				Sender:           validatorAcc.String(),
+				ValidatorAddress: validator.String(),
+				MetadataUri:      "ipfs://metadata1",
+				Indices:          []int64{0},
+				Proofs:           [][]byte{proofBytes},
+			},
+			expErr: false,
+		},
+		{
 			name: "invalid proof",
 			input: &types.MsgSubmitValidityProof{
 				Sender:           sender.String(),
