@@ -33,6 +33,7 @@ message PublishedData {
     (gogoproto.stdtime) = true
   ];
   string data_source_info = 11;
+  int64 verified_height = 12;
 }
 
 // PublishedDataStatus
