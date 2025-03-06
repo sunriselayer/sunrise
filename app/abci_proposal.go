@@ -1,8 +1,6 @@
 package app
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 
 	"cosmossdk.io/core/appmodule"
@@ -75,19 +73,29 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.ProcessProposalRequest) (*abci.ProcessProposalResponse, error) {
 		var metadataUri types.MetadataUriWrapper
-		for _, tx := range req.Txs {
-			if err := json.Unmarshal(tx, &metadataUri); err == nil {
-				data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
-				if !found {
-					return nil, errors.New("published data not found: " + metadataUri.MetadataUri)
-				}
-				if err != nil {
-					return nil, err
-				}
 
-				if data.Status != types.Status_STATUS_VERIFIED {
-					return &abci.ProcessProposalResponse{Status: abci.PROCESS_PROPOSAL_STATUS_REJECT}, nil
-				}
+		for _, txBytes := range req.Txs {
+			// TODO: fix this
+			if len(txBytes) > 100 {
+				continue
+			}
+			err := metadataUri.Unmarshal(txBytes)
+			if err != nil {
+				continue
+			}
+			if metadataUri.MetadataUri == "" {
+				continue
+			}
+			data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
+			if !found {
+				return nil, fmt.Errorf("published data not found: %s", metadataUri.MetadataUri)
+			}
+			if err != nil {
+				return nil, err
+			}
+
+			if data.Status != types.Status_STATUS_VERIFIED {
+				return &abci.ProcessProposalResponse{Status: abci.PROCESS_PROPOSAL_STATUS_REJECT}, nil
 			}
 		}
 		defaultHandler := h.DefaultProposalHandler.ProcessProposalHandler()
@@ -108,7 +116,15 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 
 	for _, txBytes := range req.Txs {
 		var metadataUri types.MetadataUriWrapper
-		if err := json.Unmarshal(txBytes, &metadataUri); err != nil {
+		// TODO: fix this
+		if len(txBytes) > 100 {
+			continue
+		}
+		err := metadataUri.Unmarshal(txBytes)
+		if err != nil {
+			continue
+		}
+		if metadataUri.MetadataUri == "" {
 			continue
 		}
 		data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
