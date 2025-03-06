@@ -287,10 +287,13 @@ func New(
 	daProposalHandler := NewProposalHandler(
 		logger,
 		app.DaKeeper,
+		app.ModuleManager,
 		baseapp.NewDefaultProposalHandler(app.Mempool(), app),
 	)
 
+	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
+	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
 	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
