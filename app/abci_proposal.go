@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"fmt"
 
 	"cosmossdk.io/core/appmodule"
@@ -15,6 +16,8 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
+
+var metadataUriSplitter = []byte{0x4D, 0x45, 0x54, 0x41, 0x44, 0x41, 0x54, 0x41} // ASCII for "METADATA"
 
 type ProposalHandler struct {
 	logger                 log.Logger
@@ -54,48 +57,62 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 			return nil, err
 		}
 
-		for _, data := range verifiedData {
-			metadataUri := &types.MetadataUriWrapper{
-				MetadataUri: data.MetadataUri,
-			}
+		if len(verifiedData) > 0 {
+			proposalTxs = append(proposalTxs, metadataUriSplitter)
 
-			metadataUriBz, err := metadataUri.Marshal()
-			if err != nil {
-				return nil, fmt.Errorf("failed to marshal metadata uri: %w", err)
-			}
+			for _, data := range verifiedData {
+				metadataUri := &types.MetadataUriWrapper{
+					MetadataUri: data.MetadataUri,
+				}
 
-			proposalTxs = append(proposalTxs, metadataUriBz)
+				metadataUriBz, err := metadataUri.Marshal()
+				if err != nil {
+					return nil, fmt.Errorf("failed to marshal metadata uri: %w", err)
+				}
+
+				proposalTxs = append(proposalTxs, metadataUriBz)
+			}
 		}
+
 		return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
 	}
 }
 
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.ProcessProposalRequest) (*abci.ProcessProposalResponse, error) {
-		var metadataUri types.MetadataUriWrapper
+		splitterIndex := -1
+		for i, txBytes := range req.Txs {
+			if bytes.Equal(txBytes, metadataUriSplitter) {
+				splitterIndex = i
+				break
+			}
+		}
 
-		for _, txBytes := range req.Txs {
-			// TODO: fix this
-			if len(txBytes) > 100 {
-				continue
-			}
-			err := metadataUri.Unmarshal(txBytes)
-			if err != nil {
-				continue
-			}
-			if metadataUri.MetadataUri == "" {
-				continue
-			}
-			data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
-			if !found {
-				return nil, fmt.Errorf("published data not found: %s", metadataUri.MetadataUri)
-			}
-			if err != nil {
-				return nil, err
-			}
+		if splitterIndex != -1 {
+			for i := splitterIndex + 1; i < len(req.Txs); i++ {
+				var metadataUri types.MetadataUriWrapper
+				err := metadataUri.Unmarshal(req.Txs[i])
+				if err != nil {
+					h.logger.Error("failed to unmarshal metadata uri", "error", err)
+					continue
+				}
 
-			if data.Status != types.Status_STATUS_VERIFIED {
-				return &abci.ProcessProposalResponse{Status: abci.PROCESS_PROPOSAL_STATUS_REJECT}, nil
+				if metadataUri.MetadataUri == "" {
+					h.logger.Error("metadata uri is empty")
+					continue
+				}
+
+				data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
+				if err != nil {
+					return nil, err
+				}
+				if !found {
+					h.logger.Error("published data not found", "metadata uri", metadataUri.MetadataUri)
+					continue
+				}
+				if data.Status != types.Status_STATUS_VERIFIED {
+					return &abci.ProcessProposalResponse{Status: abci.PROCESS_PROPOSAL_STATUS_REJECT}, nil
+				}
 			}
 		}
 		defaultHandler := h.DefaultProposalHandler.ProcessProposalHandler()
@@ -114,29 +131,40 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 		}
 	}
 
-	for _, txBytes := range req.Txs {
-		var metadataUri types.MetadataUriWrapper
-		// TODO: fix this
-		if len(txBytes) > 100 {
-			continue
+	splitterIndex := -1
+	for i, txBytes := range req.Txs {
+		if bytes.Equal(txBytes, metadataUriSplitter) {
+			splitterIndex = i
+			break
 		}
-		err := metadataUri.Unmarshal(txBytes)
-		if err != nil {
-			continue
-		}
-		if metadataUri.MetadataUri == "" {
-			continue
-		}
-		data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
-		if err != nil {
-			return err
-		}
-		if !found {
-			continue
-		}
-		err = h.keeper.DeletePublishedData(ctx, data)
-		if err != nil {
-			return err
+	}
+
+	if splitterIndex != -1 {
+		for i := splitterIndex + 1; i < len(req.Txs); i++ {
+			var metadataUri types.MetadataUriWrapper
+			err := metadataUri.Unmarshal(req.Txs[i])
+			if err != nil {
+				h.logger.Error("failed to unmarshal metadata uri", "error", err)
+				continue
+			}
+
+			if metadataUri.MetadataUri == "" {
+				h.logger.Error("metadata uri is empty")
+				continue
+			}
+
+			data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
+			if err != nil {
+				return err
+			}
+			if !found {
+				continue
+			}
+
+			err = h.keeper.DeletePublishedData(ctx, data)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
