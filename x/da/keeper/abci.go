@@ -30,20 +30,20 @@ func (k Keeper) EndBlocker(ctx context.Context) error {
 		}
 	}
 
-	// // IF STATUS_VERIFIED, remove from store
-	// verifiedData, err := k.GetSpecificStatusData(sdkCtx, types.Status_STATUS_VERIFIED)
-	// if err != nil {
-	// 	return err
-	// }
-	// for _, data := range verifiedData {
-	// 	if data.Status == types.Status_STATUS_VERIFIED {
-	// 		err = k.DeletePublishedData(sdkCtx, data)
-	// 		if err != nil {
-	// 			k.Logger.Error("failed to delete published data", "metadata_uri", data.MetadataUri, "error", err)
-	// 			continue
-	// 		}
-	// 	}
-	// }
+	// IF STATUS_VERIFIED is overtime, remove from store
+	verifiedData, err := k.GetSpecificStatusDataBeforeTime(sdkCtx, types.Status_STATUS_VERIFIED, sdkCtx.BlockTime().Add(-params.VerifiedRemovalPeriod).Unix())
+	if err != nil {
+		return err
+	}
+	for _, data := range verifiedData {
+		if data.Status == types.Status_STATUS_VERIFIED {
+			err = k.DeletePublishedData(sdkCtx, data)
+			if err != nil {
+				k.Logger.Error("failed to delete published data", "metadata_uri", data.MetadataUri, "error", err)
+				continue
+			}
+		}
+	}
 
 	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
 	challengePeriodData, err := k.GetSpecificStatusData(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD)

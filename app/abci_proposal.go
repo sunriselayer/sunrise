@@ -161,7 +161,8 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 				continue
 			}
 
-			err = h.keeper.DeletePublishedData(ctx, data)
+			data.VerifiedHeight = req.Height
+			err = h.keeper.SetPublishedData(ctx, data)
 			if err != nil {
 				return err
 			}
