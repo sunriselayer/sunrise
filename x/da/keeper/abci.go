@@ -30,20 +30,20 @@ func (k Keeper) EndBlocker(ctx context.Context) error {
 		}
 	}
 
-	// IF STATUS_VERIFIED, remove from store
-	verifiedData, err := k.GetSpecificStatusData(sdkCtx, types.Status_STATUS_VERIFIED)
-	if err != nil {
-		return err
-	}
-	for _, data := range verifiedData {
-		if data.Status == types.Status_STATUS_VERIFIED {
-			err = k.DeletePublishedData(sdkCtx, data)
-			if err != nil {
-				k.Logger.Error("failed to delete published data", "metadata_uri", data.MetadataUri, "error", err)
-				continue
-			}
-		}
-	}
+	// // IF STATUS_VERIFIED, remove from store
+	// verifiedData, err := k.GetSpecificStatusData(sdkCtx, types.Status_STATUS_VERIFIED)
+	// if err != nil {
+	// 	return err
+	// }
+	// for _, data := range verifiedData {
+	// 	if data.Status == types.Status_STATUS_VERIFIED {
+	// 		err = k.DeletePublishedData(sdkCtx, data)
+	// 		if err != nil {
+	// 			k.Logger.Error("failed to delete published data", "metadata_uri", data.MetadataUri, "error", err)
+	// 			continue
+	// 		}
+	// 	}
+	// }
 
 	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
 	challengePeriodData, err := k.GetSpecificStatusData(sdkCtx, types.Status_STATUS_CHALLENGE_PERIOD)
@@ -300,7 +300,7 @@ func (k Keeper) EndBlocker(ctx context.Context) error {
 		}
 	}
 
-	// slash epoch moved from vote_extension
+	// slash epoch moved from PreBlocker
 	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
 		k.HandleSlashEpoch(sdkCtx)
 	}
