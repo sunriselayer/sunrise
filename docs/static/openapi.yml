@@ -355,6 +355,47 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
+  /cosmos/auth/v1beta1/bech32/decode/{address_bytes}:
+    get:
+      tags:
+        - Query
+      summary: AddressBytesToString converts Account Address bytes to string
+      operationId: AuthQuery_AddressBytesToString2
+      parameters:
+        - type: string
+          format: byte
+          name: address_bytes
+          in: path
+          required: true
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/cosmos.auth.v1beta1.AddressBytesToStringResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/google.rpc.Status'
+  /cosmos/auth/v1beta1/bech32/encode/{address_string}:
+    get:
+      tags:
+        - Query
+      summary: AddressStringToBytes converts Address string to bytes
+      operationId: AuthQuery_AddressStringToBytes
+      parameters:
+        - type: string
+          name: address_string
+          in: path
+          required: true
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/cosmos.auth.v1beta1.AddressStringToBytesResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/google.rpc.Status'
   /cosmos/auth/v1beta1/bech32/{address_bytes}:
     get:
       tags:
@@ -372,26 +413,6 @@ paths:
           description: A successful response.
           schema:
             $ref: '#/definitions/cosmos.auth.v1beta1.AddressBytesToStringResponse'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/google.rpc.Status'
-  /cosmos/auth/v1beta1/bech32/{address_string}:
-    get:
-      tags:
-        - Query
-      summary: AddressStringToBytes converts Address string to bytes
-      operationId: AuthQuery_AddressStringToBytes
-      parameters:
-        - type: string
-          name: address_string
-          in: path
-          required: true
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/cosmos.auth.v1beta1.AddressStringToBytesResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -5901,7 +5922,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/all-invalidity:
+  /sunrise/v1/da/all-invalidity:
     get:
       tags:
         - Query
@@ -5920,7 +5941,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/all-published-data:
+  /sunrise/v1/da/all-published-data:
     get:
       tags:
         - Query
@@ -5935,7 +5956,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/all-validity-proofs:
+  /sunrise/v1/da/all-validity-proofs:
     get:
       tags:
         - Query
@@ -5954,7 +5975,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/invalidity:
+  /sunrise/v1/da/invalidity:
     get:
       tags:
         - Query
@@ -5976,7 +5997,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/params:
+  /sunrise/v1/da/params:
     get:
       tags:
         - Query
@@ -5991,7 +6012,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/proof-deputy:
+  /sunrise/v1/da/proof-deputy:
     get:
       tags:
         - Query
@@ -6010,7 +6031,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/published-data:
+  /sunrise/v1/da/published-data:
     get:
       tags:
         - Query
@@ -6029,7 +6050,30 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/validity-proof:
+  /sunrise/v1/da/validator-shard-indices:
+    get:
+      tags:
+        - Query
+      summary: ValidatorShardIndices
+      operationId: GithubComsunriselayersunriseQuery_ValidatorShardIndices
+      parameters:
+        - type: string
+          name: validator_address
+          in: query
+        - type: string
+          format: uint64
+          name: shard_count
+          in: query
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/sunrise.da.v1.QueryValidatorShardIndicesResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/google.rpc.Status'
+  /sunrise/v1/da/validity-proof:
     get:
       tags:
         - Query
@@ -6051,7 +6095,7 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/google.rpc.Status'
-  /sunriselayer/sunrise/v1/da/zkp-proof-threshold:
+  /sunrise/v1/da/zkp-proof-threshold:
     get:
       tags:
         - Query
@@ -11980,9 +12024,6 @@ definitions:
     type: object
     title: PublishedData
     properties:
-      challenge_timestamp:
-        type: string
-        format: date-time
       challenger:
         type: string
       data_source_info:
@@ -11997,6 +12038,9 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/cosmos.base.v1beta1.Coin'
+      published_timestamp:
+        type: string
+        format: date-time
       publisher:
         type: string
       shard_double_hashes:
@@ -12014,6 +12058,9 @@ definitions:
       timestamp:
         type: string
         format: date-time
+      verified_height:
+        type: string
+        format: int64
   sunrise.da.v1.QueryAllInvalidityResponse:
     description: >-
       QueryAllInvalidityResponse is response type for the Query/AllInvalidity
@@ -12084,6 +12131,17 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/sunrise.da.v1.PublishedData'
+  sunrise.da.v1.QueryValidatorShardIndicesResponse:
+    description: |-
+      QueryValidatorShardIndicesResponse is response type for the
+      Query/ValidatorShardIndices RPC method.
+    type: object
+    properties:
+      shard_indices:
+        type: array
+        items:
+          type: string
+          format: uint64
   sunrise.da.v1.QueryValidityProofResponse:
     description: >-
       QueryValidityProofResponse is response type for the Query/ValidityProof
