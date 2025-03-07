@@ -15,7 +15,7 @@
 on:
   release:
     types: [published]
-  push:
+  workflow_dispatch:
 
 jobs:
   might_release:
