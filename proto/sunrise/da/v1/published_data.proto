@@ -28,11 +28,12 @@ message PublishedData {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  google.protobuf.Timestamp challenge_timestamp = 10 [
+  google.protobuf.Timestamp published_timestamp = 10 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
   string data_source_info = 11;
+  int64 verified_height = 12;
 }
 
 // PublishedDataStatus

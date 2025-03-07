@@ -77,8 +77,8 @@ func DefaultParams() Params {
 		math.LegacyNewDecWithPrec(1, 3),  // 0.1% slash fraction
 		time.Minute*4,                    // challenge 4min,
 		time.Minute*10,                   // proof 10min
-		time.Hour*24,                     // rejected remove 24h
-		time.Hour*72,                     // verified remove 72h
+		time.Hour*72,                     // rejected remove 3 days
+		time.Hour*336,                    // verified remove 2 weeks
 		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(1_000_000_000))), // publish data collateral 1000RISE
 		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(100_000_000))),   // submit invalidity collateral 100RISE
 		verifyingKey,
@@ -170,6 +170,9 @@ func (p Params) Validate() error {
 	}
 	if p.RejectedRemovalPeriod <= 0 {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "rejected removal period must be positive")
+	}
+	if p.VerifiedRemovalPeriod <= 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "verified removal period must be positive")
 	}
 
 	if !p.PublishDataCollateral.IsValid() {

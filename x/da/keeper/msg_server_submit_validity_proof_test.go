@@ -9,7 +9,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	"github.com/sunriselayer/sunrise/testutil/sample"
+	"go.uber.org/mock/gomock"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	native_mimc "github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
@@ -20,12 +20,28 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
+type mockValidator struct {
+	sdk.ValidatorI
+}
+
+func (mv mockValidator) IsBonded() bool {
+	return true
+}
+
 func TestMsgSubmitValidityProof(t *testing.T) {
-	k, ms, ctx := setupMsgServer(t)
+	k, mocks, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
 	require.NoError(t, k.Params.Set(ctx, params))
-	wctx := sdk.UnwrapSDKContext(ctx)
-
+	sender := sdk.AccAddress("sender")
+	validator := sdk.ValAddress("validator")
+	validatorAcc := sdk.AccAddress(validator)
+	mockVal := mockValidator{}
+	mocks.StakingKeeper.EXPECT().Validator(gomock.Any(), gomock.Any()).Return(mockVal, nil).AnyTimes()
+	_, err := ms.RegisterProofDeputy(ctx, &types.MsgRegisterProofDeputy{
+		Sender:        validatorAcc.String(),
+		DeputyAddress: sender.String(),
+	})
+	require.NoError(t, err)
 	preImage1 := big.NewInt(111)
 	m := native_mimc.NewMiMC()
 	m.Write(preImage1.Bytes())
@@ -67,10 +83,9 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 		Timestamp:                  time.Now(),
 		Status:                     types.Status_STATUS_CHALLENGING,
 		Publisher:                  "publisher",
-		Challenger:                 "challenger",
 		PublishDataCollateral:      sdk.Coins{},
 		SubmitInvalidityCollateral: sdk.Coins{},
-		ChallengeTimestamp:         time.Now(),
+		PublishedTimestamp:         time.Now(),
 	})
 	require.NoError(t, err)
 
@@ -81,32 +96,58 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 		expErrMsg string
 	}{
 		{
+			name: "invalid validator address",
+			input: &types.MsgSubmitValidityProof{
+				Sender:           sender.String(),
+				ValidatorAddress: sdk.ValAddress("invalid").String(),
+				MetadataUri:      "ipfs://metadata1",
+				Indices:          []int64{},
+				Proofs:           [][]byte{},
+			},
+			expErr:    true,
+			expErrMsg: "proof deputy not found",
+		},
+		{
 			name: "empty proof",
 			input: &types.MsgSubmitValidityProof{
-				Sender:      sample.AccAddress(),
-				MetadataUri: "ipfs://metadata1",
-				Indices:     []int64{},
-				Proofs:      [][]byte{},
+				Sender:           sender.String(),
+				ValidatorAddress: validator.String(),
+				MetadataUri:      "ipfs://metadata1",
+				Indices:          []int64{},
+				Proofs:           [][]byte{},
 			},
 			expErr: false,
 		},
 		{
 			name: "valid proof",
 			input: &types.MsgSubmitValidityProof{
-				Sender:      sample.AccAddress(),
-				MetadataUri: "ipfs://metadata1",
-				Indices:     []int64{0},
-				Proofs:      [][]byte{proofBytes},
+				Sender:           sender.String(),
+				ValidatorAddress: validator.String(),
+				MetadataUri:      "ipfs://metadata1",
+				Indices:          []int64{0},
+				Proofs:           [][]byte{proofBytes},
+			},
+			expErr: false,
+		},
+		{
+			name: "valid proof from validator",
+			input: &types.MsgSubmitValidityProof{
+				Sender:           validatorAcc.String(),
+				ValidatorAddress: validator.String(),
+				MetadataUri:      "ipfs://metadata1",
+				Indices:          []int64{0},
+				Proofs:           [][]byte{proofBytes},
 			},
 			expErr: false,
 		},
 		{
 			name: "invalid proof",
 			input: &types.MsgSubmitValidityProof{
-				Sender:      sample.AccAddress(),
-				MetadataUri: "ipfs://metadata1",
-				Indices:     []int64{0},
-				Proofs:      [][]byte{{0x0}},
+				Sender:           sender.String(),
+				ValidatorAddress: validator.String(),
+				MetadataUri:      "ipfs://metadata1",
+				Indices:          []int64{0},
+				Proofs:           [][]byte{{0x0}},
 			},
 			expErr:    true,
 			expErrMsg: "unexpected EOF",
@@ -115,7 +156,7 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := ms.SubmitValidityProof(wctx, tc.input)
+			_, err := ms.SubmitValidityProof(ctx, tc.input)
 
 			if tc.expErr {
 				require.Error(t, err)

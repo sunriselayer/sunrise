@@ -71,7 +71,7 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 	if err != nil {
 		return nil, err
 	}
-	if publishedData.Timestamp.Add(params.ChallengePeriod).Add(params.ProofPeriod).Before(sdkCtx.BlockTime()) {
+	if publishedData.Timestamp.Add(params.ProofPeriod).Before(sdkCtx.BlockTime()) {
 		return nil, types.ErrProofPeriodIsOver
 	}
 

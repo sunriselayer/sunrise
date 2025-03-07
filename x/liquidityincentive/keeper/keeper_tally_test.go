@@ -14,7 +14,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
-	"github.com/cosmos/cosmos-sdk/codec/address"
+	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -31,8 +31,12 @@ type tallyFixture struct {
 var (
 	// handy functions
 	setTotalBonded = func(s tallyFixture, n int64) {
-		s.mocks.AcctKeeper.EXPECT().AddressCodec().Return(address.NewBech32Codec("sunrise")).AnyTimes()
-		s.mocks.StakingKeeper.EXPECT().ValidatorAddressCodec().Return(address.NewBech32Codec("sunrisevaloper")).AnyTimes()
+		s.mocks.AcctKeeper.EXPECT().
+			AddressCodec().
+			Return(addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())).AnyTimes()
+		s.mocks.StakingKeeper.EXPECT().
+			ValidatorAddressCodec().
+			Return(addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())).AnyTimes()
 		s.mocks.StakingKeeper.EXPECT().TotalBondedTokens(gomock.Any()).Return(sdkmath.NewInt(n), nil)
 	}
 	delegatorVote = func(s tallyFixture, voter sdk.AccAddress, delegations []stakingtypes.Delegation, weights []types.PoolWeight) {
