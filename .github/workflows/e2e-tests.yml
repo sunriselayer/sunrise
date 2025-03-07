@@ -55,8 +55,12 @@ jobs:
       - name: Generate Matrix
         id: set-matrix
         run: |
-          # Run the command and convert its output to a JSON array
-          TESTS=$(cd e2e && go test -list . | grep -v "^ok " | jq -R -s -c 'split("\n")[:-1]')
+          if [ -d "e2e" ]; then
+            # Run the command and convert its output to a JSON array
+            TESTS=$(cd e2e && go test -list . | grep -v "^ok " | jq -R -s -c 'split("\n")[:-1]' || echo "[]")
+          else
+            TESTS="[]"
+          fi
           echo "matrix=${TESTS}" >> $GITHUB_OUTPUT
 
   test:
