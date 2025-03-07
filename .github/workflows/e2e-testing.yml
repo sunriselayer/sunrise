@@ -35,7 +35,7 @@ jobs:
 
         # Use github actions artifacts for temporary storage of the docker image tarball
       - name: Publish Tarball as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sunrise-docker-image
           path: ${{ env.TAR_PATH }}
@@ -61,19 +61,19 @@ jobs:
     steps:
       # Load the docker image tarball from github actions artifacts and run tests (one runner per test due to matrix)
       - name: Download Tarball Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: noble-docker-image
+          name: sunrise-docker-image
 
       - name: Load Docker Image
         run: docker image load -i ${{ env.TAR_PATH }}
       - name: Set up Go 1.23
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.23
+          go-version: "1.23.5"
 
       - name: checkout chain
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: run test
         run: make ${{ matrix.test }}
