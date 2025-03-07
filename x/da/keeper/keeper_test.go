@@ -33,10 +33,6 @@ func initFixture(t *testing.T) *fixture {
 	t.Helper()
 
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount("sunrise", "sunrisepub")
-	config.SetBech32PrefixForValidator("sunrisevaloper", "sunrisevaloperpub")
-	config.SetBech32PrefixForConsensusNode("sunrisevalcons", "sunrisevalconspub")
-
 	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
 	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
 	validatorAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())

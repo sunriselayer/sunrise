@@ -41,10 +41,10 @@ func TestCreateEpoch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			fixture := initFixture(t)
-			ctx := fixture.ctx
-			k := fixture.keeper
-			mocks := fixture.mocks
+			f := initFixture(t)
+			ctx := f.ctx
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -59,8 +59,7 @@ func TestCreateEpoch(t *testing.T) {
 				DoAndReturn(
 					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
-							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
-							require.NoError(t, err)
+							valAddr := valAddrs[i].String()
 							fn(i, stakingtypes.Validator{
 								OperatorAddress: valAddr,
 								Status:          stakingtypes.Bonded,
@@ -166,8 +165,7 @@ func TestEndBlocker(t *testing.T) {
 				DoAndReturn(
 					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
-							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
-							require.NoError(t, err)
+							valAddr := valAddrs[i].String()
 							fn(i, stakingtypes.Validator{
 								OperatorAddress: valAddr,
 								Status:          stakingtypes.Bonded,
