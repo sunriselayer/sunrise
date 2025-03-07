@@ -20,9 +20,12 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
-	pool, found := k.GetPool(ctx, msg.PoolId)
+	pool, found, err := k.GetPool(ctx, msg.PoolId)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get pool")
+	}
 	if !found {
 		return nil, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", msg.PoolId)
 	}
@@ -53,23 +56,29 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 
 	sqrtPriceLowerTick, sqrtPriceUpperTick, err := types.TicksToSqrtPrice(msg.LowerTick, msg.UpperTick, pool.TickParams)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to get sqrt price")
 	}
 
 	hasPositions := pool.HasPosition(sdkCtx)
 	if !hasPositions {
 		err := k.initFirstPositionForPool(sdkCtx, pool, amountBaseDesired, amountQuoteDesired)
 		if err != nil {
-			return nil, err
+			return nil, errorsmod.Wrap(err, "failed to init first position for pool")
 		}
 		// Get updated pool after initialization
-		pool, _ = k.GetPool(ctx, msg.PoolId)
+		pool, found, err = k.GetPool(ctx, msg.PoolId)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to get pool")
+		}
+		if !found {
+			return nil, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", msg.PoolId)
+		}
 	}
 
 	// Calculate the amount of liquidity that will be added to the pool when this position is created.
 	currentSqrtPrice, err := math.LegacyNewDecFromStr(pool.CurrentSqrtPrice)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to get current sqrt price")
 	}
 	liquidityDelta := types.GetLiquidityFromAmounts(currentSqrtPrice, sqrtPriceLowerTick, sqrtPriceUpperTick, amountBaseDesired, amountQuoteDesired)
 	if liquidityDelta.IsZero() {
@@ -84,12 +93,15 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		UpperTick: msg.UpperTick,
 		Liquidity: math.LegacyZeroDec().String(),
 	}
-	positionId := k.AppendPosition(ctx, position)
+	positionId, err := k.AppendPosition(ctx, position)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to append position")
+	}
 
 	// Initialize / update the position in the pool based on the provided tick range and liquidity delta.
 	amountBase, amountQuote, _, _, err := k.UpdatePosition(sdkCtx, position.PoolId, sender, position.LowerTick, position.UpperTick, liquidityDelta, positionId)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to update position")
 	}
 
 	// Check if the actual amounts are greater than or equal to minimum amounts
@@ -104,14 +116,17 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 	coins := sdk.Coins{sdk.NewCoin(msg.TokenBase.Denom, amountBase)}
 	coins = coins.Add(sdk.NewCoin(msg.TokenQuote.Denom, amountQuote))
 	if err := k.bankKeeper.IsSendEnabledCoins(ctx, coins...); err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
 	}
 	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
 	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "failed to send coins")
 	}
 
-	position, _ = k.GetPosition(ctx, positionId)
+	position, _, err = k.GetPosition(ctx, positionId)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get position")
+	}
 
 	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventCreatePosition{
 		PositionId: positionId,

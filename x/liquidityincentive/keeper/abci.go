@@ -26,7 +26,10 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 			PoolId:          result.PoolId,
 			Count:           result.Count,
 		}
-		k.SetGauge(ctx, gauge)
+		err := k.SetGauge(ctx, gauge)
+		if err != nil {
+			return err
+		}
 		gauges = append(gauges, gauge)
 	}
 
@@ -40,7 +43,10 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 		EndBlock:   ctx.BlockHeight() + params.EpochBlocks,
 		Gauges:     gauges,
 	}
-	k.SetEpoch(ctx, epoch)
+	err = k.SetEpoch(ctx, epoch)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -52,7 +58,10 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	vRise := k.bankKeeper.GetBalance(ctx, feeCollector, consts.BondDenom)
 	vRiseDec := sdk.NewDecCoinsFromCoins(vRise)
 
-	lastEpoch, found := k.GetLastEpoch(ctx)
+	lastEpoch, found, err := k.GetLastEpoch(ctx)
+	if err != nil {
+		return err
+	}
 	if !found {
 		return nil
 	}
@@ -89,7 +98,10 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
-	lastEpoch, found := k.GetLastEpoch(ctx)
+	lastEpoch, found, err := k.GetLastEpoch(ctx)
+	if err != nil {
+		return err
+	}
 	if !found {
 		err := k.CreateEpoch(ctx, 0, 1)
 		if err != nil {
@@ -103,12 +115,21 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 			return nil
 		}
 		// remove old epoch and gauges
-		epochs := k.GetAllEpoch(ctx)
+		epochs, err := k.GetAllEpoch(ctx)
+		if err != nil {
+			return err
+		}
 		if len(epochs) > 2 {
 			epoch := epochs[0]
-			k.RemoveEpoch(ctx, epoch.Id)
+			err := k.RemoveEpoch(ctx, epoch.Id)
+			if err != nil {
+				return err
+			}
 			for _, gauge := range epoch.Gauges {
-				k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
+				err := k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}

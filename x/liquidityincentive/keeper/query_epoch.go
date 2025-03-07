@@ -37,7 +37,10 @@ func (q queryServer) Epoch(ctx context.Context, req *types.QueryEpochRequest) (*
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	epoch, found := q.k.GetEpoch(ctx, req.Id)
+	epoch, found, err := q.k.GetEpoch(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, sdkerrors.ErrKeyNotFound
 	}

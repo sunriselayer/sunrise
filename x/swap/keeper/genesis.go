@@ -30,8 +30,14 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 
-	genesis.IncomingInFlightPackets = k.GetIncomingInFlightPackets(ctx)
-	genesis.OutgoingInFlightPackets = k.GetOutgoingInFlightPackets(ctx)
+	genesis.IncomingInFlightPackets, err = k.GetIncomingInFlightPackets(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.OutgoingInFlightPackets, err = k.GetOutgoingInFlightPackets(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	return genesis, nil
 }

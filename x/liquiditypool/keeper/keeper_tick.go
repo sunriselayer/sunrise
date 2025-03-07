@@ -58,7 +58,10 @@ func (k Keeper) CrossTick(ctx sdk.Context, poolId uint64, tickIndex int64, tickI
 }
 
 func (k Keeper) NewTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (tickInfo types.TickInfo, err error) {
-	pool, found := k.GetPool(ctx, poolId)
+	pool, found, err := k.GetPool(ctx, poolId)
+	if err != nil {
+		return tickInfo, err
+	}
 	if !found {
 		return tickInfo, types.ErrPoolNotFound
 	}

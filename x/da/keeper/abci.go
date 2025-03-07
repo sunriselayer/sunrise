@@ -23,7 +23,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 	for _, data := range challengePeriodData {
 		if data.Status == types.Status_STATUS_CHALLENGE_PERIOD {
-			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get invalidities", "error", err)
+				continue
+			}
 			seen := make(map[int64]bool)
 			invalidIndices := []int64{}
 			for _, invalidity := range invalidities {
@@ -79,9 +83,6 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 
 	activeValidators := []sdk.ValAddress{}
-	// numActiveValidators := int64(0)
-	// votingPowers := make(map[string]int64)
-	// powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
 		k.Logger.Error(err.Error())
@@ -95,18 +96,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			k.Logger.Error(err.Error())
 			return
 		}
-
 		if validator.IsBonded() {
 			activeValidators = append(activeValidators, sdk.ValAddress(iterator.Value()))
-			// valAddrStr := validator.GetOperator()
-			// valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
-			// if err != nil {
-			// 	k.Logger().Error(err.Error())
-			// 	return
-			// }
-
-			// votingPowers[sdk.AccAddress(valAddr).String()] = validator.GetConsensusPower(powerReduction)
-			// numActiveValidators++
 		}
 	}
 
@@ -115,15 +106,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 
 	for _, data := range challengingData {
 		if data.Status == types.Status_STATUS_CHALLENGING {
-			// bondedTokens, err := k.StakingKeeper.TotalBondedTokens(ctx)
-			// if err != nil {
-			// 	k.Logger().Error(err.Error())
-			// 	return
-			// }
-
-			// totalBondedPower := sdk.TokensToConsensusPower(bondedTokens, k.StakingKeeper.PowerReduction(ctx))
-			// thresholdPower := params.VoteThreshold.MulInt64(totalBondedPower).RoundInt().Int64()
-			proofs := k.GetProofs(sdkCtx, data.MetadataUri)
+			proofs, err := k.GetProofs(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				continue
+			}
 			shardProofCount := make(map[int64]int64)
 			shardProofSubmitted := make(map[int64]map[string]bool)
 			for _, proof := range proofs {
@@ -133,7 +120,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 				}
 			}
 
-			threshold := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
+			threshold, err := k.GetZkpThreshold(ctx, uint64(len(data.ShardDoubleHashes)))
+			if err != nil {
+				k.Logger.Error(err.Error())
+				continue
+			}
 			indexedValidators := make(map[int64][]sdk.ValAddress)
 			for _, valAddr := range activeValidators {
 				indices := types.ShardIndicesForValidator(valAddr, int64(threshold), int64(len(data.ShardDoubleHashes)))
@@ -168,7 +159,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// valid_shards < data_shard_count
-			invalidities := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			invalidities, err := k.GetInvalidities(sdkCtx, data.MetadataUri)
+			if err != nil {
+				k.Logger.Error("failed to get invalidities", "error", err)
+				continue
+			}
 			if int64(len(safeShardIndices))+int64(data.ParityShardCount) < int64(len(data.ShardDoubleHashes)) {
 				data.Status = types.Status_STATUS_REJECTED
 				err = k.SetPublishedData(ctx, data)
@@ -228,9 +223,22 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 			}
 
 			// Count challenge & fault validators
-			k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
+			err = k.SetChallengeCounter(ctx, k.GetChallengeCounter(ctx)+1)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				return
+			}
 			for _, valAddr := range faultValidators {
-				k.SetFaultCounter(ctx, valAddr, k.GetFaultCounter(ctx, valAddr)+1)
+				count, err := k.GetFaultCounter(ctx, valAddr)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
+				err = k.SetFaultCounter(ctx, valAddr, count+1)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 
 			// Clean up proofs data
@@ -240,7 +248,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					continue
 				}
-				k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
+				err = k.DeleteProof(sdkCtx, proof.MetadataUri, addr)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 
 			// Clean up invalidity data
@@ -250,7 +262,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 					k.Logger.Error(err.Error())
 					continue
 				}
-				k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
+				err = k.DeleteInvalidity(sdkCtx, invalidity.MetadataUri, addr)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 		}
 	}
@@ -263,7 +279,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	}
 	for _, data := range rejectedData {
 		if data.Status == types.Status_STATUS_REJECTED {
-			k.DeletePublishedData(sdkCtx, data)
+			err = k.DeletePublishedData(sdkCtx, data)
+			if err != nil {
+				k.Logger.Error(err.Error())
+				continue
+			}
 		}
 	}
 
@@ -276,7 +296,11 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 		}
 		for _, data := range verifiedData {
 			if data.Status == types.Status_STATUS_VERIFIED {
-				k.DeletePublishedData(sdkCtx, data)
+				err = k.DeletePublishedData(sdkCtx, data)
+				if err != nil {
+					k.Logger.Error(err.Error())
+					continue
+				}
 			}
 		}
 	}

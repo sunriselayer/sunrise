@@ -33,7 +33,8 @@ func TestAccumulatorStore(t *testing.T) {
 	require.Equal(t, accumulator.AccumValue.String(), "")
 	require.Equal(t, accumulator.TotalShares, "0.000000000000000000")
 
-	k.AddToAccumulator(ctx, accumulator, sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(100))))
+	err = k.AddToAccumulator(ctx, accumulator, sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(100))))
+	require.NoError(t, err)
 	accumulator, err = k.GetAccumulator(ctx, "accumulator2")
 	require.NoError(t, err)
 	require.Equal(t, accumulator.Name, "accumulator2")
@@ -70,7 +71,8 @@ func TestAccumulatorPositionStore(t *testing.T) {
 
 	accmulatorValuePerShare := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(1)))
 	unclaimedRewardsTotal := sdk.NewDecCoins(sdk.NewDecCoin("denom", math.NewInt(2)))
-	k.SetAccumulatorPosition(ctx, "accumulator", accmulatorValuePerShare, "index", math.LegacyOneDec(), unclaimedRewardsTotal)
+	err = k.SetAccumulatorPosition(ctx, "accumulator", accmulatorValuePerShare, "index", math.LegacyOneDec(), unclaimedRewardsTotal)
+	require.NoError(t, err)
 	position, err := k.GetAccumulatorPosition(ctx, "accumulator", "index")
 	require.NoError(t, err)
 	require.Equal(t, position.Name, "accumulator")
@@ -79,7 +81,8 @@ func TestAccumulatorPositionStore(t *testing.T) {
 	require.Equal(t, position.AccumValuePerShare.String(), "1.000000000000000000denom")
 	require.Equal(t, position.UnclaimedRewardsTotal.String(), "2.000000000000000000denom")
 
-	k.SetAccumulatorPosition(ctx, "accumulator", accmulatorValuePerShare, "index2", math.LegacyOneDec(), unclaimedRewardsTotal)
+	err = k.SetAccumulatorPosition(ctx, "accumulator", accmulatorValuePerShare, "index2", math.LegacyOneDec(), unclaimedRewardsTotal)
+	require.NoError(t, err)
 	position, err = k.GetAccumulatorPosition(ctx, "accumulator", "index2")
 	require.NoError(t, err)
 	require.Equal(t, position.Name, "accumulator")
@@ -88,7 +91,8 @@ func TestAccumulatorPositionStore(t *testing.T) {
 	require.Equal(t, position.AccumValuePerShare.String(), "1.000000000000000000denom")
 	require.Equal(t, position.UnclaimedRewardsTotal.String(), "2.000000000000000000denom")
 
-	k.SetAccumulatorPosition(ctx, "accumulator2", accmulatorValuePerShare, "index", math.LegacyOneDec(), unclaimedRewardsTotal)
+	err = k.SetAccumulatorPosition(ctx, "accumulator2", accmulatorValuePerShare, "index", math.LegacyOneDec(), unclaimedRewardsTotal)
+	require.NoError(t, err)
 	position, err = k.GetAccumulatorPosition(ctx, "accumulator2", "index")
 	require.NoError(t, err)
 	require.Equal(t, position.Name, "accumulator2")

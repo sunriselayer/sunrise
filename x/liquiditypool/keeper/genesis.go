@@ -10,15 +10,27 @@ import (
 // InitGenesis initializes the module's state from a provided genesis state.
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) error {
 	// Set all the pool
-	k.SetPoolCount(ctx, genState.PoolCount)
+	err := k.SetPoolCount(ctx, genState.PoolCount)
+	if err != nil {
+		return err
+	}
 	for _, elem := range genState.Pools {
-		k.SetPool(ctx, elem)
+		err = k.SetPool(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Set all the position
-	k.SetPositionCount(ctx, genState.PositionCount)
+	err = k.SetPositionCount(ctx, genState.PositionCount)
+	if err != nil {
+		return err
+	}
 	for _, elem := range genState.Positions {
-		k.SetPosition(ctx, elem)
+		err = k.SetPosition(ctx, elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Set all accumulators
@@ -34,7 +46,10 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 		if err != nil {
 			panic(err)
 		}
-		k.SetAccumulatorPosition(ctx, elem.Name, elem.AccumValuePerShare, elem.Index, numShares, elem.UnclaimedRewardsTotal)
+		err = k.SetAccumulatorPosition(ctx, elem.Name, elem.AccumValuePerShare, elem.Index, numShares, elem.UnclaimedRewardsTotal)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return k.Params.Set(ctx, genState.Params)
@@ -50,10 +65,22 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 
-	genesis.Pools = k.GetAllPools(ctx)
-	genesis.PoolCount = k.GetPoolCount(ctx)
-	genesis.Positions = k.GetAllPositions(ctx)
-	genesis.PositionCount = k.GetPositionCount(ctx)
+	genesis.Pools, err = k.GetAllPools(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.PoolCount, err = k.GetPoolCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.Positions, err = k.GetAllPositions(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.PositionCount, err = k.GetPositionCount(ctx)
+	if err != nil {
+		return nil, err
+	}
 	genesis.Accumulators = k.GetAllAccumulators(ctx)
 	genesis.AccumulatorPositions = k.GetAllAccumulatorPositions(ctx)
 

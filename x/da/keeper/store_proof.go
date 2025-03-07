@@ -9,23 +9,23 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte) (proof types.Proof, found bool) {
+func (k Keeper) GetProof(ctx context.Context, metadataUri string, sender []byte) (proof types.Proof, found bool, err error) {
 	key := collections.Join(metadataUri, sender)
 	has, err := k.Proofs.Has(ctx, key)
 	if err != nil {
-		panic(err)
+		return proof, false, err
 	}
 
 	if !has {
-		return proof, false
+		return proof, false, nil
 	}
 
 	val, err := k.Proofs.Get(ctx, key)
 	if err != nil {
-		panic(err)
+		return proof, false, err
 	}
 
-	return val, true
+	return val, true, nil
 }
 
 // SetProof set the proof of the PublishedData
@@ -43,15 +43,17 @@ func (k Keeper) SetProof(ctx context.Context, data types.Proof) error {
 	return nil
 }
 
-func (k Keeper) DeleteProof(ctx sdk.Context, metadataUri string, sender []byte) {
+func (k Keeper) DeleteProof(ctx sdk.Context, metadataUri string, sender []byte) error {
 	err := k.Proofs.Remove(ctx, collections.Join(metadataUri, sender))
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
-func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) (list []types.Proof) {
-	err := k.Proofs.Walk(
+func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) (list []types.Proof, err error) {
+	err = k.Proofs.Walk(
 		ctx,
 		collections.NewPrefixedPairRange[string, []byte](metadataUri),
 		func(key collections.Pair[string, []byte], value types.Proof) (bool, error) {
@@ -60,14 +62,14 @@ func (k Keeper) GetProofs(ctx sdk.Context, metadataUri string) (list []types.Pro
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }
 
-func (k Keeper) GetAllProofs(ctx context.Context) (list []types.Proof) {
-	err := k.Proofs.Walk(
+func (k Keeper) GetAllProofs(ctx context.Context) (list []types.Proof, err error) {
+	err = k.Proofs.Walk(
 		ctx,
 		nil,
 		func(key collections.Pair[string, []byte], value types.Proof) (bool, error) {
@@ -76,8 +78,8 @@ func (k Keeper) GetAllProofs(ctx context.Context) (list []types.Proof) {
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }

@@ -2,26 +2,24 @@ package keeper
 
 import (
 	"context"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k Keeper) GetProofDeputy(ctx context.Context, validator []byte) (deputy []byte, found bool) {
+func (k Keeper) GetProofDeputy(ctx context.Context, validator []byte) (deputy []byte, found bool, err error) {
 	has, err := k.ProofDeputies.Has(ctx, validator)
 	if err != nil {
-		panic(err)
+		return deputy, false, err
 	}
 
 	if !has {
-		return deputy, false
+		return deputy, false, nil
 	}
 
 	deputy, err = k.ProofDeputies.Get(ctx, validator)
 	if err != nil {
-		panic(err)
+		return deputy, false, err
 	}
 
-	return deputy, true
+	return deputy, true, nil
 }
 
 // SetProofDeputy set the proof deputy of the validator
@@ -34,9 +32,11 @@ func (k Keeper) SetProofDeputy(ctx context.Context, validator []byte, deputy []b
 	return nil
 }
 
-func (k Keeper) DeleteProofDeputy(ctx sdk.Context, validator []byte) {
+func (k Keeper) DeleteProofDeputy(ctx context.Context, validator []byte) error {
 	err := k.ProofDeputies.Remove(ctx, validator)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }

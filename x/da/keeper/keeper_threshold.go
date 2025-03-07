@@ -6,31 +6,31 @@ import (
 	"cosmossdk.io/math"
 )
 
-func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) uint64 {
+func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) (uint64, error) {
 	numActiveValidators := int64(0)
 	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
 	if err != nil {
-		k.Logger.Error(err.Error())
-		return 0
+		return 0, err
 	}
 
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
-		numActiveValidators++
+		validator, err := k.StakingKeeper.Validator(ctx, iterator.Value())
+		if err != nil {
+			k.Logger.Error(err.Error())
+			continue
+		}
+		if validator.IsBonded() {
+			numActiveValidators++
+		}
 	}
 
-	// TODO: error handling
-	params, _ := k.Params.Get(ctx)
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return 0, err
+	}
 	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
-	threshold := replicationFactor.MulInt64(int64(shardCount)).QuoInt64(int64(numActiveValidators)).RoundInt64()
+	threshold := min(max(replicationFactor.MulInt64(int64(shardCount)).QuoInt64(int64(numActiveValidators)).TruncateInt64(), 1), int64(shardCount))
 
-	if threshold < 1 {
-		threshold = 1
-	}
-
-	if threshold > int64(shardCount) {
-		threshold = int64(shardCount)
-	}
-
-	return uint64(threshold)
+	return uint64(threshold), nil
 }

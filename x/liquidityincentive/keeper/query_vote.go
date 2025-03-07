@@ -37,10 +37,13 @@ func (q queryServer) Vote(ctx context.Context, req *types.QueryVoteRequest) (*ty
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := q.k.GetVote(
+	val, found, err := q.k.GetVote(
 		ctx,
 		req.Address,
 	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}

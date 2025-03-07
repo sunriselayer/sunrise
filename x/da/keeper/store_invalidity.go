@@ -9,23 +9,23 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []byte) (invalidity types.Invalidity, found bool) {
+func (k Keeper) GetInvalidity(ctx context.Context, metadataUri string, sender []byte) (invalidity types.Invalidity, found bool, err error) {
 	key := collections.Join(metadataUri, sender)
 	has, err := k.Invalidities.Has(ctx, key)
 	if err != nil {
-		panic(err)
+		return invalidity, false, err
 	}
 
 	if !has {
-		return invalidity, false
+		return invalidity, false, nil
 	}
 
 	val, err := k.Invalidities.Get(ctx, key)
 	if err != nil {
-		panic(err)
+		return invalidity, false, err
 	}
 
-	return val, true
+	return val, true, nil
 }
 
 // SetInvalidity set the Invalidity of the PublishedData
@@ -43,15 +43,17 @@ func (k Keeper) SetInvalidity(ctx context.Context, data types.Invalidity) error 
 	return nil
 }
 
-func (k Keeper) DeleteInvalidity(ctx sdk.Context, metadataUri string, sender []byte) {
+func (k Keeper) DeleteInvalidity(ctx context.Context, metadataUri string, sender []byte) error {
 	err := k.Invalidities.Remove(ctx, collections.Join(metadataUri, sender))
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
-func (k Keeper) GetInvalidities(ctx sdk.Context, metadataUri string) (list []types.Invalidity) {
-	err := k.Invalidities.Walk(
+func (k Keeper) GetInvalidities(ctx sdk.Context, metadataUri string) (list []types.Invalidity, err error) {
+	err = k.Invalidities.Walk(
 		ctx,
 		collections.NewPrefixedPairRange[string, []byte](metadataUri),
 		func(key collections.Pair[string, []byte], value types.Invalidity) (bool, error) {
@@ -60,14 +62,14 @@ func (k Keeper) GetInvalidities(ctx sdk.Context, metadataUri string) (list []typ
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }
 
-func (k Keeper) GetAllInvalidities(ctx context.Context) (list []types.Invalidity) {
-	err := k.Invalidities.Walk(
+func (k Keeper) GetAllInvalidities(ctx context.Context) (list []types.Invalidity, err error) {
+	err = k.Invalidities.Walk(
 		ctx,
 		nil,
 		func(key collections.Pair[string, []byte], value types.Invalidity) (bool, error) {
@@ -76,8 +78,8 @@ func (k Keeper) GetAllInvalidities(ctx context.Context) (list []types.Invalidity
 		},
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return
+	return list, nil
 }
