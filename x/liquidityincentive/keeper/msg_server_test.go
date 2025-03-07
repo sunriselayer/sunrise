@@ -15,7 +15,7 @@ func setupMsgServer(t *testing.T) (keeper.Keeper, LiquidityIncentiveMocks, types
 	f := initFixture(t)
 	ctx := sdk.UnwrapSDKContext(f.ctx)
 	k := f.keeper
-	mocks := getMocks(t)
+	mocks := f.mocks
 	return k, mocks, keeper.NewMsgServerImpl(k), ctx
 }
 

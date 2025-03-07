@@ -127,7 +127,10 @@ func (k Keeper) calculateResultRoutePoolExactAmountIn(
 	denomOut string,
 	amountIn math.Int,
 ) (amountOut math.Int, err error) {
-	pool, found := k.liquidityPoolKeeper.GetPool(ctx, poolId)
+	pool, found, err := k.liquidityPoolKeeper.GetPool(ctx, poolId)
+	if err != nil {
+		return math.Int{}, err
+	}
 	if !found {
 		return math.Int{}, lptypes.ErrPoolNotFound
 	}
@@ -176,7 +179,10 @@ func (k Keeper) swapRoutePoolExactAmountIn(
 	denomOut string,
 	amountIn math.Int,
 ) (amountOut math.Int, err error) {
-	pool, found := k.liquidityPoolKeeper.GetPool(ctx, poolId)
+	pool, found, err := k.liquidityPoolKeeper.GetPool(ctx, poolId)
+	if err != nil {
+		return math.Int{}, err
+	}
 	if !found {
 		return math.Int{}, lptypes.ErrPoolNotFound
 	}
