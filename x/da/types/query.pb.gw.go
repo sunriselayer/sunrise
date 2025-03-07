@@ -775,7 +775,7 @@ var (
 
 	pattern_Query_ZkpProofThreshold_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "zkp-proof-threshold"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ProofDeputy_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "v1", "da", "proof-deputy"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ProofDeputy_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "v1", "da", "proof-deputy"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (
