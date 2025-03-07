@@ -39,6 +39,28 @@ func (q queryServer) AllPublishedData(goCtx context.Context, req *types.QueryAll
 	return &types.QueryAllPublishedDataResponse{Data: data}, nil
 }
 
+func (q queryServer) ValidatorShardIndices(goCtx context.Context, req *types.QueryValidatorShardIndicesRequest) (*types.QueryValidatorShardIndicesResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	validator, err := q.k.validatorAddressCodec.StringToBytes(req.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+	threshold, err := q.k.GetZkpThreshold(ctx, req.ShardCount)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	indices := types.ShardIndicesForValidator(validator, int64(threshold), int64(req.ShardCount))
+	shardIndices := make([]uint64, len(indices))
+	for i, index := range indices {
+		shardIndices[i] = uint64(index)
+	}
+	return &types.QueryValidatorShardIndicesResponse{ShardIndices: shardIndices}, nil
+}
+
 func (q queryServer) ZkpProofThreshold(goCtx context.Context, req *types.QueryZkpProofThresholdRequest) (*types.QueryZkpProofThresholdResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")

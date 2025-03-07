@@ -40,6 +40,10 @@ service Query {
   rpc AllInvalidity(QueryAllInvalidityRequest) returns (QueryAllInvalidityResponse) {
     option (google.api.http).get = "/sunrise/v1/da/all-invalidity";
   }
+  // ValidatorShardIndices
+  rpc ValidatorShardIndices(QueryValidatorShardIndicesRequest) returns (QueryValidatorShardIndicesResponse) {
+    option (google.api.http).get = "/sunrise/v1/da/validator-shard-indices";
+  }
   // ZkpProofThreshold
   rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
     option (google.api.http).get = "/sunrise/v1/da/zkp-proof-threshold";
@@ -134,6 +138,19 @@ message QueryAllInvalidityResponse {
   repeated Invalidity invalidity = 1 [(gogoproto.nullable) = false];
 }
 
+// QueryValidatorShardIndicesRequest is request type for the
+// Query/ValidatorShardIndices RPC method.
+message QueryValidatorShardIndicesRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  uint64 shard_count = 2;
+}
+
+// QueryValidatorShardIndicesResponse is response type for the
+// Query/ValidatorShardIndices RPC method.
+message QueryValidatorShardIndicesResponse {
+  repeated uint64 shard_indices = 1;
+}
+
 // QueryZkpProofThresholdRequest is request type for the
 // Query/ZkpProofThreshold RPC method.
 message QueryZkpProofThresholdRequest {
@@ -143,7 +160,7 @@ message QueryZkpProofThresholdRequest {
 // QueryZkpProofThresholdResponse is response type for the
 // Query/ZkpProofThreshold RPC method.
 message QueryZkpProofThresholdResponse {
-  uint64 threshold = 2 [(amino.dont_omitempty) = true];
+  uint64 threshold = 1 [(amino.dont_omitempty) = true];
 }
 
 // QueryProofDeputyRequest is request type for the
