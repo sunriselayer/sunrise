@@ -15,7 +15,7 @@ func (k msgServer) SubmitInvalidity(ctx context.Context, msg *types.MsgSubmitInv
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 	// check number of indices
-	if len(msg.Indices) > 0 {
+	if len(msg.Indices) == 0 {
 		return nil, types.ErrInvalidIndices
 	}
 	// end static validation
@@ -27,7 +27,7 @@ func (k msgServer) SubmitInvalidity(ctx context.Context, msg *types.MsgSubmitInv
 		return nil, types.ErrDataNotFound
 	}
 	if publishedData.Status != types.Status_STATUS_CHALLENGE_PERIOD {
-		return nil, types.ErrCanNotOpenChallenge
+		return nil, types.ErrNotInChallengePeriod
 	}
 
 	params, err := k.Params.Get(ctx)

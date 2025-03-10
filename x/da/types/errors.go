@@ -9,7 +9,7 @@ import (
 // x/da module sentinel errors
 var (
 	ErrInvalidSigner            = errors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
-	ErrCanNotOpenChallenge      = errors.Register(ModuleName, 1101, "challenge is only open for vote extension passed data")
+	ErrNotInChallengePeriod     = errors.Register(ModuleName, 1101, "data is not in challenge period")
 	ErrChallengePeriodIsOver    = errors.Register(ModuleName, 1102, "challenge period is over")
 	ErrDataNotInChallenge       = errors.Register(ModuleName, 1103, "data is not in challenge")
 	ErrProofPeriodIsOver        = errors.Register(ModuleName, 1104, "proof period is over")
