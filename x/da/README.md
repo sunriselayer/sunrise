@@ -37,9 +37,11 @@ This system verifies the possession of data shard hash `H(s_i)` without exposing
 ```protobuf
 message MsgPublishData {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string metadata_uri = 2;
-  repeated bytes shard_double_hashes = 3;
+  uint64 parity_shard_count = 3;
+  repeated bytes shard_double_hashes = 4;
+  string data_source_info = 5;
 }
 ```
 
@@ -49,9 +51,11 @@ The metadata that is preserved as a JSON in the `metadata_uri` has a schema belo
 
 ```protobuf
 message Metadata {
-  uint64 shard_size = 1;
-  uint64 shard_count = 2;
-  repeated string shard_uris = 3;
+  bytes recovered_data_hash = 1;
+  uint64 recovered_data_size = 2;
+  uint64 shard_size = 3;
+  uint64 parity_shard_count = 4;
+  repeated string shard_uris = 5;
 }
 ```
 
