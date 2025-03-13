@@ -19,6 +19,15 @@ import (
 
 var metadataUriSplitter = []byte{0x4D, 0x45, 0x54, 0x41, 0x44, 0x41, 0x54, 0x41} // ASCII for "METADATA"
 
+func getSplitterIndex(txs [][]byte) int {
+	for i, txBytes := range txs {
+		if bytes.Equal(txBytes, metadataUriSplitter) {
+			return i
+		}
+	}
+	return -1
+}
+
 type ProposalHandler struct {
 	logger                 log.Logger
 	keeper                 keeper.Keeper
@@ -80,13 +89,7 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	return func(ctx sdk.Context, req *abci.ProcessProposalRequest) (*abci.ProcessProposalResponse, error) {
-		splitterIndex := -1
-		for i, txBytes := range req.Txs {
-			if bytes.Equal(txBytes, metadataUriSplitter) {
-				splitterIndex = i
-				break
-			}
-		}
+		splitterIndex := getSplitterIndex(req.Txs)
 
 		if splitterIndex != -1 {
 			for i := splitterIndex + 1; i < len(req.Txs); i++ {
@@ -131,13 +134,7 @@ func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockReq
 		}
 	}
 
-	splitterIndex := -1
-	for i, txBytes := range req.Txs {
-		if bytes.Equal(txBytes, metadataUriSplitter) {
-			splitterIndex = i
-			break
-		}
-	}
+	splitterIndex := getSplitterIndex(req.Txs)
 
 	if splitterIndex != -1 {
 		for i := splitterIndex + 1; i < len(req.Txs); i++ {
