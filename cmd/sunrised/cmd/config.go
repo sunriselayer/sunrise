@@ -3,62 +3,35 @@ package cmd
 import (
 	cmtcfg "github.com/cometbft/cometbft/config"
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sunriselayer/sunrise/app"
-	defaultoverrides "github.com/sunriselayer/sunrise/app/defaultoverrides"
+	"fmt"
+
+	"github.com/sunriselayer/sunrise/app/consts"
 )
-
-func InitSDKConfig() {
-	// Set prefixes
-	accountAddressPrefix := app.Bech32PrefixAccAddr
-	accountPubKeyPrefix := app.Bech32PrefixAccPub
-	validatorAddressPrefix := app.Bech32PrefixValAddr
-	validatorPubKeyPrefix := app.Bech32PrefixValPub
-	consNodeAddressPrefix := app.Bech32PrefixConsAddr
-	consNodePubKeyPrefix := app.Bech32PrefixConsPub
-
-	// Set and seal config
-	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(accountAddressPrefix, accountPubKeyPrefix)
-	config.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
-	config.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
-	config.Seal()
-}
 
 // initCometBFTConfig helps to override default CometBFT Config values.
 // return cmtcfg.DefaultConfig if no custom configuration is required for the application.
 func initCometBFTConfig() *cmtcfg.Config {
-	// cfg := cmtcfg.DefaultConfig()
+	cfg := cmtcfg.DefaultConfig()
 
 	// these values put a higher strain on node memory
 	// cfg.P2P.MaxNumInboundPeers = 100
 	// cfg.P2P.MaxNumOutboundPeers = 40
 
-	cfg := defaultoverrides.DefaultConsensusConfig()
-
 	return cfg
 }
 
-// The following code snippet is just for reference.
-type CustomAppConfig struct {
-	serverconfig.Config `mapstructure:",squash"`
-	DA                  app.DAConfig `mapstructure:"da"`
-}
-
-var ConfigTemplate = serverconfig.DefaultConfigTemplate + `
-
-[da]
-# API to query DA v2 uploaded data shard hashes
-shard_hashes_api = {{ .DA.ShardHashesAPI }}
-`
-
-// InitAppConfig helps to override default appConfig template and configs.
+// initAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
-func InitAppConfig() (string, CustomAppConfig) {
+func initAppConfig() (string, interface{}) {
+	// The following code snippet is just for reference.
+	type CustomAppConfig struct {
+		serverconfig.Config `mapstructure:",squash"`
+	}
+
 	// Optionally allow the chain developer to overwrite the SDK's default
 	// server config.
-	// srvCfg := serverconfig.DefaultConfig()
+	srvCfg := serverconfig.DefaultConfig()
 	// The SDK's default minimum gas price is set to "" (empty value) inside
 	// app.toml. If left empty by validators, the node will halt on startup.
 	// However, the chain developer can set a default app.toml value for their
@@ -72,21 +45,15 @@ func InitAppConfig() (string, CustomAppConfig) {
 	//
 	// In tests, we set the min gas prices to 0.
 	// srvCfg.MinGasPrices = "0stake"
-	// srvCfg.BaseConfig.IAVLDisableFastNode = true // disable fastnode by default
-	srvCfg := defaultoverrides.DefaultServerConfig()
+	// <sunrise>
+	srvCfg.MinGasPrices = fmt.Sprintf("%v%s", consts.DefaultMinGasPrice, consts.FeeDenom)
+	// </sunrise>
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
-		DA: app.DAConfig{
-			ShardHashesAPI: "http://localhost:8000/api/shard_hashes",
-		},
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate + `
-[da]
-# API to query DA v2 uploaded data shard hashes
-shard_hashes_api = "http://localhost:8000/api/shard_hashes"
-`
+	customAppTemplate := serverconfig.DefaultConfigTemplate
 
 	// Edit the default template file
 	//
@@ -97,8 +64,6 @@ shard_hashes_api = "http://localhost:8000/api/shard_hashes"
 	// # This is the number of wasm vm instances we keep cached in memory for speed-up
 	// # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
 	// lru_size = 0`
-
-	serverconfig.SetConfigTemplate(ConfigTemplate)
 
 	return customAppTemplate, customAppConfig
 }

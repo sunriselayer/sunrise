@@ -2,25 +2,20 @@ package types
 
 import (
 	"cosmossdk.io/math"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+
+	errorsmod "cosmossdk.io/errors"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-var _ paramtypes.ParamSet = (*Params)(nil)
-
-// ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// NewParams creates a new Params instance
+// NewParams creates a new Params instance.
 func NewParams(withdrawFeeRate, swapTreasuryTaxRate math.LegacyDec) Params {
 	return Params{
-		WithdrawFeeRate:     withdrawFeeRate,
-		SwapTreasuryTaxRate: swapTreasuryTaxRate,
+		WithdrawFeeRate:     withdrawFeeRate.String(),
+		SwapTreasuryTaxRate: swapTreasuryTaxRate.String(),
 	}
 }
 
-// DefaultParams returns a default set of parameters
+// DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
 		math.LegacyNewDecWithPrec(1, 2),
@@ -28,12 +23,29 @@ func DefaultParams() Params {
 	)
 }
 
-// ParamSetPairs get the params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{}
-}
-
-// Validate validates the set of params
+// Validate validates the set of params.
 func (p Params) Validate() error {
+	withdrawFeeRate, err := math.LegacyNewDecFromStr(p.WithdrawFeeRate)
+	if err != nil {
+		return err
+	}
+	if withdrawFeeRate.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdraw fee rate must not be negative")
+	}
+	if withdrawFeeRate.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdraw fee rate must be less than 1")
+	}
+
+	swapTreasuryTaxRate, err := math.LegacyNewDecFromStr(p.SwapTreasuryTaxRate)
+	if err != nil {
+		return err
+	}
+	if swapTreasuryTaxRate.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "swap treasury tax rate must not be negative")
+	}
+	if swapTreasuryTaxRate.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "swap treasury tax rate must be less than 1")
+	}
+
 	return nil
 }

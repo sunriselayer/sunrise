@@ -4,15 +4,17 @@ import (
 	"context"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, context.Context) {
-	k, _, ctx := keepertest.SwapKeeper(t)
+func setupMsgServer(t *testing.T) (keeper.Keeper, types.MsgServer, context.Context) {
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
 	return k, keeper.NewMsgServerImpl(k), ctx
 }
 

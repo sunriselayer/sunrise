@@ -3,33 +3,27 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func (k Keeper) Gauges(ctx context.Context, req *types.QueryGaugesRequest) (*types.QueryGaugesResponse, error) {
+func (q queryServer) Gauges(ctx context.Context, req *types.QueryGaugesRequest) (*types.QueryGaugesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var gauges []types.Gauge
-
-	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	gaugeStore := prefix.NewStore(store, types.GaugeKeyPrefixByPreviousEpochId(req.PreviousEpochId))
-
-	pageRes, err := query.Paginate(gaugeStore, req.Pagination, func(key []byte, value []byte) error {
-		var gauge types.Gauge
-		if err := k.cdc.Unmarshal(value, &gauge); err != nil {
-			return err
-		}
-
-		gauges = append(gauges, gauge)
-		return nil
-	})
+	gauges, pageRes, err := query.CollectionPaginate(
+		ctx,
+		q.k.Gauges,
+		req.Pagination,
+		func(key collections.Pair[uint64, uint64], value types.Gauge) (types.Gauge, error) {
+			return value, nil
+		},
+	)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -38,16 +32,19 @@ func (k Keeper) Gauges(ctx context.Context, req *types.QueryGaugesRequest) (*typ
 	return &types.QueryGaugesResponse{Gauge: gauges, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Gauge(ctx context.Context, req *types.QueryGaugeRequest) (*types.QueryGaugeResponse, error) {
+func (q queryServer) Gauge(ctx context.Context, req *types.QueryGaugeRequest) (*types.QueryGaugeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := k.GetGauge(
+	val, found, err := q.k.GetGauge(
 		ctx,
 		req.PreviousEpochId,
 		req.PoolId,
 	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}

@@ -3,68 +3,81 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
+
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 // SetGauge set a specific gauge in the store from its index
-func (k Keeper) SetGauge(ctx context.Context, gauge types.Gauge) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	b := k.cdc.MustMarshal(&gauge)
-	storeAdapter.Set(types.GaugeKey(gauge.PreviousEpochId, gauge.PoolId), b)
+func (k Keeper) SetGauge(ctx context.Context, gauge types.Gauge) error {
+	err := k.Gauges.Set(ctx, types.GaugeKey(gauge.PreviousEpochId, gauge.PoolId), gauge)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // GetGauge returns a gauge from its index
-func (k Keeper) GetGauge(ctx context.Context, previousEpochId uint64, poolId uint64) (val types.Gauge, found bool) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-
-	b := storeAdapter.Get(types.GaugeKey(previousEpochId, poolId))
-	if b == nil {
-		return val, false
+func (k Keeper) GetGauge(ctx context.Context, previousEpochId uint64, poolId uint64) (val types.Gauge, found bool, err error) {
+	key := types.GaugeKey(previousEpochId, poolId)
+	has, err := k.Gauges.Has(ctx, key)
+	if err != nil {
+		return val, false, err
 	}
 
-	k.cdc.MustUnmarshal(b, &val)
-	return val, true
+	if !has {
+		return val, false, nil
+	}
+
+	val, err = k.Gauges.Get(ctx, key)
+	if err != nil {
+		return val, false, err
+	}
+
+	return val, true, nil
 }
 
 // RemoveGauge removes a gauge from the store
-func (k Keeper) RemoveGauge(ctx context.Context, previousEpochId uint64, poolId uint64) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	storeAdapter.Delete(types.GaugeKey(previousEpochId, poolId))
+func (k Keeper) RemoveGauge(ctx context.Context, previousEpochId uint64, poolId uint64) error {
+	err := k.Gauges.Remove(ctx, types.GaugeKey(previousEpochId, poolId))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // GetAllGauges returns all gauges
-func (k Keeper) GetAllGauges(ctx context.Context) (list []types.Gauge) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.GaugeKeyPrefix))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+func (k Keeper) GetAllGauges(ctx context.Context) (list []types.Gauge, err error) {
+	err = k.Gauges.Walk(
+		ctx,
+		nil,
+		func(key collections.Pair[uint64, uint64], value types.Gauge) (bool, error) {
+			list = append(list, value)
 
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Gauge
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
+			return false, nil
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return
+	return list, nil
 }
 
 // GetAllGaugeByPreviousEpochId returns all gauges by previous epoch id
-func (k Keeper) GetAllGaugeByPreviousEpochId(ctx context.Context, previousEpochId uint64) (list []types.Gauge) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.GaugeKeyPrefixByPreviousEpochId(previousEpochId))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+func (k Keeper) GetAllGaugeByPreviousEpochId(ctx context.Context, previousEpochId uint64) (list []types.Gauge, err error) {
+	err = k.Gauges.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[uint64, uint64](previousEpochId),
+		func(key collections.Pair[uint64, uint64], value types.Gauge) (bool, error) {
+			list = append(list, value)
 
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Gauge
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
+			return false, nil
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return
+	return list, nil
 }

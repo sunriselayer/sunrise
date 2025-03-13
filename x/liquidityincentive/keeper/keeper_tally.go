@@ -7,7 +7,6 @@ import (
 	"cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -27,8 +26,8 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	currValidators := make(map[string]ValidatorGovInfo)
 
 	// fetch all the bonded validators, insert them into currValidators
-	err := k.sk.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
-		valBz, err := k.sk.ValidatorAddressCodec().StringToBytes(validator.GetOperator())
+	err := k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator sdk.ValidatorI) (stop bool) {
+		valBz, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validator.GetOperator())
 		if err != nil {
 			return false
 		}
@@ -46,15 +45,18 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		return []types.TallyResult{}, err
 	}
 
-	votes := k.GetAllVotes(ctx)
+	votes, err := k.GetAllVotes(ctx)
+	if err != nil {
+		return []types.TallyResult{}, err
+	}
 	for _, vote := range votes {
 		// if validator, just record it in the map
-		voter, err := k.authKeeper.AddressCodec().StringToBytes(vote.Sender)
+		voter, err := k.accountKeeper.AddressCodec().StringToBytes(vote.Sender)
 		if err != nil {
 			return []types.TallyResult{}, err
 		}
 
-		valAddrStr, err := k.sk.ValidatorAddressCodec().BytesToString(voter)
+		valAddrStr, err := k.stakingKeeper.ValidatorAddressCodec().BytesToString(voter)
 		if err != nil {
 			return []types.TallyResult{}, err
 		}
@@ -64,7 +66,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		}
 
 		// iterate over all delegations from voter, deduct from any delegated-to validators
-		err = k.sk.IterateDelegations(ctx, voter, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
+		err = k.stakingKeeper.IterateDelegations(ctx, voter, func(index int64, delegation sdk.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 
 			if val, ok := currValidators[valAddrStr]; ok {
@@ -120,7 +122,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	}
 
 	// If there is no staked coins, the proposal fails
-	totalBonded, err := k.sk.TotalBondedTokens(ctx)
+	totalBonded, err := k.stakingKeeper.TotalBondedTokens(ctx)
 	if err != nil {
 		return []types.TallyResult{}, err
 	}

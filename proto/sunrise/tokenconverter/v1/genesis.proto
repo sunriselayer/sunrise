@@ -1,0 +1,13 @@
+syntax = "proto3";
+package sunrise.tokenconverter.v1;
+
+import "gogoproto/gogo.proto";
+import "sunrise/tokenconverter/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
+
+// GenesisState defines the tokenconverter module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}

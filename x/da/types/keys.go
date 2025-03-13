@@ -1,8 +1,8 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	"cosmossdk.io/collections"
+	"cosmossdk.io/collections/indexes"
 )
 
 const (
@@ -12,39 +12,55 @@ const (
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
 
-	// MemStoreKey defines the in-memory store key
-	MemStoreKey = "mem_da"
+	// GovModuleName duplicates the gov module's name to avoid a dependency with x/gov.
+	// It should be synced with the gov module's name if it is ever changed.
+	// See: https://github.com/cosmos/cosmos-sdk/blob/v0.52.0-beta.2/x/gov/types/keys.go#L9
+	GovModuleName = "gov"
+)
+
+// should be changed to use collections
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
+
+	PublishedDataKeyPrefix             = collections.NewPrefix("published_data/")
+	PublishedDataStatusTimeIndexPrefix = collections.NewPrefix("published_data_by_status_time/")
+	ChallengeCountsKeyPrefix           = collections.NewPrefix("challenge_counts/")
+	FaultCountsKeyPrefix               = collections.NewPrefix("fault_counts/")
+	ProofKeyPrefix                     = collections.NewPrefix("proofs/")
+	InvalidityKeyPrefix                = collections.NewPrefix("invalidities/")
+	ProofDeputiesKeyPrefix             = collections.NewPrefix("proof_deputies/")
 )
 
 var (
-	ParamsKey = []byte("p_da")
-
-	PublishedDataKeyPrefix        = []byte("published_data/")
-	UnverifiedDataByTimeKeyPrefix = []byte("unverified_data_by_time/")
-	FaultCounterKeyPrefix         = []byte("fault_counter/")
-	ProofKeyPrefix                = []byte("proof/")
+	PublishedDataKeyCodec = collections.StringKey
+	FaultCounterKeyCodec  = collections.BytesKey
+	ProofKeyCodec         = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
+	InvalidityKeyCodec    = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
+	ProofDeputyKeyCodec   = collections.BytesKey
 )
 
-func KeyPrefix(p string) []byte {
-	return []byte(p)
+type PublishedDataIndexes struct {
+	StatusTime *indexes.Multi[collections.Pair[string, int64], string, PublishedData]
 }
 
-func PublishedDataKey(metadataUri string) []byte {
-	return append(PublishedDataKeyPrefix, metadataUri...)
+func (i PublishedDataIndexes) IndexesList() []collections.Index[string, PublishedData] {
+	return []collections.Index[string, PublishedData]{
+		i.StatusTime,
+	}
 }
 
-func UnverifiedDataTimeKeyPrefix(timestamp uint64) []byte {
-	return append(UnverifiedDataByTimeKeyPrefix, sdk.Uint64ToBigEndian(timestamp)...)
-}
-
-func UnverifiedDataByTimeKey(timestamp uint64, metadataUri string) []byte {
-	return append(UnverifiedDataTimeKeyPrefix(timestamp), metadataUri...)
-}
-
-func GetFaultCounterKey(val sdk.ValAddress) []byte {
-	return append(FaultCounterKeyPrefix, address.MustLengthPrefix(val)...)
-}
-
-func ProofKey(metadataUri string, sender string) []byte {
-	return append(append(ProofKeyPrefix, metadataUri...), sender...)
+func NewPublishedDataIndexes(sb *collections.SchemaBuilder) PublishedDataIndexes {
+	return PublishedDataIndexes{
+		StatusTime: indexes.NewMulti(
+			sb,
+			PublishedDataStatusTimeIndexPrefix,
+			"published_data_by_status_time",
+			collections.PairKeyCodec(collections.StringKey, collections.Int64Key),
+			collections.StringKey,
+			func(_ string, v PublishedData) (collections.Pair[string, int64], error) {
+				return collections.Join(v.Status.String(), v.Timestamp.Unix()), nil
+			},
+		),
+	}
 }

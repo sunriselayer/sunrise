@@ -10,6 +10,7 @@ import (
 type AccountKeeper interface {
 	GetAccount(context.Context, sdk.AccAddress) sdk.AccountI // only used for simulation
 	// Methods imported from account should be defined here
+	GetModuleAddress(name string) sdk.AccAddress
 }
 
 // BankKeeper defines the expected interface for the Bank module.
@@ -18,11 +19,5 @@ type BankKeeper interface {
 	// Methods imported from bank should be defined here
 
 	SendCoinsFromModuleToModule(ctx context.Context, senderModule, recipientModule string, amt sdk.Coins) error
-	BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
-}
-
-// ParamSubspace defines the expected Subspace interface for parameters.
-type ParamSubspace interface {
-	Get(context.Context, []byte, interface{})
-	Set(context.Context, []byte, interface{})
+	BurnCoins(ctx context.Context, address []byte, amt sdk.Coins) error
 }

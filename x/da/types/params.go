@@ -4,82 +4,88 @@ import (
 	"encoding/base64"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/consensys/gnark-crypto/ecc"
 	groth16 "github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
+
+	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
-var _ paramtypes.ParamSet = (*Params)(nil)
-
-// ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// NewParams creates a new Params instance
+// NewParams creates a new Params instance.
 func NewParams(
-	voteThreshold math.LegacyDec,
-	slashEpoch uint64,
-	epochMaxFault uint64,
-	slashFraction math.LegacyDec,
+	challengeThreshold math.LegacyDec,
 	replicationFactor math.LegacyDec,
+	slashEpoch uint64,
+	SlashFaultThreshold math.LegacyDec,
+	slashFraction math.LegacyDec,
+	challengePeriod time.Duration,
+	proofPeriod time.Duration,
+	rejectedRemovalPeriod time.Duration,
+	verifiedRemovalPeriod time.Duration,
+	publishDataCollateral sdk.Coins,
+	submitInvalidityCollateral sdk.Coins,
+	zkpVerifyingKey []byte,
+	zkpProvingKey []byte,
 	minShardCount uint64,
 	maxShardCount uint64,
 	maxShardSize uint64,
-	challengePeriod time.Duration,
-	proofPeriod time.Duration,
-	challengeCollateral sdk.Coins,
-	zkpProvingKey []byte,
-	zkpVerifyingKey []byte,
 ) Params {
 	return Params{
-		VoteThreshold:       voteThreshold,
-		SlashEpoch:          slashEpoch,
-		EpochMaxFault:       epochMaxFault,
-		SlashFraction:       slashFraction,
-		ReplicationFactor:   replicationFactor,
-		MinShardCount:       minShardCount,
-		MaxShardCount:       maxShardCount,
-		MaxShardSize:        maxShardSize,
-		ChallengePeriod:     challengePeriod,
-		ProofPeriod:         proofPeriod,
-		ChallengeCollateral: challengeCollateral,
-		ZkpProvingKey:       zkpProvingKey,
-		ZkpVerifyingKey:     zkpVerifyingKey,
+		ChallengeThreshold:         challengeThreshold.String(),
+		ReplicationFactor:          replicationFactor.String(),
+		SlashEpoch:                 slashEpoch,
+		SlashFaultThreshold:        SlashFaultThreshold.String(),
+		SlashFraction:              slashFraction.String(),
+		ChallengePeriod:            challengePeriod,
+		ProofPeriod:                proofPeriod,
+		RejectedRemovalPeriod:      rejectedRemovalPeriod,
+		VerifiedRemovalPeriod:      verifiedRemovalPeriod,
+		PublishDataCollateral:      publishDataCollateral,
+		SubmitInvalidityCollateral: submitInvalidityCollateral,
+		ZkpVerifyingKey:            zkpVerifyingKey,
+		ZkpProvingKey:              zkpProvingKey,
+		MinShardCount:              minShardCount,
+		MaxShardCount:              maxShardCount,
+		MaxShardSize:               maxShardSize,
 	}
 }
 
-// DefaultParams returns a default set of parameters
+// DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	provingKey, err := base64.StdEncoding.DecodeString(DefaultProvingKeyBase64)
-	if err != nil {
-		panic(err)
-	}
-
 	verifyingKey, err := base64.StdEncoding.DecodeString(DefaultVerifyingKeyBase64)
 	if err != nil {
 		panic(err)
 	}
 
+	provingKey, err := base64.StdEncoding.DecodeString(DefaultProvingKeyBase64)
+	if err != nil {
+		panic(err)
+	}
+
 	return NewParams(
-		math.LegacyNewDecWithPrec(67, 2), // 67%
-		120960,                           // 1 week
-		34560,                            // 2 days
-		math.LegacyNewDecWithPrec(1, 3),  // 0.1%
-		math.LegacyNewDec(5),             // 5.0
+		math.LegacyNewDecWithPrec(33, 2), // 33% challenge threshold
+		math.LegacyNewDec(5),             // 5.0 replication factor
+		120960,                           // 1 week(5sec/block) slash epoch
+		math.LegacyNewDecWithPrec(5, 1),  // 50% slash fault threshold
+		math.LegacyNewDecWithPrec(1, 3),  // 0.1% slash fraction
+		time.Minute*4,                    // challenge 4min,
+		time.Minute*10,                   // proof 10min
+		time.Hour*72,                     // rejected remove 3 days
+		time.Hour*336,                    // verified remove 2 weeks
+		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(1_000_000_000))), // publish data collateral 1000RISE
+		sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, math.NewInt(100_000_000))),   // submit invalidity collateral 100RISE
+		verifyingKey,
+		provingKey,
 		10,
 		255,
-		1000000,       // 1MB
-		time.Minute*6, // 6min,
-		time.Minute*8, // 8min
-		sdk.Coins(nil),
-		provingKey,
-		verifyingKey,
+		1000000, // 1MB
 	)
 }
 
@@ -99,7 +105,7 @@ func GenerateZkpKeys() (string, string) {
 		panic(err)
 	}
 
-	zkpVerifyingKeyBz, err := zkp.MarshalProvingKey(verifyingKey)
+	zkpVerifyingKeyBz, err := zkp.MarshalVerifyingKey(verifyingKey)
 	if err != nil {
 		panic(err)
 	}
@@ -109,12 +115,96 @@ func GenerateZkpKeys() (string, string) {
 	return provingKeyBase64, verifyingKeyBase64
 }
 
-// ParamSetPairs get the params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{}
-}
-
-// Validate validates the set of params
+// Validate validates the set of params.
 func (p Params) Validate() error {
+	challengeThreshold, err := math.LegacyNewDecFromStr(p.ChallengeThreshold)
+	if err != nil {
+		return err
+	}
+	if challengeThreshold.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge threshold must not be negative")
+	}
+	if challengeThreshold.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge threshold must be less than 1")
+	}
+
+	replicationFactor, err := math.LegacyNewDecFromStr(p.ReplicationFactor)
+	if err != nil {
+		return err
+	}
+	if !replicationFactor.IsPositive() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "replication factor must be negative")
+	}
+
+	if p.SlashEpoch == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash epoch must be positive")
+	}
+
+	SlashFaultThreshold, err := math.LegacyNewDecFromStr(p.SlashFaultThreshold)
+	if err != nil {
+		return err
+	}
+	if SlashFaultThreshold.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fault threshold must not be negative")
+	}
+	if SlashFaultThreshold.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fault threshold must be less than 1")
+	}
+
+	slashFraction, err := math.LegacyNewDecFromStr(p.SlashFraction)
+	if err != nil {
+		return err
+	}
+	if slashFraction.IsNegative() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must not be negative")
+	}
+	if slashFraction.GT(math.LegacyOneDec()) {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "slash fraction must be less than 1")
+	}
+
+	if p.ChallengePeriod <= 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge period must be positive")
+	}
+	if p.ProofPeriod <= 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "proof period must be positive")
+	}
+	if p.RejectedRemovalPeriod <= 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "rejected removal period must be positive")
+	}
+	if p.VerifiedRemovalPeriod <= 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "verified removal period must be positive")
+	}
+
+	if !p.PublishDataCollateral.IsValid() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "publish data collateral must be valid")
+	}
+	if !p.SubmitInvalidityCollateral.IsValid() {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "submit invalidity collateral must be valid")
+	}
+
+	if len(p.ZkpVerifyingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp verifying key must not be empty")
+	}
+
+	if len(p.ZkpProvingKey) == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "zkp proving key must not be empty")
+	}
+
+	if p.MinShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "min shard count must be positive")
+	}
+
+	if p.MaxShardCount == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be positive")
+	}
+
+	if p.MaxShardCount < p.MinShardCount {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard count must be greater than or equal to min shard count")
+	}
+
+	if p.MaxShardSize == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max shard size must be positive")
+	}
+
 	return nil
 }

@@ -5,9 +5,9 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	"go.uber.org/mock/gomock"
+
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -94,11 +94,11 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Authority:  sender.String(),
@@ -122,7 +122,8 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountIn(wctx, sender, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
@@ -131,7 +132,8 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, amountOut.String(), tc.expAmountOut.String())
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
@@ -170,11 +172,11 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Authority:  sender.String(),
@@ -210,7 +212,8 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountOut, err := k.SwapExactAmountIn(wctx, sender, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)
@@ -220,7 +223,8 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, amountOut.String(), tc.expAmountOut.String())
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
 			}
@@ -298,11 +302,11 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Authority:  sender.String(),
@@ -326,7 +330,8 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountIn, err := k.SwapExactAmountOut(wctx, sender, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -335,7 +340,8 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, amountIn.String(), tc.expAmountIn.String())
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
@@ -374,11 +380,11 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Authority:  sender.String(),
@@ -414,7 +420,8 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountIn, err := k.SwapExactAmountOut(wctx, sender, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -424,7 +431,8 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 				require.NoError(t, err)
 				require.Equal(t, amountIn.String(), tc.expAmountIn.String())
 
-				pool, found := k.GetPool(ctx, 0)
+				pool, found, err = k.GetPool(ctx, 0)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, pool.CurrentTick, tc.expTickIndex)
 			}
@@ -433,40 +441,45 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 }
 
 func TestGetValidatedPoolAndAccumulator(t *testing.T) {
-	k, _, ctx := keepertest.LiquiditypoolKeeper(t)
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
 	// when pool does not exist
 	_, _, err := k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.Error(t, err)
 
 	// when accumulator does not exist
-	k.SetPool(ctx, types.Pool{
+	err = k.SetPool(ctx, types.Pool{
 		Id:                   1,
 		DenomBase:            "base",
 		DenomQuote:           "quote",
-		FeeRate:              math.LegacyZeroDec(),
+		FeeRate:              math.LegacyZeroDec().String(),
 		TickParams:           types.TickParams{},
 		CurrentTick:          0,
-		CurrentTickLiquidity: math.LegacyOneDec(),
-		CurrentSqrtPrice:     math.LegacyOneDec(),
+		CurrentTickLiquidity: math.LegacyOneDec().String(),
+		CurrentSqrtPrice:     math.LegacyOneDec().String(),
 	})
+	if err != nil {
+		t.Fatalf("failed to set pool: %v", err)
+	}
 	_, _, err = k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.Error(t, err)
 
 	// When both accumulator and pool exist
-	err = k.InitAccumulator(ctx, "FeePoolAccumulator/value//1")
+	err = k.InitAccumulator(ctx, "fee_pool_accumulator/1")
 	require.NoError(t, err)
 	pool, accumulator, err := k.GetValidatedPoolAndAccumulator(ctx, 1, "base", "quote")
 	require.NoError(t, err)
 	require.Equal(t, pool.Id, uint64(1))
 	require.Equal(t, pool.DenomBase, "base")
 	require.Equal(t, pool.DenomQuote, "quote")
-	require.Equal(t, pool.FeeRate.String(), "0.000000000000000000")
+	require.Equal(t, pool.FeeRate, "0.000000000000000000")
 	require.Equal(t, pool.CurrentTick, int64(0))
-	require.Equal(t, pool.CurrentTickLiquidity.String(), "1.000000000000000000")
-	require.Equal(t, pool.CurrentSqrtPrice.String(), "1.000000000000000000")
+	require.Equal(t, pool.CurrentTickLiquidity, "1.000000000000000000")
+	require.Equal(t, pool.CurrentSqrtPrice, "1.000000000000000000")
 	require.Equal(t, accumulator.AccumValue.String(), "")
-	require.Equal(t, accumulator.Name, "FeePoolAccumulator/value//1")
-	require.Equal(t, accumulator.TotalShares.String(), "0.000000000000000000")
+	require.Equal(t, accumulator.Name, "fee_pool_accumulator/1")
+	require.Equal(t, accumulator.TotalShares, "0.000000000000000000")
 
 	// When invalid denom's put
 	_, _, err = k.GetValidatedPoolAndAccumulator(ctx, 1, "invalid_denom", "quote")
@@ -543,11 +556,11 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Authority:  sender.String(),
@@ -571,7 +584,8 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountIn, err := k.CalculateResultExactAmountOut(wctx, pool, tc.tokenOut, tc.denomIn, tc.feeEnabled)
@@ -655,11 +669,11 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Authority:  sender.String(),
@@ -683,7 +697,8 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			pool, found := k.GetPool(ctx, 0)
+			pool, found, err := k.GetPool(ctx, 0)
+			require.NoError(t, err)
 			require.True(t, found)
 
 			amountOut, err := k.CalculateResultExactAmountIn(wctx, pool, tc.tokenIn, tc.denomOut, tc.feeEnabled)

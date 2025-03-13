@@ -1,0 +1,64 @@
+syntax = "proto3";
+package sunrise.swap.v1;
+
+import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+// RoutePool
+message RoutePool {
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
+}
+
+// RouteSeries
+message RouteSeries {
+  repeated Route routes = 1 [(gogoproto.nullable) = false];
+}
+
+// RouteParallel
+message RouteParallel {
+  repeated Route routes = 1 [(gogoproto.nullable) = false];
+  repeated string weights = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+}
+
+// Route
+message Route {
+  string denom_in = 1;
+  string denom_out = 2;
+  // strategy
+  oneof strategy {
+    RoutePool pool = 3;
+    RouteSeries series = 4;
+    RouteParallel parallel = 5;
+  }
+}
+
+// RouteResultPool
+message RouteResultPool {
+  uint64 pool_id = 1 [(amino.dont_omitempty) = true];
+}
+
+// RouteResultSeries
+message RouteResultSeries {
+  repeated RouteResult route_results = 1 [(gogoproto.nullable) = false];
+}
+
+// RouteResultParallel
+message RouteResultParallel {
+  repeated RouteResult route_results = 1 [(gogoproto.nullable) = false];
+}
+
+// RouteResult
+message RouteResult {
+  cosmos.base.v1beta1.Coin token_in = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin token_out = 2 [(gogoproto.nullable) = false];
+  // strategy
+  oneof strategy {
+    RouteResultPool pool = 3;
+    RouteResultSeries series = 4;
+    RouteResultParallel parallel = 5;
+  }
+}

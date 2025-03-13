@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-package sunrise.da;
-
-option go_package = "github.com/sunriselayer/sunrise/x/da/types";
-

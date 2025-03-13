@@ -4,15 +4,18 @@ import (
 	"context"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func setupMsgServer(t testing.TB) (keeper.Keeper, keepertest.LiquidityIncentiveMocks, types.MsgServer, context.Context) {
-	k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+func setupMsgServer(t *testing.T) (keeper.Keeper, LiquidityIncentiveMocks, types.MsgServer, context.Context) {
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
+	mocks := f.mocks
 	return k, mocks, keeper.NewMsgServerImpl(k), ctx
 }
 

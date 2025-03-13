@@ -8,7 +8,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
@@ -28,39 +27,44 @@ func createNVote(keeper keeper.Keeper, ctx context.Context, n int) []types.Vote 
 			},
 		}
 
-		keeper.SetVote(ctx, items[i])
+		_ = keeper.SetVote(ctx, items[i])
 	}
 	return items
 }
 
 func TestVoteSet(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	keeper.SetVote(ctx, types.Vote{
-		Sender:      "sender1",
+	f := initFixture(t)
+	err := f.keeper.SetVote(f.ctx, types.Vote{
+		Sender:      sdk.AccAddress("sender1").String(),
 		PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}, {PoolId: 2, Weight: "1"}},
 	})
-	keeper.SetVote(ctx, types.Vote{
-		Sender:      "sender2",
+	require.NoError(t, err)
+	err = f.keeper.SetVote(f.ctx, types.Vote{
+		Sender:      sdk.AccAddress("sender2").String(),
 		PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}},
 	})
+	require.NoError(t, err)
+	votes, err := f.keeper.GetAllVotes(f.ctx)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill([]types.Vote{{
-			Sender:      "sender1",
+			Sender:      sdk.AccAddress("sender1").String(),
 			PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}, {PoolId: 2, Weight: "1"}},
 		}, {
-			Sender:      "sender2",
+			Sender:      sdk.AccAddress("sender2").String(),
 			PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "1"}},
 		}}),
-		nullify.Fill(keeper.GetAllVotes(ctx)),
+		nullify.Fill(votes),
 	)
 }
 
 func TestVoteGet(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNVote(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNVote(f.keeper, f.ctx, 10)
 	for i, item := range items {
 		address := sdk.AccAddress(fmt.Sprintf("sender%d", i)).String()
-		rst, found := keeper.GetVote(ctx, address)
+		rst, found, err := f.keeper.GetVote(f.ctx, address)
+		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -69,21 +73,25 @@ func TestVoteGet(t *testing.T) {
 	}
 }
 func TestVoteRemove(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNVote(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNVote(f.keeper, f.ctx, 10)
 	for i := range items {
 		address := sdk.AccAddress(fmt.Sprintf("sender%d", i)).String()
-		keeper.RemoveVote(ctx, address)
-		_, found := keeper.GetVote(ctx, address)
+		err := f.keeper.RemoveVote(f.ctx, address)
+		require.NoError(t, err)
+		_, found, err := f.keeper.GetVote(f.ctx, address)
+		require.NoError(t, err)
 		require.False(t, found)
 	}
 }
 
 func TestVoteGetAll(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNVote(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNVote(f.keeper, f.ctx, 10)
+	votes, err := f.keeper.GetAllVotes(f.ctx)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllVotes(ctx)),
+		nullify.Fill(votes),
 	)
 }

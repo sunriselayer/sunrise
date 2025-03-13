@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
-	host "github.com/cosmos/ibc-go/v8/modules/core/24-host"
+	transfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
+	host "github.com/cosmos/ibc-go/v9/modules/core/24-host"
 	"github.com/gogo/protobuf/jsonpb"
 )
 
@@ -69,13 +69,23 @@ func (a SwapAcknowledgement) Acknowledgement() ([]byte, error) {
 	return bz, nil
 }
 
+// GetDenomPrefix returns the receiving denomination prefix
+func GetDenomPrefix(portID, channelID string) string {
+	return fmt.Sprintf("%s/%s/", portID, channelID)
+}
+
+// GetPrefixedDenom returns the denomination with the portID and channelID prefixed
+func GetPrefixedDenom(portID, channelID, baseDenom string) string {
+	return fmt.Sprintf("%s/%s/%s", portID, channelID, baseDenom)
+}
+
 func GetDenomForThisChain(port, channel, counterpartyPort, counterpartyChannel, denom string) string {
-	counterpartyPrefix := transfertypes.GetDenomPrefix(counterpartyPort, counterpartyChannel)
+	counterpartyPrefix := GetDenomPrefix(counterpartyPort, counterpartyChannel)
 	if strings.HasPrefix(denom, counterpartyPrefix) {
 		// unwind denom
 		unwoundDenom := denom[len(counterpartyPrefix):]
-		denomTrace := transfertypes.ParseDenomTrace(unwoundDenom)
-		if denomTrace.Path == "" {
+		denomTrace := transfertypes.ExtractDenomFromPath(unwoundDenom)
+		if denomTrace.Base == unwoundDenom {
 			// denom is now unwound back to native denom
 			return unwoundDenom
 		}
@@ -83,8 +93,8 @@ func GetDenomForThisChain(port, channel, counterpartyPort, counterpartyChannel, 
 		return denomTrace.IBCDenom()
 	}
 	// append port and channel from this chain to denom
-	prefixedDenom := transfertypes.GetDenomPrefix(port, channel) + denom
-	return transfertypes.ParseDenomTrace(prefixedDenom).IBCDenom()
+	prefixedDenom := GetDenomPrefix(port, channel) + denom
+	return transfertypes.ExtractDenomFromPath(prefixedDenom).IBCDenom()
 }
 
 func DecodeSwapMetadata(memo string) (*PacketMetadata, error) {

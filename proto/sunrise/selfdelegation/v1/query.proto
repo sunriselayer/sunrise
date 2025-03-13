@@ -1,0 +1,55 @@
+syntax = "proto3";
+package sunrise.selfdelegation.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "sunrise/selfdelegation/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/selfdelegation/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/params";
+  }
+
+  // SelfDelegationProxyAccountByOwner queries the SelfDelegationProxyAccount by owner address.
+  rpc SelfDelegationProxyAccountByOwner(QuerySelfDelegationProxyAccountByOwnerRequest) returns (QuerySelfDelegationProxyAccountByOwnerResponse) {
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/self_delegation_proxy_account_by_owner/{owner_address}";
+  }
+
+  // LockupAccountsByOwner queries the LockupAccounts by owner address.
+  rpc LockupAccountsByOwner(QueryLockupAccountsByOwnerRequest) returns (QueryLockupAccountsByOwnerResponse) {
+    option (google.api.http).get = "/sunrise/selfdelegation/v1/lockup_accounts_by_owner/{owner_address}";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QuerySelfDelegationProxyAccountByOwnerRequest is request type for the Query/SelfDelegationProxyAccountByOwner RPC method.
+message QuerySelfDelegationProxyAccountByOwnerRequest {
+  string owner_address = 1;
+}
+
+// QuerySelfDelegationProxyAccountByOwnerResponse is response type for the Query/SelfDelegationProxyAccountByOwner RPC method.
+message QuerySelfDelegationProxyAccountByOwnerResponse {
+  string self_delegation_proxy_account_address = 1;
+}
+
+// QueryLockupAccountsByOwnerRequest is request type for the Query/LockupAccountsByOwner RPC method.
+message QueryLockupAccountsByOwnerRequest {
+  string owner_address = 1;
+}
+
+// QueryLockupAccountsByOwnerResponse is response type for the Query/LockupAccountsByOwner RPC method.
+message QueryLockupAccountsByOwnerResponse {
+  repeated string lockup_account_addresses = 1;
+}

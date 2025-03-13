@@ -4,21 +4,25 @@ import (
 	"context"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/da/keeper"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, context.Context) {
-	k, ctx := keepertest.DaKeeper(t)
-	return k, keeper.NewMsgServerImpl(k), ctx
+func setupMsgServer(t *testing.T) (keeper.Keeper, DaMocks, types.MsgServer, context.Context) {
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
+	mocks := f.mocks
+	return k, mocks, keeper.NewMsgServerImpl(k), ctx
 }
 
 func TestMsgServer(t *testing.T) {
-	k, ms, ctx := setupMsgServer(t)
+	k, mocks, ms, ctx := setupMsgServer(t)
 	require.NotNil(t, ms)
 	require.NotNil(t, ctx)
 	require.NotEmpty(t, k)
+	require.NotNil(t, mocks)
 }

@@ -11,12 +11,15 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryCalculationCreatePositionRequest) (*types.QueryCalculationCreatePositionResponse, error) {
+func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.QueryCalculationCreatePositionRequest) (*types.QueryCalculationCreatePositionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	pool, found := k.GetPool(ctx, req.PoolId)
+	pool, found, err := q.k.GetPool(ctx, req.PoolId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}
@@ -29,7 +32,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 	if !ok {
 		return nil, types.ErrInvalidTickers
 	}
-	err := checkTicks(lowerTick.Int64(), upperTick.Int64())
+	err = types.CheckTicks(lowerTick.Int64(), upperTick.Int64())
 	if err != nil {
 		return nil, types.ErrInvalidTickers
 	}
@@ -43,9 +46,13 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 		return nil, err
 	}
 
+	currentSqrtPrice, err := math.LegacyNewDecFromStr(pool.CurrentSqrtPrice)
+	if err != nil {
+		return nil, err
+	}
 	var liquidityDelta math.LegacyDec
 	if req.Denom == pool.DenomBase {
-		liquidityDelta = types.LiquidityBase(amount, pool.CurrentSqrtPrice, sqrtPriceUpperTick)
+		liquidityDelta = types.LiquidityBase(amount, currentSqrtPrice, sqrtPriceUpperTick)
 		_, actualAmountQuote, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)
 		if err != nil {
 			return nil, err
@@ -54,7 +61,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 			Amount: sdk.NewCoin(pool.DenomQuote, actualAmountQuote.TruncateInt()),
 		}, nil
 	} else if req.Denom == pool.DenomQuote {
-		liquidityDelta = types.LiquidityQuote(amount, pool.CurrentSqrtPrice, sqrtPriceLowerTick)
+		liquidityDelta = types.LiquidityQuote(amount, currentSqrtPrice, sqrtPriceLowerTick)
 		actualAmountBase, _, err := pool.CalcActualAmounts(lowerTick.Int64(), upperTick.Int64(), liquidityDelta)
 		if err != nil {
 			return nil, err
@@ -67,7 +74,7 @@ func (k Keeper) CalculationCreatePosition(ctx context.Context, req *types.QueryC
 	}
 }
 
-func (k Keeper) CalculationIncreaseLiquidity(ctx context.Context, req *types.QueryCalculationIncreaseLiquidityRequest) (*types.QueryCalculationIncreaseLiquidityResponse, error) {
+func (q queryServer) CalculationIncreaseLiquidity(ctx context.Context, req *types.QueryCalculationIncreaseLiquidityRequest) (*types.QueryCalculationIncreaseLiquidityResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -85,15 +92,25 @@ func (k Keeper) CalculationIncreaseLiquidity(ctx context.Context, req *types.Que
 		return nil, types.ErrInvalidTokenAmounts
 	}
 
-	position, found := k.GetPosition(ctx, req.Id)
+	position, found, err := q.k.GetPosition(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPositionNotFound
 	}
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found, err := q.k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, types.ErrPoolNotFound
 	}
-	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, position.Liquidity)
+	liquidity, err := math.LegacyNewDecFromStr(position.Liquidity)
+	if err != nil {
+		return nil, err
+	}
+	actualAmountBase, actualAmountQuote, err := pool.CalcActualAmounts(position.LowerTick, position.UpperTick, liquidity)
 	if err != nil {
 		return nil, err
 	}

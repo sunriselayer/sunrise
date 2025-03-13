@@ -3,20 +3,23 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
+
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 // SetIncomingInFlightPacket set a specific incomingPacket in the store from its index
-func (k Keeper) SetIncomingInFlightPacket(ctx context.Context, incomingPacket types.IncomingInFlightPacket) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
-	b := k.cdc.MustMarshal(&incomingPacket)
-	store.Set(types.IncomingInFlightPacketKey(
-		incomingPacket.Index,
-	), b)
+func (k Keeper) SetIncomingInFlightPacket(ctx context.Context, incomingPacket types.IncomingInFlightPacket) error {
+	err := k.IncomingInFlightPackets.Set(
+		ctx,
+		types.IncomingInFlightPacketKey(incomingPacket.Index),
+		incomingPacket,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetIncomingInFlightPacket returns a incomingPacket from its index
@@ -25,23 +28,26 @@ func (k Keeper) GetIncomingInFlightPacket(
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
-) (val types.IncomingInFlightPacket, found bool) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
-
-	b := store.Get(types.IncomingInFlightPacketKey(
-		types.NewPacketIndex(
-			srcPortId,
-			srcChannelId,
-			sequence,
-		),
-	))
-	if b == nil {
-		return val, false
+) (val types.IncomingInFlightPacket, found bool, err error) {
+	key := types.IncomingInFlightPacketKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence))
+	has, err := k.IncomingInFlightPackets.Has(
+		ctx,
+		key,
+	)
+	if err != nil {
+		return val, false, err
 	}
 
-	k.cdc.MustUnmarshal(b, &val)
-	return val, true
+	if !has {
+		return val, false, nil
+	}
+
+	val, err = k.IncomingInFlightPackets.Get(ctx, key)
+	if err != nil {
+		return val, false, err
+	}
+
+	return val, true, nil
 }
 
 // RemoveIncomingInFlightPacket removes a incomingPacket from the store
@@ -50,31 +56,32 @@ func (k Keeper) RemoveIncomingInFlightPacket(
 	srcPortId string,
 	srcChannelId string,
 	sequence uint64,
-) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
-	store.Delete(types.IncomingInFlightPacketKey(
-		types.NewPacketIndex(
-			srcPortId,
-			srcChannelId,
-			sequence,
-		),
-	))
+) error {
+	err := k.IncomingInFlightPackets.Remove(
+		ctx,
+		types.IncomingInFlightPacketKey(types.NewPacketIndex(srcPortId, srcChannelId, sequence)),
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetIncomingInFlightPackets returns all incomingPacket
-func (k Keeper) GetIncomingInFlightPackets(ctx context.Context) (list []types.IncomingInFlightPacket) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.IncomingInFlightPacketKeyPrefix))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+func (k Keeper) GetIncomingInFlightPackets(ctx context.Context) (list []types.IncomingInFlightPacket, err error) {
+	err = k.IncomingInFlightPackets.Walk(
+		ctx,
+		nil,
+		func(key collections.Triple[string, string, uint64], value types.IncomingInFlightPacket) (bool, error) {
+			list = append(list, value)
 
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.IncomingInFlightPacket
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
+			return false, nil
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return
+	return list, nil
 }

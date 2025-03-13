@@ -1,0 +1,14 @@
+syntax = "proto3";
+package sunrise.swap.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.equal) = true;
+
+  string interface_fee_rate = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
+}

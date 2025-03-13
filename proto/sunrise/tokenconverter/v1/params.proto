@@ -1,0 +1,14 @@
+syntax = "proto3";
+package sunrise.tokenconverter.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.equal) = true;
+
+  string bond_denom = 1;
+  string fee_denom = 2;
+}

@@ -11,9 +11,8 @@ import (
 	address "cosmossdk.io/core/address"
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
-	types0 "github.com/cosmos/cosmos-sdk/x/staking/types"
-	gomock "github.com/golang/mock/gomock"
-	types1 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	types0 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -200,53 +199,6 @@ func (mr *MockBankKeeperMockRecorder) SendCoinsFromModuleToModule(ctx, senderMod
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendCoinsFromModuleToModule", reflect.TypeOf((*MockBankKeeper)(nil).SendCoinsFromModuleToModule), ctx, senderModule, recipientModule, amt)
 }
 
-// MockParamSubspace is a mock of ParamSubspace interface.
-type MockParamSubspace struct {
-	ctrl     *gomock.Controller
-	recorder *MockParamSubspaceMockRecorder
-}
-
-// MockParamSubspaceMockRecorder is the mock recorder for MockParamSubspace.
-type MockParamSubspaceMockRecorder struct {
-	mock *MockParamSubspace
-}
-
-// NewMockParamSubspace creates a new mock instance.
-func NewMockParamSubspace(ctrl *gomock.Controller) *MockParamSubspace {
-	mock := &MockParamSubspace{ctrl: ctrl}
-	mock.recorder = &MockParamSubspaceMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockParamSubspace) EXPECT() *MockParamSubspaceMockRecorder {
-	return m.recorder
-}
-
-// Get mocks base method.
-func (m *MockParamSubspace) Get(arg0 context.Context, arg1 []byte, arg2 interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Get", arg0, arg1, arg2)
-}
-
-// Get indicates an expected call of Get.
-func (mr *MockParamSubspaceMockRecorder) Get(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockParamSubspace)(nil).Get), arg0, arg1, arg2)
-}
-
-// Set mocks base method.
-func (m *MockParamSubspace) Set(arg0 context.Context, arg1 []byte, arg2 interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Set", arg0, arg1, arg2)
-}
-
-// Set indicates an expected call of Set.
-func (mr *MockParamSubspaceMockRecorder) Set(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockParamSubspace)(nil).Set), arg0, arg1, arg2)
-}
-
 // MockStakingKeeper is a mock of StakingKeeper interface.
 type MockStakingKeeper struct {
 	ctrl     *gomock.Controller
@@ -271,7 +223,7 @@ func (m *MockStakingKeeper) EXPECT() *MockStakingKeeperMockRecorder {
 }
 
 // IterateBondedValidatorsByPower mocks base method.
-func (m *MockStakingKeeper) IterateBondedValidatorsByPower(arg0 context.Context, arg1 func(int64, types0.ValidatorI) bool) error {
+func (m *MockStakingKeeper) IterateBondedValidatorsByPower(arg0 context.Context, arg1 func(int64, types.ValidatorI) bool) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IterateBondedValidatorsByPower", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -285,7 +237,7 @@ func (mr *MockStakingKeeperMockRecorder) IterateBondedValidatorsByPower(arg0, ar
 }
 
 // IterateDelegations mocks base method.
-func (m *MockStakingKeeper) IterateDelegations(ctx context.Context, delegator types.AccAddress, fn func(int64, types0.DelegationI) bool) error {
+func (m *MockStakingKeeper) IterateDelegations(ctx context.Context, delegator types.AccAddress, fn func(int64, types.DelegationI) bool) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IterateDelegations", ctx, delegator, fn)
 	ret0, _ := ret[0].(error)
@@ -365,12 +317,13 @@ func (mr *MockLiquidityPoolKeeperMockRecorder) AllocateIncentive(ctx, poolId, se
 }
 
 // GetPool mocks base method.
-func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64) (types1.Pool, bool) {
+func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64) (types0.Pool, bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPool", ctx, id)
-	ret0, _ := ret[0].(types1.Pool)
+	ret0, _ := ret[0].(types0.Pool)
 	ret1, _ := ret[1].(bool)
-	return ret0, ret1
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
 // GetPool indicates an expected call of GetPool.

@@ -15,13 +15,14 @@
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   might_release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -36,6 +37,7 @@ jobs:
           args: chain build --release --release.prefix ${{ steps.vars.outputs.tarball_prefix }} -t linux:amd64 -t darwin:amd64 -t darwin:arm64 -y
         env:
           DO_NOT_TRACK: 1
+          GOFLAGS: "-buildvcs=false"
 
       - name: Delete the "latest" Release
         uses: dev-drprasad/delete-tag-and-release@v0.2.1

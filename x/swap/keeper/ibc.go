@@ -8,12 +8,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	transfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v9/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v9/modules/core/04-channel/types"
+	exported "github.com/cosmos/ibc-go/v9/modules/core/exported"
 	"github.com/sunriselayer/sunrise/x/swap/types"
-
-	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
-	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
-	exported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 )
 
 var (
@@ -23,8 +22,9 @@ var (
 		RevisionHeight: 0,
 	}
 
+	DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
 	// DefaultTransferPacketTimeoutTimestamp is the timeout timestamp following IBC defaults
-	DefaultTransferPacketTimeoutTimestamp = time.Duration(transfertypes.DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
+	DefaultTransferPacketTimeoutTimestamp = time.Duration(DefaultRelativePacketTimeoutTimestamp) * time.Nanosecond
 )
 
 func timeoutTimestamp(ctx sdk.Context, duration time.Duration) uint64 {
@@ -181,7 +181,10 @@ func (k Keeper) ProcessSwappedFund(
 	}
 
 	if waiting {
-		k.SetIncomingInFlightPacket(ctx, *waitingPacket)
+		err = k.SetIncomingInFlightPacket(ctx, *waitingPacket)
+		if err != nil {
+			return nil, err
+		}
 
 		return waitingPacket, nil
 	}
@@ -230,7 +233,10 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		RetriesRemaining: int32(retries),
 	}
 
-	k.SetOutgoingInFlightPacket(ctx, packet)
+	err = k.SetOutgoingInFlightPacket(ctx, packet)
+	if err != nil {
+		return packet, err
+	}
 
 	return packet, nil
 }
@@ -241,9 +247,15 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	acknowledgement []byte,
 	outgoingPacket types.OutgoingInFlightPacket,
 ) error {
-	incomingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+	incomingPacket, found, err := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+	if err != nil {
+		return err
+	}
 	if found {
-		k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+		err = k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+		if err != nil {
+			return err
+		}
 	} else {
 		return nil
 	}
@@ -254,9 +266,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
 			AckChange: acknowledgement,
 		}
-		break
-	case *types.IncomingInFlightPacket_AckChange:
-		break
+		// case *types.IncomingInFlightPacket_AckChange:
 	}
 
 	// The pattern of waitingPacket.Forward == nil is not handled here
@@ -265,9 +275,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 			AckForward: acknowledgement,
 		}
-		break
-	case *types.IncomingInFlightPacket_AckForward:
-		break
+		// case *types.IncomingInFlightPacket_AckForward:
 	}
 
 	deleted, err := k.ShouldDeleteCompletedWaitingPacket(ctx, incomingPacket)
@@ -275,7 +283,10 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 		return err
 	}
 	if !deleted {
-		k.SetIncomingInFlightPacket(ctx, incomingPacket)
+		err = k.SetIncomingInFlightPacket(ctx, incomingPacket)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -286,18 +297,21 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 	packet channeltypes.Packet,
 	outgoingPacket types.OutgoingInFlightPacket,
 ) error {
-	k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+	err := k.RemoveOutgoingInFlightPacket(ctx, outgoingPacket.Index.PortId, outgoingPacket.Index.ChannelId, outgoingPacket.Index.Sequence)
+	if err != nil {
+		return err
+	}
 	outgoingPacket.RetriesRemaining--
 
 	if outgoingPacket.RetriesRemaining > 0 {
 		// Resend packet
-		_, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.DestinationPort, packet.DestinationChannel)
-		if err != nil {
-			return errors.Wrap(err, "could not retrieve module from port-id")
-		}
+		// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.DestinationPort, packet.DestinationChannel)
+		// if err != nil {
+		// 	return errors.Wrap(err, "could not retrieve module from port-id")
+		// }
 		sequence, err := k.IbcKeeperFn().ChannelKeeper.SendPacket(
 			ctx,
-			chanCap,
+			// chanCap,
 			packet.SourcePort,
 			packet.SourceChannel,
 			DefaultTransferPacketTimeoutHeight,
@@ -310,14 +324,20 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		// Set the new sequence number
 		outgoingPacket.Index.Sequence = sequence
-		k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
+		err = k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
+		if err != nil {
+			return err
+		}
 	} else {
 		// If remaining retry count is zero:
 		// - Returning non error acknowledgement to the origin
 		// - However it contains error acknowledgement of change / forward packet
 		ack := channeltypes.NewErrorAcknowledgement(errors.Wrap(sdkerrors.ErrUnknownRequest, "Retry count on timeout exceeds"))
 
-		waitingPacket, found := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+		waitingPacket, found, err := k.GetIncomingInFlightPacket(ctx, outgoingPacket.AckWaitingIndex.PortId, outgoingPacket.AckWaitingIndex.ChannelId, outgoingPacket.AckWaitingIndex.Sequence)
+		if err != nil {
+			return err
+		}
 		if !found {
 			return nil
 		}
@@ -329,9 +349,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 					AckChange: ack.Acknowledgement(),
 				}
 			}
-			break
-		case *types.IncomingInFlightPacket_AckChange:
-			break
+			// case *types.IncomingInFlightPacket_AckChange:
 		}
 
 		switch packetForward := waitingPacket.Forward.(type) {
@@ -341,9 +359,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 					AckForward: ack.Acknowledgement(),
 				}
 			}
-			break
-		case *types.IncomingInFlightPacket_AckForward:
-			break
+			// case *types.IncomingInFlightPacket_AckForward:
 		}
 
 		deleted, err := k.ShouldDeleteCompletedWaitingPacket(ctx, waitingPacket)
@@ -351,7 +367,10 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			return err
 		}
 		if !deleted {
-			k.SetIncomingInFlightPacket(ctx, waitingPacket)
+			err = k.SetIncomingInFlightPacket(ctx, waitingPacket)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -398,13 +417,13 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		return false, err
 	}
 
-	_, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.Index.PortId, packet.Index.ChannelId)
-	if err != nil {
-		return false, errors.Wrap(err, "could not retrieve module from port-id")
-	}
+	// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.Index.PortId, packet.Index.ChannelId)
+	// if err != nil {
+	// 	return false, errors.Wrap(err, "could not retrieve module from port-id")
+	// }
 	if err := k.IbcKeeperFn().ChannelKeeper.WriteAcknowledgement(
 		ctx,
-		chanCap,
+		// chanCap,
 		channeltypes.NewPacket(
 			packet.Data,
 			packet.Index.Sequence,
@@ -420,7 +439,10 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		return false, err
 	}
 
-	k.RemoveIncomingInFlightPacket(ctx, packet.Index.PortId, packet.Index.ChannelId, packet.Index.Sequence)
+	err = k.RemoveIncomingInFlightPacket(ctx, packet.Index.PortId, packet.Index.ChannelId, packet.Index.Sequence)
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }

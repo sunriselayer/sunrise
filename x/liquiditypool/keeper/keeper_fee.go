@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -14,7 +15,7 @@ var emptyCoins = sdk.DecCoins(nil)
 func (k Keeper) createFeeAccumulator(ctx context.Context, poolId uint64) error {
 	err := k.InitAccumulator(ctx, types.KeyFeePoolAccumulator(poolId))
 	if err != nil {
-		return err
+		return errorsmod.Wrapf(err, "failed to create fee accumulator: %d", poolId)
 	}
 	return nil
 }
@@ -26,7 +27,7 @@ func (k Keeper) GetFeeAccumulator(ctx context.Context, poolId uint64) (types.Acc
 func (k Keeper) SetAccumulatorPositionFeeAccumulator(ctx sdk.Context, poolId uint64, lowerTick, upperTick int64, positionId uint64, liquidityDelta math.LegacyDec) error {
 	feeAccumulator, err := k.GetFeeAccumulator(ctx, poolId)
 	if err != nil {
-		return err
+		return errorsmod.Wrapf(err, "failed to get fee accumulator: %d", poolId)
 	}
 
 	positionKey := types.KeyFeePositionAccumulator(positionId)
@@ -35,7 +36,7 @@ func (k Keeper) SetAccumulatorPositionFeeAccumulator(ctx sdk.Context, poolId uin
 
 	feeGrowthOutside, err := k.getFeeGrowthOutside(ctx, poolId, lowerTick, upperTick)
 	if err != nil {
-		return err
+		return errorsmod.Wrapf(err, "failed to get fee growth outside: %d", poolId)
 	}
 
 	feeGrowthInside, _ := feeAccumulator.AccumValue.SafeSub(feeGrowthOutside)
@@ -46,17 +47,17 @@ func (k Keeper) SetAccumulatorPositionFeeAccumulator(ctx sdk.Context, poolId uin
 		}
 
 		if err := k.NewPositionIntervalAccumulation(ctx, feeAccumulator.Name, positionKey, liquidityDelta, feeGrowthInside); err != nil {
-			return err
+			return errorsmod.Wrapf(err, "failed to new position interval accumulation: %d", poolId)
 		}
 	} else {
 		err = k.updatePositionToInitValuePlusGrowthOutside(ctx, feeAccumulator.Name, positionKey, feeGrowthOutside)
 		if err != nil {
-			return err
+			return errorsmod.Wrapf(err, "failed to update position to init value plus growth outside: %d", poolId)
 		}
 
 		err = k.UpdatePositionIntervalAccumulation(ctx, feeAccumulator.Name, positionKey, liquidityDelta, feeGrowthInside)
 		if err != nil {
-			return err
+			return errorsmod.Wrapf(err, "failed to update position interval accumulation: %d", poolId)
 		}
 	}
 
@@ -64,24 +65,27 @@ func (k Keeper) SetAccumulatorPositionFeeAccumulator(ctx sdk.Context, poolId uin
 }
 
 func (k Keeper) getFeeGrowthOutside(ctx sdk.Context, poolId uint64, lowerTick, upperTick int64) (sdk.DecCoins, error) {
-	pool, found := k.GetPool(ctx, poolId)
+	pool, found, err := k.GetPool(ctx, poolId)
+	if err != nil {
+		return sdk.DecCoins{}, errorsmod.Wrapf(err, "failed to get pool: %d", poolId)
+	}
 	if !found {
-		return sdk.DecCoins{}, types.ErrPoolNotFound
+		return sdk.DecCoins{}, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", poolId)
 	}
 	currentTick := pool.GetCurrentTick()
 
 	lowerTickInfo, err := k.GetTickInfo(ctx, poolId, lowerTick)
 	if err != nil {
-		return sdk.DecCoins{}, err
+		return sdk.DecCoins{}, errorsmod.Wrapf(err, "failed to get lower tick info: %d", lowerTick)
 	}
 	upperTickInfo, err := k.GetTickInfo(ctx, poolId, upperTick)
 	if err != nil {
-		return sdk.DecCoins{}, err
+		return sdk.DecCoins{}, errorsmod.Wrapf(err, "failed to get upper tick info: %d", upperTick)
 	}
 
 	poolFeeAccumulator, err := k.GetFeeAccumulator(ctx, poolId)
 	if err != nil {
-		return sdk.DecCoins{}, err
+		return sdk.DecCoins{}, errorsmod.Wrapf(err, "failed to get fee accumulator: %d", poolId)
 	}
 	poolFeeGrowth := poolFeeAccumulator.AccumValue
 
@@ -105,30 +109,36 @@ func (k Keeper) getInitialFeeGrowth(ctx context.Context, pool types.Pool, tick i
 }
 
 func (k Keeper) collectFees(ctx sdk.Context, sender sdk.AccAddress, positionId uint64) (sdk.Coins, error) {
-	position, found := k.GetPosition(ctx, positionId)
+	position, found, err := k.GetPosition(ctx, positionId)
+	if err != nil {
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get position: %d", positionId)
+	}
 	if !found {
-		return sdk.Coins{}, types.ErrPositionNotFound
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrPositionNotFound, "position id: %d", positionId)
 	}
 
 	if sender.String() != position.Address {
-		return sdk.Coins{}, types.ErrNotPositionOwner
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrNotPositionOwner, "sender: %s, position owner: %s", sender.String(), position.Address)
 	}
 
 	feesClaimed, err := k.prepareClaimableFees(ctx, positionId)
 	if err != nil {
-		return sdk.Coins{}, err
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to prepare claimable fees: %d", positionId)
 	}
 
 	if feesClaimed.IsZero() {
 		return sdk.Coins{}, nil
 	}
 
-	pool, found := k.GetPool(ctx, position.PoolId)
+	pool, found, err := k.GetPool(ctx, position.PoolId)
+	if err != nil {
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get pool: %d", position.PoolId)
+	}
 	if !found {
-		return sdk.Coins{}, types.ErrPoolNotFound
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrPoolNotFound, "pool id: %d", position.PoolId)
 	}
 	if err := k.bankKeeper.SendCoins(ctx, pool.GetFeesAddress(), sender, feesClaimed); err != nil {
-		return sdk.Coins{}, err
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to send coins: %d", position.PoolId)
 	}
 
 	if err := ctx.EventManager().EmitTypedEvent(&types.EventClaimRewards{
@@ -148,14 +158,17 @@ func (k Keeper) GetClaimableFees(ctx sdk.Context, positionId uint64) (sdk.Coins,
 }
 
 func (k Keeper) prepareClaimableFees(ctx sdk.Context, positionId uint64) (sdk.Coins, error) {
-	position, found := k.GetPosition(ctx, positionId)
+	position, found, err := k.GetPosition(ctx, positionId)
+	if err != nil {
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get position: %d", positionId)
+	}
 	if !found {
-		return nil, types.ErrPositionNotFound
+		return sdk.Coins{}, errorsmod.Wrapf(types.ErrPositionNotFound, "position id: %d", positionId)
 	}
 
 	feeAccumulator, err := k.GetFeeAccumulator(ctx, position.PoolId)
 	if err != nil {
-		return nil, err
+		return sdk.Coins{}, errorsmod.Wrapf(err, "failed to get fee accumulator: %d", position.PoolId)
 	}
 
 	positionKey := types.KeyFeePositionAccumulator(positionId)
@@ -181,11 +194,16 @@ func (k Keeper) prepareClaimableFees(ctx sdk.Context, positionId uint64) (sdk.Co
 			return nil, err
 		}
 
-		totalSharesRemaining := feeAccumulator.TotalShares
-
+		totalSharesRemaining, err := math.LegacyNewDecFromStr(feeAccumulator.TotalShares)
+		if err != nil {
+			return nil, err
+		}
 		if !totalSharesRemaining.IsZero() {
 			forfeitedDustPerShareScaled := forfeitedDust.QuoDecTruncate(totalSharesRemaining)
-			k.AddToAccumulator(ctx, feeAccumulator, forfeitedDustPerShareScaled)
+			err = k.AddToAccumulator(ctx, feeAccumulator, forfeitedDustPerShareScaled)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 

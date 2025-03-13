@@ -2,122 +2,122 @@ package keeper
 
 import (
 	"context"
-	"encoding/binary"
 
-	"cosmossdk.io/store/prefix"
-	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
+
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 // GetEpochCount get the total number of epoch
-func (k Keeper) GetEpochCount(ctx context.Context) uint64 {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, []byte{})
-	byteKey := types.KeyPrefix(types.EpochCountKey)
-	bz := store.Get(byteKey)
-
-	// Count doesn't exist: no element
-	if bz == nil {
-		return 0
+func (k Keeper) GetEpochCount(ctx context.Context) (uint64, error) {
+	val, err := k.EpochId.Peek(ctx)
+	if err != nil {
+		return 0, err
 	}
 
-	// Parse bytes
-	return binary.BigEndian.Uint64(bz)
+	return val, nil
 }
 
 // SetEpochCount set the total number of epoch
-func (k Keeper) SetEpochCount(ctx context.Context, count uint64) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, []byte{})
-	byteKey := types.KeyPrefix(types.EpochCountKey)
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, count)
-	store.Set(byteKey, bz)
+func (k Keeper) SetEpochCount(ctx context.Context, count uint64) error {
+	err := k.EpochId.Set(ctx, count)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // AppendEpoch appends a epoch in the store with a new id and update the count
-func (k Keeper) AppendEpoch(ctx context.Context, epoch types.Epoch) uint64 {
+func (k Keeper) AppendEpoch(ctx context.Context, epoch types.Epoch) (uint64, error) {
 	// Create the epoch
-	count := k.GetEpochCount(ctx)
+	id, err := k.EpochId.Next(ctx)
+	if err != nil {
+		return 0, err
+	}
 
 	// Set the ID of the appended value
-	epoch.Id = count
+	epoch.Id = id
 
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	appendedValue := k.cdc.MustMarshal(&epoch)
-	store.Set(GetEpochIDBytes(epoch.Id), appendedValue)
+	err = k.SetEpoch(ctx, epoch)
+	if err != nil {
+		return 0, err
+	}
 
-	// Update epoch count
-	k.SetEpochCount(ctx, count+1)
-
-	return count
+	return id, nil
 }
 
 // SetEpoch set a specific epoch in the store
-func (k Keeper) SetEpoch(ctx context.Context, epoch types.Epoch) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	b := k.cdc.MustMarshal(&epoch)
-	store.Set(GetEpochIDBytes(epoch.Id), b)
+func (k Keeper) SetEpoch(ctx context.Context, epoch types.Epoch) error {
+	err := k.Epochs.Set(ctx, epoch.Id, epoch)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetEpoch returns a epoch from its id
-func (k Keeper) GetEpoch(ctx context.Context, id uint64) (val types.Epoch, found bool) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	b := store.Get(GetEpochIDBytes(id))
-	if b == nil {
-		return val, false
+func (k Keeper) GetEpoch(ctx context.Context, id uint64) (val types.Epoch, found bool, err error) {
+	has, err := k.Epochs.Has(ctx, id)
+	if err != nil {
+		return val, false, err
 	}
-	k.cdc.MustUnmarshal(b, &val)
-	return val, true
+
+	if !has {
+		return val, false, nil
+	}
+
+	val, err = k.Epochs.Get(ctx, id)
+	if err != nil {
+		return val, false, err
+	}
+
+	return val, true, nil
 }
 
 // RemoveEpoch removes a epoch from the store
-func (k Keeper) RemoveEpoch(ctx context.Context, id uint64) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	store.Delete(GetEpochIDBytes(id))
-}
-
-func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	iterator := storetypes.KVStoreReversePrefixIterator(store, []byte{})
-
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		k.cdc.MustUnmarshal(iterator.Value(), &epoch)
-		return epoch, true
+func (k Keeper) RemoveEpoch(ctx context.Context, id uint64) error {
+	err := k.Epochs.Remove(ctx, id)
+	if err != nil {
+		return err
 	}
 
-	return types.Epoch{}, false
+	return nil
 }
 
 // GetAllEpoch returns all epoch
-func (k Keeper) GetAllEpoch(ctx context.Context) (list []types.Epoch) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.EpochKey))
-	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
+func (k Keeper) GetAllEpoch(ctx context.Context) (list []types.Epoch, err error) {
+	err = k.Epochs.Walk(
+		ctx,
+		nil,
+		func(key uint64, value types.Epoch) (bool, error) {
+			list = append(list, value)
 
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Epoch
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		list = append(list, val)
+			return false, nil
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return
+	return list, nil
 }
 
-// GetEpochIDBytes returns the byte representation of the ID
-func GetEpochIDBytes(id uint64) []byte {
-	bz := types.KeyPrefix(types.EpochKey)
-	bz = append(bz, []byte("/")...)
-	bz = binary.BigEndian.AppendUint64(bz, id)
-	return bz
+func (k Keeper) GetLastEpoch(ctx context.Context) (epoch types.Epoch, found bool, err error) {
+	err = k.Epochs.Walk(
+		ctx,
+		new(collections.Range[uint64]).Descending(),
+		func(key uint64, value types.Epoch) (bool, error) {
+			epoch = value
+			found = true
+			return true, nil
+		},
+	)
+
+	if err != nil {
+		return epoch, false, err
+	}
+
+	return epoch, found, nil
 }

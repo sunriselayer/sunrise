@@ -4,18 +4,16 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 func TestSwapExactAmountIn(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
-	senderAcc := sdk.MustAccAddressFromBech32(sender)
+	sender := sdk.AccAddress("sender")
 	tests := []struct {
 		desc              string
 		interfaceProvider string
@@ -117,7 +115,7 @@ func TestSwapExactAmountIn(t *testing.T) {
 								},
 							},
 						},
-						Weights: []math.LegacyDec{math.LegacyOneDec()},
+						Weights: []string{math.LegacyOneDec().String()},
 					},
 				},
 			},
@@ -172,11 +170,15 @@ func TestSwapExactAmountIn(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			keeper, mocks, ctx := keepertest.SwapKeeper(t)
-			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			keeper := f.keeper
+			mocks := f.mocks
+
+			mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
 			mocks.LiquiditypoolKeeper.EXPECT().SwapExactAmountIn(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(math.OneInt(), nil).AnyTimes()
 
-			result, interfaceFee, err := keeper.SwapExactAmountIn(ctx, senderAcc, tc.interfaceProvider, tc.route, tc.amountIn, tc.minAmountOut)
+			result, interfaceFee, err := keeper.SwapExactAmountIn(ctx, sender, tc.interfaceProvider, tc.route, tc.amountIn, tc.minAmountOut)
 			if tc.expErr != nil {
 				require.ErrorIs(t, err, tc.expErr)
 			} else {

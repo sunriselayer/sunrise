@@ -3,65 +3,81 @@ package keeper
 import (
 	"fmt"
 
-	"cosmossdk.io/core/store"
-	"cosmossdk.io/log"
+	"cosmossdk.io/collections"
+	"cosmossdk.io/core/address"
+	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-type (
-	Keeper struct {
-		cdc          codec.BinaryCodec
-		storeService store.KVStoreService
-		logger       log.Logger
+type Keeper struct {
+	appmodule.Environment
 
-		// the address capable of executing a MsgUpdateParams message. Typically, this
-		// should be the x/gov module account.
-		authority string
+	cdc          codec.BinaryCodec
+	addressCodec address.Codec
+	// Address capable of executing a MsgUpdateParams message.
+	// Typically, this should be the x/gov module account.
+	authority []byte
 
-		authKeeper          types.AccountKeeper
-		bankKeeper          types.BankKeeper
-		sk                  types.StakingKeeper
-		liquidityPoolKeeper types.LiquidityPoolKeeper
-	}
-)
+	Schema  collections.Schema
+	Params  collections.Item[types.Params]
+	Epochs  collections.Map[uint64, types.Epoch]
+	EpochId collections.Sequence
+	Gauges  collections.Map[collections.Pair[uint64, uint64], types.Gauge]
+	Votes   collections.Map[sdk.AccAddress, types.Vote]
+
+	accountKeeper       types.AccountKeeper
+	bankKeeper          types.BankKeeper
+	stakingKeeper       types.StakingKeeper
+	liquidityPoolKeeper types.LiquidityPoolKeeper
+}
 
 func NewKeeper(
+	env appmodule.Environment,
 	cdc codec.BinaryCodec,
-	storeService store.KVStoreService,
-	logger log.Logger,
-	authority string,
-
+	addressCodec address.Codec,
+	authority []byte,
 	authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
-	sk types.StakingKeeper,
+	stakingKeeper types.StakingKeeper,
 	liquidityPoolKeeper types.LiquidityPoolKeeper,
 ) Keeper {
-	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
-		panic(fmt.Sprintf("invalid authority address: %s", authority))
+	if _, err := addressCodec.BytesToString(authority); err != nil {
+		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
 	}
 
-	return Keeper{
-		cdc:          cdc,
-		storeService: storeService,
-		authority:    authority,
-		logger:       logger,
+	sb := collections.NewSchemaBuilder(env.KVStoreService)
 
-		authKeeper:          authKeeper,
+	k := Keeper{
+		Environment:  env,
+		cdc:          cdc,
+		addressCodec: addressCodec,
+		authority:    authority,
+
+		Params:  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Epochs:  collections.NewMap(sb, types.EpochsKeyPrefix, "epochs", types.EpochsKeyCodec, codec.CollValue[types.Epoch](cdc)),
+		EpochId: collections.NewSequence(sb, types.EpochIdKey, "epoch_id"),
+		Gauges:  collections.NewMap(sb, types.GaugesKeyPrefix, "gauges", types.GaugesKeyCodec, codec.CollValue[types.Gauge](cdc)),
+		Votes:   collections.NewMap(sb, types.VotesKeyPrefix, "votes", types.VotesKeyCodec, codec.CollValue[types.Vote](cdc)),
+
+		accountKeeper:       authKeeper,
 		bankKeeper:          bankKeeper,
-		sk:                  sk,
+		stakingKeeper:       stakingKeeper,
 		liquidityPoolKeeper: liquidityPoolKeeper,
 	}
+
+	schema, err := sb.Build()
+	if err != nil {
+		panic(err)
+	}
+	k.Schema = schema
+
+	return k
 }
 
 // GetAuthority returns the module's authority.
-func (k Keeper) GetAuthority() string {
+func (k Keeper) GetAuthority() []byte {
 	return k.authority
-}
-
-// Logger returns a module-specific logger.
-func (k Keeper) Logger() log.Logger {
-	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }

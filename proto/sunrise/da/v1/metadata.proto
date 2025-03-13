@@ -1,0 +1,18 @@
+syntax = "proto3";
+package sunrise.da.v1;
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// Metadata
+message Metadata {
+  bytes recovered_data_hash = 1;
+  uint64 recovered_data_size = 2;
+  uint64 shard_size = 3;
+  uint64 parity_shard_count = 4;
+  repeated string shard_uris = 5;
+}
+
+// MetadataUriWrapper
+message MetadataUriWrapper {
+  string metadata_uri = 1;
+}

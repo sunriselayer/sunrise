@@ -17,17 +17,25 @@ func (k Keeper) UpsertTick(ctx context.Context, poolId uint64, tickIndex int64, 
 		return false, err
 	}
 
-	liquidityBefore := tickInfo.LiquidityGross
-	liquidityAfter := liquidityBefore.Add(liquidityDelta)
-	tickInfo.LiquidityGross = liquidityAfter
-
-	if upper {
-		tickInfo.LiquidityNet.SubMut(liquidityDelta)
-	} else {
-		tickInfo.LiquidityNet.AddMut(liquidityDelta)
+	liquidityBefore, err := math.LegacyNewDecFromStr(tickInfo.LiquidityGross)
+	if err != nil {
+		return false, err
 	}
+	liquidityAfter := liquidityBefore.Add(liquidityDelta)
+	tickInfo.LiquidityGross = liquidityAfter.String()
 
-	if tickInfo.LiquidityGross.IsZero() && tickInfo.LiquidityNet.IsZero() {
+	liquidityNet, err := math.LegacyNewDecFromStr(tickInfo.LiquidityNet)
+	if err != nil {
+		return false, err
+	}
+	if upper {
+		liquidityNet.SubMut(liquidityDelta)
+	} else {
+		liquidityNet.AddMut(liquidityDelta)
+	}
+	tickInfo.LiquidityNet = liquidityNet.String()
+
+	if liquidityAfter.IsZero() && liquidityNet.IsZero() {
 		tickIsEmpty = true
 	}
 
@@ -50,7 +58,10 @@ func (k Keeper) CrossTick(ctx sdk.Context, poolId uint64, tickIndex int64, tickI
 }
 
 func (k Keeper) NewTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (tickInfo types.TickInfo, err error) {
-	pool, found := k.GetPool(ctx, poolId)
+	pool, found, err := k.GetPool(ctx, poolId)
+	if err != nil {
+		return tickInfo, err
+	}
 	if !found {
 		return tickInfo, types.ErrPoolNotFound
 	}
@@ -64,22 +75,22 @@ func (k Keeper) NewTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 	return types.TickInfo{
 		PoolId:         poolId,
 		TickIndex:      tickIndex,
-		LiquidityGross: math.LegacyZeroDec(),
-		LiquidityNet:   math.LegacyZeroDec(),
+		LiquidityGross: math.LegacyZeroDec().String(),
+		LiquidityNet:   math.LegacyZeroDec().String(),
 		FeeGrowth:      initialFeeGrowth,
 	}, nil
 }
 
 // SetTickInfo set a specific tickInfo in the store
 func (k Keeper) SetTickInfo(ctx context.Context, tickInfo types.TickInfo) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	b := k.cdc.MustMarshal(&tickInfo)
 	storeAdapter.Set(types.GetTickInfoIDBytes(tickInfo.PoolId, tickInfo.TickIndex), b)
 }
 
 // GetTickInfo returns a tickInfo from its id
 func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (val types.TickInfo, err error) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	b := storeAdapter.Get(types.GetTickInfoIDBytes(poolId, tickIndex))
 	if b == nil {
 		return k.NewTickInfo(ctx, poolId, tickIndex)
@@ -89,12 +100,12 @@ func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 }
 
 func (k Keeper) RemoveTickInfo(ctx context.Context, poolId uint64, tickIndex int64) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	storeAdapter.Delete(types.GetTickInfoIDBytes(poolId, tickIndex))
 }
 
 func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (list []types.TickInfo) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	iterator := storetypes.KVStorePrefixIterator(storeAdapter, types.KeyTickPrefixByPoolId(poolId))
 
 	defer iterator.Close()
@@ -109,7 +120,7 @@ func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (l
 }
 
 func (k Keeper) GetAllTickInfos(ctx context.Context) (list []types.TickInfo) {
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
 	iterator := storetypes.KVStorePrefixIterator(storeAdapter, []byte(types.TickInfoKey))
 
 	defer iterator.Close()

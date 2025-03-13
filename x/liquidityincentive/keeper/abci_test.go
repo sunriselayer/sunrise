@@ -4,16 +4,15 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
+	stakingtypes "cosmossdk.io/x/staking/types"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/sunriselayer/sunrise/app/consts"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -42,7 +41,10 @@ func TestCreateEpoch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := f.ctx
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -55,10 +57,9 @@ func TestCreateEpoch(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
-							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
-							require.NoError(t, err)
+							valAddr := valAddrs[i].String()
 							fn(i, stakingtypes.Validator{
 								OperatorAddress: valAddr,
 								Status:          stakingtypes.Bonded,
@@ -73,13 +74,13 @@ func TestCreateEpoch(t *testing.T) {
 				t:        t,
 				valAddrs: valAddrs,
 				delAddrs: delAddrs,
-				ctx:      ctx,
+				ctx:      sdk.UnwrapSDKContext(ctx),
 				keeper:   &k,
 				mocks:    mocks,
 			}
 			tt.setup(suite)
 
-			err := k.CreateEpoch(ctx, 0, 1)
+			err := k.CreateEpoch(sdk.UnwrapSDKContext(ctx), 0, 1)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
@@ -87,18 +88,20 @@ func TestCreateEpoch(t *testing.T) {
 			}
 
 			if len(tt.expectedTally) > 0 {
-				epochs := k.GetAllEpoch(ctx)
+				epochs, err := k.GetAllEpoch(ctx)
+				require.NoError(t, err)
 				require.Len(t, epochs, 1)
 				require.Equal(t, epochs[0].Id, uint64(1))
 				require.Equal(t, epochs[0].StartBlock, int64(0))
 				require.Equal(t, epochs[0].EndBlock, int64(5))
 				require.Len(t, epochs[0].Gauges, 1)
 
-				gauges := k.GetAllGauges(ctx)
+				gauges, err := k.GetAllGauges(ctx)
+				require.NoError(t, err)
 				require.Len(t, gauges, 1)
 				require.Equal(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Count, tt.expectedTally[0].Weight)
+				require.Equal(t, gauges[0].Count.String(), tt.expectedTally[0].Weight)
 			}
 		})
 	}
@@ -129,12 +132,13 @@ func TestEndBlocker(t *testing.T) {
 		{
 			name: "historical epochs",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
 					Gauges:     []types.Gauge{},
 				})
+				require.NoError(t, err)
 				setTotalBonded(s, 10000000)
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
@@ -143,7 +147,10 @@ func TestEndBlocker(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := f.ctx
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -156,10 +163,9 @@ func TestEndBlocker(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
-							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
-							require.NoError(t, err)
+							valAddr := valAddrs[i].String()
 							fn(i, stakingtypes.Validator{
 								OperatorAddress: valAddr,
 								Status:          stakingtypes.Bonded,
@@ -174,13 +180,13 @@ func TestEndBlocker(t *testing.T) {
 				t:        t,
 				valAddrs: valAddrs,
 				delAddrs: delAddrs,
-				ctx:      ctx,
+				ctx:      sdk.UnwrapSDKContext(ctx),
 				keeper:   &k,
 				mocks:    mocks,
 			}
 			tt.setup(suite)
 
-			err := k.EndBlocker(ctx)
+			err := k.EndBlocker(sdk.UnwrapSDKContext(ctx))
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
@@ -188,20 +194,27 @@ func TestEndBlocker(t *testing.T) {
 			}
 
 			if len(tt.expectedTally) > 0 {
-				epochs := k.GetAllEpoch(ctx)
+				epochs, err := k.GetAllEpoch(ctx)
+				require.NoError(t, err)
 				require.GreaterOrEqual(t, len(epochs), 1)
-				epoch, found := k.GetLastEpoch(ctx)
+				epoch, found, err := k.GetLastEpoch(ctx)
+				require.NoError(t, err)
 				require.True(t, found)
 				require.GreaterOrEqual(t, epoch.Id, uint64(1))
 				require.Equal(t, epoch.StartBlock, int64(0))
 				require.Equal(t, epoch.EndBlock, int64(5))
 				require.Len(t, epoch.Gauges, 1)
 
-				gauges := k.GetAllGauges(ctx)
+				gauges, err := k.GetAllGauges(ctx)
+				require.NoError(t, err)
 				require.Len(t, gauges, 1)
 				require.GreaterOrEqual(t, gauges[0].PreviousEpochId, uint64(0))
 				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Count, tt.expectedTally[0].Weight)
+				require.Equal(t, gauges[0].Count.String(), tt.expectedTally[0].Weight)
+			} else {
+				_, found, err := k.GetLastEpoch(ctx)
+				require.NoError(t, err)
+				require.False(t, found)
 			}
 		})
 	}
@@ -216,14 +229,14 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "empty epochs",
 			setup: func(s tallyFixture) {
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
 			},
 		},
 		{
 			name: "existing epochs with positive fee collector balance",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
@@ -235,13 +248,14 @@ func TestBeginBlocker(t *testing.T) {
 						},
 					},
 				})
-
-				params := s.keeper.GetParams(s.ctx)
-				params.StakingRewardRatio = math.LegacyZeroDec()
-				err := s.keeper.SetParams(s.ctx, params)
 				require.NoError(t, err)
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
+				params, err := s.keeper.Params.Get(s.ctx)
+				require.NoError(t, err)
+				params.StakingRewardRatio = math.LegacyZeroDec().String()
+				err = s.keeper.Params.Set(s.ctx, params)
+				require.NoError(t, err)
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
 				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
 			},
@@ -249,7 +263,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "zero liquidity incentive allocation",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
@@ -261,13 +275,14 @@ func TestBeginBlocker(t *testing.T) {
 						},
 					},
 				})
-
-				params := s.keeper.GetParams(s.ctx)
-				params.StakingRewardRatio = math.LegacyOneDec()
-				err := s.keeper.SetParams(s.ctx, params)
 				require.NoError(t, err)
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).
-					Return(sdk.Coins{sdk.NewInt64Coin(consts.BondDenom, 1000000)}).AnyTimes()
+				params, err := s.keeper.Params.Get(s.ctx)
+				require.NoError(t, err)
+				params.StakingRewardRatio = math.LegacyOneDec().String()
+				err = s.keeper.Params.Set(s.ctx, params)
+				require.NoError(t, err)
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
 				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
 			},
@@ -275,7 +290,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "existing epochs with empty fee collector balance",
 			setup: func(s tallyFixture) {
-				s.keeper.SetEpoch(s.ctx, types.Epoch{
+				err := s.keeper.SetEpoch(s.ctx, types.Epoch{
 					Id:         1,
 					StartBlock: 0,
 					EndBlock:   0,
@@ -287,14 +302,18 @@ func TestBeginBlocker(t *testing.T) {
 						},
 					},
 				})
-
-				s.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), gomock.Any()).Return(sdk.Coins{}).AnyTimes()
+				require.NoError(t, err)
+				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sdk.NewInt64Coin(consts.BondDenom, 0)).AnyTimes()
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := f.ctx
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -307,13 +326,13 @@ func TestBeginBlocker(t *testing.T) {
 				t:        t,
 				valAddrs: valAddrs,
 				delAddrs: delAddrs,
-				ctx:      ctx,
+				ctx:      sdk.UnwrapSDKContext(ctx),
 				keeper:   &k,
 				mocks:    mocks,
 			}
 			tt.setup(suite)
 
-			err := k.BeginBlocker(ctx)
+			err := k.BeginBlocker(sdk.UnwrapSDKContext(ctx))
 			if tt.expectError {
 				require.Error(t, err)
 			} else {

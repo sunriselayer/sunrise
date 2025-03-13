@@ -3,9 +3,11 @@ vue/dist
 release/
 .idea/
 .vscode/
-build/
-data/
 .DS_Store
 *.dot
 *.log
+*.ign
+build/
+data/
 ts-client/
+cmd/sunrised/__debug_*

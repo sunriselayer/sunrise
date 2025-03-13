@@ -3,32 +3,27 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func (k Keeper) Votes(ctx context.Context, req *types.QueryVotesRequest) (*types.QueryVotesResponse, error) {
+func (q queryServer) Votes(ctx context.Context, req *types.QueryVotesRequest) (*types.QueryVotesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var votes []types.Vote
-
-	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.VoteKeyPrefix))
-	pageRes, err := query.Paginate(store, req.Pagination, func(key []byte, value []byte) error {
-		var vote types.Vote
-		if err := k.cdc.Unmarshal(value, &vote); err != nil {
-			return err
-		}
-
-		votes = append(votes, vote)
-		return nil
-	})
+	votes, pageRes, err := query.CollectionPaginate(
+		ctx,
+		q.k.Votes,
+		req.Pagination,
+		func(key sdk.AccAddress, value types.Vote) (types.Vote, error) {
+			return value, nil
+		},
+	)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -37,15 +32,18 @@ func (k Keeper) Votes(ctx context.Context, req *types.QueryVotesRequest) (*types
 	return &types.QueryVotesResponse{Votes: votes, Pagination: pageRes}, nil
 }
 
-func (k Keeper) Vote(ctx context.Context, req *types.QueryVoteRequest) (*types.QueryVoteResponse, error) {
+func (q queryServer) Vote(ctx context.Context, req *types.QueryVoteRequest) (*types.QueryVoteResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, found := k.GetVote(
+	val, found, err := q.k.GetVote(
 		ctx,
 		req.Address,
 	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}

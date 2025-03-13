@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"cosmossdk.io/core/address"
+	"cosmossdk.io/core/appmodule"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	banktypes "cosmossdk.io/x/bank/types"
 )
 
 // AccountKeeper defines the contract needed for AccountKeeper related APIs.
@@ -18,11 +19,24 @@ type AccountKeeper interface {
 	GetAccount(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
 	SetAccount(ctx context.Context, acc sdk.AccountI)
 	GetModuleAddress(moduleName string) sdk.AccAddress
+	NewAccountWithAddress(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
 	AddressCodec() address.Codec
+	GetEnvironment() appmodule.Environment
+}
+
+// FeegrantKeeper defines the expected feegrant keeper.
+type FeegrantKeeper interface {
+	UseGrantedFees(ctx context.Context, granter, grantee sdk.AccAddress, fee sdk.Coins, msgs []sdk.Msg) error
+}
+
+type ConsensusKeeper interface {
+	BlockParams(context.Context) (uint64, uint64, error)
 }
 
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
+	types.BankKeeper
+
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
 	// Methods imported from bank should be defined here
 
@@ -48,9 +62,4 @@ type BankKeeper interface {
 
 	DelegateCoins(ctx context.Context, delegatorAddr, moduleAccAddr sdk.AccAddress, amt sdk.Coins) error
 	UndelegateCoins(ctx context.Context, moduleAccAddr, delegatorAddr sdk.AccAddress, amt sdk.Coins) error
-}
-
-// FeegrantKeeper defines the expected feegrant keeper.
-type FeegrantKeeper interface {
-	UseGrantedFees(ctx context.Context, granter, grantee sdk.AccAddress, fee sdk.Coins, msgs []sdk.Msg) error
 }

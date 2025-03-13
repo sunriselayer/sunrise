@@ -1,6 +1,6 @@
 module github.com/sunriselayer/sunrise/x/da/erasurecoding
 
-go 1.22.1
+go 1.23.5
 
 require github.com/klauspost/reedsolomon v1.12.3
 

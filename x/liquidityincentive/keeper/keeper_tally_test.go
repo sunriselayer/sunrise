@@ -4,18 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
+	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
-	"github.com/cosmos/cosmos-sdk/codec/address"
+	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -26,25 +25,30 @@ type tallyFixture struct {
 	delAddrs []sdk.AccAddress
 	keeper   *keeper.Keeper
 	ctx      sdk.Context
-	mocks    keepertest.LiquidityIncentiveMocks
+	mocks    LiquidityIncentiveMocks
 }
 
 var (
 	// handy functions
 	setTotalBonded = func(s tallyFixture, n int64) {
-		s.mocks.AcctKeeper.EXPECT().AddressCodec().Return(address.NewBech32Codec("sunrise")).AnyTimes()
-		s.mocks.StakingKeeper.EXPECT().ValidatorAddressCodec().Return(address.NewBech32Codec("sunrisevaloper")).AnyTimes()
+		s.mocks.AcctKeeper.EXPECT().
+			AddressCodec().
+			Return(addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())).AnyTimes()
+		s.mocks.StakingKeeper.EXPECT().
+			ValidatorAddressCodec().
+			Return(addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())).AnyTimes()
 		s.mocks.StakingKeeper.EXPECT().TotalBondedTokens(gomock.Any()).Return(sdkmath.NewInt(n), nil)
 	}
 	delegatorVote = func(s tallyFixture, voter sdk.AccAddress, delegations []stakingtypes.Delegation, weights []types.PoolWeight) {
-		s.keeper.SetVote(s.ctx, types.Vote{
+		err := s.keeper.SetVote(s.ctx, types.Vote{
 			Sender:      voter.String(),
 			PoolWeights: weights,
 		})
+		require.NoError(s.t, err)
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
 			DoAndReturn(
-				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d sdk.DelegationI) bool) error {
 					for i, d := range delegations {
 						fn(int64(i), d)
 					}
@@ -161,7 +165,10 @@ func TestTally_Standard(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			k := f.keeper
+			mocks := f.mocks
 
 			var (
 				numVals       = 10
@@ -174,7 +181,7 @@ func TestTally_Standard(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -313,7 +320,11 @@ func TestTally_MultipleChoice(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k, mocks, ctx := keepertest.LiquidityincentiveKeeper(t)
+			f := initFixture(t)
+			ctx := sdk.UnwrapSDKContext(f.ctx)
+			k := f.keeper
+			mocks := f.mocks
+
 			var (
 				numVals       = 10
 				numDelegators = 5
@@ -325,7 +336,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)

@@ -4,23 +4,23 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestMsgVoteGauge(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sdk.AccAddress("sender")
 	k, mocks, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
-	require.NoError(t, k.SetParams(ctx, params))
+	require.NoError(t, k.Params.Set(ctx, params))
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(1)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
-	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(2)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
-	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(3)).Return(liquiditypooltypes.Pool{}, false).AnyTimes()
+	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(1)).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
+	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(2)).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
+	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(3)).Return(liquiditypooltypes.Pool{}, false, nil).AnyTimes()
 
 	// default params
 	testCases := []struct {
@@ -32,7 +32,7 @@ func TestMsgVoteGauge(t *testing.T) {
 		{
 			name: "not available pool",
 			input: &types.MsgVoteGauge{
-				Sender:      sender,
+				Sender:      sender.String(),
 				PoolWeights: []types.PoolWeight{{PoolId: 3, Weight: "1"}},
 			},
 			expErr:    true,
@@ -41,7 +41,7 @@ func TestMsgVoteGauge(t *testing.T) {
 		{
 			name: "available pools",
 			input: &types.MsgVoteGauge{
-				Sender:      sender,
+				Sender:      sender.String(),
 				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 1, Weight: "0.5"}},
 			},
 			expErr: false,
@@ -49,7 +49,7 @@ func TestMsgVoteGauge(t *testing.T) {
 		{
 			name: "empty votes",
 			input: &types.MsgVoteGauge{
-				Sender:      sender,
+				Sender:      sender.String(),
 				PoolWeights: []types.PoolWeight{},
 			},
 			expErr: false,
@@ -70,15 +70,15 @@ func TestMsgVoteGauge(t *testing.T) {
 }
 
 func TestMsgVoteGaugePartial(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
+	sender := sdk.AccAddress("sender")
 	k, mocks, ms, ctx := setupMsgServer(t)
 	params := types.DefaultParams()
-	require.NoError(t, k.SetParams(ctx, params))
+	require.NoError(t, k.Params.Set(ctx, params))
 	wctx := sdk.UnwrapSDKContext(ctx)
 
-	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(1)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
-	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(2)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
-	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(3)).Return(liquiditypooltypes.Pool{}, true).AnyTimes()
+	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(1)).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
+	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(2)).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
+	mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), uint64(3)).Return(liquiditypooltypes.Pool{}, true, nil).AnyTimes()
 
 	// default params
 	testCases := []struct {
@@ -91,15 +91,15 @@ func TestMsgVoteGaugePartial(t *testing.T) {
 		{
 			name: "all available pools",
 			input: &types.MsgVoteGauge{
-				Sender:      sender,
-				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}, {PoolId: 3, Weight: "0.5"}},
+				Sender:      sender.String(),
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.2"}, {PoolId: 2, Weight: "0.3"}, {PoolId: 3, Weight: "0.5"}},
 			},
 			expErr: false,
 		},
 		{
 			name: "partial pool",
 			input: &types.MsgVoteGauge{
-				Sender:      sender,
+				Sender:      sender.String(),
 				PoolWeights: []types.PoolWeight{{PoolId: 2, Weight: "0.5"}},
 			},
 			expErr: false,

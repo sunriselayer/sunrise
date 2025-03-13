@@ -9,8 +9,8 @@ import (
 
 func TestTickToPrice_PositiveBaseOffset(t *testing.T) {
 	tickParams := TickParams{
-		PriceRatio: math.LegacyNewDecWithPrec(10001, 4), // 1.0001
-		BaseOffset: math.LegacyNewDecWithPrec(5, 1),     // 0.5
+		PriceRatio: math.LegacyNewDecWithPrec(10001, 4).String(), // 1.0001
+		BaseOffset: math.LegacyNewDecWithPrec(5, 1).String(),     // 0.5
 	}
 	tickPriceMultiplied, err := TickToMultipliedPrice(0, tickParams)
 	require.NoError(t, err)
@@ -44,8 +44,8 @@ func TestTickToPrice_PositiveBaseOffset(t *testing.T) {
 
 func TestTickToPrice_NegativeBaseOffset(t *testing.T) {
 	tickParams := TickParams{
-		PriceRatio: math.LegacyNewDecWithPrec(10001, 4), // 1.0001
-		BaseOffset: math.LegacyNewDecWithPrec(-5, 1),    // 0.5
+		PriceRatio: math.LegacyNewDecWithPrec(10001, 4).String(), // 1.0001
+		BaseOffset: math.LegacyNewDecWithPrec(-5, 1).String(),    // 0.5
 	}
 	tickPriceMultiplied, err := TickToMultipliedPrice(0, tickParams)
 	require.NoError(t, err)
@@ -79,8 +79,8 @@ func TestTickToPrice_NegativeBaseOffset(t *testing.T) {
 
 func TestTickToPrice_ZeroBaseOffset(t *testing.T) {
 	tickParams := TickParams{
-		PriceRatio: math.LegacyNewDecWithPrec(10001, 4), // 1.0001
-		BaseOffset: math.LegacyZeroDec(),                // 0
+		PriceRatio: math.LegacyNewDecWithPrec(10001, 4).String(), // 1.0001
+		BaseOffset: math.LegacyZeroDec().String(),                // 0
 	}
 	tickPriceMultiplied, err := TickToMultipliedPrice(0, tickParams)
 	require.NoError(t, err)
@@ -125,11 +125,11 @@ func TestGetSqrtPriceFromQuoteBase(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, sqrtPrice.String(), "0.100000000000000000")
 
-	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.RoundInt())
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.TruncateInt())
 	require.NoError(t, err)
 	require.Equal(t, sqrtPrice.String(), "0.000000001000000000")
 
-	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.Mul(Multiplier).RoundInt())
+	sqrtPrice, err = GetSqrtPriceFromQuoteBase(math.NewInt(1), Multiplier.Mul(Multiplier).TruncateInt())
 	require.NoError(t, err)
 	require.Equal(t, sqrtPrice.String(), "0.000000000000000001")
 }

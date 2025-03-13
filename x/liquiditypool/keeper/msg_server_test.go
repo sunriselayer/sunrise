@@ -4,22 +4,25 @@ import (
 	"context"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
-	"github.com/sunriselayer/sunrise/x/liquiditypool/testutil"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
-func setupMsgServer(t *testing.T) (keeper.Keeper, *testutil.MockBankKeeper, types.MsgServer, context.Context) {
-	k, bk, ctx := keepertest.LiquiditypoolKeeper(t)
-	return k, bk, keeper.NewMsgServerImpl(k), ctx
+func setupMsgServer(t *testing.T) (keeper.Keeper, LiquidityPoolMocks, types.MsgServer, context.Context) {
+	f := initFixture(t)
+	ctx := sdk.UnwrapSDKContext(f.ctx)
+	k := f.keeper
+	mocks := f.mocks
+	return k, mocks, keeper.NewMsgServerImpl(k), ctx
 }
 
 func TestMsgServer(t *testing.T) {
-	k, _, ms, ctx := setupMsgServer(t)
+	k, mocks, ms, ctx := setupMsgServer(t)
 	require.NotNil(t, ms)
 	require.NotNil(t, ctx)
 	require.NotEmpty(t, k)
+	require.NotNil(t, mocks)
 }

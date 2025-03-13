@@ -1,0 +1,122 @@
+syntax = "proto3";
+package sunrise.liquidityincentive.v1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "sunrise/liquidityincentive/v1/epoch.proto";
+import "sunrise/liquidityincentive/v1/gauge.proto";
+import "sunrise/liquidityincentive/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/params";
+  }
+
+  // Epoch
+  rpc Epoch(QueryEpochRequest) returns (QueryEpochResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/epochs/{id}";
+  }
+  // Epochs
+  rpc Epochs(QueryEpochsRequest) returns (QueryEpochsResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/epochs";
+  }
+
+  // Gauge
+  rpc Gauge(QueryGaugeRequest) returns (QueryGaugeResponse) {
+    option (google.api.http).get =
+      "/sunrise/liquidityincentive/v1/epochs/"
+      "{previous_epoch_id}/gauges/{pool_id}";
+  }
+  // Gauges
+  rpc Gauges(QueryGaugesRequest) returns (QueryGaugesResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/epochs/{previous_epoch_id}/gauges";
+  }
+
+  // Vote
+  rpc Vote(QueryVoteRequest) returns (QueryVoteResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/votes/{address}";
+  }
+  // Votes
+  rpc Votes(QueryVotesRequest) returns (QueryVotesResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/votes";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryEpochRequest
+message QueryEpochRequest {
+  uint64 id = 1;
+}
+
+// QueryEpochResponse
+message QueryEpochResponse {
+  Epoch epoch = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryEpochsRequest
+message QueryEpochsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryEpochsResponse
+message QueryEpochsResponse {
+  repeated Epoch epochs = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryGaugeRequest
+message QueryGaugeRequest {
+  uint64 previous_epoch_id = 1;
+  uint64 pool_id = 2;
+}
+
+// QueryGaugeResponse
+message QueryGaugeResponse {
+  Gauge gauge = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryGaugesRequest
+message QueryGaugesRequest {
+  uint64 previous_epoch_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryGaugesResponse
+message QueryGaugesResponse {
+  repeated Gauge gauge = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryVoteRequest
+message QueryVoteRequest {
+  string address = 1;
+}
+
+// QueryVoteResponse
+message QueryVoteResponse {
+  Vote vote = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryVotesRequest
+message QueryVotesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryVotesResponse
+message QueryVotesResponse {
+  repeated Vote votes = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

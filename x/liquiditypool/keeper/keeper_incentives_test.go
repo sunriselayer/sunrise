@@ -5,16 +5,14 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestAllocateIncentive(t *testing.T) {
-	sender := "sunrise126ss57ayztn5287spvxq0dpdfarj6rk0v3p06f"
-	senderAcc := sdk.MustAccAddressFromBech32(sender)
-
+	sender := sdk.AccAddress("sender")
 	tests := []struct {
 		desc            string
 		poolId          uint64
@@ -51,15 +49,15 @@ func TestAllocateIncentive(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			k, bk, srv, ctx := setupMsgServer(t)
+			k, mocks, srv, ctx := setupMsgServer(t)
 			wctx := sdk.UnwrapSDKContext(ctx)
 
-			bk.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			bk.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 
 			// First pool
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender,
+				Authority:  sender.String(),
 				DenomBase:  "base",
 				DenomQuote: "quote",
 				FeeRate:    "0.01",
@@ -70,7 +68,7 @@ func TestAllocateIncentive(t *testing.T) {
 
 			// Second pool
 			_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender,
+				Authority:  sender.String(),
 				DenomBase:  "base",
 				DenomQuote: "quote",
 				FeeRate:    "0.01",
@@ -80,7 +78,7 @@ func TestAllocateIncentive(t *testing.T) {
 			require.NoError(t, err)
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
-				Sender:         sender,
+				Sender:         sender.String(),
 				PoolId:         0,
 				LowerTick:      -10,
 				UpperTick:      10,
@@ -91,7 +89,7 @@ func TestAllocateIncentive(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			err = k.AllocateIncentive(wctx, tc.poolId, senderAcc, tc.allocation)
+			err = k.AllocateIncentive(wctx, tc.poolId, sender, tc.allocation)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -100,7 +98,7 @@ func TestAllocateIncentive(t *testing.T) {
 				resp, err := k.GetFeeAccumulator(wctx, tc.poolId)
 				require.NoError(t, err)
 				require.Equal(t, resp.AccumValue.String(), tc.expAccumulation)
-				require.Equal(t, resp.TotalShares.String(), "19053571.850177307210510444")
+				require.Equal(t, resp.TotalShares, "19053571.850177307210510444")
 			}
 		})
 	}

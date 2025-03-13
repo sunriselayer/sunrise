@@ -7,7 +7,6 @@ import (
 
 	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
-	keepertest "github.com/sunriselayer/sunrise/testutil/keeper"
 	"github.com/sunriselayer/sunrise/testutil/nullify"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
@@ -23,16 +22,17 @@ func createNGauge(keeper keeper.Keeper, ctx context.Context, n int) []types.Gaug
 		items[i].PoolId = uint64(i)
 		items[i].Count = math.OneInt()
 
-		keeper.SetGauge(ctx, items[i])
+		_ = keeper.SetGauge(ctx, items[i])
 	}
 	return items
 }
 
 func TestGaugeGet(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetGauge(ctx, item.PreviousEpochId, item.PoolId)
+		rst, found, err := f.keeper.GetGauge(f.ctx, item.PreviousEpochId, item.PoolId)
+		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -41,36 +41,44 @@ func TestGaugeGet(t *testing.T) {
 	}
 }
 func TestGaugeRemove(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		keeper.RemoveGauge(ctx, item.PreviousEpochId, item.PoolId)
-		_, found := keeper.GetGauge(ctx,
+		err := f.keeper.RemoveGauge(f.ctx, item.PreviousEpochId, item.PoolId)
+		require.NoError(t, err)
+		_, found, err := f.keeper.GetGauge(f.ctx,
 			item.PreviousEpochId,
 			item.PoolId,
 		)
+		require.NoError(t, err)
 		require.False(t, found)
 	}
 }
 
 func TestGaugeGetAll(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
+	gauges, err := f.keeper.GetAllGauges(f.ctx)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllGauges(ctx)),
+		nullify.Fill(gauges),
 	)
 }
 
 func TestGetAllGaugeByPreviousEpochId(t *testing.T) {
-	keeper, _, ctx := keepertest.LiquidityincentiveKeeper(t)
-	items := createNGauge(keeper, ctx, 10)
+	f := initFixture(t)
+	items := createNGauge(f.keeper, f.ctx, 10)
+	gauges, err := f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 1)
+	require.NoError(t, err)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllGaugeByPreviousEpochId(ctx, 1)),
+		nullify.Fill(gauges),
 	)
+	gauges, err = f.keeper.GetAllGaugeByPreviousEpochId(f.ctx, 2)
+	require.NoError(t, err)
 	require.Len(t,
-		keeper.GetAllGaugeByPreviousEpochId(ctx, 2),
+		gauges,
 		0,
 	)
 }
