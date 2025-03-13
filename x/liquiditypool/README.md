@@ -27,7 +27,7 @@ There are two parameters in each pool
 The tick-price conversion formula is this:
 
 $$
-\text{price}(\text{tick}) = \text{price\_ratio} ^ {\text{tick} - \text{base\_offset}}
+\text{price}(\text{tick}) = \text{price\\_ratio} ^ {\text{tick} - \text{base\\_offset}}
 $$
 
 In the typiical case,
