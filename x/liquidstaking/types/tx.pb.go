@@ -36,8 +36,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type MsgUpdateParams struct {
 	// authority is the address that controls the module (defaults to x/gov unless overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// params defines the module parameters to update.
-	//
 	// NOTE: All parameters must be supplied.
 	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
 }
@@ -127,37 +125,123 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+type MsgLiquidStake struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+}
+
+func (m *MsgLiquidStake) Reset()         { *m = MsgLiquidStake{} }
+func (m *MsgLiquidStake) String() string { return proto.CompactTextString(m) }
+func (*MsgLiquidStake) ProtoMessage()    {}
+func (*MsgLiquidStake) Descriptor() ([]byte, []int) {
+	return fileDescriptor_67bfbd5180b3b43a, []int{2}
+}
+func (m *MsgLiquidStake) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgLiquidStake) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgLiquidStake.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgLiquidStake) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgLiquidStake.Merge(m, src)
+}
+func (m *MsgLiquidStake) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgLiquidStake) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgLiquidStake.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgLiquidStake proto.InternalMessageInfo
+
+func (m *MsgLiquidStake) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+type MsgLiquidStakeResponse struct {
+}
+
+func (m *MsgLiquidStakeResponse) Reset()         { *m = MsgLiquidStakeResponse{} }
+func (m *MsgLiquidStakeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgLiquidStakeResponse) ProtoMessage()    {}
+func (*MsgLiquidStakeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_67bfbd5180b3b43a, []int{3}
+}
+func (m *MsgLiquidStakeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgLiquidStakeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgLiquidStakeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgLiquidStakeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgLiquidStakeResponse.Merge(m, src)
+}
+func (m *MsgLiquidStakeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgLiquidStakeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgLiquidStakeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgLiquidStakeResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.liquidstaking.v1.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.liquidstaking.v1.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgLiquidStake)(nil), "sunrise.liquidstaking.v1.MsgLiquidStake")
+	proto.RegisterType((*MsgLiquidStakeResponse)(nil), "sunrise.liquidstaking.v1.MsgLiquidStakeResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/liquidstaking/v1/tx.proto", fileDescriptor_67bfbd5180b3b43a) }
 
 var fileDescriptor_67bfbd5180b3b43a = []byte{
-	// 354 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x2c, 0x2e, 0xcd, 0x2b,
-	0xca, 0x2c, 0x4e, 0xd5, 0xcf, 0xc9, 0x2c, 0x2c, 0xcd, 0x4c, 0x29, 0x2e, 0x49, 0xcc, 0xce, 0xcc,
-	0x4b, 0xd7, 0x2f, 0x33, 0xd4, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92, 0x80,
-	0x2a, 0xd1, 0x43, 0x51, 0xa2, 0x57, 0x66, 0x28, 0x25, 0x98, 0x98, 0x9b, 0x99, 0x97, 0xaf, 0x0f,
-	0x26, 0x21, 0x8a, 0xa5, 0xc4, 0x93, 0xf3, 0x8b, 0x73, 0xf3, 0x8b, 0xf5, 0x73, 0x8b, 0xc1, 0x86,
-	0xe4, 0x16, 0xa7, 0x43, 0x25, 0x24, 0x21, 0x12, 0xf1, 0x60, 0x9e, 0x3e, 0x84, 0x03, 0x95, 0x12,
-	0x49, 0xcf, 0x4f, 0xcf, 0x87, 0x88, 0x83, 0x58, 0x50, 0x51, 0x55, 0x9c, 0x2e, 0x2b, 0x48, 0x2c,
-	0x4a, 0xcc, 0x85, 0x6a, 0x56, 0x3a, 0xc5, 0xc8, 0xc5, 0xef, 0x5b, 0x9c, 0x1e, 0x5a, 0x90, 0x92,
-	0x58, 0x92, 0x1a, 0x00, 0x96, 0x11, 0x32, 0xe3, 0xe2, 0x4c, 0x2c, 0x2d, 0xc9, 0xc8, 0x2f, 0xca,
-	0x2c, 0xa9, 0x94, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x74, 0x92, 0xb8, 0xb4, 0x45, 0x57, 0x04, 0x6a,
-	0xab, 0x63, 0x4a, 0x4a, 0x51, 0x6a, 0x71, 0x71, 0x70, 0x49, 0x51, 0x66, 0x5e, 0x7a, 0x10, 0x42,
-	0xa9, 0x90, 0x33, 0x17, 0x1b, 0xc4, 0x6c, 0x09, 0x26, 0x05, 0x46, 0x0d, 0x6e, 0x23, 0x05, 0x3d,
-	0x5c, 0x5e, 0xd7, 0x83, 0xd8, 0xe4, 0xc4, 0x79, 0xe2, 0x9e, 0x3c, 0xc3, 0x8a, 0xe7, 0x1b, 0xb4,
-	0x18, 0x83, 0xa0, 0x5a, 0xad, 0xac, 0x9a, 0x9e, 0x6f, 0xd0, 0x42, 0x18, 0xda, 0xf5, 0x7c, 0x83,
-	0x96, 0x3a, 0xcc, 0x2b, 0x15, 0x68, 0x9e, 0x41, 0x73, 0xb8, 0x92, 0x24, 0x97, 0x38, 0x9a, 0x50,
-	0x50, 0x6a, 0x71, 0x41, 0x7e, 0x5e, 0x71, 0xaa, 0x51, 0x15, 0x17, 0xb3, 0x6f, 0x71, 0xba, 0x50,
-	0x0e, 0x17, 0x0f, 0x8a, 0x57, 0x35, 0x71, 0x3b, 0x11, 0xcd, 0x24, 0x29, 0x43, 0xa2, 0x95, 0xc2,
-	0x2c, 0x95, 0x62, 0x6d, 0x00, 0x79, 0xcd, 0xc9, 0xff, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4,
-	0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f,
-	0xe5, 0x18, 0xa2, 0x4c, 0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xa1,
-	0xa6, 0xe7, 0x24, 0x56, 0xa6, 0x16, 0xe9, 0xe3, 0xf2, 0x71, 0x49, 0x65, 0x41, 0x6a, 0x71, 0x12,
-	0x1b, 0x38, 0xee, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x00, 0x58, 0x7f, 0x42, 0x7e, 0x02,
+	// 418 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0x3f, 0xcb, 0xd3, 0x40,
+	0x18, 0xcf, 0x29, 0xbe, 0xd2, 0x7b, 0x5f, 0x14, 0x43, 0xb1, 0x69, 0x86, 0x58, 0x03, 0x62, 0x2d,
+	0x98, 0xb3, 0x15, 0x45, 0xba, 0x59, 0x57, 0x8b, 0x92, 0xe2, 0xe2, 0x22, 0xd7, 0xe6, 0xb8, 0x1e,
+	0x6d, 0x72, 0xf1, 0xee, 0x52, 0xda, 0x4d, 0x1c, 0x9d, 0xfc, 0x18, 0x8e, 0x1d, 0xfc, 0x10, 0xc5,
+	0xa9, 0x38, 0x39, 0x89, 0xb4, 0x48, 0xbf, 0x86, 0x34, 0xb9, 0xd0, 0x36, 0x10, 0xe9, 0x12, 0xf2,
+	0x3c, 0xcf, 0xef, 0xf9, 0xfd, 0xc9, 0x13, 0x78, 0x5f, 0x26, 0x91, 0x60, 0x92, 0xa0, 0x29, 0xfb,
+	0x98, 0xb0, 0x40, 0x2a, 0x3c, 0x61, 0x11, 0x45, 0xb3, 0x36, 0x52, 0x73, 0x2f, 0x16, 0x5c, 0x71,
+	0xd3, 0xd2, 0x10, 0xef, 0x04, 0xe2, 0xcd, 0xda, 0xf6, 0x1d, 0x1c, 0xb2, 0x88, 0xa3, 0xf4, 0x99,
+	0x81, 0xed, 0xda, 0x88, 0xcb, 0x90, 0x4b, 0x14, 0xca, 0x94, 0x24, 0x94, 0x54, 0x0f, 0xea, 0xd9,
+	0xe0, 0x43, 0x5a, 0xa1, 0xac, 0xd0, 0xa3, 0x2a, 0xe5, 0x94, 0x67, 0xfd, 0xfd, 0x9b, 0xee, 0x3e,
+	0x28, 0x75, 0x16, 0x63, 0x81, 0x43, 0xbd, 0xec, 0xfe, 0x00, 0xf0, 0x76, 0x5f, 0xd2, 0x77, 0x71,
+	0x80, 0x15, 0x79, 0x9b, 0x4e, 0xcc, 0xe7, 0xb0, 0x82, 0x13, 0x35, 0xe6, 0x82, 0xa9, 0x85, 0x05,
+	0x1a, 0xa0, 0x59, 0xe9, 0x59, 0x3f, 0xbf, 0x3f, 0xae, 0x6a, 0xd5, 0x97, 0x41, 0x20, 0x88, 0x94,
+	0x03, 0x25, 0x58, 0x44, 0xfd, 0x03, 0xd4, 0x7c, 0x05, 0x2f, 0x32, 0x6e, 0xeb, 0x5a, 0x03, 0x34,
+	0x2f, 0x3b, 0x0d, 0xaf, 0x2c, 0xba, 0x97, 0x29, 0xf5, 0x2a, 0xab, 0xdf, 0xf7, 0x8c, 0x6f, 0xbb,
+	0x65, 0x0b, 0xf8, 0x7a, 0xb5, 0xdb, 0xfd, 0xbc, 0x5b, 0xb6, 0x0e, 0xa4, 0x5f, 0x76, 0xcb, 0xd6,
+	0xc3, 0x3c, 0xca, 0xbc, 0x10, 0xa6, 0x60, 0xdc, 0xad, 0xc3, 0x5a, 0xa1, 0xe5, 0x13, 0x19, 0xf3,
+	0x48, 0x12, 0xf7, 0x05, 0xbc, 0xd5, 0x97, 0xf4, 0x75, 0xba, 0x3e, 0x50, 0x78, 0x42, 0x4c, 0x0b,
+	0xde, 0x1c, 0x09, 0x82, 0x15, 0x17, 0x59, 0x46, 0x3f, 0x2f, 0xbb, 0x57, 0x7b, 0x0b, 0x79, 0xe5,
+	0x5a, 0xf0, 0xee, 0xe9, 0x66, 0xce, 0xd9, 0xf9, 0x0b, 0xe0, 0xf5, 0xbe, 0xa4, 0xe6, 0x14, 0x5e,
+	0x9d, 0x7c, 0xbf, 0x47, 0xe5, 0xb9, 0x0b, 0xf6, 0xec, 0xf6, 0xd9, 0xd0, 0x5c, 0xd5, 0x64, 0xf0,
+	0xf2, 0x38, 0x46, 0xf3, 0xbf, 0x0c, 0x47, 0x48, 0xfb, 0xc9, 0xb9, 0xc8, 0x5c, 0xca, 0xbe, 0xf1,
+	0x69, 0x7f, 0x9a, 0xde, 0x9b, 0xd5, 0xc6, 0x01, 0xeb, 0x8d, 0x03, 0xfe, 0x6c, 0x1c, 0xf0, 0x75,
+	0xeb, 0x18, 0xeb, 0xad, 0x63, 0xfc, 0xda, 0x3a, 0xc6, 0xfb, 0x67, 0x94, 0xa9, 0x71, 0x32, 0xf4,
+	0x46, 0x3c, 0x44, 0x9a, 0x7c, 0x8a, 0x17, 0x44, 0xa0, 0xb2, 0x8b, 0xa9, 0x45, 0x4c, 0xe4, 0xf0,
+	0x22, 0xfd, 0xf7, 0x9e, 0xfe, 0x0b, 0x00, 0x00, 0xff, 0xff, 0x1c, 0xc5, 0x97, 0x3e, 0x3e, 0x03,
 	0x00, 0x00,
 }
 
@@ -176,6 +260,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error)
 }
 
 type msgClient struct {
@@ -195,11 +280,21 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) LiquidStake(ctx context.Context, in *MsgLiquidStake, opts ...grpc.CallOption) (*MsgLiquidStakeResponse, error) {
+	out := new(MsgLiquidStakeResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.v1.Msg/LiquidStake", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	LiquidStake(context.Context, *MsgLiquidStake) (*MsgLiquidStakeResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -208,6 +303,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) LiquidStake(ctx context.Context, req *MsgLiquidStake) (*MsgLiquidStakeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LiquidStake not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -232,6 +330,24 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_LiquidStake_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgLiquidStake)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).LiquidStake(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.liquidstaking.v1.Msg/LiquidStake",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).LiquidStake(ctx, req.(*MsgLiquidStake))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.liquidstaking.v1.Msg",
@@ -240,6 +356,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "LiquidStake",
+			Handler:    _Msg_LiquidStake_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -309,6 +429,59 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgLiquidStake) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgLiquidStake) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgLiquidStake) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgLiquidStakeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgLiquidStakeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgLiquidStakeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -336,6 +509,28 @@ func (m *MsgUpdateParams) Size() (n int) {
 }
 
 func (m *MsgUpdateParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgLiquidStake) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgLiquidStakeResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -492,6 +687,138 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgLiquidStake) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgLiquidStake: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgLiquidStake: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgLiquidStakeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgLiquidStakeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgLiquidStakeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

@@ -9,6 +9,10 @@ import (
 
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgLiquidStake{},
+	)
+
+	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
 	)
 	msgservice.RegisterMsgServiceDesc(registrar, &_Msg_serviceDesc)
