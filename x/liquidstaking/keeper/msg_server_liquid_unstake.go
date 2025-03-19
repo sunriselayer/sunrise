@@ -8,7 +8,7 @@ import (
 )
 
 func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstake) (*types.MsgLiquidUnstakeResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 

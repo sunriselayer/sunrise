@@ -1,7 +1,7 @@
 package types
 
-func NewMsgClaimRewards(creator string) *MsgClaimRewards {
+func NewMsgClaimRewards(sender string) *MsgClaimRewards {
 	return &MsgClaimRewards{
-		Creator: creator,
+		Sender: sender,
 	}
 }

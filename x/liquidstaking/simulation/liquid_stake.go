@@ -14,7 +14,7 @@ func MsgLiquidStakeFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgLiqu
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgLiquidStake{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the LiquidStake simulation

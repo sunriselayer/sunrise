@@ -1,7 +1,7 @@
 package types
 
-func NewMsgLiquidUnstake(creator string) *MsgLiquidUnstake {
+func NewMsgLiquidUnstake(sender string) *MsgLiquidUnstake {
 	return &MsgLiquidUnstake{
-		Creator: creator,
+		Sender: sender,
 	}
 }
