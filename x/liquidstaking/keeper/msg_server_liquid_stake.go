@@ -6,6 +6,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
@@ -16,17 +17,20 @@ func (k msgServer) LiquidStake(ctx context.Context, msg *types.MsgLiquidStake) (
 	}
 
 	// Claim rewards
-	err = k.Keeper.AutoCompoundModuleAccountRewards(ctx, msg.ValidatorAddress)
+	lstDenom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
+	err = k.Keeper.ClaimRewards(ctx, msg.Sender, lstDenom)
 	if err != nil {
 		return nil, err
 	}
 
-	// Send fee coin to module
 	params, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}
 	feeCoin := sdk.NewCoin(params.FeeDenom, msg.Amount)
+	bondCoin := sdk.NewCoin(params.BondDenom, msg.Amount)
+
+	// Send fee coin to module
 
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(feeCoin))
 	if err != nil {
@@ -39,11 +43,18 @@ func (k msgServer) LiquidStake(ctx context.Context, msg *types.MsgLiquidStake) (
 		return nil, err
 	}
 
-	// TODO: Stake
+	//  Stake
+	_, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
+		DelegatorAddress: msg.Sender,
+		ValidatorAddress: msg.ValidatorAddress,
+		Amount:           bondCoin,
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	// Mint liquid staking token
-	denom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
-	coins := sdk.NewCoins(sdk.NewCoin(denom, msg.Amount))
+	coins := sdk.NewCoins(sdk.NewCoin(lstDenom, msg.Amount))
 
 	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, coins)
 	if err != nil {

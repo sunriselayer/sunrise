@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
@@ -20,8 +21,12 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema                    collections.Schema
+	Params                    collections.Item[types.Params]
+	Unstakings                collections.Map[collections.Pair[sdk.AccAddress, uint64], types.Unstaking]
+	UnstakingIds              collections.Map[sdk.AccAddress, uint64]
+	RewardMultiplier          collections.Map[string, string]
+	UsersLastRewardMultiplier collections.Map[collections.Pair[string, sdk.AccAddress], string]
 
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
@@ -51,7 +56,11 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params:                    collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Unstakings:                collections.NewMap(sb, types.UnstakingsKeyPrefix, "unstakings", types.UnstakingsKeyCodec, codec.CollValue[types.Unstaking](cdc)),
+		UnstakingIds:              collections.NewMap(sb, types.UnstakingIdsKeyPrefix, "unstaking_ids", types.UnstakingIdsKeyCodec, collections.Uint64Value),
+		RewardMultiplier:          collections.NewMap(sb, types.RewardMultiplierKeyPrefix, "reward_multiplier", types.RewardMultiplierKeyCodec, collections.StringValue),
+		UsersLastRewardMultiplier: collections.NewMap(sb, types.UsersLastRewardMultiplierKeyPrefix, "users_last_reward_multiplier", types.UsersLastRewardMultiplierKeyCodec, collections.StringValue),
 
 		accountKeeper:        accountKeeper,
 		bankKeeper:           bankKeeper,

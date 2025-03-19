@@ -6,6 +6,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
@@ -16,14 +17,14 @@ func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstak
 	}
 
 	// Claim rewards
-	err = k.Keeper.AutoCompoundModuleAccountRewards(ctx, msg.ValidatorAddress)
+	lstDenom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
+	err = k.Keeper.ClaimRewards(ctx, msg.Sender, lstDenom)
 	if err != nil {
 		return nil, err
 	}
 
 	// Send liquid staking token to module
-	denom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
-	coins := sdk.NewCoins(sdk.NewCoin(denom, msg.Amount))
+	coins := sdk.NewCoins(sdk.NewCoin(lstDenom, msg.Amount))
 
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, coins)
 	if err != nil {
@@ -37,26 +38,29 @@ func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstak
 		return nil, err
 	}
 
-	// TODO: Unstake
+	// TODO: Calculate unstake amount
 	outputAmount := msg.Amount
 
-	// Convert bond denom to fee denom
-	err = k.tokenConverterKeeper.Convert(ctx, outputAmount, sender)
-	if err != nil {
-		return nil, err
-	}
-
-	// Send fee coin to sender
+	// Unstake
 	params, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}
-	feeCoin := sdk.NewCoin(params.FeeDenom, outputAmount)
 
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, sdk.NewCoins(feeCoin))
+	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
+		DelegatorAddress: msg.Sender,
+		ValidatorAddress: msg.ValidatorAddress,
+		Amount:           sdk.NewCoin(params.BondDenom, outputAmount),
+	})
 	if err != nil {
 		return nil, err
 	}
+	response, ok := res.(*stakingtypes.MsgUndelegateResponse)
+	if !ok {
+		return nil, errorsmod.Wrap(errorsmod.ErrInvalidRequest, "invalid response")
+	}
+
+	// TODO: set Unstaking state
 
 	return &types.MsgLiquidUnstakeResponse{}, nil
 }
