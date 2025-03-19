@@ -46,7 +46,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
-				// this line is used by ignite scaffolding # autocli/tx
+				{
+			RpcMethod: "WithdrawUnbonded",
+			Use: "withdraw-unbonded",
+			Short: "Send a withdraw-unbonded tx",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+		},
+		// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
 	}

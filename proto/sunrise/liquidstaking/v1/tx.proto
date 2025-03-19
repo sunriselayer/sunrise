@@ -19,10 +19,15 @@ service Msg {
 
   // LiquidStake
   rpc LiquidStake(MsgLiquidStake) returns (MsgLiquidStakeResponse);
+
   // LiquidUnstake
   rpc LiquidUnstake(MsgLiquidUnstake) returns (MsgLiquidUnstakeResponse);
+
   // ClaimRewards
   rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResponse);
+
+  // WithdrawUnbonded
+  rpc WithdrawUnbonded(MsgWithdrawUnbonded) returns (MsgWithdrawUnbondedResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -45,7 +50,13 @@ message MsgUpdateParamsResponse {}
 // MsgLiquidStake
 message MsgLiquidStake {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgLiquidStakeResponse
@@ -54,7 +65,13 @@ message MsgLiquidStakeResponse {}
 // MsgLiquidUnstake
 message MsgLiquidUnstake {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgLiquidUnstakeResponse
@@ -63,8 +80,17 @@ message MsgLiquidUnstakeResponse {}
 // MsgClaimRewards
 message MsgClaimRewards {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgClaimRewardsResponse
 message MsgClaimRewardsResponse {}
+
+// MsgWithdrawUnbonded
+message MsgWithdrawUnbonded {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgWithdrawUnbondedResponse
+message MsgWithdrawUnbondedResponse {}
