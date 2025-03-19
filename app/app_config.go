@@ -90,6 +90,8 @@ import (
 	ibcfeetypes "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
+	_ "github.com/sunriselayer/sunrise/x/liquidstaking/module"
+	liquidstakingmoduletypes "github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
 var (
@@ -176,6 +178,7 @@ var (
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
+						liquidstakingmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -197,6 +200,7 @@ var (
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
+						liquidstakingmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -221,6 +225,7 @@ var (
 						stakingtypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
+						liquidstakingmoduletypes.ModuleName,
 						// </sunrise>
 						accounts.ModuleName,
 						distrtypes.ModuleName,
@@ -382,6 +387,10 @@ var (
 			{
 				Name:   selfdelegationmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&selfdelegationmoduletypes.Module{}),
+			},
+			{
+				Name:   liquidstakingmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&liquidstakingmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

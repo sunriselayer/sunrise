@@ -73,6 +73,7 @@ import (
 
 	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
 	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
+	liquidstakingmodulekeeper "github.com/sunriselayer/sunrise/x/liquidstaking/keeper"
 	selfdelegationmodulekeeper "github.com/sunriselayer/sunrise/x/selfdelegation/keeper"
 )
 
@@ -136,6 +137,7 @@ type App struct {
 	SwapKeeper               swapmodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
 	SelfdelegationKeeper     selfdelegationmodulekeeper.Keeper
+	LiquidstakingKeeper      liquidstakingmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -231,6 +233,7 @@ func New(
 		&app.SwapKeeper,
 		&app.FeeKeeper,
 		&app.SelfdelegationKeeper,
+		&app.LiquidstakingKeeper,
 	); err != nil {
 		panic(err)
 	}
