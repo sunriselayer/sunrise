@@ -19,6 +19,7 @@ service Msg {
   rpc UpdateParams  (MsgUpdateParams ) returns (MsgUpdateParamsResponse );
   rpc LiquidStake   (MsgLiquidStake  ) returns (MsgLiquidStakeResponse  );
   rpc LiquidUnstake (MsgLiquidUnstake) returns (MsgLiquidUnstakeResponse);
+  rpc ClaimRewards  (MsgClaimRewards ) returns (MsgClaimRewardsResponse );
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -51,4 +52,11 @@ message MsgLiquidUnstake {
 }
 
 message MsgLiquidUnstakeResponse {}
+
+message MsgClaimRewards {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1;
+}
+
+message MsgClaimRewardsResponse {}
 

@@ -44,5 +44,6 @@ func (am AppModule) ProposalMsgsX(weights simsx.WeightSource, reg simsx.Registry
 func (am AppModule) WeightedOperationsX(weights simsx.WeightSource, reg simsx.Registry) {
 	reg.Add(weights.Get("msg__liquid_stake", 100), simulation.MsgLiquidStakeFactory(am.keeper))
 	reg.Add(weights.Get("msg__liquid_unstake", 100), simulation.MsgLiquidUnstakeFactory(am.keeper))
+	reg.Add(weights.Get("msg__claim_rewards", 100), simulation.MsgClaimRewardsFactory(am.keeper))
 
 }
