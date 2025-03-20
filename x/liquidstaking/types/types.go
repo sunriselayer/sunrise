@@ -4,14 +4,17 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 func LiquidStakingTokenDenom(validatorAddress string) string {
 	return fmt.Sprintf("%s/%s", ModuleName, validatorAddress)
 }
 
-func RewardSaverModuleAccount(validatorAddress string) string {
-	return fmt.Sprintf("%s/reward_saver/%s", ModuleName, validatorAddress)
+func RewardSaverAddress(validatorAddress string) sdk.AccAddress {
+	return authtypes.NewModuleAddress(fmt.Sprintf("%s/reward_saver/%s", ModuleName, validatorAddress))
 }
 
 func CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld, lstAmount math.Int) (math.Int, error) {

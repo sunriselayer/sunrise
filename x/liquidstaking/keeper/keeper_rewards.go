@@ -34,12 +34,6 @@ func (k Keeper) ValidateLastRewardHandlingTime(ctx context.Context, validatorAdd
 	return nil
 }
 
-func (k Keeper) GetRewardSaverAddress(ctx context.Context, validatorAddr string) sdk.AccAddress {
-	rewardSaverAccount := types.RewardSaverModuleAccount(validatorAddr)
-
-	return k.accountKeeper.GetModuleAddress(rewardSaverAccount)
-}
-
 func (k Keeper) HandleModuleAccountRewards(ctx context.Context) error {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 	err := k.stakingKeeper.IterateDelegatorDelegations(ctx, moduleAddr, func(delegation stakingtypes.Delegation) (stop bool) {
@@ -72,7 +66,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 	}
 
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
-	rewardSaverAddr := k.GetRewardSaverAddress(ctx, validatorAddr)
+	rewardSaverAddr := types.RewardSaverAddress(validatorAddr)
 
 	// Withdraw delegator reward as module address
 	res, err := k.Environment.MsgRouterService.Invoke(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
