@@ -46,3 +46,39 @@ func CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld, lstAmount ma
 
 	return outputAmount, nil
 }
+
+func CalculateRewardMultiplierNew(rewardMultiplierOld math.Dec, rewardAmount math.Int, lstSupplyNew math.Int) (math.Dec, error) {
+	multiplierDiffNumerator, err := math.NewDecFromString(rewardAmount.String())
+	if err != nil {
+		return math.Dec{}, err
+	}
+	multiplierDiffDenominator, err := math.NewDecFromString(lstSupplyNew.String())
+	if err != nil {
+		return math.Dec{}, err
+	}
+	multiplierDiff, err := multiplierDiffNumerator.Quo(multiplierDiffDenominator)
+	if err != nil {
+		return math.Dec{}, err
+	}
+
+	multiplierNew, err := rewardMultiplierOld.Add(multiplierDiff)
+	if err != nil {
+		return math.Dec{}, err
+	}
+
+	return multiplierNew, nil
+}
+
+func CalculateSlashingCompensation(stakedAmount, lstSupplyOld, feeCoinRewardAmount math.Int) (compensation math.Int, distribution math.Int) {
+	slashed := lstSupplyOld.Sub(stakedAmount)
+
+	if feeCoinRewardAmount.GT(slashed) {
+		compensation = slashed
+		distribution = feeCoinRewardAmount.Sub(compensation)
+	} else {
+		compensation = feeCoinRewardAmount
+		distribution = math.NewInt(0)
+	}
+
+	return
+}

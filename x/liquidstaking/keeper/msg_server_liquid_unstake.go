@@ -48,18 +48,10 @@ func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstak
 	}
 
 	// Calculate unstake amount
-	res, err := k.Environment.QueryRouterService.Invoke(ctx, &stakingtypes.QueryDelegationRequest{
-		DelegatorAddr: msg.Sender,
-		ValidatorAddr: msg.ValidatorAddress,
-	})
+	stakedAmount, err := k.GetStakedAmount(ctx, msg.ValidatorAddress)
 	if err != nil {
 		return nil, err
 	}
-	queryDelegationResponse, ok := res.(*stakingtypes.QueryDelegationResponse)
-	if !ok {
-		return nil, sdkerrors.ErrInvalidRequest
-	}
-	stakedAmount := queryDelegationResponse.DelegationResponse.Balance.Amount
 	outputAmount, err := types.CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld.Amount, msg.Amount)
 	if err != nil {
 		return nil, err
@@ -72,7 +64,7 @@ func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstak
 	}
 	output := sdk.NewCoin(params.BondDenom, outputAmount)
 
-	res, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
+	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: msg.Sender,
 		ValidatorAddress: msg.ValidatorAddress,
 		Amount:           output,

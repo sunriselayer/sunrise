@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -57,22 +56,38 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 		return err
 	}
 
+	// Get LST info
+	lstDenom := types.LiquidStakingTokenDenom(validatorAddrStr)
+	lstSupplyOld := k.bankKeeper.GetSupply(ctx, lstDenom)
+
 	// Convert fee coin to LST
 	ok, feeCoin := response.Amount.Find(params.FeeDenom)
 	if ok {
-		// TODO: absorb slashed amount
-		_, err = k.Environment.MsgRouterService.Invoke(ctx, &types.MsgLiquidStake{
-			Sender:           rewardSaverAddr.String(),
-			ValidatorAddress: validatorAddrStr,
-			Amount:           feeCoin.Amount,
-		})
+		stakedAmount, err := k.GetStakedAmount(ctx, validatorAddrStr)
 		if err != nil {
 			return err
+		}
+		compensation, distribution := types.CalculateSlashingCompensation(stakedAmount, lstSupplyOld.Amount, feeCoin.Amount)
+
+		if compensation.IsPositive() {
+			err = k.ConvertAndDelegate(ctx, rewardSaverAddr, validatorAddrStr, compensation)
+			if err != nil {
+				return err
+			}
+		}
+		if distribution.IsPositive() {
+			_, err = k.Environment.MsgRouterService.Invoke(ctx, &types.MsgLiquidStake{
+				Sender:           rewardSaverAddr.String(),
+				ValidatorAddress: validatorAddrStr,
+				Amount:           distribution,
+			})
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	// Get LST info
-	lstDenom := types.LiquidStakingTokenDenom(validatorAddrStr)
 	lstSupplyNew := k.bankKeeper.GetSupply(ctx, lstDenom)
 
 	if lstSupplyNew.IsZero() {
@@ -88,28 +103,17 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 			multiplierDenom = lstDenom
 		}
 
-		multiplierDiffNumerator, err := math.NewDecFromString(coin.Amount.String())
-		if err != nil {
-			return err
-		}
-		multiplierDiffDenominator, err := math.NewDecFromString(lstSupplyNew.Amount.String())
-		if err != nil {
-			return err
-		}
-		multiplierDiff, err := multiplierDiffNumerator.Quo(multiplierDiffDenominator)
+		multiplierOld, err := k.GetRewardMultiplier(ctx, validatorAddr, multiplierDenom)
 		if err != nil {
 			return err
 		}
 
-		multiplier, err := k.GetRewardMultiplier(ctx, validatorAddr, multiplierDenom)
+		multiplierNew, err := types.CalculateRewardMultiplierNew(multiplierOld, coin.Amount, lstSupplyNew.Amount)
 		if err != nil {
 			return err
 		}
-		multiplier, err = multiplier.Add(multiplierDiff)
-		if err != nil {
-			return err
-		}
-		err = k.SetRewardMultiplier(ctx, validatorAddr, multiplierDenom, multiplier)
+
+		err = k.SetRewardMultiplier(ctx, validatorAddr, multiplierDenom, multiplierNew)
 		if err != nil {
 			return err
 		}

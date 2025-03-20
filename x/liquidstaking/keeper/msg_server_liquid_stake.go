@@ -6,7 +6,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
@@ -28,33 +27,8 @@ func (k msgServer) LiquidStake(ctx context.Context, msg *types.MsgLiquidStake) (
 		return nil, err
 	}
 
-	// Prepare fee and bond coin
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
-	if err != nil {
-		return nil, err
-	}
-	feeCoin := sdk.NewCoin(params.FeeDenom, msg.Amount)
-	bondCoin := sdk.NewCoin(params.BondDenom, msg.Amount)
-
-	// Send fee coin to module
-
-	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(feeCoin))
-	if err != nil {
-		return nil, err
-	}
-
-	// Convert fee denom to bond denom
-	err = k.tokenConverterKeeper.ConvertReverse(ctx, msg.Amount, sender)
-	if err != nil {
-		return nil, err
-	}
-
-	//  Stake
-	_, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
-		DelegatorAddress: msg.Sender,
-		ValidatorAddress: msg.ValidatorAddress,
-		Amount:           bondCoin,
-	})
+	// Convert and delegate
+	err = k.ConvertAndDelegate(ctx, sender, msg.ValidatorAddress, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
