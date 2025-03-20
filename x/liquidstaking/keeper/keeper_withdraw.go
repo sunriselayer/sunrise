@@ -1,17 +1,23 @@
 package keeper
 
 import (
+	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
-func (k Keeper) WithdrawUnbonded(ctx sdk.Context, unstaking types.Unstaking) error {
+func (k Keeper) WithdrawUnbonded(ctx context.Context, unstaking types.Unstaking) error {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
 	params, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil
+	}
+
+	if unstaking.Amount.Denom != params.BondDenom {
+		return types.ErrInvalidUnbondedDenom
 	}
 
 	// Convert bond denom to fee denom

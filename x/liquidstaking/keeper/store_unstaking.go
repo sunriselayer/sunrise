@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"context"
+	"time"
 
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
@@ -47,11 +47,7 @@ func (k Keeper) AppendUnstaking(ctx context.Context, unstaking types.Unstaking) 
 
 // SetPool set a specific pool in the store
 func (k Keeper) SetUnstaking(ctx context.Context, unstaking types.Unstaking, id uint64) error {
-	sender, err := k.addressCodec.StringToBytes(unstaking.Address)
-	if err != nil {
-		return err
-	}
-	err = k.Unstakings.Set(ctx, collections.Join(sdk.AccAddress(sender), id), unstaking)
+	err := k.Unstakings.Set(ctx, collections.Join(unstaking.CompletionTime.Unix(), id), unstaking)
 	if err != nil {
 		return err
 	}
@@ -59,8 +55,8 @@ func (k Keeper) SetUnstaking(ctx context.Context, unstaking types.Unstaking, id 
 }
 
 // GetUnstaking returns a unstaking from its id
-func (k Keeper) GetUnstaking(ctx context.Context, address sdk.AccAddress, id uint64) (val types.Unstaking, found bool, err error) {
-	has, err := k.Unstakings.Has(ctx, collections.Join(address, id))
+func (k Keeper) GetUnstaking(ctx context.Context, completionTime time.Time, id uint64) (val types.Unstaking, found bool, err error) {
+	has, err := k.Unstakings.Has(ctx, collections.Join(completionTime.Unix(), id))
 	if err != nil {
 		return val, false, err
 	}
@@ -69,7 +65,7 @@ func (k Keeper) GetUnstaking(ctx context.Context, address sdk.AccAddress, id uin
 		return val, false, nil
 	}
 
-	val, err = k.Unstakings.Get(ctx, collections.Join(address, id))
+	val, err = k.Unstakings.Get(ctx, collections.Join(completionTime.Unix(), id))
 	if err != nil {
 		return val, false, err
 	}
@@ -78,8 +74,8 @@ func (k Keeper) GetUnstaking(ctx context.Context, address sdk.AccAddress, id uin
 }
 
 // RemoveUnstaking removes a unstaking from the store
-func (k Keeper) RemoveUnstaking(ctx context.Context, address sdk.AccAddress, id uint64) error {
-	err := k.Unstakings.Remove(ctx, collections.Join(address, id))
+func (k Keeper) RemoveUnstaking(ctx context.Context, completionTime time.Time, id uint64) error {
+	err := k.Unstakings.Remove(ctx, collections.Join(completionTime.Unix(), id))
 	if err != nil {
 		return err
 	}
@@ -91,7 +87,7 @@ func (k Keeper) GetAllUnstakings(ctx context.Context) (list []types.Unstaking, e
 	err = k.Unstakings.Walk(
 		ctx,
 		nil,
-		func(key collections.Pair[sdk.AccAddress, uint64], value types.Unstaking) (bool, error) {
+		func(key collections.Pair[int64, uint64], value types.Unstaking) (bool, error) {
 			list = append(list, value)
 
 			return false, nil
@@ -104,18 +100,14 @@ func (k Keeper) GetAllUnstakings(ctx context.Context) (list []types.Unstaking, e
 	return
 }
 
-func (k Keeper) GetUnstakingsByAddress(ctx context.Context, address sdk.AccAddress) (list []types.Unstaking, err error) {
-	err = k.Unstakings.Walk(
-		ctx,
-		collections.NewPrefixedPairRange[sdk.AccAddress, uint64](address),
-		func(key collections.Pair[sdk.AccAddress, uint64], value types.Unstaking) (bool, error) {
-			list = append(list, value)
-			return false, nil
+func (k Keeper) IterateCompletedUnstakings(ctx context.Context, now time.Time, cb func(id uint64, value types.Unstaking) (stop bool, err error)) error {
+	return k.Unstakings.Walk(ctx, nil,
+		func(key collections.Pair[int64, uint64], value types.Unstaking) (bool, error) {
+			if value.CompletionTime.After(now) {
+				return true, nil
+			}
+
+			return cb(key.K2(), value)
 		},
 	)
-	if err != nil {
-		return nil, err
-	}
-
-	return
 }

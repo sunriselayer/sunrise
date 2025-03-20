@@ -23,7 +23,7 @@ type Keeper struct {
 
 	Schema                    collections.Schema
 	Params                    collections.Item[types.Params]
-	Unstakings                collections.Map[collections.Pair[sdk.AccAddress, uint64], types.Unstaking]
+	Unstakings                collections.Map[collections.Pair[int64, uint64], types.Unstaking]
 	UnstakingId               collections.Sequence
 	RewardMultiplier          collections.Map[collections.Pair[[]byte, string], string]                   // math.Dec
 	UsersLastRewardMultiplier collections.Map[collections.Triple[sdk.AccAddress, []byte, string], string] // math.Dec

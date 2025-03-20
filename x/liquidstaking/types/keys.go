@@ -29,7 +29,7 @@ var (
 )
 
 var (
-	UnstakingsKeyCodec                = collections.PairKeyCodec(sdk.AccAddressKey, collections.Uint64Key)
+	UnstakingsKeyCodec                = collections.PairKeyCodec(collections.Int64Key, collections.Uint64Key)
 	RewardMultiplierKeyCodec          = collections.PairKeyCodec(collections.BytesKey, collections.StringKey)
 	UsersLastRewardMultiplierKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.BytesKey, collections.StringKey)
 )
