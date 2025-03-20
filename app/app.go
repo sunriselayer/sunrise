@@ -65,6 +65,7 @@ import (
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	basedepinject "cosmossdk.io/x/accounts/defaults/base/depinject"
@@ -158,6 +159,7 @@ func AppConfig() depinject.Config {
 	return depinject.Configs(
 		appConfig,
 		depinject.Provide(mint.ProvideMintFn),
+		depinject.Provide(gov.ProvideCalculateVoteResultsAndVotingPowerFn),
 	)
 }
 
