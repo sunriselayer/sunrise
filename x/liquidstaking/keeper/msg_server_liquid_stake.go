@@ -18,11 +18,17 @@ func (k msgServer) LiquidStake(ctx context.Context, msg *types.MsgLiquidStake) (
 
 	// Claim rewards
 	lstDenom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
-	err = k.Keeper.ClaimRewards(ctx, msg.Sender, lstDenom)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+
+	err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr, lstDenom)
 	if err != nil {
 		return nil, err
 	}
 
+	// Prepare fee and bond coin
 	params, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil, err

@@ -4,23 +4,36 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
 func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
-	_, err := k.addressCodec.StringToBytes(msg.Sender)
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	rewardSaverModuleAddr := k.accountKeeper.GetModuleAddress(types.RewardSaverModuleAccount())
-	coins := k.bankKeeper.SpendableCoins(ctx, rewardSaverModuleAddr)
+	totalRewards := sdk.NewCoins()
 
-	for _, coin := range coins {
-		err = k.Keeper.ClaimRewards(ctx, msg.Sender, coin.Denom)
+	for _, validatorAddrString := range msg.ValidatorAddresses {
+		rewardSaverModuleAddr := k.accountKeeper.GetModuleAddress(types.RewardSaverModuleAccount(validatorAddrString))
+		validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validatorAddrString)
 		if err != nil {
-			return nil, err
+			return nil, errorsmod.Wrap(err, "invalid validator address")
 		}
+
+		coins := k.bankKeeper.SpendableCoins(ctx, rewardSaverModuleAddr)
+
+		for _, coin := range coins {
+			err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr, coin.Denom)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		totalRewards = totalRewards.Add(coins...)
 	}
 
 	return &types.MsgClaimRewardsResponse{}, nil

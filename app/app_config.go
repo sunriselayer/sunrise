@@ -118,6 +118,7 @@ var (
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
+		{Account: liquidstakingmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 	}
 
 	// blocked account addresses

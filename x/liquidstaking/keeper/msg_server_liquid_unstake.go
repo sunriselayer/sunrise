@@ -5,6 +5,7 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
@@ -18,10 +19,18 @@ func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstak
 
 	// Claim rewards
 	lstDenom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
-	err = k.Keeper.ClaimRewards(ctx, msg.Sender, lstDenom)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+
+	err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr, lstDenom)
 	if err != nil {
 		return nil, err
 	}
+
+	// Get LST supply before burning
+	lstSupplyOld := k.bankKeeper.GetSupply(ctx, lstDenom)
 
 	// Send liquid staking token to module
 	coins := sdk.NewCoins(sdk.NewCoin(lstDenom, msg.Amount))
@@ -38,29 +47,56 @@ func (k msgServer) LiquidUnstake(ctx context.Context, msg *types.MsgLiquidUnstak
 		return nil, err
 	}
 
-	// TODO: Calculate unstake amount
-	outputAmount := msg.Amount
-
-	// Unstake
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
-		DelegatorAddress: msg.Sender,
-		ValidatorAddress: msg.ValidatorAddress,
-		Amount:           sdk.NewCoin(params.BondDenom, outputAmount),
+	// Calculate unstake amount
+	res, err := k.Environment.QueryRouterService.Invoke(ctx, &stakingtypes.QueryDelegationRequest{
+		DelegatorAddr: msg.Sender,
+		ValidatorAddr: msg.ValidatorAddress,
 	})
 	if err != nil {
 		return nil, err
 	}
-	response, ok := res.(*stakingtypes.MsgUndelegateResponse)
+	queryDelegationResponse, ok := res.(*stakingtypes.QueryDelegationResponse)
 	if !ok {
-		return nil, errorsmod.Wrap(errorsmod.ErrInvalidRequest, "invalid response")
+		return nil, sdkerrors.ErrInvalidRequest
+	}
+	stakedAmount := queryDelegationResponse.DelegationResponse.Balance.Amount
+	outputAmount, err := types.CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld.Amount, msg.Amount)
+	if err != nil {
+		return nil, err
 	}
 
-	// TODO: set Unstaking state
+	// Undelegate
+	params, err := k.tokenConverterKeeper.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
+	output := sdk.NewCoin(params.BondDenom, outputAmount)
 
-	return &types.MsgLiquidUnstakeResponse{}, nil
+	res, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
+		DelegatorAddress: msg.Sender,
+		ValidatorAddress: msg.ValidatorAddress,
+		Amount:           output,
+	})
+	if err != nil {
+		return nil, err
+	}
+	undelegateResponse, ok := res.(*stakingtypes.MsgUndelegateResponse)
+	if !ok {
+		return nil, sdkerrors.ErrInvalidRequest
+	}
+
+	// Append Unstaking state
+	_, err = k.AppendUnstaking(ctx, types.Unstaking{
+		Address:        msg.Sender,
+		CompletionTime: undelegateResponse.CompletionTime,
+		Amount:         output,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgLiquidUnstakeResponse{
+		CompletionTime: undelegateResponse.CompletionTime,
+		Amount:         output,
+	}, nil
 }

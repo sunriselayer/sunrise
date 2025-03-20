@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	stakingtypes "cosmossdk.io/x/staking/types"
 	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
@@ -20,11 +21,14 @@ type AccountKeeper interface {
 
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
+	GetSupply(ctx context.Context, denom string) sdk.Coin
+
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
 	IsSendEnabledCoins(ctx context.Context, coins ...sdk.Coin) error
 	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromModuleToModule(ctx context.Context, senderModule, recipientModule string, amt sdk.Coins) error
 	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 
 	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
@@ -34,16 +38,8 @@ type BankKeeper interface {
 
 type StakingKeeper interface {
 	ValidatorAddressCodec() addresscodec.Codec
-	// iterate through bonded validators by operator address, execute func for each validator
-	IterateBondedValidatorsByPower(
-		context.Context, func(index int64, validator sdk.ValidatorI) (stop bool),
-	) error
 
-	TotalBondedTokens(context.Context) (math.Int, error) // total bonded tokens within the validator set
-	IterateDelegations(
-		ctx context.Context, delegator sdk.AccAddress,
-		fn func(index int64, delegation sdk.DelegationI) (stop bool),
-	) error
+	GetValidator(ctx context.Context, addr sdk.ValAddress) (validator stakingtypes.Validator, err error)
 }
 
 type TokenConverterKeeper interface {

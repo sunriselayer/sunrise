@@ -23,14 +23,13 @@ var (
 	ParamsKey = collections.NewPrefix("params/")
 
 	UnstakingsKeyPrefix                = collections.NewPrefix("unstakings/")
-	UnstakingIdsKeyPrefix              = collections.NewPrefix("unstaking_ids/")
+	UnstakingIdKey                     = collections.NewPrefix("unstaking_id/")
 	RewardMultiplierKeyPrefix          = collections.NewPrefix("reward_multiplier/")
 	UsersLastRewardMultiplierKeyPrefix = collections.NewPrefix("users_last_reward_multiplier/")
 )
 
 var (
 	UnstakingsKeyCodec                = collections.PairKeyCodec(sdk.AccAddressKey, collections.Uint64Key)
-	UnstakingIdsKeyCodec              = sdk.AccAddressKey
-	RewardMultiplierKeyCodec          = collections.StringKey
-	UsersLastRewardMultiplierKeyCodec = collections.PairKeyCodec(collections.StringKey, sdk.AccAddressKey)
+	RewardMultiplierKeyCodec          = collections.PairKeyCodec(collections.BytesKey, collections.StringKey)
+	UsersLastRewardMultiplierKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.BytesKey, collections.StringKey)
 )

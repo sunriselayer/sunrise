@@ -24,9 +24,9 @@ type Keeper struct {
 	Schema                    collections.Schema
 	Params                    collections.Item[types.Params]
 	Unstakings                collections.Map[collections.Pair[sdk.AccAddress, uint64], types.Unstaking]
-	UnstakingIds              collections.Map[sdk.AccAddress, uint64]
-	RewardMultiplier          collections.Map[string, string]
-	UsersLastRewardMultiplier collections.Map[collections.Pair[string, sdk.AccAddress], string]
+	UnstakingId               collections.Sequence
+	RewardMultiplier          collections.Map[collections.Pair[[]byte, string], string]                   // math.Dec
+	UsersLastRewardMultiplier collections.Map[collections.Triple[sdk.AccAddress, []byte, string], string] // math.Dec
 
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
@@ -58,7 +58,7 @@ func NewKeeper(
 
 		Params:                    collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Unstakings:                collections.NewMap(sb, types.UnstakingsKeyPrefix, "unstakings", types.UnstakingsKeyCodec, codec.CollValue[types.Unstaking](cdc)),
-		UnstakingIds:              collections.NewMap(sb, types.UnstakingIdsKeyPrefix, "unstaking_ids", types.UnstakingIdsKeyCodec, collections.Uint64Value),
+		UnstakingId:               collections.NewSequence(sb, types.UnstakingIdKey, "unstaking_id"),
 		RewardMultiplier:          collections.NewMap(sb, types.RewardMultiplierKeyPrefix, "reward_multiplier", types.RewardMultiplierKeyCodec, collections.StringValue),
 		UsersLastRewardMultiplier: collections.NewMap(sb, types.UsersLastRewardMultiplierKeyPrefix, "users_last_reward_multiplier", types.UsersLastRewardMultiplierKeyCodec, collections.StringValue),
 

@@ -8,22 +8,28 @@ import (
 	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -271,6 +277,8 @@ func (m *MsgLiquidUnstake) GetValidatorAddress() string {
 
 // MsgLiquidUnstakeResponse
 type MsgLiquidUnstakeResponse struct {
+	CompletionTime time.Time  `protobuf:"bytes,1,opt,name=completion_time,json=completionTime,proto3,stdtime" json:"completion_time"`
+	Amount         types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
 }
 
 func (m *MsgLiquidUnstakeResponse) Reset()         { *m = MsgLiquidUnstakeResponse{} }
@@ -306,9 +314,24 @@ func (m *MsgLiquidUnstakeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgLiquidUnstakeResponse proto.InternalMessageInfo
 
+func (m *MsgLiquidUnstakeResponse) GetCompletionTime() time.Time {
+	if m != nil {
+		return m.CompletionTime
+	}
+	return time.Time{}
+}
+
+func (m *MsgLiquidUnstakeResponse) GetAmount() types.Coin {
+	if m != nil {
+		return m.Amount
+	}
+	return types.Coin{}
+}
+
 // MsgClaimRewards
 type MsgClaimRewards struct {
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender             string   `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ValidatorAddresses []string `protobuf:"bytes,2,rep,name=validator_addresses,json=validatorAddresses,proto3" json:"validator_addresses,omitempty"`
 }
 
 func (m *MsgClaimRewards) Reset()         { *m = MsgClaimRewards{} }
@@ -351,8 +374,16 @@ func (m *MsgClaimRewards) GetSender() string {
 	return ""
 }
 
+func (m *MsgClaimRewards) GetValidatorAddresses() []string {
+	if m != nil {
+		return m.ValidatorAddresses
+	}
+	return nil
+}
+
 // MsgClaimRewardsResponse
 type MsgClaimRewardsResponse struct {
+	Amount github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
 }
 
 func (m *MsgClaimRewardsResponse) Reset()         { *m = MsgClaimRewardsResponse{} }
@@ -388,87 +419,12 @@ func (m *MsgClaimRewardsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgClaimRewardsResponse proto.InternalMessageInfo
 
-// MsgWithdrawUnbonded
-type MsgWithdrawUnbonded struct {
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-}
-
-func (m *MsgWithdrawUnbonded) Reset()         { *m = MsgWithdrawUnbonded{} }
-func (m *MsgWithdrawUnbonded) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawUnbonded) ProtoMessage()    {}
-func (*MsgWithdrawUnbonded) Descriptor() ([]byte, []int) {
-	return fileDescriptor_67bfbd5180b3b43a, []int{8}
-}
-func (m *MsgWithdrawUnbonded) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgWithdrawUnbonded) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawUnbonded.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgWithdrawUnbonded) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawUnbonded.Merge(m, src)
-}
-func (m *MsgWithdrawUnbonded) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawUnbonded) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawUnbonded.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgWithdrawUnbonded proto.InternalMessageInfo
-
-func (m *MsgWithdrawUnbonded) GetSender() string {
+func (m *MsgClaimRewardsResponse) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
-		return m.Sender
+		return m.Amount
 	}
-	return ""
+	return nil
 }
-
-// MsgWithdrawUnbondedResponse
-type MsgWithdrawUnbondedResponse struct {
-}
-
-func (m *MsgWithdrawUnbondedResponse) Reset()         { *m = MsgWithdrawUnbondedResponse{} }
-func (m *MsgWithdrawUnbondedResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawUnbondedResponse) ProtoMessage()    {}
-func (*MsgWithdrawUnbondedResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_67bfbd5180b3b43a, []int{9}
-}
-func (m *MsgWithdrawUnbondedResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgWithdrawUnbondedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawUnbondedResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgWithdrawUnbondedResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawUnbondedResponse.Merge(m, src)
-}
-func (m *MsgWithdrawUnbondedResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawUnbondedResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawUnbondedResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgWithdrawUnbondedResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.liquidstaking.v1.MsgUpdateParams")
@@ -479,52 +435,57 @@ func init() {
 	proto.RegisterType((*MsgLiquidUnstakeResponse)(nil), "sunrise.liquidstaking.v1.MsgLiquidUnstakeResponse")
 	proto.RegisterType((*MsgClaimRewards)(nil), "sunrise.liquidstaking.v1.MsgClaimRewards")
 	proto.RegisterType((*MsgClaimRewardsResponse)(nil), "sunrise.liquidstaking.v1.MsgClaimRewardsResponse")
-	proto.RegisterType((*MsgWithdrawUnbonded)(nil), "sunrise.liquidstaking.v1.MsgWithdrawUnbonded")
-	proto.RegisterType((*MsgWithdrawUnbondedResponse)(nil), "sunrise.liquidstaking.v1.MsgWithdrawUnbondedResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/liquidstaking/v1/tx.proto", fileDescriptor_67bfbd5180b3b43a) }
 
 var fileDescriptor_67bfbd5180b3b43a = []byte{
-	// 600 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x95, 0x41, 0x6f, 0x12, 0x41,
-	0x14, 0xc7, 0x59, 0x5b, 0x49, 0x18, 0x6a, 0xc5, 0xb5, 0xda, 0xed, 0x9a, 0x6e, 0x29, 0x89, 0x09,
-	0x62, 0xd8, 0x2d, 0x98, 0x7a, 0xe8, 0xc1, 0x44, 0x7a, 0x6a, 0x22, 0xda, 0x50, 0xd1, 0xc4, 0x4b,
-	0x33, 0x74, 0x27, 0xcb, 0x84, 0xdd, 0x1d, 0x9c, 0x19, 0x28, 0xdc, 0x8c, 0x9f, 0xc0, 0xab, 0xdf,
-	0xa2, 0x07, 0xce, 0x9e, 0x7b, 0x6c, 0x38, 0x19, 0x0f, 0x8d, 0x01, 0x63, 0xbf, 0x86, 0x61, 0x77,
-	0xd8, 0xb2, 0x6b, 0xa1, 0x34, 0xde, 0xbc, 0xed, 0xcc, 0xfc, 0xde, 0xff, 0xff, 0xde, 0xcb, 0x7b,
-	0x59, 0xb0, 0xc9, 0x5a, 0x2e, 0xc5, 0x0c, 0x19, 0x36, 0xfe, 0xd8, 0xc2, 0x26, 0xe3, 0xb0, 0x81,
-	0x5d, 0xcb, 0x68, 0x17, 0x0c, 0xde, 0xd1, 0x9b, 0x94, 0x70, 0x22, 0x2b, 0x02, 0xd1, 0x43, 0x88,
-	0xde, 0x2e, 0xa8, 0xab, 0x47, 0x84, 0x39, 0x84, 0x19, 0x0e, 0xf3, 0x22, 0x1c, 0x66, 0xf9, 0x21,
-	0xea, 0x9a, 0xff, 0x70, 0xe8, 0x9d, 0x0c, 0xff, 0x20, 0x9e, 0x56, 0x2c, 0x62, 0x11, 0xff, 0x7e,
-	0xf4, 0x25, 0x6e, 0x1f, 0x4f, 0x4d, 0xa3, 0x09, 0x29, 0x74, 0x44, 0x70, 0xe6, 0xab, 0x04, 0xee,
-	0x96, 0x99, 0x55, 0x6d, 0x9a, 0x90, 0xa3, 0x7d, 0xef, 0x45, 0x7e, 0x0e, 0x12, 0xb0, 0xc5, 0xeb,
-	0x84, 0x62, 0xde, 0x55, 0xa4, 0xb4, 0x94, 0x4d, 0x94, 0x94, 0x7e, 0x2f, 0xbf, 0x22, 0x5c, 0x5f,
-	0x9a, 0x26, 0x45, 0x8c, 0x1d, 0x70, 0x8a, 0x5d, 0xab, 0x72, 0x89, 0xca, 0x2f, 0x40, 0xdc, 0xd7,
-	0x56, 0x6e, 0xa5, 0xa5, 0x6c, 0xb2, 0x98, 0xd6, 0xa7, 0xd5, 0xa9, 0xfb, 0x4e, 0xa5, 0xc5, 0xd3,
-	0xf3, 0x8d, 0x58, 0x45, 0x44, 0xed, 0x2c, 0x7f, 0xbe, 0x38, 0xc9, 0x5d, 0xea, 0x65, 0xd6, 0xc0,
-	0x6a, 0x24, 0xb5, 0x0a, 0x62, 0x4d, 0xe2, 0x32, 0x94, 0xf9, 0x25, 0x81, 0xe5, 0x32, 0xb3, 0x5e,
-	0x79, 0xba, 0x07, 0x1c, 0x36, 0x90, 0xbc, 0x05, 0xe2, 0x0c, 0xb9, 0x26, 0xa2, 0xd7, 0xa6, 0x2c,
-	0x38, 0xf9, 0x35, 0xb8, 0xd7, 0x86, 0x36, 0x36, 0x21, 0x27, 0xf4, 0x10, 0xfa, 0x88, 0x97, 0x7a,
-	0xa2, 0xb4, 0xd9, 0xef, 0xe5, 0xd7, 0x45, 0xf0, 0xbb, 0x31, 0x13, 0x56, 0x49, 0xb5, 0x23, 0xf7,
-	0xf2, 0x2e, 0x88, 0x43, 0x87, 0xb4, 0x5c, 0xae, 0x2c, 0x78, 0x22, 0x4f, 0x47, 0xd5, 0xfd, 0x38,
-	0xdf, 0x78, 0xe0, 0x0b, 0x31, 0xb3, 0xa1, 0x63, 0x62, 0x38, 0x90, 0xd7, 0xf5, 0x3d, 0x97, 0xf7,
-	0x7b, 0x79, 0x20, 0x1c, 0xf6, 0x5c, 0x5e, 0x11, 0xa1, 0x3b, 0xc9, 0x51, 0x13, 0x44, 0x86, 0x19,
-	0x05, 0x3c, 0x0c, 0x57, 0x19, 0x34, 0xe0, 0xb7, 0x04, 0x52, 0xc1, 0x53, 0xd5, 0x65, 0xff, 0x6d,
-	0x0b, 0x54, 0xa0, 0x44, 0xeb, 0x0c, 0x9a, 0xb0, 0xef, 0xcd, 0xee, 0xae, 0x0d, 0xb1, 0x53, 0x41,
-	0xc7, 0x90, 0x9a, 0xec, 0xe6, 0x2d, 0x08, 0xbb, 0xf9, 0x23, 0x37, 0xa9, 0x18, 0x98, 0xbd, 0x05,
-	0xf7, 0xcb, 0xcc, 0x7a, 0x8f, 0x79, 0xdd, 0xa4, 0xf0, 0xb8, 0xea, 0xd6, 0x88, 0x6b, 0x22, 0xf3,
-	0x5f, 0x0d, 0xd7, 0xc1, 0xa3, 0x2b, 0x54, 0xc7, 0xa6, 0xc5, 0x6f, 0x8b, 0x60, 0xa1, 0xcc, 0x2c,
-	0xd9, 0x06, 0x4b, 0xa1, 0x15, 0x7d, 0x32, 0x7d, 0xb5, 0x22, 0x2b, 0xa3, 0x16, 0xe6, 0x46, 0xc7,
-	0xae, 0x32, 0x06, 0xc9, 0xc9, 0xcd, 0xca, 0xce, 0x54, 0x98, 0x20, 0xd5, 0xad, 0x79, 0xc9, 0xc0,
-	0x8a, 0x80, 0x3b, 0xe1, 0x19, 0xce, 0xcd, 0x21, 0x21, 0x58, 0xb5, 0x38, 0x3f, 0x1b, 0x18, 0xda,
-	0x60, 0x29, 0x34, 0x30, 0xb3, 0x3b, 0x39, 0x89, 0x5e, 0xd3, 0xc9, 0xab, 0x86, 0x46, 0xee, 0x80,
-	0xd4, 0x5f, 0x13, 0x93, 0x9f, 0x29, 0x13, 0xc5, 0xd5, 0xed, 0x1b, 0xe1, 0x63, 0x67, 0xf5, 0xf6,
-	0xa7, 0x8b, 0x93, 0x9c, 0x54, 0x7a, 0x73, 0x3a, 0xd0, 0xa4, 0xb3, 0x81, 0x26, 0xfd, 0x1c, 0x68,
-	0xd2, 0x97, 0xa1, 0x16, 0x3b, 0x1b, 0x6a, 0xb1, 0xef, 0x43, 0x2d, 0xf6, 0x61, 0xdb, 0xc2, 0xbc,
-	0xde, 0xaa, 0xe9, 0x47, 0xc4, 0x31, 0x84, 0x83, 0x0d, 0xbb, 0x88, 0x8e, 0x0f, 0x46, 0x27, 0xf2,
-	0xeb, 0xe0, 0xdd, 0x26, 0x62, 0xb5, 0xb8, 0xf7, 0xdf, 0x78, 0xf6, 0x27, 0x00, 0x00, 0xff, 0xff,
-	0x58, 0x64, 0x99, 0x61, 0xe7, 0x06, 0x00, 0x00,
+	// 712 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x55, 0xb1, 0x6f, 0xd3, 0x4e,
+	0x14, 0xce, 0xfd, 0xf2, 0x23, 0xa2, 0x97, 0xd2, 0x16, 0x53, 0xa8, 0x6b, 0x09, 0x27, 0x8d, 0x84,
+	0x14, 0x8a, 0x72, 0x6e, 0x82, 0x00, 0xa9, 0x03, 0x12, 0xe9, 0x54, 0x89, 0x00, 0x72, 0x29, 0x03,
+	0x4b, 0x75, 0x89, 0x0f, 0xf7, 0x14, 0xdb, 0x67, 0x7c, 0x97, 0xd0, 0x2e, 0x08, 0xf1, 0x17, 0x74,
+	0x65, 0x45, 0x4c, 0x4c, 0x1d, 0xfa, 0x27, 0x30, 0x74, 0xac, 0x3a, 0x21, 0x86, 0x16, 0xb5, 0x88,
+	0xfe, 0x1b, 0xc8, 0xf6, 0xd9, 0x8d, 0x03, 0x6d, 0x23, 0x46, 0xa6, 0xe4, 0xee, 0x7d, 0xef, 0xbb,
+	0xf7, 0xbe, 0x7b, 0xdf, 0x19, 0xce, 0xf1, 0x9e, 0x17, 0x50, 0x4e, 0x0c, 0x87, 0xbe, 0xee, 0x51,
+	0x8b, 0x0b, 0xdc, 0xa5, 0x9e, 0x6d, 0xf4, 0xeb, 0x86, 0xd8, 0x40, 0x7e, 0xc0, 0x04, 0x53, 0x54,
+	0x09, 0x41, 0x19, 0x08, 0xea, 0xd7, 0x35, 0xbd, 0xc3, 0xb8, 0xcb, 0xb8, 0xd1, 0xc6, 0x9c, 0x18,
+	0xfd, 0x7a, 0x9b, 0x08, 0x5c, 0x37, 0x3a, 0x8c, 0x7a, 0x71, 0xa6, 0x36, 0x23, 0xe3, 0x2e, 0x8f,
+	0x18, 0x5d, 0x6e, 0xcb, 0xc0, 0x6c, 0x1c, 0x58, 0x8b, 0x56, 0x46, 0xbc, 0x90, 0xa1, 0x69, 0x9b,
+	0xd9, 0x2c, 0xde, 0x0f, 0xff, 0xc9, 0xdd, 0x92, 0xcd, 0x98, 0xed, 0x10, 0x23, 0x5a, 0xb5, 0x7b,
+	0xaf, 0x0c, 0x41, 0x5d, 0xc2, 0x05, 0x76, 0x7d, 0x09, 0xb8, 0x75, 0x66, 0x1f, 0x3e, 0x0e, 0xb0,
+	0x2b, 0xd9, 0x2b, 0x1f, 0x00, 0x9c, 0x6c, 0x71, 0x7b, 0xd5, 0xb7, 0xb0, 0x20, 0xcf, 0xa2, 0x88,
+	0x72, 0x1f, 0x8e, 0xe1, 0x9e, 0x58, 0x67, 0x01, 0x15, 0x9b, 0x2a, 0x28, 0x83, 0xea, 0x58, 0x53,
+	0xdd, 0xdf, 0xa9, 0x4d, 0xcb, 0xb2, 0x1e, 0x59, 0x56, 0x40, 0x38, 0x5f, 0x11, 0x01, 0xf5, 0x6c,
+	0xf3, 0x14, 0xaa, 0x3c, 0x84, 0x85, 0x98, 0x5b, 0xfd, 0xaf, 0x0c, 0xaa, 0xc5, 0x46, 0x19, 0x9d,
+	0x25, 0x14, 0x8a, 0x4f, 0x6a, 0xfe, 0xbf, 0x7b, 0x50, 0xca, 0x99, 0x32, 0x6b, 0x71, 0xe2, 0xfd,
+	0xc9, 0xf6, 0xfc, 0x29, 0x5f, 0x65, 0x16, 0xce, 0x0c, 0x95, 0x66, 0x12, 0xee, 0x33, 0x8f, 0x93,
+	0xca, 0x0f, 0x00, 0x27, 0x5a, 0xdc, 0x7e, 0x1c, 0xf1, 0xae, 0x08, 0xdc, 0x25, 0xca, 0x02, 0x2c,
+	0x70, 0xe2, 0x59, 0x24, 0xb8, 0xb0, 0x64, 0x89, 0x53, 0x9e, 0xc0, 0xab, 0x7d, 0xec, 0x50, 0x0b,
+	0x0b, 0x16, 0xac, 0xe1, 0x18, 0x12, 0x95, 0x3e, 0xd6, 0x9c, 0xdb, 0xdf, 0xa9, 0xdd, 0x94, 0xc9,
+	0x2f, 0x12, 0x4c, 0x96, 0x65, 0xaa, 0x3f, 0xb4, 0xaf, 0x2c, 0xc1, 0x02, 0x76, 0x59, 0xcf, 0x13,
+	0x6a, 0x3e, 0x22, 0xb9, 0x13, 0x76, 0xf7, 0xed, 0xa0, 0x74, 0x3d, 0x26, 0xe2, 0x56, 0x17, 0x51,
+	0x66, 0xb8, 0x58, 0xac, 0xa3, 0x65, 0x4f, 0xec, 0xef, 0xd4, 0xa0, 0x3c, 0x61, 0xd9, 0x13, 0xa6,
+	0x4c, 0x5d, 0x2c, 0x86, 0x22, 0xc8, 0x0a, 0x2b, 0x2a, 0xbc, 0x91, 0xed, 0x32, 0x15, 0xe0, 0x27,
+	0x80, 0x53, 0x69, 0x68, 0xd5, 0xe3, 0xff, 0xac, 0x04, 0x1f, 0x01, 0x54, 0x87, 0x1b, 0x4d, 0x54,
+	0x50, 0x5a, 0x70, 0xb2, 0xc3, 0x5c, 0xdf, 0x21, 0x82, 0x32, 0x6f, 0x2d, 0xb4, 0x40, 0xd4, 0x79,
+	0xb1, 0xa1, 0xa1, 0xd8, 0x1f, 0x28, 0xf1, 0x07, 0x7a, 0x9e, 0xf8, 0xa3, 0x79, 0x39, 0xac, 0x69,
+	0xeb, 0xb0, 0x04, 0xcc, 0x89, 0xd3, 0xe4, 0x30, 0xac, 0x3c, 0x48, 0xab, 0x8f, 0x07, 0x78, 0x16,
+	0xc9, 0xea, 0x42, 0x3f, 0x23, 0xe9, 0x67, 0xb4, 0xc4, 0xa8, 0x97, 0x4c, 0x6e, 0x0c, 0xaf, 0x7c,
+	0x8a, 0x5d, 0xb4, 0xe4, 0x60, 0xea, 0x9a, 0xe4, 0x0d, 0x0e, 0x2c, 0xfe, 0x17, 0x97, 0x61, 0xc2,
+	0x6b, 0xbf, 0x5d, 0x06, 0x09, 0xaf, 0x23, 0x3f, 0xda, 0x75, 0x28, 0xc3, 0xd7, 0x41, 0x78, 0x56,
+	0xcb, 0xb7, 0x91, 0xa1, 0x06, 0xab, 0x4c, 0x95, 0xec, 0xa4, 0xad, 0x83, 0x72, 0xfe, 0xfc, 0xd6,
+	0x17, 0xc2, 0xd6, 0x3f, 0x1f, 0x96, 0xaa, 0x36, 0x15, 0xeb, 0xbd, 0x36, 0xea, 0x30, 0x57, 0xbe,
+	0x58, 0xf2, 0xa7, 0xc6, 0xad, 0xae, 0x21, 0x36, 0x7d, 0xc2, 0xa3, 0x04, 0x9e, 0xc8, 0xd4, 0xf8,
+	0x92, 0x87, 0xf9, 0x16, 0xb7, 0x15, 0x07, 0x8e, 0x67, 0x1e, 0x9c, 0xdb, 0x67, 0x3f, 0x14, 0x43,
+	0x0f, 0x80, 0x56, 0x1f, 0x19, 0x9a, 0xb6, 0x46, 0x61, 0x71, 0xf0, 0x9d, 0xa8, 0x9e, 0xcb, 0x30,
+	0x80, 0xd4, 0x16, 0x46, 0x45, 0xa6, 0x47, 0x31, 0x78, 0x25, 0xeb, 0xc8, 0xf9, 0x11, 0x28, 0x24,
+	0x56, 0x6b, 0x8c, 0x8e, 0x4d, 0x0f, 0x74, 0xe0, 0x78, 0x66, 0xe8, 0xce, 0x57, 0x72, 0x10, 0x7a,
+	0x81, 0x92, 0x7f, 0x1a, 0x12, 0xed, 0xd2, 0xbb, 0x93, 0xed, 0x79, 0xd0, 0x7c, 0xba, 0x7b, 0xa4,
+	0x83, 0xbd, 0x23, 0x1d, 0x7c, 0x3f, 0xd2, 0xc1, 0xd6, 0xb1, 0x9e, 0xdb, 0x3b, 0xd6, 0x73, 0x5f,
+	0x8f, 0xf5, 0xdc, 0xcb, 0x7b, 0x03, 0x23, 0x21, 0xd9, 0x1d, 0xbc, 0x49, 0x82, 0x64, 0x61, 0x6c,
+	0x0c, 0x7d, 0x8e, 0xa2, 0x29, 0x69, 0x17, 0x22, 0x97, 0xde, 0xfd, 0x15, 0x00, 0x00, 0xff, 0xff,
+	0xbc, 0xbf, 0x80, 0x36, 0x7c, 0x07, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -548,8 +509,6 @@ type MsgClient interface {
 	LiquidUnstake(ctx context.Context, in *MsgLiquidUnstake, opts ...grpc.CallOption) (*MsgLiquidUnstakeResponse, error)
 	// ClaimRewards
 	ClaimRewards(ctx context.Context, in *MsgClaimRewards, opts ...grpc.CallOption) (*MsgClaimRewardsResponse, error)
-	// WithdrawUnbonded
-	WithdrawUnbonded(ctx context.Context, in *MsgWithdrawUnbonded, opts ...grpc.CallOption) (*MsgWithdrawUnbondedResponse, error)
 }
 
 type msgClient struct {
@@ -596,15 +555,6 @@ func (c *msgClient) ClaimRewards(ctx context.Context, in *MsgClaimRewards, opts 
 	return out, nil
 }
 
-func (c *msgClient) WithdrawUnbonded(ctx context.Context, in *MsgWithdrawUnbonded, opts ...grpc.CallOption) (*MsgWithdrawUnbondedResponse, error) {
-	out := new(MsgWithdrawUnbondedResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidstaking.v1.Msg/WithdrawUnbonded", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
@@ -616,8 +566,6 @@ type MsgServer interface {
 	LiquidUnstake(context.Context, *MsgLiquidUnstake) (*MsgLiquidUnstakeResponse, error)
 	// ClaimRewards
 	ClaimRewards(context.Context, *MsgClaimRewards) (*MsgClaimRewardsResponse, error)
-	// WithdrawUnbonded
-	WithdrawUnbonded(context.Context, *MsgWithdrawUnbonded) (*MsgWithdrawUnbondedResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -635,9 +583,6 @@ func (*UnimplementedMsgServer) LiquidUnstake(ctx context.Context, req *MsgLiquid
 }
 func (*UnimplementedMsgServer) ClaimRewards(ctx context.Context, req *MsgClaimRewards) (*MsgClaimRewardsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClaimRewards not implemented")
-}
-func (*UnimplementedMsgServer) WithdrawUnbonded(ctx context.Context, req *MsgWithdrawUnbonded) (*MsgWithdrawUnbondedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawUnbonded not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -716,24 +661,6 @@ func _Msg_ClaimRewards_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_WithdrawUnbonded_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgWithdrawUnbonded)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).WithdrawUnbonded(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.liquidstaking.v1.Msg/WithdrawUnbonded",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).WithdrawUnbonded(ctx, req.(*MsgWithdrawUnbonded))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.liquidstaking.v1.Msg",
@@ -754,10 +681,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ClaimRewards",
 			Handler:    _Msg_ClaimRewards_Handler,
-		},
-		{
-			MethodName: "WithdrawUnbonded",
-			Handler:    _Msg_WithdrawUnbonded_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -964,6 +887,24 @@ func (m *MsgLiquidUnstakeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	{
+		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.CompletionTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.CompletionTime):])
+	if err3 != nil {
+		return 0, err3
+	}
+	i -= n3
+	i = encodeVarintTx(dAtA, i, uint64(n3))
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -987,6 +928,15 @@ func (m *MsgClaimRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.ValidatorAddresses) > 0 {
+		for iNdEx := len(m.ValidatorAddresses) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ValidatorAddresses[iNdEx])
+			copy(dAtA[i:], m.ValidatorAddresses[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddresses[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
@@ -1017,59 +967,20 @@ func (m *MsgClaimRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgWithdrawUnbonded) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
+	if len(m.Amount) > 0 {
+		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
 	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgWithdrawUnbonded) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgWithdrawUnbonded) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Sender) > 0 {
-		i -= len(m.Sender)
-		copy(dAtA[i:], m.Sender)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgWithdrawUnbondedResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgWithdrawUnbondedResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgWithdrawUnbondedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -1161,6 +1072,10 @@ func (m *MsgLiquidUnstakeResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.CompletionTime)
+	n += 1 + l + sovTx(uint64(l))
+	l = m.Amount.Size()
+	n += 1 + l + sovTx(uint64(l))
 	return n
 }
 
@@ -1174,6 +1089,12 @@ func (m *MsgClaimRewards) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	if len(m.ValidatorAddresses) > 0 {
+		for _, s := range m.ValidatorAddresses {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1183,28 +1104,12 @@ func (m *MsgClaimRewardsResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	return n
-}
-
-func (m *MsgWithdrawUnbonded) Size() (n int) {
-	if m == nil {
-		return 0
+	if len(m.Amount) > 0 {
+		for _, e := range m.Amount {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
 	}
-	var l int
-	_ = l
-	l = len(m.Sender)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgWithdrawUnbondedResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
 	return n
 }
 
@@ -1754,6 +1659,72 @@ func (m *MsgLiquidUnstakeResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgLiquidUnstakeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompletionTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.CompletionTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -1836,6 +1807,38 @@ func (m *MsgClaimRewards) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddresses", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ValidatorAddresses = append(m.ValidatorAddresses, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -1886,61 +1889,11 @@ func (m *MsgClaimRewardsResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgClaimRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgWithdrawUnbonded) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawUnbonded: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawUnbonded: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1950,74 +1903,26 @@ func (m *MsgWithdrawUnbonded) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTx
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTx
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Sender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
+			m.Amount = append(m.Amount, types.Coin{})
+			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgWithdrawUnbondedResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawUnbondedResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawUnbondedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

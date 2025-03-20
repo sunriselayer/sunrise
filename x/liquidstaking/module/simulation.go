@@ -45,6 +45,5 @@ func (am AppModule) WeightedOperationsX(weights simsx.WeightSource, reg simsx.Re
 	reg.Add(weights.Get("msg__liquid_stake", 100), simulation.MsgLiquidStakeFactory(am.keeper))
 	reg.Add(weights.Get("msg__liquid_unstake", 100), simulation.MsgLiquidUnstakeFactory(am.keeper))
 	reg.Add(weights.Get("msg__claim_rewards", 100), simulation.MsgClaimRewardsFactory(am.keeper))
-	reg.Add(weights.Get("msg__withdraw_unbonded", 100), simulation.MsgWithdrawUnbondedFactory(am.keeper))
 
 }
