@@ -81,6 +81,10 @@ func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validat
 		return err
 	}
 
+	if !rewardAmount.IsPositive() {
+		return nil
+	}
+
 	rewardCoin := sdk.NewCoins(sdk.NewCoin(denom, rewardAmount))
 
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RewardSaverModuleAccount(validatorAddr.String()), sender, rewardCoin)
