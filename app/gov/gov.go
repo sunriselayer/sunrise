@@ -4,16 +4,30 @@ import (
 	"context"
 
 	"cosmossdk.io/collections"
+	addresscodec "cosmossdk.io/core/address"
 	math "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	govkeeper "cosmossdk.io/x/gov/keeper"
-	"cosmossdk.io/x/gov/types/v1"
-	stakingkeeper "cosmossdk.io/x/staking/keeper"
-	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	v1 "cosmossdk.io/x/gov/types/v1"
+	liquidstakingtypes "github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
-func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper authkeeper.AccountKeeper, stakingKeeper stakingkeeper.Keeper) govkeeper.CalculateVoteResultsAndVotingPowerFn {
+type AccountKeeper interface {
+	AddressCodec() addresscodec.Codec
+
+	GetModuleAddress(moduleName string) sdk.AccAddress
+}
+
+type StakingKeeper interface {
+	ValidatorAddressCodec() addresscodec.Codec
+
+	IterateDelegations(ctx context.Context, delAddr sdk.AccAddress,
+		fn func(index int64, del sdk.DelegationI) (stop bool),
+	) error
+}
+
+func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, stakingKeeper StakingKeeper) govkeeper.CalculateVoteResultsAndVotingPowerFn {
 	return func(
 		ctx context.Context,
 		keeper govkeeper.Keeper,
@@ -52,6 +66,14 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper authkeeper.AccountKe
 					// Because voter's voting power will tally again even if there will be deduction of voter's voting power from validator.
 					val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
 					validators[valAddrStr] = val
+
+					// <sunrise>
+					// Skip liquidstaking module's delegations
+					delegatorAddr := sdk.AccAddress(delegation.GetDelegatorAddr())
+					if delegatorAddr.Equals(authKeeper.GetModuleAddress(liquidstakingtypes.ModuleName)) {
+						return false
+					}
+					// </sunrise>
 
 					// delegation shares * bonded / total shares
 					votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
