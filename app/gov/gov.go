@@ -37,6 +37,22 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		totalVP := math.LegacyZeroDec()
 		results = createEmptyResults()
 
+		// <sunrise>
+		// Deduct liquidstaking module's delegations voting power from validators
+		liquidstakingAddr := authKeeper.GetModuleAddress(liquidstakingtypes.ModuleName)
+		err = stakingKeeper.IterateDelegations(ctx, liquidstakingAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
+			valAddrStr := delegation.GetValidatorAddr()
+			if val, ok := validators[valAddrStr]; ok {
+				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
+				validators[valAddrStr] = val
+			}
+			return false
+		})
+		if err != nil {
+			return math.LegacyDec{}, nil, err
+		}
+		// </sunrise>
+
 		// iterate over all votes, tally up the voting power of each validator
 		rng := collections.NewPrefixedPairRange[uint64, sdk.AccAddress](proposalID)
 		votesToRemove := []collections.Pair[uint64, sdk.AccAddress]{}
@@ -66,14 +82,6 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 					// Because voter's voting power will tally again even if there will be deduction of voter's voting power from validator.
 					val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
 					validators[valAddrStr] = val
-
-					// <sunrise>
-					// Skip liquidstaking module's delegations
-					delegatorAddr := sdk.AccAddress(delegation.GetDelegatorAddr())
-					if delegatorAddr.Equals(authKeeper.GetModuleAddress(liquidstakingtypes.ModuleName)) {
-						return false
-					}
-					// </sunrise>
 
 					// delegation shares * bonded / total shares
 					votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
