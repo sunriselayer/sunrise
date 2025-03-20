@@ -11,8 +11,14 @@ import (
 func (k Keeper) EndBlocker(ctx context.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
+	// Handle module account rewards
+	err := k.HandleModuleAccountRewards(ctx)
+	if err != nil {
+		return err
+	}
+
 	// Withdraw unbonded
-	err := k.GarbageCollectUnbonded(ctx)
+	err = k.GarbageCollectUnbonded(ctx)
 	if err != nil {
 		return err
 	}

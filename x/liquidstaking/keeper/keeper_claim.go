@@ -53,12 +53,6 @@ func (k Keeper) SetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccA
 // ClaimRewards claims rewards from a validator
 // reward = (rewardMultiplier - userLastRewardMultiplier) * lstCoin.Amount
 func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) error {
-	// Handle module account rewards
-	err := k.HandleModuleAccountRewardsByValidator(ctx, validatorAddr)
-	if err != nil {
-		return err
-	}
-
 	// LST info
 	lstDenom := types.LiquidStakingTokenDenom(validatorAddr.String())
 	lstCoin := k.bankKeeper.GetBalance(ctx, sender, lstDenom)

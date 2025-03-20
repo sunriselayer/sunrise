@@ -39,7 +39,7 @@ type BankKeeper interface {
 type StakingKeeper interface {
 	ValidatorAddressCodec() addresscodec.Codec
 
-	GetValidator(ctx context.Context, addr sdk.ValAddress) (validator stakingtypes.Validator, err error)
+	IterateDelegatorDelegations(ctx context.Context, delegator sdk.AccAddress, cb func(delegation stakingtypes.Delegation) (stop bool)) error
 }
 
 type TokenConverterKeeper interface {

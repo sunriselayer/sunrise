@@ -7,6 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	distributiontypes "cosmossdk.io/x/distribution/types"
+	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
@@ -39,21 +40,44 @@ func (k Keeper) GetRewardSaverAddress(ctx context.Context, validatorAddr string)
 	return k.accountKeeper.GetModuleAddress(rewardSaverAccount)
 }
 
-func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, validatorAddr sdk.ValAddress) error {
+func (k Keeper) HandleModuleAccountRewards(ctx context.Context) error {
+	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
+	err := k.stakingKeeper.IterateDelegatorDelegations(ctx, moduleAddr, func(delegation stakingtypes.Delegation) (stop bool) {
+		validatorAddr := delegation.ValidatorAddress
+
+		err := k.HandleModuleAccountRewardsByValidator(ctx, validatorAddr)
+		if err != nil {
+			k.Logger.Error("failed to handle module account rewards by validator", "validator", validatorAddr, "error", err)
+		}
+
+		return false
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, validatorAddr string) error {
+	validatorAddrBytes, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validatorAddr)
+	if err != nil {
+		return err
+	}
+
 	// Validate last reward handling time to mitigate the load
-	err := k.ValidateLastRewardHandlingTime(ctx, validatorAddr)
+	err = k.ValidateLastRewardHandlingTime(ctx, validatorAddrBytes)
 	if err != nil {
 		return err
 	}
 
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
-	validatorAddrStr := validatorAddr.String()
-	rewardSaverAddr := k.GetRewardSaverAddress(ctx, validatorAddrStr)
+	rewardSaverAddr := k.GetRewardSaverAddress(ctx, validatorAddr)
 
 	// Withdraw delegator reward as module address
 	res, err := k.Environment.MsgRouterService.Invoke(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
 		DelegatorAddress: moduleAddr.String(),
-		ValidatorAddress: validatorAddrStr,
+		ValidatorAddress: validatorAddr,
 	})
 	if err != nil {
 		return err
@@ -80,13 +104,13 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 	}
 
 	// Get LST info
-	lstDenom := types.LiquidStakingTokenDenom(validatorAddrStr)
+	lstDenom := types.LiquidStakingTokenDenom(validatorAddr)
 	lstSupplyOld := k.bankKeeper.GetSupply(ctx, lstDenom)
 
 	// Convert fee coin to LST
 	ok, feeCoin := response.Amount.Find(params.FeeDenom)
 	if ok {
-		stakedAmount, err := k.GetStakedAmount(ctx, validatorAddrStr)
+		stakedAmount, err := k.GetStakedAmount(ctx, validatorAddr)
 		if err != nil {
 			return err
 		}
@@ -94,7 +118,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 
 		// For slashing compensation
 		if compensation.IsPositive() {
-			err = k.ConvertAndDelegate(ctx, rewardSaverAddr, validatorAddrStr, compensation)
+			err = k.ConvertAndDelegate(ctx, rewardSaverAddr, validatorAddr, compensation)
 			if err != nil {
 				return err
 			}
@@ -104,7 +128,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 		if distribution.IsPositive() {
 			_, err = k.Environment.MsgRouterService.Invoke(ctx, &types.MsgLiquidStake{
 				Sender:           rewardSaverAddr.String(),
-				ValidatorAddress: validatorAddrStr,
+				ValidatorAddress: validatorAddr,
 				Amount:           distribution,
 			})
 			if err != nil {
@@ -129,7 +153,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 			multiplierDenom = lstDenom
 		}
 
-		multiplierOld, err := k.GetRewardMultiplier(ctx, validatorAddr, multiplierDenom)
+		multiplierOld, err := k.GetRewardMultiplier(ctx, validatorAddrBytes, multiplierDenom)
 		if err != nil {
 			return err
 		}
@@ -139,7 +163,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 			return err
 		}
 
-		err = k.SetRewardMultiplier(ctx, validatorAddr, multiplierDenom, multiplierNew)
+		err = k.SetRewardMultiplier(ctx, validatorAddrBytes, multiplierDenom, multiplierNew)
 		if err != nil {
 			return err
 		}
