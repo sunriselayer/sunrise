@@ -8,6 +8,29 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
+func (k Keeper) GarbageCollectUnbonded(ctx context.Context) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	err := k.IterateCompletedUnstakings(ctx, sdkCtx.BlockTime(), func(id uint64, value types.Unstaking) (stop bool, err error) {
+		err = k.WithdrawUnbonded(ctx, value)
+		if err != nil {
+			return true, err
+		}
+
+		err = k.RemoveUnstaking(ctx, value.CompletionTime, id)
+		if err != nil {
+			return true, err
+		}
+
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (k Keeper) WithdrawUnbonded(ctx context.Context, unstaking types.Unstaking) error {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 

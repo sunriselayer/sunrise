@@ -26,10 +26,12 @@ var (
 	UnstakingIdKey                     = collections.NewPrefix("unstaking_id/")
 	RewardMultiplierKeyPrefix          = collections.NewPrefix("reward_multiplier/")
 	UsersLastRewardMultiplierKeyPrefix = collections.NewPrefix("users_last_reward_multiplier/")
+	LastRewardHandlingTimeKeyPrefix    = collections.NewPrefix("last_reward_handling_time/")
 )
 
 var (
 	UnstakingsKeyCodec                = collections.PairKeyCodec(collections.Int64Key, collections.Uint64Key)
 	RewardMultiplierKeyCodec          = collections.PairKeyCodec(collections.BytesKey, collections.StringKey)
 	UsersLastRewardMultiplierKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.BytesKey, collections.StringKey)
+	LastRewardHandlingTimeKeyCodec    = collections.BytesKey
 )

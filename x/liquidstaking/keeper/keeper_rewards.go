@@ -10,8 +10,25 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidstaking/types"
 )
 
-func (k Keeper) HandleModuleAccountRewards(ctx context.Context) error {
-	// TODO: iterate all validators which the module account delegates to
+func (k Keeper) ValidateLastRewardHandlingTime(ctx context.Context, validatorAddr sdk.ValAddress) error {
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
+
+	lastRewardHandlingTime, err := k.GetLastRewardHandlingTime(ctx, validatorAddr)
+	if err != nil {
+		return err
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	if sdkCtx.BlockTime().Before(lastRewardHandlingTime.Add(params.RewardPeriod)) {
+		return nil
+	}
+	err = k.SetLastRewardHandlingTime(ctx, validatorAddr, sdkCtx.BlockTime())
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -23,6 +40,12 @@ func (k Keeper) GetRewardSaverAddress(ctx context.Context, validatorAddr string)
 }
 
 func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, validatorAddr sdk.ValAddress) error {
+	// Validate last reward handling time to mitigate the load
+	err := k.ValidateLastRewardHandlingTime(ctx, validatorAddr)
+	if err != nil {
+		return err
+	}
+
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 	validatorAddrStr := validatorAddr.String()
 	rewardSaverAddr := k.GetRewardSaverAddress(ctx, validatorAddrStr)
@@ -69,12 +92,15 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 		}
 		compensation, distribution := types.CalculateSlashingCompensation(stakedAmount, lstSupplyOld.Amount, feeCoin.Amount)
 
+		// For slashing compensation
 		if compensation.IsPositive() {
 			err = k.ConvertAndDelegate(ctx, rewardSaverAddr, validatorAddrStr, compensation)
 			if err != nil {
 				return err
 			}
 		}
+
+		// For LST distribution
 		if distribution.IsPositive() {
 			_, err = k.Environment.MsgRouterService.Invoke(ctx, &types.MsgLiquidStake{
 				Sender:           rewardSaverAddr.String(),

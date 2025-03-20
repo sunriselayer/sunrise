@@ -27,6 +27,7 @@ type Keeper struct {
 	UnstakingId               collections.Sequence
 	RewardMultiplier          collections.Map[collections.Pair[[]byte, string], string]                   // math.Dec
 	UsersLastRewardMultiplier collections.Map[collections.Triple[sdk.AccAddress, []byte, string], string] // math.Dec
+	LastRewardHandlingTime    collections.Map[[]byte, int64]
 
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
@@ -61,6 +62,7 @@ func NewKeeper(
 		UnstakingId:               collections.NewSequence(sb, types.UnstakingIdKey, "unstaking_id"),
 		RewardMultiplier:          collections.NewMap(sb, types.RewardMultiplierKeyPrefix, "reward_multiplier", types.RewardMultiplierKeyCodec, collections.StringValue),
 		UsersLastRewardMultiplier: collections.NewMap(sb, types.UsersLastRewardMultiplierKeyPrefix, "users_last_reward_multiplier", types.UsersLastRewardMultiplierKeyCodec, collections.StringValue),
+		LastRewardHandlingTime:    collections.NewMap(sb, types.LastRewardHandlingTimeKeyPrefix, "last_reward_handling_time", types.LastRewardHandlingTimeKeyCodec, collections.Int64Value),
 
 		accountKeeper:        accountKeeper,
 		bankKeeper:           bankKeeper,
