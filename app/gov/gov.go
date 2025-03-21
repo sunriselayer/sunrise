@@ -10,7 +10,7 @@ import (
 
 	govkeeper "cosmossdk.io/x/gov/keeper"
 	v1 "cosmossdk.io/x/gov/types/v1"
-	liquidstakingtypes "github.com/sunriselayer/sunrise/x/liquidstaking/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 type AccountKeeper interface {
@@ -38,9 +38,9 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		results = createEmptyResults()
 
 		// <sunrise>
-		// Deduct liquidstaking module's delegations voting power from validators
-		liquidstakingAddr := authKeeper.GetModuleAddress(liquidstakingtypes.ModuleName)
-		err = stakingKeeper.IterateDelegations(ctx, liquidstakingAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
+		// Deduct shareclass module's delegations voting power from validators
+		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
+		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 			if val, ok := validators[valAddrStr]; ok {
 				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())

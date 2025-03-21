@@ -1,15 +1,17 @@
 syntax = "proto3";
 package sunrise.shareclass.v1;
 
-import "amino/amino.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/shareclass/Params";
   option (gogoproto.equal) = true;
 
-  
+  google.protobuf.Duration reward_period = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
 }

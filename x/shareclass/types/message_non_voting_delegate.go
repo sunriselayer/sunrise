@@ -1,7 +1,7 @@
 package types
 
-func NewMsgNonVotingDelegate(creator string) *MsgNonVotingDelegate {
+func NewMsgNonVotingDelegate(sender string) *MsgNonVotingDelegate {
 	return &MsgNonVotingDelegate{
-		Creator: creator,
+		Sender: sender,
 	}
 }

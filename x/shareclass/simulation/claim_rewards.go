@@ -14,7 +14,7 @@ func MsgClaimRewardsFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgCla
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgClaimRewards{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the ClaimRewards simulation

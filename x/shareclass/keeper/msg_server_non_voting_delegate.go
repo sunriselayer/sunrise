@@ -8,8 +8,8 @@ import (
 )
 
 func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotingDelegate) (*types.MsgNonVotingDelegateResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	// TODO: Handle the message

@@ -14,7 +14,7 @@ func MsgNonVotingDelegateFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.M
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgNonVotingDelegate{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the NonVotingDelegate simulation

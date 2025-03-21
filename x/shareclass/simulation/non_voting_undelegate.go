@@ -14,7 +14,7 @@ func MsgNonVotingUndelegateFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgNonVotingUndelegate{
-			Creator: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the NonVotingUndelegate simulation
