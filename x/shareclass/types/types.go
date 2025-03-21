@@ -9,36 +9,36 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
-func LiquidStakingTokenDenom(validatorAddress string) string {
-	return fmt.Sprintf("%s/%s", ModuleName, validatorAddress)
+func NonVotingShareTokenDenom(validatorAddress string) string {
+	return fmt.Sprintf("%s/non-voting-share/%s", ModuleName, validatorAddress)
 }
 
 func RewardSaverAddress(validatorAddress string) sdk.AccAddress {
 	return authtypes.NewModuleAddress(fmt.Sprintf("%s/reward_saver/%s", ModuleName, validatorAddress))
 }
 
-func CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld, lstAmount math.Int) (math.Int, error) {
-	stakedAmountDec, err := math.NewDecFromString(stakedAmount.String())
+func CalculateUndelegationOutputAmount(share, totalShare, totalBonded math.Int) (math.Int, error) {
+	shareDec, err := math.NewDecFromString(share.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	lstSupplyOldDec, err := math.NewDecFromString(lstSupplyOld.String())
+	totalShareDec, err := math.NewDecFromString(totalShare.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	ratio, err := stakedAmountDec.Quo(lstSupplyOldDec)
+	totalBondedDec, err := math.NewDecFromString(totalBonded.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	lstAmountDec, err := math.NewDecFromString(lstAmount.String())
+	ratio, err := shareDec.Quo(totalShareDec)
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	outputAmountDec, err := lstAmountDec.Mul(ratio)
+	outputAmountDec, err := totalBondedDec.Mul(ratio)
 	if err != nil {
 		return math.Int{}, err
 	}
@@ -50,12 +50,37 @@ func CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld, lstAmount ma
 	return outputAmount, nil
 }
 
-func CalculateRewardMultiplierNew(rewardMultiplierOld math.Dec, rewardAmount math.Int, lstSupplyNew math.Int) (math.Dec, error) {
+// CalculateReward calculates the reward for a user
+// reward = (rewardMultiplier - userLastRewardMultiplier) * principal
+func CalculateReward(rewardMultiplier, userLastRewardMultiplier math.Dec, share math.Int) (math.Int, error) {
+	shareDec, err := math.NewDecFromString(share.String())
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	multiplierDiff, err := rewardMultiplier.Sub(userLastRewardMultiplier)
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	rewardAmountDec, err := multiplierDiff.Mul(shareDec)
+	if err != nil {
+		return math.Int{}, err
+	}
+	rewardAmount, err := rewardAmountDec.SdkIntTrim()
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	return rewardAmount, nil
+}
+
+func CalculateRewardMultiplierNew(rewardMultiplierOld math.Dec, rewardAmount math.Int, totalShare math.Int) (math.Dec, error) {
 	multiplierDiffNumerator, err := math.NewDecFromString(rewardAmount.String())
 	if err != nil {
 		return math.Dec{}, err
 	}
-	multiplierDiffDenominator, err := math.NewDecFromString(lstSupplyNew.String())
+	multiplierDiffDenominator, err := math.NewDecFromString(totalShare.String())
 	if err != nil {
 		return math.Dec{}, err
 	}
@@ -70,18 +95,4 @@ func CalculateRewardMultiplierNew(rewardMultiplierOld math.Dec, rewardAmount mat
 	}
 
 	return multiplierNew, nil
-}
-
-func CalculateSlashingCompensation(stakedAmount, lstSupplyOld, feeCoinRewardAmount math.Int) (compensation math.Int, distribution math.Int) {
-	slashed := lstSupplyOld.Sub(stakedAmount)
-
-	if feeCoinRewardAmount.GT(slashed) {
-		compensation = slashed
-		distribution = feeCoinRewardAmount.Sub(compensation)
-	} else {
-		compensation = feeCoinRewardAmount
-		distribution = math.NewInt(0)
-	}
-
-	return
 }

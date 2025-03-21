@@ -18,41 +18,41 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	// Claim rewards
-	lstDenom := types.LiquidStakingTokenDenom(msg.ValidatorAddress)
 	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
-	err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr, lstDenom)
+	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
 	if err != nil {
 		return nil, err
 	}
 
 	// Get LST supply before burning
-	lstSupplyOld := k.bankKeeper.GetSupply(ctx, lstDenom)
+	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
 
-	// Send liquid staking token to module
-	coins := sdk.NewCoins(sdk.NewCoin(lstDenom, msg.Amount))
+	// Send non transferrable share token to module
+	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, msg.Amount))
 
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, coins)
 	if err != nil {
 		return nil, err
 	}
 
-	// Burn liquid staking token
+	// Burn non transferrable share token
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 	err = k.bankKeeper.BurnCoins(ctx, moduleAddr, coins)
 	if err != nil {
 		return nil, err
 	}
 
-	// Calculate unstake amount
-	stakedAmount, err := k.GetStakedAmount(ctx, msg.ValidatorAddress)
+	// Calculate unbonding amount
+	totalShare := k.GetTotalShare(ctx, msg.ValidatorAddress)
+	totalStaked, err := k.GetTotalStakedAmount(ctx, msg.ValidatorAddress)
 	if err != nil {
 		return nil, err
 	}
-	outputAmount, err := types.CalculateLiquidUnstakeOutputAmount(stakedAmount, lstSupplyOld.Amount, msg.Amount)
+	outputAmount, err := types.CalculateUndelegationOutputAmount(msg.Amount, totalShare, totalStaked)
 	if err != nil {
 		return nil, err
 	}

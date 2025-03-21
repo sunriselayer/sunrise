@@ -18,19 +18,14 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	totalRewards := sdk.NewCoins()
 
 	for _, validatorAddrString := range msg.ValidatorAddresses {
-		rewardSaverAddr := types.RewardSaverAddress(validatorAddrString)
 		validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validatorAddrString)
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "invalid validator address")
 		}
 
-		coins := k.bankKeeper.SpendableCoins(ctx, rewardSaverAddr)
-
-		for _, coin := range coins {
-			err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr, coin.Denom)
-			if err != nil {
-				return nil, err
-			}
+		coins, err := k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+		if err != nil {
+			return nil, err
 		}
 
 		totalRewards = totalRewards.Add(coins...)

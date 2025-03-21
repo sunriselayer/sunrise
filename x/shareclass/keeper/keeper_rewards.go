@@ -92,72 +92,27 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 		return err
 	}
 
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
-	if err != nil {
-		return err
-	}
+	// Get total share
+	totalShare := k.GetTotalShare(ctx, validatorAddr)
 
-	// Get LST info
-	lstDenom := types.LiquidStakingTokenDenom(validatorAddr)
-	lstSupplyOld := k.bankKeeper.GetSupply(ctx, lstDenom)
-
-	// Convert fee coin to LST
-	ok, feeCoin := response.Amount.Find(params.FeeDenom)
-	if ok {
-		stakedAmount, err := k.GetStakedAmount(ctx, validatorAddr)
-		if err != nil {
-			return err
-		}
-		compensation, distribution := types.CalculateSlashingCompensation(stakedAmount, lstSupplyOld.Amount, feeCoin.Amount)
-
-		// For slashing compensation
-		if compensation.IsPositive() {
-			err = k.ConvertAndDelegate(ctx, rewardSaverAddr, validatorAddr, compensation)
-			if err != nil {
-				return err
-			}
-		}
-
-		// For redistribution
-		if distribution.IsPositive() {
-			_, err = k.Environment.MsgRouterService.Invoke(ctx, &types.MsgNonVotingDelegate{
-				Sender:           rewardSaverAddr.String(),
-				ValidatorAddress: validatorAddr,
-				Amount:           distribution,
-			})
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	// Get LST info
-	lstSupplyNew := k.bankKeeper.GetSupply(ctx, lstDenom)
-
-	if lstSupplyNew.IsZero() {
+	if totalShare.IsZero() {
 		return nil
 	}
 
 	// Iterate all rewards
-	// Multiplier_new = Multiplier_old + (Reward_new) / Supply_LST_new
-	// Supply_LST_new = Supply_LST_old + Reward_LST_new
+	// Multiplier_new = Multiplier_old + (Reward_new) / totalShare
 	for _, coin := range response.Amount {
-		multiplierDenom := coin.Denom
-		if multiplierDenom == params.FeeDenom {
-			multiplierDenom = lstDenom
-		}
-
-		multiplierOld, err := k.GetRewardMultiplier(ctx, validatorAddrBytes, multiplierDenom)
+		multiplierOld, err := k.GetRewardMultiplier(ctx, validatorAddrBytes, coin.Denom)
 		if err != nil {
 			return err
 		}
 
-		multiplierNew, err := types.CalculateRewardMultiplierNew(multiplierOld, coin.Amount, lstSupplyNew.Amount)
+		multiplierNew, err := types.CalculateRewardMultiplierNew(multiplierOld, coin.Amount, totalShare)
 		if err != nil {
 			return err
 		}
 
-		err = k.SetRewardMultiplier(ctx, validatorAddrBytes, multiplierDenom, multiplierNew)
+		err = k.SetRewardMultiplier(ctx, validatorAddrBytes, coin.Denom, multiplierNew)
 		if err != nil {
 			return err
 		}

@@ -23,8 +23,10 @@ type AccountKeeper interface {
 type BankKeeper interface {
 	GetSupply(ctx context.Context, denom string) sdk.Coin
 
+	SetSendEnabled(ctx context.Context, denom string, value bool)
+
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
-	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
+	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
 	IsSendEnabledCoins(ctx context.Context, coins ...sdk.Coin) error
 	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
