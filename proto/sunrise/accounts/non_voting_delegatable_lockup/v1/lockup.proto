@@ -1,0 +1,42 @@
+syntax = "proto3";
+package sunrise.accounts.non_voting_delegatable_lockup.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/v1";
+
+// Period defines a length of time and amount of coins that will be lock.
+message Period {
+  // Period duration
+  google.protobuf.Duration length = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+  repeated cosmos.base.v1beta1.Coin amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// UnbondingEntries
+message UnbondingEntries {
+  repeated UnbondingEntry entries = 1;
+}
+
+// UnbondingEntry defines an entry tracking the lockup account unbonding operation.
+message UnbondingEntry {
+  int64 creation_height = 1;
+  // end time of entry
+  google.protobuf.Timestamp end_time = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  // unbond amount
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  // validator address
+  string validator_address = 4 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
