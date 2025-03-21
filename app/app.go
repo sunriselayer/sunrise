@@ -61,6 +61,8 @@ import (
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	selfdelegationmodulekeeper "github.com/sunriselayer/sunrise/x/selfdelegation/keeper"
+	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
@@ -74,9 +76,6 @@ import (
 
 	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
 	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
-	liquidstakingmodulekeeper "github.com/sunriselayer/sunrise/x/liquidstaking/keeper"
-	selfdelegationmodulekeeper "github.com/sunriselayer/sunrise/x/selfdelegation/keeper"
-	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 )
 
 const (
@@ -139,7 +138,6 @@ type App struct {
 	SwapKeeper               swapmodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
 	SelfdelegationKeeper     selfdelegationmodulekeeper.Keeper
-	LiquidstakingKeeper      liquidstakingmodulekeeper.Keeper
 	ShareclassKeeper         shareclassmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
@@ -237,7 +235,6 @@ func New(
 		&app.SwapKeeper,
 		&app.FeeKeeper,
 		&app.SelfdelegationKeeper,
-		&app.LiquidstakingKeeper,
 		&app.ShareclassKeeper,
 	); err != nil {
 		panic(err)
