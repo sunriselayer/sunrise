@@ -3,7 +3,7 @@ package lockupdepinject
 import (
 	"cosmossdk.io/x/accounts/accountstd"
 
-	lockup "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup"
+	lockup "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup"
 )
 
 func ProvideAllLockupAccounts() []accountstd.DepinjectAccount {

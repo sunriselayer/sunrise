@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.accounts.non_voting_delegatable_lockup.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
@@ -11,8 +12,9 @@ import "sunrise/accounts/non_voting_delegatable_lockup/v1/lockup.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/v1";
 
-// MsgInitNonVotingDelegatableLockupAccount defines a message that enables creating a non-voting-delegatable lockup account.
+// MsgInitNonVotingDelegatableLockupAccount defines a message that enables creating a non-voting delegatable lockup account.
 message MsgInitNonVotingDelegatableLockupAccount {
+  option (amino.name) = "cosmos-sdk/MsgInitLockupAccount";
   option (gogoproto.equal) = true;
 
   // owner of the vesting account
@@ -20,11 +22,13 @@ message MsgInitNonVotingDelegatableLockupAccount {
   // end_time is end of lockup
   google.protobuf.Timestamp end_time = 2 [
     (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
     (gogoproto.stdtime) = true
   ];
   // start_time is start of lockup
   google.protobuf.Timestamp start_time = 3 [
     (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
     (gogoproto.stdtime) = true
   ];
 }
@@ -32,9 +36,10 @@ message MsgInitNonVotingDelegatableLockupAccount {
 // MsgInitNonVotingDelegatableLockupAccountResponse defines the Msg/InitNonVotingDelegatableLockupAccount response type.
 message MsgInitNonVotingDelegatableLockupAccountResponse {}
 
-// MsgInitNonVotingDelegatablePeriodicLockingAccount defines a message that enables creating a non-voting-delegatable periodic locking
+// MsgInitNonVotingDelegatablePeriodicLockingAccount defines a message that enables creating a non-voting delegatable periodic locking
 // account.
 message MsgInitNonVotingDelegatablePeriodicLockingAccount {
+  option (amino.name) = "cosmos-sdk/MsgInitPeriodLockupAccount";
   option (gogoproto.equal) = false;
 
   // owner of the lockup account
@@ -42,42 +47,57 @@ message MsgInitNonVotingDelegatablePeriodicLockingAccount {
   // start of lockup
   google.protobuf.Timestamp start_time = 2 [
     (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
     (gogoproto.stdtime) = true
   ];
-  repeated Period locking_periods = 3 [(gogoproto.nullable) = false];
+  repeated Period locking_periods = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // MsgInitNonVotingDelegatablePeriodicLockingAccountResponse defines the Msg/InitNonVotingDelegatablePeriodicLockingAccount
 // response type.
 message MsgInitNonVotingDelegatablePeriodicLockingAccountResponse {}
 
-// MsgNonVotingDelegate
-message MsgNonVotingDelegate {
+// MsgDelegate defines a message that enable lockup account to execute delegate message
+message MsgDelegate {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // sender is the owner of the lockup account
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of fee denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 
-// MsgNonVotingDelegateResponse
-message MsgNonVotingDelegateResponse {}
+// MsgUndelegate defines a message that enable lockup account to execute undelegate message
+message MsgUndelegate {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
 
-// MsgNonVotingUndelegate
-message MsgNonVotingUndelegate {
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  // Amount of bond denom
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 
-// MsgNonVotingUndelegateResponse
-message MsgNonVotingUndelegateResponse {}
+// MsgWithdrawReward defines a message that enable lockup account to execute withdraw reward message
+message MsgWithdrawReward {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
 
 // MsgSend defines a message that enable lockup account to execute send message
 message MsgSend {
@@ -89,6 +109,8 @@ message MsgSend {
   string to_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated cosmos.base.v1beta1.Coin amount = 3 [
     (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (amino.encoding) = "legacy_coins",
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
 }

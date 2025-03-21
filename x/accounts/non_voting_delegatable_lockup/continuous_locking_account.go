@@ -13,7 +13,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	// <sunsise>
-	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
+	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/v1"
 	// </sunrise>
 )
 
@@ -39,7 +39,7 @@ type ContinuousLockingAccount struct {
 	StartTime collections.Item[time.Time]
 }
 
-func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.MsgInitSelfDelegatableLockupAccount) (*lockuptypes.MsgInitSelfDelegatableLockupAccountResponse, error) {
+func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.MsgInitNonVotingDelegatableLockupAccount) (*lockuptypes.MsgInitNonVotingDelegatableLockupAccountResponse, error) {
 	if msg.EndTime.IsZero() {
 		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid end time %s", msg.EndTime.String())
 	}
@@ -63,23 +63,16 @@ func (cva ContinuousLockingAccount) Init(ctx context.Context, msg *lockuptypes.M
 	return cva.BaseLockup.Init(ctx, msg)
 }
 
-// func (cva *ContinuousLockingAccount) Delegate(ctx context.Context, msg *lockuptypes.MsgDelegate) (
-// 	*lockuptypes.MsgExecuteMessagesResponse, error,
-// ) {
-// 	return cva.BaseLockup.Delegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
-// }
+func (cva *ContinuousLockingAccount) Delegate(ctx context.Context, msg *lockuptypes.MsgDelegate) (
+	*lockuptypes.MsgExecuteMessagesResponse, error,
+) {
+	return cva.BaseLockup.Delegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
+}
 
 func (cva *ContinuousLockingAccount) SendCoins(ctx context.Context, msg *lockuptypes.MsgSend) (
 	*lockuptypes.MsgExecuteMessagesResponse, error,
 ) {
 	return cva.BaseLockup.SendCoins(ctx, msg, cva.GetLockedCoinsWithDenoms)
-}
-
-// <sunrise>
-func (cva *ContinuousLockingAccount) SelfDelegate(ctx context.Context, msg *lockuptypes.MsgSelfDelegate) (
-	*lockuptypes.MsgSelfDelegateResponse, error,
-) {
-	return cva.BaseLockup.SelfDelegate(ctx, msg, cva.GetLockedCoinsWithDenoms)
 }
 
 // GetLockCoinsInfo returns the total number of unlocked and locked coins.
@@ -213,13 +206,9 @@ func (cva ContinuousLockingAccount) RegisterInitHandler(builder *accountstd.Init
 }
 
 func (cva ContinuousLockingAccount) RegisterExecuteHandlers(builder *accountstd.ExecuteBuilder) {
-	// accountstd.RegisterExecuteHandler(builder, cva.Delegate)
+	accountstd.RegisterExecuteHandler(builder, cva.Delegate)
 	accountstd.RegisterExecuteHandler(builder, cva.SendCoins)
 	cva.BaseLockup.RegisterExecuteHandlers(builder)
-
-	// <sunrise>
-	accountstd.RegisterExecuteHandler(builder, cva.SelfDelegate)
-	// </sunrise>
 }
 
 func (cva ContinuousLockingAccount) RegisterQueryHandlers(builder *accountstd.QueryBuilder) {

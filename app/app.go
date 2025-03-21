@@ -74,6 +74,7 @@ import (
 	lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
 	multisigdepinject "cosmossdk.io/x/accounts/defaults/multisig/depinject"
 
+	nonvotingdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/depinject"
 	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
 	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
 )
@@ -195,6 +196,7 @@ func New(
 
 				basedepinject.ProvideSecp256K1PubKey,
 
+				nonvotingdelegatablelockupdepinject.ProvideAllLockupAccounts,
 				selfdelegatablelockupdepinject.ProvideAllLockupAccounts,
 				selfdelegationproxydepinject.ProvideAccount,
 			),
