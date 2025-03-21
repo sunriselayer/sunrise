@@ -9,6 +9,10 @@ import (
 
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgClaimRewards{},
+	)
+
+	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgNonVotingUndelegate{},
 	)
 
