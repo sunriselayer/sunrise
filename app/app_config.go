@@ -92,6 +92,8 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
 	_ "github.com/sunriselayer/sunrise/x/liquidstaking/module"
 	liquidstakingmoduletypes "github.com/sunriselayer/sunrise/x/liquidstaking/types"
+	_ "github.com/sunriselayer/sunrise/x/shareclass/module"
+	shareclassmoduletypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 var (
@@ -180,6 +182,7 @@ var (
 						feemoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
 						liquidstakingmoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -202,6 +205,7 @@ var (
 						feemoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
 						liquidstakingmoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -255,6 +259,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 					// SkipStoreKeys is an optional list of store keys to skip when constructing the
@@ -392,6 +397,10 @@ var (
 			{
 				Name:   liquidstakingmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&liquidstakingmoduletypes.Module{}),
+			},
+			{
+				Name:   shareclassmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&shareclassmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

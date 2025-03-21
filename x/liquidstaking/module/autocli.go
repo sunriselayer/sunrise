@@ -47,12 +47,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				{
-			RpcMethod: "WithdrawUnbonded",
-			Use: "withdraw-unbonded",
-			Short: "Send a withdraw-unbonded tx",
-			PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
-		},
-		// this line is used by ignite scaffolding # autocli/tx
+					RpcMethod:      "WithdrawUnbonded",
+					Use:            "withdraw-unbonded",
+					Short:          "Send a withdraw-unbonded tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
 	}
