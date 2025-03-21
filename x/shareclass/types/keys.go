@@ -1,6 +1,9 @@
 package types
 
-import "cosmossdk.io/collections"
+import (
+	"cosmossdk.io/collections"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 const (
 	// ModuleName defines the module name
@@ -15,5 +18,20 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_shareclass")
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params/")
+
+	UnbondingsKeyPrefix                = collections.NewPrefix("unbondings/")
+	UnbondingIdKey                     = collections.NewPrefix("unbonding_id/")
+	RewardMultiplierKeyPrefix          = collections.NewPrefix("reward_multiplier/")
+	UsersLastRewardMultiplierKeyPrefix = collections.NewPrefix("users_last_reward_multiplier/")
+	LastRewardHandlingTimeKeyPrefix    = collections.NewPrefix("last_reward_handling_time/")
+)
+
+var (
+	UnbondingsKeyCodec                = collections.PairKeyCodec(collections.Int64Key, collections.Uint64Key)
+	RewardMultiplierKeyCodec          = collections.PairKeyCodec(collections.BytesKey, collections.StringKey)
+	UsersLastRewardMultiplierKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.BytesKey, collections.StringKey)
+	LastRewardHandlingTimeKeyCodec    = collections.BytesKey
+)
