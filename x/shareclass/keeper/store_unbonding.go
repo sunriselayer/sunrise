@@ -4,8 +4,6 @@ import (
 	"context"
 	"time"
 
-	"cosmossdk.io/collections"
-
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
@@ -47,7 +45,7 @@ func (k Keeper) AppendUnbonding(ctx context.Context, unbonding types.Unbonding) 
 
 // SetUnbonding set a specific unbonding in the store
 func (k Keeper) SetUnbonding(ctx context.Context, unbonding types.Unbonding, id uint64) error {
-	err := k.Unbondings.Set(ctx, collections.Join(unbonding.CompletionTime.Unix(), id), unbonding)
+	err := k.Unbondings.Set(ctx, id, unbonding)
 	if err != nil {
 		return err
 	}
@@ -55,8 +53,8 @@ func (k Keeper) SetUnbonding(ctx context.Context, unbonding types.Unbonding, id 
 }
 
 // GetUnbonding returns a unbonding from its id
-func (k Keeper) GetUnbonding(ctx context.Context, completionTime time.Time, id uint64) (val types.Unbonding, found bool, err error) {
-	has, err := k.Unbondings.Has(ctx, collections.Join(completionTime.Unix(), id))
+func (k Keeper) GetUnbonding(ctx context.Context, id uint64) (val types.Unbonding, found bool, err error) {
+	has, err := k.Unbondings.Has(ctx, id)
 	if err != nil {
 		return val, false, err
 	}
@@ -65,7 +63,7 @@ func (k Keeper) GetUnbonding(ctx context.Context, completionTime time.Time, id u
 		return val, false, nil
 	}
 
-	val, err = k.Unbondings.Get(ctx, collections.Join(completionTime.Unix(), id))
+	val, err = k.Unbondings.Get(ctx, id)
 	if err != nil {
 		return val, false, err
 	}
@@ -74,8 +72,8 @@ func (k Keeper) GetUnbonding(ctx context.Context, completionTime time.Time, id u
 }
 
 // RemoveUnbonding removes a unbonding from the store
-func (k Keeper) RemoveUnbonding(ctx context.Context, completionTime time.Time, id uint64) error {
-	err := k.Unbondings.Remove(ctx, collections.Join(completionTime.Unix(), id))
+func (k Keeper) RemoveUnbonding(ctx context.Context, id uint64) error {
+	err := k.Unbondings.Remove(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -87,7 +85,7 @@ func (k Keeper) GetAllUnbondings(ctx context.Context) (list []types.Unbonding, e
 	err = k.Unbondings.Walk(
 		ctx,
 		nil,
-		func(key collections.Pair[int64, uint64], value types.Unbonding) (bool, error) {
+		func(id uint64, value types.Unbonding) (bool, error) {
 			list = append(list, value)
 
 			return false, nil
@@ -101,13 +99,18 @@ func (k Keeper) GetAllUnbondings(ctx context.Context) (list []types.Unbonding, e
 }
 
 func (k Keeper) IterateCompletedUnbondings(ctx context.Context, now time.Time, cb func(id uint64, value types.Unbonding) (stop bool, err error)) error {
-	return k.Unbondings.Walk(ctx, nil,
-		func(key collections.Pair[int64, uint64], value types.Unbonding) (bool, error) {
-			if value.CompletionTime.After(now) {
+	return k.Unbondings.Indexes.CompletionTime.Walk(ctx, nil,
+		func(time int64, id uint64) (bool, error) {
+			if time > now.Unix() {
 				return true, nil
 			}
 
-			return cb(key.K2(), value)
+			value, _, err := k.GetUnbonding(ctx, id)
+			if err != nil {
+				return true, err
+			}
+
+			return cb(id, value)
 		},
 	)
 }

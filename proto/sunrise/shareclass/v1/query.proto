@@ -2,9 +2,12 @@ syntax = "proto3";
 package sunrise.shareclass.v1;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "sunrise/shareclass/v1/params.proto";
+import "sunrise/shareclass/v1/unbonding.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 
@@ -13,6 +16,21 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/params";
+  }
+
+  // ClaimableRewards
+  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/claimable-rewards";
+  }
+
+  // CalculateAmount
+  rpc CalculateAmount(QueryCalculateAmountRequest) returns (QueryCalculateAmountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/calculate-amount";
+  }
+
+  // Unbondings
+  rpc Unbondings(QueryUnbondingsRequest) returns (QueryUnbondingsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/unbondings";
   }
 }
 
@@ -23,4 +41,45 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryClaimableRewardsRequest
+message QueryClaimableRewardsRequest {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryClaimableRewardsResponse
+message QueryClaimableRewardsResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// QueryCalculateAmountRequest
+message QueryCalculateAmountRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string share = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryCalculateAmountResponse
+message QueryCalculateAmountResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryUnbondingsRequest
+message QueryUnbondingsRequest {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryUnbondingsResponse
+message QueryUnbondingsResponse {
+  repeated Unbonding unbondings = 1 [(gogoproto.nullable) = false];
+  // cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

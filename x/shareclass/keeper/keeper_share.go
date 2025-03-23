@@ -24,3 +24,17 @@ func (k Keeper) GetTotalShare(ctx context.Context, validatorAddr string) math.In
 
 	return shareSupply.Amount
 }
+
+func (k Keeper) CalculateAmountByShare(ctx context.Context, validatorAddr string, share math.Int) (math.Int, error) {
+	totalShare := k.GetTotalShare(ctx, validatorAddr)
+	totalStaked, err := k.GetTotalStakedAmount(ctx, validatorAddr)
+	if err != nil {
+		return math.Int{}, err
+	}
+	outputAmount, err := types.CalculateUndelegationOutputAmount(share, totalShare, totalStaked)
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	return outputAmount, nil
+}

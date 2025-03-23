@@ -23,7 +23,7 @@ type Keeper struct {
 
 	Schema                    collections.Schema
 	Params                    collections.Item[types.Params]
-	Unbondings                collections.Map[collections.Pair[int64, uint64], types.Unbonding]
+	Unbondings                *collections.IndexedMap[uint64, types.Unbonding, types.UnbondingsIndexes]
 	UnbondingId               collections.Sequence
 	RewardMultiplier          collections.Map[collections.Pair[[]byte, string], string]                   // math.Dec
 	UsersLastRewardMultiplier collections.Map[collections.Triple[sdk.AccAddress, []byte, string], string] // math.Dec
@@ -58,7 +58,7 @@ func NewKeeper(
 		authority:    authority,
 
 		Params:                    collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		Unbondings:                collections.NewMap(sb, types.UnbondingsKeyPrefix, "unbondings", types.UnbondingsKeyCodec, codec.CollValue[types.Unbonding](cdc)),
+		Unbondings:                collections.NewIndexedMap(sb, types.UnbondingsKeyPrefix, "unbondings", types.UnbondingsKeyCodec, codec.CollValue[types.Unbonding](cdc), types.NewUnbondingsIndexes(sb, addressCodec)),
 		UnbondingId:               collections.NewSequence(sb, types.UnbondingIdKey, "unbonding_id"),
 		RewardMultiplier:          collections.NewMap(sb, types.RewardMultiplierKeyPrefix, "reward_multiplier", types.RewardMultiplierKeyCodec, collections.StringValue),
 		UsersLastRewardMultiplier: collections.NewMap(sb, types.UsersLastRewardMultiplierKeyPrefix, "users_last_reward_multiplier", types.UsersLastRewardMultiplierKeyCodec, collections.StringValue),

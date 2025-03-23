@@ -51,13 +51,25 @@ func (k Keeper) SetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccA
 }
 
 func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress) (sdk.Coins, error) {
-	rewardSaverAddr := types.RewardSaverAddress(validatorAddr.String())
+	total, err := k.GetClaimableRewards(ctx, sender, validatorAddr)
+	if err != nil {
+		return nil, err
+	}
 
-	coins := k.bankKeeper.GetAllBalances(ctx, rewardSaverAddr)
+	err = k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, total)
+	if err != nil {
+		return nil, err
+	}
+
+	return total, nil
+}
+
+func (k Keeper) GetClaimableRewards(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress) (sdk.Coins, error) {
+	coins := k.bankKeeper.GetAllBalances(ctx, types.RewardSaverAddress(validatorAddr.String()))
 	total := sdk.NewCoins()
 
 	for _, coin := range coins {
-		amount, err := k.ClaimRewardsByDenom(ctx, sender, validatorAddr, coin.Denom)
+		amount, err := k.GetClaimableRewardsByDenom(ctx, sender, validatorAddr, coin.Denom)
 		if err != nil {
 			return nil, err
 		}
@@ -69,7 +81,7 @@ func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validat
 
 // ClaimRewards claims rewards from a validator
 // reward = (rewardMultiplier - userLastRewardMultiplier) * lstCoin.Amount
-func (k Keeper) ClaimRewardsByDenom(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.Int, error) {
+func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.Int, error) {
 	// Get the share
 	share := k.GetShare(ctx, sender, validatorAddr.String())
 
@@ -85,13 +97,6 @@ func (k Keeper) ClaimRewardsByDenom(ctx context.Context, sender sdk.AccAddress, 
 	}
 
 	rewardAmount, err := types.CalculateReward(rewardMultiplier, userLastRewardMultiplier, share)
-	if err != nil {
-		return math.Int{}, err
-	}
-
-	rewardCoin := sdk.NewCoins(sdk.NewCoin(denom, rewardAmount))
-
-	err = k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, rewardCoin)
 	if err != nil {
 		return math.Int{}, err
 	}

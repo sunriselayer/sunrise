@@ -17,7 +17,7 @@ func (k Keeper) GarbageCollectUnbonded(ctx context.Context) error {
 			return true, err
 		}
 
-		err = k.RemoveUnbonding(ctx, value.CompletionTime, id)
+		err = k.RemoveUnbonding(ctx, id)
 		if err != nil {
 			return true, err
 		}
