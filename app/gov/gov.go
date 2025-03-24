@@ -25,6 +25,9 @@ type StakingKeeper interface {
 	IterateDelegations(ctx context.Context, delAddr sdk.AccAddress,
 		fn func(index int64, del sdk.DelegationI) (stop bool),
 	) error
+
+	GetDelegatorBonded(ctx context.Context, delegator sdk.AccAddress) (math.Int, error)
+	TotalBondedTokens(ctx context.Context) (math.Int, error)
 }
 
 func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, stakingKeeper StakingKeeper) govkeeper.CalculateVoteResultsAndVotingPowerFn {
@@ -38,13 +41,16 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		results = createEmptyResults()
 
 		// <sunrise>
-		// First, deduct shareclass module's delegations
+		// Deduct shareclass module's delegations
 		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
+		shareclassVP := math.LegacyZeroDec()
 		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 			if val, ok := validators[valAddrStr]; ok {
 				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
 				validators[valAddrStr] = val
+
+				shareclassVP = shareclassVP.Add(delegation.GetShares())
 			}
 			return false
 		})
@@ -140,39 +146,24 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		}
 
 		// <sunrise>
-		// Distribute shareclass module's delegations voting power proportionally
-		shareclassVotes := make(map[string]math.LegacyDec)
-		totalShareclassShares := math.LegacyZeroDec()
-
-		// Calculate the total shareclass module's delegations
-		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
-			valAddrStr := delegation.GetValidatorAddr()
-			if val, ok := validators[valAddrStr]; ok {
-				votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
-				shareclassVotes[valAddrStr] = votingPower
-				totalShareclassShares = totalShareclassShares.Add(votingPower)
-			}
-			return false
-		})
+		// To cancel the effect to quorum, we need to adjust the total voting power.
+		// totalVoterPowerCustom / totalBonded = (totalVoterPower - shareclassVotingPower) / (totalBonded - shareclassBonded)
+		shareclassBonded, err := stakingKeeper.GetDelegatorBonded(ctx, shareclassAddr)
 		if err != nil {
 			return math.LegacyDec{}, nil, err
 		}
-
-		// Calculate the total voting power
-		currentTotalPower := math.LegacyZeroDec()
-		for _, power := range results {
-			currentTotalPower = currentTotalPower.Add(power)
+		totalBonded, err := stakingKeeper.TotalBondedTokens(ctx)
+		if err != nil {
+			return math.LegacyDec{}, nil, err
 		}
+		if !totalBonded.IsZero() {
+			numerator := totalVP.Sub(shareclassVP)
+			denominator := totalBonded.Sub(shareclassBonded)
 
-		// Distribute the shareclass module's voting power proportionally
-		if !currentTotalPower.IsZero() {
-			for option, power := range results {
-				ratio := power.Quo(currentTotalPower)
-				additionalPower := totalShareclassShares.Mul(ratio)
-				results[option] = results[option].Add(additionalPower)
-			}
+			numerator = numerator.MulInt(totalBonded)
+			totalVP = numerator.Quo(math.LegacyNewDecFromInt(denominator))
 		}
-		// </sunrise>
+		// <sunrise />
 
 		return totalVP, results, nil
 	}
