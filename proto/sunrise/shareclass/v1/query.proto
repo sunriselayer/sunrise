@@ -18,14 +18,14 @@ service Query {
     option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/params";
   }
 
-  // ClaimableRewards
-  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/claimable-rewards";
-  }
-
   // CalculateAmount
   rpc CalculateAmount(QueryCalculateAmountRequest) returns (QueryCalculateAmountResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/calculate-amount";
+  }
+
+  // ClaimableRewards
+  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/claimable-rewards";
   }
 
   // Unbondings
@@ -43,20 +43,6 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryClaimableRewardsRequest
-message QueryClaimableRewardsRequest {
-  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-}
-
-// QueryClaimableRewardsResponse
-message QueryClaimableRewardsResponse {
-  repeated cosmos.base.v1beta1.Coin amount = 1 [
-    (gogoproto.nullable) = false,
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
-}
-
 // QueryCalculateAmountRequest
 message QueryCalculateAmountRequest {
   string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
@@ -70,6 +56,20 @@ message QueryCalculateAmountRequest {
 // QueryCalculateAmountResponse
 message QueryCalculateAmountResponse {
   cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryClaimableRewardsRequest
+message QueryClaimableRewardsRequest {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryClaimableRewardsResponse
+message QueryClaimableRewardsResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // QueryUnbondingsRequest

@@ -358,7 +358,7 @@ func (bva *BaseLockup) Undelegate(
 	msgUndelegate := &shareclasstypes.MsgNonVotingUndelegate{
 		Sender:           delegatorAddress,
 		ValidatorAddress: msg.ValidatorAddress,
-		ShareAmount:      msg.ShareAmount.Amount,
+		Share:            msg.Share.Amount,
 	}
 	resp, err := sendMessage(ctx, msgUndelegate)
 	if err != nil {

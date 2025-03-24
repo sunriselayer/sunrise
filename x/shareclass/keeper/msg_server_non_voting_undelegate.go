@@ -32,7 +32,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
 
 	// Send non transferrable share token to module
-	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, msg.ShareAmount))
+	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, msg.Share))
 
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, coins)
 	if err != nil {
@@ -52,7 +52,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	if err != nil {
 		return nil, err
 	}
-	outputAmount, err := types.CalculateUndelegationOutputAmount(msg.ShareAmount, totalShare, totalStaked)
+	outputAmount, err := types.CalculateUndelegationOutputAmount(msg.Share, totalShare, totalStaked)
 	if err != nil {
 		return nil, err
 	}
@@ -77,9 +77,20 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, sdkerrors.ErrInvalidRequest
 	}
 
+	// Set recipient
+	var recipient sdk.AccAddress
+	if msg.Recipient == "" {
+		recipient = sender
+	} else {
+		recipient, err = k.addressCodec.StringToBytes(msg.Recipient)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "invalid recipient address")
+		}
+	}
+
 	// Append Unstaking state
 	_, err = k.AppendUnbonding(ctx, types.Unbonding{
-		Address:        msg.Sender,
+		Address:        recipient.String(),
 		CompletionTime: undelegateResponse.CompletionTime,
 		Amount:         output,
 	})

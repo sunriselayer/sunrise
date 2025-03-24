@@ -66,11 +66,12 @@ message MsgNonVotingUndelegate {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string share_amount = 3 [
+  string share = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
+  string recipient = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgNonVotingUndelegateResponse
