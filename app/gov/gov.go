@@ -34,24 +34,12 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		proposalID uint64,
 		validators map[string]v1.ValidatorGovInfo,
 	) (totalVoterPower math.LegacyDec, results map[v1.VoteOption]math.LegacyDec, err error) {
+		// <sunrise>
+		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
+		// </sunrise>
+
 		totalVP := math.LegacyZeroDec()
 		results = createEmptyResults()
-
-		// <sunrise>
-		// Deduct shareclass module's delegations voting power from validators
-		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
-		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
-			valAddrStr := delegation.GetValidatorAddr()
-			if val, ok := validators[valAddrStr]; ok {
-				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
-				validators[valAddrStr] = val
-			}
-			return false
-		})
-		if err != nil {
-			return math.LegacyDec{}, nil, err
-		}
-		// </sunrise>
 
 		// iterate over all votes, tally up the voting power of each validator
 		rng := collections.NewPrefixedPairRange[uint64, sdk.AccAddress](proposalID)
@@ -62,6 +50,14 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			if err != nil {
 				return false, err
 			}
+
+			// <sunrise>
+			// Skip shareclass module's votes
+			if sdk.AccAddress(voter).Equals(shareclassAddr) {
+				votesToRemove = append(votesToRemove, key)
+				return false, nil
+			}
+			// </sunrise>
 
 			valAddrStr, err := stakingKeeper.ValidatorAddressCodec().BytesToString(voter)
 			if err != nil {
@@ -130,6 +126,41 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			}
 			totalVP = totalVP.Add(votingPower)
 		}
+
+		// <sunrise>
+		// Distribute shareclass module's delegations voting power proportionally
+		shareclassVotes := make(map[string]math.LegacyDec)
+		totalShareclassShares := math.LegacyZeroDec()
+
+		// Calculate the total shareclass module's delegations
+		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
+			valAddrStr := delegation.GetValidatorAddr()
+			if val, ok := validators[valAddrStr]; ok {
+				votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+				shareclassVotes[valAddrStr] = votingPower
+				totalShareclassShares = totalShareclassShares.Add(votingPower)
+			}
+			return false
+		})
+		if err != nil {
+			return math.LegacyDec{}, nil, err
+		}
+
+		// Calculate the total voting power
+		currentTotalPower := math.LegacyZeroDec()
+		for _, power := range results {
+			currentTotalPower = currentTotalPower.Add(power)
+		}
+
+		// Distribute the shareclass module's voting power proportionally
+		if !currentTotalPower.IsZero() {
+			for option, power := range results {
+				ratio := power.Quo(currentTotalPower)
+				additionalPower := totalShareclassShares.Mul(ratio)
+				results[option] = results[option].Add(additionalPower)
+			}
+		}
+		// </sunrise>
 
 		return totalVP, results, nil
 	}
