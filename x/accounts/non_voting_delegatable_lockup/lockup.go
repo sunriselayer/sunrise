@@ -358,7 +358,7 @@ func (bva *BaseLockup) Undelegate(
 	msgUndelegate := &shareclasstypes.MsgNonVotingUndelegate{
 		Sender:           delegatorAddress,
 		ValidatorAddress: msg.ValidatorAddress,
-		Amount:           msg.Amount.Amount,
+		ShareAmount:      msg.ShareAmount.Amount,
 	}
 	resp, err := sendMessage(ctx, msgUndelegate)
 	if err != nil {
@@ -386,7 +386,7 @@ func (bva *BaseLockup) Undelegate(
 
 	for i, entry := range entries.Entries {
 		if entry.CreationHeight == header.Height && entry.EndTime.Equal(msgUndelegateResp.CompletionTime) {
-			entry.Amount = entry.Amount.Add(msg.Amount)
+			entry.Amount = entry.Amount.Add(msgUndelegateResp.Amount) // <sunrise />
 
 			// update the entry
 			entries.Entries[i] = entry
