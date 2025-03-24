@@ -34,12 +34,24 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		proposalID uint64,
 		validators map[string]v1.ValidatorGovInfo,
 	) (totalVoterPower math.LegacyDec, results map[v1.VoteOption]math.LegacyDec, err error) {
-		// <sunrise>
-		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
-		// </sunrise>
-
 		totalVP := math.LegacyZeroDec()
 		results = createEmptyResults()
+
+		// <sunrise>
+		// First, deduct shareclass module's delegations
+		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
+		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
+			valAddrStr := delegation.GetValidatorAddr()
+			if val, ok := validators[valAddrStr]; ok {
+				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
+				validators[valAddrStr] = val
+			}
+			return false
+		})
+		if err != nil {
+			return math.LegacyDec{}, nil, err
+		}
+		// </sunrise>
 
 		// iterate over all votes, tally up the voting power of each validator
 		rng := collections.NewPrefixedPairRange[uint64, sdk.AccAddress](proposalID)
