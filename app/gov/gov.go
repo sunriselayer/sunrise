@@ -147,6 +147,7 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 
 		// <sunrise>
 		// To cancel the effect to quorum, we need to adjust the total voting power.
+		// It should not be totalVoterPower / totalBonded < quorum.
 		// totalVoterPowerCustom / totalBonded = (totalVoterPower - shareclassVotingPower) / (totalBonded - shareclassBonded)
 		shareclassBonded, err := stakingKeeper.GetDelegatorBonded(ctx, shareclassAddr)
 		if err != nil {
