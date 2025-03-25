@@ -53,6 +53,13 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 		return err
 	}
 
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvert{
+		Address: address.String(),
+		Amount:  amount.String(),
+	}); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -84,6 +91,13 @@ func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk
 	}
 
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(bondToken)); err != nil {
+		return err
+	}
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvertReverse{
+		Address: address.String(),
+		Amount:  amount.String(),
+	}); err != nil {
 		return err
 	}
 
