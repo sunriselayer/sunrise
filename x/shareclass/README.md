@@ -6,10 +6,43 @@ The `x/shareclass` module provides a non-voting delegation mechanism for the Sun
 
 The `x/shareclass` module implements a system where:
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant MsgServer
+    participant Keeper
+    participant BankKeeper
+    participant StakingKeeper
+    
+    %% ClaimRewards flow - simplified
+    User->>MsgServer: MsgClaimRewards
+    MsgServer->>Keeper: ClaimRewards(sender, validatorAddr)
+    Keeper-->>User: rewards
+    
+    %% CreateValidator flow - core steps only
+    User->>MsgServer: MsgCreateValidator
+    MsgServer->>BankKeeper: Burn fee - 1 urise
+    MsgServer->>StakingKeeper: MsgCreateValidator
+    MsgServer-->>User: Success
+    
+    %% NonVotingDelegate flow - key operations
+    User->>MsgServer: MsgNonVotingDelegate
+    MsgServer->>Keeper: ConvertAndDelegate(amount)
+    MsgServer->>BankKeeper: Mint & send share tokens
+    MsgServer-->>User: Success
+    
+    %% NonVotingUndelegate flow - key operations
+    User->>MsgServer: MsgNonVotingUndelegate
+    MsgServer->>BankKeeper: Burn share tokens
+    MsgServer->>Keeper: Calculate token amount
+    MsgServer->>StakingKeeper: Undelegate tokens
+    MsgServer-->>User: Completion time
+```
 1. Users can create validators with a required fee
 2. Users can delegate tokens without receiving voting rights
 3. Non-transferable share tokens represent delegation positions
 4. Delegators can claim rewards proportional to their share
+
 
 ## Messages
 The module supports the following messages:
@@ -165,6 +198,7 @@ The module uses non-transferable share tokens to track delegations:
 - Share tokens cannot be transferred between accounts
 - During undelegation, the share tokens are burned
 - The actual token amount received during undelegation is proportional to the validator's current stake
+
 
 ## Rewards Distribution
 Rewards are distributed based on the share of the validator's total delegation:
