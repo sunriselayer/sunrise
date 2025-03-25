@@ -4,8 +4,10 @@ package sunrise.shareclass.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
+import "cosmos/staking/v1beta1/staking.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "sunrise/shareclass/v1/params.proto";
 
@@ -27,6 +29,9 @@ service Msg {
 
   // ClaimRewards
   rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResponse);
+
+  // CreateValidator
+  rpc CreateValidator(MsgCreateValidator) returns (MsgCreateValidatorResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -97,3 +102,22 @@ message MsgClaimRewardsResponse {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
 }
+
+// MsgCreateValidator
+message MsgCreateValidator {
+  option (cosmos.msg.v1.signer) = "validator_address";
+
+  cosmos.staking.v1beta1.Description description = 1 [(gogoproto.nullable) = false];
+  cosmos.staking.v1beta1.CommissionRates commission = 2 [(gogoproto.nullable) = false];
+  string min_self_delegation = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string validator_address = 4 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  google.protobuf.Any pubkey = 5 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
+  cosmos.base.v1beta1.Coin fee = 6 [(gogoproto.nullable) = false];
+}
+
+// MsgCreateValidatorResponse
+message MsgCreateValidatorResponse {}

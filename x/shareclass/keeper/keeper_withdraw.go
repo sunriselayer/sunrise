@@ -34,12 +34,17 @@ func (k Keeper) GarbageCollectUnbonded(ctx context.Context) error {
 func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding) error {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
-		return nil
+		return err
 	}
 
-	if unbonding.Amount.Denom != params.BondDenom {
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return err
+	}
+
+	if unbonding.Amount.Denom != bondDenom {
 		return types.ErrInvalidUnbondedDenom
 	}
 
@@ -49,7 +54,7 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 		return err
 	}
 
-	feeCoin := sdk.NewCoin(params.FeeDenom, unbonding.Amount.Amount)
+	feeCoin := sdk.NewCoin(feeDenom, unbonding.Amount.Amount)
 
 	// Send coin to sender
 	sender, err := k.addressCodec.StringToBytes(unbonding.Address)

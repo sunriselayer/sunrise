@@ -16,7 +16,7 @@ func (q queryServer) CalculateAmount(ctx context.Context, req *types.QueryCalcul
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	params, err := q.k.tokenConverterKeeper.GetParams(ctx)
+	bondDenom, err := q.k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -26,7 +26,7 @@ func (q queryServer) CalculateAmount(ctx context.Context, req *types.QueryCalcul
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	coin := sdk.NewCoin(params.BondDenom, amount)
+	coin := sdk.NewCoin(bondDenom, amount)
 
 	return &types.QueryCalculateAmountResponse{Amount: coin}, nil
 }

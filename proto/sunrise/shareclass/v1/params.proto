@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.shareclass.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
@@ -14,4 +15,5 @@ message Params {
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
+  cosmos.base.v1beta1.Coin create_validator_fee = 2 [(gogoproto.nullable) = false];
 }

@@ -12,12 +12,16 @@ import (
 
 func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, validatorAddr string, amount math.Int) error {
 	// Prepare fee and bond coin
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return err
 	}
-	feeCoin := sdk.NewCoin(params.FeeDenom, amount)
-	bondCoin := sdk.NewCoin(params.BondDenom, amount)
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return err
+	}
+	bondCoin := sdk.NewCoin(bondDenom, amount)
+	feeCoin := sdk.NewCoin(feeDenom, amount)
 
 	// Send fee coin to module
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(feeCoin))

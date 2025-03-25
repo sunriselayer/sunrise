@@ -45,5 +45,6 @@ func (am AppModule) WeightedOperationsX(weights simsx.WeightSource, reg simsx.Re
 	reg.Add(weights.Get("msg__non_voting_delegate", 100), simulation.MsgNonVotingDelegateFactory(am.keeper))
 	reg.Add(weights.Get("msg__non_voting_undelegate", 100), simulation.MsgNonVotingUndelegateFactory(am.keeper))
 	reg.Add(weights.Get("msg__claim_rewards", 100), simulation.MsgClaimRewardsFactory(am.keeper))
+	reg.Add(weights.Get("msg__create_validator", 100), simulation.MsgCreateValidatorFactory(am.keeper))
 
 }

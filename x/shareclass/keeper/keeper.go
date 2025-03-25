@@ -32,6 +32,7 @@ type Keeper struct {
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
 	stakingKeeper        types.StakingKeeper
+	feeKeeper            types.FeeKeeper
 	tokenConverterKeeper types.TokenConverterKeeper
 }
 
@@ -43,6 +44,7 @@ func NewKeeper(
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
+	feeKeeper types.FeeKeeper,
 	tokenConverterKeeper types.TokenConverterKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
@@ -67,6 +69,7 @@ func NewKeeper(
 		accountKeeper:        accountKeeper,
 		bankKeeper:           bankKeeper,
 		stakingKeeper:        stakingKeeper,
+		feeKeeper:            feeKeeper,
 		tokenConverterKeeper: tokenConverterKeeper,
 	}
 
