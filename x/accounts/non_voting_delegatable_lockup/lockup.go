@@ -28,8 +28,8 @@ import (
 
 	// <sunsise>
 	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/v1"
+	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
-	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// </sunrise>
 )
 
@@ -517,7 +517,7 @@ func getStakingDenom(ctx context.Context) (string, error) {
 	// }
 
 	// return resp.Params.BondDenom, nil
-	resp, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	resp, err := accountstd.QueryModule[*feetypes.QueryParamsResponse](ctx, &feetypes.QueryParamsRequest{})
 	if err != nil {
 		return "", err
 	}

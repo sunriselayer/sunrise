@@ -11,7 +11,6 @@ import (
 	banktypes "cosmossdk.io/x/bank/types"
 	distrtypes "cosmossdk.io/x/distribution/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
-	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	v1 "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/v1"
 )
@@ -126,7 +125,7 @@ func (a SelfDelegationProxyAccount) Send(ctx context.Context, msg *v1.MsgSend) (
 }
 
 func getBondDenom(ctx context.Context) (string, error) {
-	params, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	params, err := accountstd.QueryModule[*stakingtypes.QueryParamsResponse](ctx, &stakingtypes.QueryParamsRequest{})
 	if err != nil {
 		return "", err
 	}

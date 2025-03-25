@@ -35,6 +35,8 @@ type ModuleInputs struct {
 
 	AccountsKeeper       types.AccountsKeeper
 	BankKeeper           types.BankKeeper
+	StakingKeeper        types.StakingKeeper
+	FeeKeeper            types.FeeKeeper
 	TokenConverterKeeper types.TokenConverterKeeper
 }
 
@@ -59,6 +61,8 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority,
 		in.AccountsKeeper,
 		in.BankKeeper,
+		in.StakingKeeper,
+		in.FeeKeeper,
 		in.TokenConverterKeeper,
 	)
 	m := NewAppModule(in.Cdc, k)
