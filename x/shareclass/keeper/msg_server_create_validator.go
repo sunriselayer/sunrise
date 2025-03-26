@@ -4,7 +4,6 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
@@ -19,6 +18,26 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
+	// Validate amount
+	stakingParams, err := k.stakingKeeper.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !msg.Amount.Amount.Equal(stakingParams.KeyRotationFee.Amount) {
+		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to key rotation fee")
+	}
+
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if msg.Amount.Denom != feeDenom {
+		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount denom must be equal to fee denom")
+	}
+
+	// Validate fee
 	params, err := k.Keeper.Params.Get(ctx)
 	if err != nil {
 		return nil, err
@@ -28,24 +47,22 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorFee, "invalid create validator fee")
 	}
 
-	// Burn fee - 1 urise
-	burnCoin := sdk.NewCoin(msg.Fee.Denom, msg.Fee.Amount.Sub(math.OneInt()))
-
+	// Burn fee
 	_, err = k.Environment.MsgRouterService.Invoke(ctx, &banktypes.MsgBurn{
 		FromAddress: sdk.AccAddress(address).String(),
-		Amount:      []*sdk.Coin{&burnCoin},
+		Amount:      []*sdk.Coin{&msg.Fee},
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	// Convert 1 urise to 1 uvrise
-	err = k.tokenConverterKeeper.ConvertReverse(ctx, math.OneInt(), sdk.AccAddress(address))
+	// Convert amount from fee denom to bond denom
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, msg.Amount.Amount, sdk.AccAddress(address))
 	if err != nil {
 		return nil, err
 	}
 
-	// Stake 1 uvrise
+	// Stake
 	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return nil, err
@@ -57,7 +74,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		MinSelfDelegation: msg.MinSelfDelegation,
 		ValidatorAddress:  msg.ValidatorAddress,
 		Pubkey:            msg.Pubkey,
-		Value:             sdk.NewCoin(bondDenom, math.OneInt()),
+		Value:             sdk.NewCoin(bondDenom, msg.Amount.Amount),
 	})
 
 	if err != nil {
