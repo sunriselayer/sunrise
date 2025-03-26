@@ -19,13 +19,10 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	}
 
 	// Validate amount
-	stakingParams, err := k.stakingKeeper.GetParams(ctx)
-	if err != nil {
-		return nil, err
-	}
+	powerReduction := k.stakingKeeper.PowerReduction(ctx)
 
-	if !msg.Amount.Amount.Equal(stakingParams.KeyRotationFee.Amount) {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to key rotation fee")
+	if !msg.Amount.Amount.Equal(powerReduction) {
+		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to power reduction in staking module")
 	}
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
