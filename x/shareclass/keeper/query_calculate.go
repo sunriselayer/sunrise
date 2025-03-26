@@ -16,17 +16,29 @@ func (q queryServer) CalculateAmount(ctx context.Context, req *types.QueryCalcul
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	bondDenom, err := q.k.stakingKeeper.BondDenom(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
 	amount, err := q.k.CalculateAmountByShare(ctx, req.ValidatorAddress, req.Share)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	coin := sdk.NewCoin(bondDenom, amount)
+	feeDenom, err := q.k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	coin := sdk.NewCoin(feeDenom, amount)
 
 	return &types.QueryCalculateAmountResponse{Amount: coin}, nil
+}
+
+func (q queryServer) CalculateShare(ctx context.Context, req *types.QueryCalculateShareRequest) (*types.QueryCalculateShareResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	share, err := q.k.CalculateShareByAmount(ctx, req.ValidatorAddress, req.Amount)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryCalculateShareResponse{Share: share}, nil
 }

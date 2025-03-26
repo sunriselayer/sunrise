@@ -1,10 +1,10 @@
 package types
 
 import (
-	"fmt"
-
 	"cosmossdk.io/math"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"regexp"
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -13,11 +13,52 @@ func NonVotingShareTokenDenom(validatorAddress string) string {
 	return fmt.Sprintf("%s/non-voting-share/%s", ModuleName, validatorAddress)
 }
 
+func NonVotingShareTokenDenomRegexp() *regexp.Regexp {
+	return regexp.MustCompile(fmt.Sprintf("^%s/non-voting-share/([^/]+)$", ModuleName))
+}
+
 func RewardSaverAddress(validatorAddress string) sdk.AccAddress {
 	return authtypes.NewModuleAddress(fmt.Sprintf("%s/reward_saver/%s", ModuleName, validatorAddress))
 }
 
-func CalculateUndelegationOutputAmount(share, totalShare, totalBonded math.Int) (math.Int, error) {
+func CalculateShareByAmount(totalShare, totalBonded, amount math.Int) (math.Int, error) {
+	if totalBonded.IsZero() {
+		return amount, nil
+	}
+
+	amountDec, err := math.NewDecFromString(amount.String())
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	totalShareDec, err := math.NewDecFromString(totalShare.String())
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	totalBondedDec, err := math.NewDecFromString(totalBonded.String())
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	ratio, err := amountDec.Quo(totalBondedDec)
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	shareDec, err := ratio.Mul(totalShareDec)
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	return shareDec.SdkIntTrim()
+}
+
+func CalculateAmountByShare(totalShare, totalBonded, share math.Int) (math.Int, error) {
+	if totalShare.IsZero() {
+		return share, nil
+	}
+
 	shareDec, err := math.NewDecFromString(share.String())
 	if err != nil {
 		return math.Int{}, err
@@ -42,12 +83,8 @@ func CalculateUndelegationOutputAmount(share, totalShare, totalBonded math.Int) 
 	if err != nil {
 		return math.Int{}, err
 	}
-	outputAmount, err := outputAmountDec.SdkIntTrim()
-	if err != nil {
-		return math.Int{}, err
-	}
 
-	return outputAmount, nil
+	return outputAmountDec.SdkIntTrim()
 }
 
 // CalculateReward calculates the reward for a user

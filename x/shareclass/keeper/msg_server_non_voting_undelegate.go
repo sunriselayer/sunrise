@@ -17,6 +17,18 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
+	// Validate amount
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if msg.Amount.Denom != feeDenom {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount denom must be equal to fee denom")
+	}
+	if !msg.Amount.IsPositive() {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount must be positive")
+	}
+
 	// Claim rewards
 	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
 	if err != nil {
@@ -28,11 +40,15 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, err
 	}
 
-	// Get LST supply before burning
+	// Calculate unbonding share
 	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
+	unbondingShare, err := k.CalculateShareByAmount(ctx, msg.ValidatorAddress, msg.Amount.Amount)
+	if err != nil {
+		return nil, err
+	}
 
 	// Send non transferrable share token to module
-	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, msg.Share))
+	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, unbondingShare))
 
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, coins)
 	if err != nil {
@@ -46,23 +62,12 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, err
 	}
 
-	// Calculate unbonding amount
-	totalShare := k.GetTotalShare(ctx, msg.ValidatorAddress)
-	totalStaked, err := k.GetTotalStakedAmount(ctx, msg.ValidatorAddress)
-	if err != nil {
-		return nil, err
-	}
-	outputAmount, err := types.CalculateUndelegationOutputAmount(msg.Share, totalShare, totalStaked)
-	if err != nil {
-		return nil, err
-	}
-
 	// Undelegate
 	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
-	output := sdk.NewCoin(bondDenom, outputAmount)
+	output := sdk.NewCoin(bondDenom, msg.Amount.Amount)
 
 	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: msg.Sender,
@@ -75,6 +80,9 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	undelegateResponse, ok := res.(*stakingtypes.MsgUndelegateResponse)
 	if !ok {
 		return nil, sdkerrors.ErrInvalidRequest
+	}
+	if undelegateResponse == nil {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "undelegate response is nil")
 	}
 
 	// Set recipient
