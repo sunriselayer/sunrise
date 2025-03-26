@@ -190,6 +190,9 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 			for _, proof := range proofs {
 				for _, index := range proof.Indices {
 					shardProofCount[index]++
+					if shardProofSubmitted[index] == nil {
+						shardProofSubmitted[index] = make(map[string]bool)
+					}
 					shardProofSubmitted[index][proof.Sender] = true
 				}
 			}
