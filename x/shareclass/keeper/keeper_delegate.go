@@ -30,14 +30,15 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 	}
 
 	// Convert fee denom to bond denom
-	err = k.tokenConverterKeeper.ConvertReverse(ctx, amount, sender)
+	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, amount, moduleAddr)
 	if err != nil {
 		return err
 	}
 
 	// Stake
 	_, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
-		DelegatorAddress: sender.String(),
+		DelegatorAddress: moduleAddr.String(),
 		ValidatorAddress: validatorAddr,
 		Amount:           bondCoin,
 	})

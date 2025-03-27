@@ -80,7 +80,7 @@ func (k Keeper) GetClaimableRewards(ctx context.Context, sender sdk.AccAddress, 
 }
 
 // ClaimRewards claims rewards from a validator
-// reward = (rewardMultiplier - userLastRewardMultiplier) * lstCoin.Amount
+// reward = (rewardMultiplier - userLastRewardMultiplier) * share.Amount
 func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.Int, error) {
 	// Get the share
 	share := k.GetShare(ctx, sender, validatorAddr.String())
