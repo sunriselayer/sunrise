@@ -22,7 +22,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	powerReduction := k.stakingKeeper.PowerReduction(ctx)
 
 	if !msg.Amount.Amount.Equal(powerReduction) {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to power reduction in staking module")
+		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to power reduction in staking module, please refer the source code of PowerReduction() function of staking module for more details")
 	}
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
@@ -31,7 +31,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	}
 
 	if msg.Amount.Denom != feeDenom {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount denom must be equal to fee denom")
+		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount denom must be equal to fee denom, please refer the source code of FeeDenom() function of fee module for more details")
 	}
 
 	// Validate fee
@@ -41,7 +41,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	}
 
 	if !msg.Fee.Equal(params.CreateValidatorFee) {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorFee, "invalid create validator fee")
+		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorFee, "invalid create validator fee, please refer the source code of Params() function of shareclass module for more details")
 	}
 
 	// Burn fee
