@@ -19,8 +19,6 @@ import (
 
 	fee "github.com/sunriselayer/sunrise/x/fee/module"
 	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
-	tokenconverter "github.com/sunriselayer/sunrise/x/tokenconverter/module"
-	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
 )
@@ -70,13 +68,6 @@ func ReplaceCustomModules(
 	oldStakingModule, _ := manager.Modules[stakingtypes.ModuleName].(staking.AppModule)
 	manager.Modules[stakingtypes.ModuleName] = CustomStakingModule{
 		AppModule: oldStakingModule,
-		cdc:       cdc,
-	}
-
-	// tokenconverter
-	oldTokenConverterModule, _ := manager.Modules[tokenconvertertypes.ModuleName].(tokenconverter.AppModule)
-	manager.Modules[tokenconvertertypes.ModuleName] = CustomTokenConverterModule{
-		AppModule: oldTokenConverterModule,
 		cdc:       cdc,
 	}
 }

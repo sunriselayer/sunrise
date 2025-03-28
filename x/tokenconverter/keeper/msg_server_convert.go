@@ -30,12 +30,5 @@ func (k msgServer) Convert(ctx context.Context, msg *types.MsgConvert) (*types.M
 		return nil, err
 	}
 
-	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvert{
-		Address: address.String(),
-		Amount:  msg.Amount.String(),
-	}); err != nil {
-		return nil, err
-	}
-
 	return &types.MsgConvertResponse{}, nil
 }
