@@ -28,6 +28,36 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "InitLockupAccount",
+					Use:            "init-lockup-account",
+					Short:          "Send a init-lockup-account tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "NonVotingDelegate",
+					Use:            "non-voting-delegate",
+					Short:          "Send a non-voting-delegate tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "NonVotingUndelegate",
+					Use:            "non-voting-undelegate",
+					Short:          "Send a non-voting-undelegate tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "ClaimRewards",
+					Use:            "claim-rewards",
+					Short:          "Send a claim-rewards tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
+				{
+					RpcMethod:      "Send",
+					Use:            "send",
+					Short:          "Send a send tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

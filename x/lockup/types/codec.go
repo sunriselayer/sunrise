@@ -11,5 +11,14 @@ func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
 	)
+
+	registrar.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgInitLockupAccount{},
+		&MsgNonVotingDelegate{},
+		&MsgNonVotingUndelegate{},
+		&MsgClaimRewards{},
+		&MsgSend{},
+	)
+
 	msgservice.RegisterMsgServiceDesc(registrar, &_Msg_serviceDesc)
 }
