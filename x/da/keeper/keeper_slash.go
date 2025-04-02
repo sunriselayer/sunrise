@@ -92,7 +92,7 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 		k.Logger.Error(err.Error())
 		return
 	}
-	threshold := slashFaultThreshold.MulInt64(int64(challengeCount)).TruncateInt().Uint64()
+	threshold := slashFaultThreshold.MulInt64(int64(challengeCount)).Ceil().TruncateInt().Uint64()
 	powerReduction := k.StakingKeeper.PowerReduction(ctx)
 	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
 		validator, err := k.StakingKeeper.Validator(ctx, operator)
