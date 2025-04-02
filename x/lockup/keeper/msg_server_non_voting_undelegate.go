@@ -4,7 +4,9 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
+
 	"github.com/sunriselayer/sunrise/x/lockup/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVotingUndelegate) (*types.MsgNonVotingUndelegateResponse, error) {
@@ -12,7 +14,16 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
 
-	// TODO: Handle the message
+	address := k.LockupAccountAddress(msg.Owner)
+
+	_, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingUndelegate{
+		Sender:    address.String(),
+		Validator: msg.Validator,
+		Amount:    msg.Amount,
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.MsgNonVotingUndelegateResponse{}, nil
 }
