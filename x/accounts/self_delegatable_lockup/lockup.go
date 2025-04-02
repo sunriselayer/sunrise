@@ -28,8 +28,8 @@ import (
 
 	// <sunsise>
 	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/v1"
+	feetypes "github.com/sunriselayer/sunrise/x/fee/types"
 	selfdelegationtypes "github.com/sunriselayer/sunrise/x/selfdelegation/types"
-	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 	// </sunrise>
 )
 
@@ -360,7 +360,7 @@ func (bva *BaseLockup) SelfDelegate(ctx context.Context, msg *lockuptypes.MsgSel
 
 	hs := bva.headerService.HeaderInfo(ctx)
 
-	res, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	res, err := accountstd.QueryModule[*feetypes.QueryParamsResponse](ctx, &feetypes.QueryParamsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -417,7 +417,7 @@ func (bva *BaseLockup) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *
 		return nil, err
 	}
 
-	res, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	res, err := accountstd.QueryModule[*feetypes.QueryParamsResponse](ctx, &feetypes.QueryParamsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -483,7 +483,7 @@ func getStakingDenom(ctx context.Context) (string, error) {
 	// }
 
 	// return resp.Params.BondDenom, nil
-	resp, err := accountstd.QueryModule[*tokenconvertertypes.QueryParamsResponse](ctx, &tokenconvertertypes.QueryParamsRequest{})
+	resp, err := accountstd.QueryModule[*feetypes.QueryParamsResponse](ctx, &feetypes.QueryParamsRequest{})
 	if err != nil {
 		return "", err
 	}

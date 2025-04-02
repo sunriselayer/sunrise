@@ -36,3 +36,11 @@ type BankKeeper interface {
 	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
 	BurnCoins(ctx context.Context, address []byte, amt sdk.Coins) error
 }
+
+type StakingKeeper interface {
+	BondDenom(ctx context.Context) (string, error)
+}
+
+type FeeKeeper interface {
+	FeeDenom(ctx context.Context) (string, error)
+}

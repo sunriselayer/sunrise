@@ -24,12 +24,12 @@ func (k msgServer) WithdrawSelfDelegationUnbonded(ctx context.Context, msg *type
 		return nil, err
 	}
 
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	err = k.bankKeeper.SendCoins(ctx, proxyAddrBytes, delegator, sdk.NewCoins(sdk.NewCoin(params.FeeDenom, msg.Amount)))
+	err = k.bankKeeper.SendCoins(ctx, proxyAddrBytes, delegator, sdk.NewCoins(sdk.NewCoin(feeDenom, msg.Amount)))
 	if err != nil {
 		return nil, err
 	}

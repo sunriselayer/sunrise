@@ -39,10 +39,7 @@ func TestMsgUpdateParams(t *testing.T) {
 			name: "send enabled param",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params: types.Params{
-					BondDenom: "stake",
-					FeeDenom:  "fee",
-				},
+				Params:    types.Params{},
 			},
 			expErr: false,
 		},

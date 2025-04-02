@@ -6,8 +6,6 @@ import (
 	"cosmossdk.io/core/transaction"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 type AccountsKeeper interface {
@@ -35,8 +33,15 @@ type BankKeeper interface {
 	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 }
 
+type StakingKeeper interface {
+	BondDenom(ctx context.Context) (string, error)
+}
+
+type FeeKeeper interface {
+	FeeDenom(ctx context.Context) (string, error)
+}
+
 type TokenConverterKeeper interface {
-	GetParams(ctx context.Context) (tokenconvertertypes.Params, error)
 	Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error
 	ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error
 }
