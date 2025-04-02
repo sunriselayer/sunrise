@@ -1,6 +1,10 @@
 package types
 
-import "cosmossdk.io/collections"
+import (
+	"cosmossdk.io/collections"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 const (
 	// ModuleName defines the module name
@@ -15,5 +19,11 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_lockup")
+var (
+	ParamsKey               = collections.NewPrefix("params")
+	LockupAccountsKeyPrefix = collections.NewPrefix("lockup_accounts")
+)
+
+var (
+	LockupAccountsKeyCodec = sdk.AccAddressKey
+)
