@@ -26,6 +26,8 @@ type Keeper struct {
 	LockupAccounts collections.Map[sdk.AccAddress, types.LockupAccount]
 
 	accountKeeper types.AccountKeeper
+	bankKeeper    types.BankKeeper
+	feeKeeper     types.FeeKeeper
 }
 
 func NewKeeper(
@@ -34,6 +36,8 @@ func NewKeeper(
 	addressCodec address.Codec,
 	authority []byte,
 	accountKeeper types.AccountKeeper,
+	bankKeeper types.BankKeeper,
+	feeKeeper types.FeeKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -51,6 +55,8 @@ func NewKeeper(
 		LockupAccounts: collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
 
 		accountKeeper: accountKeeper,
+		bankKeeper:    bankKeeper,
+		feeKeeper:     feeKeeper,
 	}
 
 	schema, err := sb.Build()
