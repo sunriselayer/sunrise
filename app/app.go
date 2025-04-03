@@ -66,10 +66,6 @@ import (
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
-	distributiontypes "cosmossdk.io/x/distribution/types"
-	stakingtypes "cosmossdk.io/x/staking/types"
-	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
-
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
@@ -157,20 +153,6 @@ func AppConfig() depinject.Config {
 		appConfig,
 		depinject.Provide(mint.ProvideMintFn),
 		depinject.Provide(gov.ProvideCalculateVoteResultsAndVotingPowerFn),
-		// For shareclass module
-		depinject.Provide(func(stakingKeeper *stakingkeeper.Keeper) stakingtypes.MsgServer {
-			return stakingkeeper.NewMsgServerImpl(stakingKeeper)
-		}),
-		depinject.Provide(func(stakingKeeper *stakingkeeper.Keeper) stakingtypes.QueryServer {
-			return stakingkeeper.NewQuerier(stakingKeeper)
-		}),
-		depinject.Provide(func(distrKeeper *distrkeeper.Keeper) distributiontypes.MsgServer {
-			return distrkeeper.NewMsgServerImpl(*distrKeeper)
-		}),
-		// For lockup module
-		depinject.Provide(func(shareclassKeeper *shareclassmodulekeeper.Keeper) shareclasstypes.MsgServer {
-			return shareclassmodulekeeper.NewMsgServerImpl(*shareclassKeeper)
-		}),
 	)
 }
 
@@ -262,6 +244,12 @@ func New(
 	}
 
 	/****  Module Options ****/
+	// For shareclass module
+	app.ShareclassKeeper.StakingMsgServer = stakingkeeper.NewMsgServerImpl(app.StakingKeeper)
+	app.ShareclassKeeper.StakingQueryServer = stakingkeeper.NewQuerier(app.StakingKeeper)
+	app.ShareclassKeeper.DistributionMsgServer = distrkeeper.NewMsgServerImpl(app.DistrKeeper)
+	// For lockup module
+	app.LockupKeeper.ShareclassMsgServer = shareclassmodulekeeper.NewMsgServerImpl(app.ShareclassKeeper)
 
 	// <sunrise>
 	anteHandler, err := NewAnteHandler(

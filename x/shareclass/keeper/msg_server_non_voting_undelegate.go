@@ -69,7 +69,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 	output := sdk.NewCoin(bondDenom, msg.Amount.Amount)
 
-	res, err := k.stakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
+	res, err := k.StakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: msg.Sender,
 		ValidatorAddress: msg.Validator,
 		Amount:           output,

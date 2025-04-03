@@ -30,7 +30,7 @@ type Keeper struct {
 	bankKeeper    types.BankKeeper
 	feeKeeper     types.FeeKeeper
 
-	shareclassMsgServer shareclasstypes.MsgServer
+	ShareclassMsgServer shareclasstypes.MsgServer
 }
 
 func NewKeeper(
@@ -62,7 +62,7 @@ func NewKeeper(
 		bankKeeper:    bankKeeper,
 		feeKeeper:     feeKeeper,
 
-		shareclassMsgServer: shareclassMsgServer,
+		ShareclassMsgServer: shareclassMsgServer,
 	}
 
 	schema, err := sb.Build()

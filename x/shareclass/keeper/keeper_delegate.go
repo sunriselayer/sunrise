@@ -37,7 +37,7 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 	}
 
 	// Stake
-	_, err = k.stakingMsgServer.Delegate(ctx, &stakingtypes.MsgDelegate{
+	_, err = k.StakingMsgServer.Delegate(ctx, &stakingtypes.MsgDelegate{
 		DelegatorAddress: moduleAddr.String(),
 		ValidatorAddress: validatorAddr,
 		Amount:           bondCoin,
@@ -52,7 +52,7 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 func (k Keeper) GetTotalStakedAmount(ctx context.Context, validatorAddr string) (math.Int, error) {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
-	res, err := k.stakingQueryServer.Delegation(ctx, &stakingtypes.QueryDelegationRequest{
+	res, err := k.StakingQueryServer.Delegation(ctx, &stakingtypes.QueryDelegationRequest{
 		DelegatorAddr: moduleAddr.String(),
 		ValidatorAddr: validatorAddr,
 	})

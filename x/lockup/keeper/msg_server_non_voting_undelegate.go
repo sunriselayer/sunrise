@@ -16,7 +16,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 
 	address := k.LockupAccountAddress(msg.Owner)
 
-	_, err := k.shareclassMsgServer.NonVotingUndelegate(ctx, &shareclasstypes.MsgNonVotingUndelegate{
+	_, err := k.ShareclassMsgServer.NonVotingUndelegate(ctx, &shareclasstypes.MsgNonVotingUndelegate{
 		Sender:    address.String(),
 		Validator: msg.Validator,
 		Amount:    msg.Amount,

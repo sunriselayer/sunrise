@@ -16,7 +16,7 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 
 	address := k.LockupAccountAddress(msg.Owner)
 
-	response, err := k.shareclassMsgServer.ClaimRewards(ctx, &shareclasstypes.MsgClaimRewards{
+	response, err := k.ShareclassMsgServer.ClaimRewards(ctx, &shareclasstypes.MsgClaimRewards{
 		Sender:    address.String(),
 		Validator: msg.Validator,
 	})

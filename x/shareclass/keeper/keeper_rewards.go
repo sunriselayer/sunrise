@@ -68,7 +68,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr)
 
 	// Withdraw delegator reward as module address
-	res, err := k.distributionMsgServer.WithdrawDelegatorReward(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
+	res, err := k.DistributionMsgServer.WithdrawDelegatorReward(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
 		DelegatorAddress: moduleAddr.String(),
 		ValidatorAddress: validatorAddr,
 	})

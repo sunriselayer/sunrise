@@ -37,9 +37,9 @@ type Keeper struct {
 	feeKeeper            types.FeeKeeper
 	tokenConverterKeeper types.TokenConverterKeeper
 
-	stakingMsgServer      stakingtypes.MsgServer
-	stakingQueryServer    stakingtypes.QueryServer
-	distributionMsgServer distributiontypes.MsgServer
+	StakingMsgServer      stakingtypes.MsgServer
+	StakingQueryServer    stakingtypes.QueryServer
+	DistributionMsgServer distributiontypes.MsgServer
 }
 
 func NewKeeper(
@@ -81,9 +81,9 @@ func NewKeeper(
 		feeKeeper:            feeKeeper,
 		tokenConverterKeeper: tokenConverterKeeper,
 
-		stakingMsgServer:      stakingMsgServer,
-		stakingQueryServer:    stakingQueryServer,
-		distributionMsgServer: distributionMsgServer,
+		StakingMsgServer:      stakingMsgServer,
+		StakingQueryServer:    stakingQueryServer,
+		DistributionMsgServer: distributionMsgServer,
 	}
 
 	schema, err := sb.Build()
