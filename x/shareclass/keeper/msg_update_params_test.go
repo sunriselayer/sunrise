@@ -4,8 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/keeper"
@@ -44,7 +42,7 @@ func TestMsgUpdateParams(t *testing.T) {
 				Authority: authorityStr,
 				Params: types.Params{
 					RewardPeriod:       time.Hour * 8,
-					CreateValidatorFee: sdk.NewCoin("fee", math.NewInt(1000)),
+					CreateValidatorGas: 1000,
 				},
 			},
 			expErr: false,

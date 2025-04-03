@@ -8,7 +8,6 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 
-	banktypes "cosmossdk.io/x/bank/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
 )
 
@@ -34,24 +33,12 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount denom must be equal to fee denom, please refer the source code of FeeDenom() function of fee module for more details")
 	}
 
-	// Validate fee
-	params, err := k.Keeper.Params.Get(ctx)
+	// Consume gas
+	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
-
-	if !msg.Fee.Equal(params.CreateValidatorFee) {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorFee, "invalid create validator fee, please refer the source code of Params() function of shareclass module for more details")
-	}
-
-	// Burn fee
-	_, err = k.Environment.MsgRouterService.Invoke(ctx, &banktypes.MsgBurn{
-		FromAddress: sdk.AccAddress(address).String(),
-		Amount:      []*sdk.Coin{&msg.Fee},
-	})
-	if err != nil {
-		return nil, err
-	}
+	sdk.UnwrapSDKContext(ctx).GasMeter().ConsumeGas(params.CreateValidatorGas, "create validator with fee denom")
 
 	// Convert amount from fee denom to bond denom
 	err = k.tokenConverterKeeper.ConvertReverse(ctx, msg.Amount.Amount, sdk.AccAddress(address))

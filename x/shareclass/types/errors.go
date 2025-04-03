@@ -12,5 +12,5 @@ var (
 	ErrInvalidRewardPeriod          = errors.Register(ModuleName, 1101, "invalid reward period")
 	ErrInvalidUnbondedDenom         = errors.Register(ModuleName, 1102, "invalid unbonded denom")
 	ErrInvalidCreateValidatorAmount = errors.Register(ModuleName, 1103, "invalid create validator amount")
-	ErrInvalidCreateValidatorFee    = errors.Register(ModuleName, 1104, "invalid create validator fee")
+	ErrInvalidCreateValidatorGas    = errors.Register(ModuleName, 1104, "invalid create validator gas")
 )
