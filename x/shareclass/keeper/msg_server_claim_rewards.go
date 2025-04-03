@@ -14,7 +14,7 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}

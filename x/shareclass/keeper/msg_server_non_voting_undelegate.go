@@ -30,7 +30,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	// Claim rewards
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
@@ -41,8 +41,8 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	// Calculate unbonding share
-	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
-	unbondingShare, err := k.CalculateShareByAmount(ctx, msg.ValidatorAddress, msg.Amount.Amount)
+	shareDenom := types.NonVotingShareTokenDenom(msg.Validator)
+	unbondingShare, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 
 	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: msg.Sender,
-		ValidatorAddress: msg.ValidatorAddress,
+		ValidatorAddress: msg.Validator,
 		Amount:           output,
 	})
 	if err != nil {
