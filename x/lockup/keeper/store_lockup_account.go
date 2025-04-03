@@ -25,3 +25,16 @@ func (k Keeper) SetLockupAccount(ctx context.Context, lockupAccount types.Lockup
 
 	return k.LockupAccounts.Set(ctx, address, lockupAccount)
 }
+
+func (k Keeper) GetAllLockupAccounts(ctx context.Context) ([]types.LockupAccount, error) {
+	lockupAccounts := []types.LockupAccount{}
+	err := k.LockupAccounts.Walk(ctx, nil, func(owner sdk.AccAddress, value types.LockupAccount) (stop bool, err error) {
+		lockupAccounts = append(lockupAccounts, value)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return lockupAccounts, nil
+}

@@ -3,6 +3,7 @@ package sunrise.lockup.v1;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "sunrise/lockup/v1/lockup_account.proto";
 import "sunrise/lockup/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
@@ -15,8 +16,8 @@ service Query {
   }
 
   // LockupAccountAddress queries the lockup account address for a given owner.
-  rpc LockupAccountAddress(QueryLockupAccountAddressRequest) returns (QueryLockupAccountAddressResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-account-address/{owner}";
+  rpc LockupAccount(QueryLockupAccountRequest) returns (QueryLockupAccountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}";
   }
 }
 
@@ -29,12 +30,14 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryLockupAccountAddressRequest is request type for the Query/LockupAccountAddress RPC method.
-message QueryLockupAccountAddressRequest {
+// QueryLockupAccountRequest is request type for the Query/LockupAccount RPC method.
+message QueryLockupAccountRequest {
   string owner = 1;
 }
 
-// QueryLockupAccountAddressResponse is response type for the Query/LockupAccountAddress RPC method.
-message QueryLockupAccountAddressResponse {
-  string lockup_account_address = 1;
+// QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
+message QueryLockupAccountResponse {
+  LockupAccount lockup_account = 1 [(gogoproto.nullable) = false];
+  string lockup_account_address = 2;
+  string unlocked_amount = 3;
 }

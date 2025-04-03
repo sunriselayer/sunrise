@@ -2,6 +2,7 @@ syntax = "proto3";
 package sunrise.lockup.v1;
 
 import "gogoproto/gogo.proto";
+import "sunrise/lockup/v1/lockup_account.proto";
 import "sunrise/lockup/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
@@ -10,4 +11,6 @@ option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
 message GenesisState {
   // params defines all the parameters of the module.
   Params params = 1 [(gogoproto.nullable) = false];
+
+  repeated LockupAccount lockup_accounts = 2 [(gogoproto.nullable) = false];
 }

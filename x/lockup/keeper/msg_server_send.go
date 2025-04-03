@@ -29,21 +29,25 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		return nil, err
 	}
 
-	totalLockupAmount := lockupAccount.LockupAmountOriginal.Add(lockupAccount.LockupAmountAdditional)
-	balance := k.bankKeeper.GetBalance(ctx, address, feeDenom)
-	sendAmount := msg.Amount.AmountOf(feeDenom)
+	found, coin := msg.Amount.Find(feeDenom)
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	now := sdkCtx.BlockTime()
+	if found {
+		totalLockupAmount := lockupAccount.LockupAmountOriginal.Add(lockupAccount.LockupAmountAdditional)
+		balance := k.bankKeeper.GetBalance(ctx, address, feeDenom)
+		sendAmount := coin.Amount
 
-	unlockedAmount, err := types.CalculateUnlockedAmount(totalLockupAmount, lockupAccount.StartTime, lockupAccount.EndTime, now)
-	if err != nil {
-		return nil, err
-	}
+		sdkCtx := sdk.UnwrapSDKContext(ctx)
+		now := sdkCtx.BlockTime()
 
-	canSend := types.SendCondition(totalLockupAmount, unlockedAmount, balance.Amount, sendAmount)
-	if !canSend {
-		return nil, errorsmod.Wrap(types.ErrInsufficientUnlockedFunds, "insufficient unlocked funds")
+		unlockedAmount, err := types.CalculateUnlockedAmount(totalLockupAmount, lockupAccount.StartTime, lockupAccount.EndTime, now)
+		if err != nil {
+			return nil, err
+		}
+
+		canSend := types.SendCondition(totalLockupAmount, unlockedAmount, balance.Amount, sendAmount)
+		if !canSend {
+			return nil, errorsmod.Wrap(types.ErrInsufficientUnlockedFunds, "insufficient unlocked funds")
+		}
 	}
 
 	_, err = k.MsgRouterService.Invoke(ctx, &banktypes.MsgSend{
