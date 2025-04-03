@@ -66,6 +66,7 @@ import (
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
+	distributiontypes "cosmossdk.io/x/distribution/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 
@@ -159,6 +160,12 @@ func AppConfig() depinject.Config {
 		// For shareclass module
 		depinject.Provide(func(stakingKeeper *stakingkeeper.Keeper) stakingtypes.MsgServer {
 			return stakingkeeper.NewMsgServerImpl(stakingKeeper)
+		}),
+		depinject.Provide(func(stakingKeeper *stakingkeeper.Keeper) stakingtypes.QueryServer {
+			return stakingkeeper.NewQuerier(stakingKeeper)
+		}),
+		depinject.Provide(func(distrKeeper *distrkeeper.Keeper) distributiontypes.MsgServer {
+			return distrkeeper.NewMsgServerImpl(*distrKeeper)
 		}),
 		// For lockup module
 		depinject.Provide(func(shareclassKeeper *shareclassmodulekeeper.Keeper) shareclasstypes.MsgServer {

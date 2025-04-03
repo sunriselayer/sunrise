@@ -69,20 +69,13 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 	output := sdk.NewCoin(bondDenom, msg.Amount.Amount)
 
-	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
+	res, err := k.stakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: msg.Sender,
 		ValidatorAddress: msg.Validator,
 		Amount:           output,
 	})
 	if err != nil {
 		return nil, err
-	}
-	undelegateResponse, ok := res.(*stakingtypes.MsgUndelegateResponse)
-	if !ok {
-		return nil, sdkerrors.ErrInvalidRequest
-	}
-	if undelegateResponse == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "undelegate response is nil")
 	}
 
 	// Set recipient
@@ -99,7 +92,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	// Append Unstaking state
 	_, err = k.AppendUnbonding(ctx, types.Unbonding{
 		Address:        recipient.String(),
-		CompletionTime: undelegateResponse.CompletionTime,
+		CompletionTime: res.CompletionTime,
 		Amount:         output,
 	})
 	if err != nil {
@@ -107,7 +100,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	return &types.MsgNonVotingUndelegateResponse{
-		CompletionTime: undelegateResponse.CompletionTime,
+		CompletionTime: res.CompletionTime,
 		Amount:         output,
 	}, nil
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	distributiontypes "cosmossdk.io/x/distribution/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
@@ -69,7 +68,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr)
 
 	// Withdraw delegator reward as module address
-	res, err := k.Environment.MsgRouterService.Invoke(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
+	res, err := k.distributionMsgServer.WithdrawDelegatorReward(ctx, &distributiontypes.MsgWithdrawDelegatorReward{
 		DelegatorAddress: moduleAddr.String(),
 		ValidatorAddress: validatorAddr,
 	})
@@ -77,17 +76,12 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 		return err
 	}
 
-	response, ok := res.(*distributiontypes.MsgWithdrawDelegatorRewardResponse)
-	if !ok {
-		return sdkerrors.ErrInvalidRequest
-	}
-
-	if response.Amount.IsZero() {
+	if res.Amount.IsZero() {
 		return nil
 	}
 
 	// Transfer to reward saver address
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, rewardSaverAddr, response.Amount)
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, rewardSaverAddr, res.Amount)
 	if err != nil {
 		return err
 	}
@@ -101,7 +95,7 @@ func (k Keeper) HandleModuleAccountRewardsByValidator(ctx context.Context, valid
 
 	// Iterate all rewards
 	// Multiplier_new = Multiplier_old + (Reward_new) / totalShare
-	for _, coin := range response.Amount {
+	for _, coin := range res.Amount {
 		multiplierOld, err := k.GetRewardMultiplier(ctx, validatorAddrBytes, coin.Denom)
 		if err != nil {
 			return err

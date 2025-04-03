@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	distributiontypes "cosmossdk.io/x/distribution/types"
 	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
@@ -36,7 +37,9 @@ type Keeper struct {
 	feeKeeper            types.FeeKeeper
 	tokenConverterKeeper types.TokenConverterKeeper
 
-	stakingMsgServer stakingtypes.MsgServer
+	stakingMsgServer      stakingtypes.MsgServer
+	stakingQueryServer    stakingtypes.QueryServer
+	distributionMsgServer distributiontypes.MsgServer
 }
 
 func NewKeeper(
@@ -50,6 +53,8 @@ func NewKeeper(
 	feeKeeper types.FeeKeeper,
 	tokenConverterKeeper types.TokenConverterKeeper,
 	stakingMsgServer stakingtypes.MsgServer,
+	stakingQueryServer stakingtypes.QueryServer,
+	distributionMsgServer distributiontypes.MsgServer,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -76,7 +81,9 @@ func NewKeeper(
 		feeKeeper:            feeKeeper,
 		tokenConverterKeeper: tokenConverterKeeper,
 
-		stakingMsgServer: stakingMsgServer,
+		stakingMsgServer:      stakingMsgServer,
+		stakingQueryServer:    stakingQueryServer,
+		distributionMsgServer: distributionMsgServer,
 	}
 
 	schema, err := sb.Build()

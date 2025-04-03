@@ -52,7 +52,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		return nil, err
 	}
 
-	_, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgCreateValidator{
+	_, err = k.stakingMsgServer.CreateValidator(ctx, &stakingtypes.MsgCreateValidator{
 		Description:       msg.Description,
 		Commission:        msg.Commission,
 		MinSelfDelegation: msg.MinSelfDelegation,

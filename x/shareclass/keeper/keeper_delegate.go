@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"cosmossdk.io/math"
-	stakingtypes "cosmossdk.io/x/staking/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
@@ -37,7 +37,7 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 	}
 
 	// Stake
-	_, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
+	_, err = k.stakingMsgServer.Delegate(ctx, &stakingtypes.MsgDelegate{
 		DelegatorAddress: moduleAddr.String(),
 		ValidatorAddress: validatorAddr,
 		Amount:           bondCoin,
@@ -52,18 +52,15 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 func (k Keeper) GetTotalStakedAmount(ctx context.Context, validatorAddr string) (math.Int, error) {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
-	res, err := k.Environment.QueryRouterService.Invoke(ctx, &stakingtypes.QueryDelegationRequest{
+	res, err := k.stakingQueryServer.Delegation(ctx, &stakingtypes.QueryDelegationRequest{
 		DelegatorAddr: moduleAddr.String(),
 		ValidatorAddr: validatorAddr,
 	})
 	if err != nil {
 		return math.Int{}, err
 	}
-	queryDelegationResponse, ok := res.(*stakingtypes.QueryDelegationResponse)
-	if !ok {
-		return math.Int{}, sdkerrors.ErrInvalidRequest
-	}
-	stakedAmount := queryDelegationResponse.DelegationResponse.Balance.Amount
+
+	stakedAmount := res.DelegationResponse.Balance.Amount
 
 	return stakedAmount, nil
 }
