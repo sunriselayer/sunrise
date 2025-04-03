@@ -8,6 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
+	stakingtypes "cosmossdk.io/x/staking/types"
+
 	"github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
@@ -37,6 +39,8 @@ type ModuleInputs struct {
 	StakingKeeper        types.StakingKeeper
 	FeeKeeper            types.FeeKeeper
 	TokenConverterKeeper types.TokenConverterKeeper
+
+	StakingMsgServer stakingtypes.MsgServer
 }
 
 type ModuleOutputs struct {
@@ -62,6 +66,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StakingKeeper,
 		in.FeeKeeper,
 		in.TokenConverterKeeper,
+		in.StakingMsgServer,
 	)
 	m := NewAppModule(in.Cdc, k)
 

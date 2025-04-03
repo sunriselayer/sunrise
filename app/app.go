@@ -66,6 +66,9 @@ import (
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
+	stakingtypes "cosmossdk.io/x/staking/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
+
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
@@ -153,6 +156,14 @@ func AppConfig() depinject.Config {
 		appConfig,
 		depinject.Provide(mint.ProvideMintFn),
 		depinject.Provide(gov.ProvideCalculateVoteResultsAndVotingPowerFn),
+		// For shareclass module
+		depinject.Provide(func(stakingKeeper *stakingkeeper.Keeper) stakingtypes.MsgServer {
+			return stakingkeeper.NewMsgServerImpl(stakingKeeper)
+		}),
+		// For lockup module
+		depinject.Provide(func(shareclassKeeper *shareclassmodulekeeper.Keeper) shareclasstypes.MsgServer {
+			return shareclassmodulekeeper.NewMsgServerImpl(*shareclassKeeper)
+		}),
 	)
 }
 

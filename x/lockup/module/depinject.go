@@ -8,6 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
+
 	"github.com/sunriselayer/sunrise/x/lockup/keeper"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 )
@@ -35,6 +37,8 @@ type ModuleInputs struct {
 	AccountKeeper types.AccountKeeper
 	BankKeeper    types.BankKeeper
 	FeeKeeper     types.FeeKeeper
+
+	ShareclassMsgServer shareclasstypes.MsgServer
 }
 
 type ModuleOutputs struct {
@@ -58,7 +62,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.FeeKeeper,
-		nil,
+		in.ShareclassMsgServer,
 	)
 	m := NewAppModule(in.Cdc, k)
 
