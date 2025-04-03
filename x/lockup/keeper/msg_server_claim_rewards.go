@@ -4,7 +4,6 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
@@ -17,17 +16,12 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 
 	address := k.LockupAccountAddress(msg.Owner)
 
-	responseMsg, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgClaimRewards{
+	response, err := k.shareclassMsgServer.ClaimRewards(ctx, &shareclasstypes.MsgClaimRewards{
 		Sender:    address.String(),
 		Validator: msg.Validator,
 	})
 	if err != nil {
 		return nil, err
-	}
-
-	response, ok := responseMsg.(*shareclasstypes.MsgClaimRewardsResponse)
-	if !ok {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid response")
 	}
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)

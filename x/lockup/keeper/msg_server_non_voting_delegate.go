@@ -16,7 +16,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 
 	address := k.LockupAccountAddress(msg.Owner)
 
-	_, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingDelegate{
+	_, err := k.shareclassMsgServer.NonVotingDelegate(ctx, &shareclasstypes.MsgNonVotingDelegate{
 		Sender:    address.String(),
 		Validator: msg.Validator,
 		Amount:    msg.Amount,
