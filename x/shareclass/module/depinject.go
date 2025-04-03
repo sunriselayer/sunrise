@@ -62,6 +62,9 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StakingKeeper,
 		in.FeeKeeper,
 		in.TokenConverterKeeper,
+		nil,
+		nil,
+		nil,
 	)
 	m := NewAppModule(in.Cdc, k)
 

@@ -28,9 +28,6 @@ require (
 	cosmossdk.io/store v1.10.0-rc.1.0.20241218084712-ca559989da43
 	cosmossdk.io/tools/confix v0.2.0-rc.1
 	cosmossdk.io/x/accounts v0.2.0-rc.1
-	cosmossdk.io/x/accounts/defaults/base v0.2.0-rc.1
-	cosmossdk.io/x/accounts/defaults/lockup v0.2.0-rc.1
-	cosmossdk.io/x/accounts/defaults/multisig v0.2.0-rc.1
 	cosmossdk.io/x/authz v0.2.0-rc.1
 	cosmossdk.io/x/bank v0.2.0-rc.1
 	cosmossdk.io/x/circuit v0.2.0-rc.1
@@ -92,6 +89,8 @@ require (
 	connectrpc.com/otelconnect v0.7.0 // indirect
 	cosmossdk.io/core/testing v0.0.1 // indirect
 	cosmossdk.io/schema v1.0.0 // indirect
+	cosmossdk.io/x/accounts/defaults/lockup v0.2.0-rc.1 // indirect
+	cosmossdk.io/x/accounts/defaults/multisig v0.2.0-rc.1 // indirect
 	cosmossdk.io/x/tx v1.1.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect

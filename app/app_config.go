@@ -73,8 +73,10 @@ import (
 	liquidityincentivemoduletypes "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	_ "github.com/sunriselayer/sunrise/x/liquiditypool/module"
 	liquiditypoolmoduletypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
-	_ "github.com/sunriselayer/sunrise/x/selfdelegation/module"
-	selfdelegationmoduletypes "github.com/sunriselayer/sunrise/x/selfdelegation/types"
+	_ "github.com/sunriselayer/sunrise/x/lockup/module"
+	lockupmoduletypes "github.com/sunriselayer/sunrise/x/lockup/types"
+	_ "github.com/sunriselayer/sunrise/x/shareclass/module"
+	shareclassmoduletypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 	_ "github.com/sunriselayer/sunrise/x/swap/module"
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module"
@@ -90,10 +92,6 @@ import (
 	ibcfeetypes "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
-	_ "github.com/sunriselayer/sunrise/x/lockup/module"
-	lockupmoduletypes "github.com/sunriselayer/sunrise/x/lockup/types"
-	_ "github.com/sunriselayer/sunrise/x/shareclass/module"
-	shareclassmoduletypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 var (
@@ -115,11 +113,11 @@ var (
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
 		{Account: damoduletypes.ModuleName},
+		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
-		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		{Account: shareclassmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 	}
 
@@ -136,11 +134,13 @@ var (
 		// pooltypes.ModuleName
 
 		damoduletypes.ModuleName,
+		feemoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
-		feemoduletypes.ModuleName,
+		shareclassmoduletypes.ModuleName,
+		lockupmoduletypes.ModuleName,
 	}
 
 	// application configuration (used by depinject)
@@ -176,11 +176,10 @@ var (
 						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						feemoduletypes.ModuleName,
-						selfdelegationmoduletypes.ModuleName,
 						shareclassmoduletypes.ModuleName,
 						lockupmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
@@ -198,12 +197,11 @@ var (
 						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						feemoduletypes.ModuleName,
-						selfdelegationmoduletypes.ModuleName,
 						shareclassmoduletypes.ModuleName,
 						lockupmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
@@ -228,9 +226,6 @@ var (
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						stakingtypes.ModuleName,
-						tokenconvertermoduletypes.ModuleName,
-						selfdelegationmoduletypes.ModuleName,
-						shareclassmoduletypes.ModuleName,
 						// </sunrise>
 						accounts.ModuleName,
 						distrtypes.ModuleName,
@@ -255,10 +250,12 @@ var (
 						ibcfeetypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
+						tokenconvertermoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						feemoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						lockupmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
@@ -371,6 +368,10 @@ var (
 				Config: appconfig.WrapAny(&damoduletypes.Module{}),
 			},
 			{
+				Name:   feemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&feemoduletypes.Module{}),
+			},
+			{
 				Name:   tokenconvertermoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&tokenconvertermoduletypes.Module{}),
 			},
@@ -385,14 +386,6 @@ var (
 			{
 				Name:   swapmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&swapmoduletypes.Module{}),
-			},
-			{
-				Name:   feemoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&feemoduletypes.Module{}),
-			},
-			{
-				Name:   selfdelegationmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&selfdelegationmoduletypes.Module{}),
 			},
 			{
 				Name:   shareclassmoduletypes.ModuleName,

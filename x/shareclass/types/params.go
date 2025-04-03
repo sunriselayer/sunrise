@@ -4,21 +4,19 @@ import (
 	"time"
 
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // NewParams creates a new Params instance.
-func NewParams(rewardPeriod time.Duration, createValidatorFee sdk.Coin) Params {
+func NewParams(rewardPeriod time.Duration, createValidatorGas uint64) Params {
 	return Params{
 		RewardPeriod:       rewardPeriod,
-		CreateValidatorFee: createValidatorFee,
+		CreateValidatorGas: createValidatorGas,
 	}
 }
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	return NewParams(time.Hour*8, sdk.NewCoin("fee", math.NewInt(1000000)))
+	return NewParams(time.Hour*8, 1000000)
 }
 
 // Validate validates the set of params.
@@ -27,8 +25,8 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(ErrInvalidRewardPeriod, "reward period must be greater than 0")
 	}
 
-	if !p.CreateValidatorFee.IsValid() {
-		return errorsmod.Wrap(ErrInvalidCreateValidatorFee, "create validator fee must be valid")
+	if p.CreateValidatorGas <= 0 {
+		return errorsmod.Wrap(ErrInvalidCreateValidatorGas, "create validator gas must be greater than 0")
 	}
 
 	return nil

@@ -109,7 +109,6 @@ message MsgCreateValidator {
   string validator_address = 4 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   google.protobuf.Any pubkey = 5 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
   cosmos.base.v1beta1.Coin amount = 6 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin fee = 7 [(gogoproto.nullable) = false];
 }
 
 // MsgCreateValidatorResponse

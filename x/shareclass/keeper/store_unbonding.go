@@ -35,7 +35,7 @@ func (k Keeper) AppendUnbonding(ctx context.Context, unbonding types.Unbonding) 
 	}
 
 	// Set the ID of the appended value
-	err = k.SetUnbonding(ctx, unbonding, id)
+	err = k.SetUnbonding(ctx, unbonding)
 	if err != nil {
 		return 0, err
 	}
@@ -44,8 +44,8 @@ func (k Keeper) AppendUnbonding(ctx context.Context, unbonding types.Unbonding) 
 }
 
 // SetUnbonding set a specific unbonding in the store
-func (k Keeper) SetUnbonding(ctx context.Context, unbonding types.Unbonding, id uint64) error {
-	err := k.Unbondings.Set(ctx, id, unbonding)
+func (k Keeper) SetUnbonding(ctx context.Context, unbonding types.Unbonding) error {
+	err := k.Unbondings.Set(ctx, unbonding.Id, unbonding)
 	if err != nil {
 		return err
 	}

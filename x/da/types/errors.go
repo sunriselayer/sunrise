@@ -24,4 +24,5 @@ var (
 	ErrProofNotFound            = errors.Register(ModuleName, 1113, "validity proof not found")
 	ErrInvalidityNotFound       = errors.Register(ModuleName, 1114, "invalidity not found")
 	ErrValidatorNotBonded       = errors.Register(ModuleName, 1115, "validator is not bonded")
+	ErrInvalidPublishDataGas    = errors.Register(ModuleName, 1116, "invalid publish data gas")
 )

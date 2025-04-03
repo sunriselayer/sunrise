@@ -5,8 +5,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
-
-	lockuptypes "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/v1"
 )
 
 func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
@@ -18,15 +16,6 @@ func RegisterInterfaces(registrar registry.InterfaceRegistrar) {
 		&MsgNonVotingDelegate{},
 		&MsgNonVotingUndelegate{},
 		&MsgClaimRewards{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&lockuptypes.MsgInitNonVotingDelegatableLockupAccount{},
-		&lockuptypes.MsgInitNonVotingDelegatablePeriodicLockingAccount{},
-		&lockuptypes.MsgDelegate{},
-		&lockuptypes.MsgUndelegate{},
-		&lockuptypes.MsgWithdrawReward{},
-		&lockuptypes.MsgSend{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),

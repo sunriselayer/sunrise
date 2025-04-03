@@ -20,8 +20,6 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 	}
 	// end static validation
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	// check duplicate data
 	has, err := k.PublishedData.Has(ctx, msg.MetadataUri)
 	if err != nil {
@@ -35,6 +33,11 @@ func (k msgServer) PublishData(ctx context.Context, msg *types.MsgPublishData) (
 	if err != nil {
 		return nil, err
 	}
+
+	// Consume gas
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.GasMeter().ConsumeGas(params.PublishDataGas, "publish data")
+
 	err = k.SetPublishedData(ctx, types.PublishedData{
 		MetadataUri:                msg.MetadataUri,
 		ParityShardCount:           msg.ParityShardCount,
