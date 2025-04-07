@@ -67,7 +67,6 @@ message EventSwapExactAmountIn {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  bool fee_enabled = 5 [(amino.dont_omitempty) = true];
 }
 
 // EventSwapExactAmountOut
@@ -82,5 +81,4 @@ message EventSwapExactAmountOut {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  bool fee_enabled = 5 [(amino.dont_omitempty) = true];
 }

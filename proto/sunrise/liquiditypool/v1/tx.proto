@@ -18,6 +18,8 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   // CreatePool
   rpc CreatePool(MsgCreatePool) returns (MsgCreatePoolResponse);
+  // UpdatePoolOwner
+  rpc UpdatePoolOwner(MsgUpdatePoolOwner) returns (MsgUpdatePoolOwnerResponse);
   // CreatePosition
   rpc CreatePosition(MsgCreatePosition) returns (MsgCreatePositionResponse);
   // IncreaseLiquidity
@@ -48,21 +50,33 @@ message MsgUpdateParamsResponse {}
 
 // MsgCreatePool
 message MsgCreatePool {
-  option (cosmos.msg.v1.signer) = "authority";
-  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string denom_base = 2;
   string denom_quote = 3;
-  string fee_rate = 4;
+  string fee_rate_lp = 4;
+  string fee_rate_owner = 5;
   // Basically 1.0001
-  string price_ratio = 5;
+  string price_ratio = 6;
   // basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
-  string base_offset = 6;
+  string base_offset = 7;
 }
 
 // MsgCreatePoolResponse
 message MsgCreatePoolResponse {
   uint64 id = 1;
 }
+
+// MsgUpdatePoolOwner
+message MsgUpdatePoolOwner {
+  option (cosmos.msg.v1.signer) = "owner";
+  uint64 pool_id = 1;
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string owner_new = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgUpdatePoolOwnerResponse
+message MsgUpdatePoolOwnerResponse {}
 
 // MsgCreatePosition
 message MsgCreatePosition {
