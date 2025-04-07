@@ -12,6 +12,4 @@ message Params {
 
   // For reservation, not used yet
   string withdraw_fee_rate = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
-  // For reservation, not used yet
-  string swap_treasury_tax_rate = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }

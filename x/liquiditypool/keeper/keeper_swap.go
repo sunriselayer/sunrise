@@ -105,14 +105,29 @@ func (k Keeper) SwapExactAmountIn(
 	if err != nil {
 		return math.Int{}, err
 	}
+
+	// owner fee
+	owner := sdk.AccAddress([]byte{})
+	ownerFeeRate := math.LegacyZeroDec()
+	ownerFeeAmount := ownerFeeRate.MulInt(tokenOut.Amount).TruncateInt()
+	tokenOut.Amount = tokenOut.Amount.Sub(ownerFeeAmount)
+	ownerFee := sdk.NewCoin(tokenOut.Denom, ownerFeeAmount)
+
+	err = k.bankKeeper.SendCoins(ctx, sender, owner, sdk.NewCoins(ownerFee))
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	// Don't forget
 	amountOut = tokenOut.Amount
 
+	// Emit event
 	if err := ctx.EventManager().EmitTypedEvent(&types.EventSwapExactAmountIn{
-		Address:    sender.String(),
-		PoolId:     pool.Id,
-		TokenIn:    tokenIn,
-		TokenOut:   sdk.NewCoin(denomOut, amountOut),
-		FeeEnabled: feeEnabled,
+		Address:  sender.String(),
+		PoolId:   pool.Id,
+		TokenIn:  tokenIn,
+		TokenOut: tokenOut,
+		OwnerFee: ownerFee,
 	}); err != nil {
 		return math.Int{}, err
 	}
@@ -146,14 +161,32 @@ func (k Keeper) SwapExactAmountOut(
 	if err != nil {
 		return math.Int{}, err
 	}
+
+	// owner fee
+	owner := sdk.AccAddress([]byte{})
+	ownerFeeRate := math.LegacyZeroDec()
+	ownerFeeRateMultiplierForTokenIn := math.LegacyOneDec().Quo(math.LegacyOneDec().Sub(ownerFeeRate))
+	// (1 - ownerFeeRate) * tokenInAmount = tokenInAmountAfterOwnerFee
+	tokenInAmountAfterOwnerFee := tokenIn.Amount
+	tokenIn.Amount = ownerFeeRateMultiplierForTokenIn.MulInt(tokenInAmountAfterOwnerFee).TruncateInt()
+	ownerFeeAmount := tokenIn.Amount.Sub(tokenInAmountAfterOwnerFee)
+	ownerFee := sdk.NewCoin(tokenIn.Denom, ownerFeeAmount)
+
+	err = k.bankKeeper.SendCoins(ctx, sender, owner, sdk.NewCoins(ownerFee))
+	if err != nil {
+		return math.Int{}, err
+	}
+
+	// Don't forget
 	amountIn = tokenIn.Amount
 
+	// Emit event
 	if err := ctx.EventManager().EmitTypedEvent(&types.EventSwapExactAmountOut{
-		Address:    sender.String(),
-		PoolId:     pool.Id,
-		TokenIn:    sdk.NewCoin(denomIn, amountIn),
-		TokenOut:   tokenOut,
-		FeeEnabled: feeEnabled,
+		Address:  sender.String(),
+		PoolId:   pool.Id,
+		TokenIn:  tokenIn,
+		TokenOut: tokenOut,
+		OwnerFee: ownerFee,
 	}); err != nil {
 		return math.Int{}, err
 	}
