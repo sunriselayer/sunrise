@@ -21,12 +21,14 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema  collections.Schema
-	Params  collections.Item[types.Params]
-	Epochs  collections.Map[uint64, types.Epoch]
-	EpochId collections.Sequence
-	Gauges  collections.Map[collections.Pair[uint64, uint64], types.Gauge]
-	Votes   collections.Map[sdk.AccAddress, types.Vote]
+	Schema          collections.Schema
+	Params          collections.Item[types.Params]
+	Epochs          collections.Map[uint64, types.Epoch]
+	EpochId         collections.Sequence
+	Gauges          collections.Map[collections.Pair[uint64, uint64], types.Gauge]
+	Votes           collections.Map[sdk.AccAddress, types.Vote]
+	Bribes          collections.Map[collections.Pair[uint64, uint64], types.Bribe]
+	UnclaimedBribes collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.UnclaimedBribe]
 
 	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
@@ -61,6 +63,14 @@ func NewKeeper(
 		EpochId: collections.NewSequence(sb, types.EpochIdKey, "epoch_id"),
 		Gauges:  collections.NewMap(sb, types.GaugesKeyPrefix, "gauges", types.GaugesKeyCodec, codec.CollValue[types.Gauge](cdc)),
 		Votes:   collections.NewMap(sb, types.VotesKeyPrefix, "votes", types.VotesKeyCodec, codec.CollValue[types.Vote](cdc)),
+		Bribes:  collections.NewMap(sb, types.BribesKeyPrefix, "bribes", types.BribesKeyCodec, codec.CollValue[types.Bribe](cdc)),
+		UnclaimedBribes: collections.NewMap(
+			sb,
+			types.UnclaimedBribesKeyPrefix,
+			"unclaimed_bribes",
+			types.UnclaimedBribesKeyCodec,
+			codec.CollValue[types.UnclaimedBribe](cdc),
+		),
 
 		accountKeeper:       authKeeper,
 		bankKeeper:          bankKeeper,
