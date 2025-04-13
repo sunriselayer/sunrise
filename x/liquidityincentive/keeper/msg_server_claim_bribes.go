@@ -10,7 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*types.MsgClaimBribeResponse, error) {
+func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (*types.MsgClaimBribesResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
@@ -20,12 +20,9 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 	totalClaimed := sdk.NewCoins()
 
 	// Check if epoch exists
-	_, found, err := k.Epochs.Get(ctx, msg.EpochId)
+	_, err = k.Epochs.Get(ctx, msg.EpochId)
 	if err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %d not found", msg.EpochId)
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -97,16 +94,14 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 	}
 
 	// Emit event
-	if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventClaimBribe{
-		Sender:  msg.Sender,
-		EpochId: msg.EpochId,
-		PoolIds: msg.PoolIds,
-		Amount:  totalClaimed,
+	if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventClaimBribes{
+		Address:       msg.Sender,
+		ClaimedBribes: totalClaimed,
 	}); err != nil {
 		return nil, err
 	}
 
-	return &types.MsgClaimBribeResponse{
-		ClaimedAmount: totalClaimed,
+	return &types.MsgClaimBribesResponse{
+		ClaimedBribes: totalClaimed,
 	}, nil
 }

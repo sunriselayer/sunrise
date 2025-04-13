@@ -108,7 +108,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, resp.CollectedFees.String(), tc.expRewards.String())
+				require.Equal(t, resp.ClaimedFees.String(), tc.expRewards.String())
 			}
 		})
 	}

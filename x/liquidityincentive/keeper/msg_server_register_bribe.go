@@ -5,8 +5,11 @@ import (
 
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+
+	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBribe) (*types.MsgRegisterBribeResponse, error) {
@@ -16,21 +19,18 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	}
 
 	// Check if epoch exists
-	epoch, found, err := k.Epochs.Get(ctx, msg.EpochId)
+	_, err = k.Epochs.Get(ctx, msg.EpochId)
 	if err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %d not found", msg.EpochId)
 	}
 
 	// Check if pool exists
-	_, found, err = k.liquidityPoolKeeper.GetPool(ctx, msg.PoolId)
+	_, found, err := k.liquidityPoolKeeper.GetPool(ctx, msg.PoolId)
 	if err != nil {
 		return nil, err
 	}
 	if !found {
-		return nil, errorsmod.Wrapf(types.ErrPoolNotFound, "pool %d not found", msg.PoolId)
+		return nil, errorsmod.Wrapf(liquiditypooltypes.ErrPoolNotFound, "pool %d not found", msg.PoolId)
 	}
 
 	// Check if bribe amount is valid
@@ -63,7 +63,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 			EpochId:       msg.EpochId,
 			PoolId:        msg.PoolId,
 			Amount:        msg.Amount,
-			ClaimedAmount: sdk.NewCoin(msg.Amount.Denom, sdk.ZeroInt()),
+			ClaimedAmount: sdk.NewCoin(msg.Amount.Denom, math.ZeroInt()),
 		}
 
 		if err := k.Bribes.Set(ctx, key, bribe); err != nil {
@@ -73,7 +73,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 
 	// Emit event
 	if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventRegisterBribe{
-		Sender:  msg.Sender,
+		Address: msg.Sender,
 		EpochId: msg.EpochId,
 		PoolId:  msg.PoolId,
 		Amount:  msg.Amount,
