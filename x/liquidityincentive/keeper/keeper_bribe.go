@@ -4,17 +4,19 @@ import (
 	"context"
 
 	"cosmossdk.io/collections"
+	errorsmod "cosmossdk.io/errors"
 	math "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
 // SaveVoteWeightsForBribes saves vote weights for bribes distribution
 func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) error {
-	// プールごとの総投票重みを計算
+	// Calculate total vote weights for each pool
 	poolTotalWeights := make(map[uint64]math.LegacyDec)
 
-	// すべての投票を取得して処理
+	// Process all votes
 	err := k.Votes.Walk(ctx, collections.NewPrefixedRange[sdk.AccAddress](), func(voter sdk.AccAddress, vote types.Vote) (bool, error) {
 		for _, poolWeight := range vote.PoolWeights {
 			weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
@@ -36,7 +38,7 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 		return err
 	}
 
-	// 各投票者の相対的な重みを保存
+	// Save relative weights for each voter
 	err = k.Votes.Walk(ctx, collections.NewPrefixedRange[sdk.AccAddress](), func(voter sdk.AccAddress, vote types.Vote) (bool, error) {
 		voterStr, err := k.addressCodec.BytesToString(voter)
 		if err != nil {
@@ -50,7 +52,7 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 			}
 
 			if weight.IsPositive() && !poolTotalWeights[poolWeight.PoolId].IsZero() {
-				// ブライブが存在するプールのみ処理
+				// Process only pools with bribes
 				bribeKey := collections.Join(epochId, poolWeight.PoolId)
 				_, found, err := k.Bribes.Get(ctx, bribeKey)
 				if err != nil {
@@ -60,10 +62,10 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 					continue
 				}
 
-				// 相対的な重みを計算
+				// Calculate relative weight
 				relativeWeight := weight.Quo(poolTotalWeights[poolWeight.PoolId])
 
-				// UnclaimedBribeを保存
+				// Save UnclaimedBribe
 				unclaimedBribe := types.UnclaimedBribe{
 					Address: voterStr,
 					EpochId: epochId,
@@ -87,10 +89,10 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 func (k Keeper) EndEpoch(ctx context.Context) error {
 	// ... existing code for ending the current epoch ...
 
-	// 終了するエポックのIDを取得
+	// Get the ID of the epoch to end
 	currentEpochId := k.GetCurrentEpochId(ctx)
 
-	// 投票重みを保存
+	// Save vote weights
 	if err := k.SaveVoteWeightsForBribes(ctx, currentEpochId); err != nil {
 		k.Logger(sdk.UnwrapSDKContext(ctx)).Error(
 			"failed to save vote weights for bribes",
@@ -99,11 +101,11 @@ func (k Keeper) EndEpoch(ctx context.Context) error {
 		)
 	}
 
-	// 請求期間が終了した古いエポックの未請求ブライブを処理
+	// Process unclaimed bribes for old epochs that have passed their claim period
 	if currentEpochId > k.GetParams(ctx).BribeClaimEpochs {
 		epochToProcess := currentEpochId - k.GetParams(ctx).BribeClaimEpochs
 		if err := k.ProcessUnclaimedBribes(ctx, epochToProcess); err != nil {
-			// エラーをログに記録するだけで、エポック終了処理は続行
+			// Only log the error and continue with epoch ending process
 			k.Logger(sdk.UnwrapSDKContext(ctx)).Error(
 				"failed to process unclaimed bribes",
 				"epoch_id", epochToProcess,
@@ -121,7 +123,7 @@ func (k Keeper) EndEpoch(ctx context.Context) error {
 func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// エポックが存在するか確認
+	// Check if the epoch exists
 	_, found, err := k.Epochs.Get(ctx, epochId)
 	if err != nil {
 		return err
@@ -130,18 +132,18 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		return errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %d not found", epochId)
 	}
 
-	// このエポックのすべてのブライブを処理
+	// Process all bribes for this epoch
 	totalUnclaimed := sdk.NewCoins()
 
 	err = k.Bribes.Walk(ctx, collections.NewPrefixedPairRange[uint64, uint64](epochId),
 		func(key collections.Pair[uint64, uint64], bribe types.Bribe) (bool, error) {
-			// 未請求額を計算
+			// Calculate unclaimed amount
 			unclaimedAmount := bribe.Amount.Sub(bribe.ClaimedAmount)
 			if !unclaimedAmount.IsZero() {
 				totalUnclaimed = totalUnclaimed.Add(unclaimedAmount)
 			}
 
-			// ブライブを削除（もう必要ない）
+			// Remove all unclaimed bribes for this epoch
 			if err := k.Bribes.Remove(ctx, key); err != nil {
 				return false, err
 			}
@@ -153,7 +155,7 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		return err
 	}
 
-	// このエポックの未請求ブライブをすべて削除
+	// Remove all unclaimed bribes for this epoch
 	err = k.UnclaimedBribes.Walk(ctx, collections.NewPrefixedTripleRange[string, uint64, uint64]("", epochId, 0),
 		func(key collections.Triple[string, uint64, uint64], unclaimed types.UnclaimedBribe) (bool, error) {
 			return false, k.UnclaimedBribes.Remove(ctx, key)
@@ -163,7 +165,7 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		return err
 	}
 
-	// 未請求のブライブがあれば、fee collectorに送信
+	// If there are unclaimed bribes, send them to fee collector
 	if !totalUnclaimed.IsZero() {
 		feeCollectorAddr := k.accountKeeper.GetModuleAddress(authtypes.FeeCollectorName)
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(
@@ -175,7 +177,7 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 			return errorsmod.Wrap(err, "failed to send unclaimed bribes to fee collector")
 		}
 
-		// イベントを発行
+		// Emit event
 		if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventUnclaimedBribesProcessed{
 			EpochId: epochId,
 			Amount:  totalUnclaimed,

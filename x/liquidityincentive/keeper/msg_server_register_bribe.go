@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
@@ -14,7 +15,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	// エポックが存在するか確認
+	// Check if epoch exists
 	epoch, found, err := k.Epochs.Get(ctx, msg.EpochId)
 	if err != nil {
 		return nil, err
@@ -23,7 +24,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 		return nil, errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %d not found", msg.EpochId)
 	}
 
-	// プールが存在するか確認
+	// Check if pool exists
 	_, found, err = k.liquidityPoolKeeper.GetPool(ctx, msg.PoolId)
 	if err != nil {
 		return nil, err
@@ -32,18 +33,18 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 		return nil, errorsmod.Wrapf(types.ErrPoolNotFound, "pool %d not found", msg.PoolId)
 	}
 
-	// ブライブの金額が有効か確認
+	// Check if bribe amount is valid
 	if !msg.Amount.IsValid() || msg.Amount.IsZero() {
 		return nil, errorsmod.Wrap(types.ErrInvalidBribeAmount, "bribe amount must be valid and non-zero")
 	}
 
-	// 送信者からブライブの金額を引き出す
+	// Withdraw bribe amount from sender
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(sdkCtx, sender, types.ModuleName, msg.Amount); err != nil {
 		return nil, errorsmod.Wrap(err, "failed to send coins to module")
 	}
 
-	// ブライブを保存または更新
+	// Save or update bribe
 	key := collections.Join(msg.EpochId, msg.PoolId)
 	existingBribe, found, err := k.Bribes.Get(ctx, key)
 	if err != nil {
@@ -51,13 +52,13 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	}
 
 	if found {
-		// 既存のブライブに追加
+		// Add to existing bribe
 		existingBribe.Amount = existingBribe.Amount.Add(msg.Amount)
 		if err := k.Bribes.Set(ctx, key, existingBribe); err != nil {
 			return nil, errorsmod.Wrap(err, "failed to update bribe")
 		}
 	} else {
-		// 新しいブライブを作成
+		// Create new bribe
 		bribe := types.Bribe{
 			EpochId:       msg.EpochId,
 			PoolId:        msg.PoolId,
@@ -70,7 +71,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 		}
 	}
 
-	// イベントを発行
+	// Emit event
 	if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventRegisterBribe{
 		Sender:  msg.Sender,
 		EpochId: msg.EpochId,

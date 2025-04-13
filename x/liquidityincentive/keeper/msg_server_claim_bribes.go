@@ -19,7 +19,7 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 	senderAddr := sdk.AccAddress(sender)
 	totalClaimed := sdk.NewCoins()
 
-	// エポックが存在するか確認
+	// Check if epoch exists
 	_, found, err := k.Epochs.Get(ctx, msg.EpochId)
 	if err != nil {
 		return nil, err
@@ -30,35 +30,35 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// 各プールのブライブを処理
+	// Process bribes for each pool
 	for _, poolId := range msg.PoolIds {
-		// ブライブが存在するか確認
+		// Check if bribe exists
 		bribeKey := collections.Join(msg.EpochId, poolId)
 		bribe, found, err := k.Bribes.Get(ctx, bribeKey)
 		if err != nil {
 			return nil, err
 		}
 		if !found {
-			continue // このプールにブライブがない
+			continue // No bribe for this pool
 		}
 
-		// 未請求のブライブを取得
+		// Get unclaimed bribe
 		unclaimedKey := collections.Join3(msg.Sender, msg.EpochId, poolId)
 		unclaimed, found, err := k.UnclaimedBribes.Get(ctx, unclaimedKey)
 		if err != nil {
 			return nil, err
 		}
 		if !found {
-			continue // 請求権がない
+			continue // No claim right
 		}
 
-		// 重みを取得
+		// Get weight
 		weight, err := math.LegacyNewDecFromStr(unclaimed.Weight)
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "invalid weight format")
 		}
 
-		// 請求額を計算
+		// Calculate claim amount
 		claimAmount := sdk.NewCoin(
 			bribe.Amount.Denom,
 			math.LegacyNewDecFromInt(bribe.Amount.Amount).Mul(weight).TruncateInt(),
@@ -68,7 +68,7 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 			continue
 		}
 
-		// ブライブを送信
+		// Send bribe
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(
 			sdkCtx,
 			types.ModuleName,
@@ -78,13 +78,13 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 			return nil, errorsmod.Wrap(err, "failed to send coins from module")
 		}
 
-		// 請求済み金額を更新
+		// Update claimed amount
 		bribe.ClaimedAmount = bribe.ClaimedAmount.Add(claimAmount)
 		if err := k.Bribes.Set(ctx, bribeKey, bribe); err != nil {
 			return nil, errorsmod.Wrap(err, "failed to update bribe claimed amount")
 		}
 
-		// UnclaimedBribeを削除（重複請求を防止）
+		// Remove UnclaimedBribe (prevent double claiming)
 		if err := k.UnclaimedBribes.Remove(ctx, unclaimedKey); err != nil {
 			return nil, errorsmod.Wrap(err, "failed to remove unclaimed bribe")
 		}
@@ -96,7 +96,7 @@ func (k msgServer) ClaimBribe(ctx context.Context, msg *types.MsgClaimBribe) (*t
 		return nil, errorsmod.Wrap(types.ErrNoBribesToClaim, "no bribes to claim")
 	}
 
-	// イベントを発行
+	// Emit event
 	if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventClaimBribe{
 		Sender:  msg.Sender,
 		EpochId: msg.EpochId,
