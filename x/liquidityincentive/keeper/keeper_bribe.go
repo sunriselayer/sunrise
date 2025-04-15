@@ -5,8 +5,9 @@ import (
 
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
-	math "cosmossdk.io/math"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -83,28 +84,35 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 }
 
 // EndEpoch ends the current epoch and starts a new one
-func (k Keeper) EndEpoch(ctx context.Context) error {
+func (k Keeper) EndEpoch(ctx sdk.Context) error {
 	// ... existing code for ending the current epoch ...
 
 	// Get the ID of the epoch to end
-	currentEpochId := k.GetCurrentEpochId(ctx)
+	currentEpochId, err := k.GetEpochCount(ctx)
+	if err != nil {
+		return err
+	}
 
 	// Save vote weights
 	if err := k.SaveVoteWeightsForBribes(ctx, currentEpochId); err != nil {
-		k.Logger(sdk.UnwrapSDKContext(ctx)).Error(
-			"failed to save vote weights for bribes",
+		ctx.Logger().Error("failed to save vote weights for bribes",
 			"epoch_id", currentEpochId,
 			"error", err,
 		)
 	}
 
 	// Process unclaimed bribes for old epochs that have passed their claim period
-	if currentEpochId > k.GetParams(ctx).BribeClaimEpochs {
-		epochToProcess := currentEpochId - k.GetParams(ctx).BribeClaimEpochs
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
+
+	// Use EpochBlocks as the claim period for now
+	if currentEpochId > uint64(params.EpochBlocks) {
+		epochToProcess := currentEpochId - uint64(params.EpochBlocks)
 		if err := k.ProcessUnclaimedBribes(ctx, epochToProcess); err != nil {
 			// Only log the error and continue with epoch ending process
-			k.Logger(sdk.UnwrapSDKContext(ctx)).Error(
-				"failed to process unclaimed bribes",
+			ctx.Logger().Error("failed to process unclaimed bribes",
 				"epoch_id", epochToProcess,
 				"error", err,
 			)
@@ -126,7 +134,7 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		return err
 	}
 	if epoch.Id == 0 {
-		return errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %d not found", epochId)
+		return errorsmod.Wrapf(sdkerrors.ErrNotFound, "epoch %d not found", epochId)
 	}
 
 	// Process all bribes for this epoch
