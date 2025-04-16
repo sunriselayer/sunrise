@@ -9,14 +9,16 @@ import (
 
 	math "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Authority); err != nil {
+	authority, err := k.addressCodec.StringToBytes(msg.Authority)
+	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}
 
-	err := sdk.ValidateDenom(msg.DenomBase)
+	err = sdk.ValidateDenom(msg.DenomBase)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid denom base")
 	}
@@ -24,6 +26,10 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	err = sdk.ValidateDenom(msg.DenomQuote)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid denom quote")
+	}
+
+	if msg.DenomBase == msg.DenomQuote {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "denom base and denom quote must be different")
 	}
 
 	feeRate, err := math.LegacyNewDecFromStr(msg.FeeRate)
@@ -63,13 +69,25 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 
 	// end static validation
 
-	params, err := k.Params.Get(ctx)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "failed to get params")
-	}
+	// Validate quote denom and consume gas if authority is not gov
+	if !sdk.AccAddress(authority).Equals(sdk.AccAddress(k.authority)) {
+		feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to get fee denom")
+		}
 
-	if params.CreatePoolGas > 0 {
-		sdk.UnwrapSDKContext(ctx).GasMeter().ConsumeGas(params.CreatePoolGas, "create pool")
+		if msg.DenomQuote != feeDenom {
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "denom quote must be the same as fee denom")
+		}
+
+		params, err := k.Params.Get(ctx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to get params")
+		}
+
+		if params.CreatePoolGas > 0 {
+			sdk.UnwrapSDKContext(ctx).GasMeter().ConsumeGas(params.CreatePoolGas, "create pool")
+		}
 	}
 
 	var pool = types.Pool{
