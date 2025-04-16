@@ -174,7 +174,7 @@ message MsgClaimRewards {
 
 // MsgClaimRewardsResponse
 message MsgClaimRewardsResponse {
-  repeated cosmos.base.v1beta1.Coin collected_fees = 1 [
+  repeated cosmos.base.v1beta1.Coin claimed_fees = 1 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];

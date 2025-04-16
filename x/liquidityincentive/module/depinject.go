@@ -32,10 +32,12 @@ type ModuleInputs struct {
 	Cdc          codec.Codec
 	AddressCodec address.Codec
 
-	AccountKeeper       types.AccountKeeper
-	BankKeeper          types.BankKeeper
-	StakingKeeper       types.StakingKeeper
-	LiquidityPoolKeeper types.LiquidityPoolKeeper
+	AccountKeeper        types.AccountKeeper
+	BankKeeper           types.BankKeeper
+	StakingKeeper        types.StakingKeeper
+	FeeKeeper            types.FeeKeeper
+	TokenConverterKeeper types.TokenConverterKeeper
+	LiquidityPoolKeeper  types.LiquidityPoolKeeper
 }
 
 type ModuleOutputs struct {
@@ -59,6 +61,8 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.StakingKeeper,
+		in.FeeKeeper,
+		in.TokenConverterKeeper,
 		in.LiquidityPoolKeeper,
 	)
 	m := NewAppModule(in.Cdc, k)

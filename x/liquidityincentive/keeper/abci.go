@@ -5,7 +5,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -55,9 +54,27 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
-	vRise := k.bankKeeper.GetBalance(ctx, feeCollector, consts.BondDenom)
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return err
+	}
+	rise := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
+
+	// Convert fee denom to bond denom
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, rise.Amount, feeCollector)
+	if err != nil {
+		return err
+	}
+
+	// Get bond denom
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return err
+	}
+	vRise := sdk.NewCoin(bondDenom, rise.Amount)
 	vRiseDec := sdk.NewDecCoinsFromCoins(vRise)
 
+	// Distribute incentives to gauges
 	lastEpoch, found, err := k.GetLastEpoch(ctx)
 	if err != nil {
 		return err
@@ -109,6 +126,12 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 			return nil
 		}
 	} else if ctx.BlockHeight() >= lastEpoch.EndBlock {
+		// End current epoch and start new one
+		if err := k.FinalizeBribeForEpoch(ctx); err != nil {
+			ctx.Logger().Error("epoch ending error", err)
+			return nil
+		}
+
 		err := k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
 		if err != nil {
 			ctx.Logger().Error("epoch creation error", err)

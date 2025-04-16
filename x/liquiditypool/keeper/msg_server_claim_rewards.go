@@ -38,6 +38,6 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	}
 
 	return &types.MsgClaimRewardsResponse{
-		CollectedFees: totalCollectedFees,
+		ClaimedFees: totalCollectedFees,
 	}, nil
 }

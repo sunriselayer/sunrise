@@ -50,6 +50,7 @@ func initFixture(t *testing.T) *fixture {
 		addressCodec,
 		authority,
 		mocks.BankKeeper,
+		nil,
 	)
 
 	// Initialize params

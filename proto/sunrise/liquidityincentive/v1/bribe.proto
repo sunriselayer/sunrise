@@ -1,0 +1,24 @@
+syntax = "proto3";
+package sunrise.liquidityincentive.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
+
+// Bribe
+message Bribe {
+  uint64 epoch_id = 1;
+  uint64 pool_id = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin claimed_amount = 4 [(gogoproto.nullable) = false];
+}
+
+// Bribe
+message UnclaimedBribe {
+  string address = 1;
+  uint64 epoch_id = 2;
+  uint64 pool_id = 3;
+  string weight = 4 [(cosmos_proto.scalar) = "cosmos.Dec"];
+}

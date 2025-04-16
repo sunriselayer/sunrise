@@ -4,11 +4,11 @@
 
 ### BeginBlocker
 
-- Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
+- Transfer a portion of inflation rewards from `x/distribution` pool to `x/liquidityincentive` pool.
 
 ### EndBlocker
 
-- Transfer a portion of inflation rewards from `x/distribution` pool to `x/liquidityincentive` pool.
+- Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
 
 ### Lazy accounting
 

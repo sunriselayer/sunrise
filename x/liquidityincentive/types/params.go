@@ -8,10 +8,11 @@ import (
 )
 
 // NewParams creates a new Params instance.
-func NewParams(epochBlocks int64, stakingRewardRatio math.LegacyDec) Params {
+func NewParams(epochBlocks int64, stakingRewardRatio math.LegacyDec, bribeClaimEpochs uint64) Params {
 	return Params{
 		EpochBlocks:        epochBlocks,
 		StakingRewardRatio: stakingRewardRatio.String(),
+		BribeClaimEpochs:   bribeClaimEpochs,
 	}
 }
 
@@ -20,6 +21,7 @@ func DefaultParams() Params {
 	return NewParams(
 		5,                                // new epoch per 10 blocks
 		math.LegacyNewDecWithPrec(50, 2), // 50% to staking
+		10,                               // 10 epochs to claim bribes
 	)
 }
 
@@ -38,6 +40,10 @@ func (p Params) Validate() error {
 	}
 	if stakingRewardRatio.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "staking reward ratio must be less than 1")
+	}
+
+	if p.BribeClaimEpochs == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "bribe claim epochs must be positive")
 	}
 
 	return nil

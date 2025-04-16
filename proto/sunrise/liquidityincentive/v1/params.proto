@@ -12,4 +12,5 @@ message Params {
 
   int64 epoch_blocks = 1;
   string staking_reward_ratio = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  uint64 bribe_claim_epochs = 3;
 }
