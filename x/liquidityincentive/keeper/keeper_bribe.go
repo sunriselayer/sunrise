@@ -83,9 +83,8 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 	return nil
 }
 
-// EndEpoch ends the current epoch and starts a new one
-func (k Keeper) EndEpoch(ctx sdk.Context) error {
-	// ... existing code for ending the current epoch ...
+// FinalizeBribeForEpoch ends the current epoch and starts a new one
+func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 
 	// Get the ID of the epoch to end
 	currentEpochId, err := k.GetEpochCount(ctx)
@@ -118,8 +117,6 @@ func (k Keeper) EndEpoch(ctx sdk.Context) error {
 			)
 		}
 	}
-
-	// ... rest of the epoch ending code ...
 
 	return nil
 }

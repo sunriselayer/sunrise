@@ -109,6 +109,12 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 			return nil
 		}
 	} else if ctx.BlockHeight() >= lastEpoch.EndBlock {
+		// End current epoch and start new one
+		if err := k.FinalizeBribeForEpoch(ctx); err != nil {
+			ctx.Logger().Error("epoch ending error", err)
+			return nil
+		}
+
 		err := k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
 		if err != nil {
 			ctx.Logger().Error("epoch creation error", err)
