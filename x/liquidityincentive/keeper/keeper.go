@@ -30,10 +30,12 @@ type Keeper struct {
 	Bribes          collections.Map[collections.Pair[uint64, uint64], types.Bribe]
 	UnclaimedBribes collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.UnclaimedBribe]
 
-	accountKeeper       types.AccountKeeper
-	bankKeeper          types.BankKeeper
-	stakingKeeper       types.StakingKeeper
-	liquidityPoolKeeper types.LiquidityPoolKeeper
+	accountKeeper        types.AccountKeeper
+	bankKeeper           types.BankKeeper
+	stakingKeeper        types.StakingKeeper
+	feeKeeper            types.FeeKeeper
+	tokenConverterKeeper types.TokenConverterKeeper
+	liquidityPoolKeeper  types.LiquidityPoolKeeper
 }
 
 func NewKeeper(
@@ -44,6 +46,8 @@ func NewKeeper(
 	authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
+	feeKeeper types.FeeKeeper,
+	tokenConverterKeeper types.TokenConverterKeeper,
 	liquidityPoolKeeper types.LiquidityPoolKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
@@ -72,10 +76,12 @@ func NewKeeper(
 			codec.CollValue[types.UnclaimedBribe](cdc),
 		),
 
-		accountKeeper:       authKeeper,
-		bankKeeper:          bankKeeper,
-		stakingKeeper:       stakingKeeper,
-		liquidityPoolKeeper: liquidityPoolKeeper,
+		accountKeeper:        authKeeper,
+		bankKeeper:           bankKeeper,
+		stakingKeeper:        stakingKeeper,
+		feeKeeper:            feeKeeper,
+		tokenConverterKeeper: tokenConverterKeeper,
+		liquidityPoolKeeper:  liquidityPoolKeeper,
 	}
 
 	schema, err := sb.Build()

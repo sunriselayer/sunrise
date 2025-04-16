@@ -41,6 +41,16 @@ type StakingKeeper interface {
 		ctx context.Context, delegator sdk.AccAddress,
 		fn func(index int64, delegation sdk.DelegationI) (stop bool),
 	) error
+
+	BondDenom(ctx context.Context) (string, error)
+}
+
+type FeeKeeper interface {
+	FeeDenom(ctx context.Context) (string, error)
+}
+
+type TokenConverterKeeper interface {
+	ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error
 }
 
 type LiquidityPoolKeeper interface {
