@@ -28,7 +28,7 @@ func (q queryServer) AddressBonded(ctx context.Context, req *types.QueryAddressB
 		return nil, err
 	}
 
-	amount := make(map[string]sdk.Coin)
+	bonds := []types.ValidatorBond{}
 
 	for _, balance := range balances {
 		matches := types.NonVotingShareTokenDenomRegexp().FindStringSubmatch(balance.Denom)
@@ -38,9 +38,12 @@ func (q queryServer) AddressBonded(ctx context.Context, req *types.QueryAddressB
 			if err != nil {
 				return nil, err
 			}
-			amount[validatorAddr] = sdk.NewCoin(feeDenom, bondAmount)
+			bonds = append(bonds, types.ValidatorBond{
+				ValidatorAddress: validatorAddr,
+				Amount:           sdk.NewCoin(feeDenom, bondAmount),
+			})
 		}
 	}
 
-	return &types.QueryAddressBondedResponse{Amount: amount}, nil
+	return &types.QueryAddressBondedResponse{Bonds: bonds}, nil
 }

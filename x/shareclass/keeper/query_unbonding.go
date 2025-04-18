@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (q queryServer) AddressUnbondings(ctx context.Context, req *types.QueryAddressUnbondingsRequest) (*types.QueryAddressUnbondingsResponse, error) {
+func (q queryServer) AddressUnbonding(ctx context.Context, req *types.QueryAddressUnbondingRequest) (*types.QueryAddressUnbondingResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -24,5 +24,5 @@ func (q queryServer) AddressUnbondings(ctx context.Context, req *types.QueryAddr
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAddressUnbondingsResponse{Unbondings: unbondings}, nil
+	return &types.QueryAddressUnbondingResponse{Unbondings: unbondings}, nil
 }

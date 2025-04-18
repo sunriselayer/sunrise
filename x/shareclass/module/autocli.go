@@ -27,9 +27,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod: "AddressUnbondings",
-					Use:       "address-unbondings <address>",
-					Short:     "Shows the unbondings of an address",
+					RpcMethod: "AddressUnbonding",
+					Use:       "address-unbonding <address>",
+					Short:     "Shows the unbonding of an address",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "address"},
 					},
