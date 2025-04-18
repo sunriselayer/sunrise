@@ -118,23 +118,23 @@ func (m *QueryParamsResponse) GetParams() Params {
 }
 
 // QueryCalculateAmountRequest
-type QueryCalculateAmountRequest struct {
+type QueryCalculateBondingAmountRequest struct {
 	ValidatorAddress string                `protobuf:"bytes,1,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
 	Share            cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=share,proto3,customtype=cosmossdk.io/math.Int" json:"share"`
 }
 
-func (m *QueryCalculateAmountRequest) Reset()         { *m = QueryCalculateAmountRequest{} }
-func (m *QueryCalculateAmountRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculateAmountRequest) ProtoMessage()    {}
-func (*QueryCalculateAmountRequest) Descriptor() ([]byte, []int) {
+func (m *QueryCalculateBondingAmountRequest) Reset()         { *m = QueryCalculateBondingAmountRequest{} }
+func (m *QueryCalculateBondingAmountRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculateBondingAmountRequest) ProtoMessage()    {}
+func (*QueryCalculateBondingAmountRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{2}
 }
-func (m *QueryCalculateAmountRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculateBondingAmountRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculateAmountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculateBondingAmountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculateAmountRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculateBondingAmountRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -144,42 +144,42 @@ func (m *QueryCalculateAmountRequest) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculateAmountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculateAmountRequest.Merge(m, src)
+func (m *QueryCalculateBondingAmountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculateBondingAmountRequest.Merge(m, src)
 }
-func (m *QueryCalculateAmountRequest) XXX_Size() int {
+func (m *QueryCalculateBondingAmountRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculateAmountRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculateAmountRequest.DiscardUnknown(m)
+func (m *QueryCalculateBondingAmountRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculateBondingAmountRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculateAmountRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculateBondingAmountRequest proto.InternalMessageInfo
 
-func (m *QueryCalculateAmountRequest) GetValidatorAddress() string {
+func (m *QueryCalculateBondingAmountRequest) GetValidatorAddress() string {
 	if m != nil {
 		return m.ValidatorAddress
 	}
 	return ""
 }
 
-// QueryCalculateAmountResponse
-type QueryCalculateAmountResponse struct {
+// QueryCalculateBondingAmountResponse
+type QueryCalculateBondingAmountResponse struct {
 	Amount types.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount"`
 }
 
-func (m *QueryCalculateAmountResponse) Reset()         { *m = QueryCalculateAmountResponse{} }
-func (m *QueryCalculateAmountResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculateAmountResponse) ProtoMessage()    {}
-func (*QueryCalculateAmountResponse) Descriptor() ([]byte, []int) {
+func (m *QueryCalculateBondingAmountResponse) Reset()         { *m = QueryCalculateBondingAmountResponse{} }
+func (m *QueryCalculateBondingAmountResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculateBondingAmountResponse) ProtoMessage()    {}
+func (*QueryCalculateBondingAmountResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{3}
 }
-func (m *QueryCalculateAmountResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculateBondingAmountResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculateAmountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculateBondingAmountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculateAmountResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculateBondingAmountResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -189,19 +189,19 @@ func (m *QueryCalculateAmountResponse) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculateAmountResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculateAmountResponse.Merge(m, src)
+func (m *QueryCalculateBondingAmountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculateBondingAmountResponse.Merge(m, src)
 }
-func (m *QueryCalculateAmountResponse) XXX_Size() int {
+func (m *QueryCalculateBondingAmountResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculateAmountResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculateAmountResponse.DiscardUnknown(m)
+func (m *QueryCalculateBondingAmountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculateBondingAmountResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculateAmountResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculateBondingAmountResponse proto.InternalMessageInfo
 
-func (m *QueryCalculateAmountResponse) GetAmount() types.Coin {
+func (m *QueryCalculateBondingAmountResponse) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
@@ -292,23 +292,23 @@ func (m *QueryCalculateShareResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryCalculateShareResponse proto.InternalMessageInfo
 
-// QueryBondedRequest
-type QueryBondedRequest struct {
+// QueryAddressBondedRequest
+type QueryAddressBondedRequest struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
 
-func (m *QueryBondedRequest) Reset()         { *m = QueryBondedRequest{} }
-func (m *QueryBondedRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryBondedRequest) ProtoMessage()    {}
-func (*QueryBondedRequest) Descriptor() ([]byte, []int) {
+func (m *QueryAddressBondedRequest) Reset()         { *m = QueryAddressBondedRequest{} }
+func (m *QueryAddressBondedRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAddressBondedRequest) ProtoMessage()    {}
+func (*QueryAddressBondedRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{6}
 }
-func (m *QueryBondedRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryAddressBondedRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryBondedRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAddressBondedRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryBondedRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAddressBondedRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -318,42 +318,42 @@ func (m *QueryBondedRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *QueryBondedRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBondedRequest.Merge(m, src)
+func (m *QueryAddressBondedRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAddressBondedRequest.Merge(m, src)
 }
-func (m *QueryBondedRequest) XXX_Size() int {
+func (m *QueryAddressBondedRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryBondedRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBondedRequest.DiscardUnknown(m)
+func (m *QueryAddressBondedRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAddressBondedRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryBondedRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryAddressBondedRequest proto.InternalMessageInfo
 
-func (m *QueryBondedRequest) GetAddress() string {
+func (m *QueryAddressBondedRequest) GetAddress() string {
 	if m != nil {
 		return m.Address
 	}
 	return ""
 }
 
-// QueryBondedResponse
-type QueryBondedResponse struct {
+// QueryAddressBondedResponse
+type QueryAddressBondedResponse struct {
 	Amount map[string]types.Coin `protobuf:"bytes,1,rep,name=amount,proto3" json:"amount" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *QueryBondedResponse) Reset()         { *m = QueryBondedResponse{} }
-func (m *QueryBondedResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryBondedResponse) ProtoMessage()    {}
-func (*QueryBondedResponse) Descriptor() ([]byte, []int) {
+func (m *QueryAddressBondedResponse) Reset()         { *m = QueryAddressBondedResponse{} }
+func (m *QueryAddressBondedResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAddressBondedResponse) ProtoMessage()    {}
+func (*QueryAddressBondedResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{7}
 }
-func (m *QueryBondedResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryAddressBondedResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryBondedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAddressBondedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryBondedResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAddressBondedResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -363,19 +363,19 @@ func (m *QueryBondedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *QueryBondedResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBondedResponse.Merge(m, src)
+func (m *QueryAddressBondedResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAddressBondedResponse.Merge(m, src)
 }
-func (m *QueryBondedResponse) XXX_Size() int {
+func (m *QueryAddressBondedResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryBondedResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBondedResponse.DiscardUnknown(m)
+func (m *QueryAddressBondedResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAddressBondedResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryBondedResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryAddressBondedResponse proto.InternalMessageInfo
 
-func (m *QueryBondedResponse) GetAmount() map[string]types.Coin {
+func (m *QueryAddressBondedResponse) GetAmount() map[string]types.Coin {
 	if m != nil {
 		return m.Amount
 	}
@@ -480,23 +480,23 @@ func (m *QueryClaimableRewardsResponse) GetAmount() github_com_cosmos_cosmos_sdk
 	return nil
 }
 
-// QueryUnbondingsRequest
-type QueryUnbondingsRequest struct {
+// QueryAddressUnbondingsRequest
+type QueryAddressUnbondingsRequest struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
 
-func (m *QueryUnbondingsRequest) Reset()         { *m = QueryUnbondingsRequest{} }
-func (m *QueryUnbondingsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryUnbondingsRequest) ProtoMessage()    {}
-func (*QueryUnbondingsRequest) Descriptor() ([]byte, []int) {
+func (m *QueryAddressUnbondingsRequest) Reset()         { *m = QueryAddressUnbondingsRequest{} }
+func (m *QueryAddressUnbondingsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAddressUnbondingsRequest) ProtoMessage()    {}
+func (*QueryAddressUnbondingsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{10}
 }
-func (m *QueryUnbondingsRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryAddressUnbondingsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryUnbondingsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAddressUnbondingsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryUnbondingsRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAddressUnbondingsRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -506,42 +506,42 @@ func (m *QueryUnbondingsRequest) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *QueryUnbondingsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryUnbondingsRequest.Merge(m, src)
+func (m *QueryAddressUnbondingsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAddressUnbondingsRequest.Merge(m, src)
 }
-func (m *QueryUnbondingsRequest) XXX_Size() int {
+func (m *QueryAddressUnbondingsRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryUnbondingsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryUnbondingsRequest.DiscardUnknown(m)
+func (m *QueryAddressUnbondingsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAddressUnbondingsRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryUnbondingsRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryAddressUnbondingsRequest proto.InternalMessageInfo
 
-func (m *QueryUnbondingsRequest) GetAddress() string {
+func (m *QueryAddressUnbondingsRequest) GetAddress() string {
 	if m != nil {
 		return m.Address
 	}
 	return ""
 }
 
-// QueryUnbondingsResponse
-type QueryUnbondingsResponse struct {
+// QueryAddressUnbondingsResponse
+type QueryAddressUnbondingsResponse struct {
 	Unbondings []Unbonding `protobuf:"bytes,1,rep,name=unbondings,proto3" json:"unbondings"`
 }
 
-func (m *QueryUnbondingsResponse) Reset()         { *m = QueryUnbondingsResponse{} }
-func (m *QueryUnbondingsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryUnbondingsResponse) ProtoMessage()    {}
-func (*QueryUnbondingsResponse) Descriptor() ([]byte, []int) {
+func (m *QueryAddressUnbondingsResponse) Reset()         { *m = QueryAddressUnbondingsResponse{} }
+func (m *QueryAddressUnbondingsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAddressUnbondingsResponse) ProtoMessage()    {}
+func (*QueryAddressUnbondingsResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{11}
 }
-func (m *QueryUnbondingsResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryAddressUnbondingsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryUnbondingsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAddressUnbondingsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryUnbondingsResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAddressUnbondingsResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -551,19 +551,19 @@ func (m *QueryUnbondingsResponse) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-func (m *QueryUnbondingsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryUnbondingsResponse.Merge(m, src)
+func (m *QueryAddressUnbondingsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAddressUnbondingsResponse.Merge(m, src)
 }
-func (m *QueryUnbondingsResponse) XXX_Size() int {
+func (m *QueryAddressUnbondingsResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryUnbondingsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryUnbondingsResponse.DiscardUnknown(m)
+func (m *QueryAddressUnbondingsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAddressUnbondingsResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryUnbondingsResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryAddressUnbondingsResponse proto.InternalMessageInfo
 
-func (m *QueryUnbondingsResponse) GetUnbondings() []Unbonding {
+func (m *QueryAddressUnbondingsResponse) GetUnbondings() []Unbonding {
 	if m != nil {
 		return m.Unbondings
 	}
@@ -573,78 +573,80 @@ func (m *QueryUnbondingsResponse) GetUnbondings() []Unbonding {
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "sunrise.shareclass.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "sunrise.shareclass.v1.QueryParamsResponse")
-	proto.RegisterType((*QueryCalculateAmountRequest)(nil), "sunrise.shareclass.v1.QueryCalculateAmountRequest")
-	proto.RegisterType((*QueryCalculateAmountResponse)(nil), "sunrise.shareclass.v1.QueryCalculateAmountResponse")
+	proto.RegisterType((*QueryCalculateBondingAmountRequest)(nil), "sunrise.shareclass.v1.QueryCalculateBondingAmountRequest")
+	proto.RegisterType((*QueryCalculateBondingAmountResponse)(nil), "sunrise.shareclass.v1.QueryCalculateBondingAmountResponse")
 	proto.RegisterType((*QueryCalculateShareRequest)(nil), "sunrise.shareclass.v1.QueryCalculateShareRequest")
 	proto.RegisterType((*QueryCalculateShareResponse)(nil), "sunrise.shareclass.v1.QueryCalculateShareResponse")
-	proto.RegisterType((*QueryBondedRequest)(nil), "sunrise.shareclass.v1.QueryBondedRequest")
-	proto.RegisterType((*QueryBondedResponse)(nil), "sunrise.shareclass.v1.QueryBondedResponse")
-	proto.RegisterMapType((map[string]types.Coin)(nil), "sunrise.shareclass.v1.QueryBondedResponse.AmountEntry")
+	proto.RegisterType((*QueryAddressBondedRequest)(nil), "sunrise.shareclass.v1.QueryAddressBondedRequest")
+	proto.RegisterType((*QueryAddressBondedResponse)(nil), "sunrise.shareclass.v1.QueryAddressBondedResponse")
+	proto.RegisterMapType((map[string]types.Coin)(nil), "sunrise.shareclass.v1.QueryAddressBondedResponse.AmountEntry")
 	proto.RegisterType((*QueryClaimableRewardsRequest)(nil), "sunrise.shareclass.v1.QueryClaimableRewardsRequest")
 	proto.RegisterType((*QueryClaimableRewardsResponse)(nil), "sunrise.shareclass.v1.QueryClaimableRewardsResponse")
-	proto.RegisterType((*QueryUnbondingsRequest)(nil), "sunrise.shareclass.v1.QueryUnbondingsRequest")
-	proto.RegisterType((*QueryUnbondingsResponse)(nil), "sunrise.shareclass.v1.QueryUnbondingsResponse")
+	proto.RegisterType((*QueryAddressUnbondingsRequest)(nil), "sunrise.shareclass.v1.QueryAddressUnbondingsRequest")
+	proto.RegisterType((*QueryAddressUnbondingsResponse)(nil), "sunrise.shareclass.v1.QueryAddressUnbondingsResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/shareclass/v1/query.proto", fileDescriptor_b90b1443cb3702b3) }
 
 var fileDescriptor_b90b1443cb3702b3 = []byte{
-	// 869 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xcf, 0x4f, 0xe3, 0x46,
-	0x18, 0xcd, 0x84, 0x92, 0xb6, 0x83, 0xd4, 0xd2, 0x29, 0xb4, 0xe0, 0x42, 0x00, 0x4b, 0x95, 0x28,
-	0x6d, 0x6c, 0x62, 0x7e, 0x55, 0xa5, 0x3d, 0x10, 0xd4, 0xaa, 0x48, 0xa8, 0x6a, 0x0d, 0x6d, 0xa5,
-	0x5e, 0xe8, 0x24, 0x1e, 0x19, 0x0b, 0x67, 0x26, 0x78, 0xec, 0xb4, 0xb9, 0x56, 0x3d, 0xf5, 0x54,
-	0x89, 0xff, 0xa0, 0xbd, 0xf5, 0xd4, 0x95, 0x72, 0xd8, 0xc3, 0x5e, 0xf6, 0xc6, 0x11, 0xb1, 0x97,
-	0xd5, 0x1e, 0xd8, 0x15, 0xec, 0x1f, 0xb2, 0xca, 0xcc, 0x38, 0xc4, 0xc1, 0x58, 0x09, 0x68, 0x4f,
-	0xd8, 0x33, 0xef, 0xfb, 0xbe, 0x37, 0x6f, 0x9e, 0x1f, 0x81, 0x0b, 0x3c, 0xa2, 0x81, 0xc7, 0x89,
-	0xc9, 0x0f, 0x71, 0x40, 0x6a, 0x3e, 0xe6, 0xdc, 0x6c, 0x96, 0xcd, 0xe3, 0x88, 0x04, 0x2d, 0xa3,
-	0x11, 0xb0, 0x90, 0xa1, 0x49, 0x05, 0x31, 0xae, 0x21, 0x46, 0xb3, 0xac, 0x2d, 0xd5, 0x18, 0xaf,
-	0x33, 0x6e, 0x56, 0x31, 0x27, 0x12, 0x6f, 0x36, 0xcb, 0x55, 0x12, 0xe2, 0xb2, 0xd9, 0xc0, 0xae,
-	0x47, 0x71, 0xe8, 0x31, 0x2a, 0x5b, 0x68, 0xc5, 0x5e, 0x6c, 0x8c, 0xaa, 0x31, 0x2f, 0xde, 0x9f,
-	0x96, 0xfb, 0x07, 0xe2, 0xcd, 0x94, 0x2f, 0x6a, 0x6b, 0xc2, 0x65, 0x2e, 0x93, 0xeb, 0x9d, 0x27,
-	0xb5, 0x3a, 0xe3, 0x32, 0xe6, 0xfa, 0xc4, 0xc4, 0x0d, 0xcf, 0xc4, 0x94, 0xb2, 0x50, 0x4c, 0x8b,
-	0x6b, 0xf4, 0xf4, 0x43, 0x35, 0x70, 0x80, 0xeb, 0x31, 0xe6, 0xe3, 0x74, 0x4c, 0x44, 0xab, 0x8c,
-	0x3a, 0x1e, 0x75, 0x25, 0x4c, 0x9f, 0x80, 0xe8, 0x87, 0xce, 0xd9, 0xbe, 0x17, 0xb5, 0x36, 0x39,
-	0x8e, 0x08, 0x0f, 0x75, 0x1b, 0xbe, 0x9f, 0x58, 0xe5, 0x0d, 0x46, 0x39, 0x41, 0x9b, 0xb0, 0x20,
-	0x67, 0x4c, 0x81, 0x79, 0xb0, 0x38, 0x66, 0xcd, 0x1a, 0xa9, 0xd2, 0x19, 0xb2, 0xac, 0xf2, 0xc6,
-	0xe9, 0xc5, 0x5c, 0xce, 0x56, 0x25, 0xfa, 0xff, 0x00, 0x7e, 0x24, 0x9a, 0x6e, 0x63, 0xbf, 0x16,
-	0xf9, 0x38, 0x24, 0x5b, 0x75, 0x16, 0xd1, 0x50, 0xcd, 0x44, 0xdf, 0xc1, 0xf7, 0x9a, 0xd8, 0xf7,
-	0x1c, 0x1c, 0xb2, 0xe0, 0x00, 0x3b, 0x4e, 0x40, 0xb8, 0x9c, 0xf3, 0x76, 0x65, 0xe1, 0xbc, 0x5d,
-	0x9a, 0x55, 0xaa, 0xfd, 0x14, 0x63, 0xb6, 0x24, 0x64, 0x2f, 0x0c, 0x3c, 0xea, 0xda, 0xe3, 0xcd,
-	0xbe, 0x75, 0xb4, 0x05, 0x47, 0x05, 0xab, 0xa9, 0xbc, 0xe8, 0xf1, 0x69, 0x87, 0xcc, 0xb3, 0x8b,
-	0xb9, 0x49, 0xd9, 0x87, 0x3b, 0x47, 0x86, 0xc7, 0xcc, 0x3a, 0x0e, 0x0f, 0x8d, 0x1d, 0x1a, 0x9e,
-	0xb7, 0x4b, 0x50, 0x0d, 0xd8, 0xa1, 0xa1, 0x2d, 0x2b, 0xf5, 0x9f, 0xe1, 0x4c, 0x3a, 0x63, 0xa5,
-	0xc7, 0x06, 0x2c, 0x60, 0xb1, 0xa2, 0xf4, 0x98, 0x36, 0x54, 0x8f, 0x8e, 0x0f, 0x0c, 0xe5, 0x03,
-	0x63, 0x9b, 0x79, 0x34, 0xd6, 0x42, 0xc2, 0xf5, 0x07, 0x00, 0x6a, 0xc9, 0xce, 0x7b, 0x9d, 0x81,
-	0xaf, 0x4b, 0x8a, 0xed, 0x2e, 0xcf, 0x3b, 0x68, 0x11, 0x73, 0xfe, 0xb5, 0xff, 0xfa, 0x14, 0x65,
-	0xa5, 0x45, 0x57, 0x6e, 0x70, 0x67, 0xb9, 0xbf, 0x55, 0x5e, 0xac, 0x30, 0xea, 0x10, 0x27, 0x16,
-	0xc3, 0x82, 0x6f, 0x26, 0x25, 0x98, 0x3a, 0x6f, 0x97, 0x26, 0x54, 0x75, 0xf2, 0xe4, 0x31, 0x50,
-	0x7f, 0x0c, 0x94, 0x81, 0xe3, 0x56, 0x8a, 0xe4, 0x7e, 0xcf, 0x85, 0x8d, 0x2c, 0x8e, 0x59, 0xeb,
-	0xb7, 0x18, 0x38, 0xa5, 0xd6, 0x90, 0x77, 0xff, 0x35, 0x0d, 0x83, 0x56, 0xf2, 0x36, 0xb5, 0x7d,
-	0x38, 0xd6, 0xb3, 0x89, 0xc6, 0xe1, 0xc8, 0x11, 0x69, 0x49, 0xb2, 0x76, 0xe7, 0x11, 0x99, 0x70,
-	0xb4, 0x89, 0xfd, 0x48, 0x5a, 0x31, 0xcb, 0x26, 0xb6, 0xc4, 0x7d, 0x91, 0xff, 0x1c, 0xe8, 0xff,
-	0x80, 0xd8, 0x7d, 0x3e, 0xf6, 0xea, 0xb8, 0xea, 0x13, 0x9b, 0xfc, 0x86, 0x03, 0x87, 0xdf, 0x43,
-	0x98, 0x74, 0x67, 0xe5, 0xef, 0xec, 0x2c, 0xfd, 0x4f, 0x00, 0x67, 0x6f, 0x21, 0xa9, 0x24, 0xaf,
-	0xf5, 0x49, 0x9e, 0xf1, 0x8d, 0x2c, 0x77, 0x54, 0xfd, 0xef, 0xf9, 0xdc, 0xa2, 0xeb, 0x85, 0x87,
-	0x51, 0xd5, 0xa8, 0xb1, 0xba, 0xca, 0x4a, 0xf5, 0xa7, 0xc4, 0x9d, 0x23, 0x33, 0x6c, 0x35, 0x08,
-	0x17, 0x05, 0xbc, 0xeb, 0xcd, 0x5d, 0xf8, 0x81, 0x60, 0xf1, 0x63, 0x9c, 0x6e, 0xf7, 0x11, 0x49,
-	0xc7, 0xf0, 0xc3, 0x1b, 0xdd, 0xd4, 0x69, 0xbe, 0x81, 0xb0, 0x9b, 0xa0, 0x5c, 0x9d, 0x68, 0xfe,
-	0x16, 0x13, 0x75, 0xcb, 0x95, 0x5d, 0x7a, 0x2a, 0xad, 0xbf, 0xde, 0x82, 0xa3, 0x62, 0x06, 0x3a,
-	0x01, 0xb0, 0x20, 0xf3, 0x12, 0x7d, 0x92, 0xe5, 0xc6, 0x44, 0x40, 0x6b, 0x4b, 0x83, 0x40, 0x25,
-	0x67, 0xdd, 0xfa, 0xe3, 0xc9, 0xcb, 0x93, 0xfc, 0x67, 0x68, 0xc9, 0x54, 0x35, 0x3e, 0x6e, 0x91,
-	0xc0, 0xcc, 0xfa, 0x1f, 0x82, 0x1e, 0x02, 0xf8, 0x6e, 0x5f, 0xea, 0x21, 0x2b, 0x6b, 0x66, 0x7a,
-	0xa8, 0x6b, 0x2b, 0x43, 0xd5, 0x28, 0xc2, 0x5f, 0x0a, 0xc2, 0xeb, 0x68, 0x75, 0x10, 0xc2, 0xb5,
-	0xb8, 0x49, 0x49, 0x7a, 0x01, 0xb5, 0x01, 0x7c, 0x27, 0x99, 0x51, 0xa8, 0x3c, 0x10, 0x8b, 0xde,
-	0x08, 0xd6, 0xac, 0x61, 0x4a, 0x14, 0xef, 0x4d, 0xc1, 0x7b, 0x0d, 0xad, 0x0c, 0xc7, 0x5b, 0xac,
-	0x0b, 0x1f, 0xc8, 0xc4, 0xc9, 0xf6, 0x41, 0x22, 0x1c, 0xb3, 0x7d, 0x90, 0x0c, 0xb0, 0xe1, 0x7c,
-	0x50, 0x95, 0x54, 0x1e, 0x01, 0x38, 0xde, 0xff, 0x69, 0xa3, 0xec, 0x4b, 0x4d, 0x4f, 0x2b, 0x6d,
-	0x75, 0xb8, 0x22, 0xc5, 0xf9, 0x2b, 0xc1, 0x79, 0x03, 0xad, 0x0d, 0x24, 0x69, 0xdc, 0xa5, 0x14,
-	0x28, 0xa6, 0xff, 0x02, 0x08, 0xaf, 0xbf, 0x62, 0x54, 0xca, 0xe2, 0x70, 0x23, 0x3b, 0x34, 0x63,
-	0x50, 0xb8, 0x22, 0xbb, 0x2e, 0xc8, 0x2e, 0x23, 0x63, 0x10, 0xb2, 0xd7, 0x61, 0x50, 0xd9, 0x3d,
-	0xbd, 0x2c, 0x82, 0xb3, 0xcb, 0x22, 0x78, 0x71, 0x59, 0x04, 0x7f, 0x5f, 0x15, 0x73, 0x67, 0x57,
-	0xc5, 0xdc, 0xd3, 0xab, 0x62, 0xee, 0x17, 0xab, 0x27, 0x09, 0x53, 0x7b, 0xfe, 0xde, 0xdb, 0x55,
-	0x24, 0x63, 0xb5, 0x20, 0x7e, 0xd8, 0xad, 0xbc, 0x0a, 0x00, 0x00, 0xff, 0xff, 0x09, 0xe1, 0x16,
-	0x41, 0xfa, 0x0a, 0x00, 0x00,
+	// 900 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x4f, 0x4f, 0x3b, 0x45,
+	0x18, 0xee, 0xf4, 0x27, 0x55, 0x87, 0x68, 0xf8, 0x8d, 0xfc, 0x0c, 0xac, 0xb0, 0xc0, 0x1a, 0x13,
+	0x44, 0xbb, 0x4b, 0x0b, 0x08, 0xf2, 0xc7, 0x48, 0x51, 0x13, 0x12, 0xe3, 0x9f, 0x45, 0x3d, 0x68,
+	0x22, 0x4e, 0xbb, 0x93, 0xed, 0x86, 0xed, 0x4e, 0xd9, 0xd9, 0xad, 0x36, 0xc6, 0x8b, 0xf1, 0x03,
+	0x98, 0xf0, 0x0d, 0x3c, 0x7a, 0xd3, 0x34, 0xf1, 0xe2, 0xc9, 0x13, 0x37, 0x09, 0xc6, 0xc4, 0x78,
+	0x40, 0x03, 0xfa, 0x3d, 0xcc, 0xce, 0xcc, 0x96, 0x6e, 0xd9, 0x6e, 0xda, 0x12, 0x4f, 0xb4, 0xb3,
+	0xcf, 0xf3, 0xbe, 0xcf, 0xfb, 0xcc, 0xdb, 0x67, 0x81, 0x4b, 0x2c, 0xf4, 0x7c, 0x87, 0x11, 0x83,
+	0xd5, 0xb1, 0x4f, 0x6a, 0x2e, 0x66, 0xcc, 0x68, 0x95, 0x8c, 0xd3, 0x90, 0xf8, 0x6d, 0xbd, 0xe9,
+	0xd3, 0x80, 0xa2, 0x47, 0x12, 0xa2, 0xdf, 0x42, 0xf4, 0x56, 0x49, 0x59, 0xa9, 0x51, 0xd6, 0xa0,
+	0xcc, 0xa8, 0x62, 0x46, 0x04, 0xde, 0x68, 0x95, 0xaa, 0x24, 0xc0, 0x25, 0xa3, 0x89, 0x6d, 0xc7,
+	0xc3, 0x81, 0x43, 0x3d, 0x51, 0x42, 0x51, 0x7b, 0xb1, 0x31, 0xaa, 0x46, 0x9d, 0xf8, 0xf9, 0xac,
+	0x78, 0x7e, 0xcc, 0xbf, 0x19, 0xe2, 0x8b, 0x7c, 0x34, 0x6d, 0x53, 0x9b, 0x8a, 0xf3, 0xe8, 0x93,
+	0x3c, 0x9d, 0xb3, 0x29, 0xb5, 0x5d, 0x62, 0xe0, 0xa6, 0x63, 0x60, 0xcf, 0xa3, 0x01, 0xef, 0x16,
+	0x73, 0xb4, 0xf4, 0xa1, 0x9a, 0xd8, 0xc7, 0x8d, 0x18, 0xf3, 0x42, 0x3a, 0x26, 0xf4, 0xaa, 0xd4,
+	0xb3, 0x1c, 0xcf, 0x16, 0x30, 0x6d, 0x1a, 0xa2, 0xf7, 0xa3, 0xd9, 0xde, 0xe3, 0x5c, 0x93, 0x9c,
+	0x86, 0x84, 0x05, 0x9a, 0x09, 0x9f, 0x49, 0x9c, 0xb2, 0x26, 0xf5, 0x18, 0x41, 0x3b, 0xb0, 0x20,
+	0x7a, 0xcc, 0x80, 0x45, 0xb0, 0x3c, 0x59, 0x9e, 0xd7, 0x53, 0xad, 0xd3, 0x05, 0xad, 0xf2, 0xd8,
+	0xf9, 0xd5, 0x42, 0xce, 0x94, 0x14, 0xed, 0x27, 0x00, 0x35, 0x5e, 0xf4, 0x00, 0xbb, 0xb5, 0xd0,
+	0xc5, 0x01, 0xa9, 0x08, 0x25, 0xfb, 0x0d, 0x1a, 0x7a, 0x81, 0x6c, 0x8d, 0xde, 0x81, 0x0f, 0x5b,
+	0xd8, 0x75, 0x2c, 0x1c, 0x50, 0xff, 0x18, 0x5b, 0x96, 0x4f, 0x98, 0x68, 0xf7, 0x64, 0x65, 0xe9,
+	0xb2, 0x53, 0x9c, 0x97, 0xe6, 0x7d, 0x14, 0x63, 0xf6, 0x05, 0xe4, 0x28, 0xf0, 0x1d, 0xcf, 0x36,
+	0xa7, 0x5a, 0x7d, 0xe7, 0x68, 0x1f, 0x4e, 0x70, 0x71, 0x33, 0x79, 0x5e, 0xe3, 0xa5, 0x48, 0xd3,
+	0x9f, 0x57, 0x0b, 0x8f, 0x44, 0x1d, 0x66, 0x9d, 0xe8, 0x0e, 0x35, 0x1a, 0x38, 0xa8, 0xeb, 0x87,
+	0x5e, 0x70, 0xd9, 0x29, 0x42, 0xd9, 0xe0, 0xd0, 0x0b, 0x4c, 0xc1, 0xd4, 0x3e, 0x85, 0xcf, 0x67,
+	0x0a, 0x97, 0xee, 0x6c, 0xc2, 0x02, 0xe6, 0x27, 0xd2, 0x9d, 0x59, 0x5d, 0x96, 0x8a, 0xb6, 0x42,
+	0x97, 0x5b, 0xa1, 0x1f, 0x50, 0xc7, 0x8b, 0x9d, 0x11, 0x70, 0xed, 0x07, 0x00, 0x95, 0x64, 0x83,
+	0xa3, 0xa8, 0xef, 0xff, 0xe5, 0xc8, 0x41, 0x57, 0xe7, 0x18, 0x96, 0xc4, 0x9a, 0x3f, 0x83, 0xcf,
+	0xa5, 0x4a, 0x96, 0x5e, 0x74, 0x5d, 0x07, 0x63, 0xbb, 0xfe, 0x2e, 0x9c, 0xe5, 0x1d, 0xa4, 0xec,
+	0xc8, 0x73, 0x62, 0xc5, 0x9e, 0x94, 0xe1, 0xe3, 0x49, 0x27, 0x66, 0x2e, 0x3b, 0xc5, 0x69, 0x59,
+	0x24, 0x69, 0x40, 0x0c, 0xd4, 0x7e, 0x8d, 0x6d, 0xee, 0xab, 0x28, 0x25, 0x7f, 0xd2, 0x73, 0x7d,
+	0x0f, 0x96, 0x27, 0xcb, 0x7b, 0x03, 0x96, 0x7b, 0x70, 0x09, 0x5d, 0x2c, 0xc4, 0x9b, 0x5e, 0xe0,
+	0xb7, 0x93, 0x57, 0xac, 0x7c, 0x00, 0x27, 0x7b, 0x1e, 0xa2, 0x29, 0xf8, 0xe0, 0x84, 0xb4, 0x85,
+	0x74, 0x33, 0xfa, 0x88, 0x0c, 0x38, 0xd1, 0xc2, 0x6e, 0x28, 0xd6, 0x34, 0x6b, 0x77, 0x4c, 0x81,
+	0xdb, 0xce, 0x6f, 0x01, 0xed, 0x3b, 0x00, 0xe7, 0xc4, 0x2d, 0xb8, 0xd8, 0x69, 0xe0, 0xaa, 0x4b,
+	0x4c, 0xf2, 0x39, 0xf6, 0x2d, 0x76, 0x0f, 0x9b, 0xd2, 0xd7, 0x2d, 0x3f, 0xf6, 0xba, 0x69, 0xdf,
+	0x00, 0x38, 0x3f, 0x40, 0xa4, 0x74, 0xbe, 0xd6, 0xe7, 0x7c, 0xc6, 0x0f, 0x67, 0x35, 0x72, 0xf5,
+	0xfb, 0xbf, 0x16, 0x96, 0x6d, 0x27, 0xa8, 0x87, 0x55, 0xbd, 0x46, 0x1b, 0x32, 0x4e, 0xe5, 0x9f,
+	0x22, 0xb3, 0x4e, 0x8c, 0xa0, 0xdd, 0x24, 0x8c, 0x13, 0x58, 0x77, 0x61, 0x8f, 0xa4, 0x0a, 0x29,
+	0xeb, 0xc3, 0x38, 0x07, 0xef, 0xe3, 0x95, 0x56, 0x87, 0xea, 0xa0, 0xa2, 0x72, 0xb6, 0xb7, 0x20,
+	0xec, 0x46, 0x2e, 0x93, 0xf3, 0x2d, 0x0e, 0xd8, 0xac, 0x2e, 0x5d, 0x2e, 0x4f, 0x0f, 0xb3, 0xfc,
+	0xef, 0x13, 0x70, 0x82, 0xb7, 0x42, 0x67, 0x00, 0x16, 0x44, 0xc0, 0xa2, 0x17, 0xb3, 0x56, 0x34,
+	0x91, 0xe8, 0xca, 0xca, 0x30, 0x50, 0xa1, 0x59, 0x2b, 0x7f, 0xfd, 0xdb, 0x3f, 0x67, 0xf9, 0x97,
+	0xd1, 0x8a, 0x21, 0x39, 0x2e, 0x6e, 0x13, 0xdf, 0xc8, 0x7a, 0xe9, 0xa0, 0xdf, 0x01, 0x7c, 0x36,
+	0x3d, 0x1f, 0xd1, 0xab, 0x59, 0xad, 0x33, 0x5f, 0x06, 0xca, 0xf6, 0x38, 0x54, 0x39, 0xc5, 0x1b,
+	0x7c, 0x8a, 0xd7, 0xd0, 0xee, 0x30, 0x53, 0xd4, 0xe2, 0x5a, 0x45, 0xe9, 0x78, 0x51, 0xac, 0x0d,
+	0xea, 0x00, 0xf8, 0x74, 0x32, 0xe3, 0x50, 0x69, 0x28, 0x51, 0xbd, 0x11, 0xae, 0x94, 0x47, 0xa1,
+	0x48, 0xfd, 0x3b, 0x5c, 0xff, 0x06, 0x5a, 0x1b, 0x4d, 0x3f, 0x3f, 0x47, 0x3f, 0x02, 0xf8, 0x54,
+	0x22, 0xa3, 0xd0, 0xea, 0x08, 0x71, 0x26, 0x44, 0x97, 0x46, 0x0e, 0x40, 0x6d, 0x97, 0x6b, 0x7e,
+	0x05, 0xad, 0x0f, 0xa3, 0xb9, 0xca, 0xb9, 0xc6, 0x97, 0xf2, 0xc7, 0xf4, 0x15, 0xfa, 0x19, 0xc0,
+	0xa9, 0xfe, 0x90, 0x40, 0x6b, 0x99, 0xd6, 0xa5, 0xe7, 0x9e, 0xb2, 0x3e, 0x1a, 0x49, 0xaa, 0xdf,
+	0xe3, 0xea, 0x37, 0xd1, 0xc6, 0x50, 0x8e, 0xc7, 0x55, 0x8a, 0xbe, 0x54, 0xfa, 0x0b, 0x80, 0x0f,
+	0xef, 0x04, 0x01, 0x5a, 0x1f, 0xc2, 0xc5, 0x3b, 0x61, 0xa4, 0x6c, 0x8c, 0xc8, 0x92, 0x13, 0xbc,
+	0xce, 0x27, 0xd8, 0x46, 0x5b, 0xc3, 0x4c, 0x70, 0x9b, 0x2e, 0xb7, 0x77, 0x50, 0x79, 0xfb, 0xfc,
+	0x5a, 0x05, 0x17, 0xd7, 0x2a, 0xf8, 0xfb, 0x5a, 0x05, 0xdf, 0xde, 0xa8, 0xb9, 0x8b, 0x1b, 0x35,
+	0xf7, 0xc7, 0x8d, 0x9a, 0xfb, 0xb8, 0xdc, 0x13, 0xb9, 0xa9, 0xd5, 0xbf, 0xe8, 0xad, 0xcf, 0x23,
+	0xb8, 0x5a, 0xe0, 0xff, 0x64, 0xae, 0xfd, 0x17, 0x00, 0x00, 0xff, 0xff, 0xaf, 0x13, 0xb9, 0x9d,
+	0x86, 0x0b, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -661,16 +663,16 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// CalculateAmount
-	CalculateAmount(ctx context.Context, in *QueryCalculateAmountRequest, opts ...grpc.CallOption) (*QueryCalculateAmountResponse, error)
+	// CalculateBondingAmount
+	CalculateBondingAmount(ctx context.Context, in *QueryCalculateBondingAmountRequest, opts ...grpc.CallOption) (*QueryCalculateBondingAmountResponse, error)
 	// CalculateShare
 	CalculateShare(ctx context.Context, in *QueryCalculateShareRequest, opts ...grpc.CallOption) (*QueryCalculateShareResponse, error)
-	// Bonded
-	Bonded(ctx context.Context, in *QueryBondedRequest, opts ...grpc.CallOption) (*QueryBondedResponse, error)
+	// AddressBonded
+	AddressBonded(ctx context.Context, in *QueryAddressBondedRequest, opts ...grpc.CallOption) (*QueryAddressBondedResponse, error)
 	// ClaimableRewards
 	ClaimableRewards(ctx context.Context, in *QueryClaimableRewardsRequest, opts ...grpc.CallOption) (*QueryClaimableRewardsResponse, error)
-	// Unbondings
-	Unbondings(ctx context.Context, in *QueryUnbondingsRequest, opts ...grpc.CallOption) (*QueryUnbondingsResponse, error)
+	// AddressUnbondings
+	AddressUnbondings(ctx context.Context, in *QueryAddressUnbondingsRequest, opts ...grpc.CallOption) (*QueryAddressUnbondingsResponse, error)
 }
 
 type queryClient struct {
@@ -690,9 +692,9 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) CalculateAmount(ctx context.Context, in *QueryCalculateAmountRequest, opts ...grpc.CallOption) (*QueryCalculateAmountResponse, error) {
-	out := new(QueryCalculateAmountResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/CalculateAmount", in, out, opts...)
+func (c *queryClient) CalculateBondingAmount(ctx context.Context, in *QueryCalculateBondingAmountRequest, opts ...grpc.CallOption) (*QueryCalculateBondingAmountResponse, error) {
+	out := new(QueryCalculateBondingAmountResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/CalculateBondingAmount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -708,9 +710,9 @@ func (c *queryClient) CalculateShare(ctx context.Context, in *QueryCalculateShar
 	return out, nil
 }
 
-func (c *queryClient) Bonded(ctx context.Context, in *QueryBondedRequest, opts ...grpc.CallOption) (*QueryBondedResponse, error) {
-	out := new(QueryBondedResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/Bonded", in, out, opts...)
+func (c *queryClient) AddressBonded(ctx context.Context, in *QueryAddressBondedRequest, opts ...grpc.CallOption) (*QueryAddressBondedResponse, error) {
+	out := new(QueryAddressBondedResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/AddressBonded", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -726,9 +728,9 @@ func (c *queryClient) ClaimableRewards(ctx context.Context, in *QueryClaimableRe
 	return out, nil
 }
 
-func (c *queryClient) Unbondings(ctx context.Context, in *QueryUnbondingsRequest, opts ...grpc.CallOption) (*QueryUnbondingsResponse, error) {
-	out := new(QueryUnbondingsResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/Unbondings", in, out, opts...)
+func (c *queryClient) AddressUnbondings(ctx context.Context, in *QueryAddressUnbondingsRequest, opts ...grpc.CallOption) (*QueryAddressUnbondingsResponse, error) {
+	out := new(QueryAddressUnbondingsResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/AddressUnbondings", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -739,16 +741,16 @@ func (c *queryClient) Unbondings(ctx context.Context, in *QueryUnbondingsRequest
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// CalculateAmount
-	CalculateAmount(context.Context, *QueryCalculateAmountRequest) (*QueryCalculateAmountResponse, error)
+	// CalculateBondingAmount
+	CalculateBondingAmount(context.Context, *QueryCalculateBondingAmountRequest) (*QueryCalculateBondingAmountResponse, error)
 	// CalculateShare
 	CalculateShare(context.Context, *QueryCalculateShareRequest) (*QueryCalculateShareResponse, error)
-	// Bonded
-	Bonded(context.Context, *QueryBondedRequest) (*QueryBondedResponse, error)
+	// AddressBonded
+	AddressBonded(context.Context, *QueryAddressBondedRequest) (*QueryAddressBondedResponse, error)
 	// ClaimableRewards
 	ClaimableRewards(context.Context, *QueryClaimableRewardsRequest) (*QueryClaimableRewardsResponse, error)
-	// Unbondings
-	Unbondings(context.Context, *QueryUnbondingsRequest) (*QueryUnbondingsResponse, error)
+	// AddressUnbondings
+	AddressUnbondings(context.Context, *QueryAddressUnbondingsRequest) (*QueryAddressUnbondingsResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -758,20 +760,20 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (*UnimplementedQueryServer) CalculateAmount(ctx context.Context, req *QueryCalculateAmountRequest) (*QueryCalculateAmountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculateAmount not implemented")
+func (*UnimplementedQueryServer) CalculateBondingAmount(ctx context.Context, req *QueryCalculateBondingAmountRequest) (*QueryCalculateBondingAmountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculateBondingAmount not implemented")
 }
 func (*UnimplementedQueryServer) CalculateShare(ctx context.Context, req *QueryCalculateShareRequest) (*QueryCalculateShareResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CalculateShare not implemented")
 }
-func (*UnimplementedQueryServer) Bonded(ctx context.Context, req *QueryBondedRequest) (*QueryBondedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Bonded not implemented")
+func (*UnimplementedQueryServer) AddressBonded(ctx context.Context, req *QueryAddressBondedRequest) (*QueryAddressBondedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddressBonded not implemented")
 }
 func (*UnimplementedQueryServer) ClaimableRewards(ctx context.Context, req *QueryClaimableRewardsRequest) (*QueryClaimableRewardsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClaimableRewards not implemented")
 }
-func (*UnimplementedQueryServer) Unbondings(ctx context.Context, req *QueryUnbondingsRequest) (*QueryUnbondingsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Unbondings not implemented")
+func (*UnimplementedQueryServer) AddressUnbondings(ctx context.Context, req *QueryAddressUnbondingsRequest) (*QueryAddressUnbondingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddressUnbondings not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -796,20 +798,20 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_CalculateAmount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculateAmountRequest)
+func _Query_CalculateBondingAmount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCalculateBondingAmountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).CalculateAmount(ctx, in)
+		return srv.(QueryServer).CalculateBondingAmount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.shareclass.v1.Query/CalculateAmount",
+		FullMethod: "/sunrise.shareclass.v1.Query/CalculateBondingAmount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculateAmount(ctx, req.(*QueryCalculateAmountRequest))
+		return srv.(QueryServer).CalculateBondingAmount(ctx, req.(*QueryCalculateBondingAmountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -832,20 +834,20 @@ func _Query_CalculateShare_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Bonded_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBondedRequest)
+func _Query_AddressBonded_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAddressBondedRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Bonded(ctx, in)
+		return srv.(QueryServer).AddressBonded(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.shareclass.v1.Query/Bonded",
+		FullMethod: "/sunrise.shareclass.v1.Query/AddressBonded",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Bonded(ctx, req.(*QueryBondedRequest))
+		return srv.(QueryServer).AddressBonded(ctx, req.(*QueryAddressBondedRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -868,20 +870,20 @@ func _Query_ClaimableRewards_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Unbondings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryUnbondingsRequest)
+func _Query_AddressUnbondings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAddressUnbondingsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Unbondings(ctx, in)
+		return srv.(QueryServer).AddressUnbondings(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sunrise.shareclass.v1.Query/Unbondings",
+		FullMethod: "/sunrise.shareclass.v1.Query/AddressUnbondings",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Unbondings(ctx, req.(*QueryUnbondingsRequest))
+		return srv.(QueryServer).AddressUnbondings(ctx, req.(*QueryAddressUnbondingsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -896,24 +898,24 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "CalculateAmount",
-			Handler:    _Query_CalculateAmount_Handler,
+			MethodName: "CalculateBondingAmount",
+			Handler:    _Query_CalculateBondingAmount_Handler,
 		},
 		{
 			MethodName: "CalculateShare",
 			Handler:    _Query_CalculateShare_Handler,
 		},
 		{
-			MethodName: "Bonded",
-			Handler:    _Query_Bonded_Handler,
+			MethodName: "AddressBonded",
+			Handler:    _Query_AddressBonded_Handler,
 		},
 		{
 			MethodName: "ClaimableRewards",
 			Handler:    _Query_ClaimableRewards_Handler,
 		},
 		{
-			MethodName: "Unbondings",
-			Handler:    _Query_Unbondings_Handler,
+			MethodName: "AddressUnbondings",
+			Handler:    _Query_AddressUnbondings_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -976,7 +978,7 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculateAmountRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculateBondingAmountRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -986,12 +988,12 @@ func (m *QueryCalculateAmountRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculateAmountRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculateAmountRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1016,7 +1018,7 @@ func (m *QueryCalculateAmountRequest) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculateAmountResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculateBondingAmountResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1026,12 +1028,12 @@ func (m *QueryCalculateAmountResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculateAmountResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculateAmountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1122,7 +1124,7 @@ func (m *QueryCalculateShareResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryBondedRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryAddressBondedRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1132,12 +1134,12 @@ func (m *QueryBondedRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryBondedRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAddressBondedRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryBondedRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAddressBondedRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1152,7 +1154,7 @@ func (m *QueryBondedRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryBondedResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryAddressBondedResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1162,12 +1164,12 @@ func (m *QueryBondedResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryBondedResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAddressBondedResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryBondedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAddressBondedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1273,7 +1275,7 @@ func (m *QueryClaimableRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryUnbondingsRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryAddressUnbondingsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1283,12 +1285,12 @@ func (m *QueryUnbondingsRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryUnbondingsRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAddressUnbondingsRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryUnbondingsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAddressUnbondingsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1303,7 +1305,7 @@ func (m *QueryUnbondingsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryUnbondingsResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryAddressUnbondingsResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1313,12 +1315,12 @@ func (m *QueryUnbondingsResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryUnbondingsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAddressUnbondingsResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryUnbondingsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAddressUnbondingsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1371,7 +1373,7 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculateAmountRequest) Size() (n int) {
+func (m *QueryCalculateBondingAmountRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1386,7 +1388,7 @@ func (m *QueryCalculateAmountRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculateAmountResponse) Size() (n int) {
+func (m *QueryCalculateBondingAmountResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1423,7 +1425,7 @@ func (m *QueryCalculateShareResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryBondedRequest) Size() (n int) {
+func (m *QueryAddressBondedRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1436,7 +1438,7 @@ func (m *QueryBondedRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryBondedResponse) Size() (n int) {
+func (m *QueryAddressBondedResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1486,7 +1488,7 @@ func (m *QueryClaimableRewardsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryUnbondingsRequest) Size() (n int) {
+func (m *QueryAddressUnbondingsRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1499,7 +1501,7 @@ func (m *QueryUnbondingsRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryUnbondingsResponse) Size() (n int) {
+func (m *QueryAddressUnbondingsResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1653,7 +1655,7 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculateAmountRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculateBondingAmountRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1676,10 +1678,10 @@ func (m *QueryCalculateAmountRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculateAmountRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculateBondingAmountRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculateAmountRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculateBondingAmountRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1769,7 +1771,7 @@ func (m *QueryCalculateAmountRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculateAmountResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculateBondingAmountResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1792,10 +1794,10 @@ func (m *QueryCalculateAmountResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculateAmountResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculateBondingAmountResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculateAmountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculateBondingAmountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2052,7 +2054,7 @@ func (m *QueryCalculateShareResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryBondedRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryAddressBondedRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2075,10 +2077,10 @@ func (m *QueryBondedRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBondedRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAddressBondedRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBondedRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAddressBondedRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2134,7 +2136,7 @@ func (m *QueryBondedRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryBondedResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryAddressBondedResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2157,10 +2159,10 @@ func (m *QueryBondedResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBondedResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAddressBondedResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBondedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAddressBondedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2511,7 +2513,7 @@ func (m *QueryClaimableRewardsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryUnbondingsRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryAddressUnbondingsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2534,10 +2536,10 @@ func (m *QueryUnbondingsRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryUnbondingsRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAddressUnbondingsRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryUnbondingsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAddressUnbondingsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2593,7 +2595,7 @@ func (m *QueryUnbondingsRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryUnbondingsResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryAddressUnbondingsResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2616,10 +2618,10 @@ func (m *QueryUnbondingsResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryUnbondingsResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAddressUnbondingsResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryUnbondingsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAddressUnbondingsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
