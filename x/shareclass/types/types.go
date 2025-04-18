@@ -1,10 +1,11 @@
 package types
 
 import (
-	"cosmossdk.io/math"
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"regexp"
+
+	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -22,6 +23,9 @@ func RewardSaverAddress(validatorAddress string) sdk.AccAddress {
 }
 
 func CalculateShareByAmount(totalShare, totalBonded, amount math.Int) (math.Int, error) {
+	if totalShare.IsZero() {
+		return amount, nil
+	}
 	if totalBonded.IsZero() {
 		return amount, nil
 	}
