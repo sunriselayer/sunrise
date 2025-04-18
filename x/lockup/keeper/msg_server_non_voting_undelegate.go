@@ -17,9 +17,9 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	address := k.LockupAccountAddress(msg.Owner)
 
 	_, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingUndelegate{
-		Sender:    address.String(),
-		Validator: msg.Validator,
-		Amount:    msg.Amount,
+		Sender:           address.String(),
+		ValidatorAddress: msg.ValidatorAddress,
+		Amount:           msg.Amount,
 	})
 	if err != nil {
 		return nil, err

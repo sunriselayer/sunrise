@@ -25,7 +25,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	}
 
 	// Claim rewards
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
@@ -36,19 +36,19 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	}
 
 	// Calculate share before delegate
-	shareAmount, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
+	shareAmount, err := k.CalculateShareByAmount(ctx, msg.ValidatorAddress, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	// Convert and delegate
-	err = k.ConvertAndDelegate(ctx, sender, msg.Validator, msg.Amount.Amount)
+	err = k.ConvertAndDelegate(ctx, sender, msg.ValidatorAddress, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	// Mint non transferrable share token
-	shareDenom := types.NonVotingShareTokenDenom(msg.Validator)
+	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
 	k.bankKeeper.SetSendEnabled(ctx, shareDenom, false)
 	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, shareAmount))
 

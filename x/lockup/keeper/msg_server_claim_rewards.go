@@ -18,8 +18,8 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	address := k.LockupAccountAddress(msg.Owner)
 
 	responseMsg, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgClaimRewards{
-		Sender:    address.String(),
-		Validator: msg.Validator,
+		Sender:           address.String(),
+		ValidatorAddress: msg.ValidatorAddress,
 	})
 	if err != nil {
 		return nil, err

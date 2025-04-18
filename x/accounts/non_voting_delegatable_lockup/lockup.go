@@ -328,9 +328,9 @@ func (bva *BaseLockup) Delegate(
 	}
 
 	msgDelegate := &shareclasstypes.MsgNonVotingDelegate{
-		Sender:    delegatorAddress,
-		Validator: msg.ValidatorAddress,
-		Amount:    msg.Amount,
+		Sender:           delegatorAddress,
+		ValidatorAddress: msg.ValidatorAddress,
+		Amount:           msg.Amount,
 	}
 	resp, err := sendMessage(ctx, msgDelegate)
 	if err != nil {
@@ -356,9 +356,9 @@ func (bva *BaseLockup) Undelegate(
 	}
 
 	msgUndelegate := &shareclasstypes.MsgNonVotingUndelegate{
-		Sender:    delegatorAddress,
-		Validator: msg.ValidatorAddress,
-		Amount:    msg.Amount,
+		Sender:           delegatorAddress,
+		ValidatorAddress: msg.ValidatorAddress,
+		Amount:           msg.Amount,
 	}
 	resp, err := sendMessage(ctx, msgUndelegate)
 	if err != nil {
