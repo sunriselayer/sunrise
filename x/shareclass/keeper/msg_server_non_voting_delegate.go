@@ -35,6 +35,12 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, err
 	}
 
+	// Calculate share before delegate
+	shareAmount, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
+	if err != nil {
+		return nil, err
+	}
+
 	// Convert and delegate
 	err = k.ConvertAndDelegate(ctx, sender, msg.Validator, msg.Amount.Amount)
 	if err != nil {
@@ -44,12 +50,6 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	// Mint non transferrable share token
 	shareDenom := types.NonVotingShareTokenDenom(msg.Validator)
 	k.bankKeeper.SetSendEnabled(ctx, shareDenom, false)
-
-	shareAmount, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
-	if err != nil {
-		return nil, err
-	}
-
 	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, shareAmount))
 
 	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, coins)

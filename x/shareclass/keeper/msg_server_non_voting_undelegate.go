@@ -70,8 +70,8 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	output := sdk.NewCoin(bondDenom, msg.Amount.Amount)
 
 	res, err := k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgUndelegate{
-		DelegatorAddress: msg.Sender,
-		ValidatorAddress: msg.Validator,
+		DelegatorAddress: moduleAddr.String(),
+		ValidatorAddress: msg.ValidatorAddress,
 		Amount:           output,
 	})
 	if err != nil {
