@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package sunrise.shareclass.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos/staking/v1beta1/staking.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "sunrise/shareclass/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters. The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // NonVotingDelegate
+  rpc NonVotingDelegate(MsgNonVotingDelegate) returns (MsgNonVotingDelegateResponse);
+
+  // NonVotingUndelegate
+  rpc NonVotingUndelegate(MsgNonVotingUndelegate) returns (MsgNonVotingUndelegateResponse);
+
+  // ClaimRewards
+  rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResponse);
+
+  // CreateValidator
+  rpc CreateValidator(MsgCreateValidator) returns (MsgCreateValidatorResponse);
+}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // params defines the module parameters to update.
+
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the response structure for executing a
+// MsgUpdateParams message.
+message MsgUpdateParamsResponse {}
+
+// MsgNonVotingDelegate
+message MsgNonVotingDelegate {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgNonVotingDelegateResponse
+message MsgNonVotingDelegateResponse {}
+
+// MsgNonVotingUndelegate
+message MsgNonVotingUndelegate {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  string recipient = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgNonVotingUndelegateResponse
+message MsgNonVotingUndelegateResponse {
+  google.protobuf.Timestamp completion_time = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgClaimRewards
+message MsgClaimRewards {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// MsgClaimRewardsResponse
+message MsgClaimRewardsResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// MsgCreateValidator
+message MsgCreateValidator {
+  option (cosmos.msg.v1.signer) = "validator_address";
+
+  cosmos.staking.v1beta1.Description description = 1 [(gogoproto.nullable) = false];
+  cosmos.staking.v1beta1.CommissionRates commission = 2 [(gogoproto.nullable) = false];
+  string min_self_delegation = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string validator_address = 4 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  google.protobuf.Any pubkey = 5 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
+  cosmos.base.v1beta1.Coin amount = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee = 7 [(gogoproto.nullable) = false];
+}
+
+// MsgCreateValidatorResponse
+message MsgCreateValidatorResponse {}

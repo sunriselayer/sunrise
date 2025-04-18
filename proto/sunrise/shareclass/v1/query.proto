@@ -1,0 +1,124 @@
+syntax = "proto3";
+package sunrise.shareclass.v1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "sunrise/shareclass/v1/params.proto";
+import "sunrise/shareclass/v1/bond.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/params";
+  }
+
+  // CalculateBondingAmount
+  rpc CalculateBondingAmount(QueryCalculateBondingAmountRequest) returns (QueryCalculateBondingAmountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/calculate-bonding-amount";
+  }
+
+  // CalculateShare
+  rpc CalculateShare(QueryCalculateShareRequest) returns (QueryCalculateShareResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/calculate-share";
+  }
+
+  // AddressBonded
+  rpc AddressBonded(QueryAddressBondedRequest) returns (QueryAddressBondedResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/bonded/{address}";
+  }
+
+  // ClaimableRewards
+  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/claimable-rewards";
+  }
+
+  // AddressUnbonding
+  rpc AddressUnbonding(QueryAddressUnbondingRequest) returns (QueryAddressUnbondingResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/unbonding/{address}";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryCalculateAmountRequest
+message QueryCalculateBondingAmountRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string share = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryCalculateBondingAmountResponse
+message QueryCalculateBondingAmountResponse {
+  cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryCalculateShareRequest
+message QueryCalculateShareRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string amount = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryCalculateShareResponse
+message QueryCalculateShareResponse {
+  string share = 1 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryAddressBondedRequest
+message QueryAddressBondedRequest {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// QueryAddressBondedResponse
+message QueryAddressBondedResponse {
+  repeated ValidatorBond bonds = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryClaimableRewardsRequest
+message QueryClaimableRewardsRequest {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryClaimableRewardsResponse
+message QueryClaimableRewardsResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// QueryAddressUnbondingRequest
+message QueryAddressUnbondingRequest {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAddressUnbondingResponse
+message QueryAddressUnbondingResponse {
+  repeated Unbonding unbondings = 1 [(gogoproto.nullable) = false];
+  // cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

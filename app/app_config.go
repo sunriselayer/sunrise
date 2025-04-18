@@ -90,6 +90,8 @@ import (
 	ibcfeetypes "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v9/modules/core/exported"
+	_ "github.com/sunriselayer/sunrise/x/shareclass/module"
+	shareclassmoduletypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 var (
@@ -116,6 +118,7 @@ var (
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
+		{Account: shareclassmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 	}
 
 	// blocked account addresses
@@ -176,6 +179,7 @@ var (
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -197,6 +201,7 @@ var (
 						swapmoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -221,6 +226,7 @@ var (
 						stakingtypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
 						selfdelegationmoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
 						// </sunrise>
 						accounts.ModuleName,
 						distrtypes.ModuleName,
@@ -382,6 +388,10 @@ var (
 			{
 				Name:   selfdelegationmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&selfdelegationmoduletypes.Module{}),
+			},
+			{
+				Name:   shareclassmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&shareclassmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

@@ -56,12 +56,17 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 		}
 	}
 
-	params, err := k.tokenConverterKeeper.GetParams(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	err = k.bankKeeper.SendCoins(ctx, delegatorBytes, proxyAddrBytes, sdk.NewCoins(sdk.NewCoin(params.FeeDenom, msg.Amount)))
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.bankKeeper.SendCoins(ctx, delegatorBytes, proxyAddrBytes, sdk.NewCoins(sdk.NewCoin(feeDenom, msg.Amount)))
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +85,7 @@ func (k msgServer) SelfDelegate(ctx context.Context, msg *types.MsgSelfDelegate)
 	_, err = k.Environment.MsgRouterService.Invoke(ctx, &stakingtypes.MsgDelegate{
 		DelegatorAddress: proxyAddr,
 		ValidatorAddress: rootOwnerVal,
-		Amount:           sdk.NewCoin(params.BondDenom, msg.Amount),
+		Amount:           sdk.NewCoin(bondDenom, msg.Amount),
 	})
 	if err != nil {
 		return nil, err

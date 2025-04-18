@@ -61,19 +61,22 @@ import (
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
+	selfdelegationmodulekeeper "github.com/sunriselayer/sunrise/x/selfdelegation/keeper"
+	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	basedepinject "cosmossdk.io/x/accounts/defaults/base/depinject"
 	lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
 	multisigdepinject "cosmossdk.io/x/accounts/defaults/multisig/depinject"
 
+	nonvotingdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/depinject"
 	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
 	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
-	selfdelegationmodulekeeper "github.com/sunriselayer/sunrise/x/selfdelegation/keeper"
 )
 
 const (
@@ -136,6 +139,7 @@ type App struct {
 	SwapKeeper               swapmodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
 	SelfdelegationKeeper     selfdelegationmodulekeeper.Keeper
+	ShareclassKeeper         shareclassmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -156,6 +160,7 @@ func AppConfig() depinject.Config {
 	return depinject.Configs(
 		appConfig,
 		depinject.Provide(mint.ProvideMintFn),
+		depinject.Provide(gov.ProvideCalculateVoteResultsAndVotingPowerFn),
 	)
 }
 
@@ -191,6 +196,7 @@ func New(
 
 				basedepinject.ProvideSecp256K1PubKey,
 
+				nonvotingdelegatablelockupdepinject.ProvideAllLockupAccounts,
 				selfdelegatablelockupdepinject.ProvideAllLockupAccounts,
 				selfdelegationproxydepinject.ProvideAccount,
 			),
@@ -231,6 +237,7 @@ func New(
 		&app.SwapKeeper,
 		&app.FeeKeeper,
 		&app.SelfdelegationKeeper,
+		&app.ShareclassKeeper,
 	); err != nil {
 		panic(err)
 	}

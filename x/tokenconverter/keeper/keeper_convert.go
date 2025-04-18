@@ -9,21 +9,30 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
-func (k Keeper) GetParams(ctx context.Context) (types.Params, error) {
-	return k.Params.Get(ctx)
+func (k Keeper) GetDenoms(ctx context.Context) (bondDenom string, feeDenom string, err error) {
+	bondDenom, err = k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return "", "", err
+	}
+	feeDenom, err = k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return "", "", err
+	}
+
+	return bondDenom, feeDenom, nil
 }
 
 func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
-	params, err := k.Params.Get(ctx)
+	bondDenom, feeDenom, err := k.GetDenoms(ctx)
 	if err != nil {
 		return err
 	}
 
-	bondToken := sdk.NewCoin(params.BondDenom, amount)
+	bondToken := sdk.NewCoin(bondDenom, amount)
 	if err := bondToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(params.FeeDenom, amount)
+	feeToken := sdk.NewCoin(feeDenom, amount)
 	if err := feeToken.Validate(); err != nil {
 		return err
 	}
@@ -44,20 +53,27 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 		return err
 	}
 
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvert{
+		Address: address.String(),
+		Amount:  amount.String(),
+	}); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
-	params, err := k.Params.Get(ctx)
+	bondDenom, feeDenom, err := k.GetDenoms(ctx)
 	if err != nil {
 		return err
 	}
 
-	bondToken := sdk.NewCoin(params.BondDenom, amount)
+	bondToken := sdk.NewCoin(bondDenom, amount)
 	if err := bondToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(params.FeeDenom, amount)
+	feeToken := sdk.NewCoin(feeDenom, amount)
 	if err := feeToken.Validate(); err != nil {
 		return err
 	}
@@ -75,6 +91,13 @@ func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk
 	}
 
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(bondToken)); err != nil {
+		return err
+	}
+
+	if err := sdk.UnwrapSDKContext(ctx).EventManager().EmitTypedEvent(&types.EventConvertReverse{
+		Address: address.String(),
+		Amount:  amount.String(),
+	}); err != nil {
 		return err
 	}
 
