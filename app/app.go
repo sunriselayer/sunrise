@@ -77,6 +77,7 @@ import (
 	nonvotingdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/depinject"
 	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
 	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
+	lockupmodulekeeper "github.com/sunriselayer/sunrise/x/lockup/keeper"
 )
 
 const (
@@ -140,6 +141,7 @@ type App struct {
 	FeeKeeper                feemodulekeeper.Keeper
 	SelfdelegationKeeper     selfdelegationmodulekeeper.Keeper
 	ShareclassKeeper         shareclassmodulekeeper.Keeper
+	LockupKeeper             lockupmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -238,6 +240,7 @@ func New(
 		&app.FeeKeeper,
 		&app.SelfdelegationKeeper,
 		&app.ShareclassKeeper,
+		&app.LockupKeeper,
 	); err != nil {
 		panic(err)
 	}
