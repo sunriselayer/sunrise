@@ -18,6 +18,49 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				// this line is used by ignite scaffolding # autocli/query
+				{
+					RpcMethod: "AddressBonded",
+					Use:       "address-bonded <address>",
+					Short:     "Shows the bonded amount of an address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "address"},
+					},
+				},
+				{
+					RpcMethod: "AddressUnbondings",
+					Use:       "address-unbondings <address>",
+					Short:     "Shows the unbondings of an address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "address"},
+					},
+				},
+				{
+					RpcMethod: "CalculateBondingAmount",
+					Use:       "calculate-bonding-amount <validator_address> <share>",
+					Short:     "Shows the bonding amount of a validator by share",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "share"},
+					},
+				},
+				{
+					RpcMethod: "CalculateShare",
+					Use:       "calculate-share <validator_address> <amount>",
+					Short:     "Shows the share of a validator by amount",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "amount"},
+					},
+				},
+				{
+					RpcMethod: "ClaimableRewards",
+					Use:       "claimable-rewards <address> <validator_address>",
+					Short:     "Shows the claimable rewards of a validator",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "address"},
+						{ProtoField: "validator_address"},
+					},
+				},
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{

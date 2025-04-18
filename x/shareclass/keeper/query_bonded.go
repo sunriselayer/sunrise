@@ -11,7 +11,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (q queryServer) Bonded(ctx context.Context, req *types.QueryBondedRequest) (*types.QueryBondedResponse, error) {
+func (q queryServer) AddressBonded(ctx context.Context, req *types.QueryAddressBondedRequest) (*types.QueryAddressBondedResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -42,5 +42,5 @@ func (q queryServer) Bonded(ctx context.Context, req *types.QueryBondedRequest) 
 		}
 	}
 
-	return &types.QueryBondedResponse{Amount: amount}, nil
+	return &types.QueryAddressBondedResponse{Amount: amount}, nil
 }
