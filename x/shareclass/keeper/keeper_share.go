@@ -41,6 +41,11 @@ func (k Keeper) CalculateAmountByShare(ctx context.Context, validatorAddr string
 
 func (k Keeper) CalculateShareByAmount(ctx context.Context, validatorAddr string, amount math.Int) (math.Int, error) {
 	totalShare := k.GetTotalShare(ctx, validatorAddr)
+	// If total share is zero, return the amount
+	// GetTotalStakedAmount will result in rpc error: code = NotFound
+	if totalShare.IsZero() {
+		return amount, nil
+	}
 	totalStaked, err := k.GetTotalStakedAmount(ctx, validatorAddr)
 	if err != nil {
 		return math.Int{}, err
