@@ -1,13 +1,19 @@
 package types
 
+import (
+	"time"
+)
+
 // NewParams creates a new Params instance.
-func NewParams() Params {
-	return Params{}
+func NewParams(minLockupDuration time.Duration) Params {
+	return Params{
+		MinLockupDuration: minLockupDuration,
+	}
 }
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	return NewParams()
+	return NewParams(time.Hour * 24 * 30)
 }
 
 // Validate validates the set of params.

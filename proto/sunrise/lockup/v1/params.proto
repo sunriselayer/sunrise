@@ -2,10 +2,15 @@ syntax = "proto3";
 package sunrise.lockup.v1;
 
 import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+
+  google.protobuf.Duration min_lockup_duration = 1
+  [(gogoproto.nullable) = false, (amino.dont_omitempty) = true, (gogoproto.stdduration) = true];
 }
