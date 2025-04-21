@@ -11,11 +11,12 @@ import (
 )
 
 func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Owner); err != nil {
+	owner, err := k.addressCodec.StringToBytes(msg.Owner)
+	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
 
-	address := k.LockupAccountAddress(msg.Owner)
+	address := k.LockupAccountAddress(owner, msg.Id)
 
 	responseMsg, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgClaimRewards{
 		Sender:           address.String(),
@@ -38,7 +39,7 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	found, coin := response.Amount.Find(feeDenom)
 
 	if found {
-		lockupAccount, err := k.GetLockupAccount(ctx, address)
+		lockupAccount, err := k.GetLockupAccount(ctx, owner, msg.Id)
 		if err != nil {
 			return nil, err
 		}

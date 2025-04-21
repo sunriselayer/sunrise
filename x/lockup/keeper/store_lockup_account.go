@@ -3,13 +3,14 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 )
 
-func (k Keeper) GetLockupAccount(ctx context.Context, address sdk.AccAddress) (types.LockupAccount, error) {
-	lockupAccount, err := k.LockupAccounts.Get(ctx, address)
+func (k Keeper) GetLockupAccount(ctx context.Context, address sdk.AccAddress, id uint64) (types.LockupAccount, error) {
+	lockupAccount, err := k.LockupAccounts.Get(ctx, collections.Join([]byte(address), id))
 	if err != nil {
 		return types.LockupAccount{}, err
 	}
@@ -23,12 +24,12 @@ func (k Keeper) SetLockupAccount(ctx context.Context, lockupAccount types.Lockup
 		return err
 	}
 
-	return k.LockupAccounts.Set(ctx, address, lockupAccount)
+	return k.LockupAccounts.Set(ctx, collections.Join(address, lockupAccount.Id), lockupAccount)
 }
 
 func (k Keeper) GetAllLockupAccounts(ctx context.Context) ([]types.LockupAccount, error) {
 	lockupAccounts := []types.LockupAccount{}
-	err := k.LockupAccounts.Walk(ctx, nil, func(owner sdk.AccAddress, value types.LockupAccount) (stop bool, err error) {
+	err := k.LockupAccounts.Walk(ctx, nil, func(key collections.Pair[[]byte, uint64], value types.LockupAccount) (stop bool, err error) {
 		lockupAccounts = append(lockupAccounts, value)
 		return false, nil
 	})

@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"time"
 
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
@@ -12,21 +11,21 @@ func LockupAccountModule(owner string) string {
 	return fmt.Sprintf("%s/%s", ModuleName, owner)
 }
 
-func CalculateUnlockedAmount(lockupAmount math.Int, startTime time.Time, endTime time.Time, now time.Time) (math.Int, error) {
-	if startTime.After(endTime) {
+func CalculateUnlockedAmount(lockupAmount math.Int, startTime int64, endTime int64, now int64) (math.Int, error) {
+	if startTime > endTime {
 		return math.Int{}, errorsmod.Wrap(ErrInvalidTimeRange, "start time is after end time")
 	}
 
-	if now.Before(startTime) {
+	if now < startTime {
 		return math.NewInt(0), nil
 	}
 
-	if now.After(endTime) {
+	if now > endTime {
 		return lockupAmount, nil
 	}
 
-	numerator := now.Sub(startTime).Milliseconds()
-	denominator := endTime.Sub(startTime).Milliseconds()
+	numerator := now - startTime
+	denominator := endTime - startTime
 
 	numeratorDec := math.NewDecFromInt64(numerator)
 	denominatorDec := math.NewDecFromInt64(denominator)

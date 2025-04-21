@@ -21,15 +21,15 @@ func (q queryServer) LockupAccount(ctx context.Context, req *types.QueryLockupAc
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	lockupAccount, err := q.k.GetLockupAccount(ctx, owner)
+	lockupAccount, err := q.k.GetLockupAccount(ctx, owner, req.Id)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
-	address := q.k.LockupAccountAddress(req.Owner)
+	address := q.k.LockupAccountAddress(owner, lockupAccount.Id)
 
 	lockupAmount := lockupAccount.LockupAmountOriginal.Add(lockupAccount.LockupAmountAdditional)
-	now := sdk.UnwrapSDKContext(ctx).BlockTime()
+	now := sdk.UnwrapSDKContext(ctx).BlockTime().Unix()
 	unlockedAmount, err := types.CalculateUnlockedAmount(lockupAmount, lockupAccount.StartTime, lockupAccount.EndTime, now)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

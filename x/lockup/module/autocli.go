@@ -31,8 +31,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "InitLockupAccount",
 					Use:       "init-lockup-account",
-					Short:     "Send a init-lockup-account tx <owner> <start_time> <end_time> <amount> <denom>",
+					Short:     "Send a init-lockup-account tx [owner] [start_time] [end_time] [amount] [denom]",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
 						{ProtoField: "start_time"},
 						{ProtoField: "end_time"},
 						{ProtoField: "amount.amount"},
@@ -42,8 +43,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "NonVotingDelegate",
 					Use:       "non-voting-delegate",
-					Short:     "Send a non-voting-delegate tx <validator_address> <amount> <denom>",
+					Short:     "Send a non-voting-delegate tx [id] [validator_address] [amount] [denom]",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
 						{ProtoField: "amount.amount"},
 						{ProtoField: "amount.denom"},
@@ -52,8 +54,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "NonVotingUndelegate",
 					Use:       "non-voting-undelegate",
-					Short:     "Send a non-voting-undelegate tx <validator_address> <amount> <denom>",
+					Short:     "Send a non-voting-undelegate tx [id] [validator_address] [amount] [denom]",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
 						{ProtoField: "amount.amount"},
 						{ProtoField: "amount.denom"},
@@ -62,16 +65,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "ClaimRewards",
 					Use:       "claim-rewards",
-					Short:     "Send a claim-rewards tx <validator_address>",
+					Short:     "Send a claim-rewards tx [id] [validator_address]",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
 					},
 				},
 				{
 					RpcMethod: "Send",
-					Use:       "send <recipient> <amount>",
+					Use:       "send [id] [recipient] [amount]",
 					Short:     "Send a send tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
 						{ProtoField: "recipient"},
 						{ProtoField: "amount", Varargs: true},
 					},

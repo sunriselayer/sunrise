@@ -10,13 +10,14 @@ import (
 )
 
 func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVotingUndelegate) (*types.MsgNonVotingUndelegateResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Owner); err != nil {
+	owner, err := k.addressCodec.StringToBytes(msg.Owner)
+	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
 
-	address := k.LockupAccountAddress(msg.Owner)
+	address := k.LockupAccountAddress(owner, msg.Id)
 
-	_, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingUndelegate{
+	_, err = k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingUndelegate{
 		Sender:           address.String(),
 		ValidatorAddress: msg.ValidatorAddress,
 		Amount:           msg.Amount,

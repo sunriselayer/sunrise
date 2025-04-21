@@ -17,12 +17,12 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
 
-	lockupAccount, err := k.GetLockupAccount(ctx, owner)
+	lockupAccount, err := k.GetLockupAccount(ctx, owner, msg.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	address := k.LockupAccountAddress(msg.Owner)
+	address := k.LockupAccountAddress(owner, msg.Id)
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
 	if err != nil {
@@ -37,7 +37,7 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		sendAmount := coin.Amount
 
 		sdkCtx := sdk.UnwrapSDKContext(ctx)
-		now := sdkCtx.BlockTime()
+		now := sdkCtx.BlockTime().Unix()
 
 		unlockedAmount, err := types.CalculateUnlockedAmount(totalLockupAmount, lockupAccount.StartTime, lockupAccount.EndTime, now)
 		if err != nil {
