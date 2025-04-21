@@ -30,8 +30,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "InitLockupAccount",
-					Use:       "init-lockup-account",
-					Short:     "Send a init-lockup-account tx [owner] [start_time] [end_time] [amount] [denom]",
+					Use:       "init-lockup-account [owner] [start_time] [end_time] [amount] [denom]",
+					Short:     "Send a init-lockup-account tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "owner"},
 						{ProtoField: "start_time"},
@@ -42,8 +42,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "NonVotingDelegate",
-					Use:       "non-voting-delegate",
-					Short:     "Send a non-voting-delegate tx [id] [validator_address] [amount] [denom]",
+					Use:       "non-voting-delegate [id] [validator_address] [amount] [denom]",
+					Short:     "Send a non-voting-delegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
@@ -53,8 +53,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "NonVotingUndelegate",
-					Use:       "non-voting-undelegate",
-					Short:     "Send a non-voting-undelegate tx [id] [validator_address] [amount] [denom]",
+					Use:       "non-voting-undelegate [id] [validator_address] [amount] [denom]",
+					Short:     "Send a non-voting-undelegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
@@ -64,11 +64,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "ClaimRewards",
-					Use:       "claim-rewards",
-					Short:     "Send a claim-rewards tx [id] [validator_address]",
+					Use:       "claim-rewards [id]",
+					Short:     "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
-						{ProtoField: "validator_address"},
 					},
 				},
 				{
