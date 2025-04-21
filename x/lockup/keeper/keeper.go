@@ -21,9 +21,10 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema         collections.Schema
-	Params         collections.Item[types.Params]
-	LockupAccounts collections.Map[sdk.AccAddress, types.LockupAccount]
+	Schema              collections.Schema
+	Params              collections.Item[types.Params]
+	NextLockupAccountId collections.Map[sdk.AccAddress, uint64]
+	LockupAccounts      collections.Map[collections.Pair[[]byte, uint64], types.LockupAccount]
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
@@ -51,8 +52,9 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		LockupAccounts: collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
+		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		NextLockupAccountId: collections.NewMap(sb, types.NextLockupAccountIdKeyPrefix, "next_lockup_account_id", types.NextLockupAccountIdKeyCodec, collections.Uint64Value),
+		LockupAccounts:      collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
 
 		accountKeeper: accountKeeper,
 		bankKeeper:    bankKeeper,
