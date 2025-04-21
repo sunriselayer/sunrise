@@ -33,6 +33,7 @@ message QueryParamsResponse {
 // QueryLockupAccountRequest is request type for the Query/LockupAccount RPC method.
 message QueryLockupAccountRequest {
   string owner = 1;
+  uint64 id = 2;
 }
 
 // QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
