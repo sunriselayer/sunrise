@@ -39,6 +39,5 @@ message QueryLockupAccountRequest {
 // QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
 message QueryLockupAccountResponse {
   LockupAccount lockup_account = 1 [(gogoproto.nullable) = false];
-  string lockup_account_address = 2;
-  string unlocked_amount = 3;
+  string unlocked_amount = 2;
 }

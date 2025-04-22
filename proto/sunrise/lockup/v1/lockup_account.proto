@@ -9,16 +9,17 @@ option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
 
 // LockupAccount defines the lockup account.
 message LockupAccount {
-  string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id = 2 [(amino.dont_omitempty) = true];
-  int64 start_time = 3;
-  int64 end_time = 4;
-  string lockup_amount_original = 5 [
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 3 [(amino.dont_omitempty) = true];
+  int64 start_time = 4;
+  int64 end_time = 5;
+  string lockup_amount_original = 6 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-  string lockup_amount_additional = 6 [
+  string lockup_amount_additional = 7 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
