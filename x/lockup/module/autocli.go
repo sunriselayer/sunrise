@@ -18,6 +18,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				// this line is used by ignite scaffolding # autocli/query
+				{
+					RpcMethod: "LockupAccount",
+					Use:       "lockup-account [owner] [id]",
+					Short:     "Shows the lockup account of the owner",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+						{ProtoField: "id"},
+					},
+				},
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
@@ -64,10 +73,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "ClaimRewards",
-					Use:       "claim-rewards [id]",
+					Use:       "claim-rewards [id] [validator_address]",
 					Short:     "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
+						{ProtoField: "validator_address"},
 					},
 				},
 				{
