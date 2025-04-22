@@ -22,7 +22,7 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		return nil, err
 	}
 
-	address := k.LockupAccountAddress(owner, msg.Id)
+	lockupAcc := k.LockupAccountAddress(owner, msg.Id)
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
 	if err != nil {
@@ -33,7 +33,7 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 
 	if found {
 		totalLockupAmount := lockupAccount.LockupAmountOriginal.Add(lockupAccount.LockupAmountAdditional)
-		balance := k.bankKeeper.GetBalance(ctx, address, feeDenom)
+		balance := k.bankKeeper.GetBalance(ctx, lockupAcc, feeDenom)
 		sendAmount := coin.Amount
 
 		sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -51,7 +51,7 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 	}
 
 	_, err = k.MsgRouterService.Invoke(ctx, &banktypes.MsgSend{
-		FromAddress: address.String(),
+		FromAddress: lockupAcc.String(),
 		ToAddress:   msg.Recipient,
 		Amount:      msg.Amount,
 	})

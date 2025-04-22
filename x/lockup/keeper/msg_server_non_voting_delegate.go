@@ -15,10 +15,10 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
 
-	address := k.LockupAccountAddress(owner, msg.Id)
+	lockupAcc := k.LockupAccountAddress(owner, msg.Id)
 
 	_, err = k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingDelegate{
-		Sender:           address.String(),
+		Sender:           lockupAcc.String(),
 		ValidatorAddress: msg.ValidatorAddress,
 		Amount:           msg.Amount,
 	})

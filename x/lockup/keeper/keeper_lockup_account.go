@@ -17,7 +17,7 @@ import (
 
 func (k Keeper) LockupAccountAddress(owner sdk.AccAddress, id uint64) sdk.AccAddress {
 	seed := k.makeAddressSeed(owner, id)
-	return k.accountKeeper.GetModuleAddress(seed)
+	return authtypes.NewModuleAddress(seed)
 }
 
 func (k Keeper) makeAddressSeed(owner sdk.AccAddress, id uint64) string {
@@ -77,16 +77,16 @@ func (k Keeper) InitLockupAccountFromMsg(ctx context.Context, msg *types.MsgInit
 	}
 
 	// Generate the seed and the lockup account address
-	seed := k.makeAddressSeed(owner, id)
-	lockupAccAddr := authtypes.NewModuleAddress(seed)
+	lockupAcc := k.LockupAccountAddress(owner, id)
 
-	err = k.bankKeeper.SendCoins(ctx, sender, lockupAccAddr, sdk.NewCoins(msg.Amount))
+	err = k.bankKeeper.SendCoins(ctx, sender, lockupAcc, sdk.NewCoins(msg.Amount))
 	if err != nil {
 		return errorsmod.Wrap(err, "failed to send coins")
 	}
 
 	lockupAccount := types.LockupAccount{
-		Owner:                  msg.Sender,
+		Address:                lockupAcc.String(),
+		Owner:                  msg.Owner,
 		Id:                     id,
 		StartTime:              msg.StartTime,
 		EndTime:                msg.EndTime,
