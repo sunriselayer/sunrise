@@ -107,7 +107,10 @@ func (k Keeper) CheckUnbondingEntriesMature(ctx context.Context, owner sdk.AccAd
 			keptEntries = append(keptEntries, entry)
 		} else {
 			matureEntriesFound = true
-			k.TrackUndelegation(ctx, owner, id, entry.Amount)
+			err = k.TrackUndelegation(ctx, owner, id, entry.Amount)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
