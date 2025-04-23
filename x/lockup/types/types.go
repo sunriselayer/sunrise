@@ -15,17 +15,19 @@ func (lockup LockupAccount) GetLockCoinInfo(blockTime int64) (unlockedAmount, lo
 	startTime := lockup.StartTime
 	endTime := lockup.EndTime
 	originalLocking := lockup.OriginalLocking
+	additionalLocking := lockup.AdditionalLocking
+	totalLocking := originalLocking.Add(additionalLocking)
 
 	if startTime > endTime {
 		return math.Int{}, math.Int{}, errorsmod.Wrap(ErrInvalidTimeRange, "start time is after end time")
 	}
 
 	if blockTime < startTime {
-		return math.NewInt(0), originalLocking, nil
+		return math.NewInt(0), totalLocking, nil
 	}
 
 	if blockTime > endTime {
-		return originalLocking, math.NewInt(0), nil
+		return totalLocking, math.NewInt(0), nil
 	}
 
 	// calculate the locking scalar
@@ -33,8 +35,8 @@ func (lockup LockupAccount) GetLockCoinInfo(blockTime int64) (unlockedAmount, lo
 	y := endTime - startTime
 	s := math.LegacyNewDec(x).Quo(math.LegacyNewDec(y))
 
-	unlockedAmt := math.LegacyNewDecFromInt(originalLocking).Mul(s).RoundInt()
-	lockedAmt := originalLocking.Sub(unlockedAmt)
+	unlockedAmt := math.LegacyNewDecFromInt(totalLocking).Mul(s).RoundInt()
+	lockedAmt := totalLocking.Sub(unlockedAmt)
 
 	return unlockedAmt, lockedAmt, nil
 }
