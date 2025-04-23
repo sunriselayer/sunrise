@@ -14,14 +14,40 @@ message LockupAccount {
   uint64 id = 3 [(amino.dont_omitempty) = true];
   int64 start_time = 4;
   int64 end_time = 5;
-  string lockup_amount_original = 6 [
+  string original_locking = 6 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-  string lockup_amount_additional = 7 [
+  string delegated_free = 8 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
+  string delegated_locking = 9 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  UnbondingEntries unbond_entries = 10;
+}
+
+// UnbondingEntries list of elements
+message UnbondingEntries {
+  repeated UnbondingEntry entries = 1;
+}
+
+// UnbondingEntry defines an entry tracking the lockup account unbonding operation.
+message UnbondingEntry {
+  int64 creation_height = 1;
+  // end time of entry
+  int64 end_time = 2;
+  // unbond amount
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  // validator address
+  string validator_address = 4 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
 }
