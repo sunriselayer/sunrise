@@ -85,13 +85,15 @@ func (k Keeper) InitLockupAccountFromMsg(ctx context.Context, msg *types.MsgInit
 	}
 
 	lockupAccount := types.LockupAccount{
-		Address:                lockupAcc.String(),
-		Owner:                  msg.Owner,
-		Id:                     id,
-		StartTime:              msg.StartTime,
-		EndTime:                msg.EndTime,
-		LockupAmountOriginal:   msg.Amount.Amount,
-		LockupAmountAdditional: math.ZeroInt(),
+		Address:          lockupAcc.String(),
+		Owner:            msg.Owner,
+		Id:               id,
+		StartTime:        msg.StartTime,
+		EndTime:          msg.EndTime,
+		OriginalLocking:  msg.Amount.Amount,
+		DelegatedFree:    math.ZeroInt(),
+		DelegatedLocking: math.ZeroInt(),
+		UnbondEntries:    &types.UnbondingEntries{},
 	}
 
 	err = k.SetLockupAccount(ctx, lockupAccount)

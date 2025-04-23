@@ -9,8 +9,8 @@ import (
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 )
 
-func (k Keeper) GetLockupAccount(ctx context.Context, address sdk.AccAddress, id uint64) (types.LockupAccount, error) {
-	lockupAccount, err := k.LockupAccounts.Get(ctx, collections.Join([]byte(address), id))
+func (k Keeper) GetLockupAccount(ctx context.Context, owner sdk.AccAddress, id uint64) (types.LockupAccount, error) {
+	lockupAccount, err := k.LockupAccounts.Get(ctx, collections.Join([]byte(owner), id))
 	if err != nil {
 		return types.LockupAccount{}, err
 	}

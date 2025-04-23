@@ -26,15 +26,15 @@ func (q queryServer) LockupAccount(ctx context.Context, req *types.QueryLockupAc
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
-	lockupAmount := lockupAccount.LockupAmountOriginal.Add(lockupAccount.LockupAmountAdditional)
-	now := sdk.UnwrapSDKContext(ctx).BlockTime().Unix()
-	unlockedAmount, err := types.CalculateUnlockedAmount(lockupAmount, lockupAccount.StartTime, lockupAccount.EndTime, now)
+	currentTime := sdk.UnwrapSDKContext(ctx).BlockTime().Unix()
+	unlockedAmount, lockedAmount, err := lockupAccount.GetLockCoinInfo(currentTime)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &types.QueryLockupAccountResponse{
 		LockupAccount:  lockupAccount,
 		UnlockedAmount: unlockedAmount.String(),
+		LockedAmount:   lockedAmount.String(),
 	}, nil
 }
