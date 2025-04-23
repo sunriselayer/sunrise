@@ -35,7 +35,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
-	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+	rewards, err := k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -109,5 +109,6 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	return &types.MsgNonVotingUndelegateResponse{
 		CompletionTime: undelegateResponse.CompletionTime,
 		Amount:         output,
+		Rewards:        rewards,
 	}, nil
 }

@@ -44,14 +44,7 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	found, coin := claimRewardsResponse.Amount.Find(feeDenom)
 
 	if found {
-		lockupAccount, err := k.GetLockupAccount(ctx, owner, msg.Id)
-		if err != nil {
-			return nil, err
-		}
-
-		lockupAccount.AdditionalLocking = lockupAccount.AdditionalLocking.Add(coin.Amount)
-
-		err = k.SetLockupAccount(ctx, lockupAccount)
+		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)
 		if err != nil {
 			return nil, err
 		}

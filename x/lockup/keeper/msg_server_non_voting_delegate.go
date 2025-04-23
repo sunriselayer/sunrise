@@ -55,13 +55,31 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, err
 	}
 
-	_, err = k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingDelegate{
+	res, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingDelegate{
 		Sender:           lockup.Address,
 		ValidatorAddress: msg.ValidatorAddress,
 		Amount:           msg.Amount,
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	delegateReposense, ok := res.(*shareclasstypes.MsgNonVotingDelegateResponse)
+	if !ok {
+		return nil, sdkerrors.ErrInvalidRequest
+	}
+	if delegateReposense == nil {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid response")
+	}
+
+	// Add rewards to lockup account
+	found, coin := delegateReposense.Rewards.Find(feeDenom)
+
+	if found {
+		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &types.MsgNonVotingDelegateResponse{}, nil

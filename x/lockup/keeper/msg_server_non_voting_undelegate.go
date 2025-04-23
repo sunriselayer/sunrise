@@ -78,5 +78,14 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, err
 	}
 
+	// Add rewards to lockup account
+	found, coin := undelegateResponse.Rewards.Find(feeDenom)
+	if found {
+		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return &types.MsgNonVotingUndelegateResponse{}, nil
 }

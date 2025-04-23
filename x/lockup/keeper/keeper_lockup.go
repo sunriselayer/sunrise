@@ -123,3 +123,14 @@ func (k Keeper) CheckUnbondingEntriesMature(ctx context.Context, owner sdk.AccAd
 
 	return nil
 }
+
+func (k Keeper) AddRewardsToLockupAccount(ctx context.Context, owner sdk.AccAddress, id uint64, amount math.Int) error {
+	lockup, err := k.GetLockupAccount(ctx, owner, id)
+	if err != nil {
+		return err
+	}
+
+	lockup.AdditionalLocking = lockup.AdditionalLocking.Add(amount)
+
+	return k.SetLockupAccount(ctx, lockup)
+}
