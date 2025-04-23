@@ -60,7 +60,12 @@ message MsgNonVotingDelegate {
 }
 
 // MsgNonVotingDelegateResponse
-message MsgNonVotingDelegateResponse {}
+message MsgNonVotingDelegateResponse {
+  repeated cosmos.base.v1beta1.Coin rewards = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
 
 // MsgNonVotingUndelegate
 message MsgNonVotingUndelegate {
@@ -78,6 +83,10 @@ message MsgNonVotingUndelegateResponse {
     (gogoproto.stdtime) = true
   ];
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin rewards = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgClaimRewards
