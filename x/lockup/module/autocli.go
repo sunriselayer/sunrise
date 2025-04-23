@@ -19,9 +19,26 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				// this line is used by ignite scaffolding # autocli/query
 				{
+					RpcMethod: "LockupAccounts",
+					Use:       "lockup-accounts [owner]",
+					Short:     "Shows the lockup accounts of the owner",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+					},
+				},
+				{
 					RpcMethod: "LockupAccount",
 					Use:       "lockup-account [owner] [id]",
-					Short:     "Shows the lockup account of the owner",
+					Short:     "Shows the lockup account of the owner and id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+						{ProtoField: "id"},
+					},
+				},
+				{
+					RpcMethod: "SpendableAmount",
+					Use:       "spendable-amount [owner] [id]",
+					Short:     "Shows the spendable amount of the lockup account",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "owner"},
 						{ProtoField: "id"},
@@ -82,12 +99,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Send",
-					Use:       "send [id] [recipient] [amount]",
+					Use:       "send [id] [recipient] [amount] [denom]",
 					Short:     "Send a send tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "recipient"},
-						{ProtoField: "amount", Varargs: true},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
