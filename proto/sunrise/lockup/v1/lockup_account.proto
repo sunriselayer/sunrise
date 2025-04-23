@@ -19,17 +19,17 @@ message LockupAccount {
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-  string delegated_free = 8 [
+  string delegated_free = 7 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-  string delegated_locking = 9 [
+  string delegated_locking = 8 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-  UnbondingEntries unbond_entries = 10;
+  UnbondingEntries unbond_entries = 9;
 }
 
 // UnbondingEntries list of elements
