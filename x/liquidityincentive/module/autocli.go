@@ -68,12 +68,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a vote-gauge tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
-				{
-					RpcMethod:      "CollectVoteRewards",
-					Use:            "collect-vote-rewards",
-					Short:          "Send a collect-vote-rewards tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
-				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
