@@ -11,10 +11,10 @@ import (
 func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}

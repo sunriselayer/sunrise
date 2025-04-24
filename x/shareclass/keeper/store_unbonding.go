@@ -4,6 +4,9 @@ import (
 	"context"
 	"time"
 
+	"cosmossdk.io/collections"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
@@ -96,6 +99,26 @@ func (k Keeper) GetAllUnbondings(ctx context.Context) (list []types.Unbonding, e
 	}
 
 	return
+}
+
+func (k Keeper) GetUnbondingsByAddress(ctx context.Context, addr sdk.AccAddress) (list []types.Unbonding, err error) {
+	err = k.Unbondings.Indexes.Address.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[sdk.AccAddress, uint64](addr),
+		func(_ sdk.AccAddress, id uint64) (bool, error) {
+			value, _, err := k.GetUnbonding(ctx, id)
+			if err != nil {
+				return false, err
+			}
+			list = append(list, value)
+			return false, nil
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
 }
 
 func (k Keeper) IterateCompletedUnbondings(ctx context.Context, now time.Time, cb func(id uint64, value types.Unbonding) (stop bool, err error)) error {

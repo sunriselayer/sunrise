@@ -112,16 +112,107 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+// QueryLockupAccountsRequest is request type for the Query/LockupAccounts RPC method.
+type QueryLockupAccountsRequest struct {
+	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+}
+
+func (m *QueryLockupAccountsRequest) Reset()         { *m = QueryLockupAccountsRequest{} }
+func (m *QueryLockupAccountsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryLockupAccountsRequest) ProtoMessage()    {}
+func (*QueryLockupAccountsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ce28385d844894c6, []int{2}
+}
+func (m *QueryLockupAccountsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryLockupAccountsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryLockupAccountsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryLockupAccountsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryLockupAccountsRequest.Merge(m, src)
+}
+func (m *QueryLockupAccountsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryLockupAccountsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryLockupAccountsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryLockupAccountsRequest proto.InternalMessageInfo
+
+func (m *QueryLockupAccountsRequest) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+// QueryLockupAccountsResponse is response type for the Query/LockupAccounts RPC method.
+type QueryLockupAccountsResponse struct {
+	LockupAccounts []LockupAccount `protobuf:"bytes,1,rep,name=lockup_accounts,json=lockupAccounts,proto3" json:"lockup_accounts"`
+}
+
+func (m *QueryLockupAccountsResponse) Reset()         { *m = QueryLockupAccountsResponse{} }
+func (m *QueryLockupAccountsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryLockupAccountsResponse) ProtoMessage()    {}
+func (*QueryLockupAccountsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ce28385d844894c6, []int{3}
+}
+func (m *QueryLockupAccountsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryLockupAccountsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryLockupAccountsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryLockupAccountsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryLockupAccountsResponse.Merge(m, src)
+}
+func (m *QueryLockupAccountsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryLockupAccountsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryLockupAccountsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryLockupAccountsResponse proto.InternalMessageInfo
+
+func (m *QueryLockupAccountsResponse) GetLockupAccounts() []LockupAccount {
+	if m != nil {
+		return m.LockupAccounts
+	}
+	return nil
+}
+
 // QueryLockupAccountRequest is request type for the Query/LockupAccount RPC method.
 type QueryLockupAccountRequest struct {
 	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id    uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (m *QueryLockupAccountRequest) Reset()         { *m = QueryLockupAccountRequest{} }
 func (m *QueryLockupAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryLockupAccountRequest) ProtoMessage()    {}
 func (*QueryLockupAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ce28385d844894c6, []int{2}
+	return fileDescriptor_ce28385d844894c6, []int{4}
 }
 func (m *QueryLockupAccountRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -157,18 +248,25 @@ func (m *QueryLockupAccountRequest) GetOwner() string {
 	return ""
 }
 
+func (m *QueryLockupAccountRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 // QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
 type QueryLockupAccountResponse struct {
-	LockupAccount        LockupAccount `protobuf:"bytes,1,opt,name=lockup_account,json=lockupAccount,proto3" json:"lockup_account"`
-	LockupAccountAddress string        `protobuf:"bytes,2,opt,name=lockup_account_address,json=lockupAccountAddress,proto3" json:"lockup_account_address,omitempty"`
-	UnlockedAmount       string        `protobuf:"bytes,3,opt,name=unlocked_amount,json=unlockedAmount,proto3" json:"unlocked_amount,omitempty"`
+	LockupAccount  LockupAccount `protobuf:"bytes,1,opt,name=lockup_account,json=lockupAccount,proto3" json:"lockup_account"`
+	LockedAmount   string        `protobuf:"bytes,2,opt,name=locked_amount,json=lockedAmount,proto3" json:"locked_amount,omitempty"`
+	UnlockedAmount string        `protobuf:"bytes,3,opt,name=unlocked_amount,json=unlockedAmount,proto3" json:"unlocked_amount,omitempty"`
 }
 
 func (m *QueryLockupAccountResponse) Reset()         { *m = QueryLockupAccountResponse{} }
 func (m *QueryLockupAccountResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryLockupAccountResponse) ProtoMessage()    {}
 func (*QueryLockupAccountResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ce28385d844894c6, []int{3}
+	return fileDescriptor_ce28385d844894c6, []int{5}
 }
 func (m *QueryLockupAccountResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -204,9 +302,9 @@ func (m *QueryLockupAccountResponse) GetLockupAccount() LockupAccount {
 	return LockupAccount{}
 }
 
-func (m *QueryLockupAccountResponse) GetLockupAccountAddress() string {
+func (m *QueryLockupAccountResponse) GetLockedAmount() string {
 	if m != nil {
-		return m.LockupAccountAddress
+		return m.LockedAmount
 	}
 	return ""
 }
@@ -218,45 +316,155 @@ func (m *QueryLockupAccountResponse) GetUnlockedAmount() string {
 	return ""
 }
 
+// QuerySpendableAmountRequest is request type for the Query/SpendableAmount RPC method.
+type QuerySpendableAmountRequest struct {
+	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id    uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QuerySpendableAmountRequest) Reset()         { *m = QuerySpendableAmountRequest{} }
+func (m *QuerySpendableAmountRequest) String() string { return proto.CompactTextString(m) }
+func (*QuerySpendableAmountRequest) ProtoMessage()    {}
+func (*QuerySpendableAmountRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ce28385d844894c6, []int{6}
+}
+func (m *QuerySpendableAmountRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QuerySpendableAmountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QuerySpendableAmountRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QuerySpendableAmountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySpendableAmountRequest.Merge(m, src)
+}
+func (m *QuerySpendableAmountRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QuerySpendableAmountRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySpendableAmountRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QuerySpendableAmountRequest proto.InternalMessageInfo
+
+func (m *QuerySpendableAmountRequest) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *QuerySpendableAmountRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+// QuerySpendableAmountResponse is response type for the Query/SpendableAmount RPC method.
+type QuerySpendableAmountResponse struct {
+	SpendableAmount string `protobuf:"bytes,1,opt,name=spendable_amount,json=spendableAmount,proto3" json:"spendable_amount,omitempty"`
+}
+
+func (m *QuerySpendableAmountResponse) Reset()         { *m = QuerySpendableAmountResponse{} }
+func (m *QuerySpendableAmountResponse) String() string { return proto.CompactTextString(m) }
+func (*QuerySpendableAmountResponse) ProtoMessage()    {}
+func (*QuerySpendableAmountResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ce28385d844894c6, []int{7}
+}
+func (m *QuerySpendableAmountResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QuerySpendableAmountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QuerySpendableAmountResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QuerySpendableAmountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuerySpendableAmountResponse.Merge(m, src)
+}
+func (m *QuerySpendableAmountResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QuerySpendableAmountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuerySpendableAmountResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QuerySpendableAmountResponse proto.InternalMessageInfo
+
+func (m *QuerySpendableAmountResponse) GetSpendableAmount() string {
+	if m != nil {
+		return m.SpendableAmount
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "sunrise.lockup.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "sunrise.lockup.v1.QueryParamsResponse")
+	proto.RegisterType((*QueryLockupAccountsRequest)(nil), "sunrise.lockup.v1.QueryLockupAccountsRequest")
+	proto.RegisterType((*QueryLockupAccountsResponse)(nil), "sunrise.lockup.v1.QueryLockupAccountsResponse")
 	proto.RegisterType((*QueryLockupAccountRequest)(nil), "sunrise.lockup.v1.QueryLockupAccountRequest")
 	proto.RegisterType((*QueryLockupAccountResponse)(nil), "sunrise.lockup.v1.QueryLockupAccountResponse")
+	proto.RegisterType((*QuerySpendableAmountRequest)(nil), "sunrise.lockup.v1.QuerySpendableAmountRequest")
+	proto.RegisterType((*QuerySpendableAmountResponse)(nil), "sunrise.lockup.v1.QuerySpendableAmountResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/lockup/v1/query.proto", fileDescriptor_ce28385d844894c6) }
 
 var fileDescriptor_ce28385d844894c6 = []byte{
-	// 436 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x41, 0xeb, 0xd3, 0x30,
-	0x18, 0xc6, 0x9b, 0xe9, 0x06, 0x46, 0x36, 0x31, 0x16, 0xd9, 0x8a, 0xd6, 0x51, 0x70, 0xee, 0xe0,
-	0x12, 0x36, 0x85, 0xe1, 0x49, 0xb6, 0x93, 0x07, 0x15, 0xdd, 0xd1, 0xcb, 0xc8, 0xba, 0x50, 0x8b,
-	0x5d, 0xd2, 0x35, 0xed, 0x74, 0x88, 0x17, 0x2f, 0x5e, 0x05, 0x3f, 0x87, 0x1f, 0xc2, 0xdb, 0xf0,
-	0x34, 0xf0, 0xe2, 0x49, 0x64, 0xf3, 0x83, 0xc8, 0x92, 0x0c, 0xfe, 0xa5, 0x1d, 0xfb, 0xdf, 0xd2,
-	0xf7, 0x79, 0xf2, 0xe4, 0xf7, 0xbe, 0x6f, 0xe1, 0x5d, 0x99, 0xf1, 0x24, 0x94, 0x8c, 0x44, 0xc2,
-	0x7f, 0x97, 0xc5, 0x64, 0xd5, 0x27, 0xcb, 0x8c, 0x25, 0x6b, 0x1c, 0x27, 0x22, 0x15, 0xe8, 0xa6,
-	0x91, 0xb1, 0x96, 0xf1, 0xaa, 0xef, 0xd8, 0x81, 0x08, 0x84, 0x52, 0xc9, 0xe1, 0xa4, 0x8d, 0xce,
-	0x9d, 0x40, 0x88, 0x20, 0x62, 0x84, 0xc6, 0x21, 0xa1, 0x9c, 0x8b, 0x94, 0xa6, 0xa1, 0xe0, 0xd2,
-	0xa8, 0x9d, 0xe2, 0x2b, 0xfa, 0x34, 0xa5, 0xbe, 0x2f, 0x32, 0x9e, 0x1a, 0x9f, 0x5b, 0xf4, 0xc5,
-	0x34, 0xa1, 0x0b, 0x93, 0xe3, 0xd9, 0x10, 0xbd, 0x3e, 0xd0, 0xbd, 0x52, 0xc5, 0x09, 0x5b, 0x66,
-	0x4c, 0xa6, 0xde, 0x4b, 0x78, 0x2b, 0x57, 0x95, 0xb1, 0xe0, 0x92, 0xa1, 0x21, 0xac, 0xe9, 0xcb,
-	0x4d, 0xd0, 0x06, 0xdd, 0xeb, 0x83, 0x16, 0x2e, 0x34, 0x83, 0xf5, 0x95, 0xf1, 0xd5, 0xcd, 0x9f,
-	0x7b, 0xd6, 0xc4, 0xd8, 0xbd, 0x3e, 0x6c, 0xa9, 0xbc, 0xe7, 0xca, 0x36, 0xd2, 0x84, 0xe6, 0x31,
-	0x64, 0xc3, 0xaa, 0x78, 0xcf, 0x59, 0xa2, 0x42, 0xaf, 0x4d, 0xf4, 0x87, 0xf7, 0x13, 0x40, 0xa7,
-	0xec, 0x8e, 0x41, 0x79, 0x01, 0x1b, 0xf9, 0x7e, 0x0d, 0x52, 0xbb, 0x04, 0x29, 0x97, 0x60, 0xc8,
-	0xea, 0xd1, 0xc5, 0x22, 0x7a, 0x0c, 0x6f, 0xe7, 0xe3, 0xa6, 0x74, 0x3e, 0x4f, 0x98, 0x94, 0xcd,
-	0x8a, 0x82, 0xb2, 0x73, 0xf6, 0x91, 0xd6, 0xd0, 0x03, 0x78, 0x23, 0xe3, 0x07, 0x85, 0xcd, 0xa7,
-	0x74, 0xa1, 0x28, 0xae, 0x28, 0x7b, 0xe3, 0x58, 0x1e, 0xa9, 0xea, 0xe0, 0x47, 0x05, 0x56, 0x55,
-	0x33, 0xe8, 0x0b, 0x80, 0x35, 0x3d, 0x22, 0x74, 0xbf, 0x04, 0xb5, 0xb8, 0x0b, 0xa7, 0x73, 0xce,
-	0xa6, 0x27, 0xe2, 0xe1, 0xcf, 0xbf, 0xfe, 0x7d, 0xab, 0x74, 0x51, 0x87, 0x18, 0x7f, 0x44, 0xd7,
-	0x2c, 0x21, 0xa7, 0xf6, 0x8f, 0xbe, 0x03, 0x58, 0xcf, 0x4d, 0x06, 0x3d, 0x3c, 0xf5, 0x52, 0xd9,
-	0xda, 0x9c, 0xde, 0x25, 0xdd, 0x06, 0xef, 0xa9, 0xc2, 0x7b, 0x82, 0x86, 0xe7, 0xf0, 0xf4, 0xa9,
-	0x67, 0xf6, 0x20, 0xc9, 0x47, 0xf5, 0x3f, 0x7c, 0x1a, 0x3f, 0xdb, 0xec, 0x5c, 0xb0, 0xdd, 0xb9,
-	0xe0, 0xef, 0xce, 0x05, 0x5f, 0xf7, 0xae, 0xb5, 0xdd, 0xbb, 0xd6, 0xef, 0xbd, 0x6b, 0xbd, 0xc1,
-	0x41, 0x98, 0xbe, 0xcd, 0x66, 0xd8, 0x17, 0x8b, 0xf2, 0xf0, 0x0f, 0xc7, 0xf8, 0x74, 0x1d, 0x33,
-	0x39, 0xab, 0xa9, 0x5f, 0xff, 0xd1, 0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0xbb, 0x8b, 0x6f, 0x03,
-	0xaa, 0x03, 0x00, 0x00,
+	// 573 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xcf, 0x6b, 0x13, 0x41,
+	0x14, 0xc7, 0x33, 0x69, 0x13, 0xf0, 0xd5, 0x26, 0x3a, 0xe6, 0xd0, 0xae, 0x75, 0x0d, 0x2b, 0xc6,
+	0x08, 0x66, 0x87, 0xc6, 0x43, 0x11, 0xd4, 0x92, 0xaa, 0xa0, 0xe0, 0xcf, 0x78, 0xf3, 0x52, 0x36,
+	0xc9, 0x10, 0x17, 0x37, 0x33, 0xdb, 0xfd, 0x51, 0x0d, 0xa5, 0x17, 0x2f, 0x5e, 0x05, 0xff, 0x11,
+	0x11, 0x3c, 0xf4, 0x3f, 0xe8, 0xb1, 0xe0, 0xc5, 0x93, 0x48, 0xe2, 0x1f, 0x22, 0x99, 0x99, 0x2d,
+	0x8c, 0xbb, 0x31, 0xab, 0xb7, 0xc9, 0x7b, 0xdf, 0xf7, 0x7d, 0x9f, 0x79, 0x79, 0xb3, 0x70, 0x29,
+	0x8c, 0x59, 0xe0, 0x86, 0x94, 0x78, 0xbc, 0xff, 0x26, 0xf6, 0xc9, 0xfe, 0x26, 0xd9, 0x8b, 0x69,
+	0x30, 0xb6, 0xfd, 0x80, 0x47, 0x1c, 0x9f, 0x57, 0x69, 0x5b, 0xa6, 0xed, 0xfd, 0x4d, 0xa3, 0x36,
+	0xe4, 0x43, 0x2e, 0xb2, 0x64, 0x76, 0x92, 0x42, 0x63, 0x63, 0xc8, 0xf9, 0xd0, 0xa3, 0xc4, 0xf1,
+	0x5d, 0xe2, 0x30, 0xc6, 0x23, 0x27, 0x72, 0x39, 0x0b, 0x55, 0xb6, 0x91, 0xee, 0x22, 0x4f, 0xbb,
+	0x4e, 0xbf, 0xcf, 0x63, 0x16, 0x29, 0x9d, 0x99, 0xd6, 0xf9, 0x4e, 0xe0, 0x8c, 0x94, 0x8f, 0x55,
+	0x03, 0xfc, 0x62, 0x46, 0xf7, 0x5c, 0x04, 0xbb, 0x74, 0x2f, 0xa6, 0x61, 0x64, 0x3d, 0x85, 0x0b,
+	0x5a, 0x34, 0xf4, 0x39, 0x0b, 0x29, 0xde, 0x82, 0xb2, 0x2c, 0x5e, 0x43, 0x75, 0xd4, 0x5c, 0x69,
+	0xaf, 0xdb, 0xa9, 0xcb, 0xd8, 0xb2, 0x64, 0x67, 0xf9, 0xf8, 0xc7, 0xe5, 0x42, 0x57, 0xc9, 0xad,
+	0x36, 0x18, 0xc2, 0xef, 0xb1, 0x90, 0x75, 0x24, 0x61, 0xd2, 0x0d, 0xd7, 0xa0, 0xc4, 0xdf, 0x32,
+	0x1a, 0x08, 0xd7, 0x33, 0x5d, 0xf9, 0xc3, 0x62, 0x70, 0x31, 0xb3, 0x46, 0xb1, 0x3c, 0x83, 0xaa,
+	0x7e, 0xe1, 0x19, 0xd4, 0x52, 0x73, 0xa5, 0x5d, 0xcf, 0x80, 0xd2, 0x3c, 0x14, 0x5b, 0xc5, 0xd3,
+	0x8c, 0xad, 0x0e, 0xac, 0xa7, 0xfb, 0xfd, 0x15, 0x11, 0x57, 0xa0, 0xe8, 0x0e, 0xd6, 0x8a, 0x75,
+	0xd4, 0x5c, 0xee, 0x16, 0xdd, 0x81, 0x75, 0x84, 0xb2, 0xee, 0x79, 0x8a, 0xfc, 0x04, 0x2a, 0x3a,
+	0xb2, 0x1a, 0x63, 0x5e, 0xe2, 0x55, 0x8d, 0x18, 0x5f, 0x01, 0x11, 0xa0, 0x83, 0x5d, 0x67, 0x24,
+	0xdc, 0x8a, 0x82, 0xed, 0xac, 0x0c, 0x76, 0x44, 0x0c, 0x5f, 0x83, 0x6a, 0xcc, 0x74, 0xd9, 0x92,
+	0x90, 0x55, 0x92, 0xb0, 0x14, 0x5a, 0xf7, 0xd4, 0xb8, 0x5f, 0xfa, 0x94, 0x0d, 0x9c, 0x9e, 0x47,
+	0x65, 0xfc, 0xdf, 0x06, 0xf0, 0x08, 0x36, 0xb2, 0x4d, 0xd4, 0x04, 0xae, 0xc3, 0xb9, 0x30, 0x49,
+	0x25, 0x38, 0xd2, 0xb0, 0x1a, 0xea, 0x25, 0xed, 0xaf, 0x25, 0x28, 0x09, 0x2f, 0xfc, 0x01, 0x41,
+	0x59, 0x6e, 0x15, 0xbe, 0x9a, 0x31, 0xa9, 0xf4, 0xfa, 0x1a, 0x8d, 0x45, 0x32, 0x89, 0x63, 0xd9,
+	0xef, 0xbf, 0xfd, 0xfa, 0x54, 0x6c, 0xe2, 0x06, 0x51, 0x7a, 0xcf, 0x19, 0xd3, 0x80, 0xcc, 0x7b,
+	0x32, 0xf8, 0x33, 0x82, 0x8a, 0xbe, 0x8e, 0xb8, 0x35, 0xaf, 0x55, 0xe6, 0xaa, 0x1b, 0x76, 0x5e,
+	0xb9, 0x22, 0xdc, 0x16, 0x84, 0xb7, 0xf0, 0xd6, 0x22, 0x42, 0x79, 0x6a, 0x25, 0x6f, 0x81, 0x1c,
+	0x88, 0x3f, 0xe8, 0x10, 0x7f, 0x41, 0xb0, 0xaa, 0x79, 0xe3, 0x1b, 0xb9, 0x10, 0x12, 0xe0, 0x56,
+	0x4e, 0xb5, 0xe2, 0xbd, 0x2f, 0x78, 0xef, 0xe2, 0xdb, 0xff, 0xc9, 0x4b, 0x0e, 0xdc, 0xc1, 0x21,
+	0x3e, 0x42, 0x50, 0xfd, 0x63, 0x85, 0xf0, 0xdc, 0xc9, 0x65, 0x2f, 0xac, 0x41, 0x72, 0xeb, 0x15,
+	0xfa, 0x03, 0x81, 0xbe, 0x8d, 0xef, 0x2c, 0x42, 0x3f, 0xdd, 0xd4, 0x96, 0xdc, 0x60, 0x8d, 0x7d,
+	0xe7, 0xe1, 0xf1, 0xc4, 0x44, 0x27, 0x13, 0x13, 0xfd, 0x9c, 0x98, 0xe8, 0xe3, 0xd4, 0x2c, 0x9c,
+	0x4c, 0xcd, 0xc2, 0xf7, 0xa9, 0x59, 0x78, 0x65, 0x0f, 0xdd, 0xe8, 0x75, 0xdc, 0xb3, 0xfb, 0x7c,
+	0x94, 0xdd, 0xe2, 0x5d, 0xd2, 0x24, 0x1a, 0xfb, 0x34, 0xec, 0x95, 0xc5, 0x17, 0xfa, 0xe6, 0xef,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x16, 0xa2, 0x34, 0x68, 0x51, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -273,8 +481,12 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// LockupAccountAddress queries the lockup account address for a given owner.
+	// LockupAccounts queries all lockup accounts for a given owner.
+	LockupAccounts(ctx context.Context, in *QueryLockupAccountsRequest, opts ...grpc.CallOption) (*QueryLockupAccountsResponse, error)
+	// LockupAccount queries a lockup account for a given owner and id.
 	LockupAccount(ctx context.Context, in *QueryLockupAccountRequest, opts ...grpc.CallOption) (*QueryLockupAccountResponse, error)
+	// SpendableAmount queries the spendable amount for a given owner and id.
+	SpendableAmount(ctx context.Context, in *QuerySpendableAmountRequest, opts ...grpc.CallOption) (*QuerySpendableAmountResponse, error)
 }
 
 type queryClient struct {
@@ -294,9 +506,27 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) LockupAccounts(ctx context.Context, in *QueryLockupAccountsRequest, opts ...grpc.CallOption) (*QueryLockupAccountsResponse, error) {
+	out := new(QueryLockupAccountsResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Query/LockupAccounts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) LockupAccount(ctx context.Context, in *QueryLockupAccountRequest, opts ...grpc.CallOption) (*QueryLockupAccountResponse, error) {
 	out := new(QueryLockupAccountResponse)
 	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Query/LockupAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) SpendableAmount(ctx context.Context, in *QuerySpendableAmountRequest, opts ...grpc.CallOption) (*QuerySpendableAmountResponse, error) {
+	out := new(QuerySpendableAmountResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Query/SpendableAmount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -307,8 +537,12 @@ func (c *queryClient) LockupAccount(ctx context.Context, in *QueryLockupAccountR
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// LockupAccountAddress queries the lockup account address for a given owner.
+	// LockupAccounts queries all lockup accounts for a given owner.
+	LockupAccounts(context.Context, *QueryLockupAccountsRequest) (*QueryLockupAccountsResponse, error)
+	// LockupAccount queries a lockup account for a given owner and id.
 	LockupAccount(context.Context, *QueryLockupAccountRequest) (*QueryLockupAccountResponse, error)
+	// SpendableAmount queries the spendable amount for a given owner and id.
+	SpendableAmount(context.Context, *QuerySpendableAmountRequest) (*QuerySpendableAmountResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -318,8 +552,14 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
+func (*UnimplementedQueryServer) LockupAccounts(ctx context.Context, req *QueryLockupAccountsRequest) (*QueryLockupAccountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LockupAccounts not implemented")
+}
 func (*UnimplementedQueryServer) LockupAccount(ctx context.Context, req *QueryLockupAccountRequest) (*QueryLockupAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LockupAccount not implemented")
+}
+func (*UnimplementedQueryServer) SpendableAmount(ctx context.Context, req *QuerySpendableAmountRequest) (*QuerySpendableAmountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SpendableAmount not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -344,6 +584,24 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_LockupAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLockupAccountsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LockupAccounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.lockup.v1.Query/LockupAccounts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LockupAccounts(ctx, req.(*QueryLockupAccountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_LockupAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryLockupAccountRequest)
 	if err := dec(in); err != nil {
@@ -362,6 +620,24 @@ func _Query_LockupAccount_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_SpendableAmount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySpendableAmountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SpendableAmount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.lockup.v1.Query/SpendableAmount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SpendableAmount(ctx, req.(*QuerySpendableAmountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.lockup.v1.Query",
@@ -372,8 +648,16 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
+			MethodName: "LockupAccounts",
+			Handler:    _Query_LockupAccounts_Handler,
+		},
+		{
 			MethodName: "LockupAccount",
 			Handler:    _Query_LockupAccount_Handler,
+		},
+		{
+			MethodName: "SpendableAmount",
+			Handler:    _Query_SpendableAmount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -436,6 +720,73 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryLockupAccountsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryLockupAccountsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryLockupAccountsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryLockupAccountsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryLockupAccountsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryLockupAccountsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.LockupAccounts) > 0 {
+		for iNdEx := len(m.LockupAccounts) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.LockupAccounts[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *QueryLockupAccountRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -456,6 +807,11 @@ func (m *QueryLockupAccountRequest) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	_ = i
 	var l int
 	_ = l
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
+	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
 		copy(dAtA[i:], m.Owner)
@@ -493,10 +849,10 @@ func (m *QueryLockupAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.LockupAccountAddress) > 0 {
-		i -= len(m.LockupAccountAddress)
-		copy(dAtA[i:], m.LockupAccountAddress)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.LockupAccountAddress)))
+	if len(m.LockedAmount) > 0 {
+		i -= len(m.LockedAmount)
+		copy(dAtA[i:], m.LockedAmount)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.LockedAmount)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -510,6 +866,71 @@ func (m *QueryLockupAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QuerySpendableAmountRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QuerySpendableAmountRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuerySpendableAmountRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QuerySpendableAmountResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QuerySpendableAmountResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuerySpendableAmountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SpendableAmount) > 0 {
+		i -= len(m.SpendableAmount)
+		copy(dAtA[i:], m.SpendableAmount)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.SpendableAmount)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -544,7 +965,7 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryLockupAccountRequest) Size() (n int) {
+func (m *QueryLockupAccountsRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -557,6 +978,37 @@ func (m *QueryLockupAccountRequest) Size() (n int) {
 	return n
 }
 
+func (m *QueryLockupAccountsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.LockupAccounts) > 0 {
+		for _, e := range m.LockupAccounts {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryLockupAccountRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	return n
+}
+
 func (m *QueryLockupAccountResponse) Size() (n int) {
 	if m == nil {
 		return 0
@@ -565,11 +1017,40 @@ func (m *QueryLockupAccountResponse) Size() (n int) {
 	_ = l
 	l = m.LockupAccount.Size()
 	n += 1 + l + sovQuery(uint64(l))
-	l = len(m.LockupAccountAddress)
+	l = len(m.LockedAmount)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
 	l = len(m.UnlockedAmount)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QuerySpendableAmountRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	return n
+}
+
+func (m *QuerySpendableAmountResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.SpendableAmount)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
@@ -715,6 +1196,172 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *QueryLockupAccountsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryLockupAccountsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryLockupAccountsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryLockupAccountsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryLockupAccountsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryLockupAccountsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LockupAccounts", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LockupAccounts = append(m.LockupAccounts, LockupAccount{})
+			if err := m.LockupAccounts[len(m.LockupAccounts)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *QueryLockupAccountRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -776,6 +1423,25 @@ func (m *QueryLockupAccountRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -861,7 +1527,7 @@ func (m *QueryLockupAccountResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LockupAccountAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field LockedAmount", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -889,7 +1555,7 @@ func (m *QueryLockupAccountResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.LockupAccountAddress = string(dAtA[iNdEx:postIndex])
+			m.LockedAmount = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -922,6 +1588,189 @@ func (m *QueryLockupAccountResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.UnlockedAmount = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QuerySpendableAmountRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QuerySpendableAmountRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QuerySpendableAmountRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QuerySpendableAmountResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QuerySpendableAmountResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QuerySpendableAmountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SpendableAmount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SpendableAmount = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

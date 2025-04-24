@@ -12,7 +12,7 @@ import (
 func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotingDelegate) (*types.MsgNonVotingDelegateResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	// Validate amount
@@ -25,31 +25,31 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	}
 
 	// Claim rewards
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
-	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+	rewards, err := k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+	if err != nil {
+		return nil, err
+	}
+
+	// Calculate share before delegate
+	shareAmount, err := k.CalculateShareByAmount(ctx, msg.ValidatorAddress, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	// Convert and delegate
-	err = k.ConvertAndDelegate(ctx, sender, msg.Validator, msg.Amount.Amount)
+	err = k.ConvertAndDelegate(ctx, sender, msg.ValidatorAddress, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	// Mint non transferrable share token
-	shareDenom := types.NonVotingShareTokenDenom(msg.Validator)
+	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
 	k.bankKeeper.SetSendEnabled(ctx, shareDenom, false)
-
-	shareAmount, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
-	if err != nil {
-		return nil, err
-	}
-
 	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, shareAmount))
 
 	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, coins)
@@ -63,5 +63,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, err
 	}
 
-	return &types.MsgNonVotingDelegateResponse{}, nil
+	return &types.MsgNonVotingDelegateResponse{
+		Rewards: rewards,
+	}, nil
 }

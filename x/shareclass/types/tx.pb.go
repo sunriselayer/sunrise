@@ -134,9 +134,9 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgNonVotingDelegate
 type MsgNonVotingDelegate struct {
-	Sender    string     `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Validator string     `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
-	Amount    types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
+	Sender           string     `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ValidatorAddress string     `protobuf:"bytes,2,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
+	Amount           types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
 }
 
 func (m *MsgNonVotingDelegate) Reset()         { *m = MsgNonVotingDelegate{} }
@@ -179,9 +179,9 @@ func (m *MsgNonVotingDelegate) GetSender() string {
 	return ""
 }
 
-func (m *MsgNonVotingDelegate) GetValidator() string {
+func (m *MsgNonVotingDelegate) GetValidatorAddress() string {
 	if m != nil {
-		return m.Validator
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -195,6 +195,7 @@ func (m *MsgNonVotingDelegate) GetAmount() types.Coin {
 
 // MsgNonVotingDelegateResponse
 type MsgNonVotingDelegateResponse struct {
+	Rewards github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"rewards"`
 }
 
 func (m *MsgNonVotingDelegateResponse) Reset()         { *m = MsgNonVotingDelegateResponse{} }
@@ -230,12 +231,19 @@ func (m *MsgNonVotingDelegateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgNonVotingDelegateResponse proto.InternalMessageInfo
 
+func (m *MsgNonVotingDelegateResponse) GetRewards() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.Rewards
+	}
+	return nil
+}
+
 // MsgNonVotingUndelegate
 type MsgNonVotingUndelegate struct {
-	Sender    string     `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Validator string     `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
-	Amount    types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
-	Recipient string     `protobuf:"bytes,4,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	Sender           string     `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ValidatorAddress string     `protobuf:"bytes,2,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
+	Amount           types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
+	Recipient        string     `protobuf:"bytes,4,opt,name=recipient,proto3" json:"recipient,omitempty"`
 }
 
 func (m *MsgNonVotingUndelegate) Reset()         { *m = MsgNonVotingUndelegate{} }
@@ -278,9 +286,9 @@ func (m *MsgNonVotingUndelegate) GetSender() string {
 	return ""
 }
 
-func (m *MsgNonVotingUndelegate) GetValidator() string {
+func (m *MsgNonVotingUndelegate) GetValidatorAddress() string {
 	if m != nil {
-		return m.Validator
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -301,8 +309,9 @@ func (m *MsgNonVotingUndelegate) GetRecipient() string {
 
 // MsgNonVotingUndelegateResponse
 type MsgNonVotingUndelegateResponse struct {
-	CompletionTime time.Time  `protobuf:"bytes,1,opt,name=completion_time,json=completionTime,proto3,stdtime" json:"completion_time"`
-	Amount         types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+	CompletionTime time.Time                                `protobuf:"bytes,1,opt,name=completion_time,json=completionTime,proto3,stdtime" json:"completion_time"`
+	Amount         types.Coin                               `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+	Rewards        github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=rewards,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"rewards"`
 }
 
 func (m *MsgNonVotingUndelegateResponse) Reset()         { *m = MsgNonVotingUndelegateResponse{} }
@@ -352,10 +361,17 @@ func (m *MsgNonVotingUndelegateResponse) GetAmount() types.Coin {
 	return types.Coin{}
 }
 
+func (m *MsgNonVotingUndelegateResponse) GetRewards() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.Rewards
+	}
+	return nil
+}
+
 // MsgClaimRewards
 type MsgClaimRewards struct {
-	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Validator string `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
+	Sender           string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ValidatorAddress string `protobuf:"bytes,2,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
 }
 
 func (m *MsgClaimRewards) Reset()         { *m = MsgClaimRewards{} }
@@ -398,9 +414,9 @@ func (m *MsgClaimRewards) GetSender() string {
 	return ""
 }
 
-func (m *MsgClaimRewards) GetValidator() string {
+func (m *MsgClaimRewards) GetValidatorAddress() string {
 	if m != nil {
-		return m.Validator
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -972,10 +988,10 @@ func (m *MsgNonVotingDelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x1a
-	if len(m.Validator) > 0 {
-		i -= len(m.Validator)
-		copy(dAtA[i:], m.Validator)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1009,6 +1025,20 @@ func (m *MsgNonVotingDelegateResponse) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
+	if len(m.Rewards) > 0 {
+		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -1049,10 +1079,10 @@ func (m *MsgNonVotingUndelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	}
 	i--
 	dAtA[i] = 0x1a
-	if len(m.Validator) > 0 {
-		i -= len(m.Validator)
-		copy(dAtA[i:], m.Validator)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1086,6 +1116,20 @@ func (m *MsgNonVotingUndelegateResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 	_ = i
 	var l int
 	_ = l
+	if len(m.Rewards) > 0 {
+		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
 	{
 		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -1127,10 +1171,10 @@ func (m *MsgClaimRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Validator) > 0 {
-		i -= len(m.Validator)
-		copy(dAtA[i:], m.Validator)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1331,7 +1375,7 @@ func (m *MsgNonVotingDelegate) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Validator)
+	l = len(m.ValidatorAddress)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1346,6 +1390,12 @@ func (m *MsgNonVotingDelegateResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if len(m.Rewards) > 0 {
+		for _, e := range m.Rewards {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1359,7 +1409,7 @@ func (m *MsgNonVotingUndelegate) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Validator)
+	l = len(m.ValidatorAddress)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1382,6 +1432,12 @@ func (m *MsgNonVotingUndelegateResponse) Size() (n int) {
 	n += 1 + l + sovTx(uint64(l))
 	l = m.Amount.Size()
 	n += 1 + l + sovTx(uint64(l))
+	if len(m.Rewards) > 0 {
+		for _, e := range m.Rewards {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1395,7 +1451,7 @@ func (m *MsgClaimRewards) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Validator)
+	l = len(m.ValidatorAddress)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1685,7 +1741,7 @@ func (m *MsgNonVotingDelegate) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1713,7 +1769,7 @@ func (m *MsgNonVotingDelegate) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Validator = string(dAtA[iNdEx:postIndex])
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -1798,6 +1854,40 @@ func (m *MsgNonVotingDelegateResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgNonVotingDelegateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rewards = append(m.Rewards, types.Coin{})
+			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -1882,7 +1972,7 @@ func (m *MsgNonVotingUndelegate) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1910,7 +2000,7 @@ func (m *MsgNonVotingUndelegate) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Validator = string(dAtA[iNdEx:postIndex])
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -2093,6 +2183,40 @@ func (m *MsgNonVotingUndelegateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rewards = append(m.Rewards, types.Coin{})
+			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -2177,7 +2301,7 @@ func (m *MsgClaimRewards) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2205,7 +2329,7 @@ func (m *MsgClaimRewards) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Validator = string(dAtA[iNdEx:postIndex])
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -7,13 +7,11 @@ import (
 	context "context"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
-	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
-	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,14 +19,12 @@ import (
 	io "io"
 	math "math"
 	math_bits "math/bits"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -131,10 +127,13 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgInitLockupAccount
 type MsgInitLockupAccount struct {
-	Sender    string     `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	StartTime time.Time  `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
-	EndTime   time.Time  `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
-	Amount    types.Coin `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount"`
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Owner  string `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`
+	// start of lockup as unix time (in seconds).
+	StartTime int64 `protobuf:"varint,3,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end of lockup as unix time (in seconds).
+	EndTime int64      `protobuf:"varint,4,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	Amount  types.Coin `protobuf:"bytes,5,opt,name=amount,proto3" json:"amount"`
 }
 
 func (m *MsgInitLockupAccount) Reset()         { *m = MsgInitLockupAccount{} }
@@ -177,18 +176,25 @@ func (m *MsgInitLockupAccount) GetSender() string {
 	return ""
 }
 
-func (m *MsgInitLockupAccount) GetStartTime() time.Time {
+func (m *MsgInitLockupAccount) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *MsgInitLockupAccount) GetStartTime() int64 {
 	if m != nil {
 		return m.StartTime
 	}
-	return time.Time{}
+	return 0
 }
 
-func (m *MsgInitLockupAccount) GetEndTime() time.Time {
+func (m *MsgInitLockupAccount) GetEndTime() int64 {
 	if m != nil {
 		return m.EndTime
 	}
-	return time.Time{}
+	return 0
 }
 
 func (m *MsgInitLockupAccount) GetAmount() types.Coin {
@@ -237,9 +243,10 @@ var xxx_messageInfo_MsgInitLockupAccountResponse proto.InternalMessageInfo
 
 // MsgNonVotingDelegate
 type MsgNonVotingDelegate struct {
-	Owner     string     `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
-	Validator string     `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
-	Amount    types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
+	Owner            string     `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id               uint64     `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	ValidatorAddress string     `protobuf:"bytes,3,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
+	Amount           types.Coin `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount"`
 }
 
 func (m *MsgNonVotingDelegate) Reset()         { *m = MsgNonVotingDelegate{} }
@@ -282,9 +289,16 @@ func (m *MsgNonVotingDelegate) GetOwner() string {
 	return ""
 }
 
-func (m *MsgNonVotingDelegate) GetValidator() string {
+func (m *MsgNonVotingDelegate) GetId() uint64 {
 	if m != nil {
-		return m.Validator
+		return m.Id
+	}
+	return 0
+}
+
+func (m *MsgNonVotingDelegate) GetValidatorAddress() string {
+	if m != nil {
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -335,9 +349,10 @@ var xxx_messageInfo_MsgNonVotingDelegateResponse proto.InternalMessageInfo
 
 // MsgNonVotingUndelegate
 type MsgNonVotingUndelegate struct {
-	Owner     string     `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
-	Validator string     `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
-	Amount    types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
+	Owner            string     `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id               uint64     `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	ValidatorAddress string     `protobuf:"bytes,3,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
+	Amount           types.Coin `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount"`
 }
 
 func (m *MsgNonVotingUndelegate) Reset()         { *m = MsgNonVotingUndelegate{} }
@@ -380,9 +395,16 @@ func (m *MsgNonVotingUndelegate) GetOwner() string {
 	return ""
 }
 
-func (m *MsgNonVotingUndelegate) GetValidator() string {
+func (m *MsgNonVotingUndelegate) GetId() uint64 {
 	if m != nil {
-		return m.Validator
+		return m.Id
+	}
+	return 0
+}
+
+func (m *MsgNonVotingUndelegate) GetValidatorAddress() string {
+	if m != nil {
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -433,8 +455,9 @@ var xxx_messageInfo_MsgNonVotingUndelegateResponse proto.InternalMessageInfo
 
 // MsgClaimRewards
 type MsgClaimRewards struct {
-	Owner     string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
-	Validator string `protobuf:"bytes,2,opt,name=validator,proto3" json:"validator,omitempty"`
+	Owner            string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id               uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	ValidatorAddress string `protobuf:"bytes,3,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
 }
 
 func (m *MsgClaimRewards) Reset()         { *m = MsgClaimRewards{} }
@@ -477,9 +500,16 @@ func (m *MsgClaimRewards) GetOwner() string {
 	return ""
 }
 
-func (m *MsgClaimRewards) GetValidator() string {
+func (m *MsgClaimRewards) GetId() uint64 {
 	if m != nil {
-		return m.Validator
+		return m.Id
+	}
+	return 0
+}
+
+func (m *MsgClaimRewards) GetValidatorAddress() string {
+	if m != nil {
+		return m.ValidatorAddress
 	}
 	return ""
 }
@@ -523,9 +553,10 @@ var xxx_messageInfo_MsgClaimRewardsResponse proto.InternalMessageInfo
 
 // MsgSend
 type MsgSend struct {
-	Owner     string                                   `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
-	Recipient string                                   `protobuf:"bytes,2,opt,name=recipient,proto3" json:"recipient,omitempty"`
-	Amount    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
+	Owner     string     `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id        uint64     `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Recipient string     `protobuf:"bytes,3,opt,name=recipient,proto3" json:"recipient,omitempty"`
+	Amount    types.Coin `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount"`
 }
 
 func (m *MsgSend) Reset()         { *m = MsgSend{} }
@@ -568,6 +599,13 @@ func (m *MsgSend) GetOwner() string {
 	return ""
 }
 
+func (m *MsgSend) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func (m *MsgSend) GetRecipient() string {
 	if m != nil {
 		return m.Recipient
@@ -575,11 +613,11 @@ func (m *MsgSend) GetRecipient() string {
 	return ""
 }
 
-func (m *MsgSend) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *MsgSend) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
-	return nil
+	return types.Coin{}
 }
 
 // MsgSendResponse
@@ -637,55 +675,54 @@ func init() {
 func init() { proto.RegisterFile("sunrise/lockup/v1/tx.proto", fileDescriptor_efb50c4019309976) }
 
 var fileDescriptor_efb50c4019309976 = []byte{
-	// 764 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x56, 0xcd, 0x4e, 0xdb, 0x4a,
-	0x14, 0x8e, 0x49, 0x08, 0x64, 0x40, 0xf7, 0x0a, 0x5f, 0x74, 0x09, 0x56, 0xeb, 0xd0, 0x6c, 0x4a,
-	0x91, 0xb0, 0x09, 0x95, 0x40, 0x62, 0x83, 0x08, 0x55, 0xd5, 0x4a, 0x4d, 0x55, 0x85, 0xc2, 0xa2,
-	0x0b, 0xd0, 0xc4, 0x9e, 0x0e, 0x16, 0xf1, 0x8c, 0xe5, 0x99, 0x04, 0xd8, 0x55, 0x7d, 0x80, 0x0a,
-	0x55, 0x7d, 0x8a, 0xae, 0x58, 0xf0, 0x10, 0x2c, 0xaa, 0x0a, 0xb1, 0xea, 0xaa, 0x54, 0x61, 0xc1,
-	0x6b, 0x54, 0xf6, 0x8c, 0x8d, 0xc1, 0x0e, 0x3f, 0x9b, 0x4a, 0x5d, 0xc1, 0xf8, 0x7c, 0x73, 0xce,
-	0xf7, 0x7d, 0x67, 0xce, 0x01, 0xa0, 0xb1, 0x0e, 0xf1, 0x1d, 0x86, 0xcc, 0x36, 0xb5, 0x76, 0x3a,
-	0x9e, 0xd9, 0xad, 0x99, 0x7c, 0xcf, 0xf0, 0x7c, 0xca, 0xa9, 0x3a, 0x26, 0x63, 0x86, 0x88, 0x19,
-	0xdd, 0x9a, 0xa6, 0x5b, 0x94, 0xb9, 0x94, 0x99, 0x2d, 0xc8, 0x90, 0xd9, 0xad, 0xb5, 0x10, 0x87,
-	0x35, 0xd3, 0xa2, 0x0e, 0x11, 0x57, 0xb4, 0x09, 0x19, 0x77, 0x19, 0x0e, 0x52, 0xb9, 0x0c, 0xcb,
-	0xc0, 0xa4, 0x08, 0x6c, 0x85, 0x27, 0x53, 0x1c, 0x64, 0x68, 0x1c, 0x53, 0x4c, 0xc5, 0xf7, 0xe0,
-	0x37, 0xf9, 0xb5, 0x82, 0x29, 0xc5, 0x6d, 0x64, 0x86, 0xa7, 0x56, 0xe7, 0xbd, 0xc9, 0x1d, 0x17,
-	0x31, 0x0e, 0x5d, 0x4f, 0x02, 0xf4, 0x34, 0x73, 0x0f, 0xfa, 0xd0, 0x95, 0x69, 0xab, 0x9f, 0x15,
-	0xf0, 0x6f, 0x83, 0xe1, 0x75, 0xcf, 0x86, 0x1c, 0xbd, 0x09, 0x23, 0xea, 0x02, 0x28, 0xc1, 0x0e,
-	0xdf, 0xa6, 0xbe, 0xc3, 0xf7, 0xcb, 0xca, 0x94, 0x32, 0x5d, 0xaa, 0x97, 0x4f, 0x8f, 0x66, 0xc7,
-	0x25, 0x9f, 0x15, 0xdb, 0xf6, 0x11, 0x63, 0x6b, 0xdc, 0x77, 0x08, 0x6e, 0x5e, 0x42, 0xd5, 0x45,
-	0x50, 0x14, 0xb9, 0xcb, 0x03, 0x53, 0xca, 0xf4, 0xc8, 0xfc, 0xa4, 0x91, 0xb2, 0xc6, 0x10, 0x25,
-	0xea, 0x85, 0xe3, 0x9f, 0x95, 0x5c, 0x53, 0xc2, 0x97, 0xfe, 0xf9, 0x78, 0x71, 0x38, 0x73, 0x99,
-	0xa8, 0x3a, 0x09, 0x26, 0xae, 0x71, 0x6a, 0x22, 0xe6, 0x51, 0xc2, 0x50, 0xf5, 0xcb, 0x00, 0x18,
-	0x6f, 0x30, 0xfc, 0x92, 0x38, 0xfc, 0x55, 0x98, 0x74, 0xc5, 0xb2, 0x68, 0x87, 0x70, 0x75, 0x0e,
-	0x14, 0x19, 0x22, 0x36, 0xf2, 0x6f, 0x65, 0x2c, 0x71, 0xea, 0x2a, 0x00, 0x8c, 0x43, 0x9f, 0x6f,
-	0x05, 0x9e, 0x49, 0xca, 0x9a, 0x21, 0x0c, 0x35, 0x22, 0x43, 0x8d, 0xb7, 0x91, 0xa1, 0xf5, 0xe1,
-	0x80, 0xf3, 0xc1, 0x59, 0x45, 0x69, 0x96, 0xc2, 0x7b, 0x41, 0x44, 0x5d, 0x06, 0xc3, 0x88, 0xd8,
-	0x22, 0x45, 0xfe, 0x1e, 0x29, 0x86, 0x10, 0xb1, 0xc3, 0x04, 0x8b, 0xa0, 0x08, 0xdd, 0x40, 0x41,
-	0xb9, 0x20, 0x4d, 0x93, 0xa4, 0x83, 0xc7, 0x63, 0xc8, 0xc7, 0x63, 0xac, 0x52, 0x87, 0x44, 0xa6,
-	0x09, 0xf8, 0xd2, 0x48, 0x60, 0x9a, 0xd4, 0x52, 0xd5, 0xc1, 0x83, 0x2c, 0x57, 0x62, 0xdb, 0xbe,
-	0x29, 0xa1, 0x6d, 0xaf, 0x29, 0xd9, 0xa0, 0xdc, 0x21, 0xf8, 0x19, 0x6a, 0x23, 0x0c, 0x39, 0x52,
-	0x0d, 0x30, 0x48, 0x77, 0xc9, 0x1d, 0x5c, 0x13, 0x30, 0x75, 0x19, 0x94, 0xba, 0xb0, 0xed, 0xd8,
-	0x90, 0x53, 0x3f, 0xf4, 0xac, 0x54, 0x7f, 0x74, 0x7a, 0x34, 0xfb, 0x50, 0xde, 0xd9, 0x88, 0x62,
-	0xd7, 0x1e, 0x49, 0x7c, 0x27, 0xa1, 0x37, 0x7f, 0x3f, 0xbd, 0x20, 0xd0, 0x2b, 0x58, 0x48, 0xb9,
-	0x29, 0x35, 0xb1, 0xdc, 0xef, 0x0a, 0xf8, 0x3f, 0x09, 0x58, 0x27, 0xf6, 0xdf, 0x2d, 0x78, 0x0a,
-	0xe8, 0xd9, 0x7a, 0x62, 0xc9, 0x9f, 0xc4, 0x20, 0xaf, 0xb6, 0xa1, 0xe3, 0x36, 0xd1, 0x2e, 0xf4,
-	0x6d, 0xf6, 0xc7, 0xb5, 0x5e, 0xa1, 0x2c, 0x86, 0x38, 0xc9, 0x27, 0xe6, 0xda, 0x53, 0xc0, 0x50,
-	0x83, 0xe1, 0x35, 0x44, 0xec, 0x7b, 0x73, 0x5c, 0x00, 0x25, 0x1f, 0x59, 0x8e, 0xe7, 0x20, 0xc2,
-	0x25, 0xc7, 0x1b, 0x96, 0x53, 0x0c, 0x55, 0xad, 0x44, 0x1b, 0xf2, 0x37, 0xb7, 0x61, 0x2e, 0x68,
-	0xc3, 0xd7, 0xb3, 0xca, 0x34, 0x76, 0xf8, 0x76, 0xa7, 0x65, 0x58, 0xd4, 0x95, 0xbb, 0x58, 0xfe,
-	0x98, 0x65, 0xf6, 0x8e, 0xc9, 0xf7, 0x3d, 0xc4, 0xc2, 0x0b, 0x2c, 0xb3, 0x65, 0x63, 0x61, 0x3f,
-	0x02, 0x8d, 0x91, 0xee, 0xf9, 0x8b, 0x02, 0xc8, 0x37, 0x18, 0x56, 0x37, 0xc1, 0xe8, 0x95, 0x85,
-	0x5b, 0xcd, 0x58, 0x94, 0xd7, 0x16, 0xa0, 0x36, 0x73, 0x3b, 0x26, 0xaa, 0xa3, 0xba, 0x60, 0x2c,
-	0xbd, 0x20, 0x1f, 0x67, 0x27, 0x48, 0x01, 0x35, 0xf3, 0x8e, 0xc0, 0x64, 0xb9, 0xf4, 0x62, 0xe9,
-	0x53, 0x2e, 0x05, 0xec, 0x57, 0xae, 0xef, 0x70, 0xab, 0x0c, 0xfc, 0x97, 0x35, 0xd8, 0x4f, 0x6e,
-	0xc9, 0x73, 0x09, 0xd5, 0x6a, 0x77, 0x86, 0xc6, 0x45, 0x37, 0xc1, 0xe8, 0x95, 0xd1, 0xea, 0xd3,
-	0xb2, 0x24, 0xa6, 0x5f, 0xcb, 0xb2, 0x46, 0x42, 0x7d, 0x0e, 0x0a, 0xe1, 0x38, 0x68, 0xd9, 0x77,
-	0x82, 0x98, 0x56, 0xed, 0x1f, 0x8b, 0xf2, 0x68, 0x83, 0x1f, 0x2e, 0x0e, 0x67, 0x94, 0xfa, 0x8b,
-	0xe3, 0x9e, 0xae, 0x9c, 0xf4, 0x74, 0xe5, 0x57, 0x4f, 0x57, 0x0e, 0xce, 0xf5, 0xdc, 0xc9, 0xb9,
-	0x9e, 0xfb, 0x71, 0xae, 0xe7, 0xde, 0x19, 0x89, 0x47, 0x2d, 0xd3, 0xb5, 0xe1, 0x3e, 0xf2, 0xa3,
-	0x83, 0xb9, 0x17, 0xfd, 0xab, 0x10, 0x3e, 0xf0, 0x56, 0x31, 0xfc, 0x33, 0xf6, 0xf4, 0x77, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x1a, 0x89, 0xfa, 0xcf, 0x03, 0x09, 0x00, 0x00,
+	// 745 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x56, 0xcd, 0x4e, 0xdb, 0x4a,
+	0x18, 0x8d, 0x21, 0x84, 0x9b, 0x01, 0x71, 0x6f, 0x7c, 0xd1, 0x25, 0xb1, 0x2e, 0x26, 0xcd, 0xa6,
+	0x14, 0x09, 0xbb, 0xa1, 0x12, 0x48, 0xec, 0x08, 0x55, 0xd5, 0x4a, 0x0d, 0xaa, 0x42, 0x61, 0xd1,
+	0x05, 0x68, 0x62, 0x4f, 0x87, 0x51, 0xe3, 0x19, 0xcb, 0x33, 0x09, 0xb0, 0xab, 0xfa, 0x04, 0x55,
+	0xdf, 0xa3, 0x12, 0x0b, 0x9e, 0xa1, 0x62, 0x89, 0x58, 0x75, 0x55, 0x55, 0xb0, 0x60, 0x51, 0x75,
+	0xdf, 0x65, 0x65, 0xcf, 0x38, 0x3f, 0xd8, 0x01, 0xaa, 0x76, 0x51, 0x75, 0x17, 0xcf, 0x39, 0x73,
+	0xbe, 0xef, 0x9c, 0x99, 0xf9, 0x14, 0x60, 0xf0, 0x36, 0x0d, 0x08, 0x47, 0x76, 0x8b, 0x39, 0xaf,
+	0xda, 0xbe, 0xdd, 0xa9, 0xda, 0xe2, 0xc0, 0xf2, 0x03, 0x26, 0x98, 0x5e, 0x50, 0x98, 0x25, 0x31,
+	0xab, 0x53, 0x35, 0x4c, 0x87, 0x71, 0x8f, 0x71, 0xbb, 0x09, 0x39, 0xb2, 0x3b, 0xd5, 0x26, 0x12,
+	0xb0, 0x6a, 0x3b, 0x8c, 0x50, 0xb9, 0xc5, 0x98, 0x51, 0xb8, 0xc7, 0x71, 0x28, 0xe5, 0x71, 0xac,
+	0x80, 0x92, 0x04, 0x76, 0xa3, 0x2f, 0x5b, 0x7e, 0x28, 0x68, 0x1a, 0x33, 0xcc, 0xe4, 0x7a, 0xf8,
+	0x4b, 0xad, 0xce, 0x61, 0xc6, 0x70, 0x0b, 0xd9, 0xd1, 0x57, 0xb3, 0xfd, 0xd2, 0x16, 0xc4, 0x43,
+	0x5c, 0x40, 0xcf, 0x57, 0x04, 0x33, 0xd9, 0xb9, 0x0f, 0x03, 0xe8, 0x29, 0xd9, 0xca, 0x3b, 0x0d,
+	0xfc, 0x5d, 0xe7, 0x78, 0xcb, 0x77, 0xa1, 0x40, 0xcf, 0x22, 0x44, 0x5f, 0x06, 0x79, 0xd8, 0x16,
+	0x7b, 0x2c, 0x20, 0xe2, 0xb0, 0xa8, 0x95, 0xb5, 0xf9, 0x7c, 0xad, 0x78, 0x76, 0xbc, 0x38, 0xad,
+	0xfa, 0x59, 0x73, 0xdd, 0x00, 0x71, 0xbe, 0x29, 0x02, 0x42, 0x71, 0xa3, 0x47, 0xd5, 0x57, 0x40,
+	0x4e, 0x6a, 0x17, 0x47, 0xca, 0xda, 0xfc, 0xc4, 0x52, 0xc9, 0x4a, 0x44, 0x63, 0xc9, 0x12, 0xb5,
+	0xec, 0xc9, 0xa7, 0xb9, 0x4c, 0x43, 0xd1, 0x57, 0xa7, 0xde, 0x5c, 0x1e, 0x2d, 0xf4, 0x84, 0x2a,
+	0x25, 0x30, 0x73, 0xa5, 0xa7, 0x06, 0xe2, 0x3e, 0xa3, 0x1c, 0x55, 0xbe, 0x69, 0x60, 0xba, 0xce,
+	0xf1, 0x13, 0x4a, 0xc4, 0xd3, 0x48, 0x74, 0xcd, 0x71, 0x58, 0x9b, 0x0a, 0xfd, 0x3e, 0xc8, 0x71,
+	0x44, 0x5d, 0x14, 0xdc, 0xd8, 0xb1, 0xe2, 0xe9, 0x16, 0x18, 0x63, 0xfb, 0x14, 0x05, 0x51, 0xb7,
+	0xd7, 0x6d, 0x90, 0x34, 0x7d, 0x16, 0x00, 0x2e, 0x60, 0x20, 0x76, 0xc3, 0x8c, 0x8b, 0xa3, 0x65,
+	0x6d, 0x7e, 0xb4, 0x91, 0x8f, 0x56, 0x9e, 0x13, 0x0f, 0xe9, 0x25, 0xf0, 0x17, 0xa2, 0xae, 0x04,
+	0xb3, 0x11, 0x38, 0x8e, 0xa8, 0x1b, 0x41, 0x2b, 0x20, 0x07, 0xbd, 0xb0, 0xcb, 0xe2, 0x98, 0x0a,
+	0x46, 0xd5, 0x09, 0x2f, 0x88, 0xa5, 0x2e, 0x88, 0xb5, 0xce, 0x08, 0x8d, 0x83, 0x91, 0xf4, 0xd5,
+	0x89, 0x30, 0x18, 0xd5, 0x6f, 0xc5, 0x04, 0xff, 0xa7, 0x39, 0xef, 0x46, 0xf3, 0x45, 0x46, 0xb3,
+	0xc1, 0xe8, 0x36, 0x13, 0x84, 0xe2, 0x87, 0xa8, 0x85, 0x30, 0x14, 0xa8, 0x67, 0x54, 0xbb, 0x9d,
+	0xd1, 0x29, 0x30, 0x42, 0xdc, 0x28, 0x95, 0x6c, 0x63, 0x84, 0xb8, 0xfa, 0x06, 0x28, 0x74, 0x60,
+	0x8b, 0xb8, 0x50, 0xb0, 0x60, 0x17, 0xca, 0x1d, 0x91, 0xff, 0x7c, 0xed, 0xce, 0xd9, 0xf1, 0xe2,
+	0xac, 0xd2, 0xda, 0x8e, 0x39, 0x83, 0xa2, 0xff, 0x74, 0xae, 0xac, 0xf7, 0xc5, 0x91, 0xfd, 0xb1,
+	0x38, 0x40, 0x18, 0x87, 0x6c, 0x52, 0xa5, 0x91, 0x30, 0xdb, 0x4d, 0xe3, 0xab, 0x06, 0xfe, 0xeb,
+	0x27, 0x6c, 0x51, 0xf7, 0x8f, 0xce, 0xa3, 0x0c, 0xcc, 0x74, 0xbb, 0xdd, 0x44, 0xde, 0xcb, 0xa7,
+	0xbe, 0xde, 0x82, 0xc4, 0x6b, 0xa0, 0x7d, 0x18, 0xb8, 0xfc, 0x77, 0x8b, 0x62, 0xc0, 0x91, 0x9c,
+	0x02, 0xfd, 0xed, 0x76, 0xad, 0x7c, 0xd0, 0xc0, 0x78, 0x9d, 0xe3, 0x4d, 0x44, 0xdd, 0x9f, 0xb6,
+	0xb0, 0x0c, 0xf2, 0x01, 0x72, 0x88, 0x4f, 0x10, 0x15, 0xaa, 0xf5, 0x6b, 0xa6, 0x5d, 0x97, 0xfa,
+	0x6b, 0x4e, 0xad, 0x10, 0x1d, 0x49, 0xe8, 0x23, 0xf6, 0xb6, 0x74, 0x99, 0x05, 0xa3, 0x75, 0x8e,
+	0xf5, 0x1d, 0x30, 0x39, 0x30, 0x95, 0x2b, 0x29, 0xd3, 0xf4, 0xca, 0x94, 0x34, 0x16, 0x6e, 0xe6,
+	0xc4, 0x75, 0x74, 0x0f, 0x14, 0x92, 0x53, 0xf4, 0x6e, 0xba, 0x40, 0x82, 0x68, 0xd8, 0xb7, 0x24,
+	0xf6, 0x97, 0x4b, 0x4e, 0xa6, 0x21, 0xe5, 0x12, 0xc4, 0x61, 0xe5, 0x86, 0x3e, 0x7f, 0x9d, 0x83,
+	0x7f, 0xd3, 0x9e, 0xfe, 0xbd, 0x1b, 0x74, 0x7a, 0x54, 0xa3, 0x7a, 0x6b, 0x6a, 0xb7, 0xe8, 0x0e,
+	0x98, 0x1c, 0x78, 0x5d, 0x43, 0x8e, 0xac, 0x9f, 0x33, 0xec, 0xc8, 0xd2, 0xae, 0xbd, 0xfe, 0x08,
+	0x64, 0xa3, 0x2b, 0x6f, 0xa4, 0xef, 0x09, 0x31, 0xa3, 0x32, 0x1c, 0x8b, 0x75, 0x8c, 0xb1, 0xd7,
+	0x97, 0x47, 0x0b, 0x5a, 0xed, 0xf1, 0xc9, 0xb9, 0xa9, 0x9d, 0x9e, 0x9b, 0xda, 0xe7, 0x73, 0x53,
+	0x7b, 0x7b, 0x61, 0x66, 0x4e, 0x2f, 0xcc, 0xcc, 0xc7, 0x0b, 0x33, 0xf3, 0xc2, 0xc2, 0x44, 0xec,
+	0xb5, 0x9b, 0x96, 0xc3, 0x3c, 0x5b, 0xc9, 0xb5, 0xe0, 0x21, 0x0a, 0xe2, 0x0f, 0xfb, 0x20, 0xfe,
+	0x3f, 0x21, 0x0e, 0x7d, 0xc4, 0x9b, 0xb9, 0xe8, 0xcf, 0xc4, 0x83, 0xef, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0x39, 0xc4, 0x47, 0x36, 0x28, 0x09, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1055,23 +1092,24 @@ func (m *MsgInitLockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x22
-	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.EndTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.EndTime):])
-	if err3 != nil {
-		return 0, err3
+	dAtA[i] = 0x2a
+	if m.EndTime != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.EndTime))
+		i--
+		dAtA[i] = 0x20
 	}
-	i -= n3
-	i = encodeVarintTx(dAtA, i, uint64(n3))
-	i--
-	dAtA[i] = 0x1a
-	n4, err4 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime):])
-	if err4 != nil {
-		return 0, err4
+	if m.StartTime != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.StartTime))
+		i--
+		dAtA[i] = 0x18
 	}
-	i -= n4
-	i = encodeVarintTx(dAtA, i, uint64(n4))
-	i--
-	dAtA[i] = 0x12
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
@@ -1134,13 +1172,18 @@ func (m *MsgNonVotingDelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x1a
-	if len(m.Validator) > 0 {
-		i -= len(m.Validator)
-		copy(dAtA[i:], m.Validator)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+	dAtA[i] = 0x22
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
@@ -1204,13 +1247,18 @@ func (m *MsgNonVotingUndelegate) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x1a
-	if len(m.Validator) > 0 {
-		i -= len(m.Validator)
-		copy(dAtA[i:], m.Validator)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+	dAtA[i] = 0x22
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
@@ -1265,12 +1313,17 @@ func (m *MsgClaimRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Validator) > 0 {
-		i -= len(m.Validator)
-		copy(dAtA[i:], m.Validator)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Validator)))
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
@@ -1325,26 +1378,27 @@ func (m *MsgSend) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Amount) > 0 {
-		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTx(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
+	{
+		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x22
 	if len(m.Recipient) > 0 {
 		i -= len(m.Recipient)
 		copy(dAtA[i:], m.Recipient)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Recipient)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
@@ -1424,10 +1478,16 @@ func (m *MsgInitLockupAccount) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.StartTime)
-	n += 1 + l + sovTx(uint64(l))
-	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.EndTime)
-	n += 1 + l + sovTx(uint64(l))
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.StartTime != 0 {
+		n += 1 + sovTx(uint64(m.StartTime))
+	}
+	if m.EndTime != 0 {
+		n += 1 + sovTx(uint64(m.EndTime))
+	}
 	l = m.Amount.Size()
 	n += 1 + l + sovTx(uint64(l))
 	return n
@@ -1452,7 +1512,10 @@ func (m *MsgNonVotingDelegate) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Validator)
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	l = len(m.ValidatorAddress)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1480,7 +1543,10 @@ func (m *MsgNonVotingUndelegate) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Validator)
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	l = len(m.ValidatorAddress)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1508,7 +1574,10 @@ func (m *MsgClaimRewards) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Validator)
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	l = len(m.ValidatorAddress)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1534,16 +1603,15 @@ func (m *MsgSend) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
 	l = len(m.Recipient)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if len(m.Amount) > 0 {
-		for _, e := range m.Amount {
-			l = e.Size()
-			n += 1 + l + sovTx(uint64(l))
-		}
-	}
+	l = m.Amount.Size()
+	n += 1 + l + sovTx(uint64(l))
 	return n
 }
 
@@ -1790,9 +1858,9 @@ func (m *MsgInitLockupAccount) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1802,30 +1870,29 @@ func (m *MsgInitLockupAccount) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthTx
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthTx
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.StartTime, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
 			}
-			var msglen int
+			m.StartTime = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1835,26 +1902,31 @@ func (m *MsgInitLockupAccount) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				m.StartTime |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.EndTime, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			m.EndTime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EndTime |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -2020,8 +2092,27 @@ func (m *MsgNonVotingDelegate) Unmarshal(dAtA []byte) error {
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2049,9 +2140,9 @@ func (m *MsgNonVotingDelegate) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Validator = string(dAtA[iNdEx:postIndex])
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -2217,8 +2308,27 @@ func (m *MsgNonVotingUndelegate) Unmarshal(dAtA []byte) error {
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2246,9 +2356,9 @@ func (m *MsgNonVotingUndelegate) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Validator = string(dAtA[iNdEx:postIndex])
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -2414,8 +2524,27 @@ func (m *MsgClaimRewards) Unmarshal(dAtA []byte) error {
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2443,7 +2572,7 @@ func (m *MsgClaimRewards) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Validator = string(dAtA[iNdEx:postIndex])
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2578,6 +2707,25 @@ func (m *MsgSend) Unmarshal(dAtA []byte) error {
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Recipient", wireType)
 			}
@@ -2609,7 +2757,7 @@ func (m *MsgSend) Unmarshal(dAtA []byte) error {
 			}
 			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -2638,8 +2786,7 @@ func (m *MsgSend) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Amount = append(m.Amount, types.Coin{})
-			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

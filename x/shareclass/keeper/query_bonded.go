@@ -11,7 +11,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (q queryServer) Bonded(ctx context.Context, req *types.QueryBondedRequest) (*types.QueryBondedResponse, error) {
+func (q queryServer) AddressBonded(ctx context.Context, req *types.QueryAddressBondedRequest) (*types.QueryAddressBondedResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -28,7 +28,7 @@ func (q queryServer) Bonded(ctx context.Context, req *types.QueryBondedRequest) 
 		return nil, err
 	}
 
-	amount := make(map[string]sdk.Coin)
+	bonds := []types.ValidatorBond{}
 
 	for _, balance := range balances {
 		matches := types.NonVotingShareTokenDenomRegexp().FindStringSubmatch(balance.Denom)
@@ -38,9 +38,12 @@ func (q queryServer) Bonded(ctx context.Context, req *types.QueryBondedRequest) 
 			if err != nil {
 				return nil, err
 			}
-			amount[validatorAddr] = sdk.NewCoin(feeDenom, bondAmount)
+			bonds = append(bonds, types.ValidatorBond{
+				ValidatorAddress: validatorAddr,
+				Amount:           sdk.NewCoin(feeDenom, bondAmount),
+			})
 		}
 	}
 
-	return &types.QueryBondedResponse{Amount: amount}, nil
+	return &types.QueryAddressBondedResponse{Bonds: bonds}, nil
 }

@@ -15,9 +15,19 @@ service Query {
     option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/params";
   }
 
-  // LockupAccountAddress queries the lockup account address for a given owner.
-  rpc LockupAccount(QueryLockupAccountRequest) returns (QueryLockupAccountResponse) {
+  // LockupAccounts queries all lockup accounts for a given owner.
+  rpc LockupAccounts(QueryLockupAccountsRequest) returns (QueryLockupAccountsResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}";
+  }
+
+  // LockupAccount queries a lockup account for a given owner and id.
+  rpc LockupAccount(QueryLockupAccountRequest) returns (QueryLockupAccountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}/{id}";
+  }
+
+  // SpendableAmount queries the spendable amount for a given owner and id.
+  rpc SpendableAmount(QuerySpendableAmountRequest) returns (QuerySpendableAmountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/spendable-amount/{owner}/{id}";
   }
 }
 
@@ -30,14 +40,36 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
+// QueryLockupAccountsRequest is request type for the Query/LockupAccounts RPC method.
+message QueryLockupAccountsRequest {
+  string owner = 1;
+}
+
+// QueryLockupAccountsResponse is response type for the Query/LockupAccounts RPC method.
+message QueryLockupAccountsResponse {
+  repeated LockupAccount lockup_accounts = 1 [(gogoproto.nullable) = false];
+}
+
 // QueryLockupAccountRequest is request type for the Query/LockupAccount RPC method.
 message QueryLockupAccountRequest {
   string owner = 1;
+  uint64 id = 2;
 }
 
 // QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
 message QueryLockupAccountResponse {
   LockupAccount lockup_account = 1 [(gogoproto.nullable) = false];
-  string lockup_account_address = 2;
+  string locked_amount = 2;
   string unlocked_amount = 3;
+}
+
+// QuerySpendableAmountRequest is request type for the Query/SpendableAmount RPC method.
+message QuerySpendableAmountRequest {
+  string owner = 1;
+  uint64 id = 2;
+}
+
+// QuerySpendableAmountResponse is response type for the Query/SpendableAmount RPC method.
+message QuerySpendableAmountResponse {
+  string spendable_amount = 1;
 }

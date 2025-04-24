@@ -23,6 +23,9 @@ func RewardSaverAddress(validatorAddress string) sdk.AccAddress {
 }
 
 func CalculateShareByAmount(totalShare, totalBonded, amount math.Int) (math.Int, error) {
+	if totalShare.IsZero() {
+		return amount, nil
+	}
 	if totalBonded.IsZero() {
 		return amount, nil
 	}

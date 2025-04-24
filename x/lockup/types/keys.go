@@ -20,10 +20,12 @@ const (
 )
 
 var (
-	ParamsKey               = collections.NewPrefix("params")
-	LockupAccountsKeyPrefix = collections.NewPrefix("lockup_accounts")
+	ParamsKey                    = collections.NewPrefix("params")
+	NextLockupAccountIdKeyPrefix = collections.NewPrefix("next_lockup_account_id")
+	LockupAccountsKeyPrefix      = collections.NewPrefix("lockup_accounts")
 )
 
 var (
-	LockupAccountsKeyCodec = sdk.AccAddressKey
+	NextLockupAccountIdKeyCodec = sdk.AccAddressKey
+	LockupAccountsKeyCodec      = collections.PairKeyCodec(collections.BytesKey, collections.Uint64Key)
 )

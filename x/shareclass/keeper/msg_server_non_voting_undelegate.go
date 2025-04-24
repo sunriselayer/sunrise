@@ -14,7 +14,7 @@ import (
 func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVotingUndelegate) (*types.MsgNonVotingUndelegateResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	// Validate amount
@@ -30,19 +30,19 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	// Claim rewards
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
-	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+	rewards, err := k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
 	if err != nil {
 		return nil, err
 	}
 
 	// Calculate unbonding share
-	shareDenom := types.NonVotingShareTokenDenom(msg.Validator)
-	unbondingShare, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
+	shareDenom := types.NonVotingShareTokenDenom(msg.ValidatorAddress)
+	unbondingShare, err := k.CalculateShareByAmount(ctx, msg.ValidatorAddress, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -70,8 +70,8 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	output := sdk.NewCoin(bondDenom, msg.Amount.Amount)
 
 	res, err := k.StakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
-		DelegatorAddress: msg.Sender,
-		ValidatorAddress: msg.Validator,
+		DelegatorAddress: moduleAddr.String(),
+		ValidatorAddress: msg.ValidatorAddress,
 		Amount:           output,
 	})
 	if err != nil {
@@ -102,5 +102,6 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	return &types.MsgNonVotingUndelegateResponse{
 		CompletionTime: res.CompletionTime,
 		Amount:         output,
+		Rewards:        rewards,
 	}, nil
 }
