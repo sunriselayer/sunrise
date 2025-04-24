@@ -14,7 +14,7 @@ import (
 func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVotingUndelegate) (*types.MsgNonVotingUndelegateResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	// Validate amount
@@ -35,7 +35,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
-	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+	rewards, err := k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -109,5 +109,6 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	return &types.MsgNonVotingUndelegateResponse{
 		CompletionTime: undelegateResponse.CompletionTime,
 		Amount:         output,
+		Rewards:        rewards,
 	}, nil
 }

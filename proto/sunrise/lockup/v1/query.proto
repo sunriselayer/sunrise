@@ -1,0 +1,75 @@
+syntax = "proto3";
+package sunrise.lockup.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "sunrise/lockup/v1/lockup_account.proto";
+import "sunrise/lockup/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/params";
+  }
+
+  // LockupAccounts queries all lockup accounts for a given owner.
+  rpc LockupAccounts(QueryLockupAccountsRequest) returns (QueryLockupAccountsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}";
+  }
+
+  // LockupAccount queries a lockup account for a given owner and id.
+  rpc LockupAccount(QueryLockupAccountRequest) returns (QueryLockupAccountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}/{id}";
+  }
+
+  // SpendableAmount queries the spendable amount for a given owner and id.
+  rpc SpendableAmount(QuerySpendableAmountRequest) returns (QuerySpendableAmountResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/spendable-amount/{owner}/{id}";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryLockupAccountsRequest is request type for the Query/LockupAccounts RPC method.
+message QueryLockupAccountsRequest {
+  string owner = 1;
+}
+
+// QueryLockupAccountsResponse is response type for the Query/LockupAccounts RPC method.
+message QueryLockupAccountsResponse {
+  repeated LockupAccount lockup_accounts = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryLockupAccountRequest is request type for the Query/LockupAccount RPC method.
+message QueryLockupAccountRequest {
+  string owner = 1;
+  uint64 id = 2;
+}
+
+// QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
+message QueryLockupAccountResponse {
+  LockupAccount lockup_account = 1 [(gogoproto.nullable) = false];
+  string locked_amount = 2;
+  string unlocked_amount = 3;
+}
+
+// QuerySpendableAmountRequest is request type for the Query/SpendableAmount RPC method.
+message QuerySpendableAmountRequest {
+  string owner = 1;
+  uint64 id = 2;
+}
+
+// QuerySpendableAmountResponse is response type for the Query/SpendableAmount RPC method.
+message QuerySpendableAmountResponse {
+  string spendable_amount = 1;
+}

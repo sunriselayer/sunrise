@@ -1,0 +1,58 @@
+syntax = "proto3";
+package sunrise.lockup.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
+
+// LockupAccount defines the lockup account.
+message LockupAccount {
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 3 [(amino.dont_omitempty) = true];
+  int64 start_time = 4;
+  int64 end_time = 5;
+  string original_locking = 6 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string delegated_free = 7 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  string delegated_locking = 8 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  UnbondingEntries unbond_entries = 9;
+  string additional_locking = 10 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// UnbondingEntries list of elements
+message UnbondingEntries {
+  repeated UnbondingEntry entries = 1;
+}
+
+// UnbondingEntry defines an entry tracking the lockup account unbonding operation.
+message UnbondingEntry {
+  int64 creation_height = 1;
+  // end time of entry
+  int64 end_time = 2;
+  // unbond amount
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  // validator address
+  string validator_address = 4 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}

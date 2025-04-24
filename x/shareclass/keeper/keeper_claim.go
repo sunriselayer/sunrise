@@ -94,6 +94,11 @@ func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAd
 	if err != nil {
 		return math.Int{}, err
 	}
+	// Update the user's last reward multiplier
+	err = k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom, rewardMultiplier)
+	if err != nil {
+		return math.Int{}, err
+	}
 
 	rewardAmount, err := types.CalculateReward(rewardMultiplier, userLastRewardMultiplier, share)
 	if err != nil {
