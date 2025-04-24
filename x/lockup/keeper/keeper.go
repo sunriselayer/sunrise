@@ -10,7 +10,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/lockup/types"
-	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 type Keeper struct {
@@ -29,9 +28,10 @@ type Keeper struct {
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
+	stakingKeeper types.StakingKeeper
 	feeKeeper     types.FeeKeeper
 
-	ShareclassMsgServer shareclasstypes.MsgServer
+	shareclassKeeper types.ShareclassKeeper
 }
 
 func NewKeeper(
@@ -41,8 +41,9 @@ func NewKeeper(
 	authority []byte,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
 	feeKeeper types.FeeKeeper,
-	shareclassMsgServer shareclasstypes.MsgServer,
+	shareclassKeeper types.ShareclassKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -62,9 +63,10 @@ func NewKeeper(
 
 		accountKeeper: accountKeeper,
 		bankKeeper:    bankKeeper,
+		stakingKeeper: stakingKeeper,
 		feeKeeper:     feeKeeper,
 
-		ShareclassMsgServer: shareclassMsgServer,
+		shareclassKeeper: shareclassKeeper,
 	}
 
 	schema, err := sb.Build()
