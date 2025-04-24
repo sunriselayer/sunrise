@@ -8,6 +8,12 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 
+// ValidatorBond
+message ValidatorBond {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
 // Unbonding
 message Unbonding {
   uint64 id = 1;

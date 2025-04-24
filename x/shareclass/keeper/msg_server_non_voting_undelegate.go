@@ -5,77 +5,14 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVotingUndelegate) (*types.MsgNonVotingUndelegateResponse, error) {
 	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
-	}
-
-	// Validate amount
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
-	if err != nil {
-		return nil, err
-	}
-	if msg.Amount.Denom != feeDenom {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount denom must be equal to fee denom")
-	}
-	if !msg.Amount.IsPositive() {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount must be positive")
-	}
-
-	// Claim rewards
-	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid validator address")
-	}
-
-	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	// Calculate unbonding share
-	shareDenom := types.NonVotingShareTokenDenom(msg.Validator)
-	unbondingShare, err := k.CalculateShareByAmount(ctx, msg.Validator, msg.Amount.Amount)
-	if err != nil {
-		return nil, err
-	}
-
-	// Send non transferrable share token to module
-	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, unbondingShare))
-
-	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, coins)
-	if err != nil {
-		return nil, err
-	}
-
-	// Burn non transferrable share token
-	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
-	err = k.bankKeeper.BurnCoins(ctx, moduleAddr, coins)
-	if err != nil {
-		return nil, err
-	}
-
-	// Undelegate
-	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
-	if err != nil {
-		return nil, err
-	}
-	output := sdk.NewCoin(bondDenom, msg.Amount.Amount)
-
-	res, err := k.StakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
-		DelegatorAddress: msg.Sender,
-		ValidatorAddress: msg.Validator,
-		Amount:           output,
-	})
-	if err != nil {
-		return nil, err
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	// Set recipient
@@ -89,18 +26,19 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		}
 	}
 
-	// Append Unstaking state
-	_, err = k.AppendUnbonding(ctx, types.Unbonding{
-		Address:        recipient.String(),
-		CompletionTime: res.CompletionTime,
-		Amount:         output,
-	})
+	validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+
+	output, rewards, completionTime, err := k.Undelegate(ctx, sender, recipient, validatorAddr, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	return &types.MsgNonVotingUndelegateResponse{
-		CompletionTime: res.CompletionTime,
+		CompletionTime: completionTime,
 		Amount:         output,
+		Rewards:        rewards,
 	}, nil
 }

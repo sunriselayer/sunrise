@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
@@ -12,11 +13,10 @@ import (
 
 func (k Keeper) GetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAddress, denom string) (math.Dec, error) {
 	rewardMultiplierString, err := k.RewardMultiplier.Get(ctx, collections.Join([]byte(validatorAddr), denom))
-	if err == collections.ErrNotFound {
-		return math.NewDecFromInt64(0), nil
-	}
-
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return math.NewDecFromInt64(0), nil
+		}
 		return math.Dec{}, err
 	}
 	return math.NewDecFromString(rewardMultiplierString)
@@ -32,11 +32,10 @@ func (k Keeper) SetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAd
 
 func (k Keeper) GetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.Dec, error) {
 	userLastRewardMultiplierString, err := k.UsersLastRewardMultiplier.Get(ctx, collections.Join3(sender, []byte(validatorAddr), denom))
-	if err == collections.ErrNotFound {
-		return math.NewDecFromInt64(0), nil
-	}
-
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return math.NewDecFromInt64(0), nil
+		}
 		return math.Dec{}, err
 	}
 	return math.NewDecFromString(userLastRewardMultiplierString)
@@ -92,6 +91,11 @@ func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAd
 	}
 
 	userLastRewardMultiplier, err := k.GetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom)
+	if err != nil {
+		return math.Int{}, err
+	}
+	// Update the user's last reward multiplier
+	err = k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom, rewardMultiplier)
 	if err != nil {
 		return math.Int{}, err
 	}

@@ -3,7 +3,6 @@ package mint
 import (
 	"context"
 	"encoding/binary"
-	"fmt"
 	"time"
 
 	"cosmossdk.io/core/appmodule"
@@ -12,7 +11,6 @@ import (
 
 	minttypes "cosmossdk.io/x/mint/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	liquidityincentivetypes "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
 )
@@ -74,46 +72,16 @@ func ProvideMintFn(bankKeeper BankKeeper) minttypes.MintFn {
 		secondsSinceLastMint := env.HeaderService.HeaderInfo(ctx).Time.Unix() - (int64)(lastMint)
 
 		blockProvision := annualProvision.Mul(math.NewInt(secondsSinceLastMint)).Quo(math.NewInt(secondsPerYear))
-
 		if blockProvision.IsPositive() {
-			res, err := env.QueryRouterService.Invoke(ctx, &liquidityincentivetypes.QueryParamsRequest{})
-			if err != nil {
+			feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, blockProvision))
+
+			if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, feeCoins); err != nil {
 				return err
 			}
-			liquidityIncentiveParamsRes, ok := res.(*liquidityincentivetypes.QueryParamsResponse)
-			if !ok {
-				return fmt.Errorf("unexpected response type: %T", res)
-			}
-			stakingRewardRatio, err := math.LegacyNewDecFromStr(liquidityIncentiveParamsRes.Params.StakingRewardRatio)
-			if err != nil {
+			if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, feeCoins); err != nil {
 				return err
-			}
-			feeProvision := stakingRewardRatio.MulInt(blockProvision).TruncateInt()
-			bondProvision := blockProvision.Sub(feeProvision)
-
-			if feeProvision.IsPositive() {
-				feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, feeProvision))
-
-				if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, feeCoins); err != nil {
-					return err
-				}
-				if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, feeCoins); err != nil {
-					return err
-				}
-			}
-
-			if bondProvision.IsPositive() {
-				bondCoins := sdk.NewCoins(sdk.NewCoin(consts.BondDenom, bondProvision))
-
-				if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, bondCoins); err != nil {
-					return err
-				}
-				if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, bondCoins); err != nil {
-					return err
-				}
 			}
 		}
-
 		return nil
 	}
 }

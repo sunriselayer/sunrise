@@ -3,7 +3,7 @@ package sunrise.shareclass.v1;
 
 import "gogoproto/gogo.proto";
 import "sunrise/shareclass/v1/params.proto";
-import "sunrise/shareclass/v1/unbonding.proto";
+import "sunrise/shareclass/v1/bond.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 

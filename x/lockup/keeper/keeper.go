@@ -10,7 +10,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/lockup/types"
-	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 type Keeper struct {
@@ -22,15 +21,17 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema         collections.Schema
-	Params         collections.Item[types.Params]
-	LockupAccounts collections.Map[sdk.AccAddress, types.LockupAccount]
+	Schema              collections.Schema
+	Params              collections.Item[types.Params]
+	NextLockupAccountId collections.Map[sdk.AccAddress, uint64]
+	LockupAccounts      collections.Map[collections.Pair[[]byte, uint64], types.LockupAccount]
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
+	stakingKeeper types.StakingKeeper
 	feeKeeper     types.FeeKeeper
 
-	ShareclassMsgServer shareclasstypes.MsgServer
+	shareclassKeeper types.ShareclassKeeper
 }
 
 func NewKeeper(
@@ -40,8 +41,9 @@ func NewKeeper(
 	authority []byte,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
 	feeKeeper types.FeeKeeper,
-	shareclassMsgServer shareclasstypes.MsgServer,
+	shareclassKeeper types.ShareclassKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -55,14 +57,16 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params:         collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		LockupAccounts: collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
+		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		NextLockupAccountId: collections.NewMap(sb, types.NextLockupAccountIdKeyPrefix, "next_lockup_account_id", types.NextLockupAccountIdKeyCodec, collections.Uint64Value),
+		LockupAccounts:      collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
 
 		accountKeeper: accountKeeper,
 		bankKeeper:    bankKeeper,
+		stakingKeeper: stakingKeeper,
 		feeKeeper:     feeKeeper,
 
-		ShareclassMsgServer: shareclassMsgServer,
+		shareclassKeeper: shareclassKeeper,
 	}
 
 	schema, err := sb.Build()

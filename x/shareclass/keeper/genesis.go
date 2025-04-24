@@ -17,7 +17,10 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 			return err
 		}
 	}
-	k.SetUnbondingId(ctx, genState.UnbondingCount)
+	err := k.SetUnbondingId(ctx, genState.UnbondingCount)
+	if err != nil {
+		return err
+	}
 
 	for _, elem := range genState.RewardMultipliers {
 		validatorAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(elem.Validator)

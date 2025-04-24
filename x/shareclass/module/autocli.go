@@ -18,6 +18,49 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				// this line is used by ignite scaffolding # autocli/query
+				{
+					RpcMethod: "AddressBonded",
+					Use:       "address-bonded <address>",
+					Short:     "Shows the bonded amount of an address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "address"},
+					},
+				},
+				{
+					RpcMethod: "AddressUnbonding",
+					Use:       "address-unbonding <address>",
+					Short:     "Shows the unbonding of an address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "address"},
+					},
+				},
+				{
+					RpcMethod: "CalculateBondingAmount",
+					Use:       "calculate-bonding-amount <validator_address> <share>",
+					Short:     "Shows the bonding amount of a validator by share",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "share"},
+					},
+				},
+				{
+					RpcMethod: "CalculateShare",
+					Use:       "calculate-share <validator_address> <amount>",
+					Short:     "Shows the share of a validator by amount",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "amount"},
+					},
+				},
+				{
+					RpcMethod: "ClaimableRewards",
+					Use:       "claimable-rewards <address> <validator_address>",
+					Short:     "Shows the claimable rewards of a validator",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "address"},
+						{ProtoField: "validator_address"},
+					},
+				},
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
@@ -29,28 +72,44 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "NonVotingDelegate",
-					Use:            "non-voting-delegate",
-					Short:          "Send a non-voting-delegate tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "NonVotingDelegate",
+					Use:       "non-voting-delegate <validator_address> <amount> <denom>",
+					Short:     "Send a non-voting-delegate tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
 				},
 				{
-					RpcMethod:      "NonVotingUndelegate",
-					Use:            "non-voting-undelegate",
-					Short:          "Send a non-voting-undelegate tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "NonVotingUndelegate",
+					Use:       "non-voting-undelegate <validator_address> <amount> <denom> <recipient>",
+					Short:     "Send a non-voting-undelegate tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+						{ProtoField: "recipient"},
+					},
 				},
 				{
-					RpcMethod:      "ClaimRewards",
-					Use:            "claim-rewards",
-					Short:          "Send a claim-rewards tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "ClaimRewards",
+					Use:       "claim-rewards <validator_address>",
+					Short:     "Send a claim-rewards tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+					},
 				},
 				{
-					RpcMethod:      "CreateValidator",
-					Use:            "create-validator",
-					Short:          "Send a create-validator tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "CreateValidator",
+					Use:       "create-validator <validator_address> <min_self_delegation> <amount> <denom>",
+					Short:     "Send a create-validator tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "validator_address"},
+						{ProtoField: "min_self_delegation"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

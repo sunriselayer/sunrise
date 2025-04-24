@@ -55,18 +55,27 @@ message MsgUpdateParamsResponse {}
 message MsgNonVotingDelegate {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
 }
 
 // MsgNonVotingDelegateResponse
-message MsgNonVotingDelegateResponse {}
+message MsgNonVotingDelegateResponse {
+  repeated cosmos.base.v1beta1.Coin share = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin rewards = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
 
 // MsgNonVotingUndelegate
 message MsgNonVotingUndelegate {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
   string recipient = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
@@ -78,13 +87,17 @@ message MsgNonVotingUndelegateResponse {
     (gogoproto.stdtime) = true
   ];
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin rewards = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgClaimRewards
 message MsgClaimRewards {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
 }
 
 // MsgClaimRewardsResponse

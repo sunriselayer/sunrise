@@ -139,7 +139,6 @@ var (
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
-		shareclassmoduletypes.ModuleName,
 		lockupmoduletypes.ModuleName,
 	}
 

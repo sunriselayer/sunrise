@@ -18,6 +18,32 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Shows the parameters of the module",
 				},
 				// this line is used by ignite scaffolding # autocli/query
+				{
+					RpcMethod: "LockupAccounts",
+					Use:       "lockup-accounts [owner]",
+					Short:     "Shows the lockup accounts of the owner",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+					},
+				},
+				{
+					RpcMethod: "LockupAccount",
+					Use:       "lockup-account [owner] [id]",
+					Short:     "Shows the lockup account of the owner and id",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+						{ProtoField: "id"},
+					},
+				},
+				{
+					RpcMethod: "SpendableAmount",
+					Use:       "spendable-amount [owner] [id]",
+					Short:     "Shows the spendable amount of the lockup account",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+						{ProtoField: "id"},
+					},
+				},
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
@@ -29,34 +55,58 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod:      "InitLockupAccount",
-					Use:            "init-lockup-account",
-					Short:          "Send a init-lockup-account tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "InitLockupAccount",
+					Use:       "init-lockup-account [owner] [start_time] [end_time] [amount] [denom]",
+					Short:     "Send a init-lockup-account tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "owner"},
+						{ProtoField: "start_time"},
+						{ProtoField: "end_time"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
 				},
 				{
-					RpcMethod:      "NonVotingDelegate",
-					Use:            "non-voting-delegate",
-					Short:          "Send a non-voting-delegate tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "NonVotingDelegate",
+					Use:       "non-voting-delegate [id] [validator_address] [amount] [denom]",
+					Short:     "Send a non-voting-delegate tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "validator_address"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
 				},
 				{
-					RpcMethod:      "NonVotingUndelegate",
-					Use:            "non-voting-undelegate",
-					Short:          "Send a non-voting-undelegate tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "NonVotingUndelegate",
+					Use:       "non-voting-undelegate [id] [validator_address] [amount] [denom]",
+					Short:     "Send a non-voting-undelegate tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "validator_address"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
 				},
 				{
-					RpcMethod:      "ClaimRewards",
-					Use:            "claim-rewards",
-					Short:          "Send a claim-rewards tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "ClaimRewards",
+					Use:       "claim-rewards [id] [validator_address]",
+					Short:     "Send a claim-rewards tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "validator_address"},
+					},
 				},
 				{
-					RpcMethod:      "Send",
-					Use:            "send",
-					Short:          "Send a send tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "Send",
+					Use:       "send [id] [recipient] [amount] [denom]",
+					Short:     "Send a send tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "recipient"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
