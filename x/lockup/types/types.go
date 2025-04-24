@@ -11,52 +11,39 @@ func LockupAccountModule(owner string) string {
 	return fmt.Sprintf("%s/%s", ModuleName, owner)
 }
 
-func CalculateUnlockedAmount(lockupAmount math.Int, startTime int64, endTime int64, now int64) (math.Int, error) {
+func (lockup LockupAccount) GetLockCoinInfo(blockTime int64) (unlockedAmount, lockedAmount math.Int, err error) {
+	startTime := lockup.StartTime
+	endTime := lockup.EndTime
+	originalLocking := lockup.OriginalLocking
+	additionalLocking := lockup.AdditionalLocking
+	totalLocking := originalLocking.Add(additionalLocking)
+
 	if startTime > endTime {
-		return math.Int{}, errorsmod.Wrap(ErrInvalidTimeRange, "start time is after end time")
+		return math.Int{}, math.Int{}, errorsmod.Wrap(ErrInvalidTimeRange, "start time is after end time")
 	}
 
-	if now < startTime {
-		return math.NewInt(0), nil
+	if blockTime < startTime {
+		return math.NewInt(0), totalLocking, nil
 	}
 
-	if now > endTime {
-		return lockupAmount, nil
+	if blockTime > endTime {
+		return totalLocking, math.NewInt(0), nil
 	}
 
-	numerator := now - startTime
-	denominator := endTime - startTime
+	// calculate the locking scalar
+	x := blockTime - startTime
+	y := endTime - startTime
+	s := math.LegacyNewDec(x).Quo(math.LegacyNewDec(y))
 
-	numeratorDec := math.NewDecFromInt64(numerator)
-	denominatorDec := math.NewDecFromInt64(denominator)
+	unlockedAmt := math.LegacyNewDecFromInt(totalLocking).Mul(s).RoundInt()
+	lockedAmt := totalLocking.Sub(unlockedAmt)
 
-	ratio, err := numeratorDec.Quo(denominatorDec)
-	if err != nil {
-		return math.Int{}, err
-	}
-
-	lockupAmountDec, err := math.NewDecFromString(lockupAmount.String())
-	if err != nil {
-		return math.Int{}, err
-	}
-
-	unlockedAmountDec, err := lockupAmountDec.Mul(ratio)
-	if err != nil {
-		return math.Int{}, err
-	}
-
-	unlockedAmount, err := unlockedAmountDec.SdkIntTrim()
-	if err != nil {
-		return math.Int{}, err
-	}
-
-	return unlockedAmount, nil
+	return unlockedAmt, lockedAmt, nil
 }
 
-func CalculateRequiredBalance(lockupAmount, unlockedAmount math.Int) math.Int {
-	return lockupAmount.Sub(unlockedAmount)
-}
-
-func SendCondition(lockupAmount, unlockedAmount, balance, sendAmount math.Int) bool {
-	return balance.Sub(sendAmount).GTE(CalculateRequiredBalance(lockupAmount, unlockedAmount))
+func (lockup LockupAccount) GetNotBondedLockedAmount(lockedAmount math.Int) math.Int {
+	delegatedLockingAmt := lockup.DelegatedLocking
+	x := math.MinInt(lockedAmount, delegatedLockingAmt)
+	lockedAmt := lockedAmount.Sub(x)
+	return lockedAmt
 }

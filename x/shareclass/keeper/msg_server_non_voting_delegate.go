@@ -30,7 +30,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
-	_, err = k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
+	rewards, err := k.Keeper.ClaimRewards(ctx, sender, validatorAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -63,5 +63,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, err
 	}
 
-	return &types.MsgNonVotingDelegateResponse{}, nil
+	return &types.MsgNonVotingDelegateResponse{
+		Rewards: rewards,
+	}, nil
 }

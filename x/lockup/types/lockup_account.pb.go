@@ -28,13 +28,16 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // LockupAccount defines the lockup account.
 type LockupAccount struct {
-	Address                string                `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	Owner                  string                `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`
-	Id                     uint64                `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
-	StartTime              int64                 `protobuf:"varint,4,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	EndTime                int64                 `protobuf:"varint,5,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
-	LockupAmountOriginal   cosmossdk_io_math.Int `protobuf:"bytes,6,opt,name=lockup_amount_original,json=lockupAmountOriginal,proto3,customtype=cosmossdk.io/math.Int" json:"lockup_amount_original"`
-	LockupAmountAdditional cosmossdk_io_math.Int `protobuf:"bytes,7,opt,name=lockup_amount_additional,json=lockupAmountAdditional,proto3,customtype=cosmossdk.io/math.Int" json:"lockup_amount_additional"`
+	Address           string                `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Owner             string                `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`
+	Id                uint64                `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
+	StartTime         int64                 `protobuf:"varint,4,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	EndTime           int64                 `protobuf:"varint,5,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	OriginalLocking   cosmossdk_io_math.Int `protobuf:"bytes,6,opt,name=original_locking,json=originalLocking,proto3,customtype=cosmossdk.io/math.Int" json:"original_locking"`
+	DelegatedFree     cosmossdk_io_math.Int `protobuf:"bytes,7,opt,name=delegated_free,json=delegatedFree,proto3,customtype=cosmossdk.io/math.Int" json:"delegated_free"`
+	DelegatedLocking  cosmossdk_io_math.Int `protobuf:"bytes,8,opt,name=delegated_locking,json=delegatedLocking,proto3,customtype=cosmossdk.io/math.Int" json:"delegated_locking"`
+	UnbondEntries     *UnbondingEntries     `protobuf:"bytes,9,opt,name=unbond_entries,json=unbondEntries,proto3" json:"unbond_entries,omitempty"`
+	AdditionalLocking cosmossdk_io_math.Int `protobuf:"bytes,10,opt,name=additional_locking,json=additionalLocking,proto3,customtype=cosmossdk.io/math.Int" json:"additional_locking"`
 }
 
 func (m *LockupAccount) Reset()         { *m = LockupAccount{} }
@@ -105,8 +108,127 @@ func (m *LockupAccount) GetEndTime() int64 {
 	return 0
 }
 
+func (m *LockupAccount) GetUnbondEntries() *UnbondingEntries {
+	if m != nil {
+		return m.UnbondEntries
+	}
+	return nil
+}
+
+// UnbondingEntries list of elements
+type UnbondingEntries struct {
+	Entries []*UnbondingEntry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
+}
+
+func (m *UnbondingEntries) Reset()         { *m = UnbondingEntries{} }
+func (m *UnbondingEntries) String() string { return proto.CompactTextString(m) }
+func (*UnbondingEntries) ProtoMessage()    {}
+func (*UnbondingEntries) Descriptor() ([]byte, []int) {
+	return fileDescriptor_453c51fa8fc49e78, []int{1}
+}
+func (m *UnbondingEntries) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UnbondingEntries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UnbondingEntries.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UnbondingEntries) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UnbondingEntries.Merge(m, src)
+}
+func (m *UnbondingEntries) XXX_Size() int {
+	return m.Size()
+}
+func (m *UnbondingEntries) XXX_DiscardUnknown() {
+	xxx_messageInfo_UnbondingEntries.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UnbondingEntries proto.InternalMessageInfo
+
+func (m *UnbondingEntries) GetEntries() []*UnbondingEntry {
+	if m != nil {
+		return m.Entries
+	}
+	return nil
+}
+
+// UnbondingEntry defines an entry tracking the lockup account unbonding operation.
+type UnbondingEntry struct {
+	CreationHeight int64 `protobuf:"varint,1,opt,name=creation_height,json=creationHeight,proto3" json:"creation_height,omitempty"`
+	// end time of entry
+	EndTime int64 `protobuf:"varint,2,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// unbond amount
+	Amount cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=amount,proto3,customtype=cosmossdk.io/math.Int" json:"amount"`
+	// validator address
+	ValidatorAddress string `protobuf:"bytes,4,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
+}
+
+func (m *UnbondingEntry) Reset()         { *m = UnbondingEntry{} }
+func (m *UnbondingEntry) String() string { return proto.CompactTextString(m) }
+func (*UnbondingEntry) ProtoMessage()    {}
+func (*UnbondingEntry) Descriptor() ([]byte, []int) {
+	return fileDescriptor_453c51fa8fc49e78, []int{2}
+}
+func (m *UnbondingEntry) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UnbondingEntry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UnbondingEntry.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UnbondingEntry) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UnbondingEntry.Merge(m, src)
+}
+func (m *UnbondingEntry) XXX_Size() int {
+	return m.Size()
+}
+func (m *UnbondingEntry) XXX_DiscardUnknown() {
+	xxx_messageInfo_UnbondingEntry.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UnbondingEntry proto.InternalMessageInfo
+
+func (m *UnbondingEntry) GetCreationHeight() int64 {
+	if m != nil {
+		return m.CreationHeight
+	}
+	return 0
+}
+
+func (m *UnbondingEntry) GetEndTime() int64 {
+	if m != nil {
+		return m.EndTime
+	}
+	return 0
+}
+
+func (m *UnbondingEntry) GetValidatorAddress() string {
+	if m != nil {
+		return m.ValidatorAddress
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*LockupAccount)(nil), "sunrise.lockup.v1.LockupAccount")
+	proto.RegisterType((*UnbondingEntries)(nil), "sunrise.lockup.v1.UnbondingEntries")
+	proto.RegisterType((*UnbondingEntry)(nil), "sunrise.lockup.v1.UnbondingEntry")
 }
 
 func init() {
@@ -114,32 +236,43 @@ func init() {
 }
 
 var fileDescriptor_453c51fa8fc49e78 = []byte{
-	// 389 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x52, 0xcd, 0xaa, 0x1a, 0x31,
-	0x18, 0x9d, 0xf8, 0x5b, 0x03, 0x5d, 0x38, 0xa8, 0x8c, 0x42, 0x47, 0xe9, 0xa2, 0x48, 0x8b, 0x19,
-	0x6c, 0x9f, 0x60, 0x5c, 0x55, 0x28, 0x14, 0xa6, 0x5d, 0x75, 0x33, 0xc4, 0x49, 0x18, 0x83, 0x4e,
-	0x22, 0x49, 0xc6, 0xd6, 0x97, 0x28, 0x7d, 0x8c, 0x2e, 0xbb, 0xf0, 0x21, 0x5c, 0x8a, 0xab, 0xd2,
-	0x85, 0x14, 0x5d, 0xf4, 0x35, 0x8a, 0xc9, 0xcc, 0xe5, 0xde, 0xd5, 0xe5, 0x6e, 0x86, 0xef, 0xfb,
-	0xce, 0x99, 0x73, 0x4e, 0x92, 0x0f, 0xbe, 0x52, 0x39, 0x97, 0x4c, 0xd1, 0x60, 0x2d, 0x92, 0x55,
-	0xbe, 0x09, 0xb6, 0xd3, 0xa2, 0x8a, 0x71, 0x92, 0x88, 0x9c, 0x6b, 0xb4, 0x91, 0x42, 0x0b, 0xb7,
-	0x5d, 0xf0, 0x90, 0x45, 0xd1, 0x76, 0x3a, 0x68, 0xe3, 0x8c, 0x71, 0x11, 0x98, 0xaf, 0x65, 0x0d,
-	0xfa, 0x89, 0x50, 0x99, 0x50, 0xb1, 0xe9, 0x02, 0xdb, 0x14, 0x50, 0x27, 0x15, 0xa9, 0xb0, 0xf3,
-	0x5b, 0x65, 0xa7, 0x2f, 0xbf, 0x57, 0xe1, 0xf3, 0x0f, 0x46, 0x31, 0xb4, 0x76, 0xee, 0x5b, 0xd8,
-	0xc4, 0x84, 0x48, 0xaa, 0x94, 0x07, 0x46, 0x60, 0xdc, 0x9a, 0x79, 0xa7, 0xfd, 0xa4, 0x53, 0x48,
-	0x85, 0x16, 0xf9, 0xa4, 0x25, 0xe3, 0x69, 0x54, 0x12, 0x5d, 0x04, 0xeb, 0xe2, 0x2b, 0xa7, 0xd2,
-	0xab, 0x3c, 0xf2, 0x87, 0xa5, 0xb9, 0x5d, 0x58, 0x61, 0xc4, 0xab, 0x8e, 0xc0, 0xb8, 0x36, 0xab,
-	0xff, 0xfc, 0xf7, 0xeb, 0x35, 0x88, 0x2a, 0x8c, 0xb8, 0x2f, 0x20, 0x54, 0x1a, 0x4b, 0x1d, 0x6b,
-	0x96, 0x51, 0xaf, 0x36, 0x02, 0xe3, 0x6a, 0xd4, 0x32, 0x93, 0xcf, 0x2c, 0xa3, 0x6e, 0x1f, 0x3e,
-	0xa3, 0x9c, 0x58, 0xb0, 0x6e, 0xc0, 0x26, 0xe5, 0xc4, 0x40, 0x18, 0xf6, 0xca, 0x5b, 0xcb, 0x6e,
-	0xa7, 0x88, 0x85, 0x64, 0x29, 0xe3, 0x78, 0xed, 0x35, 0x4c, 0xa2, 0x37, 0x87, 0xf3, 0xd0, 0xf9,
-	0x73, 0x1e, 0x76, 0x6d, 0x2a, 0x45, 0x56, 0x88, 0x89, 0x20, 0xc3, 0x7a, 0x89, 0xe6, 0x5c, 0x9f,
-	0xf6, 0x13, 0x58, 0xc4, 0x9d, 0x73, 0x1d, 0x75, 0xac, 0x54, 0x68, 0x94, 0x3e, 0x16, 0x42, 0x2e,
-	0x85, 0xde, 0x43, 0x0b, 0x4c, 0x08, 0xd3, 0x4c, 0xdc, 0x4c, 0x9a, 0x4f, 0x37, 0xe9, 0xdd, 0x37,
-	0x09, 0xef, 0xa4, 0x66, 0xef, 0x0f, 0x17, 0x1f, 0x1c, 0x2f, 0x3e, 0xf8, 0x7b, 0xf1, 0xc1, 0x8f,
-	0xab, 0xef, 0x1c, 0xaf, 0xbe, 0xf3, 0xfb, 0xea, 0x3b, 0x5f, 0x50, 0xca, 0xf4, 0x32, 0x5f, 0xa0,
-	0x44, 0x64, 0x41, 0xb1, 0x0c, 0x6b, 0xbc, 0xa3, 0xb2, 0x6c, 0x82, 0x6f, 0xe5, 0x0e, 0xe9, 0xdd,
-	0x86, 0xaa, 0x45, 0xc3, 0xbc, 0xf0, 0xbb, 0xff, 0x01, 0x00, 0x00, 0xff, 0xff, 0x99, 0x69, 0x10,
-	0x41, 0x62, 0x02, 0x00, 0x00,
+	// 568 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x41, 0x6f, 0xd3, 0x30,
+	0x18, 0x6d, 0xda, 0xae, 0x5d, 0x3d, 0xb5, 0x6b, 0xad, 0x4d, 0xca, 0x26, 0x2d, 0xeb, 0x8a, 0x04,
+	0x15, 0xa8, 0x89, 0x56, 0x8e, 0x9c, 0x56, 0x04, 0xda, 0xd0, 0x04, 0x52, 0x80, 0x09, 0xed, 0x12,
+	0xb9, 0xb1, 0x49, 0xad, 0x35, 0x76, 0xe5, 0xb8, 0x85, 0xfe, 0x0b, 0x7e, 0x06, 0x47, 0x0e, 0xfd,
+	0x11, 0x3b, 0x4e, 0x3d, 0x21, 0x0e, 0x13, 0x6a, 0x0f, 0x88, 0x2b, 0xbf, 0x00, 0xd5, 0x8e, 0x37,
+	0x3a, 0x0e, 0x53, 0x2f, 0x91, 0xbf, 0xf7, 0xde, 0xf7, 0xfc, 0x62, 0x7d, 0x36, 0x78, 0x98, 0x0c,
+	0x99, 0xa0, 0x09, 0xf1, 0xfa, 0x3c, 0xbc, 0x18, 0x0e, 0xbc, 0xd1, 0x61, 0xba, 0x0a, 0x50, 0x18,
+	0xf2, 0x21, 0x93, 0xee, 0x40, 0x70, 0xc9, 0x61, 0x2d, 0xd5, 0xb9, 0x9a, 0x75, 0x47, 0x87, 0xbb,
+	0x35, 0x14, 0x53, 0xc6, 0x3d, 0xf5, 0xd5, 0xaa, 0xdd, 0x9d, 0x90, 0x27, 0x31, 0x4f, 0x02, 0x55,
+	0x79, 0xba, 0x48, 0xa9, 0xad, 0x88, 0x47, 0x5c, 0xe3, 0x8b, 0x95, 0x46, 0x1b, 0x7f, 0xf2, 0xa0,
+	0x7c, 0xaa, 0x1c, 0x8f, 0xf4, 0x76, 0xb0, 0x0d, 0x8a, 0x08, 0x63, 0x41, 0x92, 0xc4, 0xb6, 0xea,
+	0x56, 0xb3, 0xd4, 0xb1, 0xa7, 0x93, 0xd6, 0x56, 0x6a, 0x75, 0xa4, 0x99, 0xb7, 0x52, 0x50, 0x16,
+	0xf9, 0x46, 0x08, 0x5d, 0xb0, 0xc6, 0x3f, 0x31, 0x22, 0xec, 0xec, 0x3d, 0x1d, 0x5a, 0x06, 0xb7,
+	0x41, 0x96, 0x62, 0x3b, 0x57, 0xb7, 0x9a, 0xf9, 0xce, 0xda, 0xd7, 0x5f, 0xdf, 0x1e, 0x5b, 0x7e,
+	0x96, 0x62, 0xb8, 0x07, 0x40, 0x22, 0x91, 0x90, 0x81, 0xa4, 0x31, 0xb1, 0xf3, 0x75, 0xab, 0x99,
+	0xf3, 0x4b, 0x0a, 0x79, 0x47, 0x63, 0x02, 0x77, 0xc0, 0x3a, 0x61, 0x58, 0x93, 0x6b, 0x8a, 0x2c,
+	0x12, 0x86, 0x15, 0x75, 0x06, 0xaa, 0x5c, 0xd0, 0x88, 0x32, 0xd4, 0x0f, 0x16, 0x07, 0x44, 0x59,
+	0x64, 0x17, 0x54, 0x96, 0x27, 0x97, 0xd7, 0xfb, 0x99, 0x1f, 0xd7, 0xfb, 0xdb, 0x3a, 0x4f, 0x82,
+	0x2f, 0x5c, 0xca, 0xbd, 0x18, 0xc9, 0x9e, 0x7b, 0xc2, 0xe4, 0x74, 0xd2, 0x02, 0x69, 0xd0, 0x13,
+	0x26, 0xfd, 0x4d, 0x63, 0x72, 0xaa, 0x3d, 0xa0, 0x0f, 0x2a, 0x98, 0xf4, 0x49, 0x84, 0x24, 0xc1,
+	0xc1, 0x47, 0x41, 0x88, 0x5d, 0x5c, 0xdd, 0xb5, 0x7c, 0x63, 0xf1, 0x52, 0x10, 0x02, 0x3f, 0x80,
+	0xda, 0xad, 0xa7, 0x09, 0xbb, 0xbe, 0xba, 0x6d, 0xf5, 0xc6, 0xc5, 0xa4, 0x7d, 0x05, 0x2a, 0x43,
+	0xd6, 0xe5, 0x0c, 0x07, 0x84, 0x49, 0x41, 0x49, 0x62, 0x97, 0xea, 0x56, 0x73, 0xa3, 0xfd, 0xc0,
+	0xfd, 0x6f, 0x78, 0xdc, 0xf7, 0x4a, 0x48, 0x59, 0xf4, 0x42, 0x4b, 0xfd, 0xb2, 0x6e, 0x4d, 0x4b,
+	0x78, 0x0e, 0x20, 0xc2, 0x98, 0x4a, 0xca, 0xff, 0x3d, 0x53, 0xb0, 0x7a, 0xcc, 0xda, 0xad, 0x4d,
+	0x9a, 0xb3, 0xf1, 0x06, 0x54, 0xef, 0x6e, 0x0f, 0x9f, 0x81, 0xa2, 0x09, 0x6d, 0xd5, 0x73, 0xcd,
+	0x8d, 0xf6, 0xc1, 0x7d, 0xa1, 0xc7, 0xbe, 0xe9, 0x68, 0xfc, 0xb6, 0x40, 0x65, 0x99, 0x83, 0x8f,
+	0xc0, 0x66, 0x28, 0x08, 0x5a, 0x6c, 0x1c, 0xf4, 0x08, 0x8d, 0x7a, 0x52, 0x8d, 0x73, 0xce, 0xaf,
+	0x18, 0xf8, 0x58, 0xa1, 0x4b, 0x53, 0x95, 0x5d, 0x9e, 0xaa, 0xe7, 0xa0, 0x80, 0xe2, 0xc5, 0xa5,
+	0x50, 0xa3, 0xba, 0xe2, 0x7f, 0xa7, 0xad, 0xf0, 0x35, 0xa8, 0x8d, 0x50, 0x9f, 0x62, 0x24, 0xb9,
+	0x08, 0xcc, 0xcd, 0xca, 0x2b, 0xbf, 0x83, 0xe9, 0xa4, 0xb5, 0x97, 0xb6, 0x9c, 0x19, 0xcd, 0xf2,
+	0x85, 0xa9, 0x8e, 0xee, 0xe0, 0x9d, 0xe3, 0xcb, 0x99, 0x63, 0x5d, 0xcd, 0x1c, 0xeb, 0xe7, 0xcc,
+	0xb1, 0xbe, 0xcc, 0x9d, 0xcc, 0xd5, 0xdc, 0xc9, 0x7c, 0x9f, 0x3b, 0x99, 0x73, 0x37, 0xa2, 0xb2,
+	0x37, 0xec, 0xba, 0x21, 0x8f, 0xbd, 0xf4, 0xec, 0xfa, 0x68, 0x4c, 0x84, 0x29, 0xbc, 0xcf, 0xe6,
+	0x91, 0x91, 0xe3, 0x01, 0x49, 0xba, 0x05, 0xf5, 0x04, 0x3c, 0xfd, 0x1b, 0x00, 0x00, 0xff, 0xff,
+	0x7c, 0x69, 0xae, 0xae, 0x83, 0x04, 0x00, 0x00,
 }
 
 func (m *LockupAccount) Marshal() (dAtA []byte, err error) {
@@ -163,9 +296,41 @@ func (m *LockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	{
-		size := m.LockupAmountAdditional.Size()
+		size := m.AdditionalLocking.Size()
 		i -= size
-		if _, err := m.LockupAmountAdditional.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.AdditionalLocking.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintLockupAccount(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x52
+	if m.UnbondEntries != nil {
+		{
+			size, err := m.UnbondEntries.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintLockupAccount(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	{
+		size := m.DelegatedLocking.Size()
+		i -= size
+		if _, err := m.DelegatedLocking.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintLockupAccount(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x42
+	{
+		size := m.DelegatedFree.Size()
+		i -= size
+		if _, err := m.DelegatedFree.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintLockupAccount(dAtA, i, uint64(size))
@@ -173,9 +338,9 @@ func (m *LockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i--
 	dAtA[i] = 0x3a
 	{
-		size := m.LockupAmountOriginal.Size()
+		size := m.OriginalLocking.Size()
 		i -= size
-		if _, err := m.LockupAmountOriginal.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.OriginalLocking.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintLockupAccount(dAtA, i, uint64(size))
@@ -214,6 +379,93 @@ func (m *LockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *UnbondingEntries) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UnbondingEntries) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UnbondingEntries) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Entries) > 0 {
+		for iNdEx := len(m.Entries) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Entries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintLockupAccount(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UnbondingEntry) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UnbondingEntry) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UnbondingEntry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ValidatorAddress) > 0 {
+		i -= len(m.ValidatorAddress)
+		copy(dAtA[i:], m.ValidatorAddress)
+		i = encodeVarintLockupAccount(dAtA, i, uint64(len(m.ValidatorAddress)))
+		i--
+		dAtA[i] = 0x22
+	}
+	{
+		size := m.Amount.Size()
+		i -= size
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintLockupAccount(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	if m.EndTime != 0 {
+		i = encodeVarintLockupAccount(dAtA, i, uint64(m.EndTime))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.CreationHeight != 0 {
+		i = encodeVarintLockupAccount(dAtA, i, uint64(m.CreationHeight))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintLockupAccount(dAtA []byte, offset int, v uint64) int {
 	offset -= sovLockupAccount(v)
 	base := offset
@@ -248,10 +500,54 @@ func (m *LockupAccount) Size() (n int) {
 	if m.EndTime != 0 {
 		n += 1 + sovLockupAccount(uint64(m.EndTime))
 	}
-	l = m.LockupAmountOriginal.Size()
+	l = m.OriginalLocking.Size()
 	n += 1 + l + sovLockupAccount(uint64(l))
-	l = m.LockupAmountAdditional.Size()
+	l = m.DelegatedFree.Size()
 	n += 1 + l + sovLockupAccount(uint64(l))
+	l = m.DelegatedLocking.Size()
+	n += 1 + l + sovLockupAccount(uint64(l))
+	if m.UnbondEntries != nil {
+		l = m.UnbondEntries.Size()
+		n += 1 + l + sovLockupAccount(uint64(l))
+	}
+	l = m.AdditionalLocking.Size()
+	n += 1 + l + sovLockupAccount(uint64(l))
+	return n
+}
+
+func (m *UnbondingEntries) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Entries) > 0 {
+		for _, e := range m.Entries {
+			l = e.Size()
+			n += 1 + l + sovLockupAccount(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *UnbondingEntry) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CreationHeight != 0 {
+		n += 1 + sovLockupAccount(uint64(m.CreationHeight))
+	}
+	if m.EndTime != 0 {
+		n += 1 + sovLockupAccount(uint64(m.EndTime))
+	}
+	l = m.Amount.Size()
+	n += 1 + l + sovLockupAccount(uint64(l))
+	l = len(m.ValidatorAddress)
+	if l > 0 {
+		n += 1 + l + sovLockupAccount(uint64(l))
+	}
 	return n
 }
 
@@ -413,7 +709,7 @@ func (m *LockupAccount) Unmarshal(dAtA []byte) error {
 			}
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LockupAmountOriginal", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field OriginalLocking", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -441,13 +737,13 @@ func (m *LockupAccount) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.LockupAmountOriginal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.OriginalLocking.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LockupAmountAdditional", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatedFree", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -475,9 +771,351 @@ func (m *LockupAccount) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.LockupAmountAdditional.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.DelegatedFree.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatedLocking", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.DelegatedLocking.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UnbondEntries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UnbondEntries == nil {
+				m.UnbondEntries = &UnbondingEntries{}
+			}
+			if err := m.UnbondEntries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdditionalLocking", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.AdditionalLocking.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipLockupAccount(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UnbondingEntries) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowLockupAccount
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UnbondingEntries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UnbondingEntries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Entries = append(m.Entries, &UnbondingEntry{})
+			if err := m.Entries[len(m.Entries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipLockupAccount(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UnbondingEntry) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowLockupAccount
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UnbondingEntry: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UnbondingEntry: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreationHeight", wireType)
+			}
+			m.CreationHeight = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CreationHeight |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			m.EndTime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EndTime |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLockupAccount
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLockupAccount
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
