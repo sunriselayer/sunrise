@@ -72,16 +72,16 @@ func ProvideMintFn(bankKeeper BankKeeper) minttypes.MintFn {
 		secondsSinceLastMint := env.HeaderService.HeaderInfo(ctx).Time.Unix() - (int64)(lastMint)
 
 		blockProvision := annualProvision.Mul(math.NewInt(secondsSinceLastMint)).Quo(math.NewInt(secondsPerYear))
+		if blockProvision.IsPositive() {
+			feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, blockProvision))
 
-		feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, blockProvision))
-
-		if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, feeCoins); err != nil {
-			return err
+			if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, feeCoins); err != nil {
+				return err
+			}
+			if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, feeCoins); err != nil {
+				return err
+			}
 		}
-		if err := bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, authtypes.FeeCollectorName, feeCoins); err != nil {
-			return err
-		}
-
 		return nil
 	}
 }
