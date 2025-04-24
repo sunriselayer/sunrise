@@ -61,7 +61,11 @@ message MsgNonVotingDelegate {
 
 // MsgNonVotingDelegateResponse
 message MsgNonVotingDelegateResponse {
-  repeated cosmos.base.v1beta1.Coin rewards = 1 [
+  repeated cosmos.base.v1beta1.Coin share = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin rewards = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
