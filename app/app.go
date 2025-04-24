@@ -245,13 +245,6 @@ func New(
 	}
 
 	/****  Module Options ****/
-	// For shareclass module
-	app.ShareclassKeeper.StakingMsgServer = stakingkeeper.NewMsgServerImpl(app.StakingKeeper)
-	app.ShareclassKeeper.StakingQueryServer = stakingkeeper.NewQuerier(app.StakingKeeper)
-	app.ShareclassKeeper.DistributionMsgServer = distrkeeper.NewMsgServerImpl(app.DistrKeeper)
-	// For lockup module
-	app.LockupKeeper.ShareclassMsgServer = shareclassmodulekeeper.NewMsgServerImpl(app.ShareclassKeeper)
-
 	// <sunrise>
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
