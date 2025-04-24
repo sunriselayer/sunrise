@@ -123,7 +123,7 @@ var (
 
 	// blocked account addresses
 	blockAccAddrs = []string{
-		authtypes.FeeCollectorName,
+
 		distrtypes.ModuleName,
 		minttypes.ModuleName,
 		stakingtypes.BondedPoolName,
@@ -132,13 +132,15 @@ var (
 		// We allow the following module accounts to receive funds:
 		// govtypes.ModuleName
 		// pooltypes.ModuleName
+		// authtypes.FeeCollectorName,
 
 		damoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
+		// liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
+		// shareclassmoduletypes.ModuleName,
 		lockupmoduletypes.ModuleName,
 	}
 
