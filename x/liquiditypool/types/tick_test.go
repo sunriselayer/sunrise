@@ -45,7 +45,7 @@ func TestTickToPrice_PositiveBaseOffset(t *testing.T) {
 func TestTickToPrice_NegativeBaseOffset(t *testing.T) {
 	tickParams := TickParams{
 		PriceRatio: math.LegacyNewDecWithPrec(10001, 4).String(), // 1.0001
-		BaseOffset: math.LegacyNewDecWithPrec(-5, 1).String(),    // 0.5
+		BaseOffset: math.LegacyNewDecWithPrec(-5, 1).String(),    // -0.5
 	}
 	tickPriceMultiplied, err := TickToMultipliedPrice(0, tickParams)
 	require.NoError(t, err)

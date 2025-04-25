@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
@@ -87,6 +88,7 @@ func TestTickInfoStore(t *testing.T) {
 
 func TestUpsertTick(t *testing.T) {
 	k, mocks, srv, ctx := setupMsgServer(t)
+	quoteDenom := consts.FeeDenom
 
 	// When pool does not exist
 	_, err := k.UpsertTick(ctx, 1, 0, math.LegacyNewDec(10), true)
@@ -97,12 +99,13 @@ func TestUpsertTick(t *testing.T) {
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender.String(),
+		Sender:     sender.String(),
 		DenomBase:  "base",
-		DenomQuote: "quote",
+		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
 		BaseOffset: "0.5",
@@ -153,7 +156,7 @@ func TestUpsertTick(t *testing.T) {
 
 func TestNewTickInfo(t *testing.T) {
 	k, mocks, srv, ctx := setupMsgServer(t)
-
+	quoteDenom := consts.FeeDenom
 	// When pool does not exist
 	_, err := k.NewTickInfo(ctx, 1, 0)
 	require.Error(t, err)
@@ -163,12 +166,13 @@ func TestNewTickInfo(t *testing.T) {
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender.String(),
+		Sender:     sender.String(),
 		DenomBase:  "base",
-		DenomQuote: "quote",
+		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
 		BaseOffset: "0.5",

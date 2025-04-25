@@ -132,3 +132,42 @@ func (mr *MockBankKeeperMockRecorder) SpendableCoins(arg0, arg1 interface{}) *go
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SpendableCoins", reflect.TypeOf((*MockBankKeeper)(nil).SpendableCoins), arg0, arg1)
 }
+
+// MockFeeKeeper is a mock of FeeKeeper interface.
+type MockFeeKeeper struct {
+	ctrl     *gomock.Controller
+	recorder *MockFeeKeeperMockRecorder
+}
+
+// MockFeeKeeperMockRecorder is the mock recorder for MockFeeKeeper.
+type MockFeeKeeperMockRecorder struct {
+	mock *MockFeeKeeper
+}
+
+// NewMockFeeKeeper creates a new mock instance.
+func NewMockFeeKeeper(ctrl *gomock.Controller) *MockFeeKeeper {
+	mock := &MockFeeKeeper{ctrl: ctrl}
+	mock.recorder = &MockFeeKeeperMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockFeeKeeper) EXPECT() *MockFeeKeeperMockRecorder {
+	return m.recorder
+}
+
+// FeeDenom mocks base method.
+func (m *MockFeeKeeper) FeeDenom(ctx context.Context) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FeeDenom", ctx)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FeeDenom indicates an expected call of FeeDenom.
+func (mr *MockFeeKeeperMockRecorder) FeeDenom(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FeeDenom", reflect.TypeOf((*MockFeeKeeper)(nil).FeeDenom), ctx)
+}
+

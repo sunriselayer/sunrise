@@ -8,11 +8,13 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestAllocateIncentive(t *testing.T) {
 	sender := sdk.AccAddress("sender")
+	quoteDenom := consts.FeeDenom
 	tests := []struct {
 		desc            string
 		poolId          uint64
@@ -54,12 +56,13 @@ func TestAllocateIncentive(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
 
 			// First pool
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender.String(),
+				Sender:     sender.String(),
 				DenomBase:  "base",
-				DenomQuote: "quote",
+				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
 				BaseOffset: "0.5",
@@ -68,9 +71,9 @@ func TestAllocateIncentive(t *testing.T) {
 
 			// Second pool
 			_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender.String(),
+				Sender:     sender.String(),
 				DenomBase:  "base",
-				DenomQuote: "quote",
+				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
 				BaseOffset: "0.5",
@@ -83,7 +86,7 @@ func TestAllocateIncentive(t *testing.T) {
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
-				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+				TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 				MinAmountBase:  math.NewInt(0),
 				MinAmountQuote: math.NewInt(0),
 			})

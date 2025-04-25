@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -16,11 +17,14 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	_, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+
 	sender := sdk.AccAddress("sender")
+	quoteDenom := consts.FeeDenom
 	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender.String(),
+		Sender:     sender.String(),
 		DenomBase:  "base",
-		DenomQuote: "quote",
+		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
 		BaseOffset: "0.5",
@@ -37,7 +41,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 		LowerTick:      0,
 		UpperTick:      1,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
-		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 		MinAmountBase:  math.NewInt(0),
 		MinAmountQuote: math.NewInt(0),
 	})
@@ -54,7 +58,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 		LowerTick:      0,
 		UpperTick:      1,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
-		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 		MinAmountBase:  math.NewInt(0),
 		MinAmountQuote: math.NewInt(0),
 	})
@@ -71,7 +75,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 		LowerTick:      -10,
 		UpperTick:      10,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
-		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 		MinAmountBase:  math.NewInt(0),
 		MinAmountQuote: math.NewInt(0),
 	})
@@ -85,7 +89,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 func TestMsgServerIncreaseLiquidity(t *testing.T) {
 	initFixture(t)
 	sender := sdk.AccAddress("sender")
-
+	quoteDenom := consts.FeeDenom
 	tests := []struct {
 		desc    string
 		request *types.MsgIncreaseLiquidity
@@ -134,11 +138,11 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender.String(),
+				Sender:     sender.String(),
 				DenomBase:  "base",
-				DenomQuote: "quote",
+				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
 				BaseOffset: "0.5",
@@ -151,7 +155,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 				LowerTick:      -4155,
 				UpperTick:      4054,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
-				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+				TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 				MinAmountBase:  math.NewInt(0),
 				MinAmountQuote: math.NewInt(0),
 			})
@@ -173,16 +177,17 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 func TestMsgServerDecreaseLiquidity(t *testing.T) {
 	initFixture(t)
 	sender := sdk.AccAddress("sender")
+	quoteDenom := consts.FeeDenom
 	_, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
 	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender.String(),
+		Sender:     sender.String(),
 		DenomBase:  "base",
-		DenomQuote: "quote",
+		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
 		BaseOffset: "0.5",
@@ -195,7 +200,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 		LowerTick:      -10,
 		UpperTick:      10,
 		TokenBase:      sdk.NewInt64Coin("base", 10000),
-		TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+		TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 		MinAmountBase:  math.NewInt(0),
 		MinAmountQuote: math.NewInt(0),
 	})

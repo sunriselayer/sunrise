@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"fmt"
 	"testing"
 
 	"cosmossdk.io/math"
@@ -8,12 +9,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestMsgServerClaimRewards(t *testing.T) {
 	initFixture(t)
 	sender := sdk.AccAddress("sender")
+	quoteDenom := consts.FeeDenom
 
 	tests := []struct {
 		desc       string
@@ -65,16 +68,20 @@ func TestMsgServerClaimRewards(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
+				Return(consts.FeeDenom, nil).AnyTimes()
 
-			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-				Authority:  sender.String(),
+			res, err := srv.CreatePool(wctx, &types.MsgCreatePool{
+				Sender:     sender.String(),
 				DenomBase:  "base",
-				DenomQuote: "quote",
+				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
 				BaseOffset: "0.5",
 			})
 			require.NoError(t, err)
+			fmt.Println("res", res)
+			fmt.Println("err", err)
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
@@ -82,7 +89,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				LowerTick:      -10,
 				UpperTick:      10,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
-				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+				TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 				MinAmountBase:  math.NewInt(0),
 				MinAmountQuote: math.NewInt(0),
 			})
@@ -94,7 +101,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				LowerTick:      100,
 				UpperTick:      200,
 				TokenBase:      sdk.NewInt64Coin("base", 10000),
-				TokenQuote:     sdk.NewInt64Coin("quote", 10000),
+				TokenQuote:     sdk.NewInt64Coin(quoteDenom, 10000),
 				MinAmountBase:  math.NewInt(0),
 				MinAmountQuote: math.NewInt(0),
 			})
