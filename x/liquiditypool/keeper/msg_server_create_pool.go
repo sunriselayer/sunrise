@@ -13,9 +13,9 @@ import (
 )
 
 func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
-	authority, err := k.addressCodec.StringToBytes(msg.Authority)
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
 	err = sdk.ValidateDenom(msg.DenomBase)
@@ -59,18 +59,18 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 		return nil, errorsmod.Wrap(err, "invalid base offset")
 	}
 
-	if baseOffset.IsPositive() {
-		return nil, errorsmod.Wrap(err, "base offset must be in range (-1, 0]")
+	if baseOffset.GTE(math.LegacyOneDec()) {
+		return nil, errorsmod.Wrap(err, "base offset must be less than 1")
 	}
 
 	if baseOffset.LTE(math.LegacyNewDec(-1)) {
-		return nil, errorsmod.Wrap(err, "base offset must be in range (-1, 0]")
+		return nil, errorsmod.Wrap(err, "base offset must be greater than -1")
 	}
 
 	// end static validation
 
 	// Validate quote denom and consume gas if authority is not gov
-	if !sdk.AccAddress(authority).Equals(sdk.AccAddress(k.authority)) {
+	if !sdk.AccAddress(sender).Equals(sdk.AccAddress(k.authority)) {
 		feeDenom, err := k.feeKeeper.FeeDenom(ctx)
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "failed to get fee denom")
