@@ -52,6 +52,8 @@ func initFixture(t *testing.T) *fixture {
 		mocks.AcctKeeper,
 		mocks.BankKeeper,
 		mocks.StakingKeeper,
+		mocks.FeeKeeper,
+		mocks.TokenConverterKeeper,
 		mocks.LiquiditypoolKeeper,
 	)
 
@@ -69,19 +71,23 @@ func initFixture(t *testing.T) *fixture {
 }
 
 type LiquidityIncentiveMocks struct {
-	AcctKeeper          *liquidityincentivetestutil.MockAccountKeeper
-	BankKeeper          *liquidityincentivetestutil.MockBankKeeper
-	StakingKeeper       *liquidityincentivetestutil.MockStakingKeeper
-	LiquiditypoolKeeper *liquidityincentivetestutil.MockLiquidityPoolKeeper
+	AcctKeeper           *liquidityincentivetestutil.MockAccountKeeper
+	BankKeeper           *liquidityincentivetestutil.MockBankKeeper
+	StakingKeeper        *liquidityincentivetestutil.MockStakingKeeper
+	FeeKeeper            *liquidityincentivetestutil.MockFeeKeeper
+	TokenConverterKeeper *liquidityincentivetestutil.MockTokenConverterKeeper
+	LiquiditypoolKeeper  *liquidityincentivetestutil.MockLiquidityPoolKeeper
 }
 
 func getMocks(t *testing.T) LiquidityIncentiveMocks {
 	ctrl := gomock.NewController(t)
 
 	return LiquidityIncentiveMocks{
-		AcctKeeper:          liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
-		BankKeeper:          liquidityincentivetestutil.NewMockBankKeeper(ctrl),
-		StakingKeeper:       liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
-		LiquiditypoolKeeper: liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
+		AcctKeeper:           liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:           liquidityincentivetestutil.NewMockBankKeeper(ctrl),
+		StakingKeeper:        liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
+		FeeKeeper:            liquidityincentivetestutil.NewMockFeeKeeper(ctrl),
+		TokenConverterKeeper: liquidityincentivetestutil.NewMockTokenConverterKeeper(ctrl),
+		LiquiditypoolKeeper:  liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
 	}
 }
