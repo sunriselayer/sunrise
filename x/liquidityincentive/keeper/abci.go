@@ -54,25 +54,25 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
+	incentiveModule := authtypes.NewModuleAddress(types.ModuleName)
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
 	if err != nil {
 		return err
 	}
-	rise := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
-
-	// Convert fee denom to bond denom
-	err = k.tokenConverterKeeper.ConvertReverse(ctx, rise.Amount, feeCollector)
-	if err != nil {
-		return err
-	}
-
-	// Get bond denom
 	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return err
 	}
-	vRise := sdk.NewCoin(bondDenom, rise.Amount)
-	vRiseDec := sdk.NewDecCoinsFromCoins(vRise)
+	feeBalance := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
+	amount := feeBalance.Amount
+
+	k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(feeBalance))
+
+	// Convert fee denom to bond denom
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, amount, incentiveModule)
+	if err != nil {
+		return err
+	}
 
 	// Distribute incentives to gauges
 	lastEpoch, found, err := k.GetLastEpoch(ctx)
@@ -83,6 +83,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		return nil
 	}
 
+	amountDec := math.LegacyNewDecFromInt(amount)
 	totalCount := math.LegacyZeroDec()
 	for _, gauge := range lastEpoch.Gauges {
 		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
@@ -93,14 +94,13 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	}
 	for _, gauge := range lastEpoch.Gauges {
 		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
-		allocationDec := vRiseDec.MulDecTruncate(weight)
-		allocation, _ := allocationDec.TruncateDecimal()
-		if allocation.IsAllPositive() {
+		allocationDec := amountDec.Mul(weight)
+		if allocationDec.IsPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(
 				ctx,
 				gauge.PoolId,
-				authtypes.NewModuleAddress(authtypes.FeeCollectorName),
-				allocation,
+				incentiveModule,
+				sdk.NewCoins(sdk.NewCoin(bondDenom, allocationDec.TruncateInt())),
 			)
 			if err != nil {
 				ctx.Logger().Error("failure in incentive allocation", "error", err)
