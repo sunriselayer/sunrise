@@ -106,9 +106,13 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		return err
 	}
 
+	// Get `x/liquidityincentive` module's incentive balance.
+	incentiveBalance := k.bankKeeper.GetBalance(ctx, incentiveModule, bondDenom)
+
+	// Distribute incentives to gauges
 	for _, gauge := range lastEpoch.Gauges {
 		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
-		allocationDec := math.LegacyNewDecFromInt(incentiveAmount).Mul(weight)
+		allocationDec := math.LegacyNewDecFromInt(incentiveBalance.Amount).Mul(weight)
 		if allocationDec.IsPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(
 				ctx,
