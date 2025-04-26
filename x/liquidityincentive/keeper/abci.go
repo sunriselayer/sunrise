@@ -63,13 +63,26 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	if err != nil {
 		return err
 	}
+
+	// Send a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeBalance := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
-	amount := feeBalance.Amount
+	feeCollectorAmountDec := math.LegacyNewDecFromInt(feeBalance.Amount)
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
+	stakingRewardRatioDec, err := math.LegacyNewDecFromStr(params.StakingRewardRatio)
+	if err != nil {
+		return err
+	}
+	incentiveAmount := feeCollectorAmountDec.Mul(math.LegacyOneDec().Sub(stakingRewardRatioDec)).TruncateInt()
+	err = k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(feeDenom, incentiveAmount)))
+	if err != nil {
+		return err
+	}
 
-	k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(feeBalance))
-
-	// Convert fee denom to bond denom
-	err = k.tokenConverterKeeper.ConvertReverse(ctx, amount, incentiveModule)
+	// Convert fee denom to bond denom in the `x/liquidityincentive` module account.
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, incentiveAmount, incentiveModule)
 	if err != nil {
 		return err
 	}
@@ -83,7 +96,6 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		return nil
 	}
 
-	amountDec := math.LegacyNewDecFromInt(amount)
 	totalCount := math.LegacyZeroDec()
 	for _, gauge := range lastEpoch.Gauges {
 		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
@@ -94,7 +106,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	}
 	for _, gauge := range lastEpoch.Gauges {
 		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
-		allocationDec := amountDec.Mul(weight)
+		allocationDec := math.LegacyNewDecFromInt(incentiveAmount).Mul(weight)
 		if allocationDec.IsPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(
 				ctx,
