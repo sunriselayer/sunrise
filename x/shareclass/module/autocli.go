@@ -102,15 +102,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "CreateValidator",
-					Use:       "create-validator <validator_address> <min_self_delegation> <amount> <denom> <fee_amount> <fee_denom>",
+					Use:       "create-validator <validator_address> <min_self_delegation> <amount> <denom>",
 					Short:     "Send a create-validator tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "validator_address"},
 						{ProtoField: "min_self_delegation"},
 						{ProtoField: "amount.amount"},
 						{ProtoField: "amount.denom"},
-						{ProtoField: "fee.amount"},
-						{ProtoField: "fee.denom"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

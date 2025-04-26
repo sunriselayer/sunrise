@@ -42,7 +42,12 @@ type StakingKeeper interface {
 
 	PowerReduction(ctx context.Context) math.Int
 	BondDenom(ctx context.Context) (string, error)
+	Delegation(ctx context.Context, addrDel sdk.AccAddress, addrVal sdk.ValAddress) (sdk.DelegationI, error)
 	IterateDelegatorDelegations(ctx context.Context, delegator sdk.AccAddress, cb func(delegation stakingtypes.Delegation) (stop bool)) error
+}
+
+type DistributionKeeper interface {
+	WithdrawDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (sdk.Coins, error)
 }
 
 type FeeKeeper interface {

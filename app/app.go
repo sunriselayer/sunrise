@@ -61,7 +61,7 @@ import (
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
-	selfdelegationmodulekeeper "github.com/sunriselayer/sunrise/x/selfdelegation/keeper"
+	lockupmodulekeeper "github.com/sunriselayer/sunrise/x/lockup/keeper"
 	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
@@ -69,15 +69,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
-
-	basedepinject "cosmossdk.io/x/accounts/defaults/base/depinject"
-	lockupdepinject "cosmossdk.io/x/accounts/defaults/lockup/depinject"
-	multisigdepinject "cosmossdk.io/x/accounts/defaults/multisig/depinject"
-
-	nonvotingdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/non_voting_delegatable_lockup/depinject"
-	selfdelegatablelockupdepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegatable_lockup/depinject"
-	selfdelegationproxydepinject "github.com/sunriselayer/sunrise/x/accounts/self_delegation_proxy/depinject"
-	lockupmodulekeeper "github.com/sunriselayer/sunrise/x/lockup/keeper"
 )
 
 const (
@@ -134,12 +125,11 @@ type App struct {
 	TransferKeeper      ibctransferkeeper.Keeper
 
 	DaKeeper                 damodulekeeper.Keeper
+	FeeKeeper                feemodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
-	FeeKeeper                feemodulekeeper.Keeper
-	SelfdelegationKeeper     selfdelegationmodulekeeper.Keeper
 	ShareclassKeeper         shareclassmodulekeeper.Keeper
 	LockupKeeper             lockupmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
@@ -191,17 +181,6 @@ func New(
 				// read the depinject documentation and depinject module wiring for more information
 				// on available options and how to use them.
 			),
-			depinject.Provide(
-				basedepinject.ProvideAccount,
-				lockupdepinject.ProvideAllLockupAccounts,
-				multisigdepinject.ProvideAccount,
-
-				basedepinject.ProvideSecp256K1PubKey,
-
-				nonvotingdelegatablelockupdepinject.ProvideAllLockupAccounts,
-				selfdelegatablelockupdepinject.ProvideAllLockupAccounts,
-				selfdelegationproxydepinject.ProvideAccount,
-			),
 		)
 	)
 
@@ -233,12 +212,11 @@ func New(
 		&app.EpochsKeeper,
 		&app.ParamsKeeper,
 		&app.DaKeeper,
+		&app.FeeKeeper,
 		&app.TokenconverterKeeper,
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
-		&app.FeeKeeper,
-		&app.SelfdelegationKeeper,
 		&app.ShareclassKeeper,
 		&app.LockupKeeper,
 	); err != nil {
@@ -267,7 +245,6 @@ func New(
 	}
 
 	/****  Module Options ****/
-
 	// <sunrise>
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{

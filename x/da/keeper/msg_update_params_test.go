@@ -42,7 +42,7 @@ func TestMsgUpdateParams(t *testing.T) {
 				Params:    types.Params{},
 			},
 			expErr:    true,
-			expErrMsg: "cannot be empty",
+			expErrMsg: "must be positive",
 		},
 		{
 			name: "default params",

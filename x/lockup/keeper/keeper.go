@@ -28,7 +28,10 @@ type Keeper struct {
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
+	stakingKeeper types.StakingKeeper
 	feeKeeper     types.FeeKeeper
+
+	shareclassKeeper types.ShareclassKeeper
 }
 
 func NewKeeper(
@@ -38,7 +41,9 @@ func NewKeeper(
 	authority []byte,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
 	feeKeeper types.FeeKeeper,
+	shareclassKeeper types.ShareclassKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -58,7 +63,10 @@ func NewKeeper(
 
 		accountKeeper: accountKeeper,
 		bankKeeper:    bankKeeper,
+		stakingKeeper: stakingKeeper,
 		feeKeeper:     feeKeeper,
+
+		shareclassKeeper: shareclassKeeper,
 	}
 
 	schema, err := sb.Build()

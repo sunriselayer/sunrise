@@ -8,7 +8,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	banktypes "cosmossdk.io/x/bank/types"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 )
 
@@ -16,6 +15,10 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 	owner, err := k.addressCodec.StringToBytes(msg.Owner)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid owner address")
+	}
+	recipient, err := k.addressCodec.StringToBytes(msg.Recipient)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid recipient address")
 	}
 
 	lockup, err := k.GetLockupAccount(ctx, owner, msg.Id)
@@ -68,11 +71,7 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		)
 	}
 
-	_, err = k.MsgRouterService.Invoke(ctx, &banktypes.MsgSend{
-		FromAddress: lockup.Address,
-		ToAddress:   msg.Recipient,
-		Amount:      sdk.NewCoins(msg.Amount),
-	})
+	err = k.bankKeeper.SendCoins(ctx, lockupAcc, recipient, sdk.NewCoins(msg.Amount))
 	if err != nil {
 		return nil, err
 	}

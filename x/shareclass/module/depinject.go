@@ -5,6 +5,7 @@ import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/depinject/appconfig"
+	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	"github.com/cosmos/cosmos-sdk/codec"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -35,6 +36,7 @@ type ModuleInputs struct {
 	AccountKeeper        types.AccountKeeper
 	BankKeeper           types.BankKeeper
 	StakingKeeper        types.StakingKeeper
+	DistributionKeeper   types.DistributionKeeper
 	FeeKeeper            types.FeeKeeper
 	TokenConverterKeeper types.TokenConverterKeeper
 }
@@ -60,8 +62,11 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.StakingKeeper,
+		in.DistributionKeeper,
 		in.FeeKeeper,
 		in.TokenConverterKeeper,
+		stakingkeeper.NewMsgServerImpl(in.StakingKeeper.(*stakingkeeper.Keeper)),
+		stakingkeeper.NewQuerier(in.StakingKeeper.(*stakingkeeper.Keeper)),
 	)
 	m := NewAppModule(in.Cdc, k)
 

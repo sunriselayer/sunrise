@@ -11,48 +11,49 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+  uint64 publish_data_gas = 1;
   // Invalid shard threshold required to go to STATUS_CHALLENGING.
-  string challenge_threshold = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  string challenge_threshold = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
   // https://docs.sunriselayer.io/learn/sunrise/data-availability#the-condition-of-data-availability
-  string replication_factor = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  string replication_factor = 3 [(cosmos_proto.scalar) = "cosmos.Dec"];
   // How many blocks of slash are done every
-  uint64 slash_epoch = 3;
+  uint64 slash_epoch = 4;
   // (number of challenges a validator did not submit proof / number of all challenge) is over this threshold in an epoch
   // that validator will be slashed
-  string slash_fault_threshold = 4 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  string slash_fault_threshold = 5 [(cosmos_proto.scalar) = "cosmos.Dec"];
   // voting power deducted during slash
-  string slash_fraction = 5 [(cosmos_proto.scalar) = "cosmos.Dec"];
-  google.protobuf.Duration challenge_period = 6 [
+  string slash_fraction = 6 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  google.protobuf.Duration challenge_period = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  google.protobuf.Duration proof_period = 7 [
+  google.protobuf.Duration proof_period = 8 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  google.protobuf.Duration rejected_removal_period = 8 [
+  google.protobuf.Duration rejected_removal_period = 9 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  google.protobuf.Duration verified_removal_period = 9 [
+  google.protobuf.Duration verified_removal_period = 10 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  repeated cosmos.base.v1beta1.Coin publish_data_collateral = 10 [
+  repeated cosmos.base.v1beta1.Coin publish_data_collateral = 11 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  repeated cosmos.base.v1beta1.Coin submit_invalidity_collateral = 11 [
+  repeated cosmos.base.v1beta1.Coin submit_invalidity_collateral = 12 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  bytes zkp_verifying_key = 12;
+  bytes zkp_verifying_key = 13;
   // proving key used in sunrise-data
-  bytes zkp_proving_key = 13;
+  bytes zkp_proving_key = 14;
   // min_shard_count used in sunrise-data
-  uint64 min_shard_count = 14;
+  uint64 min_shard_count = 15;
   // max_shard_count used in sunrise-data
-  uint64 max_shard_count = 15;
+  uint64 max_shard_count = 16;
   // max_shard_size used in sunrise-data
-  uint64 max_shard_size = 16;
+  uint64 max_shard_size = 17;
 }

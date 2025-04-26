@@ -4,9 +4,7 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
-	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards) (*types.MsgClaimRewardsResponse, error) {
@@ -14,26 +12,22 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
-
+	valAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
 	lockup, err := k.GetLockupAccount(ctx, owner, msg.Id)
 	if err != nil {
 		return nil, err
 	}
+	lockupAddr, err := k.addressCodec.StringToBytes(lockup.Address)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid lockup address")
+	}
 
-	res, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgClaimRewards{
-		Sender:           lockup.Address,
-		ValidatorAddress: msg.ValidatorAddress,
-	})
+	rewards, err := k.shareclassKeeper.ClaimRewards(ctx, lockupAddr, valAddr)
 	if err != nil {
 		return nil, err
-	}
-
-	claimRewardsResponse, ok := res.(*shareclasstypes.MsgClaimRewardsResponse)
-	if !ok {
-		return nil, sdkerrors.ErrInvalidRequest
-	}
-	if claimRewardsResponse == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid response")
 	}
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
@@ -41,7 +35,7 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 		return nil, err
 	}
 
-	found, coin := claimRewardsResponse.Amount.Find(feeDenom)
+	found, coin := rewards.Find(feeDenom)
 
 	if found {
 		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)

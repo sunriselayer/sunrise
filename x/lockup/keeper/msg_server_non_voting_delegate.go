@@ -8,7 +8,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
-	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotingDelegate) (*types.MsgNonVotingDelegateResponse, error) {
@@ -16,9 +15,17 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid owner address")
 	}
+	valAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(msg.ValidatorAddress)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
 	lockup, err := k.GetLockupAccount(ctx, owner, msg.Id)
 	if err != nil {
 		return nil, err
+	}
+	lockupAddr, err := k.addressCodec.StringToBytes(lockup.Address)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid lockup address")
 	}
 
 	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
@@ -30,11 +37,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "delegate amount denom must be equal to fee denom")
 	}
 
-	lockupAcc, err := k.addressCodec.StringToBytes(lockup.Address)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid lockup account address")
-	}
-	balance := k.bankKeeper.GetBalance(ctx, lockupAcc, feeDenom)
+	balance := k.bankKeeper.GetBalance(ctx, lockupAddr, feeDenom)
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	currentTime := sdkCtx.BlockTime().Unix()
@@ -54,26 +57,13 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	if err != nil {
 		return nil, err
 	}
-
-	res, err := k.MsgRouterService.Invoke(ctx, &shareclasstypes.MsgNonVotingDelegate{
-		Sender:           lockup.Address,
-		ValidatorAddress: msg.ValidatorAddress,
-		Amount:           msg.Amount,
-	})
+	_, rewards, err := k.shareclassKeeper.Delegate(ctx, lockupAddr, valAddr, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
-	delegateReposense, ok := res.(*shareclasstypes.MsgNonVotingDelegateResponse)
-	if !ok {
-		return nil, sdkerrors.ErrInvalidRequest
-	}
-	if delegateReposense == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid response")
-	}
-
 	// Add rewards to lockup account
-	found, coin := delegateReposense.Rewards.Find(feeDenom)
+	found, coin := rewards.Find(feeDenom)
 
 	if found {
 		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)

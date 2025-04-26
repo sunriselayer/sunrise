@@ -3,6 +3,7 @@ package sunrise.shareclass.v1;
 
 import "gogoproto/gogo.proto";
 import "sunrise/shareclass/v1/params.proto";
+import "sunrise/shareclass/v1/bond.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 
@@ -10,4 +11,32 @@ option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 message GenesisState {
   // params defines all the parameters of the module.
   Params params = 1 [(gogoproto.nullable) = false];
+
+  repeated Unbonding unbondings = 2 [(gogoproto.nullable) = false];
+  uint64 unbonding_count = 3;
+
+  repeated GenesisRewardMultiplier reward_multipliers = 4 [(gogoproto.nullable) = false];
+  repeated GenesisUserLastRewardMultiplier user_last_reward_multipliers = 5 [(gogoproto.nullable) = false];
+  repeated GenesisLastRewardHandlingTime last_reward_handling_times = 6 [(gogoproto.nullable) = false];
+}
+
+// GenesisRewardMultiplier
+message GenesisRewardMultiplier {
+  string validator = 1;
+  string denom = 2;
+  string reward_multiplier = 3;
+}
+
+// GenesisUserLastRewardMultiplier
+message GenesisUserLastRewardMultiplier {
+  string user = 1;
+  string validator = 2;
+  string denom = 3;
+  string reward_multiplier = 4;
+}
+
+// GenesisLastRewardHandlingTime
+message GenesisLastRewardHandlingTime {
+  string validator = 1;
+  int64 last_reward_handling_time = 2;
 }

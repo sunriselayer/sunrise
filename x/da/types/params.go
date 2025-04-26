@@ -20,6 +20,7 @@ import (
 
 // NewParams creates a new Params instance.
 func NewParams(
+	publishDataGas uint64,
 	challengeThreshold math.LegacyDec,
 	replicationFactor math.LegacyDec,
 	slashEpoch uint64,
@@ -38,6 +39,7 @@ func NewParams(
 	maxShardSize uint64,
 ) Params {
 	return Params{
+		PublishDataGas:             publishDataGas,
 		ChallengeThreshold:         challengeThreshold.String(),
 		ReplicationFactor:          replicationFactor.String(),
 		SlashEpoch:                 slashEpoch,
@@ -70,6 +72,7 @@ func DefaultParams() Params {
 	}
 
 	return NewParams(
+		1000000,
 		math.LegacyNewDecWithPrec(33, 2), // 33% challenge threshold
 		math.LegacyNewDec(5),             // 5.0 replication factor
 		120960,                           // 1 week(5sec/block) slash epoch
@@ -117,6 +120,10 @@ func GenerateZkpKeys() (string, string) {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if p.PublishDataGas <= 0 {
+		return errorsmod.Wrap(ErrInvalidPublishDataGas, "publish data gas must be positive")
+	}
+
 	challengeThreshold, err := math.LegacyNewDecFromStr(p.ChallengeThreshold)
 	if err != nil {
 		return err
