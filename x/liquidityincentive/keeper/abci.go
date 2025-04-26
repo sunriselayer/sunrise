@@ -64,6 +64,25 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		return err
 	}
 
+	// Check the Gauge count is not zero.
+	// Distribute incentives to gauges
+	lastEpoch, found, err := k.GetLastEpoch(ctx)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return nil
+	}
+
+	totalCount := math.LegacyZeroDec()
+	for _, gauge := range lastEpoch.Gauges {
+		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
+	}
+
+	if totalCount.IsZero() {
+		return nil
+	}
+
 	// Send a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeBalance := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
 	feeCollectorAmountDec := math.LegacyNewDecFromInt(feeBalance.Amount)
@@ -87,23 +106,6 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		return err
 	}
 
-	// Distribute incentives to gauges
-	lastEpoch, found, err := k.GetLastEpoch(ctx)
-	if err != nil {
-		return err
-	}
-	if !found {
-		return nil
-	}
-
-	totalCount := math.LegacyZeroDec()
-	for _, gauge := range lastEpoch.Gauges {
-		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
-	}
-
-	if totalCount.IsZero() {
-		return nil
-	}
 	for _, gauge := range lastEpoch.Gauges {
 		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
 		allocationDec := math.LegacyNewDecFromInt(incentiveAmount).Mul(weight)
