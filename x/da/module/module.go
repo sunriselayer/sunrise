@@ -9,7 +9,6 @@ import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
-	"cosmossdk.io/depinject/appconfig"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -153,9 +152,9 @@ func (am AppModule) IsAppModule() {}
 // ----------------------------------------------------------------------------
 
 func init() {
-	appconfig.Register(
+	appmodule.Register(
 		&types.Module{},
-		appconfig.Provide(ProvideModule),
+		appmodule.Provide(ProvideModule),
 	)
 }
 

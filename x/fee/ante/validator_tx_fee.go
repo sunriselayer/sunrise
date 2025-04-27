@@ -1,11 +1,9 @@
-// This file is based on github.com/cosmos/cosmos-sdk/x/auth/ante/validator_tx_fee.go
+// https://github.com/cosmos/cosmos-sdk/blob/v0.53.0-rc.4/x/auth/ante/validator_tx_fee.go
 package ante
 
 import (
-	"context"
 	"math"
 
-	"cosmossdk.io/core/transaction"
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 
@@ -15,7 +13,7 @@ import (
 
 // checkTxFeeWithValidatorMinGasPrices implements the default fee logic, where the minimum price per
 // unit of gas is fixed and set by each validator, can the tx priority is computed from the gas price.
-func (dfd *DeductFeeDecorator) checkTxFeeWithValidatorMinGasPrices(ctx context.Context, tx transaction.Tx) (sdk.Coins, int64, error) {
+func checkTxFeeWithValidatorMinGasPrices(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
 	feeTx, ok := tx.(sdk.FeeTx)
 	if !ok {
 		return nil, 0, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
@@ -27,33 +25,8 @@ func (dfd *DeductFeeDecorator) checkTxFeeWithValidatorMinGasPrices(ctx context.C
 	// Ensure that the provided fees meet a minimum threshold for the validator,
 	// if this is a CheckTx. This is only for local mempool purposes, and thus
 	// is only ran on check tx.
-	if dfd.accountKeeper.GetEnvironment().TransactionService.ExecMode(ctx) == transaction.ExecModeCheck {
-		// <sunrise>
-		if dfd.accountKeeper.GetEnvironment().HeaderService.HeaderInfo(ctx).Height > 0 {
-			if len(feeCoins) != 1 {
-				return nil, 0, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
-			}
-			params, err := dfd.feeKeeper.Params.Get(ctx)
-			if err != nil {
-				return nil, 0, err
-			}
-			if feeCoins[0].Denom != params.FeeDenom {
-				includedBypass := false
-				for _, denom := range params.BypassDenoms {
-					if feeCoins[0].Denom == denom {
-						includedBypass = true
-						break
-					}
-				}
-
-				if !includedBypass {
-					return nil, 0, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid fee denomination: %s", feeCoins[0].Denom)
-				}
-			}
-		}
-		// </sunrise>
-
-		minGasPrices := dfd.minGasPrices
+	if ctx.IsCheckTx() {
+		minGasPrices := ctx.MinGasPrices()
 		if !minGasPrices.IsZero() {
 			requiredFees := make(sdk.Coins, len(minGasPrices))
 
@@ -62,7 +35,7 @@ func (dfd *DeductFeeDecorator) checkTxFeeWithValidatorMinGasPrices(ctx context.C
 			glDec := sdkmath.LegacyNewDec(int64(gas))
 			for i, gp := range minGasPrices {
 				fee := gp.Amount.Mul(glDec)
-				requiredFees[i] = sdk.NewCoin(gp.Denom, fee.Ceil().TruncateInt())
+				requiredFees[i] = sdk.NewCoin(gp.Denom, fee.Ceil().RoundInt())
 			}
 
 			if !feeCoins.IsAnyGTE(requiredFees) {
