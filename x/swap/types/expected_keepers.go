@@ -29,8 +29,6 @@ type BankKeeper interface {
 // TransferKeeper defines the expected interface for the IBC Transfer module.
 type TransferKeeper interface {
 	Transfer(ctx context.Context, msg *transfertypes.MsgTransfer) (*transfertypes.MsgTransferResponse, error)
-	GetTotalEscrowForDenom(ctx context.Context, denom string) sdk.Coin
-	SetTotalEscrowForDenom(ctx context.Context, coin sdk.Coin)
 }
 
 // LiquidityPoolKeeper defines the expected interface for the liquidity pool module.
