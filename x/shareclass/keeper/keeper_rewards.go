@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	stakingtypes "cosmossdk.io/x/staking/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
@@ -39,7 +39,7 @@ func (k Keeper) HandleModuleAccountRewards(ctx context.Context) error {
 
 		err := k.HandleModuleAccountRewardsByValidator(ctx, validatorAddr)
 		if err != nil {
-			k.Logger.Error("failed to handle module account rewards by validator", "validator", validatorAddr, "error", err)
+			k.Logger().Error("failed to handle module account rewards by validator", "validator", validatorAddr, "error", err)
 		}
 
 		return false

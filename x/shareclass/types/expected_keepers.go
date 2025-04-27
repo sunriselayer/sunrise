@@ -7,7 +7,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	stakingtypes "cosmossdk.io/x/staking/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // AccountKeeper defines the expected interface for the Account module.
@@ -42,7 +42,7 @@ type StakingKeeper interface {
 
 	PowerReduction(ctx context.Context) math.Int
 	BondDenom(ctx context.Context) (string, error)
-	Delegation(ctx context.Context, addrDel sdk.AccAddress, addrVal sdk.ValAddress) (sdk.DelegationI, error)
+	Delegation(ctx context.Context, addrDel sdk.AccAddress, addrVal sdk.ValAddress) (stakingtypes.DelegationI, error)
 	IterateDelegatorDelegations(ctx context.Context, delegator sdk.AccAddress, cb func(delegation stakingtypes.Delegation) (stop bool)) error
 }
 
