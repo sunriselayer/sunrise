@@ -42,7 +42,7 @@ func initRootCmd(
 		snapshot.Cmd(newApp),
 	)
 
-	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{AddFlags: func(cmd *cobra.Command) {
+	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{AddFlags: func(cmd *cobra.Command) {
 	}})
 
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands

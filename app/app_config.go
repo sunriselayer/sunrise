@@ -47,7 +47,7 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/params" // import for side-effects
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	_ "github.com/cosmos/cosmos-sdk/x/protocolpool" // import for side-effects
-	pooltypes "github.com/cosmos/cosmos-sdk/x/protocolpool/types"
+	protocolpooltypes "github.com/cosmos/cosmos-sdk/x/protocolpool/types"
 	_ "github.com/cosmos/cosmos-sdk/x/slashing" // import for side-effects
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	_ "github.com/cosmos/cosmos-sdk/x/staking" // import for side-effects
@@ -84,8 +84,8 @@ var (
 	moduleAccPerms = []*authmodulev1.ModuleAccountPermission{
 		{Account: authtypes.FeeCollectorName},
 		{Account: distrtypes.ModuleName},
-		{Account: pooltypes.ModuleName},
-		// {Account: pooltypes.ProtocolPoolEscrowAccount},
+		{Account: protocolpooltypes.ModuleName},
+		{Account: protocolpooltypes.ProtocolPoolEscrowAccount},
 		{Account: minttypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
@@ -136,6 +136,7 @@ var (
 					// NOTE: upgrade module is required to be prioritized
 					PreBlockers: []string{
 						upgradetypes.ModuleName,
+						authtypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/preBlockers
 					},
 					// During begin block slashing happens after distr.BeginBlocker so that
@@ -149,7 +150,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						// </sunrise>
 						distrtypes.ModuleName,
-						pooltypes.ModuleName,
+						protocolpooltypes.ModuleName,
 						slashingtypes.ModuleName,
 						evidencetypes.ModuleName,
 						stakingtypes.ModuleName,
@@ -170,7 +171,7 @@ var (
 						govtypes.ModuleName,
 						stakingtypes.ModuleName,
 						feegrant.ModuleName,
-						pooltypes.ModuleName,
+						protocolpooltypes.ModuleName,
 
 						// chain modules
 						damoduletypes.ModuleName,
@@ -208,7 +209,7 @@ var (
 						feegrant.ModuleName,
 						upgradetypes.ModuleName,
 						circuittypes.ModuleName,
-						pooltypes.ModuleName,
+						protocolpooltypes.ModuleName,
 						// ibc modules
 						paramstypes.ModuleName,
 						ibcexported.ModuleName,
@@ -300,7 +301,7 @@ var (
 				Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
 			},
 			{
-				Name:   pooltypes.ModuleName,
+				Name:   protocolpooltypes.ModuleName,
 				Config: appconfig.WrapAny(&poolmodulev1.Module{}),
 			},
 			{
