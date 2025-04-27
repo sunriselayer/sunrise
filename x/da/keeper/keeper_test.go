@@ -33,12 +33,12 @@ func initFixture(t *testing.T) *fixture {
 	t.Helper()
 
 	config := sdk.GetConfig()
-	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
+	encCfg := moduletestutil.MakeTestEncodingConfig(module.AppModule{})
 	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
 	validatorAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
-	env := runtime.NewEnvironment(runtime.NewKVStoreService(storeKey), log.NewTestLogger(t))
+	storeService := runtime.NewKVStoreService(storeKey)
 	ctx := testutil.DefaultContextWithDB(t, storeKey, storetypes.NewTransientStoreKey("transient_test")).Ctx
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
@@ -46,11 +46,12 @@ func initFixture(t *testing.T) *fixture {
 	mocks := getMocks(t)
 
 	k := keeper.NewKeeper(
-		env,
 		encCfg.Codec,
+		storeService,
+		log.NewNopLogger(),
+		authority.String(),
 		addressCodec,
 		validatorAddressCodec,
-		authority,
 		mocks.BankKeeper,
 		mocks.StakingKeeper,
 		mocks.SlashingKeeper,

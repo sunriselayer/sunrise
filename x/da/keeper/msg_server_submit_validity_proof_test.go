@@ -8,6 +8,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
@@ -21,7 +22,7 @@ import (
 )
 
 type mockValidator struct {
-	sdk.ValidatorI
+	stakingtypes.ValidatorI
 }
 
 func (mv mockValidator) IsBonded() bool {

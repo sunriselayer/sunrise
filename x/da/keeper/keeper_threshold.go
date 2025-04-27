@@ -17,7 +17,7 @@ func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) (uint64,
 	for ; iterator.Valid(); iterator.Next() {
 		validator, err := k.StakingKeeper.Validator(ctx, iterator.Value())
 		if err != nil {
-			k.Logger.Error(err.Error())
+			k.Logger().Error(err.Error())
 			continue
 		}
 		if validator.IsBonded() {
