@@ -8,7 +8,6 @@ import (
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
-	codectestutil "github.com/cosmos/cosmos-sdk/codec/testutil"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -33,11 +32,11 @@ func initFixture(t *testing.T) *fixture {
 	t.Helper()
 
 	config := sdk.GetConfig()
-	encCfg := moduletestutil.MakeTestEncodingConfig(codectestutil.CodecOptions{}, module.AppModule{})
+	encCfg := moduletestutil.MakeTestEncodingConfig(module.AppModule{})
 	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
-	env := runtime.NewEnvironment(runtime.NewKVStoreService(storeKey), log.NewTestLogger(t))
+	storeService := runtime.NewKVStoreService(storeKey)
 	ctx := testutil.DefaultContextWithDB(t, storeKey, storetypes.NewTransientStoreKey("transient_test")).Ctx
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
@@ -45,10 +44,11 @@ func initFixture(t *testing.T) *fixture {
 	mocks := getMocks(t)
 
 	k := keeper.NewKeeper(
-		env,
 		encCfg.Codec,
+		storeService,
+		log.NewNopLogger(),
+		authority.String(),
 		addressCodec,
-		authority,
 		mocks.AcctKeeper,
 		mocks.BankKeeper,
 		mocks.StakingKeeper,

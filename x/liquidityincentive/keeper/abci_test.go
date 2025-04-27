@@ -9,9 +9,9 @@ import (
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
-	stakingtypes "cosmossdk.io/x/staking/types"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -57,7 +57,7 @@ func TestCreateEpoch(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr := valAddrs[i].String()
 							fn(i, stakingtypes.Validator{
@@ -163,7 +163,7 @@ func TestEndBlocker(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr := valAddrs[i].String()
 							fn(i, stakingtypes.Validator{

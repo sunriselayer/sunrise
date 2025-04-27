@@ -10,13 +10,14 @@ import (
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
-	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type tallyFixture struct {
@@ -48,7 +49,7 @@ var (
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
 			DoAndReturn(
-				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d sdk.DelegationI) bool) error {
+				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
 					for i, d := range delegations {
 						fn(int64(i), d)
 					}
@@ -181,7 +182,7 @@ func TestTally_Standard(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -336,7 +337,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
