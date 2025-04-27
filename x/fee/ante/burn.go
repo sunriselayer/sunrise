@@ -12,13 +12,13 @@ type BurnFeeDecorator struct {
 	feeKeeper *feekeeper.Keeper
 }
 
+// CONTRACT: len(fee) == 1 and fee[0].Denom == feeKeeper.Params.FeeDenom
 func NewBurnFeeDecorator(feeKeeper *feekeeper.Keeper) BurnFeeDecorator {
 	return BurnFeeDecorator{
 		feeKeeper: feeKeeper,
 	}
 }
 
-// CONTRACT: len(fee) == 1 and fee[0].Denom == params.FeeDenom
 func (bfd BurnFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
 	feeTx, ok := tx.(sdk.FeeTx)
 	if !ok {
@@ -27,7 +27,10 @@ func (bfd BurnFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 
 	fee := feeTx.GetFee()
 	if !simulate {
-		bfd.feeKeeper.Burn(ctx, fee)
+		err := bfd.feeKeeper.Burn(ctx, fee)
+		if err != nil {
+			return ctx, err
+		}
 	}
 
 	return next(ctx, tx, simulate)

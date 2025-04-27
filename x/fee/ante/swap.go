@@ -1,14 +1,12 @@
 package ante
 
 import (
-	"bytes"
-	"fmt"
-
 	errorsmod "cosmossdk.io/errors"
 
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
+	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	feekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
@@ -21,6 +19,7 @@ type SwapBeforeFeeDecorator struct {
 	swapKeeper *swapkeeper.Keeper
 }
 
+// CONTRACT: len(fee) == 1 and fee[0].Denom == feeKeeper.Params.FeeDenom
 func NewSwapBeforeFeeDecorator(feeKeeper *feekeeper.Keeper, swapKeeper *swapkeeper.Keeper) SwapBeforeFeeDecorator {
 	return SwapBeforeFeeDecorator{
 		feeKeeper:  feeKeeper,
@@ -36,29 +35,42 @@ func (sbfd SwapBeforeFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 
 	fee := feeTx.GetFee()
 
-	// check len(fee) == 1 and fee[0].Denom == params.FeeDenom
-	if len(fee) != 1 {
-		return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
-	}
-	params, err := sbfd.feeKeeper.Params.Get(ctx)
-	if err != nil {
-		return ctx, err
-	}
-	if fee[0].Denom != params.FeeDenom {
-		return ctx, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "fee denom must be %s: %s", params.FeeDenom, fee[0].Denom)
-	}
-
 	if !simulate {
-		txConcrete, ok := tx.(*sdktx.Tx)
+		hasExtOptsTx, ok := tx.(authante.HasExtensionOptionsTx)
 		if !ok {
-			return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a sdktx.Tx")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a HasExtensionOptionsTx")
 		}
 
-		for _, ext := range txConcrete.Body.ExtensionOptions {
-			var swapExt swaptypes.SwapBeforeFeeExtension
-			todo := true
+		once := false
 
-			if todo {
+		for _, ext := range hasExtOptsTx.GetExtensionOptions() {
+			if ext.TypeUrl == codectypes.MsgTypeURL(&swaptypes.SwapBeforeFeeExtension{}) {
+				if once {
+					return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "swap before fee extension can only be used once")
+				}
+
+				// Very important
+				if feeTx.FeeGranter() != nil {
+					return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "fee granter is not allowed with swap before fee")
+				}
+
+				// Unmarshal the extension
+				var swapExt swaptypes.SwapBeforeFeeExtension
+				err := swapExt.Unmarshal(ext.Value)
+				if err != nil {
+					return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "failed to unmarshal swap before fee extension")
+				}
+
+				// Validate route
+				params, err := sbfd.feeKeeper.Params.Get(ctx)
+				if err != nil {
+					return ctx, err
+				}
+
+				if swapExt.Route.DenomOut != params.FeeDenom {
+					return ctx, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "route denom out must be %s: %s", params.FeeDenom, swapExt.Route.DenomOut)
+				}
+
 				_, _, err = sbfd.swapKeeper.SwapExactAmountOut(
 					ctx,
 					sdk.AccAddress(feeTx.FeePayer()),
@@ -71,7 +83,7 @@ func (sbfd SwapBeforeFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 					return ctx, errorsmod.Wrapf(err, "failed to swap before fee")
 				}
 
-				break
+				once = true
 			}
 		}
 	}

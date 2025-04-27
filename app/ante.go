@@ -64,9 +64,10 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(options.AccountKeeper),
 		ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
-		feeante.NewSwapBeforeFeeDecorator(options.FeeKeeper, options.SwapKeeper),
+		feeante.NewFeeDenomValidationDecorator(options.FeeKeeper),                // <sunrise />
+		feeante.NewSwapBeforeFeeDecorator(options.FeeKeeper, options.SwapKeeper), // <sunrise />
 		ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
-		feeante.NewBurnFeeDecorator(options.FeeKeeper),
+		feeante.NewBurnFeeDecorator(options.FeeKeeper),    // <sunrise />
 		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(options.AccountKeeper),
 		ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
