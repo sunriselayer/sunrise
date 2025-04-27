@@ -5,14 +5,14 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"cosmossdk.io/x/mint"
-	minttypes "cosmossdk.io/x/mint/types"
+	"github.com/cosmos/cosmos-sdk/x/mint"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 type CustomMintModule struct {
-	mint.AppModule
+	mint.AppModuleBasic
 	cdc codec.Codec
 }
 

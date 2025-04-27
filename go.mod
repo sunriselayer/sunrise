@@ -1,60 +1,45 @@
 module github.com/sunriselayer/sunrise
 
-go 1.23.5
-
-// 0.52 integration
-replace (
-	github.com/cosmos/cosmos-sdk => github.com/cosmos/cosmos-sdk v0.52.0-rc.2.0.20250127135924-c9d68e4322bb
-	github.com/cosmos/ibc-go/v9 => github.com/cosmos/ibc-go/v9 v9.0.0-20250124215514-f0469954dfc7 // https://github.com/cosmos/ibc-go/pull/7882
-)
+go 1.23.6
 
 replace (
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
+
+	github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 	// replace broken goleveldb
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+	// replace broken vanity url
+	nhooyr.io/websocket => github.com/coder/websocket v1.8.7
 )
 
 require (
-	cosmossdk.io/api v0.8.2
+	cosmossdk.io/api v0.9.0
 	cosmossdk.io/client/v2 v2.10.0-beta.3
-	cosmossdk.io/collections v1.0.0
-	cosmossdk.io/core v1.0.0
-	cosmossdk.io/depinject v1.1.0
+	cosmossdk.io/collections v1.2.0
+	cosmossdk.io/core v0.11.3
+	cosmossdk.io/depinject v1.2.0
 	cosmossdk.io/errors v1.0.1
 	cosmossdk.io/errors/v2 v2.0.0
 	cosmossdk.io/log v1.5.0
-	cosmossdk.io/math v1.5.0
-	cosmossdk.io/store v1.10.0-rc.1.0.20241218084712-ca559989da43
-	cosmossdk.io/tools/confix v0.2.0-rc.1
+	cosmossdk.io/math v1.5.3
+	cosmossdk.io/store v1.1.2
+	cosmossdk.io/tools/confix v0.1.2
 	cosmossdk.io/x/accounts v0.2.0-rc.1
-	cosmossdk.io/x/authz v0.2.0-rc.1
-	cosmossdk.io/x/bank v0.2.0-rc.1
-	cosmossdk.io/x/circuit v0.2.0-rc.1
-	cosmossdk.io/x/consensus v0.2.0-rc.1
-	cosmossdk.io/x/distribution v0.2.0-rc.1
-	cosmossdk.io/x/epochs v0.2.0-rc.1
-	cosmossdk.io/x/evidence v0.2.0-rc.1
-	cosmossdk.io/x/feegrant v0.2.0-rc.1
-	cosmossdk.io/x/gov v0.2.0-rc.1
-	cosmossdk.io/x/group v0.2.0-rc.1
-	cosmossdk.io/x/mint v0.2.0-rc.1
-	cosmossdk.io/x/nft v0.2.0-rc.1
-	cosmossdk.io/x/params v0.2.0-rc.1
-	cosmossdk.io/x/protocolpool v0.2.0-rc.1
-	cosmossdk.io/x/slashing v0.2.0-rc.1
-	cosmossdk.io/x/staking v0.2.0-rc.1
-	cosmossdk.io/x/upgrade v0.2.0-rc.1
+	cosmossdk.io/x/circuit v0.2.0-rc.2
+	cosmossdk.io/x/evidence v0.2.0-rc.2
+	cosmossdk.io/x/feegrant v0.2.0-rc.2
+	cosmossdk.io/x/tx v0.14.0-rc.2
+	cosmossdk.io/x/upgrade v0.2.0-rc.2
 	github.com/bufbuild/buf v1.32.1
-	github.com/cometbft/cometbft v1.0.0
-	github.com/cometbft/cometbft-db v1.0.1
-	github.com/cometbft/cometbft/api v1.0.0
+	github.com/cometbft/cometbft v0.38.17
+	github.com/cosmos/cosmos-db v1.1.1
 	github.com/consensys/gnark v0.12.0
 	github.com/consensys/gnark-crypto v0.15.0
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
-	github.com/cosmos/cosmos-sdk v0.53.0
+	github.com/cosmos/cosmos-sdk v0.53.0-rc.4
 	github.com/cosmos/gogoproto v1.7.0
-	github.com/cosmos/ibc-go/v9 v9.0.0-20241217101236-efca310eb993
+	github.com/cosmos/ibc-go/v10 v10.1.1
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1

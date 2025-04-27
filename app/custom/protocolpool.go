@@ -5,14 +5,14 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"cosmossdk.io/x/protocolpool"
-	protocolpooltypes "cosmossdk.io/x/protocolpool/types"
+	"github.com/cosmos/cosmos-sdk/x/protocolpool"
+	protocolpooltypes "github.com/cosmos/cosmos-sdk/x/protocolpool/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 type CustomProtocolPoolModule struct {
-	protocolpool.AppModule
+	protocolpool.AppModuleBasic
 	cdc codec.Codec
 }
 

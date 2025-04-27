@@ -8,12 +8,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"cosmossdk.io/x/gov"
-	govtypes "cosmossdk.io/x/gov/types/v1"
+	"github.com/cosmos/cosmos-sdk/x/gov"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 )
 
 type CustomGovModule struct {
-	gov.AppModule
+	gov.AppModuleBasic
 	cdc codec.Codec
 }
 

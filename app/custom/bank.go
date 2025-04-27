@@ -5,12 +5,12 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"cosmossdk.io/x/bank"
-	banktypes "cosmossdk.io/x/bank/types"
+	"github.com/cosmos/cosmos-sdk/x/bank"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
 type CustomBankModule struct {
-	bank.AppModule
+	bank.AppModuleBasic
 	cdc codec.Codec
 }
 

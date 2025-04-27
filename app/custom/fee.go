@@ -12,7 +12,7 @@ import (
 )
 
 type CustomFeeModule struct {
-	fee.AppModule
+	fee.AppModuleBasic
 	cdc codec.Codec
 }
 

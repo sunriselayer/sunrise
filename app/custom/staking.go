@@ -5,12 +5,12 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	staking "cosmossdk.io/x/staking"
-	stakingtypes "cosmossdk.io/x/staking/types"
+	staking "github.com/cosmos/cosmos-sdk/x/staking"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type CustomStakingModule struct {
-	staking.AppModule
+	staking.AppModuleBasic
 	cdc codec.Codec
 }
 
