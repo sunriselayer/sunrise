@@ -321,7 +321,7 @@ func (k Keeper) computeOutAmtGivenIn(
 		return SwapResult{}, PoolUpdates{}, err
 	}
 
-	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.KVStoreService, poolId, swapState.tick)
+	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.storeService, poolId, swapState.tick)
 	defer nextInitTickIter.Close()
 
 	swapNoProgressIterationCount := 0
@@ -424,7 +424,7 @@ func (k Keeper) computeInAmtGivenOut(
 		return SwapResult{}, PoolUpdates{}, err
 	}
 
-	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.KVStoreService, poolId, swapState.tick)
+	nextInitTickIter := swapHelper.NextTickIterator(ctx, k.storeService, poolId, swapState.tick)
 	defer nextInitTickIter.Close()
 
 	swapNoProgressIterationCount := 0
@@ -693,7 +693,7 @@ func (k Keeper) ComputeMaxInAmtGivenMaxTicksCrossed(
 		return sdk.Coin{}, sdk.Coin{}, err
 	}
 
-	nextInitTickIter := swapHelper.NextTickIterator(cacheCtx, k.KVStoreService, poolId, swapState.tick)
+	nextInitTickIter := swapHelper.NextTickIterator(cacheCtx, k.storeService, poolId, swapState.tick)
 	defer nextInitTickIter.Close()
 
 	totalTokenOut := math.LegacyZeroDec()

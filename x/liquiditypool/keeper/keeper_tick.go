@@ -83,14 +83,14 @@ func (k Keeper) NewTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 
 // SetTickInfo set a specific tickInfo in the store
 func (k Keeper) SetTickInfo(ctx context.Context, tickInfo types.TickInfo) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	b := k.cdc.MustMarshal(&tickInfo)
 	storeAdapter.Set(types.GetTickInfoIDBytes(tickInfo.PoolId, tickInfo.TickIndex), b)
 }
 
 // GetTickInfo returns a tickInfo from its id
 func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64) (val types.TickInfo, err error) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	b := storeAdapter.Get(types.GetTickInfoIDBytes(poolId, tickIndex))
 	if b == nil {
 		return k.NewTickInfo(ctx, poolId, tickIndex)
@@ -100,12 +100,12 @@ func (k Keeper) GetTickInfo(ctx context.Context, poolId uint64, tickIndex int64)
 }
 
 func (k Keeper) RemoveTickInfo(ctx context.Context, poolId uint64, tickIndex int64) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	storeAdapter.Delete(types.GetTickInfoIDBytes(poolId, tickIndex))
 }
 
 func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (list []types.TickInfo) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	iterator := storetypes.KVStorePrefixIterator(storeAdapter, types.KeyTickPrefixByPoolId(poolId))
 
 	defer iterator.Close()
@@ -120,7 +120,7 @@ func (k Keeper) GetAllInitializedTicksForPool(ctx sdk.Context, poolId uint64) (l
 }
 
 func (k Keeper) GetAllTickInfos(ctx context.Context) (list []types.TickInfo) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	iterator := storetypes.KVStorePrefixIterator(storeAdapter, []byte(types.TickInfoKey))
 
 	defer iterator.Close()

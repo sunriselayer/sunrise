@@ -16,7 +16,7 @@ import (
 )
 
 func (k Keeper) InitAccumulator(ctx context.Context, name string) error {
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	hasKey, err := store.Has(types.FormatKeyAccumPrefix(name))
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (k Keeper) InitAccumulator(ctx context.Context, name string) error {
 
 func (k Keeper) GetAccumulator(ctx context.Context, name string) (types.AccumulatorObject, error) {
 	accumulator := types.AccumulatorObject{}
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	bz, err := store.Get(types.FormatKeyAccumPrefix(name))
 	if err != nil {
 		return types.AccumulatorObject{}, err
@@ -52,7 +52,7 @@ func (k Keeper) GetAccumulator(ctx context.Context, name string) (types.Accumula
 }
 
 func (k Keeper) GetAllAccumulators(ctx context.Context) (list []types.AccumulatorObject) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.KeyAccumPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
 
@@ -72,7 +72,7 @@ func (k Keeper) SetAccumulator(ctx context.Context, accumulator types.Accumulato
 	if err != nil {
 		return err
 	}
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	return store.Set(types.FormatKeyAccumPrefix(accumulator.Name), bz)
 }
 
@@ -83,7 +83,7 @@ func (k Keeper) AddToAccumulator(ctx context.Context, accumulator types.Accumula
 
 func (k Keeper) GetAccumulatorPosition(ctx context.Context, accumName, name string) (types.AccumulatorPosition, error) {
 	position := types.AccumulatorPosition{}
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	bz, err := store.Get(types.FormatKeyAccumulatorPositionPrefix(accumName, name))
 	if err != nil {
 		return types.AccumulatorPosition{}, err
@@ -101,7 +101,7 @@ func (k Keeper) GetAccumulatorPosition(ctx context.Context, accumName, name stri
 }
 
 func (k Keeper) GetAllAccumulatorPositions(ctx context.Context) (list []types.AccumulatorPosition) {
-	storeAdapter := runtime.KVStoreAdapter(k.KVStoreService.OpenKVStore(ctx))
+	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.KeyAccumulatorPositionPrefix))
 	iterator := storetypes.KVStorePrefixIterator(store, []byte{})
 
@@ -128,7 +128,7 @@ func (k Keeper) SetAccumulatorPosition(ctx context.Context, accumName string, ac
 	if err != nil {
 		return err
 	}
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	return store.Set(types.FormatKeyAccumulatorPositionPrefix(accumName, index), bz)
 }
 
@@ -265,7 +265,7 @@ func (k Keeper) SetPositionIntervalAccumulation(ctx context.Context, accumName, 
 }
 
 func (k Keeper) DeletePosition(ctx context.Context, accumName, positionName string) error {
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	err := store.Delete(types.FormatKeyAccumulatorPositionPrefix(accumName, positionName))
 	if err != nil {
 		return err
@@ -287,7 +287,7 @@ func (k Keeper) GetAccumulatorPositionSize(ctx context.Context, accumName, name 
 }
 
 func (k Keeper) HasPosition(ctx context.Context, accumName, name string) bool {
-	store := k.KVStoreService.OpenKVStore(ctx)
+	store := k.storeService.OpenKVStore(ctx)
 	containsKey, err := store.Has(types.FormatKeyAccumulatorPositionPrefix(accumName, name))
 	if err != nil {
 		return false
