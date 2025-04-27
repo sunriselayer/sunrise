@@ -1,12 +1,12 @@
 syntax = "proto3";
-package sunrise.da.v1;
+package sunrise.da.v0;
 
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "sunrise/da/v1/params.proto";
-import "sunrise/da/v1/published_data.proto";
+import "sunrise/da/v0/params.proto";
+import "sunrise/da/v0/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 

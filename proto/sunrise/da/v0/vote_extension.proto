@@ -1,7 +1,7 @@
 syntax = "proto3";
-package sunrise.da.v1;
+package sunrise.da.v0;
 
-import "sunrise/da/v1/published_data.proto";
+import "sunrise/da/v0/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 

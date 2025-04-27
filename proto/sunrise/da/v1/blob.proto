@@ -1,0 +1,21 @@
+syntax = "proto3";
+package sunrise.da.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// Blob
+message Blob {
+  // sha256 hash of the blob
+  bytes hash = 1;
+  repeated Shard shards = 2 [(gogoproto.nullable) = false];
+}
+
+// Shard
+message Shard {
+  // sha256 hash of the shard
+  bytes hash = 1;
+  string uri = 2;
+  string data_source_info = 3;
+}
