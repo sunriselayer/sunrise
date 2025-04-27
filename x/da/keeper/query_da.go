@@ -45,7 +45,7 @@ func (q queryServer) ValidatorShardIndices(goCtx context.Context, req *types.Que
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	validator, err := q.k.validatorAddressCodec.StringToBytes(req.ValidatorAddress)
+	validator, err := q.k.StakingKeeper.ValidatorAddressCodec().StringToBytes(req.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
@@ -80,7 +80,7 @@ func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDep
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	validator, err := q.k.validatorAddressCodec.StringToBytes(req.ValidatorAddress)
+	validator, err := q.k.StakingKeeper.ValidatorAddressCodec().StringToBytes(req.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
@@ -101,7 +101,7 @@ func (q queryServer) ValidityProof(goCtx context.Context, req *types.QueryValidi
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	validator, err := q.k.validatorAddressCodec.StringToBytes(req.ValidatorAddress)
+	validator, err := q.k.StakingKeeper.ValidatorAddressCodec().StringToBytes(req.ValidatorAddress)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}

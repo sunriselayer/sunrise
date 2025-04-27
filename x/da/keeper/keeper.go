@@ -21,8 +21,7 @@ type Keeper struct {
 	// should be the x/gov module account.
 	authority string
 
-	addressCodec          address.Codec
-	validatorAddressCodec address.ValidatorAddressCodec
+	addressCodec address.Codec
 
 	Schema          collections.Schema
 	Params          collections.Item[types.Params]
@@ -44,7 +43,6 @@ func NewKeeper(
 	logger log.Logger,
 	authority string,
 	addressCodec address.Codec,
-	validatorAddressCodec address.ValidatorAddressCodec,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	slashingKeeper types.SlashingKeeper,
@@ -56,12 +54,11 @@ func NewKeeper(
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := Keeper{
-		cdc:                   cdc,
-		storeService:          storeService,
-		logger:                logger,
-		authority:             authority,
-		addressCodec:          addressCodec,
-		validatorAddressCodec: validatorAddressCodec,
+		cdc:          cdc,
+		storeService: storeService,
+		logger:       logger,
+		authority:    authority,
+		addressCodec: addressCodec,
 
 		Params:          collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		PublishedData:   collections.NewIndexedMap(sb, types.PublishedDataKeyPrefix, "published_data", types.PublishedDataKeyCodec, codec.CollValue[types.PublishedData](cdc), types.NewPublishedDataIndexes(sb)),

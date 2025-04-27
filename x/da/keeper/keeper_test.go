@@ -50,7 +50,6 @@ func initFixture(t *testing.T) *fixture {
 		log.NewNopLogger(),
 		authority.String(),
 		addressCodec,
-		validatorAddressCodec,
 		mocks.BankKeeper,
 		mocks.StakingKeeper,
 		mocks.SlashingKeeper,

@@ -167,8 +167,7 @@ type ModuleInputs struct {
 	Config       *types.Module
 	Logger       log.Logger
 
-	AddressCodec          address.Codec
-	ValidatorAddressCodec address.ValidatorAddressCodec
+	AddressCodec address.Codec
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -194,7 +193,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Logger,
 		authority.String(),
 		in.AddressCodec,
-		in.ValidatorAddressCodec,
 		in.BankKeeper,
 		in.StakingKeeper,
 		in.SlashingKeeper,
