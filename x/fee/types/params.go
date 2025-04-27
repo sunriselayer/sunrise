@@ -9,11 +9,10 @@ import (
 )
 
 // NewParams creates a new Params instance.
-func NewParams(feeDenom string, burnRatio math.LegacyDec, bypassDenoms []string) Params {
+func NewParams(feeDenom string, burnRatio math.LegacyDec) Params {
 	return Params{
-		FeeDenom:     feeDenom,
-		BurnRatio:    burnRatio.String(),
-		BypassDenoms: bypassDenoms,
+		FeeDenom:  feeDenom,
+		BurnRatio: burnRatio.String(),
 	}
 }
 
@@ -22,7 +21,6 @@ func DefaultParams() Params {
 	return NewParams(
 		"token",
 		math.LegacyNewDecWithPrec(50, 2),
-		[]string{sdk.DefaultBondDenom},
 	)
 }
 
@@ -41,12 +39,6 @@ func (p Params) Validate() error {
 	}
 	if burnRatio.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "burn ratio must be less than 1")
-	}
-
-	for _, bypassDenom := range p.BypassDenoms {
-		if err := sdk.ValidateDenom(bypassDenom); err != nil {
-			return err
-		}
 	}
 
 	return nil
