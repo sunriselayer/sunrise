@@ -15,6 +15,7 @@ import (
 
 	feeante "github.com/sunriselayer/sunrise/x/fee/ante"
 	fee "github.com/sunriselayer/sunrise/x/fee/keeper"
+	swapkeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 )
 
 // HandlerOptions are the options required for constructing a default SDK AnteHandler.
@@ -24,6 +25,7 @@ type HandlerOptions struct {
 	IBCKeeper     *keeper.Keeper
 	CircuitKeeper *circuitkeeper.Keeper
 	FeeKeeper     *fee.Keeper
+	SwapKeeper    *swapkeeper.Keeper
 }
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
@@ -62,8 +64,9 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(options.AccountKeeper),
 		ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
-		feeante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.FeeKeeper),
-		// NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
+		feeante.NewSwapBeforeFeeDecorator(options.FeeKeeper, options.SwapKeeper),
+		ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
+		feeante.NewBurnFeeDecorator(options.FeeKeeper),
 		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(options.AccountKeeper),
 		ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
