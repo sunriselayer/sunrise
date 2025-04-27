@@ -6,7 +6,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
@@ -30,7 +29,7 @@ import (
 	solomachine "github.com/cosmos/ibc-go/v10/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v10/modules/light-clients/07-tendermint"
 
-	ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
+	// ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
 	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
@@ -156,15 +155,15 @@ func (app *App) registerIBCModules() error {
 // This needs to be removed after IBC supports App Wiring.
 func RegisterIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
 	modules := map[string]appmodule.AppModule{
-		ibcexported.ModuleName:      ibc.NewAppModule(cdc, &ibckeeper.Keeper{}),
-		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(cdc, ibctransferkeeper.Keeper{}),
-		icatypes.ModuleName:         icamodule.NewAppModule(cdc, &icacontrollerkeeper.Keeper{}, &icahostkeeper.Keeper{}),
+		ibcexported.ModuleName:      ibc.NewAppModule(&ibckeeper.Keeper{}),
+		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(ibctransferkeeper.Keeper{}),
+		icatypes.ModuleName:         icamodule.NewAppModule(&icacontrollerkeeper.Keeper{}, &icahostkeeper.Keeper{}),
 		ibctm.ModuleName:            ibctm.NewAppModule(ibctm.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 		solomachine.ModuleName:      solomachine.NewAppModule(solomachine.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 	}
 
 	for _, m := range modules {
-		if mr, ok := m.(appmodule.HasRegisterInterfaces); ok {
+		if mr, ok := m.(module.AppModuleBasic); ok {
 			mr.RegisterInterfaces(registry)
 		}
 	}

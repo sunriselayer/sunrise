@@ -17,7 +17,5 @@ type CustomStakingModule struct {
 func (cm CustomStakingModule) DefaultGenesis() json.RawMessage {
 	genesis := stakingtypes.DefaultGenesisState()
 
-	genesis.Params.KeyRotationFee.Denom = genesis.Params.BondDenom
-
 	return cm.cdc.MustMarshalJSON(genesis)
 }

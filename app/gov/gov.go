@@ -8,8 +8,9 @@ import (
 	math "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	govkeeper "cosmossdk.io/x/gov/keeper"
-	v1 "cosmossdk.io/x/gov/types/v1"
+	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
+	v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
@@ -23,7 +24,7 @@ type StakingKeeper interface {
 	ValidatorAddressCodec() addresscodec.Codec
 
 	IterateDelegations(ctx context.Context, delAddr sdk.AccAddress,
-		fn func(index int64, del sdk.DelegationI) (stop bool),
+		fn func(index int64, del stakingtypes.DelegationI) (stop bool),
 	) error
 
 	GetDelegatorBonded(ctx context.Context, delegator sdk.AccAddress) (math.Int, error)
@@ -34,17 +35,22 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 	return func(
 		ctx context.Context,
 		keeper govkeeper.Keeper,
-		proposalID uint64,
+		proposal v1.Proposal,
 		validators map[string]v1.ValidatorGovInfo,
 	) (totalVoterPower math.LegacyDec, results map[v1.VoteOption]math.LegacyDec, err error) {
-		totalVP := math.LegacyZeroDec()
-		results = createEmptyResults()
+		totalVotingPower := math.LegacyZeroDec()
+
+		results = make(map[v1.VoteOption]math.LegacyDec)
+		results[v1.OptionYes] = math.LegacyZeroDec()
+		results[v1.OptionAbstain] = math.LegacyZeroDec()
+		results[v1.OptionNo] = math.LegacyZeroDec()
+		results[v1.OptionNoWithVeto] = math.LegacyZeroDec()
 
 		// <sunrise>
 		// Deduct shareclass module's delegations
 		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
 		shareclassVP := math.LegacyZeroDec()
-		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation sdk.DelegationI) (stop bool) {
+		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 			if val, ok := validators[valAddrStr]; ok {
 				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
@@ -60,7 +66,7 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		// </sunrise>
 
 		// iterate over all votes, tally up the voting power of each validator
-		rng := collections.NewPrefixedPairRange[uint64, sdk.AccAddress](proposalID)
+		rng := collections.NewPrefixedPairRange[uint64, sdk.AccAddress](proposal.Id)
 		votesToRemove := []collections.Pair[uint64, sdk.AccAddress]{}
 		if err := keeper.Votes.Walk(ctx, rng, func(key collections.Pair[uint64, sdk.AccAddress], vote v1.Vote) (bool, error) {
 			// if validator, just record it in the map
@@ -88,7 +94,7 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			}
 
 			// iterate over all delegations from voter, deduct from any delegated-to validators
-			err = stakingKeeper.IterateDelegations(ctx, voter, func(index int64, delegation sdk.DelegationI) (stop bool) {
+			err = stakingKeeper.IterateDelegations(ctx, voter, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
 				valAddrStr := delegation.GetValidatorAddr()
 
 				if val, ok := validators[valAddrStr]; ok {
@@ -106,7 +112,7 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 						results[option.Option] = results[option.Option].Add(subPower)
 					}
 
-					totalVP = totalVP.Add(votingPower)
+					totalVotingPower = totalVotingPower.Add(votingPower)
 				}
 
 				return false
@@ -142,7 +148,7 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 				subPower := votingPower.Mul(weight)
 				results[option.Option] = results[option.Option].Add(subPower)
 			}
-			totalVP = totalVP.Add(votingPower)
+			totalVotingPower = totalVotingPower.Add(votingPower)
 		}
 
 		// <sunrise>
@@ -158,25 +164,14 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			return math.LegacyDec{}, nil, err
 		}
 		if !totalBonded.IsZero() {
-			numerator := totalVP.Sub(shareclassVP)
+			numerator := totalVotingPower.Sub(shareclassVP)
 			denominator := totalBonded.Sub(shareclassBonded)
 
 			numerator = numerator.MulInt(totalBonded)
-			totalVP = numerator.Quo(math.LegacyNewDecFromInt(denominator))
+			totalVotingPower = numerator.Quo(math.LegacyNewDecFromInt(denominator))
 		}
 		// <sunrise />
 
-		return totalVP, results, nil
+		return totalVotingPower, results, nil
 	}
-}
-
-func createEmptyResults() map[v1.VoteOption]math.LegacyDec {
-	results := make(map[v1.VoteOption]math.LegacyDec)
-	results[v1.OptionYes] = math.LegacyZeroDec()
-	results[v1.OptionAbstain] = math.LegacyZeroDec()
-	results[v1.OptionNo] = math.LegacyZeroDec()
-	results[v1.OptionNoWithVeto] = math.LegacyZeroDec()
-	results[v1.OptionSpam] = math.LegacyZeroDec()
-
-	return results
 }

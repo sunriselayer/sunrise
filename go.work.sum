@@ -1061,7 +1061,6 @@ cosmossdk.io/api v0.7.4/go.mod h1:IcxpYS5fMemZGqyYtErK7OqvdM0C8kdW3dq8Q/XIG38=
 cosmossdk.io/api v0.9.0 h1:QYs9APeSlDNGbsBOBFjp3jXgGd4hnEPnnku3+W3tT4Y=
 cosmossdk.io/client/v2 v2.0.0-beta.8 h1:RXMJdA4V9H1H3/3BfMD6dAW3lF8W9DpNPPYnKD+ArxY=
 cosmossdk.io/collections v1.2.0 h1:IesfVG8G/+FYCMVMP01frS/Cw99Omk5vBh3cHbO01Gg=
-cosmossdk.io/core v0.11.3/go.mod h1:9rL4RE1uDt5AJ4Tg55sYyHWXA16VmpHgbe0PbJc6N2Y=
 cosmossdk.io/core v0.12.1-0.20240725072823-6a2d039e1212/go.mod h1:sLzMwAW9HW+Nm3GltUVHDRSRZbcXLy9+2AYgi2bwt/s=
 cosmossdk.io/core v1.0.0-alpha.6/go.mod h1:3u9cWq1FAVtiiCrDPpo4LhR+9V6k/ycSG4/Y/tREWCY=
 cosmossdk.io/depinject v1.2.0 h1:6NW/FSK1IkWTrX7XxUpBmX1QMBozpEI9SsWkKTBc5zw=
@@ -1515,6 +1514,7 @@ github.com/desertbit/timer v1.0.1 h1:yRpYNn5Vaaj6QXecdLMPMJsW81JLiI1eokUft5nBmeo
 github.com/desertbit/timer v1.0.1/go.mod h1:htRrYeY5V/t4iu1xCJ5XsQvp4xve8QulXXctAzxqcwE=
 github.com/dgraph-io/badger v1.6.0/go.mod h1:zwt7syl517jmP8s94KqSxTlM6IMsdhYy6psNgSztDR4=
 github.com/dgraph-io/badger/v2 v2.2007.4/go.mod h1:vSw/ax2qojzbN6eXHIx6KPKtCSHJN/Uz0X0VPruTIhk=
+github.com/dgraph-io/ristretto v0.1.1/go.mod h1:S1GPSBCYCIhmVNfcth17y2zZtQT6wzkzgwUve0VDWWA=
 github.com/dgraph-io/ristretto v0.1.2-0.20240116140435-c67e07994f91/go.mod h1:swkazRqnUf1N62d0Nutz7KIj2UKqsm/H8tD0nBJAXqM=
 github.com/dgraph-io/ristretto v1.0.0 h1:SYG07bONKMlFDUYu5pEu3DGAh8c2OFNzKm6G9J4Si84=
 github.com/dgraph-io/ristretto v1.0.0/go.mod h1:jTi2FiYEhQ1NsMmA7DeBykizjOuY88NhKBkepyu1jPc=

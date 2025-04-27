@@ -2,18 +2,18 @@
 package app
 
 import (
-	errorsmod "cosmossdk.io/errors"
+	"errors"
 
 	ibcante "github.com/cosmos/ibc-go/v10/modules/core/ante"
-	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
+	"github.com/cosmos/ibc-go/v10/modules/core/keeper"
+
+	corestoretypes "cosmossdk.io/core/store"
+	circuitante "cosmossdk.io/x/circuit/ante"
+	circuitkeeper "cosmossdk.io/x/circuit/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante/unorderedtx"
-
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 
-	circuitante "cosmossdk.io/x/circuit/ante"
 	feeante "github.com/sunriselayer/sunrise/x/fee/ante"
 	fee "github.com/sunriselayer/sunrise/x/fee/keeper"
 )
@@ -23,7 +23,7 @@ type HandlerOptions struct {
 	ante.HandlerOptions
 
 	IBCKeeper     *keeper.Keeper
-	CircuitKeeper *circuitante.CircuitBreaker
+	CircuitKeeper *circuitkeeper.Keeper
 	FeeKeeper     *fee.Keeper
 }
 
@@ -32,15 +32,15 @@ type HandlerOptions struct {
 // signer.
 func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 	if options.AccountKeeper == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "account keeper is required for ante builder")
+		return nil, errors.New("account keeper is required for ante builder")
 	}
 
 	if options.BankKeeper == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "bank keeper is required for ante builder")
+		return nil, errors.New("bank keeper is required for ante builder")
 	}
 
 	if options.SignModeHandler == nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for ante builder")
+		return nil, errors.New("sign mode handler is required for ante builder")
 	}
 
 	if options.IBCKeeper == nil {

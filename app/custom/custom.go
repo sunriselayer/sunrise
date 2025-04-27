@@ -32,33 +32,33 @@ func ReplaceCustomModules(
 	// bank
 	oldBankModule, _ := manager[banktypes.ModuleName].(bank.AppModuleBasic)
 	manager[banktypes.ModuleName] = CustomBankModule{
-		AppModule: oldBankModule,
-		cdc:       cdc,
+		AppModuleBasic: oldBankModule,
+		cdc:            cdc,
 	}
 
 	// fee
 	oldFeeModule, _ := manager[feetypes.ModuleName].(fee.AppModuleBasic)
 	manager[feetypes.ModuleName] = CustomFeeModule{
-		AppModule: oldFeeModule,
-		cdc:       cdc,
+		AppModuleBasic: oldFeeModule,
+		cdc:            cdc,
 	}
 
 	// gov
 	oldGovModule, _ := manager[govtypes.ModuleName].(gov.AppModuleBasic)
 	manager[govtypes.ModuleName] = CustomGovModule{
-		AppModule: oldGovModule,
-		cdc:       cdc,
+		AppModuleBasic: oldGovModule,
+		cdc:            cdc,
 	}
 
 	// mint
 	oldMintModule, _ := manager[minttypes.ModuleName].(mint.AppModuleBasic)
 	manager[minttypes.ModuleName] = CustomMintModule{
-		AppModule: oldMintModule,
-		cdc:       cdc,
+		AppModuleBasic: oldMintModule,
+		cdc:            cdc,
 	}
 
 	// protocolpool
-	oldProtocolPoolModule, _ := manager[protocolpooltypes.ModuleName].(protocolpool.AppModuleBasic)
+	oldProtocolPoolModule, _ := manager[protocolpooltypes.ModuleName].(protocolpool.AppModule)
 	manager[protocolpooltypes.ModuleName] = CustomProtocolPoolModule{
 		AppModule: oldProtocolPoolModule,
 		cdc:       cdc,
@@ -67,7 +67,7 @@ func ReplaceCustomModules(
 	// staking
 	oldStakingModule, _ := manager[stakingtypes.ModuleName].(staking.AppModuleBasic)
 	manager[stakingtypes.ModuleName] = CustomStakingModule{
-		AppModule: oldStakingModule,
-		cdc:       cdc,
+		AppModuleBasic: oldStakingModule,
+		cdc:            cdc,
 	}
 }

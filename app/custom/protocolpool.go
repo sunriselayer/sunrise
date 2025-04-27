@@ -12,7 +12,7 @@ import (
 )
 
 type CustomProtocolPoolModule struct {
-	protocolpool.AppModuleBasic
+	protocolpool.AppModule
 	cdc codec.Codec
 }
 

@@ -52,7 +52,7 @@ func NewProposalHandler(
 }
 
 func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
-	return func(ctx sdk.Context, req *abci.PrepareProposalRequest) (*abci.PrepareProposalResponse, error) {
+	return func(ctx sdk.Context, req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
 		defaultHandler := h.DefaultProposalHandler.PrepareProposalHandler()
 		defaultResponse, err := defaultHandler(ctx, req)
 		if err != nil {
@@ -83,12 +83,12 @@ func (h *ProposalHandler) PrepareProposal() sdk.PrepareProposalHandler {
 			}
 		}
 
-		return &abci.PrepareProposalResponse{Txs: proposalTxs}, nil
+		return &abci.ResponsePrepareProposal{Txs: proposalTxs}, nil
 	}
 }
 
 func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
-	return func(ctx sdk.Context, req *abci.ProcessProposalRequest) (*abci.ProcessProposalResponse, error) {
+	return func(ctx sdk.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
 		splitterIndex := getSplitterIndex(req.Txs)
 
 		if splitterIndex != -1 {
@@ -114,7 +114,7 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 					continue
 				}
 				if data.Status != types.Status_STATUS_VERIFIED {
-					return &abci.ProcessProposalResponse{Status: abci.PROCESS_PROPOSAL_STATUS_REJECT}, nil
+					return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
 				}
 			}
 		}
@@ -123,48 +123,60 @@ func (h *ProposalHandler) ProcessProposal() sdk.ProcessProposalHandler {
 	}
 }
 
-func (h *ProposalHandler) PreBlocker(ctx sdk.Context, req *abci.FinalizeBlockRequest) error {
-	ctx = ctx.WithEventManager(sdk.NewEventManager())
-	for _, moduleName := range h.ModuleManager.OrderPreBlockers {
-		if module, ok := h.ModuleManager.Modules[moduleName].(appmodule.HasPreBlocker); ok {
-			err := module.PreBlock(ctx)
-			if err != nil {
-				return err
+func (h *ProposalHandler) PreBlocker() sdk.PreBlocker {
+	return func(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+		ctx = ctx.WithEventManager(sdk.NewEventManager())
+
+		consensusParamsChanged := false
+		for _, moduleName := range h.ModuleManager.OrderPreBlockers {
+			if module, ok := h.ModuleManager.Modules[moduleName].(appmodule.HasPreBlocker); ok {
+				res, err := module.PreBlock(ctx)
+
+				if res.IsConsensusParamsChanged() {
+					consensusParamsChanged = true
+				}
+
+				if err != nil {
+					return nil, err
+				}
+
 			}
 		}
-	}
 
-	splitterIndex := getSplitterIndex(req.Txs)
+		splitterIndex := getSplitterIndex(req.Txs)
 
-	if splitterIndex != -1 {
-		for i := splitterIndex + 1; i < len(req.Txs); i++ {
-			var metadataUri types.MetadataUriWrapper
-			err := metadataUri.Unmarshal(req.Txs[i])
-			if err != nil {
-				h.logger.Error("failed to unmarshal metadata uri", "error", err)
-				continue
-			}
+		if splitterIndex != -1 {
+			for i := splitterIndex + 1; i < len(req.Txs); i++ {
+				var metadataUri types.MetadataUriWrapper
+				err := metadataUri.Unmarshal(req.Txs[i])
+				if err != nil {
+					h.logger.Error("failed to unmarshal metadata uri", "error", err)
+					continue
+				}
 
-			if metadataUri.MetadataUri == "" {
-				h.logger.Error("metadata uri is empty")
-				continue
-			}
+				if metadataUri.MetadataUri == "" {
+					h.logger.Error("metadata uri is empty")
+					continue
+				}
 
-			data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
-			if err != nil {
-				return err
-			}
-			if !found {
-				continue
-			}
+				data, found, err := h.keeper.GetPublishedData(ctx, metadataUri.MetadataUri)
+				if err != nil {
+					return nil, err
+				}
+				if !found {
+					continue
+				}
 
-			data.VerifiedHeight = req.Height
-			err = h.keeper.SetPublishedData(ctx, data)
-			if err != nil {
-				return err
+				data.VerifiedHeight = req.Height
+				err = h.keeper.SetPublishedData(ctx, data)
+				if err != nil {
+					return nil, err
+				}
 			}
 		}
-	}
 
-	return nil
+		return &sdk.ResponsePreBlock{
+			ConsensusParamsChanged: consensusParamsChanged,
+		}, nil
+	}
 }

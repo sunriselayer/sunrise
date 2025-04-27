@@ -1,9 +1,7 @@
 package app
 
 import (
-	"fmt"
 	"io"
-	"path/filepath"
 
 	clienthelpers "cosmossdk.io/client/v2/helpers"
 	"cosmossdk.io/core/appmodule"
@@ -32,6 +30,7 @@ import (
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
@@ -40,6 +39,7 @@ import (
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	poolkeeper "github.com/cosmos/cosmos-sdk/x/protocolpool/keeper"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/controller/keeper"
@@ -80,7 +80,7 @@ var (
 // capabilities aren't needed for testing.
 type App struct {
 	*runtime.App
-	legacyAmino       registry.AminoRegistrar
+	legacyAmino       *codec.LegacyAmino
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
@@ -150,7 +150,7 @@ func AppConfig() depinject.Config {
 // New returns a reference to an initialized App.
 func New(
 	logger log.Logger,
-	db corestore.KVStoreWithBatch,
+	db dbm.DB,
 	traceStore io.Writer,
 	loadLatest bool,
 	appOpts servertypes.AppOptions,
@@ -226,27 +226,24 @@ func New(
 	// </sunrise>
 
 	// register streaming services
-	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
-		panic(err)
-	}
+	// if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
+	// panic(err)
+	// }
 
 	/****  Module Options ****/
 	// <sunrise>
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
-			ante.HandlerOptions{
-				AccountKeeper:            app.AuthKeeper,
-				BankKeeper:               app.BankKeeper,
-				ConsensusKeeper:          app.ConsensusParamsKeeper,
-				SignModeHandler:          app.txConfig.SignModeHandler(),
-				FeegrantKeeper:           app.FeeGrantKeeper,
-				SigGasConsumer:           ante.DefaultSigVerificationGasConsumer,
-				UnorderedTxManager:       app.UnorderedTxManager,
-				Environment:              app.AuthKeeper.Environment,
-				AccountAbstractionKeeper: app.AccountsKeeper,
+			HandlerOptions: ante.HandlerOptions{
+				AccountKeeper:   app.AuthKeeper,
+				BankKeeper:      app.BankKeeper,
+				SignModeHandler: app.txConfig.SignModeHandler(),
+				FeegrantKeeper:  app.FeeGrantKeeper,
+				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
-			&app.CircuitBreakerKeeper,
-			app.FeeKeeper,
+			IBCKeeper:     app.IBCKeeper,
+			CircuitKeeper: &app.CircuitBreakerKeeper,
+			FeeKeeper:     &app.FeeKeeper,
 		},
 	)
 	if err != nil {
@@ -266,12 +263,12 @@ func New(
 
 	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
-	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
+	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker())
 	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	overrideModules := map[string]module.AppModuleSimulation{
-		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AuthKeeper, &app.AccountsKeeper, authsims.RandomGenesisAccounts, nil),
+		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AuthKeeper, authsims.RandomGenesisAccounts, nil),
 	}
 	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, overrideModules)
 
@@ -281,7 +278,7 @@ func New(
 	// This is necessary for manually registered modules that do not support app wiring.
 	// Manually set the module version map as shown below.
 	// The upgrade module will automatically handle de-duplication of the module version map.
-	app.SetInitChainer(func(ctx sdk.Context, req *abci.InitChainRequest) (*abci.InitChainResponse, error) {
+	app.SetInitChainer(func(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
 		if err := app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap()); err != nil {
 			return nil, err
 		}
@@ -306,12 +303,7 @@ func (app *App) GetSubspace(moduleName string) paramstypes.Subspace {
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
 func (app *App) LegacyAmino() *codec.LegacyAmino {
-	switch cdc := app.legacyAmino.(type) {
-	case *codec.LegacyAmino:
-		return cdc
-	default:
-		panic("unexpected codec type")
-	}
+	return app.legacyAmino
 }
 
 // AppCodec returns App's app codec.
