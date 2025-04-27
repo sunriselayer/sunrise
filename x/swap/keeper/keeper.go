@@ -5,21 +5,23 @@ import (
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/address"
-	"cosmossdk.io/core/appmodule"
+	"cosmossdk.io/core/store"
+	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
+	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 type Keeper struct {
-	appmodule.Environment
-
-	cdc          codec.BinaryCodec
-	addressCodec address.Codec
+	cdc          codec.Codec
+	storeService store.KVStoreService
+	logger       log.Logger
 	// Address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
-	authority []byte
+	authority string
+
+	addressCodec address.Codec
 
 	Schema                  collections.Schema
 	Params                  collections.Item[types.Params]
@@ -35,27 +37,29 @@ type Keeper struct {
 }
 
 func NewKeeper(
-	env appmodule.Environment,
-	cdc codec.BinaryCodec,
+	cdc codec.Codec,
+	storeService store.KVStoreService,
+	logger log.Logger,
+	authority string,
 	addressCodec address.Codec,
-	authority []byte,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	transferKeeper types.TransferKeeper,
 	liquidityPoolKeeper types.LiquidityPoolKeeper,
 	ibcKeeperFn func() *ibckeeper.Keeper,
 ) Keeper {
-	if _, err := addressCodec.BytesToString(authority); err != nil {
+	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
 	}
 
-	sb := collections.NewSchemaBuilder(env.KVStoreService)
+	sb := collections.NewSchemaBuilder(storeService)
 
 	k := Keeper{
-		Environment:  env,
 		cdc:          cdc,
-		addressCodec: addressCodec,
+		storeService: storeService,
+		logger:       logger,
 		authority:    authority,
+		addressCodec: addressCodec,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		IncomingInFlightPackets: collections.NewMap(
@@ -90,6 +94,11 @@ func NewKeeper(
 }
 
 // GetAuthority returns the module's authority.
-func (k Keeper) GetAuthority() []byte {
+func (k Keeper) GetAuthority() string {
 	return k.authority
+}
+
+// Logger returns a module-specific logger.
+func (k Keeper) Logger() log.Logger {
+	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }

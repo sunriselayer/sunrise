@@ -1,14 +1,13 @@
 package swap
 
 import (
-	"context"
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	transfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
-	channeltypes "github.com/cosmos/ibc-go/v9/modules/core/04-channel/types"
-	porttypes "github.com/cosmos/ibc-go/v9/modules/core/05-port/types"
-	exported "github.com/cosmos/ibc-go/v9/modules/core/exported"
+	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
+	channeltypes "github.com/cosmos/ibc-go/v10/modules/core/04-channel/types"
+	porttypes "github.com/cosmos/ibc-go/v10/modules/core/05-port/types"
+	exported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 
 	keeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	types "github.com/sunriselayer/sunrise/x/swap/types"
@@ -35,7 +34,7 @@ func NewIBCMiddleware(
 // receiveFunds receives funds from the packet into the override receiver
 // address and returns an error if the funds cannot be received.
 func (im IBCMiddleware) receiveFunds(
-	ctx context.Context,
+	ctx sdk.Context,
 	channelVersion string,
 	packet channeltypes.Packet,
 	data transfertypes.FungibleTokenPacketData,
@@ -78,7 +77,7 @@ func (im IBCMiddleware) receiveFunds(
 // should be handled by the swap middleware it attempts to perform a swap. If the swap is successful
 // the underlying application's OnRecvPacket callback is invoked, an ack error is returned otherwise.
 func (im IBCMiddleware) OnRecvPacket(
-	ctx context.Context,
+	ctx sdk.Context,
 	channelVersion string,
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
@@ -176,7 +175,7 @@ func (im IBCMiddleware) OnRecvPacket(
 
 // OnAcknowledgementPacket implements the IBCModule interface.
 func (im IBCMiddleware) OnAcknowledgementPacket(
-	ctx context.Context,
+	ctx sdk.Context,
 	channelVersion string,
 	packet channeltypes.Packet,
 	acknowledgement []byte,
@@ -206,7 +205,7 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 
 // OnTimeoutPacket implements the IBCModule interface.
 func (im IBCMiddleware) OnTimeoutPacket(
-	ctx context.Context,
+	ctx sdk.Context,
 	channelVersion string,
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,

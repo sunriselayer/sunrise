@@ -10,7 +10,7 @@ import (
 
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
-	types0 "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
+	types0 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	types1 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	gomock "go.uber.org/mock/gomock"
 )

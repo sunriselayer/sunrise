@@ -8,10 +8,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	transfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
-	clienttypes "github.com/cosmos/ibc-go/v9/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v9/modules/core/04-channel/types"
-	exported "github.com/cosmos/ibc-go/v9/modules/core/exported"
+	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v10/modules/core/04-channel/types"
+	exported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
 
