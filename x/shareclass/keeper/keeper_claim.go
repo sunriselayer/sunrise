@@ -11,18 +11,18 @@ import (
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (k Keeper) GetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAddress, denom string) (math.Dec, error) {
+func (k Keeper) GetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAddress, denom string) (math.LegacyDec, error) {
 	rewardMultiplierString, err := k.RewardMultiplier.Get(ctx, collections.Join([]byte(validatorAddr), denom))
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return math.NewDecFromInt64(0), nil
+			return math.LegacyZeroDec(), nil
 		}
-		return math.Dec{}, err
+		return math.LegacyDec{}, err
 	}
-	return math.NewDecFromString(rewardMultiplierString)
+	return math.LegacyNewDecFromStr(rewardMultiplierString)
 }
 
-func (k Keeper) SetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAddress, denom string, value math.Dec) error {
+func (k Keeper) SetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAddress, denom string, value math.LegacyDec) error {
 	err := k.RewardMultiplier.Set(ctx, collections.Join([]byte(validatorAddr), denom), value.String())
 	if err != nil {
 		return err
@@ -30,18 +30,18 @@ func (k Keeper) SetRewardMultiplier(ctx context.Context, validatorAddr sdk.ValAd
 	return nil
 }
 
-func (k Keeper) GetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.Dec, error) {
+func (k Keeper) GetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.LegacyDec, error) {
 	userLastRewardMultiplierString, err := k.UsersLastRewardMultiplier.Get(ctx, collections.Join3(sender, []byte(validatorAddr), denom))
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return math.NewDecFromInt64(0), nil
+			return math.LegacyZeroDec(), nil
 		}
-		return math.Dec{}, err
+		return math.LegacyDec{}, err
 	}
-	return math.NewDecFromString(userLastRewardMultiplierString)
+	return math.LegacyNewDecFromStr(userLastRewardMultiplierString)
 }
 
-func (k Keeper) SetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string, value math.Dec) error {
+func (k Keeper) SetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string, value math.LegacyDec) error {
 	err := k.UsersLastRewardMultiplier.Set(ctx, collections.Join3(sender, []byte(validatorAddr), denom), value.String())
 	if err != nil {
 		return err
