@@ -95,7 +95,7 @@ func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient
 
 	// Burn non transferrable share token
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
-	err = k.bankKeeper.BurnCoins(ctx, moduleAddr, coins)
+	err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, coins)
 	if err != nil {
 		return sdk.Coin{}, nil, time.Time{}, err
 	}

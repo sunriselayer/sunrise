@@ -6,7 +6,7 @@ package types
 import (
 	context "context"
 	cosmossdk_io_math "cosmossdk.io/math"
-	types1 "cosmossdk.io/x/staking/types"
+	types1 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
