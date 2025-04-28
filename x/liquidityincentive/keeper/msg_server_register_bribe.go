@@ -3,9 +3,7 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -19,16 +17,29 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	senderAddr := sdk.AccAddress(sender)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// Check if bribe already exists
-	bribeKey := collections.Join(msg.EpochId, msg.PoolId)
-	_, err = k.Bribes.Get(ctx, bribeKey)
-	if err == nil {
-		return nil, errorsmod.Wrap(types.ErrBribeAlreadyExists, "bribe already exists")
+	// Check if epoch is in the future
+	currentEpoch, found, err := k.GetLastEpoch(ctx)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get current epoch")
+	}
+
+	if found && msg.EpochId <= currentEpoch.Id {
+		return nil, errorsmod.Wrap(types.ErrInvalidBribe, "epoch is in the past")
 	}
 
 	// Check if amount is valid
-	if !msg.Amount.IsValid() || msg.Amount.IsZero() {
-		return nil, errorsmod.Wrap(types.ErrInvalidBribe, "invalid bribe amount")
+	err = msg.Amount.Validate()
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid bribe amount")
+	}
+
+	if msg.Amount.IsZero() {
+		return nil, errorsmod.Wrap(types.ErrInvalidBribe, "amount cannot be zero")
+	}
+
+	// Check if send enabled coins
+	if err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.Amount...); err != nil {
+		return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
 	}
 
 	// Send coins from sender to module
@@ -36,27 +47,32 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 		sdkCtx,
 		senderAddr,
 		types.BribeAccount,
-		sdk.NewCoins(msg.Amount),
+		msg.Amount,
 	); err != nil {
 		return nil, errorsmod.Wrap(err, "failed to send coins to module")
 	}
 
 	// Create new bribe
 	bribe := types.Bribe{
+		EpochId:       msg.EpochId,
+		PoolId:        msg.PoolId,
+		Address:       msg.Sender,
 		Amount:        msg.Amount,
-		ClaimedAmount: sdk.NewCoin(msg.Amount.Denom, math.ZeroInt()),
+		ClaimedAmount: sdk.NewCoins(),
 	}
 
 	// Save bribe
-	if err := k.Bribes.Set(ctx, bribeKey, bribe); err != nil {
+	id, err := k.AppendBribe(ctx, bribe)
+	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to save bribe")
 	}
 
 	// Emit event
 	if err := sdkCtx.EventManager().EmitTypedEvent(&types.EventRegisterBribe{
-		Address: msg.Sender,
+		Id:      id,
 		EpochId: msg.EpochId,
 		PoolId:  msg.PoolId,
+		Address: msg.Sender,
 		Amount:  msg.Amount,
 	}); err != nil {
 		return nil, err
