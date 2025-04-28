@@ -51,12 +51,11 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 
 			if weight.IsPositive() && !poolTotalWeights[poolWeight.PoolId].IsZero() {
 				// Process only pools with bribes
-				bribeKey := collections.Join(epochId, poolWeight.PoolId)
-				bribe, err := k.Bribes.Get(ctx, bribeKey)
+				bribe, found, err := k.GetBribeByEpochAndPool(ctx, epochId, poolWeight.PoolId)
 				if err != nil {
 					return err
 				}
-				if bribe == (types.Bribe{}) {
+				if !found {
 					continue
 				}
 
@@ -66,12 +65,15 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 				// Save UnclaimedBribe
 				unclaimedBribe := types.UnclaimedBribe{
 					Address: voterStr,
-					EpochId: epochId,
-					PoolId:  poolWeight.PoolId,
+					BribeId: bribe.Id,
 					Weight:  relativeWeight.String(),
 				}
 
-				key := collections.Join3(sdk.MustAccAddressFromBech32(voterStr), epochId, poolWeight.PoolId)
+				voterAddr, err := k.addressCodec.StringToBytes(voterStr)
+				if err != nil {
+					return err
+				}
+				key := collections.Join(sdk.AccAddress(voterAddr), bribe.Id)
 				if err := k.UnclaimedBribes.Set(ctx, key, unclaimedBribe); err != nil {
 					return err
 				}
@@ -126,38 +128,55 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 
 	// Process all bribes for this epoch
 	totalUnclaimed := sdk.NewCoins()
+	var bribesToRemove []uint64
 
-	err := k.Bribes.Walk(ctx, collections.NewPrefixedPairRange[uint64, uint64](epochId),
-		func(key collections.Pair[uint64, uint64], bribe types.Bribe) (bool, error) {
-			// Calculate unclaimed amount
-			unclaimedAmount := bribe.Amount.Sub(bribe.ClaimedAmount)
-			if !unclaimedAmount.IsZero() {
-				totalUnclaimed = totalUnclaimed.Add(unclaimedAmount)
-			}
-
-			// Remove all unclaimed bribes for this epoch
-			if err := k.Bribes.Remove(ctx, key); err != nil {
+	err := k.Bribes.Indexes.EpochId.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[uint64, uint64](epochId),
+		func(_ uint64, bribeId uint64) (bool, error) {
+			bribe, _, err := k.GetBribe(ctx, bribeId)
+			if err != nil {
 				return false, err
 			}
-
+			// Calculate unclaimed amount
+			unclaimedAmount := bribe.Amount.Sub(bribe.ClaimedAmount...)
+			if !unclaimedAmount.IsZero() {
+				totalUnclaimed = totalUnclaimed.Add(unclaimedAmount...)
+			}
+			bribesToRemove = append(bribesToRemove, bribeId)
 			return false, nil
 		})
+	if err != nil {
+		return err
+	}
 
+	// Remove all bribes for this epoch
+	for _, bribeId := range bribesToRemove {
+		if err := k.RemoveBribe(ctx, bribeId); err != nil {
+			continue
+		}
+	}
+
+	// Remove all unclaimed bribes for this epoch
+	var keysToRemove []collections.Pair[sdk.AccAddress, uint64]
+	err = k.UnclaimedBribes.Walk(ctx,
+		nil, // Iterate over all unclaimed bribes with Pair key
+		func(key collections.Pair[sdk.AccAddress, uint64], value types.UnclaimedBribe) (bool, error) {
+			if value.EpochId == epochId { // Check bribe's epochId
+				keysToRemove = append(keysToRemove, key)
+			}
+			return false, nil
+		},
+	)
 	if err != nil {
 		return err
 	}
 
 	// Remove all unclaimed bribes for this epoch
-	err = k.UnclaimedBribes.Walk(ctx, collections.NewPrefixedTripleRange[sdk.AccAddress, uint64, uint64](sdk.AccAddress{}),
-		func(key collections.Triple[sdk.AccAddress, uint64, uint64], unclaimed types.UnclaimedBribe) (bool, error) {
-			if key.K2() == epochId {
-				return false, k.UnclaimedBribes.Remove(ctx, key)
-			}
-			return false, nil
-		})
-
-	if err != nil {
-		return err
+	for _, key := range keysToRemove {
+		if err := k.UnclaimedBribes.Remove(ctx, key); err != nil {
+			continue
+		}
 	}
 
 	// If there are unclaimed bribes, send them to fee collector
