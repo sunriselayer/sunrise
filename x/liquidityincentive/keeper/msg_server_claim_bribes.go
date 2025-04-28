@@ -60,7 +60,7 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 	// Send bribe
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(
 		sdkCtx,
-		types.ModuleName,
+		types.BribeAccount,
 		senderAddr,
 		sdk.NewCoins(claimAmount),
 	); err != nil {

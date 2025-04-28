@@ -175,7 +175,7 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		feeCollectorAddr := k.accountKeeper.GetModuleAddress(authtypes.FeeCollectorName)
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(
 			sdkCtx,
-			types.ModuleName,
+			types.BribeAccount,
 			feeCollectorAddr,
 			totalUnclaimed,
 		); err != nil {

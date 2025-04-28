@@ -18,6 +18,9 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_liquidityincentive"
 
+	// BribeAccount is the account that holds the bribe funds
+	BribeAccount = ModuleName + "/bribe"
+
 	// UnclaimedBribePrefix is the prefix for unclaimed bribes
 	UnclaimedBribePrefix = "unclaimed_bribe/"
 

@@ -41,7 +41,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(
 		sdkCtx,
 		senderAddr,
-		types.ModuleName,
+		types.BribeAccount,
 		sdk.NewCoins(msg.Amount),
 	); err != nil {
 		return nil, errorsmod.Wrap(err, "failed to send coins to module")
