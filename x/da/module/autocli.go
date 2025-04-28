@@ -81,7 +81,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "SubmitInvalidity",
-					Use:            "submit-invalidity [metadata_uri] [index,...]",
+					Use:            "submit-invalidity [metadata_uri] [index],[index],...",
 					Short:          "Submit invalidity to the data",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "indices"}},
 				},

@@ -82,7 +82,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "NonVotingUndelegate",
-					Use:       "non-voting-undelegate [validator_address] [amount] [recipient]",
+					Use:       "non-voting-undelegate [validator_address] [amount] [recipient?]",
 					Short:     "Send a non-voting-undelegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "validator_address"},
