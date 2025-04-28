@@ -45,7 +45,7 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 		}
 
 		// Event is emitted in the bank keeper
-		if err := k.bankKeeper.BurnCoins(ctx, k.accountKeeper.GetModuleAddress(types.ModuleName), burnCoins); err != nil {
+		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
 			return err
 		}
 	}
