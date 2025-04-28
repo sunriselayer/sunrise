@@ -29,7 +29,7 @@ func (q queryServer) BribeAllocations(ctx context.Context, req *types.QueryBribe
 		},
 	)
 	if err != nil {
-		q.k.Logger.Error("failed to paginate bribe allocations", "error", err)
+		q.k.Logger().Error("failed to paginate bribe allocations", "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to query bribe allocations: %v", err)
 	}
 
@@ -48,7 +48,7 @@ func (q queryServer) BribeAllocationsByAddress(ctx context.Context, req *types.Q
 
 	addr, err := q.k.addressCodec.StringToBytes(req.Address)
 	if err != nil {
-		q.k.Logger.Error("failed to decode address string", "address", req.Address, "error", err)
+		q.k.Logger().Error("failed to decode address string", "address", req.Address, "error", err)
 		return nil, status.Errorf(codes.InvalidArgument, "invalid address format '%s': %v", req.Address, err)
 	}
 
@@ -60,7 +60,7 @@ func (q queryServer) BribeAllocationsByAddress(ctx context.Context, req *types.Q
 		return false, nil
 	})
 	if err != nil {
-		q.k.Logger.Error("failed to walk bribe allocations by address", "address", req.Address, "error", err)
+		q.k.Logger().Error("failed to walk bribe allocations by address", "address", req.Address, "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to query bribe allocations by address %s: %v", req.Address, err)
 	}
 
@@ -78,7 +78,7 @@ func (q queryServer) BribeAllocation(ctx context.Context, req *types.QueryBribeA
 
 	addr, err := q.k.addressCodec.StringToBytes(req.Address)
 	if err != nil {
-		q.k.Logger.Error("failed to decode address string", "address", req.Address, "error", err)
+		q.k.Logger().Error("failed to decode address string", "address", req.Address, "error", err)
 		return nil, status.Errorf(codes.InvalidArgument, "invalid address format '%s': %v", req.Address, err)
 	}
 
@@ -87,7 +87,7 @@ func (q queryServer) BribeAllocation(ctx context.Context, req *types.QueryBribeA
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, errors.Wrapf(sdkerrors.ErrKeyNotFound, "bribe allocation not found for address %s, epoch %d, pool %d", req.Address, req.EpochId, req.PoolId)
 		}
-		q.k.Logger.Error("failed to get bribe allocation", "address", req.Address, "epoch_id", req.EpochId, "pool_id", req.PoolId, "error", err)
+		q.k.Logger().Error("failed to get bribe allocation", "address", req.Address, "epoch_id", req.EpochId, "pool_id", req.PoolId, "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to get bribe allocation for address %s, epoch %d, pool %d: %v", req.Address, req.EpochId, req.PoolId, err)
 	}
 

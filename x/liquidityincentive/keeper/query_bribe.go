@@ -27,7 +27,7 @@ func (q queryServer) Bribes(ctx context.Context, req *types.QueryBribesRequest) 
 		},
 	)
 	if err != nil {
-		q.k.Logger.Error("failed to paginate bribes", "error", err)
+		q.k.Logger().Error("failed to paginate bribes", "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to query bribes: %v", err)
 	}
 
@@ -42,7 +42,7 @@ func (q queryServer) Bribe(ctx context.Context, req *types.QueryBribeRequest) (*
 
 	bribe, found, err := q.k.GetBribe(ctx, req.Id)
 	if err != nil {
-		q.k.Logger.Error("failed to get bribe", "id", req.Id, "error", err)
+		q.k.Logger().Error("failed to get bribe", "id", req.Id, "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to get bribe with id %d: %v", req.Id, err)
 	}
 	if !found {
@@ -62,7 +62,7 @@ func (q queryServer) BribesByEpochId(ctx context.Context, req *types.QueryBribes
 	// Retrieve all bribes for the given epoch ID from the keeper (no pagination)
 	bribes, err := q.k.GetAllBribeByEpochId(ctx, req.EpochId)
 	if err != nil {
-		q.k.Logger.Error("failed to get bribes by epoch id", "epoch_id", req.EpochId, "error", err)
+		q.k.Logger().Error("failed to get bribes by epoch id", "epoch_id", req.EpochId, "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to query bribes by epoch id %d: %v", req.EpochId, err)
 	}
 
@@ -80,7 +80,7 @@ func (q queryServer) BribesByPoolId(ctx context.Context, req *types.QueryBribesB
 	// Retrieve all bribes for the given pool ID from the keeper (no pagination)
 	bribes, err := q.k.GetAllBribeByPoolId(ctx, req.PoolId)
 	if err != nil {
-		q.k.Logger.Error("failed to get bribes by pool id", "pool_id", req.PoolId, "error", err)
+		q.k.Logger().Error("failed to get bribes by pool id", "pool_id", req.PoolId, "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to query bribes by pool id %d: %v", req.PoolId, err)
 	}
 
@@ -98,7 +98,7 @@ func (q queryServer) BribesByEpochAndPoolId(ctx context.Context, req *types.Quer
 	// Retrieve all bribes for the given epoch and pool ID from the keeper (no pagination)
 	bribes, err := q.k.GetBribeByEpochAndPool(ctx, req.EpochId, req.PoolId)
 	if err != nil {
-		q.k.Logger.Error("failed to get bribes by epoch and pool id", "epoch_id", req.EpochId, "pool_id", req.PoolId, "error", err)
+		q.k.Logger().Error("failed to get bribes by epoch and pool id", "epoch_id", req.EpochId, "pool_id", req.PoolId, "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to query bribes by epoch id %d and pool id %d: %v", req.EpochId, req.PoolId, err)
 	}
 
