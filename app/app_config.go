@@ -208,6 +208,7 @@ var (
 						evidencetypes.ModuleName,
 						authz.ModuleName,
 						feegrant.ModuleName,
+						vestingtypes.ModuleName,
 						upgradetypes.ModuleName,
 						circuittypes.ModuleName,
 						protocolpooltypes.ModuleName,
