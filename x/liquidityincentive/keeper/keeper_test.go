@@ -6,6 +6,7 @@ import (
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
+	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	codectestutil "github.com/cosmos/cosmos-sdk/codec/testutil"
@@ -58,7 +59,7 @@ func initFixture(t *testing.T) *fixture {
 	)
 
 	// Initialize params
-	if err := k.Params.Set(ctx, types.DefaultParams()); err != nil {
+	if err := k.Params.Set(ctx, types.NewParams(5, math.LegacyNewDecWithPrec(50, 2), 20)); err != nil {
 		t.Fatalf("failed to set params: %v", err)
 	}
 

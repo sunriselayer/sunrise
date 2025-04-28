@@ -93,7 +93,7 @@ func TestCreateEpoch(t *testing.T) {
 				require.Len(t, epochs, 1)
 				require.Equal(t, epochs[0].Id, uint64(1))
 				require.Equal(t, epochs[0].StartBlock, int64(0))
-				require.Equal(t, epochs[0].EndBlock, int64(7200))
+				require.Equal(t, epochs[0].EndBlock, int64(5))
 				require.Len(t, epochs[0].Gauges, 1)
 
 				gauges, err := k.GetAllGauges(ctx)
