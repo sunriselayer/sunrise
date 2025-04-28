@@ -95,15 +95,17 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 
 	// Use EpochBlocks as the claim period for now
 	expiredEpochId := k.GetBribeExpiredEpochId(ctx)
-	newExpiredEpochId := currentEpochId - uint64(params.BribeClaimEpochs)
-	if newExpiredEpochId > expiredEpochId {
-		for epochId := expiredEpochId; epochId < newExpiredEpochId; epochId++ {
-			if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
-				// Only log the error and continue with epoch ending process
-				ctx.Logger().Error("failed to process unclaimed bribes",
-					"epoch_id", epochId,
-					"error", err,
-				)
+	if currentEpochId > params.BribeClaimEpochs {
+		newExpiredEpochId := currentEpochId - params.BribeClaimEpochs
+		if newExpiredEpochId > expiredEpochId {
+			for epochId := expiredEpochId; epochId < newExpiredEpochId; epochId++ {
+				if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
+					// Only log the error and continue with epoch ending process
+					ctx.Logger().Error("failed to process unclaimed bribes",
+						"epoch_id", epochId,
+						"error", err,
+					)
+				}
 			}
 		}
 	}
