@@ -8,10 +8,12 @@ import (
 	context "context"
 	reflect "reflect"
 
+	address "cosmossdk.io/core/address"
 	store "cosmossdk.io/core/store"
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
 	gomock "go.uber.org/mock/gomock"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -234,10 +236,10 @@ func (mr *MockStakingKeeperMockRecorder) TotalBondedTokens(ctx interface{}) *gom
 }
 
 // Validator mocks base method.
-func (m *MockStakingKeeper) Validator(ctx context.Context, address types.ValAddress) (types.ValidatorI, error) {
+func (m *MockStakingKeeper) Validator(ctx context.Context, address types.ValAddress) (stakingtypes.ValidatorI, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Validator", ctx, address)
-	ret0, _ := ret[0].(types.ValidatorI)
+	ret0, _ := ret[0].(stakingtypes.ValidatorI)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -246,6 +248,20 @@ func (m *MockStakingKeeper) Validator(ctx context.Context, address types.ValAddr
 func (mr *MockStakingKeeperMockRecorder) Validator(ctx, address interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Validator", reflect.TypeOf((*MockStakingKeeper)(nil).Validator), ctx, address)
+}
+
+// ValidatorAddressCodec mocks base method.
+func (m *MockStakingKeeper) ValidatorAddressCodec() address.Codec {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ValidatorAddressCodec")
+	ret0, _ := ret[0].(address.Codec)
+	return ret0
+}
+
+// ValidatorAddressCodec indicates an expected call of ValidatorAddressCodec.
+func (mr *MockStakingKeeperMockRecorder) ValidatorAddressCodec() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidatorAddressCodec", reflect.TypeOf((*MockStakingKeeper)(nil).ValidatorAddressCodec))
 }
 
 // ValidatorsPowerStoreIterator mocks base method.
