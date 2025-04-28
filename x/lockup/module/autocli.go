@@ -56,36 +56,33 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "InitLockupAccount",
-					Use:       "init-lockup-account [owner] [start_time] [end_time] [amount] [denom]",
+					Use:       "init-lockup-account [owner] [start_time] [end_time] [amount]",
 					Short:     "Send a init-lockup-account tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "owner"},
 						{ProtoField: "start_time"},
 						{ProtoField: "end_time"},
-						{ProtoField: "amount.amount"},
-						{ProtoField: "amount.denom"},
+						{ProtoField: "amount"},
 					},
 				},
 				{
 					RpcMethod: "NonVotingDelegate",
-					Use:       "non-voting-delegate [id] [validator_address] [amount] [denom]",
+					Use:       "non-voting-delegate [id] [validator_address] [amount]",
 					Short:     "Send a non-voting-delegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
-						{ProtoField: "amount.amount"},
-						{ProtoField: "amount.denom"},
+						{ProtoField: "amount"},
 					},
 				},
 				{
 					RpcMethod: "NonVotingUndelegate",
-					Use:       "non-voting-undelegate [id] [validator_address] [amount] [denom]",
+					Use:       "non-voting-undelegate [id] [validator_address] [amount]",
 					Short:     "Send a non-voting-undelegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "validator_address"},
-						{ProtoField: "amount.amount"},
-						{ProtoField: "amount.denom"},
+						{ProtoField: "amount"},
 					},
 				},
 				{
@@ -99,13 +96,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "Send",
-					Use:       "send [id] [recipient] [amount] [denom]",
+					Use:       "send [id] [recipient] [amount]",
 					Short:     "Send a send tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "recipient"},
-						{ProtoField: "amount.amount"},
-						{ProtoField: "amount.denom"},
+						{ProtoField: "amount"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

@@ -30,7 +30,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "SwapExactAmountIn",
-					Use:       "swap-exact-amount-in <interface_provider> <amount_in> <min_amount_out>",
+					Use:       "swap-exact-amount-in [interface_provider] [amount_in] [min_amount_out]",
 					Short:     "Send a swap-exact-amount-in tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "interface_provider"},

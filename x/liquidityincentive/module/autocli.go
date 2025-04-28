@@ -24,19 +24,19 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Epoch",
-					Use:            "epoch <id>",
+					Use:            "epoch [id]",
 					Short:          "Shows a epoch by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
 					RpcMethod:      "Gauges",
-					Use:            "all-gauges <previous_epoch_id]",
+					Use:            "all-gauges [previous_epoch_id]",
 					Short:          "List all gauge",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
 				},
 				{
 					RpcMethod:      "Gauge",
-					Use:            "gauge <previous_epoch_id> <pool_id>",
+					Use:            "gauge [previous_epoch_id] [pool_id]",
 					Short:          "Shows a gauge",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
 				},
@@ -47,7 +47,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Vote",
-					Use:            "vote <address>",
+					Use:            "vote [address]",
 					Short:          "Shows a gauge vote",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
 				},
