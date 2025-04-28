@@ -135,7 +135,7 @@ type MsgCreatePool struct {
 	FeeRate    string `protobuf:"bytes,4,opt,name=fee_rate,json=feeRate,proto3" json:"fee_rate,omitempty"`
 	// Basically 1.0001
 	PriceRatio string `protobuf:"bytes,5,opt,name=price_ratio,json=priceRatio,proto3" json:"price_ratio,omitempty"`
-	// basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
+	// basically 0 and [0, 1). In the 1:1 stable pair, 0.5 would work
 	BaseOffset string `protobuf:"bytes,6,opt,name=base_offset,json=baseOffset,proto3" json:"base_offset,omitempty"`
 }
 

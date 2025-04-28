@@ -66,7 +66,7 @@ message MsgInitLockupAccountResponse {}
 message MsgNonVotingDelegate {
   option (cosmos.msg.v1.signer) = "owner";
   string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id = 2;
+  uint64 lockup_account_id = 2;
   string validator_address = 3 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
 }
@@ -78,7 +78,7 @@ message MsgNonVotingDelegateResponse {}
 message MsgNonVotingUndelegate {
   option (cosmos.msg.v1.signer) = "owner";
   string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id = 2;
+  uint64 lockup_account_id = 2;
   string validator_address = 3 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
 }
@@ -90,7 +90,7 @@ message MsgNonVotingUndelegateResponse {}
 message MsgClaimRewards {
   option (cosmos.msg.v1.signer) = "owner";
   string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id = 2;
+  uint64 lockup_account_id = 2;
   string validator_address = 3 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
 }
 
@@ -101,9 +101,12 @@ message MsgClaimRewardsResponse {}
 message MsgSend {
   option (cosmos.msg.v1.signer) = "owner";
   string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id = 2;
+  uint64 lockup_account_id = 2;
   string recipient = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin amount = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgSendResponse
