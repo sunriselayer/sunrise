@@ -52,11 +52,11 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 			if weight.IsPositive() && !poolTotalWeights[poolWeight.PoolId].IsZero() {
 				// Process only pools with bribes
 				bribe, found, err := k.GetBribeByEpochAndPool(ctx, epochId, poolWeight.PoolId)
-				if err != nil {
-					return err
-				}
 				if !found {
 					continue
+				}
+				if err != nil {
+					return err
 				}
 
 				// Calculate relative weight
