@@ -127,15 +127,15 @@ func request_Query_LockupAccount_0(ctx context.Context, marshaler runtime.Marsha
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
 	}
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["lockup_account_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "lockup_account_id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.LockupAccountId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "lockup_account_id", err)
 	}
 
 	msg, err := client.LockupAccount(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -165,15 +165,15 @@ func local_request_Query_LockupAccount_0(ctx context.Context, marshaler runtime.
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
 	}
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["lockup_account_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "lockup_account_id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.LockupAccountId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "lockup_account_id", err)
 	}
 
 	msg, err := server.LockupAccount(ctx, &protoReq)
@@ -203,15 +203,15 @@ func request_Query_SpendableAmount_0(ctx context.Context, marshaler runtime.Mars
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
 	}
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["lockup_account_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "lockup_account_id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.LockupAccountId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "lockup_account_id", err)
 	}
 
 	msg, err := client.SpendableAmount(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -241,15 +241,15 @@ func local_request_Query_SpendableAmount_0(ctx context.Context, marshaler runtim
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "owner", err)
 	}
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["lockup_account_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "lockup_account_id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.LockupAccountId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "lockup_account_id", err)
 	}
 
 	msg, err := server.SpendableAmount(ctx, &protoReq)
@@ -484,9 +484,9 @@ var (
 
 	pattern_Query_LockupAccounts_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunriselayer", "sunrise", "lockup", "v1", "lockup-accounts", "owner"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_LockupAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "lockup", "v1", "lockup-accounts", "owner", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_LockupAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "lockup", "v1", "lockup-accounts", "owner", "lockup_account_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_SpendableAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "lockup", "v1", "spendable-amount", "owner", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_SpendableAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "lockup", "v1", "spendable-amount", "owner", "lockup_account_id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

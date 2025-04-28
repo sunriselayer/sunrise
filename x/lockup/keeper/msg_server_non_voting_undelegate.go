@@ -19,10 +19,15 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
-	lockup, err := k.GetLockupAccount(ctx, owner, msg.Id)
+	lockup, err := k.GetLockupAccount(ctx, owner, msg.LockupAccountId)
 	if err != nil {
 		return nil, err
 	}
+	err = msg.Amount.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	lockupAddr, err := k.addressCodec.StringToBytes(lockup.Address)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid lockup address")
@@ -75,7 +80,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	// Add rewards to lockup account
 	found, coin := rewards.Find(feeDenom)
 	if found {
-		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)
+		err = k.AddRewardsToLockupAccount(ctx, owner, msg.LockupAccountId, coin.Amount)
 		if err != nil {
 			return nil, err
 		}
