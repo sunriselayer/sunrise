@@ -22,9 +22,6 @@ const (
 	// BribeAccount is the account that holds the bribe funds
 	BribeAccount = ModuleName + "/bribe"
 
-	// UnclaimedBribePrefix is the prefix for unclaimed bribes
-	UnclaimedBribePrefix = "unclaimed_bribe/"
-
 	// GovModuleName duplicates the gov module's name to avoid a dependency with x/gov.
 	// It should be synced with the gov module's name if it is ever changed.
 	// See: https://github.com/cosmos/cosmos-sdk/blob/v0.52.0-beta.2/x/gov/types/keys.go#L9
@@ -35,15 +32,16 @@ var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey = collections.NewPrefix("params/")
 
-	EpochsKeyPrefix          = collections.NewPrefix("epochs/")
-	EpochIdKey               = collections.NewPrefix("epoch_id/")
-	GaugesKeyPrefix          = collections.NewPrefix("gauges/")
-	VotesKeyPrefix           = collections.NewPrefix("votes/")
-	BribesKeyPrefix          = collections.NewPrefix("bribes/")
-	BribeIdKey               = collections.NewPrefix("bribe_id/")
-	BribesEpochIdIndexPrefix = collections.NewPrefix("bribes_by_epoch_id/")
-	BribesPoolIdIndexPrefix  = collections.NewPrefix("bribes_by_pool_id/")
-	UnclaimedBribesKeyPrefix = collections.NewPrefix("unclaimed_bribes/")
+	EpochsKeyPrefix           = collections.NewPrefix("epochs/")
+	EpochIdKey                = collections.NewPrefix("epoch_id/")
+	GaugesKeyPrefix           = collections.NewPrefix("gauges/")
+	VotesKeyPrefix            = collections.NewPrefix("votes/")
+	BribesKeyPrefix           = collections.NewPrefix("bribes/")
+	BribeIdKey                = collections.NewPrefix("bribe_id/")
+	BribesEpochIdIndexPrefix  = collections.NewPrefix("bribes_by_epoch_id/")
+	BribesPoolIdIndexPrefix   = collections.NewPrefix("bribes_by_pool_id/")
+	BribeAllocationsKeyPrefix = collections.NewPrefix("bribe_allocations/")
+	BribeExpiredEpochIdKey    = collections.NewPrefix("bribe_expired_epoch_id/")
 )
 
 type BribesIndexes struct {
@@ -82,11 +80,11 @@ func NewBribesIndexes(sb *collections.SchemaBuilder) BribesIndexes {
 }
 
 var (
-	EpochsKeyCodec          = collections.Uint64Key
-	GaugesKeyCodec          = collections.PairKeyCodec(collections.Uint64Key, collections.Uint64Key)
-	VotesKeyCodec           = sdk.AccAddressKey
-	BribesKeyCodec          = collections.Uint64Key
-	UnclaimedBribesKeyCodec = collections.PairKeyCodec(sdk.AccAddressKey, collections.Uint64Key)
+	EpochsKeyCodec           = collections.Uint64Key
+	GaugesKeyCodec           = collections.PairKeyCodec(collections.Uint64Key, collections.Uint64Key)
+	VotesKeyCodec            = sdk.AccAddressKey
+	BribesKeyCodec           = collections.Uint64Key
+	BribeAllocationsKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.Uint64Key, collections.Uint64Key)
 )
 
 func GaugeKey(previousEpochId uint64, poolId uint64) collections.Pair[uint64, uint64] {
@@ -97,6 +95,6 @@ func BribeKey(epochId uint64, poolId uint64) collections.Pair[uint64, uint64] {
 	return collections.Join(epochId, poolId)
 }
 
-func UnclaimedBribeKey(address sdk.AccAddress, epochId uint64, poolId uint64) collections.Triple[sdk.AccAddress, uint64, uint64] {
+func BribeAllocationKey(address sdk.AccAddress, epochId uint64, poolId uint64) collections.Triple[sdk.AccAddress, uint64, uint64] {
 	return collections.Join3(address, epochId, poolId)
 }

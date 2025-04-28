@@ -21,15 +21,16 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema          collections.Schema
-	Params          collections.Item[types.Params]
-	Epochs          collections.Map[uint64, types.Epoch]
-	EpochId         collections.Sequence
-	Gauges          collections.Map[collections.Pair[uint64, uint64], types.Gauge]
-	Votes           collections.Map[sdk.AccAddress, types.Vote]
-	Bribes          *collections.IndexedMap[uint64, types.Bribe, types.BribesIndexes]
-	BribeId         collections.Sequence
-	UnclaimedBribes collections.Map[collections.Pair[sdk.AccAddress, uint64], types.UnclaimedBribe]
+	Schema              collections.Schema
+	Params              collections.Item[types.Params]
+	Epochs              collections.Map[uint64, types.Epoch]
+	EpochId             collections.Sequence
+	Gauges              collections.Map[collections.Pair[uint64, uint64], types.Gauge]
+	Votes               collections.Map[sdk.AccAddress, types.Vote]
+	Bribes              *collections.IndexedMap[uint64, types.Bribe, types.BribesIndexes]
+	BribeId             collections.Sequence
+	BribeAllocations    collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.BribeAllocation]
+	BribeExpiredEpochId collections.Item[uint64]
 
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
@@ -77,13 +78,14 @@ func NewKeeper(
 			types.NewBribesIndexes(sb),
 		),
 		BribeId: collections.NewSequence(sb, types.BribeIdKey, "bribe_id"),
-		UnclaimedBribes: collections.NewMap(
+		BribeAllocations: collections.NewMap(
 			sb,
-			types.UnclaimedBribesKeyPrefix,
-			"unclaimed_bribes",
-			types.UnclaimedBribesKeyCodec,
-			codec.CollValue[types.UnclaimedBribe](cdc),
+			types.BribeAllocationsKeyPrefix,
+			"bribe_allocations",
+			types.BribeAllocationsKeyCodec,
+			codec.CollValue[types.BribeAllocation](cdc),
 		),
+		BribeExpiredEpochId: collections.NewItem(sb, types.BribeExpiredEpochIdKey, "bribe_expired_epoch_id", collections.Uint64Value),
 
 		accountKeeper:        authKeeper,
 		bankKeeper:           bankKeeper,

@@ -8,6 +8,18 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
+func (k Keeper) GetBribeExpiredEpochId(ctx context.Context) uint64 {
+	id, err := k.BribeExpiredEpochId.Get(ctx)
+	if err != nil {
+		return 0
+	}
+	return id
+}
+
+func (k Keeper) SetBribeExpiredEpochId(ctx context.Context, id uint64) error {
+	return k.BribeExpiredEpochId.Set(ctx, id)
+}
+
 // AppendBribe appends a bribe in the store with a new id and update the count
 func (k Keeper) AppendBribe(ctx context.Context, bribe types.Bribe) (id uint64, err error) {
 	id, err = k.BribeId.Next(ctx)
@@ -122,21 +134,25 @@ func (k Keeper) GetAllBribeByPoolId(ctx context.Context, poolId uint64) (list []
 	return list, nil
 }
 
-// GetBribeByEpochAndPool retrieves a bribe by epoch ID and pool ID.
-// Note: This iterates through all bribes, which might be inefficient for a large number of bribes.
-func (k Keeper) GetBribeByEpochAndPool(ctx context.Context, epochId, poolId uint64) (types.Bribe, bool, error) {
-	var foundBribe types.Bribe
-	found := false
-	err := k.Bribes.Walk(ctx, nil, func(key uint64, bribe types.Bribe) (stop bool, err error) {
-		if bribe.EpochId == epochId && bribe.PoolId == poolId {
-			foundBribe = bribe
-			found = true
-			return true, nil // Stop iteration once found
-		}
-		return false, nil
-	})
+// GetBribeByEpochAndPool retrieves a bribe by epoch ID and pool ID using indexes.
+func (k Keeper) GetBribeByEpochAndPool(ctx context.Context, epochId, poolId uint64) (list []types.Bribe, err error) {
+	err = k.Bribes.Indexes.EpochId.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[uint64, uint64](epochId),
+		func(_ uint64, bribeId uint64) (stop bool, err error) {
+			bribe, _, err := k.GetBribe(ctx, bribeId)
+			if err != nil {
+				return false, err
+			}
+			if bribe.PoolId == poolId {
+				list = append(list, bribe)
+			}
+			return false, nil // Continue iteration
+		},
+	)
+
 	if err != nil {
-		return types.Bribe{}, false, err
+		return nil, err
 	}
-	return foundBribe, found, nil
+	return list, nil
 }
