@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.liquidityincentive.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/liquidityincentive/v1/gauge.proto";
@@ -9,11 +10,28 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 
 // EventVoteGauge
 message EventVoteGauge {
-  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];;
+  string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated PoolWeight pool_weights = 2 [(gogoproto.nullable) = false];
 }
 
-// EventCollectVoteRewards
-message EventCollectVoteRewards {
+// EventRegisterBribe
+message EventRegisterBribe {
+  uint64 id = 1;
+  string address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 epoch_id = 3;
+  uint64 pool_id = 4;
+  repeated cosmos.base.v1beta1.Coin amount = 5 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// EventClaimBribes
+message EventClaimBribes {
   string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 bribe_id = 2;
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
 }

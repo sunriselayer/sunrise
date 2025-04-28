@@ -9,23 +9,44 @@ import (
 
 	math "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Authority); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+	sender, err := k.addressCodec.StringToBytes(msg.Sender)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	// end static validation
+	err = sdk.ValidateDenom(msg.DenomBase)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid denom base")
+	}
 
-	// TODO: enable later after completion of module - for now, disabled for testing
-	// if msg.Authority != k.authority {
-	// 	return nil, types.ErrInvalidSigner
-	// }
+	err = sdk.ValidateDenom(msg.DenomQuote)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid denom quote")
+	}
+
+	if msg.DenomBase == msg.DenomQuote {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "denom base and denom quote must be different")
+	}
 
 	feeRate, err := math.LegacyNewDecFromStr(msg.FeeRate)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid fee rate")
+	}
+
+	if !feeRate.IsPositive() {
+		return nil, errorsmod.Wrap(err, "fee rate must be positive")
+	}
+
+	if feeRate.GTE(math.LegacyOneDec()) {
+		return nil, errorsmod.Wrap(err, "fee rate must be less than 1")
+	}
+
+	if msg.PriceRatio != "1.0001" {
+		return nil, errorsmod.Wrap(err, "price ratio must be 1.0001")
 	}
 
 	priceRatio, err := math.LegacyNewDecFromStr(msg.PriceRatio)
@@ -36,6 +57,37 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	baseOffset, err := math.LegacyNewDecFromStr(msg.BaseOffset)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid base offset")
+	}
+
+	if baseOffset.GTE(math.LegacyOneDec()) {
+		return nil, errorsmod.Wrap(err, "base offset must be less than 1")
+	}
+
+	if baseOffset.LTE(math.LegacyNewDec(-1)) {
+		return nil, errorsmod.Wrap(err, "base offset must be greater than -1")
+	}
+
+	// end static validation
+
+	// Validate quote denom and consume gas if authority is not gov
+	if !sdk.AccAddress(sender).Equals(sdk.AccAddress(k.authority)) {
+		feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to get fee denom")
+		}
+
+		if msg.DenomQuote != feeDenom {
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "denom quote must be the same as fee denom")
+		}
+
+		params, err := k.Params.Get(ctx)
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to get params")
+		}
+
+		if params.CreatePoolGas > 0 {
+			sdk.UnwrapSDKContext(ctx).GasMeter().ConsumeGas(params.CreatePoolGas, "create pool")
+		}
 	}
 
 	var pool = types.Pool{

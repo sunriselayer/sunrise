@@ -256,8 +256,6 @@ func TestBeginBlocker(t *testing.T) {
 				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
-				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
-					Return(nil).AnyTimes()
 			},
 		},
 		{
@@ -283,8 +281,6 @@ func TestBeginBlocker(t *testing.T) {
 				require.NoError(t, err)
 				s.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(sdk.NewInt64Coin(consts.BondDenom, 1000000)).AnyTimes()
-				s.mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
-					Return(nil).AnyTimes()
 			},
 		},
 		{
@@ -322,6 +318,18 @@ func TestBeginBlocker(t *testing.T) {
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
 			)
+			mocks.StakingKeeper.EXPECT().BondDenom(gomock.Any()).
+				Return(consts.BondDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
+				Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.TokenConverterKeeper.EXPECT().ConvertReverse(gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(nil).AnyTimes()
+			mocks.BankKeeper.EXPECT().SendCoinsFromModuleToModule(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(nil).AnyTimes()
+			mocks.TokenConverterKeeper.EXPECT().ConvertReverse(gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(nil).AnyTimes()
+			mocks.LiquiditypoolKeeper.EXPECT().AllocateIncentive(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(nil).AnyTimes()
 			suite := tallyFixture{
 				t:        t,
 				valAddrs: valAddrs,

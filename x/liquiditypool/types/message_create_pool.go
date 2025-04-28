@@ -1,8 +1,8 @@
 package types
 
-func NewMsgCreatePool(authority string, denomBase string, denomQuote string) *MsgCreatePool {
+func NewMsgCreatePool(sender string, denomBase string, denomQuote string) *MsgCreatePool {
 	return &MsgCreatePool{
-		Authority:  authority,
+		Sender:     sender,
 		DenomBase:  denomBase,
 		DenomQuote: denomQuote,
 	}

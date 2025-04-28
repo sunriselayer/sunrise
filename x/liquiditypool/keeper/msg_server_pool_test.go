@@ -5,19 +5,25 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestPoolMsgServerCreate(t *testing.T) {
-	k, _, srv, ctx := setupMsgServer(t)
+	k, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+
 	sender := sdk.AccAddress("sender")
+	quoteDenom := consts.FeeDenom
+
 	resp, err := srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender.String(),
+		Sender:     sender.String(),
 		DenomBase:  "base",
-		DenomQuote: "quote",
+		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
 		BaseOffset: "0.5",
@@ -36,13 +42,13 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	require.Equal(t, pool.CurrentTickLiquidity, "0.000000000000000000")
 	require.Equal(t, pool.CurrentSqrtPrice, "0.000000000000000000")
 	require.Equal(t, pool.DenomBase, "base")
-	require.Equal(t, pool.DenomQuote, "quote")
+	require.Equal(t, pool.DenomQuote, quoteDenom)
 
 	// try creating another pool with same info
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
-		Authority:  sender.String(),
+		Sender:     sender.String(),
 		DenomBase:  "base",
-		DenomQuote: "quote",
+		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
 		BaseOffset: "0.5",

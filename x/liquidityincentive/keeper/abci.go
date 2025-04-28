@@ -5,7 +5,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
@@ -55,9 +54,18 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
-	vRise := k.bankKeeper.GetBalance(ctx, feeCollector, consts.BondDenom)
-	vRiseDec := sdk.NewDecCoinsFromCoins(vRise)
+	incentiveModule := authtypes.NewModuleAddress(types.ModuleName)
+	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	if err != nil {
+		return err
+	}
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return err
+	}
 
+	// Check the Gauge count is not zero.
+	// Distribute incentives to gauges
 	lastEpoch, found, err := k.GetLastEpoch(ctx)
 	if err != nil {
 		return err
@@ -74,16 +82,43 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	if totalCount.IsZero() {
 		return nil
 	}
+
+	// Send a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
+	feeBalance := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
+	feeCollectorAmountDec := math.LegacyNewDecFromInt(feeBalance.Amount)
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return err
+	}
+	stakingRewardRatioDec, err := math.LegacyNewDecFromStr(params.StakingRewardRatio)
+	if err != nil {
+		return err
+	}
+	incentiveAmount := feeCollectorAmountDec.Mul(math.LegacyOneDec().Sub(stakingRewardRatioDec)).TruncateInt()
+	err = k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(feeDenom, incentiveAmount)))
+	if err != nil {
+		return err
+	}
+
+	// Convert fee denom to bond denom in the `x/liquidityincentive` module account.
+	err = k.tokenConverterKeeper.ConvertReverse(ctx, incentiveAmount, incentiveModule)
+	if err != nil {
+		return err
+	}
+
+	// Get `x/liquidityincentive` module's incentive balance.
+	incentiveBalance := k.bankKeeper.GetBalance(ctx, incentiveModule, bondDenom)
+
+	// Distribute incentives to gauges
 	for _, gauge := range lastEpoch.Gauges {
 		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
-		allocationDec := vRiseDec.MulDecTruncate(weight)
-		allocation, _ := allocationDec.TruncateDecimal()
-		if allocation.IsAllPositive() {
+		allocationDec := math.LegacyNewDecFromInt(incentiveBalance.Amount).Mul(weight)
+		if allocationDec.IsPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(
 				ctx,
 				gauge.PoolId,
-				authtypes.NewModuleAddress(authtypes.FeeCollectorName),
-				allocation,
+				incentiveModule,
+				sdk.NewCoins(sdk.NewCoin(bondDenom, allocationDec.TruncateInt())),
 			)
 			if err != nil {
 				ctx.Logger().Error("failure in incentive allocation", "error", err)
@@ -109,6 +144,12 @@ func (k Keeper) EndBlocker(ctx sdk.Context) error {
 			return nil
 		}
 	} else if ctx.BlockHeight() >= lastEpoch.EndBlock {
+		// End current epoch and start new one
+		if err := k.FinalizeBribeForEpoch(ctx); err != nil {
+			ctx.Logger().Error("epoch ending error", err)
+			return nil
+		}
+
 		err := k.CreateEpoch(ctx, lastEpoch.Id, lastEpoch.Id+1)
 		if err != nil {
 			ctx.Logger().Error("epoch creation error", err)

@@ -6,6 +6,7 @@ import (
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
+	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	codectestutil "github.com/cosmos/cosmos-sdk/codec/testutil"
@@ -52,11 +53,13 @@ func initFixture(t *testing.T) *fixture {
 		mocks.AcctKeeper,
 		mocks.BankKeeper,
 		mocks.StakingKeeper,
+		mocks.FeeKeeper,
+		mocks.TokenConverterKeeper,
 		mocks.LiquiditypoolKeeper,
 	)
 
 	// Initialize params
-	if err := k.Params.Set(ctx, types.DefaultParams()); err != nil {
+	if err := k.Params.Set(ctx, types.NewParams(5, math.LegacyNewDecWithPrec(50, 2), 20)); err != nil {
 		t.Fatalf("failed to set params: %v", err)
 	}
 
@@ -69,19 +72,23 @@ func initFixture(t *testing.T) *fixture {
 }
 
 type LiquidityIncentiveMocks struct {
-	AcctKeeper          *liquidityincentivetestutil.MockAccountKeeper
-	BankKeeper          *liquidityincentivetestutil.MockBankKeeper
-	StakingKeeper       *liquidityincentivetestutil.MockStakingKeeper
-	LiquiditypoolKeeper *liquidityincentivetestutil.MockLiquidityPoolKeeper
+	AcctKeeper           *liquidityincentivetestutil.MockAccountKeeper
+	BankKeeper           *liquidityincentivetestutil.MockBankKeeper
+	StakingKeeper        *liquidityincentivetestutil.MockStakingKeeper
+	FeeKeeper            *liquidityincentivetestutil.MockFeeKeeper
+	TokenConverterKeeper *liquidityincentivetestutil.MockTokenConverterKeeper
+	LiquiditypoolKeeper  *liquidityincentivetestutil.MockLiquidityPoolKeeper
 }
 
 func getMocks(t *testing.T) LiquidityIncentiveMocks {
 	ctrl := gomock.NewController(t)
 
 	return LiquidityIncentiveMocks{
-		AcctKeeper:          liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
-		BankKeeper:          liquidityincentivetestutil.NewMockBankKeeper(ctrl),
-		StakingKeeper:       liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
-		LiquiditypoolKeeper: liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
+		AcctKeeper:           liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:           liquidityincentivetestutil.NewMockBankKeeper(ctrl),
+		StakingKeeper:        liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
+		FeeKeeper:            liquidityincentivetestutil.NewMockFeeKeeper(ctrl),
+		TokenConverterKeeper: liquidityincentivetestutil.NewMockTokenConverterKeeper(ctrl),
+		LiquiditypoolKeeper:  liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
 	}
 }

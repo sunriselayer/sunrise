@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.liquidityincentive.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -18,8 +19,10 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   // VoteGauge
   rpc VoteGauge(MsgVoteGauge) returns (MsgVoteGaugeResponse);
-  // CollectVoteRewards
-  rpc CollectVoteRewards(MsgCollectVoteRewards) returns (MsgCollectVoteRewardsResponse);
+  // RegisterBribe
+  rpc RegisterBribe(MsgRegisterBribe) returns (MsgRegisterBribeResponse);
+  // ClaimBribes
+  rpc ClaimBribes(MsgClaimBribes) returns (MsgClaimBribesResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -50,11 +53,32 @@ message MsgVoteGauge {
 // MsgVoteGaugeResponse
 message MsgVoteGaugeResponse {}
 
-// MsgCollectVoteRewards
-message MsgCollectVoteRewards {
+// MsgRegisterBribe
+message MsgRegisterBribe {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 epoch_id = 2;
+  uint64 pool_id = 3;
+  repeated cosmos.base.v1beta1.Coin amount = 4 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
 }
 
-// MsgCollectVoteRewardsResponse
-message MsgCollectVoteRewardsResponse {}
+// MsgRegisterBribeResponse
+message MsgRegisterBribeResponse {}
+
+// MsgClaimBribes
+message MsgClaimBribes {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 bribe_id = 2;
+}
+
+// MsgClaimBribesResponse
+message MsgClaimBribesResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}

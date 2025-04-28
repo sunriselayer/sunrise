@@ -199,6 +199,20 @@ func (mr *MockBankKeeperMockRecorder) SendCoinsFromModuleToModule(ctx, senderMod
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendCoinsFromModuleToModule", reflect.TypeOf((*MockBankKeeper)(nil).SendCoinsFromModuleToModule), ctx, senderModule, recipientModule, amt)
 }
 
+// IsSendEnabledCoins mocks base method.
+func (m *MockBankKeeper) IsSendEnabledCoins(ctx context.Context, coins ...types.Coin) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsSendEnabledCoins", ctx, coins)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// IsSendEnabledCoins indicates an expected call of IsSendEnabledCoins.
+func (mr *MockBankKeeperMockRecorder) IsSendEnabledCoins(ctx, coins interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsSendEnabledCoins", reflect.TypeOf((*MockBankKeeper)(nil).IsSendEnabledCoins), ctx, coins)
+}
+
 // MockStakingKeeper is a mock of StakingKeeper interface.
 type MockStakingKeeper struct {
 	ctrl     *gomock.Controller
@@ -279,6 +293,21 @@ func (mr *MockStakingKeeperMockRecorder) ValidatorAddressCodec() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidatorAddressCodec", reflect.TypeOf((*MockStakingKeeper)(nil).ValidatorAddressCodec))
 }
 
+// BondDenom mocks base method.
+func (m *MockStakingKeeper) BondDenom(ctx context.Context) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BondDenom", ctx)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BondDenom indicates an expected call of BondDenom.
+func (mr *MockStakingKeeperMockRecorder) BondDenom(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BondDenom", reflect.TypeOf((*MockStakingKeeper)(nil).BondDenom), ctx)
+}
+
 // MockLiquidityPoolKeeper is a mock of LiquidityPoolKeeper interface.
 type MockLiquidityPoolKeeper struct {
 	ctrl     *gomock.Controller
@@ -330,4 +359,79 @@ func (m *MockLiquidityPoolKeeper) GetPool(ctx context.Context, id uint64) (types
 func (mr *MockLiquidityPoolKeeperMockRecorder) GetPool(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPool", reflect.TypeOf((*MockLiquidityPoolKeeper)(nil).GetPool), ctx, id)
+}
+
+// MockFeeKeeper is a mock of FeeKeeper interface.
+type MockFeeKeeper struct {
+	ctrl     *gomock.Controller
+	recorder *MockFeeKeeperMockRecorder
+}
+
+// MockFeeKeeperMockRecorder is the mock recorder for MockFeeKeeper.
+type MockFeeKeeperMockRecorder struct {
+	mock *MockFeeKeeper
+}
+
+// NewMockFeeKeeper creates a new mock instance.
+func NewMockFeeKeeper(ctrl *gomock.Controller) *MockFeeKeeper {
+	mock := &MockFeeKeeper{ctrl: ctrl}
+	mock.recorder = &MockFeeKeeperMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockFeeKeeper) EXPECT() *MockFeeKeeperMockRecorder {
+	return m.recorder
+}
+
+// FeeDenom mocks base method.
+func (m *MockFeeKeeper) FeeDenom(ctx context.Context) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FeeDenom", ctx)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FeeDenom indicates an expected call of FeeDenom.
+func (mr *MockFeeKeeperMockRecorder) FeeDenom(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FeeDenom", reflect.TypeOf((*MockFeeKeeper)(nil).FeeDenom), ctx)
+}
+
+// MockTokenConverterKeeper is a mock of TokenConverterKeeper interface.
+type MockTokenConverterKeeper struct {
+	ctrl     *gomock.Controller
+	recorder *MockTokenConverterKeeperMockRecorder
+}
+
+// MockTokenConverterKeeperMockRecorder is the mock recorder for MockTokenConverterKeeper.
+type MockTokenConverterKeeperMockRecorder struct {
+	mock *MockTokenConverterKeeper
+}
+
+// NewMockTokenConverterKeeper creates a new mock instance.
+func NewMockTokenConverterKeeper(ctrl *gomock.Controller) *MockTokenConverterKeeper {
+	mock := &MockTokenConverterKeeper{ctrl: ctrl}
+	mock.recorder = &MockTokenConverterKeeperMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTokenConverterKeeper) EXPECT() *MockTokenConverterKeeperMockRecorder {
+	return m.recorder
+}
+
+// ConvertReverse mocks base method.
+func (m *MockTokenConverterKeeper) ConvertReverse(ctx context.Context, amount math.Int, address types.AccAddress) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ConvertReverse", ctx, amount, address)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ConvertReverse indicates an expected call of ConvertReverse.
+func (mr *MockTokenConverterKeeperMockRecorder) ConvertReverse(ctx, amount, address interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConvertReverse", reflect.TypeOf((*MockTokenConverterKeeper)(nil).ConvertReverse), ctx, amount, address)
 }

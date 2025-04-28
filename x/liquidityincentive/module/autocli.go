@@ -69,10 +69,23 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				{
-					RpcMethod:      "CollectVoteRewards",
-					Use:            "collect-vote-rewards",
-					Short:          "Send a collect-vote-rewards tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					RpcMethod: "RegisterBribe",
+					Use:       "register-bribe [epoch_id] [pool_id] [amount] [denom]",
+					Short:     "Send a register-bribe tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "epoch_id"},
+						{ProtoField: "pool_id"},
+						{ProtoField: "amount.amount"},
+						{ProtoField: "amount.denom"},
+					},
+				},
+				{
+					RpcMethod: "ClaimBribes",
+					Use:       "claim-bribes [bribe_id]",
+					Short:     "Send a claim-bribes tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "bribe_id"},
+					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

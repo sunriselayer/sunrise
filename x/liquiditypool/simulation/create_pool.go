@@ -14,7 +14,7 @@ func MsgCreatePoolFactory(k keeper.Keeper) simsx.SimMsgFactoryFn[*types.MsgCreat
 		from := testData.AnyAccount(reporter)
 
 		msg := &types.MsgCreatePool{
-			Authority: from.AddressBech32,
+			Sender: from.AddressBech32,
 		}
 
 		// TODO: Handle the CreatePool simulation

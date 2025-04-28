@@ -25,6 +25,7 @@ type BankKeeper interface {
 	SendCoinsFromModuleToModule(ctx context.Context, senderModule string, recipientModule string, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	IsSendEnabledCoins(ctx context.Context, coins ...sdk.Coin) error
 	// Methods imported from bank should be defined here
 }
 
@@ -41,6 +42,16 @@ type StakingKeeper interface {
 		ctx context.Context, delegator sdk.AccAddress,
 		fn func(index int64, delegation sdk.DelegationI) (stop bool),
 	) error
+
+	BondDenom(ctx context.Context) (string, error)
+}
+
+type FeeKeeper interface {
+	FeeDenom(ctx context.Context) (string, error)
+}
+
+type TokenConverterKeeper interface {
+	ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error
 }
 
 type LiquidityPoolKeeper interface {
