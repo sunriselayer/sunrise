@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"slices"
 
 	errorsmod "cosmossdk.io/errors"
 	math "cosmossdk.io/math"
@@ -26,14 +27,19 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 	if err != nil {
 		return nil, err
 	}
-	// Get unclaimed bribe
-	unclaimed, err := k.GetUnclaimedBribe(ctx, senderAddr, msg.BribeId)
+	// Get bribe allocation
+	allocation, err := k.GetBribeAllocation(ctx, senderAddr, bribe.EpochId, bribe.PoolId)
 	if err != nil {
 		return nil, err
 	}
 
+	// Check if bribe allocation is already claimed
+	if slices.Contains(allocation.ClaimedBribeIds, bribe.Id) {
+		return nil, types.ErrBribeAlreadyClaimed
+	}
+
 	// Get weight
-	weight, err := math.LegacyNewDecFromStr(unclaimed.Weight)
+	weight, err := math.LegacyNewDecFromStr(allocation.Weight)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid weight format")
 	}
@@ -43,7 +49,7 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 	claimAmount, _ := claimAmountDec.TruncateDecimal()
 
 	if claimAmount.IsZero() {
-		return nil, errorsmod.Wrap(types.ErrNoBribesToClaim, "no bribes to claim")
+		return nil, types.ErrNoBribeToClaim
 	}
 
 	// Send bribe
@@ -62,9 +68,10 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 		return nil, errorsmod.Wrap(err, "failed to update bribe claimed amount")
 	}
 
-	// Remove UnclaimedBribe (prevent double claiming)
-	if err := k.RemoveUnclaimedBribe(ctx, unclaimed); err != nil {
-		return nil, errorsmod.Wrap(err, "failed to remove unclaimed bribe")
+	// Update bribe allocation (prevent double claiming)
+	allocation.ClaimedBribeIds = append(allocation.ClaimedBribeIds, bribe.Id)
+	if err := k.SetBribeAllocation(ctx, allocation); err != nil {
+		return nil, errorsmod.Wrap(err, "failed to update bribe allocation")
 	}
 
 	// Emit event
