@@ -20,11 +20,11 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 
 	// Check if bribe exists
 	bribe, found, err := k.GetBribe(ctx, msg.BribeId)
-	if err != nil {
-		return nil, err
-	}
 	if !found {
 		return nil, types.ErrBribeNotFound
+	}
+	if err != nil {
+		return nil, err
 	}
 	// Get unclaimed bribe
 	unclaimed, err := k.GetUnclaimedBribe(ctx, senderAddr, msg.BribeId)

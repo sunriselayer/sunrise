@@ -66,6 +66,8 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 				unclaimedBribe := types.UnclaimedBribe{
 					Address: voterStr,
 					BribeId: bribe.Id,
+					EpochId: epochId,
+					PoolId:  poolWeight.PoolId,
 					Weight:  relativeWeight.String(),
 				}
 
