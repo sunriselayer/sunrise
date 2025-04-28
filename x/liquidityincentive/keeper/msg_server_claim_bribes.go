@@ -57,6 +57,11 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 		return nil, errorsmod.Wrap(types.ErrNoBribesToClaim, "no bribes to claim")
 	}
 
+	// Remove UnclaimedBribe (prevent double claiming)
+	if err := k.UnclaimedBribes.Remove(ctx, unclaimedKey); err != nil {
+		return nil, errorsmod.Wrap(err, "failed to remove unclaimed bribe")
+	}
+
 	// Send bribe
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(
 		sdkCtx,
@@ -71,11 +76,6 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 	bribe.ClaimedAmount = bribe.ClaimedAmount.Add(claimAmount)
 	if err := k.Bribes.Set(ctx, bribeKey, bribe); err != nil {
 		return nil, errorsmod.Wrap(err, "failed to update bribe claimed amount")
-	}
-
-	// Remove UnclaimedBribe (prevent double claiming)
-	if err := k.UnclaimedBribes.Remove(ctx, unclaimedKey); err != nil {
-		return nil, errorsmod.Wrap(err, "failed to remove unclaimed bribe")
 	}
 
 	totalClaimed = totalClaimed.Add(claimAmount)

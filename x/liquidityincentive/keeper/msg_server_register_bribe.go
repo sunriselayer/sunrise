@@ -19,12 +19,6 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	senderAddr := sdk.AccAddress(sender)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// Check if epoch exists
-	_, err = k.Epochs.Get(ctx, msg.EpochId)
-	if err != nil {
-		return nil, err
-	}
-
 	// Check if bribe already exists
 	bribeKey := collections.Join(msg.EpochId, msg.PoolId)
 	_, err = k.Bribes.Get(ctx, bribeKey)
