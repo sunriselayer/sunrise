@@ -11,10 +11,9 @@ import (
 
 type CustomBankModule struct {
 	bank.AppModuleBasic
-	cdc codec.Codec
 }
 
-func (cm CustomBankModule) DefaultGenesis() json.RawMessage {
+func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := banktypes.DefaultGenesisState()
 
 	metadataFee := banktypes.Metadata{
@@ -64,5 +63,5 @@ func (cm CustomBankModule) DefaultGenesis() json.RawMessage {
 
 	genesis.SendEnabled = append(genesis.SendEnabled, sendEnabledVrise)
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genesis)
 }
