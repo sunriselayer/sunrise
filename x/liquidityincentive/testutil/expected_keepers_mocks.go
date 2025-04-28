@@ -199,6 +199,20 @@ func (mr *MockBankKeeperMockRecorder) SendCoinsFromModuleToModule(ctx, senderMod
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendCoinsFromModuleToModule", reflect.TypeOf((*MockBankKeeper)(nil).SendCoinsFromModuleToModule), ctx, senderModule, recipientModule, amt)
 }
 
+// IsSendEnabledCoins mocks base method.
+func (m *MockBankKeeper) IsSendEnabledCoins(ctx context.Context, coins ...types.Coin) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsSendEnabledCoins", ctx, coins)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// IsSendEnabledCoins indicates an expected call of IsSendEnabledCoins.
+func (mr *MockBankKeeperMockRecorder) IsSendEnabledCoins(ctx, coins interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsSendEnabledCoins", reflect.TypeOf((*MockBankKeeper)(nil).IsSendEnabledCoins), ctx, coins)
+}
+
 // MockStakingKeeper is a mock of StakingKeeper interface.
 type MockStakingKeeper struct {
 	ctrl     *gomock.Controller

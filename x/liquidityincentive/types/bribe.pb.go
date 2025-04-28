@@ -6,6 +6,7 @@ package types
 import (
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
@@ -27,10 +28,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Bribe
 type Bribe struct {
-	EpochId       uint64     `protobuf:"varint,1,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
-	PoolId        uint64     `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	Amount        types.Coin `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount"`
-	ClaimedAmount types.Coin `protobuf:"bytes,4,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount"`
+	Id            uint64                                   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	EpochId       uint64                                   `protobuf:"varint,2,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
+	PoolId        uint64                                   `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	Address       string                                   `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	Amount        github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,5,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
+	ClaimedAmount github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,6,rep,name=claimed_amount,json=claimedAmount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"claimed_amount"`
 }
 
 func (m *Bribe) Reset()         { *m = Bribe{} }
@@ -66,6 +69,13 @@ func (m *Bribe) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Bribe proto.InternalMessageInfo
 
+func (m *Bribe) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func (m *Bribe) GetEpochId() uint64 {
 	if m != nil {
 		return m.EpochId
@@ -80,40 +90,48 @@ func (m *Bribe) GetPoolId() uint64 {
 	return 0
 }
 
-func (m *Bribe) GetAmount() types.Coin {
+func (m *Bribe) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *Bribe) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
 		return m.Amount
 	}
-	return types.Coin{}
+	return nil
 }
 
-func (m *Bribe) GetClaimedAmount() types.Coin {
+func (m *Bribe) GetClaimedAmount() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
 		return m.ClaimedAmount
 	}
-	return types.Coin{}
+	return nil
 }
 
-// Bribe
-type UnclaimedBribe struct {
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	EpochId uint64 `protobuf:"varint,2,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
-	PoolId  uint64 `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	Weight  string `protobuf:"bytes,4,opt,name=weight,proto3" json:"weight,omitempty"`
+// BribeAllocation
+type BribeAllocation struct {
+	Address         string   `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	EpochId         uint64   `protobuf:"varint,2,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
+	PoolId          uint64   `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	Weight          string   `protobuf:"bytes,4,opt,name=weight,proto3" json:"weight,omitempty"`
+	ClaimedBribeIds []uint64 `protobuf:"varint,5,rep,packed,name=claimed_bribe_ids,json=claimedBribeIds,proto3" json:"claimed_bribe_ids,omitempty"`
 }
 
-func (m *UnclaimedBribe) Reset()         { *m = UnclaimedBribe{} }
-func (m *UnclaimedBribe) String() string { return proto.CompactTextString(m) }
-func (*UnclaimedBribe) ProtoMessage()    {}
-func (*UnclaimedBribe) Descriptor() ([]byte, []int) {
+func (m *BribeAllocation) Reset()         { *m = BribeAllocation{} }
+func (m *BribeAllocation) String() string { return proto.CompactTextString(m) }
+func (*BribeAllocation) ProtoMessage()    {}
+func (*BribeAllocation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2269523b87017629, []int{1}
 }
-func (m *UnclaimedBribe) XXX_Unmarshal(b []byte) error {
+func (m *BribeAllocation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *UnclaimedBribe) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *BribeAllocation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_UnclaimedBribe.Marshal(b, m, deterministic)
+		return xxx_messageInfo_BribeAllocation.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -123,49 +141,56 @@ func (m *UnclaimedBribe) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *UnclaimedBribe) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UnclaimedBribe.Merge(m, src)
+func (m *BribeAllocation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BribeAllocation.Merge(m, src)
 }
-func (m *UnclaimedBribe) XXX_Size() int {
+func (m *BribeAllocation) XXX_Size() int {
 	return m.Size()
 }
-func (m *UnclaimedBribe) XXX_DiscardUnknown() {
-	xxx_messageInfo_UnclaimedBribe.DiscardUnknown(m)
+func (m *BribeAllocation) XXX_DiscardUnknown() {
+	xxx_messageInfo_BribeAllocation.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UnclaimedBribe proto.InternalMessageInfo
+var xxx_messageInfo_BribeAllocation proto.InternalMessageInfo
 
-func (m *UnclaimedBribe) GetAddress() string {
+func (m *BribeAllocation) GetAddress() string {
 	if m != nil {
 		return m.Address
 	}
 	return ""
 }
 
-func (m *UnclaimedBribe) GetEpochId() uint64 {
+func (m *BribeAllocation) GetEpochId() uint64 {
 	if m != nil {
 		return m.EpochId
 	}
 	return 0
 }
 
-func (m *UnclaimedBribe) GetPoolId() uint64 {
+func (m *BribeAllocation) GetPoolId() uint64 {
 	if m != nil {
 		return m.PoolId
 	}
 	return 0
 }
 
-func (m *UnclaimedBribe) GetWeight() string {
+func (m *BribeAllocation) GetWeight() string {
 	if m != nil {
 		return m.Weight
 	}
 	return ""
 }
 
+func (m *BribeAllocation) GetClaimedBribeIds() []uint64 {
+	if m != nil {
+		return m.ClaimedBribeIds
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Bribe)(nil), "sunrise.liquidityincentive.v1.Bribe")
-	proto.RegisterType((*UnclaimedBribe)(nil), "sunrise.liquidityincentive.v1.UnclaimedBribe")
+	proto.RegisterType((*BribeAllocation)(nil), "sunrise.liquidityincentive.v1.BribeAllocation")
 }
 
 func init() {
@@ -173,30 +198,35 @@ func init() {
 }
 
 var fileDescriptor_2269523b87017629 = []byte{
-	// 361 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0xb1, 0x4e, 0xeb, 0x30,
-	0x14, 0x8d, 0xdb, 0xbe, 0xf4, 0xd5, 0x4f, 0xaf, 0x43, 0x84, 0x44, 0x5b, 0x89, 0x50, 0x75, 0x40,
-	0x65, 0x20, 0x56, 0x61, 0x40, 0x62, 0x23, 0x20, 0xa4, 0xae, 0x11, 0x2c, 0x2c, 0x55, 0x62, 0x5b,
-	0xa9, 0xa5, 0xc4, 0x0e, 0xb1, 0x53, 0xe8, 0x0f, 0x30, 0xf3, 0x31, 0x8c, 0x7c, 0x40, 0xc7, 0x8a,
-	0x89, 0x09, 0xa1, 0xf6, 0x47, 0x50, 0x62, 0x77, 0xa8, 0x00, 0x89, 0xcd, 0xe7, 0x9e, 0x7b, 0xee,
-	0x3d, 0x47, 0xd7, 0xf0, 0x50, 0x16, 0x3c, 0x67, 0x92, 0xa2, 0x84, 0xdd, 0x15, 0x8c, 0x30, 0x35,
-	0x67, 0x1c, 0x53, 0xae, 0xd8, 0x8c, 0xa2, 0xd9, 0x08, 0x45, 0x39, 0x8b, 0xa8, 0x97, 0xe5, 0x42,
-	0x09, 0x67, 0xcf, 0xb4, 0x7a, 0x5f, 0x5b, 0xbd, 0xd9, 0xa8, 0xe7, 0x62, 0x21, 0x53, 0x21, 0x51,
-	0x14, 0xca, 0x52, 0x1a, 0x51, 0x15, 0x8e, 0x10, 0x16, 0x8c, 0x6b, 0x79, 0xaf, 0xab, 0xf9, 0x49,
-	0x85, 0x90, 0x06, 0x86, 0xda, 0x89, 0x45, 0x2c, 0x74, 0xbd, 0x7c, 0xe9, 0xea, 0xe0, 0x05, 0xc0,
-	0x3f, 0x7e, 0xb9, 0xdf, 0xe9, 0xc2, 0xbf, 0x34, 0x13, 0x78, 0x3a, 0x61, 0xa4, 0x03, 0xfa, 0x60,
-	0xd8, 0x08, 0x9a, 0x15, 0x1e, 0x13, 0x67, 0x17, 0x36, 0x33, 0x21, 0x92, 0x92, 0xa9, 0x55, 0x8c,
-	0x5d, 0xc2, 0x31, 0x71, 0x4e, 0xa1, 0x1d, 0xa6, 0xa2, 0xe0, 0xaa, 0x53, 0xef, 0x83, 0xe1, 0xbf,
-	0xe3, 0xae, 0x67, 0x56, 0x96, 0xfe, 0x3c, 0xe3, 0xcf, 0xbb, 0x10, 0x8c, 0xfb, 0x8d, 0xc5, 0xfb,
-	0xbe, 0x15, 0x98, 0x76, 0xe7, 0x0a, 0xb6, 0x71, 0x12, 0xb2, 0x94, 0x92, 0x89, 0x19, 0xd0, 0xf8,
-	0xdd, 0x80, 0xff, 0x46, 0x76, 0x5e, 0xa9, 0x06, 0x8f, 0x00, 0xb6, 0x6f, 0xb8, 0xa9, 0xe9, 0x1c,
-	0x1d, 0xd8, 0x0c, 0x09, 0xc9, 0xa9, 0x94, 0x55, 0x8c, 0x56, 0xb0, 0x81, 0x5b, 0x09, 0x6b, 0x3f,
-	0x26, 0xac, 0x6f, 0x25, 0x3c, 0x80, 0xf6, 0x3d, 0x65, 0xf1, 0x54, 0x1b, 0x6c, 0xf9, 0xed, 0xd7,
-	0xe7, 0x23, 0x68, 0x3c, 0x5e, 0x52, 0x1c, 0x18, 0xd6, 0xbf, 0x5e, 0xac, 0x5c, 0xb0, 0x5c, 0xb9,
-	0xe0, 0x63, 0xe5, 0x82, 0xa7, 0xb5, 0x6b, 0x2d, 0xd7, 0xae, 0xf5, 0xb6, 0x76, 0xad, 0xdb, 0xb3,
-	0x98, 0xa9, 0x69, 0x11, 0x79, 0x58, 0xa4, 0xc8, 0x1c, 0x37, 0x09, 0xe7, 0x34, 0xdf, 0x00, 0xf4,
-	0xf0, 0xdd, 0xb7, 0x50, 0xf3, 0x8c, 0xca, 0xc8, 0xae, 0x8e, 0x74, 0xf2, 0x19, 0x00, 0x00, 0xff,
-	0xff, 0xed, 0xd9, 0x1b, 0xd6, 0x41, 0x02, 0x00, 0x00,
+	// 433 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x52, 0xb1, 0x8e, 0xd3, 0x40,
+	0x10, 0xcd, 0xe6, 0x72, 0x0e, 0x2c, 0x22, 0x27, 0x56, 0x27, 0xe1, 0x9c, 0x84, 0x2f, 0xba, 0x02,
+	0x05, 0xa4, 0x78, 0xc9, 0xd1, 0xd1, 0xc5, 0xd0, 0xa4, 0x35, 0x54, 0x34, 0x96, 0xbd, 0xbb, 0x72,
+	0x46, 0xd8, 0xbb, 0xc6, 0xbb, 0x0e, 0xe4, 0x2f, 0xf8, 0x0e, 0xea, 0xfb, 0x88, 0x6b, 0x90, 0x4e,
+	0x57, 0x5d, 0x05, 0x28, 0xf9, 0x11, 0xe4, 0xf5, 0x46, 0x8a, 0x04, 0x05, 0x42, 0x54, 0xf6, 0x9b,
+	0x37, 0xe3, 0xe7, 0x79, 0xf3, 0xf0, 0x33, 0xdd, 0xc8, 0x1a, 0xb4, 0xa0, 0x05, 0x7c, 0x6c, 0x80,
+	0x83, 0xd9, 0x80, 0x64, 0x42, 0x1a, 0x58, 0x0b, 0xba, 0x9e, 0xd3, 0xac, 0x86, 0x4c, 0x84, 0x55,
+	0xad, 0x8c, 0x22, 0x4f, 0x5c, 0x6b, 0xf8, 0x7b, 0x6b, 0xb8, 0x9e, 0x9f, 0x05, 0x4c, 0xe9, 0x52,
+	0x69, 0x9a, 0xa5, 0xba, 0x1d, 0xcd, 0x84, 0x49, 0xe7, 0x94, 0x29, 0x90, 0xdd, 0xf8, 0xd9, 0xb8,
+	0xe3, 0x13, 0x8b, 0x68, 0x07, 0x1c, 0x75, 0x9a, 0xab, 0x5c, 0x75, 0xf5, 0xf6, 0xad, 0xab, 0x5e,
+	0xdc, 0xf5, 0xf1, 0x71, 0xd4, 0xea, 0x93, 0x11, 0xee, 0x03, 0xf7, 0xd1, 0x04, 0x4d, 0x07, 0x71,
+	0x1f, 0x38, 0x19, 0xe3, 0x7b, 0xa2, 0x52, 0x6c, 0x95, 0x00, 0xf7, 0xfb, 0xb6, 0x3a, 0xb4, 0x78,
+	0xc9, 0xc9, 0x63, 0x3c, 0xac, 0x94, 0x2a, 0x5a, 0xe6, 0xc8, 0x32, 0x5e, 0x0b, 0x97, 0x9c, 0x5c,
+	0xe2, 0x61, 0xca, 0x79, 0x2d, 0xb4, 0xf6, 0x07, 0x13, 0x34, 0xbd, 0x1f, 0xf9, 0xb7, 0x57, 0xb3,
+	0x53, 0xf7, 0x1b, 0x8b, 0x8e, 0x79, 0x6b, 0x6a, 0x90, 0x79, 0xbc, 0x6f, 0x24, 0x0c, 0x7b, 0x69,
+	0xa9, 0x1a, 0x69, 0xfc, 0xe3, 0xc9, 0xd1, 0xf4, 0xc1, 0xe5, 0x38, 0x74, 0xfd, 0xed, 0x8e, 0xa1,
+	0xdb, 0x31, 0x7c, 0xad, 0x40, 0x46, 0x2f, 0xae, 0xbf, 0x9f, 0xf7, 0xbe, 0xfe, 0x38, 0x9f, 0xe6,
+	0x60, 0x56, 0x4d, 0x16, 0x32, 0x55, 0xba, 0x1d, 0xdd, 0x63, 0xa6, 0xf9, 0x07, 0x6a, 0x36, 0x95,
+	0xd0, 0x76, 0x40, 0xc7, 0xee, 0xd3, 0xa4, 0xc6, 0x23, 0x56, 0xa4, 0x50, 0x0a, 0x9e, 0x38, 0x31,
+	0xef, 0xff, 0x8b, 0x3d, 0x74, 0x12, 0x0b, 0xab, 0x70, 0xf1, 0x0d, 0xe1, 0x13, 0x6b, 0xed, 0xa2,
+	0x28, 0x14, 0x4b, 0x0d, 0x28, 0x79, 0x68, 0x10, 0xfa, 0x5b, 0x83, 0xfe, 0xe5, 0x10, 0x4f, 0xb1,
+	0xf7, 0x49, 0x40, 0xbe, 0x32, 0xee, 0x0e, 0xa3, 0xdb, 0xab, 0x19, 0x76, 0x32, 0x6f, 0x04, 0x8b,
+	0x1d, 0x4b, 0x9e, 0xe3, 0x47, 0x7b, 0x5f, 0x6c, 0x0a, 0x13, 0xe0, 0xda, 0xde, 0x61, 0x10, 0x9f,
+	0x38, 0xc2, 0xae, 0xb0, 0xe4, 0x3a, 0x7a, 0x77, 0xbd, 0x0d, 0xd0, 0xcd, 0x36, 0x40, 0x3f, 0xb7,
+	0x01, 0xfa, 0xb2, 0x0b, 0x7a, 0x37, 0xbb, 0xa0, 0x77, 0xb7, 0x0b, 0x7a, 0xef, 0x5f, 0x1d, 0x58,
+	0xe4, 0xf2, 0x5b, 0xa4, 0x1b, 0x51, 0xef, 0x01, 0xfd, 0xfc, 0xa7, 0xe4, 0x5b, 0xeb, 0x32, 0xcf,
+	0xe6, 0xf0, 0xe5, 0xaf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x3c, 0x1d, 0x12, 0x7a, 0x24, 0x03, 0x00,
+	0x00,
 }
 
 func (m *Bribe) Marshal() (dAtA []byte, err error) {
@@ -219,40 +249,60 @@ func (m *Bribe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	{
-		size, err := m.ClaimedAmount.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
+	if len(m.ClaimedAmount) > 0 {
+		for iNdEx := len(m.ClaimedAmount) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ClaimedAmount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintBribe(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
 		}
-		i -= size
-		i = encodeVarintBribe(dAtA, i, uint64(size))
 	}
-	i--
-	dAtA[i] = 0x22
-	{
-		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
+	if len(m.Amount) > 0 {
+		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintBribe(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i -= size
-		i = encodeVarintBribe(dAtA, i, uint64(size))
 	}
-	i--
-	dAtA[i] = 0x1a
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintBribe(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.PoolId != 0 {
 		i = encodeVarintBribe(dAtA, i, uint64(m.PoolId))
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x18
 	}
 	if m.EpochId != 0 {
 		i = encodeVarintBribe(dAtA, i, uint64(m.EpochId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Id != 0 {
+		i = encodeVarintBribe(dAtA, i, uint64(m.Id))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *UnclaimedBribe) Marshal() (dAtA []byte, err error) {
+func (m *BribeAllocation) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -262,16 +312,34 @@ func (m *UnclaimedBribe) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UnclaimedBribe) MarshalTo(dAtA []byte) (int, error) {
+func (m *BribeAllocation) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *UnclaimedBribe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *BribeAllocation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if len(m.ClaimedBribeIds) > 0 {
+		dAtA2 := make([]byte, len(m.ClaimedBribeIds)*10)
+		var j1 int
+		for _, num := range m.ClaimedBribeIds {
+			for num >= 1<<7 {
+				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA2[j1] = uint8(num)
+			j1++
+		}
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
+		i = encodeVarintBribe(dAtA, i, uint64(j1))
+		i--
+		dAtA[i] = 0x2a
+	}
 	if len(m.Weight) > 0 {
 		i -= len(m.Weight)
 		copy(dAtA[i:], m.Weight)
@@ -316,20 +384,35 @@ func (m *Bribe) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovBribe(uint64(m.Id))
+	}
 	if m.EpochId != 0 {
 		n += 1 + sovBribe(uint64(m.EpochId))
 	}
 	if m.PoolId != 0 {
 		n += 1 + sovBribe(uint64(m.PoolId))
 	}
-	l = m.Amount.Size()
-	n += 1 + l + sovBribe(uint64(l))
-	l = m.ClaimedAmount.Size()
-	n += 1 + l + sovBribe(uint64(l))
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovBribe(uint64(l))
+	}
+	if len(m.Amount) > 0 {
+		for _, e := range m.Amount {
+			l = e.Size()
+			n += 1 + l + sovBribe(uint64(l))
+		}
+	}
+	if len(m.ClaimedAmount) > 0 {
+		for _, e := range m.ClaimedAmount {
+			l = e.Size()
+			n += 1 + l + sovBribe(uint64(l))
+		}
+	}
 	return n
 }
 
-func (m *UnclaimedBribe) Size() (n int) {
+func (m *BribeAllocation) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -348,6 +431,13 @@ func (m *UnclaimedBribe) Size() (n int) {
 	l = len(m.Weight)
 	if l > 0 {
 		n += 1 + l + sovBribe(uint64(l))
+	}
+	if len(m.ClaimedBribeIds) > 0 {
+		l = 0
+		for _, e := range m.ClaimedBribeIds {
+			l += sovBribe(uint64(e))
+		}
+		n += 1 + sovBribe(uint64(l)) + l
 	}
 	return n
 }
@@ -389,6 +479,25 @@ func (m *Bribe) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBribe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EpochId", wireType)
 			}
 			m.EpochId = 0
@@ -406,7 +515,7 @@ func (m *Bribe) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 2:
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
 			}
@@ -425,7 +534,39 @@ func (m *Bribe) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 3:
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBribe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBribe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBribe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -454,11 +595,12 @@ func (m *Bribe) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Amount = append(m.Amount, types.Coin{})
+			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ClaimedAmount", wireType)
 			}
@@ -487,7 +629,8 @@ func (m *Bribe) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.ClaimedAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.ClaimedAmount = append(m.ClaimedAmount, types.Coin{})
+			if err := m.ClaimedAmount[len(m.ClaimedAmount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -512,7 +655,7 @@ func (m *Bribe) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *UnclaimedBribe) Unmarshal(dAtA []byte) error {
+func (m *BribeAllocation) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -535,10 +678,10 @@ func (m *UnclaimedBribe) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: UnclaimedBribe: wiretype end group for non-group")
+			return fmt.Errorf("proto: BribeAllocation: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UnclaimedBribe: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: BribeAllocation: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -643,6 +786,82 @@ func (m *UnclaimedBribe) Unmarshal(dAtA []byte) error {
 			}
 			m.Weight = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 5:
+			if wireType == 0 {
+				var v uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowBribe
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ClaimedBribeIds = append(m.ClaimedBribeIds, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowBribe
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthBribe
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthBribe
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.ClaimedBribeIds) == 0 {
+					m.ClaimedBribeIds = make([]uint64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowBribe
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ClaimedBribeIds = append(m.ClaimedBribeIds, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClaimedBribeIds", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipBribe(dAtA[iNdEx:])

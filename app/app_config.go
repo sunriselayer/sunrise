@@ -101,6 +101,7 @@ var (
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: liquidityincentivemoduletypes.BribeAccount},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: shareclassmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 	}

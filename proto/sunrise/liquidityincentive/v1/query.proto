@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "sunrise/liquidityincentive/v1/epoch.proto";
 import "sunrise/liquidityincentive/v1/gauge.proto";
 import "sunrise/liquidityincentive/v1/params.proto";
+import "sunrise/liquidityincentive/v1/bribe.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
@@ -44,6 +45,40 @@ service Query {
   // Votes
   rpc Votes(QueryVotesRequest) returns (QueryVotesResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/votes";
+  }
+
+  // Bribes
+  rpc Bribes(QueryBribesRequest) returns (QueryBribesResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes";
+  }
+  // Bribe
+  rpc Bribe(QueryBribeRequest) returns (QueryBribeResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/{id}";
+  }
+  // BribesByEpochId
+  rpc BribesByEpochId(QueryBribesByEpochIdRequest) returns (QueryBribesByEpochIdResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/epoch/{epoch_id}";
+  }
+  // BribesByPoolId
+  rpc BribesByPoolId(QueryBribesByPoolIdRequest) returns (QueryBribesByPoolIdResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/pool/{pool_id}";
+  }
+  // BribesByEpochAndPoolId
+  rpc BribesByEpochAndPoolId(QueryBribesByEpochAndPoolIdRequest) returns (QueryBribesByEpochAndPoolIdResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/epoch/{epoch_id}/pool/{pool_id}";
+  }
+
+  // BribeAllocations
+  rpc BribeAllocations(QueryBribeAllocationsRequest) returns (QueryBribeAllocationsResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe-allocations";
+  }
+  // BribeAllocationsByAddress
+  rpc BribeAllocationsByAddress(QueryBribeAllocationsByAddressRequest) returns (QueryBribeAllocationsByAddressResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe_allocations/{address}";
+  }
+  // BribeAllocation
+  rpc BribeAllocation(QueryBribeAllocationRequest) returns (QueryBribeAllocationResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe-allocations/{address}/{epoch_id}/{pool_id}";
   }
 }
 
@@ -119,4 +154,93 @@ message QueryVotesRequest {
 message QueryVotesResponse {
   repeated Vote votes = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBribesRequest
+message QueryBribesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryBribesResponse
+message QueryBribesResponse {
+  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBribeRequest
+message QueryBribeRequest {
+  uint64 id = 1;
+}
+
+// QueryBribeResponse
+message QueryBribeResponse {
+  Bribe bribe = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryBribesByEpochIdRequest
+message QueryBribesByEpochIdRequest {
+  uint64 epoch_id = 1;
+}
+
+// QueryBribesByEpochIdResponse
+message QueryBribesByEpochIdResponse {
+  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBribesByPoolIdRequest
+message QueryBribesByPoolIdRequest {
+  uint64 pool_id = 1;
+}
+
+// QueryBribesByPoolIdResponse
+message QueryBribesByPoolIdResponse {
+  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBribesByEpochAndPoolIdRequest
+message QueryBribesByEpochAndPoolIdRequest {
+  uint64 epoch_id = 1;
+  uint64 pool_id = 2;
+}
+
+// QueryBribesByEpochAndPoolIdResponse
+message QueryBribesByEpochAndPoolIdResponse {
+  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBribeAllocationsRequest
+message QueryBribeAllocationsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+
+// QueryBribeAllocationsResponse
+message QueryBribeAllocationsResponse {
+  repeated BribeAllocation bribe_allocations = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBribeAllocationsByAddressRequest
+message QueryBribeAllocationsByAddressRequest {
+  string address = 1;
+}
+
+// QueryBribeAllocationsByAddressResponse
+message QueryBribeAllocationsByAddressResponse {
+  repeated BribeAllocation bribe_allocations = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryBribeAllocationRequest
+message QueryBribeAllocationRequest {
+  string address = 1;
+  uint64 epoch_id = 2;
+  uint64 pool_id = 3;
+}
+
+// QueryBribeAllocationResponse
+message QueryBribeAllocationResponse {
+  BribeAllocation bribe_allocation = 1 [(gogoproto.nullable) = false];
 }
