@@ -27,8 +27,9 @@ type Keeper struct {
 	EpochId         collections.Sequence
 	Gauges          collections.Map[collections.Pair[uint64, uint64], types.Gauge]
 	Votes           collections.Map[sdk.AccAddress, types.Vote]
-	Bribes          collections.Map[collections.Pair[uint64, uint64], types.Bribe]
-	UnclaimedBribes collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.UnclaimedBribe]
+	Bribes          *collections.IndexedMap[uint64, types.Bribe, types.BribesIndexes]
+	BribeId         collections.Sequence
+	UnclaimedBribes collections.Map[collections.Pair[sdk.AccAddress, uint64], types.UnclaimedBribe]
 
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
@@ -67,7 +68,15 @@ func NewKeeper(
 		EpochId: collections.NewSequence(sb, types.EpochIdKey, "epoch_id"),
 		Gauges:  collections.NewMap(sb, types.GaugesKeyPrefix, "gauges", types.GaugesKeyCodec, codec.CollValue[types.Gauge](cdc)),
 		Votes:   collections.NewMap(sb, types.VotesKeyPrefix, "votes", types.VotesKeyCodec, codec.CollValue[types.Vote](cdc)),
-		Bribes:  collections.NewMap(sb, types.BribesKeyPrefix, "bribes", types.BribesKeyCodec, codec.CollValue[types.Bribe](cdc)),
+		Bribes: collections.NewIndexedMap(
+			sb,
+			types.BribesKeyPrefix,
+			"bribes",
+			types.BribesKeyCodec,
+			codec.CollValue[types.Bribe](cdc),
+			types.NewBribesIndexes(sb),
+		),
+		BribeId: collections.NewSequence(sb, types.BribeIdKey, "bribe_id"),
 		UnclaimedBribes: collections.NewMap(
 			sb,
 			types.UnclaimedBribesKeyPrefix,

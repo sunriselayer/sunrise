@@ -2,6 +2,7 @@ package types
 
 import (
 	"cosmossdk.io/collections"
+	"cosmossdk.io/collections/indexes"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -39,15 +40,53 @@ var (
 	GaugesKeyPrefix          = collections.NewPrefix("gauges/")
 	VotesKeyPrefix           = collections.NewPrefix("votes/")
 	BribesKeyPrefix          = collections.NewPrefix("bribes/")
+	BribeIdKey               = collections.NewPrefix("bribe_id/")
+	BribesEpochIdIndexPrefix = collections.NewPrefix("bribes_by_epoch_id/")
+	BribesPoolIdIndexPrefix  = collections.NewPrefix("bribes_by_pool_id/")
 	UnclaimedBribesKeyPrefix = collections.NewPrefix("unclaimed_bribes/")
 )
+
+type BribesIndexes struct {
+	EpochId *indexes.Multi[uint64, uint64, Bribe]
+	PoolId  *indexes.Multi[uint64, uint64, Bribe]
+}
+
+func (i BribesIndexes) IndexesList() []collections.Index[uint64, Bribe] {
+	return []collections.Index[uint64, Bribe]{
+		i.EpochId,
+		i.PoolId,
+	}
+}
+
+func NewBribesIndexes(sb *collections.SchemaBuilder) BribesIndexes {
+	return BribesIndexes{
+		EpochId: indexes.NewMulti(sb,
+			BribesEpochIdIndexPrefix,
+			"bribes_by_epoch_id",
+			collections.Uint64Key,
+			collections.Uint64Key,
+			func(_ uint64, v Bribe) (uint64, error) {
+				return v.EpochId, nil
+			},
+		),
+		PoolId: indexes.NewMulti(sb,
+			BribesPoolIdIndexPrefix,
+			"bribes_by_pool_id",
+			collections.Uint64Key,
+			collections.Uint64Key,
+			func(_ uint64, v Bribe) (uint64, error) {
+				return v.PoolId, nil
+			},
+		),
+	}
+}
 
 var (
 	EpochsKeyCodec          = collections.Uint64Key
 	GaugesKeyCodec          = collections.PairKeyCodec(collections.Uint64Key, collections.Uint64Key)
 	VotesKeyCodec           = sdk.AccAddressKey
-	BribesKeyCodec          = collections.PairKeyCodec(collections.Uint64Key, collections.Uint64Key)
-	UnclaimedBribesKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.Uint64Key, collections.Uint64Key)
+	BribesKeyCodec          = collections.Uint64Key
+	UnclaimedBribesKeyCodec = collections.PairKeyCodec(sdk.AccAddressKey, collections.Uint64Key)
 )
 
 func GaugeKey(previousEpochId uint64, poolId uint64) collections.Pair[uint64, uint64] {
