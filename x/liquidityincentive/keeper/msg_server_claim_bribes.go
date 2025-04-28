@@ -19,12 +19,6 @@ func (k msgServer) ClaimBribes(ctx context.Context, msg *types.MsgClaimBribes) (
 	senderAddr := sdk.AccAddress(sender)
 	totalClaimed := sdk.NewCoins()
 
-	// Check if epoch exists
-	_, err = k.Epochs.Get(ctx, msg.EpochId)
-	if err != nil {
-		return nil, err
-	}
-
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	// Check if bribe exists

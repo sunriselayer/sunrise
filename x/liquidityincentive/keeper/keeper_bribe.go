@@ -7,7 +7,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -125,19 +124,10 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// Check if the epoch exists
-	epoch, err := k.Epochs.Get(ctx, epochId)
-	if err != nil {
-		return err
-	}
-	if epoch.Id == 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrNotFound, "epoch %d not found", epochId)
-	}
-
 	// Process all bribes for this epoch
 	totalUnclaimed := sdk.NewCoins()
 
-	err = k.Bribes.Walk(ctx, collections.NewPrefixedPairRange[uint64, uint64](epochId),
+	err := k.Bribes.Walk(ctx, collections.NewPrefixedPairRange[uint64, uint64](epochId),
 		func(key collections.Pair[uint64, uint64], bribe types.Bribe) (bool, error) {
 			// Calculate unclaimed amount
 			unclaimedAmount := bribe.Amount.Sub(bribe.ClaimedAmount)
