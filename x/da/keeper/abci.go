@@ -11,14 +11,14 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) EndBlocker(ctx context.Context) {
+func (k Keeper) EndBlocker(ctx context.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		k.Logger().Error("failed to get params", "error", err)
-		return
+		return err
 	}
 
 	// If STATUS_REJECTED is overtime, remove from the store
@@ -55,6 +55,8 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
 		k.HandleSlashEpoch(sdkCtx)
 	}
+
+	return nil
 }
 
 func (k Keeper) DeleteRejectedDataOvertime(ctx sdk.Context, duration time.Duration) error {

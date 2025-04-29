@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (k Keeper) BeginBlocker(ctx context.Context) {
+func (k Keeper) BeginBlocker(ctx context.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyBeginBlocker)
 
 	// Handle module account rewards
@@ -17,13 +17,14 @@ func (k Keeper) BeginBlocker(ctx context.Context) {
 	err := k.HandleModuleAccountRewards(cacheCtx)
 	if err != nil {
 		k.Logger().Error("failed to handle module account rewards", "error", err)
-		return
+		return err
 	}
 
 	write()
+	return nil
 }
 
-func (k Keeper) EndBlocker(ctx context.Context) {
+func (k Keeper) EndBlocker(ctx context.Context) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Withdraw unbonded
@@ -31,8 +32,9 @@ func (k Keeper) EndBlocker(ctx context.Context) {
 	err := k.GarbageCollectUnbonded(cacheCtx)
 	if err != nil {
 		k.Logger().Error("failed to garbage collect unbonded", "error", err)
-		return
+		return err
 	}
 
 	write()
+	return nil
 }
