@@ -19,10 +19,15 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
-	lockup, err := k.GetLockupAccount(ctx, owner, msg.Id)
+	lockup, err := k.GetLockupAccount(ctx, owner, msg.LockupAccountId)
 	if err != nil {
 		return nil, err
 	}
+	err = msg.Amount.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	lockupAddr, err := k.addressCodec.StringToBytes(lockup.Address)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid lockup address")
@@ -48,12 +53,12 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	}
 
 	// refresh ubd entries to make sure delegation locking amount is up to date
-	err = k.CheckUnbondingEntriesMature(ctx, owner, msg.Id)
+	err = k.CheckUnbondingEntriesMature(ctx, owner, msg.LockupAccountId)
 	if err != nil {
 		return nil, err
 	}
 
-	err = k.TrackDelegation(ctx, owner, msg.Id, balance.Amount, lockedAmount, msg.Amount.Amount)
+	err = k.TrackDelegation(ctx, owner, msg.LockupAccountId, balance.Amount, lockedAmount, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +71,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	found, coin := rewards.Find(feeDenom)
 
 	if found {
-		err = k.AddRewardsToLockupAccount(ctx, owner, msg.Id, coin.Amount)
+		err = k.AddRewardsToLockupAccount(ctx, owner, msg.LockupAccountId, coin.Amount)
 		if err != nil {
 			return nil, err
 		}

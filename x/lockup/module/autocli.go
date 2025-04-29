@@ -28,20 +28,20 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "LockupAccount",
-					Use:       "lockup-account [owner] [id]",
+					Use:       "lockup-account [owner] [lockup_account_id]",
 					Short:     "Shows the lockup account of the owner and id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "owner"},
-						{ProtoField: "id"},
+						{ProtoField: "lockup_account_id"},
 					},
 				},
 				{
 					RpcMethod: "SpendableAmount",
-					Use:       "spendable-amount [owner] [id]",
+					Use:       "spendable-amount [owner] [lockup_account_id]",
 					Short:     "Shows the spendable amount of the lockup account",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "owner"},
-						{ProtoField: "id"},
+						{ProtoField: "lockup_account_id"},
 					},
 				},
 			},
@@ -67,39 +67,39 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "NonVotingDelegate",
-					Use:       "non-voting-delegate [id] [validator_address] [amount]",
+					Use:       "non-voting-delegate [lockup_account_id] [validator_address] [amount]",
 					Short:     "Send a non-voting-delegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "id"},
+						{ProtoField: "lockup_account_id"},
 						{ProtoField: "validator_address"},
 						{ProtoField: "amount"},
 					},
 				},
 				{
 					RpcMethod: "NonVotingUndelegate",
-					Use:       "non-voting-undelegate [id] [validator_address] [amount]",
+					Use:       "non-voting-undelegate [lockup_account_id] [validator_address] [amount]",
 					Short:     "Send a non-voting-undelegate tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "id"},
+						{ProtoField: "lockup_account_id"},
 						{ProtoField: "validator_address"},
 						{ProtoField: "amount"},
 					},
 				},
 				{
 					RpcMethod: "ClaimRewards",
-					Use:       "claim-rewards [id] [validator_address]",
+					Use:       "claim-rewards [lockup_account_id] [validator_address]",
 					Short:     "Send a claim-rewards tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "id"},
+						{ProtoField: "lockup_account_id"},
 						{ProtoField: "validator_address"},
 					},
 				},
 				{
 					RpcMethod: "Send",
-					Use:       "send [id] [recipient] [amount]",
+					Use:       "send [lockup_account_id] [recipient] [amount]",
 					Short:     "Send a send tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "id"},
+						{ProtoField: "lockup_account_id"},
 						{ProtoField: "recipient"},
 						{ProtoField: "amount"},
 					},
