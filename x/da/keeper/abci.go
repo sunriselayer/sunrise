@@ -5,52 +5,56 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (k Keeper) EndBlocker(ctx context.Context) error {
+func (k Keeper) EndBlocker(ctx context.Context) {
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to get params", "error", err)
+		return
 	}
 
 	// If STATUS_REJECTED is overtime, remove from the store
 	err = k.DeleteRejectedDataOvertime(sdkCtx, params.RejectedRemovalPeriod)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to delete rejected data overtime", "error", err)
 	}
 
 	// IF STATUS_VERIFIED is overtime, remove from store
 	err = k.DeleteVerifiedDataOvertime(sdkCtx, params.VerifiedRemovalPeriod)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to delete verified data overtime", "error", err)
 	}
 
 	// if STATUS_CHALLENGE_PERIOD receives invalidity above the threshold, change to STATUS_CHALLENGING
 	err = k.ChangeToChallengingFromChallengePeriod(sdkCtx, params.ChallengeThreshold)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to change to challenging from challenge period", "error", err)
 	}
 
 	// if STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
 	err = k.ChangeToVerifiedFromProofPeriod(sdkCtx, params.ChallengePeriod)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to change to verified from proof period", "error", err)
 	}
 
 	// if STATUS_CHALLENGING, tally validity_proofs
 	err = k.TallyValidityProofs(sdkCtx, params.ProofPeriod, params.ReplicationFactor)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to tally validity proofs", "error", err)
 	}
 
 	// slash epoch moved from PreBlocker
 	if sdkCtx.BlockHeight()%int64(params.SlashEpoch) == 0 {
 		k.HandleSlashEpoch(sdkCtx)
 	}
-	return nil
 }
 
 func (k Keeper) DeleteRejectedDataOvertime(ctx sdk.Context, duration time.Duration) error {
