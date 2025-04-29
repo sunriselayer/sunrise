@@ -81,10 +81,7 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 
 	// Save vote weights
 	if err := k.SaveVoteWeightsForBribes(ctx, currentEpochId); err != nil {
-		ctx.Logger().Error("failed to save vote weights for bribes",
-			"epoch_id", currentEpochId,
-			"error", err,
-		)
+		return err
 	}
 
 	// Process unclaimed bribes for old epochs that have passed their claim period
@@ -100,11 +97,7 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 		if newExpiredEpochId > expiredEpochId {
 			for epochId := expiredEpochId; epochId < newExpiredEpochId; epochId++ {
 				if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
-					// Only log the error and continue with epoch ending process
-					ctx.Logger().Error("failed to process unclaimed bribes",
-						"epoch_id", epochId,
-						"error", err,
-					)
+					return err
 				}
 			}
 		}

@@ -5,6 +5,8 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 )
 
 // NewParams creates a new Params instance.
@@ -19,9 +21,9 @@ func NewParams(epochBlocks int64, stakingRewardRatio math.LegacyDec, bribeClaimE
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		7200,                             // new epoch per about a day
-		math.LegacyNewDecWithPrec(50, 2), // 50% to staking
-		5,                                // 5 epochs to claim bribes
+		int64(minttypes.DefaultParams().BlocksPerYear/365*30), // new epoch per about 30 days
+		math.LegacyNewDecWithPrec(50, 2),                      // 50% to staking
+		5,                                                     // 5 epochs to claim bribes
 	)
 }
 
