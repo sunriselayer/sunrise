@@ -11,11 +11,10 @@ import (
 
 type CustomStakingModule struct {
 	staking.AppModuleBasic
-	cdc codec.Codec
 }
 
-func (cm CustomStakingModule) DefaultGenesis() json.RawMessage {
+func (cm CustomStakingModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := stakingtypes.DefaultGenesisState()
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genesis)
 }

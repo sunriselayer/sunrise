@@ -13,14 +13,13 @@ import (
 
 type CustomMintModule struct {
 	mint.AppModuleBasic
-	cdc codec.Codec
 }
 
-func (cm CustomMintModule) DefaultGenesis() json.RawMessage {
+func (cm CustomMintModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := minttypes.DefaultGenesisState()
 
 	// Params wil not be used anyway because there is a custom MintFn
 	genesis.Params.MintDenom = consts.FeeDenom
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genesis)
 }
