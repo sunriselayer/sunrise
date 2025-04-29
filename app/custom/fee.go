@@ -13,13 +13,12 @@ import (
 
 type CustomFeeModule struct {
 	fee.AppModuleBasic
-	cdc codec.Codec
 }
 
-func (cm CustomFeeModule) DefaultGenesis() json.RawMessage {
+func (cm CustomFeeModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := feetypes.DefaultGenesis()
 
 	genesis.Params.FeeDenom = consts.FeeDenom
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genesis)
 }

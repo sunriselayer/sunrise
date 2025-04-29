@@ -70,13 +70,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "RegisterBribe",
-					Use:       "register-bribe [epoch_id] [pool_id] [amount] [denom]",
+					Use:       "register-bribe [epoch_id] [pool_id] [amount]",
 					Short:     "Send a register-bribe tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "epoch_id"},
 						{ProtoField: "pool_id"},
-						{ProtoField: "amount.amount"},
-						{ProtoField: "amount.denom"},
+						{ProtoField: "amount"},
 					},
 				},
 				{
