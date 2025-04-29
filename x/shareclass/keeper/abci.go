@@ -4,24 +4,35 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (k Keeper) EndBlocker(ctx context.Context) error {
-	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
+func (k Keeper) BeginBlocker(ctx context.Context) {
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyBeginBlocker)
 
 	// Handle module account rewards
-	err := k.HandleModuleAccountRewards(ctx)
+	cacheCtx, write := sdk.UnwrapSDKContext(ctx).CacheContext()
+	err := k.HandleModuleAccountRewards(cacheCtx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to handle module account rewards", "error", err)
+		return
 	}
+
+	write()
+}
+
+func (k Keeper) EndBlocker(ctx context.Context) {
+	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyEndBlocker)
 
 	// Withdraw unbonded
-	err = k.GarbageCollectUnbonded(ctx)
+	cacheCtx, write := sdk.UnwrapSDKContext(ctx).CacheContext()
+	err := k.GarbageCollectUnbonded(cacheCtx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to garbage collect unbonded", "error", err)
+		return
 	}
 
-	return nil
+	write()
 }
