@@ -49,29 +49,34 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 	return nil
 }
 
-func (k Keeper) BeginBlocker(ctx sdk.Context) error {
+func (k Keeper) BeginBlocker(ctx sdk.Context) {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, telemetry.Now(), telemetry.MetricKeyBeginBlocker)
+
+	cacheCtx, write := sdk.UnwrapSDKContext(ctx).CacheContext()
 
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
 	incentiveModule := authtypes.NewModuleAddress(types.ModuleName)
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	feeDenom, err := k.feeKeeper.FeeDenom(cacheCtx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to get fee denom", "error", err)
+		return
 	}
-	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	bondDenom, err := k.stakingKeeper.BondDenom(cacheCtx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to get bond denom", "error", err)
+		return
 	}
 
 	// Check the Gauge count is not zero.
 	// Distribute incentives to gauges
-	lastEpoch, found, err := k.GetLastEpoch(ctx)
+	lastEpoch, found, err := k.GetLastEpoch(cacheCtx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to get last epoch", "error", err)
+		return
 	}
 	if !found {
-		return nil
+		return
 	}
 
 	totalCount := math.LegacyZeroDec()
@@ -80,34 +85,39 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 	}
 
 	if totalCount.IsZero() {
-		return nil
+		k.Logger().Info("total count is zero")
+		return
 	}
 
 	// Send a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
-	feeBalance := k.bankKeeper.GetBalance(ctx, feeCollector, feeDenom)
+	feeBalance := k.bankKeeper.GetBalance(cacheCtx, feeCollector, feeDenom)
 	feeCollectorAmountDec := math.LegacyNewDecFromInt(feeBalance.Amount)
-	params, err := k.Params.Get(ctx)
+	params, err := k.Params.Get(cacheCtx)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to get params", "error", err)
+		return
 	}
 	stakingRewardRatioDec, err := math.LegacyNewDecFromStr(params.StakingRewardRatio)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to parse staking reward ratio", "error", err)
+		return
 	}
 	incentiveAmount := feeCollectorAmountDec.Mul(math.LegacyOneDec().Sub(stakingRewardRatioDec)).TruncateInt()
-	err = k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(feeDenom, incentiveAmount)))
+	err = k.bankKeeper.SendCoinsFromModuleToModule(cacheCtx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(feeDenom, incentiveAmount)))
 	if err != nil {
-		return err
+		k.Logger().Error("failed to send coins from fee collector to liquidity incentive module", "error", err)
+		return
 	}
 
 	// Convert fee denom to bond denom in the `x/liquidityincentive` module account.
-	err = k.tokenConverterKeeper.ConvertReverse(ctx, incentiveAmount, incentiveModule)
+	err = k.tokenConverterKeeper.ConvertReverse(cacheCtx, incentiveAmount, incentiveModule)
 	if err != nil {
-		return err
+		k.Logger().Error("failed to convert fee denom to bond denom", "error", err)
+		return
 	}
 
 	// Get `x/liquidityincentive` module's incentive balance.
-	incentiveBalance := k.bankKeeper.GetBalance(ctx, incentiveModule, bondDenom)
+	incentiveBalance := k.bankKeeper.GetBalance(cacheCtx, incentiveModule, bondDenom)
 
 	// Distribute incentives to gauges
 	for _, gauge := range lastEpoch.Gauges {
@@ -115,18 +125,18 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) error {
 		allocationDec := math.LegacyNewDecFromInt(incentiveBalance.Amount).Mul(weight)
 		if allocationDec.IsPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(
-				ctx,
+				cacheCtx,
 				gauge.PoolId,
 				incentiveModule,
 				sdk.NewCoins(sdk.NewCoin(bondDenom, allocationDec.TruncateInt())),
 			)
 			if err != nil {
-				ctx.Logger().Error("failure in incentive allocation", "error", err)
+				k.Logger().Error("failure in incentive allocation", "error", err)
 			}
 		}
 	}
 
-	return nil
+	write()
 }
 
 func (k Keeper) EndBlocker(ctx sdk.Context) error {
