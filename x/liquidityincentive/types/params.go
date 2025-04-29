@@ -21,7 +21,7 @@ func NewParams(epochBlocks int64, stakingRewardRatio math.LegacyDec, bribeClaimE
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		int64(minttypes.DefaultParams().BlocksPerYear/365*30), // new epoch per about 30 days
+		int64(minttypes.DefaultParams().BlocksPerYear/365*12), // new epoch per about 12 days
 		math.LegacyNewDecWithPrec(50, 2),                      // 50% to staking
 		5,                                                     // 5 epochs to claim bribes
 	)
