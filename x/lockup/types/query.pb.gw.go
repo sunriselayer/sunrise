@@ -480,13 +480,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "lockup", "v1", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "lockup", "v1", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_LockupAccounts_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunriselayer", "sunrise", "lockup", "v1", "lockup-accounts", "owner"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_LockupAccounts_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "lockup", "v1", "lockup-accounts", "owner"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_LockupAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "lockup", "v1", "lockup-accounts", "owner", "lockup_account_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_LockupAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "lockup", "v1", "lockup-accounts", "owner", "lockup_account_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_SpendableAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunriselayer", "sunrise", "lockup", "v1", "spendable-amount", "owner", "lockup_account_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_SpendableAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "lockup", "v1", "spendable-amount", "owner", "lockup_account_id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

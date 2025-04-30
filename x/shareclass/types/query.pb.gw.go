@@ -576,17 +576,17 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "shareclass", "v1", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculateBondingAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "shareclass", "v1", "calculate-bonding-amount"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculateBondingAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "calculate-bonding-amount"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculateShare_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "shareclass", "v1", "calculate-share"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculateShare_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "calculate-share"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AddressBonded_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunriselayer", "sunrise", "shareclass", "v1", "bonded", "address"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AddressBonded_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "shareclass", "v1", "bonded", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ClaimableRewards_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"sunriselayer", "sunrise", "shareclass", "v1", "claimable-rewards"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ClaimableRewards_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "claimable-rewards"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_AddressUnbonding_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunriselayer", "sunrise", "shareclass", "v1", "unbonding", "address"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_AddressUnbonding_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "shareclass", "v1", "unbonding", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (
