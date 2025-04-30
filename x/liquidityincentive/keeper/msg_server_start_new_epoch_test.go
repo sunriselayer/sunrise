@@ -15,7 +15,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func TestEndBlocker(t *testing.T) {
+func TesStartNewEpoch(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
