@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/stretchr/testify/require"
@@ -28,6 +29,11 @@ func (s *E2eTestSuite) SetupSuite() {
 	// Build and run the container
 	require.NoError(s.T(), s.buildAndRunContainer())
 }
+
+const (
+	KeyUser      = "user"
+	KeyValidator = "validator"
+)
 
 // TearDownSuite runs once after all tests
 func (s *E2eTestSuite) TearDownSuite() {
@@ -54,14 +60,20 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 	}
 
 	// Build the Docker image
-	buildCmd := exec.CommandContext(s.ctx, "docker", "build", "-t", "sunrise-e2e", ".")
+	buildCmd := exec.CommandContext(s.ctx, "docker", "build", "-t", "sunrise-e2e", "-f", "./tests/Dockerfile", ".")
 	buildCmd.Dir = projectRoot
 	if err := buildCmd.Run(); err != nil {
 		return fmt.Errorf("failed to build Docker image: %w", err)
 	}
 
 	// Run the container
-	runCmd := exec.CommandContext(s.ctx, "docker", "run", "-d", "--name", "sunrise-e2e-test", "sunrise-e2e")
+	runCmd := exec.CommandContext(s.ctx, "docker", "run", "-d",
+		"--name", "sunrise-e2e-test",
+		"-p", "26656:26656",
+		"-p", "26657:26657",
+		"-p", "1317:1317",
+		"-p", "9090:9090",
+		"sunrise-e2e")
 	output, err := runCmd.Output()
 	if err != nil {
 		return fmt.Errorf("failed to run container: %w", err)
@@ -70,13 +82,23 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 	s.containerId = string(output)
 
 	// Initialize the chain
-	if _, err := s.execDockerCommand("sunrised", "init", "test", "--chain-id", "sunrise-test"); err != nil {
-		return fmt.Errorf("failed to initialize chain: %w", err)
+	if output, err := s.execDockerCommand("sunrised", "init", "test", "--chain-id", "sunrise-test"); err != nil {
+		return fmt.Errorf("failed to initialize chain: %w\nOutput: %s", err, output)
+	}
+
+	// Create a user account
+	if _, err := s.execDockerCommand("sunrised", "keys", "add", KeyUser, "--keyring-backend", "test"); err != nil {
+		return fmt.Errorf("failed to create user account: %w", err)
 	}
 
 	// Create a validator account
-	if _, err := s.execDockerCommand("sunrised", "keys", "add", "validator", "--keyring-backend", "test"); err != nil {
+	if _, err := s.execDockerCommand("sunrised", "keys", "add", KeyValidator, "--keyring-backend", "test"); err != nil {
 		return fmt.Errorf("failed to create validator account: %w", err)
+	}
+
+	userAddr, err := s.getUserAddress()
+	if err != nil {
+		return err
 	}
 
 	// Add genesis account
@@ -85,17 +107,23 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 		return err
 	}
 
-	if _, err := s.execDockerCommand("sunrised", "add-genesis-account", validatorAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test"); err != nil {
-		return fmt.Errorf("failed to add genesis account: %w", err)
+	output, err = s.execDockerCommand("sunrised", "genesis", "add-genesis-account", userAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test")
+	if err != nil {
+		return fmt.Errorf("failed to add genesis account: %w\nOutput: %s", err, output)
+	}
+
+	output, err = s.execDockerCommand("sunrised", "genesis", "add-genesis-account", validatorAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test")
+	if err != nil {
+		return fmt.Errorf("failed to add genesis account: %w\nOutput: %s", err, output)
 	}
 
 	// Create gentx
-	if _, err := s.execDockerCommand("sunrised", "gentx", "validator", "1000000000uvrise", "--chain-id", "sunrise-test", "--keyring-backend", "test"); err != nil {
+	if _, err := s.execDockerCommand("sunrised", "genesis", "gentx", KeyValidator, "1000000000uvrise", "--chain-id", "sunrise-test", "--keyring-backend", "test"); err != nil {
 		return fmt.Errorf("failed to create gentx: %w", err)
 	}
 
 	// Collect gentxs
-	if _, err := s.execDockerCommand("sunrised", "collect-gentxs"); err != nil {
+	if _, err := s.execDockerCommand("sunrised", "genesis", "collect-gentxs"); err != nil {
 		return fmt.Errorf("failed to collect gentxs: %w", err)
 	}
 
@@ -106,7 +134,13 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 	}
 
 	// Wait for the chain to be ready
-	time.Sleep(5 * time.Second)
+	maxRetries := 30
+	for range maxRetries {
+		if _, err := s.execDockerCommand("sunrised", "status"); err == nil {
+			break
+		}
+		time.Sleep(1 * time.Second)
+	}
 
 	return nil
 }
@@ -117,13 +151,22 @@ func (s *E2eTestSuite) execDockerCommand(args ...string) ([]byte, error) {
 	return cmd.CombinedOutput()
 }
 
+// getUserAddress returns the user address
+func (s *E2eTestSuite) getUserAddress() (string, error) {
+	output, err := s.execDockerCommand("sunrised", "keys", "show", KeyUser, "-a", "--keyring-backend", "test")
+	if err != nil {
+		return "", fmt.Errorf("failed to get user address: %w", err)
+	}
+	return strings.TrimSpace(string(output)), nil
+}
+
 // getValidatorAddress returns the validator address
 func (s *E2eTestSuite) getValidatorAddress() (string, error) {
-	output, err := s.execDockerCommand("sunrised", "keys", "show", "validator", "-a", "--keyring-backend", "test")
+	output, err := s.execDockerCommand("sunrised", "keys", "show", KeyValidator, "-a", "--keyring-backend", "test")
 	if err != nil {
 		return "", fmt.Errorf("failed to get validator address: %w", err)
 	}
-	return string(output), nil
+	return strings.TrimSpace(string(output)), nil
 }
 
 // getBalance returns the balance of the specified address

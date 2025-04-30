@@ -4,10 +4,10 @@ WORKDIR /app/
 ENV PACKAGES="curl build-base git bash file linux-headers eudev-dev"
 RUN apk add --no-cache $PACKAGES
 
-COPY go.mod go.sum* ./
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
+COPY . ./
 
 RUN make build
 
@@ -16,4 +16,4 @@ FROM alpine:latest
 COPY --from=builder /app/build/sunrised /usr/bin/sunrised
 EXPOSE 26656 26657 1317 9090
 
-ENTRYPOINT ["sunrised"]
+CMD ["sleep", "infinity"]
