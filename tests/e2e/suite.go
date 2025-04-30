@@ -31,8 +31,10 @@ func (s *E2eTestSuite) SetupSuite() {
 }
 
 const (
-	KeyUser      = "user"
-	KeyValidator = "validator"
+	SunriseBinary = "sunrised"
+	KeyUser       = "user"
+	KeyValidator  = "validator"
+	ChainId       = "sunrise-test"
 )
 
 // TearDownSuite runs once after all tests
@@ -82,7 +84,7 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 	s.containerId = string(output)
 
 	// Initialize the chain
-	if output, err := s.execDockerCommand("sunrised", "init", "test", "--chain-id", "sunrise-test"); err != nil {
+	if output, err := s.execDockerCommand("sunrised", "init", "test", "--chain-id", ChainId); err != nil {
 		return fmt.Errorf("failed to initialize chain: %w\nOutput: %s", err, output)
 	}
 
@@ -107,28 +109,28 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 		return err
 	}
 
-	output, err = s.execDockerCommand("sunrised", "genesis", "add-genesis-account", userAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test")
+	output, err = s.execDockerCommand(SunriseBinary, "genesis", "add-genesis-account", userAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test")
 	if err != nil {
 		return fmt.Errorf("failed to add genesis account: %w\nOutput: %s", err, output)
 	}
 
-	output, err = s.execDockerCommand("sunrised", "genesis", "add-genesis-account", validatorAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test")
+	output, err = s.execDockerCommand(SunriseBinary, "genesis", "add-genesis-account", validatorAddr, "1000000000uvrise,1000000000urise", "--keyring-backend", "test")
 	if err != nil {
 		return fmt.Errorf("failed to add genesis account: %w\nOutput: %s", err, output)
 	}
 
 	// Create gentx
-	if _, err := s.execDockerCommand("sunrised", "genesis", "gentx", KeyValidator, "1000000000uvrise", "--chain-id", "sunrise-test", "--keyring-backend", "test"); err != nil {
+	if _, err := s.execDockerCommand(SunriseBinary, "genesis", "gentx", KeyValidator, "1000000000uvrise", "--chain-id", ChainId, "--keyring-backend", "test"); err != nil {
 		return fmt.Errorf("failed to create gentx: %w", err)
 	}
 
 	// Collect gentxs
-	if _, err := s.execDockerCommand("sunrised", "genesis", "collect-gentxs"); err != nil {
+	if _, err := s.execDockerCommand(SunriseBinary, "genesis", "collect-gentxs"); err != nil {
 		return fmt.Errorf("failed to collect gentxs: %w", err)
 	}
 
 	// Start the chain
-	startCmd := exec.CommandContext(s.ctx, "docker", "exec", s.containerId, "sunrised", "start")
+	startCmd := exec.CommandContext(s.ctx, "docker", "exec", s.containerId, SunriseBinary, "start")
 	if err := startCmd.Start(); err != nil {
 		return fmt.Errorf("failed to start chain: %w", err)
 	}
@@ -136,7 +138,7 @@ func (s *E2eTestSuite) buildAndRunContainer() error {
 	// Wait for the chain to be ready
 	maxRetries := 30
 	for range maxRetries {
-		if _, err := s.execDockerCommand("sunrised", "status"); err == nil {
+		if _, err := s.execDockerCommand(SunriseBinary, "status"); err == nil {
 			break
 		}
 		time.Sleep(1 * time.Second)
@@ -153,7 +155,7 @@ func (s *E2eTestSuite) execDockerCommand(args ...string) ([]byte, error) {
 
 // getUserAddress returns the user address
 func (s *E2eTestSuite) getUserAddress() (string, error) {
-	output, err := s.execDockerCommand("sunrised", "keys", "show", KeyUser, "-a", "--keyring-backend", "test")
+	output, err := s.execDockerCommand(SunriseBinary, "keys", "show", KeyUser, "-a", "--keyring-backend", "test")
 	if err != nil {
 		return "", fmt.Errorf("failed to get user address: %w", err)
 	}
@@ -162,7 +164,7 @@ func (s *E2eTestSuite) getUserAddress() (string, error) {
 
 // getValidatorAddress returns the validator address
 func (s *E2eTestSuite) getValidatorAddress() (string, error) {
-	output, err := s.execDockerCommand("sunrised", "keys", "show", KeyValidator, "-a", "--keyring-backend", "test")
+	output, err := s.execDockerCommand(SunriseBinary, "keys", "show", KeyValidator, "-a", "--keyring-backend", "test")
 	if err != nil {
 		return "", fmt.Errorf("failed to get validator address: %w", err)
 	}
@@ -171,5 +173,5 @@ func (s *E2eTestSuite) getValidatorAddress() (string, error) {
 
 // getBalance returns the balance of the specified address
 func (s *E2eTestSuite) getBalance(address string) ([]byte, error) {
-	return s.execDockerCommand("sunrised", "query", "bank", "balances", address)
+	return s.execDockerCommand(SunriseBinary, "query", "bank", "balances", address)
 }

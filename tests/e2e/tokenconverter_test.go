@@ -6,7 +6,11 @@ import (
 
 // convertTokens executes the token conversion command
 func (s *E2eTestSuite) convertTokens(amount string) ([]byte, error) {
-	return s.execDockerCommand("sunrised", "tx", "tokenconverter", "convert", amount, "--from", KeyUser, "--keyring-backend", "test", "-y")
+	return s.execDockerCommand(SunriseBinary, "tx", "tokenconverter", "convert", amount,
+		"--from", KeyUser,
+		"--keyring-backend", "test",
+		"--chain-id", ChainId,
+		"-y")
 }
 
 // TestTokenConverter tests the token converter functionality
