@@ -10,6 +10,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 
+// fees means whole tx fees, not amount to burn
 func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	err := fees.Validate()
 	if err != nil {
