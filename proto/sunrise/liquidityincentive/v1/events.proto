@@ -8,6 +8,13 @@ import "sunrise/liquidityincentive/v1/gauge.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
+// EventStartNewEpoch
+message EventStartNewEpoch {
+  uint64 epoch_id = 1;
+  int64 start_block = 2;
+  int64 end_block = 3;
+}
+
 // EventVoteGauge
 message EventVoteGauge {
   string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];

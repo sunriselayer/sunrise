@@ -18,4 +18,5 @@ var (
 	ErrInvalidClaimAmount     = errors.Register(ModuleName, 8, "invalid claim amount")
 	ErrInsufficientBribeFunds = errors.Register(ModuleName, 9, "insufficient bribe funds")
 	ErrBribeAlreadyClaimed    = errors.Register(ModuleName, 10, "bribe already claimed")
+	ErrEpochNotEnded          = errors.Register(ModuleName, 11, "epoch not ended")
 )

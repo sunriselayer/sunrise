@@ -17,6 +17,8 @@ service Msg {
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  // StartNewEpoch
+  rpc StartNewEpoch(MsgStartNewEpoch) returns (MsgStartNewEpochResponse);
   // VoteGauge
   rpc VoteGauge(MsgVoteGauge) returns (MsgVoteGaugeResponse);
   // RegisterBribe
@@ -42,6 +44,15 @@ message MsgUpdateParams {
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
+
+// MsgStartNewEpoch
+message MsgStartNewEpoch {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgStartNewEpochResponse
+message MsgStartNewEpochResponse {}
 
 // MsgVoteGauge
 message MsgVoteGauge {
