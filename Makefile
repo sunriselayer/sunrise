@@ -46,6 +46,18 @@ test: govet govulncheck test-unit
 .PHONY: test test-unit test-race test-cover bench
 
 #################
+###  Build    ###
+#################
+
+build:
+	@echo "--> ensure dependencies have not been modified"
+	@go mod verify
+	@echo "--> building $(APPNAME)d"
+	@go build $(BUILD_FLAGS) -mod=readonly -o ./build/$(APPNAME)d ./cmd/$(APPNAME)d
+
+.PHONY: build
+
+#################
 ###  Install  ###
 #################
 
