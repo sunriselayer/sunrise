@@ -11,6 +11,7 @@ import (
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
@@ -49,14 +50,14 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		// <sunrise>
 		// Deduct shareclass module's delegations
 		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
-		shareclassVP := math.LegacyZeroDec()
+		shareclassVotingPower := math.LegacyZeroDec()
 		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 			if val, ok := validators[valAddrStr]; ok {
 				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
 				validators[valAddrStr] = val
 
-				shareclassVP = shareclassVP.Add(delegation.GetShares())
+				shareclassVotingPower = shareclassVotingPower.Add(delegation.GetShares())
 			}
 			return false
 		})
@@ -154,22 +155,25 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		// <sunrise>
 		// To cancel the effect to quorum, we need to adjust the total voting power.
 		// It should not be totalVoterPower / totalBonded < quorum.
-		// totalVoterPowerCustom / totalBonded = (totalVoterPower - shareclassVotingPower) / (totalBonded - shareclassBonded)
-		shareclassBonded, err := stakingKeeper.GetDelegatorBonded(ctx, shareclassAddr)
-		if err != nil {
-			return math.LegacyDec{}, nil, err
-		}
+		// totalVoterPowerCustom / totalBonded = totalVoterPower / (totalBonded - shareclassBonded)
+		// totalVoterPowerCustom = totalVoterPower * totalBonded / (totalBonded - shareclassBonded)
 		totalBonded, err := stakingKeeper.TotalBondedTokens(ctx)
 		if err != nil {
 			return math.LegacyDec{}, nil, err
 		}
-		if !totalBonded.IsZero() {
-			numerator := totalVotingPower.Sub(shareclassVP)
-			denominator := totalBonded.Sub(shareclassBonded)
-
-			numerator = numerator.MulInt(totalBonded)
-			totalVotingPower = numerator.Quo(math.LegacyNewDecFromInt(denominator))
+		shareclassBonded, err := stakingKeeper.GetDelegatorBonded(ctx, shareclassAddr)
+		if err != nil {
+			return math.LegacyDec{}, nil, err
 		}
+		denominator := totalBonded.Sub(shareclassBonded)
+		// If denominator is zero, set totalVotingPower to zero.
+		if denominator.IsZero() {
+			totalVotingPower = math.LegacyZeroDec()
+			return totalVotingPower, results, nil
+		}
+
+		numerator := totalVotingPower.MulInt(totalBonded)
+		totalVotingPower = numerator.Quo(math.LegacyNewDecFromInt(denominator))
 		// <sunrise />
 
 		return totalVotingPower, results, nil

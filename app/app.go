@@ -113,11 +113,11 @@ type App struct {
 	DaKeeper                 damodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
+	ShareclassKeeper         shareclassmodulekeeper.Keeper
+	LockupKeeper             lockupmodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
-	ShareclassKeeper         shareclassmodulekeeper.Keeper
-	LockupKeeper             lockupmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -201,11 +201,11 @@ func New(
 		&app.DaKeeper,
 		&app.FeeKeeper,
 		&app.TokenconverterKeeper,
+		&app.ShareclassKeeper,
+		&app.LockupKeeper,
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
-		&app.ShareclassKeeper,
-		&app.LockupKeeper,
 	); err != nil {
 		panic(err)
 	}

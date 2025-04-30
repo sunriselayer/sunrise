@@ -10,6 +10,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 // ValidatorGovInfo used for tallying
@@ -22,10 +23,7 @@ type ValidatorGovInfo struct {
 }
 
 func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
-	results := make(map[uint64]math.LegacyDec)
-
-	totalVotingPower := math.LegacyZeroDec()
-	currValidators := make(map[string]ValidatorGovInfo)
+	validators := make(map[string]ValidatorGovInfo)
 
 	// fetch all the bonded validators, insert them into currValidators
 	err := k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
@@ -33,7 +31,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		if err != nil {
 			return false
 		}
-		currValidators[validator.GetOperator()] = ValidatorGovInfo{
+		validators[validator.GetOperator()] = ValidatorGovInfo{
 			Address:             valBz,
 			BondedTokens:        validator.GetBondedTokens(),
 			DelegatorShares:     validator.GetDelegatorShares(),
@@ -47,35 +45,66 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		return []types.TallyResult{}, err
 	}
 
-	votes, err := k.GetAllVotes(ctx)
+	// Hereafter it is analogy with gov CalculateVoteResultsAndVotingPowerFn
+	totalVotingPower := math.LegacyZeroDec()
+
+	results := make(map[uint64]math.LegacyDec)
+
+	// <sunrise>
+	// Deduct shareclass module's delegations
+	shareclassAddr := k.accountKeeper.GetModuleAddress(shareclasstypes.ModuleName)
+	// shareclassVotingPower := math.LegacyZeroDec()
+	err = k.stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
+		valAddrStr := delegation.GetValidatorAddr()
+		if val, ok := validators[valAddrStr]; ok {
+			val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
+			validators[valAddrStr] = val
+
+			// shareclassVotingPower = shareclassVotingPower.Add(delegation.GetShares())
+		}
+		return false
+	})
 	if err != nil {
 		return []types.TallyResult{}, err
 	}
-	for _, vote := range votes {
+	// </sunrise>
+
+	// iterate over all votes, tally up the voting power of each validator
+	votesToRemove := []sdk.AccAddress{}
+	if err := k.Votes.Walk(ctx, nil, func(key sdk.AccAddress, vote types.Vote) (bool, error) {
 		// if validator, just record it in the map
 		voter, err := k.accountKeeper.AddressCodec().StringToBytes(vote.Sender)
 		if err != nil {
-			return []types.TallyResult{}, err
+			return false, err
 		}
+
+		// <sunrise>
+		// Skip shareclass module's votes
+		if sdk.AccAddress(voter).Equals(shareclassAddr) {
+			votesToRemove = append(votesToRemove, key)
+			return false, nil
+		}
+		// </sunrise>
 
 		valAddrStr, err := k.stakingKeeper.ValidatorAddressCodec().BytesToString(voter)
 		if err != nil {
-			return []types.TallyResult{}, err
+			return false, err
 		}
-		if val, ok := currValidators[valAddrStr]; ok {
+
+		if val, ok := validators[valAddrStr]; ok {
 			val.PoolWeights = vote.PoolWeights
-			currValidators[valAddrStr] = val
+			validators[valAddrStr] = val
 		}
 
 		// iterate over all delegations from voter, deduct from any delegated-to validators
 		err = k.stakingKeeper.IterateDelegations(ctx, voter, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
 			valAddrStr := delegation.GetValidatorAddr()
 
-			if val, ok := currValidators[valAddrStr]; ok {
+			if val, ok := validators[valAddrStr]; ok {
 				// There is no need to handle the special case that validator address equal to voter address.
 				// Because voter's voting power will tally again even if there will be deduction of voter's voting power from validator.
 				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
-				currValidators[valAddrStr] = val
+				validators[valAddrStr] = val
 
 				// delegation shares * bonded / total shares
 				votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
@@ -95,12 +124,24 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 			return false
 		})
 		if err != nil {
+			return false, err
+		}
+
+		votesToRemove = append(votesToRemove, key)
+		return false, nil
+	}); err != nil {
+		return []types.TallyResult{}, err
+	}
+
+	// remove all votes from store
+	for _, key := range votesToRemove {
+		if err := k.Votes.Remove(ctx, key); err != nil {
 			return []types.TallyResult{}, err
 		}
 	}
 
 	// iterate over the validators again to tally their voting power
-	for _, val := range currValidators {
+	for _, val := range validators {
 		if len(val.PoolWeights) == 0 {
 			continue
 		}
