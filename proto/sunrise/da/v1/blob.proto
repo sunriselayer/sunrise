@@ -24,7 +24,7 @@ message BlobDeclaration {
 message ValidatorPowerSnapshot {
   int64 block_height = 1;
   string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string voting_power = 3 [
+  string power = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false

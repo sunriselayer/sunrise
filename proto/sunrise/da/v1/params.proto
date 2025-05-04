@@ -1,0 +1,25 @@
+syntax = "proto3";
+package sunrise.da.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.equal) = true;
+  uint64 gas_per_byte = 1;
+  // https://docs.sunriselayer.io/learn/sunrise/data-availability#the-condition-of-data-availability
+  string replication_factor = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  google.protobuf.Duration voting_period = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+  google.protobuf.Duration preservation_period = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+}

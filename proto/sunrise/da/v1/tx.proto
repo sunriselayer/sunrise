@@ -21,6 +21,34 @@ message MsgDeclareBlob {
 // MsgDeclareBlobResponse
 message MsgDeclareBlobResponse {}
 
+// MsgAggregateAvailability
+message MsgAggregateAvailability {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated AvailabilityCommitment commitments = 2 [(gogoproto.nullable) = false];
+  // Sign message is protobuf serialized AvailabilityCommitment
+  // The signer is the validator's deputy
+  repeated bytes signatures = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgAggregateAvailabilityResponse
+message MsgAggregateAvailabilityResponse {}
+
+// AvailabilityCommitment
+message AvailabilityCommitment {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  // Poseidon
+  bytes blob_shards_root = 2;
+  bool is_valid_declaration = 3;
+  repeated ShardAvailability shard_availabilities = 4 [(gogoproto.nullable) = false];
+}
+
+// ShardAvailability
+message ShardAvailability {
+  uint32 index = 1;
+  bool availability = 2;
+}
+
 // MsgChallengeUnavailability
 message MsgChallengeUnavailability {
   option (cosmos.msg.v1.signer) = "sender";
@@ -37,16 +65,10 @@ message MsgRespondToChallenge {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  // Poseidon
-  bytes blob_shards_root = 3;
-  bool is_valid_declaration = 4;
-  repeated ShardAvailability shard_availabilities = 5 [(gogoproto.nullable) = false];
-}
-
-// ShardAvailability
-message ShardAvailability {
-  uint32 index = 1;
-  bool availability = 2;
+  uint64 challenge_id = 2;
+  bytes kzg_commitment = 3;
+  bytes merkle_path = 4;
+  bytes kzg_opening_proof = 5;
 }
 
 // MsgRespondToChallengeResponse
