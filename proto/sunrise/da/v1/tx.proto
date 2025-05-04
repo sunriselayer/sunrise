@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.da.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -16,6 +17,10 @@ message MsgDeclareBlob {
   uint64 size = 3;
   // Poseidon
   bytes kzg_commitments_root = 4;
+  repeated cosmos.base.v1beta1.Coin aggregation_rewards = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgDeclareBlobResponse
@@ -65,10 +70,10 @@ message MsgRespondToChallenge {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  uint64 challenge_id = 2;
-  bytes kzg_commitment = 3;
-  bytes merkle_path = 4;
-  bytes kzg_opening_proof = 5;
+  uint64 challenge_id = 3;
+  bytes kzg_commitment = 4;
+  bytes merkle_path = 5;
+  bytes kzg_opening_proof = 6;
 }
 
 // MsgRespondToChallengeResponse
