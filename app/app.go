@@ -55,6 +55,7 @@ import (
 	lockupmodulekeeper "github.com/sunriselayer/sunrise/x/lockup/keeper"
 	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
+	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
@@ -92,7 +93,7 @@ type App struct {
 	BankKeeper            bankkeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	SlashingKeeper        slashingkeeper.Keeper
-	MintKeeper            *mintkeeper.Keeper
+	MintKeeper            mintkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	FeeGrantKeeper        feegrantkeeper.Keeper
 	GovKeeper             *govkeeper.Keeper
@@ -112,11 +113,11 @@ type App struct {
 	DaKeeper                 damodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
+	ShareclassKeeper         shareclassmodulekeeper.Keeper
+	LockupKeeper             lockupmodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
-	ShareclassKeeper         shareclassmodulekeeper.Keeper
-	LockupKeeper             lockupmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -200,11 +201,11 @@ func New(
 		&app.DaKeeper,
 		&app.FeeKeeper,
 		&app.TokenconverterKeeper,
+		&app.ShareclassKeeper,
+		&app.LockupKeeper,
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
-		&app.ShareclassKeeper,
-		&app.LockupKeeper,
 	); err != nil {
 		panic(err)
 	}
@@ -235,8 +236,16 @@ func New(
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
 			HandlerOptions: ante.HandlerOptions{
-				AccountKeeper:   app.AuthKeeper,
-				BankKeeper:      app.BankKeeper,
+				AccountKeeper: app.AuthKeeper,
+				BankKeeper:    app.BankKeeper,
+				ExtensionOptionChecker: func(a *codectypes.Any) bool {
+					switch a.TypeUrl {
+					case codectypes.MsgTypeURL(&swaptypes.SwapBeforeFeeExtension{}):
+						return true
+					default:
+						return false
+					}
+				},
 				SignModeHandler: app.txConfig.SignModeHandler(),
 				FeegrantKeeper:  app.FeeGrantKeeper,
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
@@ -244,6 +253,7 @@ func New(
 			IBCKeeper:     app.IBCKeeper,
 			CircuitKeeper: &app.CircuitBreakerKeeper,
 			FeeKeeper:     &app.FeeKeeper,
+			SwapKeeper:    &app.SwapKeeper,
 		},
 	)
 	if err != nil {

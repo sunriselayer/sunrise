@@ -13,6 +13,7 @@ import (
 	types "github.com/cosmos/cosmos-sdk/types"
 	types0 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	gomock "go.uber.org/mock/gomock"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -199,6 +200,20 @@ func (mr *MockBankKeeperMockRecorder) SendCoinsFromModuleToModule(ctx, senderMod
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendCoinsFromModuleToModule", reflect.TypeOf((*MockBankKeeper)(nil).SendCoinsFromModuleToModule), ctx, senderModule, recipientModule, amt)
 }
 
+// IsSendEnabledCoins mocks base method.
+func (m *MockBankKeeper) IsSendEnabledCoins(ctx context.Context, coins ...types.Coin) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsSendEnabledCoins", ctx, coins)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// IsSendEnabledCoins indicates an expected call of IsSendEnabledCoins.
+func (mr *MockBankKeeperMockRecorder) IsSendEnabledCoins(ctx, coins interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsSendEnabledCoins", reflect.TypeOf((*MockBankKeeper)(nil).IsSendEnabledCoins), ctx, coins)
+}
+
 // MockStakingKeeper is a mock of StakingKeeper interface.
 type MockStakingKeeper struct {
 	ctrl     *gomock.Controller
@@ -223,7 +238,7 @@ func (m *MockStakingKeeper) EXPECT() *MockStakingKeeperMockRecorder {
 }
 
 // IterateBondedValidatorsByPower mocks base method.
-func (m *MockStakingKeeper) IterateBondedValidatorsByPower(arg0 context.Context, arg1 func(int64, types.ValidatorI) bool) error {
+func (m *MockStakingKeeper) IterateBondedValidatorsByPower(arg0 context.Context, arg1 func(int64, stakingtypes.ValidatorI) bool) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IterateBondedValidatorsByPower", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -237,7 +252,7 @@ func (mr *MockStakingKeeperMockRecorder) IterateBondedValidatorsByPower(arg0, ar
 }
 
 // IterateDelegations mocks base method.
-func (m *MockStakingKeeper) IterateDelegations(ctx context.Context, delegator types.AccAddress, fn func(int64, types.DelegationI) bool) error {
+func (m *MockStakingKeeper) IterateDelegations(ctx context.Context, delegator types.AccAddress, fn func(int64, stakingtypes.DelegationI) bool) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IterateDelegations", ctx, delegator, fn)
 	ret0, _ := ret[0].(error)

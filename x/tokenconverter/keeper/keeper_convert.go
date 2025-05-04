@@ -41,7 +41,7 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 		return err
 	}
 
-	if err := k.bankKeeper.BurnCoins(ctx, k.accountKeeper.GetModuleAddress(types.ModuleName), sdk.NewCoins(bondToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
 		return err
 	}
 
@@ -82,7 +82,7 @@ func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk
 		return err
 	}
 
-	if err := k.bankKeeper.BurnCoins(ctx, k.accountKeeper.GetModuleAddress(types.ModuleName), sdk.NewCoins(feeToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
 		return err
 	}
 

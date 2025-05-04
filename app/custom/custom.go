@@ -1,7 +1,6 @@
 package custom
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
@@ -25,7 +24,6 @@ import (
 
 func ReplaceCustomModules(
 	manager module.BasicManager,
-	cdc codec.Codec,
 ) {
 	sdk.DefaultBondDenom = consts.BondDenom
 
@@ -33,41 +31,35 @@ func ReplaceCustomModules(
 	oldBankModule, _ := manager[banktypes.ModuleName].(bank.AppModuleBasic)
 	manager[banktypes.ModuleName] = CustomBankModule{
 		AppModuleBasic: oldBankModule,
-		cdc:            cdc,
 	}
 
 	// fee
 	oldFeeModule, _ := manager[feetypes.ModuleName].(fee.AppModuleBasic)
 	manager[feetypes.ModuleName] = CustomFeeModule{
 		AppModuleBasic: oldFeeModule,
-		cdc:            cdc,
 	}
 
 	// gov
 	oldGovModule, _ := manager[govtypes.ModuleName].(gov.AppModuleBasic)
 	manager[govtypes.ModuleName] = CustomGovModule{
 		AppModuleBasic: oldGovModule,
-		cdc:            cdc,
 	}
 
 	// mint
 	oldMintModule, _ := manager[minttypes.ModuleName].(mint.AppModuleBasic)
 	manager[minttypes.ModuleName] = CustomMintModule{
 		AppModuleBasic: oldMintModule,
-		cdc:            cdc,
 	}
 
 	// protocolpool
 	oldProtocolPoolModule, _ := manager[protocolpooltypes.ModuleName].(protocolpool.AppModule)
 	manager[protocolpooltypes.ModuleName] = CustomProtocolPoolModule{
 		AppModule: oldProtocolPoolModule,
-		cdc:       cdc,
 	}
 
 	// staking
 	oldStakingModule, _ := manager[stakingtypes.ModuleName].(staking.AppModuleBasic)
 	manager[stakingtypes.ModuleName] = CustomStakingModule{
 		AppModuleBasic: oldStakingModule,
-		cdc:            cdc,
 	}
 }

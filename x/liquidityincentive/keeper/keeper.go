@@ -24,14 +24,16 @@ type Keeper struct {
 
 	addressCodec address.Codec
 
-	Schema          collections.Schema
-	Params          collections.Item[types.Params]
-	Epochs          collections.Map[uint64, types.Epoch]
-	EpochId         collections.Sequence
-	Gauges          collections.Map[collections.Pair[uint64, uint64], types.Gauge]
-	Votes           collections.Map[sdk.AccAddress, types.Vote]
-	Bribes          collections.Map[collections.Pair[uint64, uint64], types.Bribe]
-	UnclaimedBribes collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.UnclaimedBribe]
+	Schema              collections.Schema
+	Params              collections.Item[types.Params]
+	Epochs              collections.Map[uint64, types.Epoch]
+	EpochId             collections.Sequence
+	Gauges              collections.Map[collections.Pair[uint64, uint64], types.Gauge]
+	Votes               collections.Map[sdk.AccAddress, types.Vote]
+	Bribes              *collections.IndexedMap[uint64, types.Bribe, types.BribesIndexes]
+	BribeId             collections.Sequence
+	BribeAllocations    collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.BribeAllocation]
+	BribeExpiredEpochId collections.Item[uint64]
 
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
@@ -72,14 +74,23 @@ func NewKeeper(
 		EpochId: collections.NewSequence(sb, types.EpochIdKey, "epoch_id"),
 		Gauges:  collections.NewMap(sb, types.GaugesKeyPrefix, "gauges", types.GaugesKeyCodec, codec.CollValue[types.Gauge](cdc)),
 		Votes:   collections.NewMap(sb, types.VotesKeyPrefix, "votes", types.VotesKeyCodec, codec.CollValue[types.Vote](cdc)),
-		Bribes:  collections.NewMap(sb, types.BribesKeyPrefix, "bribes", types.BribesKeyCodec, codec.CollValue[types.Bribe](cdc)),
-		UnclaimedBribes: collections.NewMap(
+		Bribes: collections.NewIndexedMap(
 			sb,
-			types.UnclaimedBribesKeyPrefix,
-			"unclaimed_bribes",
-			types.UnclaimedBribesKeyCodec,
-			codec.CollValue[types.UnclaimedBribe](cdc),
+			types.BribesKeyPrefix,
+			"bribes",
+			types.BribesKeyCodec,
+			codec.CollValue[types.Bribe](cdc),
+			types.NewBribesIndexes(sb),
 		),
+		BribeId: collections.NewSequence(sb, types.BribeIdKey, "bribe_id"),
+		BribeAllocations: collections.NewMap(
+			sb,
+			types.BribeAllocationsKeyPrefix,
+			"bribe_allocations",
+			types.BribeAllocationsKeyCodec,
+			codec.CollValue[types.BribeAllocation](cdc),
+		),
+		BribeExpiredEpochId: collections.NewItem(sb, types.BribeExpiredEpochIdKey, "bribe_expired_epoch_id", collections.Uint64Value),
 
 		accountKeeper:        authKeeper,
 		bankKeeper:           bankKeeper,

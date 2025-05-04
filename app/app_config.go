@@ -99,10 +99,11 @@ var (
 		{Account: damoduletypes.ModuleName},
 		{Account: feemoduletypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		{Account: tokenconvertermoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: shareclassmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 		{Account: liquiditypoolmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: liquidityincentivemoduletypes.BribeAccount},
 		{Account: swapmoduletypes.ModuleName},
-		{Account: shareclassmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
 	}
 
 	// blocked account addresses
@@ -119,11 +120,11 @@ var (
 		damoduletypes.ModuleName,
 		feemoduletypes.ModuleName,
 		tokenconvertermoduletypes.ModuleName,
+		shareclassmoduletypes.ModuleName,
+		lockupmoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
 		liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
-		shareclassmoduletypes.ModuleName,
-		lockupmoduletypes.ModuleName,
 	}
 
 	// application configuration (used by depinject)
@@ -161,10 +162,10 @@ var (
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
-						liquiditypoolmoduletypes.ModuleName,
-						swapmoduletypes.ModuleName,
 						shareclassmoduletypes.ModuleName,
 						lockupmoduletypes.ModuleName,
+						liquiditypoolmoduletypes.ModuleName,
+						swapmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -177,11 +178,11 @@ var (
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
+						lockupmoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						shareclassmoduletypes.ModuleName,
-						lockupmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -207,6 +208,7 @@ var (
 						evidencetypes.ModuleName,
 						authz.ModuleName,
 						feegrant.ModuleName,
+						vestingtypes.ModuleName,
 						upgradetypes.ModuleName,
 						circuittypes.ModuleName,
 						protocolpooltypes.ModuleName,
@@ -219,11 +221,11 @@ var (
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
+						shareclassmoduletypes.ModuleName,
+						lockupmoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						shareclassmoduletypes.ModuleName,
-						lockupmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -321,6 +323,14 @@ var (
 				Config: appconfig.WrapAny(&tokenconvertermoduletypes.Module{}),
 			},
 			{
+				Name:   shareclassmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&shareclassmoduletypes.Module{}),
+			},
+			{
+				Name:   lockupmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&lockupmoduletypes.Module{}),
+			},
+			{
 				Name:   liquiditypoolmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&liquiditypoolmoduletypes.Module{}),
 			},
@@ -331,14 +341,6 @@ var (
 			{
 				Name:   swapmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&swapmoduletypes.Module{}),
-			},
-			{
-				Name:   shareclassmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&shareclassmoduletypes.Module{}),
-			},
-			{
-				Name:   lockupmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&lockupmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

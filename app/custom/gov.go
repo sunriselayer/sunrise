@@ -14,10 +14,9 @@ import (
 
 type CustomGovModule struct {
 	gov.AppModuleBasic
-	cdc codec.Codec
 }
 
-func (cm CustomGovModule) DefaultGenesis() json.RawMessage {
+func (cm CustomGovModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := govtypes.DefaultGenesisState()
 
 	day := time.Duration(time.Hour * 24)
@@ -34,5 +33,5 @@ func (cm CustomGovModule) DefaultGenesis() json.RawMessage {
 	genesis.Params.MaxDepositPeriod = &oneWeek
 	genesis.Params.VotingPeriod = &oneWeek
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genesis)
 }

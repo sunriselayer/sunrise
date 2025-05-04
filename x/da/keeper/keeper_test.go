@@ -34,7 +34,6 @@ func initFixture(t *testing.T) *fixture {
 	config := sdk.GetConfig()
 	encCfg := moduletestutil.MakeTestEncodingConfig(module.AppModule{})
 	addressCodec := addresscodec.NewBech32Codec(config.GetBech32AccountAddrPrefix())
-	validatorAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	storeService := runtime.NewKVStoreService(storeKey)

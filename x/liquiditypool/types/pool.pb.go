@@ -127,11 +127,11 @@ func (m *Pool) GetCurrentSqrtPrice() string {
 }
 
 // TickParams
-// PriceRatio^(Tick - BaseOffSet)
+// PriceRatio^(Tick + BaseOffSet)
 type TickParams struct {
 	// Basically 1.0001
 	PriceRatio string `protobuf:"bytes,1,opt,name=price_ratio,json=priceRatio,proto3" json:"price_ratio,omitempty"`
-	// basically 0 and (-1,0]. In the 1:1 stable pair, -0.5 would work
+	// basically 0 and (-1, 0]. In the 1:1 stable pair, -0.5 would work
 	BaseOffset string `protobuf:"bytes,2,opt,name=base_offset,json=baseOffset,proto3" json:"base_offset,omitempty"`
 }
 

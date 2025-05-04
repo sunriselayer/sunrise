@@ -7,7 +7,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
@@ -49,31 +48,19 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 			if err != nil {
 				continue
 			}
-
 			if weight.IsPositive() && !poolTotalWeights[poolWeight.PoolId].IsZero() {
-				// Process only pools with bribes
-				bribeKey := collections.Join(epochId, poolWeight.PoolId)
-				bribe, err := k.Bribes.Get(ctx, bribeKey)
-				if err != nil {
-					return err
-				}
-				if bribe == (types.Bribe{}) {
-					continue
-				}
-
 				// Calculate relative weight
 				relativeWeight := weight.Quo(poolTotalWeights[poolWeight.PoolId])
-
-				// Save UnclaimedBribe
-				unclaimedBribe := types.UnclaimedBribe{
-					Address: voterStr,
-					EpochId: epochId,
-					PoolId:  poolWeight.PoolId,
-					Weight:  relativeWeight.String(),
+				// Save BribeAllocation
+				bribeAllocation := types.BribeAllocation{
+					Address:         voterStr,
+					EpochId:         epochId,
+					PoolId:          poolWeight.PoolId,
+					Weight:          relativeWeight.String(),
+					ClaimedBribeIds: []uint64{},
 				}
-
-				key := collections.Join3(sdk.MustAccAddressFromBech32(voterStr), epochId, poolWeight.PoolId)
-				if err := k.UnclaimedBribes.Set(ctx, key, unclaimedBribe); err != nil {
+				err = k.SetBribeAllocation(ctx, bribeAllocation)
+				if err != nil {
 					return err
 				}
 			}
@@ -94,10 +81,7 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 
 	// Save vote weights
 	if err := k.SaveVoteWeightsForBribes(ctx, currentEpochId); err != nil {
-		ctx.Logger().Error("failed to save vote weights for bribes",
-			"epoch_id", currentEpochId,
-			"error", err,
-		)
+		return err
 	}
 
 	// Process unclaimed bribes for old epochs that have passed their claim period
@@ -107,14 +91,15 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 	}
 
 	// Use EpochBlocks as the claim period for now
-	if currentEpochId > uint64(params.EpochBlocks) {
-		epochToProcess := currentEpochId - uint64(params.EpochBlocks)
-		if err := k.ProcessUnclaimedBribes(ctx, epochToProcess); err != nil {
-			// Only log the error and continue with epoch ending process
-			ctx.Logger().Error("failed to process unclaimed bribes",
-				"epoch_id", epochToProcess,
-				"error", err,
-			)
+	expiredEpochId := k.GetBribeExpiredEpochId(ctx)
+	if currentEpochId > params.BribeClaimEpochs {
+		newExpiredEpochId := currentEpochId - params.BribeClaimEpochs
+		if newExpiredEpochId > expiredEpochId {
+			for epochId := expiredEpochId; epochId < newExpiredEpochId; epochId++ {
+				if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
+					return err
+				}
+			}
 		}
 	}
 
@@ -125,49 +110,64 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// Check if the epoch exists
-	epoch, err := k.Epochs.Get(ctx, epochId)
-	if err != nil {
-		return err
-	}
-	if epoch.Id == 0 {
-		return errorsmod.Wrapf(sdkerrors.ErrNotFound, "epoch %d not found", epochId)
-	}
-
 	// Process all bribes for this epoch
 	totalUnclaimed := sdk.NewCoins()
+	var bribesToRemove []uint64
 
-	err = k.Bribes.Walk(ctx, collections.NewPrefixedPairRange[uint64, uint64](epochId),
-		func(key collections.Pair[uint64, uint64], bribe types.Bribe) (bool, error) {
-			// Calculate unclaimed amount
-			unclaimedAmount := bribe.Amount.Sub(bribe.ClaimedAmount)
-			if !unclaimedAmount.IsZero() {
-				totalUnclaimed = totalUnclaimed.Add(unclaimedAmount)
+	err := k.Bribes.Indexes.EpochId.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[uint64, uint64](epochId),
+		func(_ uint64, bribeId uint64) (bool, error) {
+			bribe, found, err := k.GetBribe(ctx, bribeId)
+			if !found {
+				return true, nil
 			}
-
-			// Remove all unclaimed bribes for this epoch
-			if err := k.Bribes.Remove(ctx, key); err != nil {
+			if err != nil {
 				return false, err
 			}
-
+			// Calculate unclaimed amount
+			unclaimedAmount := bribe.Amount.Sub(bribe.ClaimedAmount...)
+			if !unclaimedAmount.IsZero() {
+				totalUnclaimed = totalUnclaimed.Add(unclaimedAmount...)
+			}
+			bribesToRemove = append(bribesToRemove, bribeId)
 			return false, nil
 		})
-
 	if err != nil {
 		return err
 	}
 
-	// Remove all unclaimed bribes for this epoch
-	err = k.UnclaimedBribes.Walk(ctx, collections.NewPrefixedTripleRange[sdk.AccAddress, uint64, uint64](sdk.AccAddress{}),
-		func(key collections.Triple[sdk.AccAddress, uint64, uint64], unclaimed types.UnclaimedBribe) (bool, error) {
+	// If there are no bribes to remove, return nil
+	if len(bribesToRemove) == 0 {
+		return nil
+	}
+
+	// Remove all bribes for this epoch
+	for _, bribeId := range bribesToRemove {
+		if err := k.RemoveBribe(ctx, bribeId); err != nil {
+			continue
+		}
+	}
+
+	var keysToRemove []collections.Triple[sdk.AccAddress, uint64, uint64]
+	err = k.BribeAllocations.Walk(ctx,
+		nil,
+		func(key collections.Triple[sdk.AccAddress, uint64, uint64], value types.BribeAllocation) (bool, error) {
 			if key.K2() == epochId {
-				return false, k.UnclaimedBribes.Remove(ctx, key)
+				keysToRemove = append(keysToRemove, key)
 			}
 			return false, nil
-		})
-
+		},
+	)
 	if err != nil {
 		return err
+	}
+
+	// Remove all bribe allocations for this epoch
+	for _, key := range keysToRemove {
+		if err := k.BribeAllocations.Remove(ctx, key); err != nil {
+			continue
+		}
 	}
 
 	// If there are unclaimed bribes, send them to fee collector
@@ -175,12 +175,17 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		feeCollectorAddr := k.accountKeeper.GetModuleAddress(authtypes.FeeCollectorName)
 		if err := k.bankKeeper.SendCoinsFromModuleToAccount(
 			sdkCtx,
-			types.ModuleName,
+			types.BribeAccount,
 			feeCollectorAddr,
 			totalUnclaimed,
 		); err != nil {
 			return errorsmod.Wrap(err, "failed to send unclaimed bribes to fee collector")
 		}
+	}
+
+	// Set the expired epoch id
+	if err := k.SetBribeExpiredEpochId(ctx, epochId); err != nil {
+		return err
 	}
 
 	return nil

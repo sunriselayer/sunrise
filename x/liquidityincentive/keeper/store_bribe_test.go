@@ -21,10 +21,11 @@ func createNBribe(keeper keeper.Keeper, ctx context.Context, n int) []types.Brib
 	for i := range items {
 		items[i].EpochId = 1
 		items[i].PoolId = uint64(i)
-		items[i].Amount = sdk.NewCoin("test", math.OneInt())
-		items[i].ClaimedAmount = sdk.NewCoin("test", math.ZeroInt())
+		items[i].Amount = sdk.NewCoins(sdk.NewCoin("test", math.OneInt()))
+		items[i].ClaimedAmount = sdk.NewCoins(sdk.NewCoin("test", math.ZeroInt()))
 
-		_ = keeper.SetBribe(ctx, items[i])
+		id, _ := keeper.AppendBribe(ctx, items[i])
+		items[i].Id = id
 	}
 	return items
 }
@@ -33,7 +34,7 @@ func TestBribeGet(t *testing.T) {
 	f := initFixture(t)
 	items := createNBribe(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		rst, found, err := f.keeper.GetBribe(f.ctx, item.EpochId, item.PoolId)
+		rst, found, err := f.keeper.GetBribe(f.ctx, item.Id)
 		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t,
@@ -47,9 +48,9 @@ func TestBribeRemove(t *testing.T) {
 	f := initFixture(t)
 	items := createNBribe(f.keeper, f.ctx, 10)
 	for _, item := range items {
-		err := f.keeper.RemoveBribe(f.ctx, item.EpochId, item.PoolId)
+		err := f.keeper.RemoveBribe(f.ctx, item.Id)
 		require.NoError(t, err)
-		_, found, err := f.keeper.GetBribe(f.ctx, item.EpochId, item.PoolId)
+		_, found, err := f.keeper.GetBribe(f.ctx, item.PoolId)
 		require.NoError(t, err)
 		require.False(t, found)
 	}

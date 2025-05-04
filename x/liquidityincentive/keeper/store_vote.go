@@ -64,3 +64,17 @@ func (k Keeper) GetAllVotes(ctx context.Context) (list []types.Vote, err error) 
 
 	return list, nil
 }
+
+func (k Keeper) RemoveAllVotes(ctx context.Context) error {
+	err := k.Votes.Walk(ctx, nil, func(key sdk.AccAddress, value types.Vote) (bool, error) {
+		err := k.Votes.Remove(ctx, key)
+		if err != nil {
+			return false, err
+		}
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
