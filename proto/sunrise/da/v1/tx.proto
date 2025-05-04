@@ -3,31 +3,49 @@ package sunrise.da.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
+import "cosmos/tx/v1beta1/tx.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "sunrise/da/v1/blob.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// BlobTx
+message BlobTx {
+  cosmos.tx.v1beta1.Tx tx = 1;
+  repeated Shard shards = 2 [(gogoproto.nullable) = false];
+  // Max 256 peers, each max 256 characters
+  repeated string uri_peers = 3;
+  // Max 8 webhooks, each max 256 characters
+  repeated string commitment_webhook_urls = 4;
+}
+
+// Shard
+message Shard {
+  // Poseidon
+  bytes hash = 1;
+  bytes kzg_commitment = 2;
+  // ipfs:// or ar://
+  string uri = 3;
+}
 
 // MsgDeclareBlob
 message MsgDeclareBlob {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   // Poseidon
-  bytes shards_root = 2;
+  bytes shards_merkle_root = 2;
   uint64 size = 3;
   // Poseidon
-  bytes kzg_commitments_root = 4;
-  repeated cosmos.base.v1beta1.Coin aggregation_rewards = 5 [
-    (gogoproto.nullable) = false,
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
+  bytes kzg_commitments_merkle_root = 4;
+  cosmos.base.v1beta1.Coin aggregation_reward = 5;
 }
 
 // MsgDeclareBlobResponse
 message MsgDeclareBlobResponse {}
 
-// MsgAggregateAvailability
-message MsgAggregateAvailability {
+// MsgBundleCommitments
+message MsgBundleCommitments {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated AvailabilityCommitment commitments = 2 [(gogoproto.nullable) = false];
@@ -36,14 +54,13 @@ message MsgAggregateAvailability {
   repeated bytes signatures = 3 [(gogoproto.nullable) = false];
 }
 
-// MsgAggregateAvailabilityResponse
-message MsgAggregateAvailabilityResponse {}
+// MsgBundleCommitmentsResponse
+message MsgBundleCommitmentsResponse {}
 
 // AvailabilityCommitment
 message AvailabilityCommitment {
-  string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  // Poseidon
-  bytes blob_shards_root = 2;
+  BlobId blob_id = 1;
+  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   bool is_valid_declaration = 3;
   repeated ShardAvailability shard_availabilities = 4 [(gogoproto.nullable) = false];
 }
@@ -72,7 +89,7 @@ message MsgRespondToChallenge {
   string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   uint64 challenge_id = 3;
   bytes kzg_commitment = 4;
-  bytes merkle_path = 5;
+  bytes kzg_commitment_merkle_path = 5;
   bytes kzg_opening_proof = 6;
 }
 
@@ -81,8 +98,8 @@ message MsgRespondToChallengeResponse {}
 
 // MsgRegisterDeputy
 message MsgRegisterDeputy {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  option (cosmos.msg.v1.signer) = "validator";
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   string deputy = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
@@ -91,8 +108,8 @@ message MsgRegisterDeputyResponse {}
 
 // MsgUnregisterDeputy
 message MsgUnregisterDeputy {
-  option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  option (cosmos.msg.v1.signer) = "validator";
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
 }
 
 // MsgUnregisterDeputyResponse

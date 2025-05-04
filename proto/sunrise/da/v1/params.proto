@@ -11,14 +11,15 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
-  uint64 gas_per_byte = 1;
+  uint64 gas_per_shard = 1;
+  uint64 gas_challenge_unavailability = 2;
   // https://docs.sunriselayer.io/learn/sunrise/data-availability#the-condition-of-data-availability
-  string replication_factor = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
-  google.protobuf.Duration voting_period = 3 [
+  string replication_factor = 3 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  google.protobuf.Duration declaration_period = 4 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  google.protobuf.Duration preservation_period = 4 [
+  google.protobuf.Duration preservation_period = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
