@@ -13,13 +13,16 @@ message Params {
   option (gogoproto.equal) = true;
   uint64 gas_per_shard = 1;
   uint64 gas_challenge_unavailability = 2;
-  // https://docs.sunriselayer.io/learn/sunrise/data-availability#the-condition-of-data-availability
-  string replication_factor = 3 [(cosmos_proto.scalar) = "cosmos.Dec"];
-  google.protobuf.Duration declaration_period = 4 [
+
+  google.protobuf.Duration declaration_period = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-  google.protobuf.Duration preservation_period = 5 [
+  google.protobuf.Duration preservation_period = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdduration) = true
+  ];
+  google.protobuf.Duration challenge_response_period = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
