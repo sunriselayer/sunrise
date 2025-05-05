@@ -3,15 +3,22 @@ package keeper
 import (
 	"context"
 
-	"github.com/sunriselayer/sunrise/x/da/types"
-
 	errorsmod "cosmossdk.io/errors"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
 func (k msgServer) RegisterCommitmentKey(ctx context.Context, msg *types.MsgRegisterCommitmentKey) (*types.MsgRegisterCommitmentKeyResponse, error) {
 	validator, err := k.StakingKeeper.ValidatorAddressCodec().StringToBytes(msg.Validator)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid validator address")
+	}
+
+	var pubkey cryptotypes.PubKey
+	err = k.cdc.UnmarshalInterface(msg.Pubkey.Value, &pubkey)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to unmarshal pubkey")
 	}
 
 	err = k.SetCommitmentKey(ctx, validator, types.CommitmentKey{

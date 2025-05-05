@@ -84,7 +84,10 @@ message QueryCommitmentKeyRequest {
 // QueryCommitmentKeyResponse is response type for the
 // Query/CommitmentKey RPC method.
 message QueryCommitmentKeyResponse {
-  google.protobuf.Any pubkey = 1 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
+  google.protobuf.Any pubkey = 1 [
+    (cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // QueryShardIndicesRequest is request type for the

@@ -6,7 +6,9 @@ import (
 	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/iden3/go-iden3-crypto/poseidon"
+	"github.com/sunriselayer/sunrise/x/da/kzg"
 )
 
 func CalculateShardsTotalSize(shardCount uint32) uint64 {
@@ -63,4 +65,22 @@ func uint32ToBytes(n uint32) []byte {
 	b := make([]byte, 4)
 	binary.BigEndian.PutUint32(b, n)
 	return b
+}
+
+func CorrespondingEvaluationPointIndex(
+	shardsMerkleRoot []byte,
+	addr sdk.ValAddress,
+) (uint32, error) {
+	hasher, err := poseidon.New(16)
+	if err != nil {
+		return 0, err
+	}
+	hasher.Write(shardsMerkleRoot)
+	hasher.Write(addr.Bytes())
+	hash := hasher.Sum(nil)
+
+	hashInt := new(big.Int).SetBytes(hash)
+	hashInt.Mod(hashInt, big.NewInt(int64(kzg.EvaluationPointCount)))
+
+	return uint32(hashInt.Uint64()), nil
 }

@@ -6,7 +6,7 @@ import (
 
 const (
 	// ExpansionFactor            = 2
-	ShardSize                  = 1024
+	ShardSize                  = 4096
 	ValidatorReplicationFactor = 12
 )
 

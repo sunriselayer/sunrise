@@ -54,7 +54,10 @@ message MsgUpdateParamsResponse {}
 message MsgRegisterCommitmentKey {
   option (cosmos.msg.v1.signer) = "validator";
   string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  google.protobuf.Any pubkey = 2 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
+  google.protobuf.Any pubkey = 2 [
+    (cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgRegisterCommitmentKeyResponse

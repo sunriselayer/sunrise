@@ -64,7 +64,7 @@ func (k msgServer) BundleCommitments(ctx context.Context, msg *types.MsgBundleCo
 		}
 	}
 
-	err = k.TallyCommitments(ctx)
+	err = k.TallyCommitments(ctx, declaration, msg.Commitments)
 	if err != nil {
 		return nil, err
 	}

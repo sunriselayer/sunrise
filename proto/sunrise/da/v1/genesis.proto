@@ -40,7 +40,10 @@ message ValidatorPowerSnapshot {
 // CommitmentKey
 message CommitmentKey {
   string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  google.protobuf.Any pubkey = 2 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
+  google.protobuf.Any pubkey = 2 [
+    (cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // BlobDeclaration
@@ -85,4 +88,5 @@ message Challenge {
   bytes shards_merkle_root = 1;
   uint32 shard_index = 2;
   uint32 evaluation_point_index = 3;
+  bool responded = 4;
 }

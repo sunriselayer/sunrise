@@ -12,8 +12,6 @@ import (
 )
 
 func (k Keeper) VerifyCommitmentSignature(ctx context.Context, validator sdk.ValAddress, commitment types.AvailabilityCommitment, signature []byte) error {
-	var pubkey cryptotypes.PubKey
-
 	commitmentKey, found, err := k.GetCommitmentKey(ctx, validator)
 	if err != nil {
 		return errorsmod.Wrapf(err, "failed to get commitment key for validator %s", validator)
@@ -22,7 +20,11 @@ func (k Keeper) VerifyCommitmentSignature(ctx context.Context, validator sdk.Val
 		return errorsmod.Wrapf(sdkerrors.ErrNotFound, "commitment key not found for validator %s", validator)
 	}
 
-	// TODO: unmarshal pubkey
+	var pubkey cryptotypes.PubKey
+	err = k.cdc.UnmarshalInterface(commitmentKey.Pubkey.Value, &pubkey)
+	if err != nil {
+		return errorsmod.Wrap(err, "failed to unmarshal pubkey")
+	}
 
 	signMessage, err := commitment.Marshal()
 	if err != nil {
@@ -36,7 +38,7 @@ func (k Keeper) VerifyCommitmentSignature(ctx context.Context, validator sdk.Val
 	return nil
 }
 
-func (k Keeper) TallyCommitments(ctx context.Context) error {
+func (k Keeper) TallyCommitments(ctx context.Context, declaration types.BlobDeclaration, commitments []types.AvailabilityCommitment) error {
 
 }
 
