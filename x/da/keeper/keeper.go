@@ -8,6 +8,7 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
@@ -23,14 +24,12 @@ type Keeper struct {
 
 	addressCodec address.Codec
 
-	Schema          collections.Schema
-	Params          collections.Item[types.Params]
-	PublishedData   *collections.IndexedMap[string, types.PublishedData, types.PublishedDataIndexes]
-	ChallengeCounts collections.Item[uint64]
-	FaultCounts     collections.Map[[]byte, uint64]
-	Proofs          collections.Map[collections.Pair[string, []byte], types.Proof]
-	Invalidities    collections.Map[collections.Pair[string, []byte], types.Invalidity]
-	ProofDeputies   collections.Map[[]byte, []byte]
+	Schema                  collections.Schema
+	Params                  collections.Item[types.Params]
+	BlobDeclarations        *collections.IndexedMap[collections.Pair[int64, []byte], types.BlobDeclaration, types.BlobDeclarationIndexes]
+	ValidatorPowerSnapshots collections.Map[collections.Pair[int64, []byte], types.ValidatorPowerSnapshot]
+	BlobIncludeds           *collections.IndexedMap[collections.Pair[int64, []byte], types.BlobIncluded, types.BlobIncludedIndexes]
+	Deputies                collections.Map[[]byte, sdk.AccAddress]
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -60,13 +59,11 @@ func NewKeeper(
 		authority:    authority,
 		addressCodec: addressCodec,
 
-		Params:          collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		PublishedData:   collections.NewIndexedMap(sb, types.PublishedDataKeyPrefix, "published_data", types.PublishedDataKeyCodec, codec.CollValue[types.PublishedData](cdc), types.NewPublishedDataIndexes(sb)),
-		ChallengeCounts: collections.NewItem(sb, types.ChallengeCountsKeyPrefix, "challenge_counts", collections.Uint64Value),
-		FaultCounts:     collections.NewMap(sb, types.FaultCountsKeyPrefix, "fault_counts", types.FaultCounterKeyCodec, collections.Uint64Value),
-		Proofs:          collections.NewMap(sb, types.ProofKeyPrefix, "proofs", types.ProofKeyCodec, codec.CollValue[types.Proof](cdc)),
-		Invalidities:    collections.NewMap(sb, types.InvalidityKeyPrefix, "invalidities", types.InvalidityKeyCodec, codec.CollValue[types.Invalidity](cdc)),
-		ProofDeputies:   collections.NewMap(sb, types.ProofDeputiesKeyPrefix, "proof_deputy", types.ProofDeputyKeyCodec, collections.BytesValue),
+		Params:                  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		BlobDeclarations:        collections.NewIndexedMap(sb, types.BlobDeclarationsKeyPrefix, "blob_declarations", types.BlobDeclarationKeyCodec, codec.CollValue[types.BlobDeclaration](cdc), types.NewBlobDeclarationIndexes(sb)),
+		ValidatorPowerSnapshots: collections.NewMap(sb, types.ValidatorPowerSnapshotsKeyPrefix, "validator_power_snapshots", types.ValidatorPowerSnapshotKeyCodec, codec.CollValue[types.ValidatorPowerSnapshot](cdc)),
+		BlobIncludeds:           collections.NewIndexedMap(sb, types.BlobIncludedsKeyPrefix, "blob_includeds", types.BlobIncludedKeyCodec, codec.CollValue[types.BlobIncluded](cdc), types.NewBlobIncludedIndexes(sb)),
+		Deputies:                collections.NewMap(sb, types.DeputiesKeyPrefix, "proof_deputies", types.ProofDeputyKeyCodec, collections.BytesValue),
 
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,
