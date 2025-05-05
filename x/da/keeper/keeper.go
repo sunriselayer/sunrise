@@ -23,13 +23,13 @@ type Keeper struct {
 
 	addressCodec address.Codec
 
-	Schema                  collections.Schema
-	Params                  collections.Item[types.Params]
-	CommitmentKeys          collections.Map[[]byte, types.CommitmentKey]
-	BlobDeclarations        *collections.IndexedMap[collections.Pair[int64, []byte], types.BlobDeclaration, types.BlobDeclarationIndexes]
-	ValidatorPowerSnapshots collections.Map[collections.Pair[int64, []byte], types.ValidatorPowerSnapshot]
-	BlobCommitments         *collections.IndexedMap[[]byte, types.BlobCommitment, types.BlobCommitmentIndexes]
-	Challenges              collections.Map[collections.Triple[[]byte, uint32, uint32], types.Challenge]
+	Schema                   collections.Schema
+	Params                   collections.Item[types.Params]
+	CommitmentKeys           collections.Map[[]byte, types.CommitmentKey]
+	BlobDeclarations         *collections.IndexedMap[[]byte, types.BlobDeclaration, types.BlobDeclarationIndexes]
+	ValidatorsPowerSnapshots collections.Map[int64, types.ValidatorsPowerSnapshot]
+	BlobCommitments          *collections.IndexedMap[[]byte, types.BlobCommitment, types.BlobCommitmentIndexes]
+	Challenges               collections.Map[collections.Triple[[]byte, uint32, uint32], types.Challenge]
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -59,12 +59,12 @@ func NewKeeper(
 		authority:    authority,
 		addressCodec: addressCodec,
 
-		Params:                  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		CommitmentKeys:          collections.NewMap(sb, types.CommitmentKeysKeyPrefix, "commitment_keys", types.CommitmentKeyCodec, codec.CollValue[types.CommitmentKey](cdc)),
-		BlobDeclarations:        collections.NewIndexedMap(sb, types.BlobDeclarationsKeyPrefix, "blob_declarations", types.BlobDeclarationKeyCodec, codec.CollValue[types.BlobDeclaration](cdc), types.NewBlobDeclarationIndexes(sb)),
-		ValidatorPowerSnapshots: collections.NewMap(sb, types.ValidatorPowerSnapshotsKeyPrefix, "validator_power_snapshots", types.ValidatorPowerSnapshotKeyCodec, codec.CollValue[types.ValidatorPowerSnapshot](cdc)),
-		BlobCommitments:         collections.NewIndexedMap(sb, types.BlobCommitmentsKeyPrefix, "blob_commitments", types.BlobCommitmentKeyCodec, codec.CollValue[types.BlobCommitment](cdc), types.NewBlobCommitmentIndexes(sb)),
-		Challenges:              collections.NewMap(sb, types.ChallengesKeyPrefix, "challenges", types.ChallengeKeyCodec, codec.CollValue[types.Challenge](cdc)),
+		Params:                   collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		CommitmentKeys:           collections.NewMap(sb, types.CommitmentKeysKeyPrefix, "commitment_keys", types.CommitmentKeyCodec, codec.CollValue[types.CommitmentKey](cdc)),
+		BlobDeclarations:         collections.NewIndexedMap(sb, types.BlobDeclarationsKeyPrefix, "blob_declarations", types.BlobDeclarationKeyCodec, codec.CollValue[types.BlobDeclaration](cdc), types.NewBlobDeclarationIndexes(sb)),
+		ValidatorsPowerSnapshots: collections.NewMap(sb, types.ValidatorsPowerSnapshotsKeyPrefix, "validators_power_snapshots", types.ValidatorsPowerSnapshotKeyCodec, codec.CollValue[types.ValidatorsPowerSnapshot](cdc)),
+		BlobCommitments:          collections.NewIndexedMap(sb, types.BlobCommitmentsKeyPrefix, "blob_commitments", types.BlobCommitmentKeyCodec, codec.CollValue[types.BlobCommitment](cdc), types.NewBlobCommitmentIndexes(sb)),
+		Challenges:               collections.NewMap(sb, types.ChallengesKeyPrefix, "challenges", types.ChallengeKeyCodec, codec.CollValue[types.Challenge](cdc)),
 
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,

@@ -1,10 +1,11 @@
 syntax = "proto3";
 package sunrise.da.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
-import "sunrise/da/v1/blob.proto";
+import "google/protobuf/timestamp.proto";
 import "sunrise/da/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
@@ -13,11 +14,27 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 message GenesisState {
   // params defines all the parameters of the module.
   Params params = 1 [(gogoproto.nullable) = false];
-  repeated CommitmentKey commitment_keys = 2 [(gogoproto.nullable) = false];
-  repeated BlobDeclaration blob_declarations = 3 [(gogoproto.nullable) = false];
-  repeated ValidatorPowerSnapshot validator_power_snapshots = 4 [(gogoproto.nullable) = false];
+  repeated ValidatorsPowerSnapshot validators_power_snapshots = 2 [(gogoproto.nullable) = false];
+  repeated CommitmentKey commitment_keys = 3 [(gogoproto.nullable) = false];
+  repeated BlobDeclaration blob_declarations = 4 [(gogoproto.nullable) = false];
   repeated BlobCommitment blob_commitments = 5 [(gogoproto.nullable) = false];
   repeated Challenge challenges = 6 [(gogoproto.nullable) = false];
+}
+
+// ValidatorsPowerSnapshot
+message ValidatorsPowerSnapshot {
+  int64 block_height = 1;
+  repeated ValidatorPowerSnapshot snapshots = 2 [(gogoproto.nullable) = false];
+}
+
+// ValidatorPowerSnapshot
+message ValidatorPowerSnapshot {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string power = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // CommitmentKey
@@ -26,15 +43,41 @@ message CommitmentKey {
   google.protobuf.Any pubkey = 2 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
 }
 
-// ValidatorPowerSnapshot
-message ValidatorPowerSnapshot {
-  int64 block_height = 1;
-  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string power = 3 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
+// BlobDeclaration
+message BlobDeclaration {
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // Poseidon
+  bytes shards_merkle_root = 2;
+  int64 block_height = 3;
+  uint32 shard_count = 4;
+  bytes kzg_commitments_merkle_root = 5;
+  repeated cosmos.base.v1beta1.Coin bundler_rewards = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+  google.protobuf.Timestamp expiry = 7 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+}
+
+// BlobCommitment
+message BlobCommitment {
+  bytes shards_merkle_root = 1;
+  int64 block_height = 2;
+  uint32 shard_count = 3;
+  bytes kzg_commitments_merkle_root = 4;
+  repeated ShardCommitment shard_commitments = 5 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp expiry = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+}
+
+// ShardCommitment
+message ShardCommitment {
+  uint32 shard_index = 1;
+  repeated string validators = 2;
 }
 
 // Challenge

@@ -12,8 +12,8 @@ func keyChallenge(shardsMerkleRoot []byte, shardIndex uint32, evaluationPoint ui
 	return collections.Join3(shardsMerkleRoot, shardIndex, evaluationPoint)
 }
 
-func (k Keeper) GetChallenge(ctx context.Context, shardsMerkleRoot []byte, shardIndex uint32, evaluationPoint uint32) (data types.Challenge, found bool, err error) {
-	has, err := k.Challenges.Has(ctx, keyChallenge(shardsMerkleRoot, shardIndex, evaluationPoint))
+func (k Keeper) GetChallenge(ctx context.Context, shardsMerkleRoot []byte, shardIndex uint32, evaluationPointIndex uint32) (data types.Challenge, found bool, err error) {
+	has, err := k.Challenges.Has(ctx, keyChallenge(shardsMerkleRoot, shardIndex, evaluationPointIndex))
 	if err != nil {
 		return data, false, err
 	}
@@ -22,7 +22,7 @@ func (k Keeper) GetChallenge(ctx context.Context, shardsMerkleRoot []byte, shard
 		return data, false, nil
 	}
 
-	val, err := k.Challenges.Get(ctx, keyChallenge(shardsMerkleRoot, shardIndex, evaluationPoint))
+	val, err := k.Challenges.Get(ctx, keyChallenge(shardsMerkleRoot, shardIndex, evaluationPointIndex))
 	if err != nil {
 		return data, false, err
 	}

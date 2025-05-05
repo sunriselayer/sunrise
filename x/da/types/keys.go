@@ -23,30 +23,33 @@ var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey = collections.NewPrefix("params/")
 
-	CommitmentKeysKeyPrefix          = collections.NewPrefix("commitment_keys/")
-	BlobDeclarationsKeyPrefix        = collections.NewPrefix("blob_declarations/")
-	BlobDeclarationsByExpiryPrefix   = collections.NewPrefix("blob_declarations_by_expiry/")
-	ValidatorPowerSnapshotsKeyPrefix = collections.NewPrefix("validator_power_snapshots/")
-	BlobCommitmentsKeyPrefix         = collections.NewPrefix("blob_commitments/")
-	BlobCommitmentsByExpiryPrefix    = collections.NewPrefix("blob_commitments_by_expiry/")
-	ChallengesKeyPrefix              = collections.NewPrefix("challenges/")
+	CommitmentKeysKeyPrefix             = collections.NewPrefix("commitment_keys/")
+	BlobDeclarationsKeyPrefix           = collections.NewPrefix("blob_declarations/")
+	BlobDeclarationsByExpiryPrefix      = collections.NewPrefix("blob_declarations_by_expiry/")
+	BlobDeclarationsByBlockHeightPrefix = collections.NewPrefix("blob_declarations_by_block_height/")
+	ValidatorsPowerSnapshotsKeyPrefix   = collections.NewPrefix("validators_power_snapshots/")
+	BlobCommitmentsKeyPrefix            = collections.NewPrefix("blob_commitments/")
+	BlobCommitmentsByExpiryPrefix       = collections.NewPrefix("blob_commitments_by_expiry/")
+	ChallengesKeyPrefix                 = collections.NewPrefix("challenges/")
 )
 
 var (
-	CommitmentKeyCodec             = collections.BytesKey
-	BlobDeclarationKeyCodec        = collections.PairKeyCodec(collections.Int64Key, collections.BytesKey)
-	ValidatorPowerSnapshotKeyCodec = collections.PairKeyCodec(collections.Int64Key, collections.BytesKey)
-	BlobCommitmentKeyCodec         = collections.BytesKey
-	ChallengeKeyCodec              = collections.TripleKeyCodec(collections.BytesKey, collections.Uint32Key, collections.Uint32Key)
+	CommitmentKeyCodec              = collections.BytesKey
+	BlobDeclarationKeyCodec         = collections.BytesKey
+	ValidatorsPowerSnapshotKeyCodec = collections.Int64Key
+	BlobCommitmentKeyCodec          = collections.BytesKey
+	ChallengeKeyCodec               = collections.TripleKeyCodec(collections.BytesKey, collections.Uint32Key, collections.Uint32Key)
 )
 
 type BlobDeclarationIndexes struct {
-	Expiry *indexes.Multi[int64, collections.Pair[int64, []byte], BlobDeclaration]
+	Expiry      *indexes.Multi[int64, []byte, BlobDeclaration]
+	BlockHeight *indexes.Multi[int64, []byte, BlobDeclaration]
 }
 
-func (i BlobDeclarationIndexes) IndexesList() []collections.Index[collections.Pair[int64, []byte], BlobDeclaration] {
-	return []collections.Index[collections.Pair[int64, []byte], BlobDeclaration]{
+func (i BlobDeclarationIndexes) IndexesList() []collections.Index[[]byte, BlobDeclaration] {
+	return []collections.Index[[]byte, BlobDeclaration]{
 		i.Expiry,
+		i.BlockHeight,
 	}
 }
 
@@ -58,8 +61,18 @@ func NewBlobDeclarationIndexes(sb *collections.SchemaBuilder) BlobDeclarationInd
 			"blob_declaration_by_expiry",
 			collections.Int64Key,
 			BlobDeclarationKeyCodec,
-			func(_ collections.Pair[int64, []byte], v BlobDeclaration) (int64, error) {
+			func(_ []byte, v BlobDeclaration) (int64, error) {
 				return v.Expiry.Unix(), nil
+			},
+		),
+		BlockHeight: indexes.NewMulti(
+			sb,
+			BlobDeclarationsByBlockHeightPrefix,
+			"blob_declaration_by_block_height",
+			collections.Int64Key,
+			BlobDeclarationKeyCodec,
+			func(_ []byte, v BlobDeclaration) (int64, error) {
+				return v.BlockHeight, nil
 			},
 		),
 	}

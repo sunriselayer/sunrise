@@ -5,7 +5,6 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -29,12 +28,15 @@ func (k msgServer) BundleCommitments(ctx context.Context, msg *types.MsgBundleCo
 	declarationHeight := msg.Commitments[0].DeclarationHeight
 	shardsMerkleRoot := msg.Commitments[0].ShardsMerkleRoot
 
-	declaration, found, err := k.GetBlobDeclaration(ctx, declarationHeight, shardsMerkleRoot)
+	declaration, found, err := k.GetBlobDeclaration(ctx, shardsMerkleRoot)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to get blob declaration")
 	}
 	if !found {
 		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "blob declaration not found")
+	}
+	if declaration.BlockHeight != declarationHeight {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "declaration height mismatch")
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -56,26 +58,19 @@ func (k msgServer) BundleCommitments(ctx context.Context, msg *types.MsgBundleCo
 			return nil, errorsmod.Wrapf(err, "invalid validator address at index %d", i)
 		}
 
-		var pubKey cryptotypes.PubKey
-		commitmentKey, found, err := k.GetCommitmentKey(ctx, validator)
+		err = k.VerifyCommitmentSignature(ctx, validator, commitment, msg.Signatures[i])
 		if err != nil {
-			return nil, errorsmod.Wrapf(err, "failed to get commitment key for validator %s", validator)
-		}
-		if found {
-		}
-
-		signMessage, err := commitment.Marshal()
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to marshal commitment")
-		}
-
-		if !pubKey.VerifySignature(signMessage, msg.Signatures[i]) {
-			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid signature at index %d", i)
+			return nil, errorsmod.Wrapf(err, "invalid signature at index %d", i)
 		}
 	}
 
-	if declaration.BundlerReward != nil {
-		err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, sdk.NewCoins(*declaration.BundlerReward))
+	err = k.TallyCommitments(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(declaration.BundlerRewards) > 0 {
+		err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, declaration.BundlerRewards)
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "failed to send bundler reward")
 		}

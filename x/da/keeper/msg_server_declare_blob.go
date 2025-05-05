@@ -22,16 +22,14 @@ func (k msgServer) DeclareBlob(ctx context.Context, msg *types.MsgDeclareBlob) (
 	if len(msg.ShardsMerkleRoot) != 32 {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "shards merkle root must be 32 bytes poseidon hash")
 	}
-	if msg.BlobSize == 0 {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "blob size must be positive")
+	if msg.ShardCount == 0 {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "shard count must be positive")
 	}
 	if len(msg.KzgCommitmentsMerkleRoot) != 32 {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "kzg commitments merkle root must be 32 bytes poseidon hash")
 	}
-	if msg.BundlerReward != nil {
-		if err := msg.BundlerReward.Validate(); err != nil {
-			return nil, errorsmod.Wrap(err, "invalid bundler reward, empty is possible")
-		}
+	if err := msg.BundlerRewards.Validate(); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid bundler reward, empty is possible")
 	}
 
 	params, err := k.Params.Get(ctx)
@@ -42,23 +40,23 @@ func (k msgServer) DeclareBlob(ctx context.Context, msg *types.MsgDeclareBlob) (
 	// Consume gas
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.GasMeter().ConsumeGas(params.GasPerByte*msg.MetadataSize, "declare blob metadata size")
-	sdkCtx.GasMeter().ConsumeGas(params.GasPerByte*msg.BlobSize, "declare blob size")
+	sdkCtx.GasMeter().ConsumeGas(params.GasPerByte*types.CalculateShardsTotalSize(msg.ShardCount), "declare blob size")
 
-	_, has, err := k.GetBlobDeclaration(ctx, sdkCtx.BlockHeight(), msg.ShardsMerkleRoot)
+	_, has, err := k.GetBlobDeclaration(ctx, msg.ShardsMerkleRoot)
 	if err != nil {
 		return nil, err
 	}
 	if has {
-		return nil, types.ErrDataAlreadyExist
+		return nil, types.ErrDeclarationAlreadyExists
 	}
 
 	err = k.SetBlobDeclaration(ctx, types.BlobDeclaration{
 		Sender:                   msg.Sender,
 		BlockHeight:              sdkCtx.BlockHeight(),
 		ShardsMerkleRoot:         msg.ShardsMerkleRoot,
-		ShardCount:               types.CalculateShardCount(msg.BlobSize),
+		ShardCount:               msg.ShardCount,
 		KzgCommitmentsMerkleRoot: msg.KzgCommitmentsMerkleRoot,
-		BundlerReward:            msg.BundlerReward,
+		BundlerRewards:           msg.BundlerRewards,
 		Expiry:                   sdkCtx.BlockTime().Add(params.DeclarationPeriod),
 	})
 	if err != nil {
@@ -66,8 +64,8 @@ func (k msgServer) DeclareBlob(ctx context.Context, msg *types.MsgDeclareBlob) (
 	}
 
 	// Send collateral to module account
-	if msg.BundlerReward != nil {
-		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sdk.AccAddress(sender), types.ModuleName, sdk.NewCoins(*msg.BundlerReward))
+	if len(msg.BundlerRewards) > 0 {
+		err := k.BankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, msg.BundlerRewards)
 		if err != nil {
 			return nil, err
 		}

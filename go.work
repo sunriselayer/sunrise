@@ -1,9 +1,0 @@
-go 1.23.8
-
-toolchain go1.24.2
-
-use (
-	.
-	./x/da/kzg
-	./x/da/erasurecoding
-)

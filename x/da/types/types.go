@@ -9,8 +9,8 @@ import (
 	"github.com/iden3/go-iden3-crypto/poseidon"
 )
 
-func CalculateShardCount(blobSize uint64) uint32 {
-	return ExpansionFactor * uint32(math.Ceil(float64(blobSize)/float64(ShardSize)))
+func CalculateShardsTotalSize(shardCount uint32) uint64 {
+	return uint64(shardCount) * ShardSize
 }
 
 func CalculateShardCountPerValidator(shardCount uint32, validatorCount uint32) uint32 {
@@ -22,7 +22,7 @@ func CalculateShardCountPerValidator(shardCount uint32, validatorCount uint32) u
 
 func CorrespondingShardIndices(
 	shardsMerkleRoot []byte,
-	addr sdk.AccAddress,
+	addr sdk.ValAddress,
 	shardCount uint32,
 	shardCountPerValidator uint32,
 ) (map[uint32]bool, error) {

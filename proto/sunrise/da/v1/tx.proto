@@ -76,10 +76,14 @@ message MsgDeclareBlob {
   uint64 metadata_size = 2;
   // Poseidon
   bytes shards_merkle_root = 3;
-  uint64 blob_size = 4;
+  uint32 shard_count = 4;
   // Poseidon
   bytes kzg_commitments_merkle_root = 5;
-  cosmos.base.v1beta1.Coin bundler_reward = 6;
+
+  repeated cosmos.base.v1beta1.Coin bundler_rewards = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgDeclareBlobResponse
@@ -100,10 +104,10 @@ message MsgBundleCommitmentsResponse {}
 
 // AvailabilityCommitment
 message AvailabilityCommitment {
-  // Replay protection
-  int64 declaration_height = 1;
   // Poseidon
-  bytes shards_merkle_root = 2;
+  bytes shards_merkle_root = 1;
+  // Replay protection
+  int64 declaration_height = 2;
   string validator = 3 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
   bool is_valid_declaration = 4;
   repeated ShardAvailability shard_availabilities = 5 [(gogoproto.nullable) = false];

@@ -38,11 +38,11 @@ func DefaultParams() Params {
 // Validate validates the set of params.
 func (p Params) Validate() error {
 	if p.GasPerByte <= 0 {
-		return errorsmod.Wrap(ErrInvalidPublishDataGas, "gas per byte must be positive")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "gas per byte must be positive")
 	}
 
 	if p.GasChallengeUnavailability <= 0 {
-		return errorsmod.Wrap(ErrInvalidPublishDataGas, "gas challenge unavailability must be positive")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "gas challenge unavailability must be positive")
 	}
 
 	if p.DeclarationPeriod <= 0 {
