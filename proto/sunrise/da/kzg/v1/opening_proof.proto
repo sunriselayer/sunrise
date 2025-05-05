@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sunrise.da.kzg.v1;
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/kzg";
+
+// OpeningProof
+message OpeningProof {
+  bytes h = 1;
+  bytes claimed_value = 2;
+}

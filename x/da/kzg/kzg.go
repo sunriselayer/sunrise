@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
+	bls12381 "github.com/consensys/gnark-crypto/ecc/bls12-381"
 	fr "github.com/consensys/gnark-crypto/ecc/bls12-381/fr"
 	kzg "github.com/consensys/gnark-crypto/ecc/bls12-381/kzg"
 )
@@ -59,15 +60,15 @@ func KzgCommit(data []byte, srs kzg.SRS) ([]byte, error) {
 // pointIndex: index of the point to prove (0-31)
 // data: original 1024 bytes of data
 // srs: SRS containing proving key
-func KzgOpen(pointIndex int, data []byte) (kzg.OpeningProof, fr.Element, error) {
+func KzgOpen(pointIndex int, data []byte) (OpeningProof, fr.Element, error) {
 	if pointIndex < 0 || pointIndex >= EvaluationPointCount {
-		return kzg.OpeningProof{}, fr.Element{}, fmt.Errorf("pointIndex must be between 0 and 31")
+		return OpeningProof{}, fr.Element{}, fmt.Errorf("pointIndex must be between 0 and 31")
 	}
 
 	xs := xs()
 	ys, err := ys(data)
 	if err != nil {
-		return kzg.OpeningProof{}, fr.Element{}, err
+		return OpeningProof{}, fr.Element{}, err
 	}
 
 	poly := InterpolateLagrange(xs, ys)
@@ -77,10 +78,17 @@ func KzgOpen(pointIndex int, data []byte) (kzg.OpeningProof, fr.Element, error) 
 	// Generate opening proof
 	proof, err := kzg.Open(poly, point, Srs.Pk)
 	if err != nil {
-		return kzg.OpeningProof{}, fr.Element{}, err
+		return OpeningProof{}, fr.Element{}, err
 	}
 
-	return proof, value, nil
+	h := proof.H.Bytes()
+	claimedValue := proof.ClaimedValue.Bytes()
+	proofSerializable := OpeningProof{
+		H:            h[:],
+		ClaimedValue: claimedValue[:],
+	}
+
+	return proofSerializable, value, nil
 }
 
 // KzgVerify verifies an opening proof
@@ -88,7 +96,7 @@ func KzgOpen(pointIndex int, data []byte) (kzg.OpeningProof, fr.Element, error) 
 // pointIndex: index of the point being proved (0-31)
 // proof: the opening proof
 // srs: SRS containing verification key
-func KzgVerify(commitment []byte, proof kzg.OpeningProof, pointIndex int) error {
+func KzgVerify(commitment []byte, proof OpeningProof, pointIndex int) error {
 	if pointIndex < 0 || pointIndex >= EvaluationPointCount {
 		return fmt.Errorf("pointIndex must be between 0 and 31")
 	}
@@ -99,9 +107,23 @@ func KzgVerify(commitment []byte, proof kzg.OpeningProof, pointIndex int) error 
 		return err
 	}
 
+	h := bls12381.G1Affine{}
+	_, err = h.SetBytes(proof.H)
+	if err != nil {
+		return err
+	}
+
+	claimedValue := fr.Element{}
+	claimedValue.SetBytes(proof.ClaimedValue)
+
+	proofRaw := kzg.OpeningProof{
+		H:            h,
+		ClaimedValue: claimedValue,
+	}
+
 	// Get point from index
 	point := xs()[pointIndex]
 
 	// Verify the proof
-	return kzg.Verify(&commitmentDigest, &proof, point, Srs.Vk)
+	return kzg.Verify(&commitmentDigest, &proofRaw, point, Srs.Vk)
 }

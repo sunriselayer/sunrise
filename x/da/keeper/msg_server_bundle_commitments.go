@@ -74,5 +74,12 @@ func (k msgServer) BundleCommitments(ctx context.Context, msg *types.MsgBundleCo
 		}
 	}
 
+	if declaration.BundlerReward != nil {
+		err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, sdk.NewCoins(*declaration.BundlerReward))
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "failed to send bundler reward")
+		}
+	}
+
 	return &types.MsgBundleCommitmentsResponse{}, nil
 }

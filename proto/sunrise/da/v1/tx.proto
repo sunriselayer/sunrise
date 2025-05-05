@@ -6,6 +6,7 @@ import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "sunrise/da/kzg/v1/opening_proof.proto";
 import "sunrise/da/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
@@ -137,7 +138,7 @@ message MsgRespondToChallenge {
   bytes kzg_commitment = 5;
   // array of binary of 33 bytes, 1byte 0x00 or 0x01 and 32 bytes hash
   repeated bytes kzg_commitment_merkle_path = 6 [(gogoproto.nullable) = false];
-  bytes kzg_opening_proof = 7;
+  sunrise.da.kzg.v1.OpeningProof kzg_opening_proof = 7 [(gogoproto.nullable) = false];
 }
 
 // MsgRespondToChallengeResponse
