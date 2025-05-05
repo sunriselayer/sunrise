@@ -11,7 +11,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 // BlobDeclaration
 message BlobDeclaration {
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  int64 declaration_height = 2;
+  int64 block_height = 2;
   // Poseidon
   bytes shards_merkle_root = 3;
   uint32 shard_count = 4;
@@ -23,17 +23,6 @@ message BlobDeclaration {
   ];
 }
 
-// ValidatorPowerSnapshot
-message ValidatorPowerSnapshot {
-  int64 block_height = 1;
-  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string power = 3 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
-}
-
 // Directly included in block as Tx
 message Blob {
   bytes shards_merkle_root = 1;
@@ -41,12 +30,13 @@ message Blob {
   bytes kzg_commitments_merkle_root = 3;
 }
 
-// BlobIncluded
-message BlobIncluded {
+// BlobCommitment
+message BlobCommitment {
   bytes shards_merkle_root = 1;
-  uint32 shard_count = 2;
-  bytes kzg_commitments_merkle_root = 3;
-  google.protobuf.Timestamp expiry = 4 [
+  int64 block_height = 2;
+  uint32 shard_count = 3;
+  bytes kzg_commitments_merkle_root = 4;
+  google.protobuf.Timestamp expiry = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];

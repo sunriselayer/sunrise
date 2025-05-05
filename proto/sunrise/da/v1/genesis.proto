@@ -1,6 +1,7 @@
 syntax = "proto3";
 package sunrise.da.v1;
 
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/da/v1/blob.proto";
 import "sunrise/da/v1/params.proto";
@@ -11,7 +12,25 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 message GenesisState {
   // params defines all the parameters of the module.
   Params params = 1 [(gogoproto.nullable) = false];
-  repeated BlobDeclaration blob_declarations = 2 [(gogoproto.nullable) = false];
-  repeated ValidatorPowerSnapshot validator_power_snapshots = 3 [(gogoproto.nullable) = false];
-  repeated BlobIncluded blob_includeds = 4 [(gogoproto.nullable) = false];
+  repeated Deputy deputies = 2 [(gogoproto.nullable) = false];
+  repeated BlobDeclaration blob_declarations = 3 [(gogoproto.nullable) = false];
+  repeated ValidatorPowerSnapshot validator_power_snapshots = 4 [(gogoproto.nullable) = false];
+  repeated BlobCommitment blob_commitments = 5 [(gogoproto.nullable) = false];
+}
+
+// Deputy
+message Deputy {
+  string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// ValidatorPowerSnapshot
+message ValidatorPowerSnapshot {
+  int64 block_height = 1;
+  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string power = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }

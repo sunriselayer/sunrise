@@ -21,45 +21,68 @@ const (
 // should be changed to use collections
 var (
 	// ParamsKey is the prefix to retrieve all Params
-	ParamsKey = collections.NewPrefix("v0_params/")
+	ParamsKey = collections.NewPrefix("params/")
 
-	PublishedDataKeyPrefix             = collections.NewPrefix("v0_published_data/")
-	PublishedDataStatusTimeIndexPrefix = collections.NewPrefix("v0_published_data_by_status_time/")
-	ChallengeCountsKeyPrefix           = collections.NewPrefix("v0_challenge_counts/")
-	FaultCountsKeyPrefix               = collections.NewPrefix("v0_fault_counts/")
-	ProofKeyPrefix                     = collections.NewPrefix("v0_proofs/")
-	InvalidityKeyPrefix                = collections.NewPrefix("v0_invalidities/")
-	ProofDeputiesKeyPrefix             = collections.NewPrefix("proof_deputies/")
+	BlobDeclarationsKeyPrefix        = collections.NewPrefix("blob_declarations/")
+	BlobDeclarationsByExpiryPrefix   = collections.NewPrefix("blob_declarations_by_expiry/")
+	ValidatorPowerSnapshotsKeyPrefix = collections.NewPrefix("validator_power_snapshots/")
+	BlobCommitmentsKeyPrefix         = collections.NewPrefix("blob_commitments/")
+	BlobCommitmentsByExpiryPrefix    = collections.NewPrefix("blob_commitments_by_expiry/")
+	DeputiesKeyPrefix                = collections.NewPrefix("proof_deputies/")
 )
 
 var (
-	PublishedDataKeyCodec = collections.StringKey
-	FaultCounterKeyCodec  = collections.BytesKey
-	ProofKeyCodec         = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
-	InvalidityKeyCodec    = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
-	ProofDeputyKeyCodec   = collections.BytesKey
+	BlobDeclarationKeyCodec        = collections.PairKeyCodec(collections.Int64Key, collections.BytesKey)
+	ValidatorPowerSnapshotKeyCodec = collections.PairKeyCodec(collections.Int64Key, collections.BytesKey)
+	BlobCommitmentKeyCodec         = collections.BytesKey
+	DeputyKeyCodec                 = collections.BytesKey
 )
 
-type PublishedDataIndexes struct {
-	StatusTime *indexes.Multi[collections.Pair[string, int64], string, PublishedData]
+type BlobDeclarationIndexes struct {
+	Expiry *indexes.Multi[int64, collections.Pair[int64, []byte], BlobDeclaration]
 }
 
-func (i PublishedDataIndexes) IndexesList() []collections.Index[string, PublishedData] {
-	return []collections.Index[string, PublishedData]{
-		i.StatusTime,
+func (i BlobDeclarationIndexes) IndexesList() []collections.Index[collections.Pair[int64, []byte], BlobDeclaration] {
+	return []collections.Index[collections.Pair[int64, []byte], BlobDeclaration]{
+		i.Expiry,
 	}
 }
 
-func NewPublishedDataIndexes(sb *collections.SchemaBuilder) PublishedDataIndexes {
-	return PublishedDataIndexes{
-		StatusTime: indexes.NewMulti(
+func NewBlobDeclarationIndexes(sb *collections.SchemaBuilder) BlobDeclarationIndexes {
+	return BlobDeclarationIndexes{
+		Expiry: indexes.NewMulti(
 			sb,
-			PublishedDataStatusTimeIndexPrefix,
-			"published_data_by_status_time",
-			collections.PairKeyCodec(collections.StringKey, collections.Int64Key),
-			collections.StringKey,
-			func(_ string, v PublishedData) (collections.Pair[string, int64], error) {
-				return collections.Join(v.Status.String(), v.Timestamp.Unix()), nil
+			BlobDeclarationsByExpiryPrefix,
+			"blob_declaration_by_expiry",
+			collections.Int64Key,
+			BlobDeclarationKeyCodec,
+			func(_ collections.Pair[int64, []byte], v BlobDeclaration) (int64, error) {
+				return v.Expiry.Unix(), nil
+			},
+		),
+	}
+}
+
+type BlobCommitmentIndexes struct {
+	Expiry *indexes.Multi[int64, []byte, BlobCommitment]
+}
+
+func (i BlobCommitmentIndexes) IndexesList() []collections.Index[[]byte, BlobCommitment] {
+	return []collections.Index[[]byte, BlobCommitment]{
+		i.Expiry,
+	}
+}
+
+func NewBlobCommitmentIndexes(sb *collections.SchemaBuilder) BlobCommitmentIndexes {
+	return BlobCommitmentIndexes{
+		Expiry: indexes.NewMulti(
+			sb,
+			BlobCommitmentsByExpiryPrefix,
+			"blob_commitment_by_expiry",
+			collections.Int64Key,
+			BlobCommitmentKeyCodec,
+			func(_ []byte, v BlobCommitment) (int64, error) {
+				return v.Expiry.Unix(), nil
 			},
 		),
 	}

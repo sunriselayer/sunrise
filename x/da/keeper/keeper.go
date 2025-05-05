@@ -8,7 +8,6 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
@@ -28,8 +27,8 @@ type Keeper struct {
 	Params                  collections.Item[types.Params]
 	BlobDeclarations        *collections.IndexedMap[collections.Pair[int64, []byte], types.BlobDeclaration, types.BlobDeclarationIndexes]
 	ValidatorPowerSnapshots collections.Map[collections.Pair[int64, []byte], types.ValidatorPowerSnapshot]
-	BlobIncludeds           *collections.IndexedMap[collections.Pair[int64, []byte], types.BlobIncluded, types.BlobIncludedIndexes]
-	Deputies                collections.Map[[]byte, sdk.AccAddress]
+	BlobCommitments         *collections.IndexedMap[[]byte, types.BlobCommitment, types.BlobCommitmentIndexes]
+	Deputies                collections.Map[[]byte, types.Deputy]
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -62,8 +61,8 @@ func NewKeeper(
 		Params:                  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		BlobDeclarations:        collections.NewIndexedMap(sb, types.BlobDeclarationsKeyPrefix, "blob_declarations", types.BlobDeclarationKeyCodec, codec.CollValue[types.BlobDeclaration](cdc), types.NewBlobDeclarationIndexes(sb)),
 		ValidatorPowerSnapshots: collections.NewMap(sb, types.ValidatorPowerSnapshotsKeyPrefix, "validator_power_snapshots", types.ValidatorPowerSnapshotKeyCodec, codec.CollValue[types.ValidatorPowerSnapshot](cdc)),
-		BlobIncludeds:           collections.NewIndexedMap(sb, types.BlobIncludedsKeyPrefix, "blob_includeds", types.BlobIncludedKeyCodec, codec.CollValue[types.BlobIncluded](cdc), types.NewBlobIncludedIndexes(sb)),
-		Deputies:                collections.NewMap(sb, types.DeputiesKeyPrefix, "proof_deputies", types.ProofDeputyKeyCodec, collections.BytesValue),
+		BlobCommitments:         collections.NewIndexedMap(sb, types.BlobCommitmentsKeyPrefix, "blob_commitments", types.BlobCommitmentKeyCodec, codec.CollValue[types.BlobCommitment](cdc), types.NewBlobCommitmentIndexes(sb)),
+		Deputies:                collections.NewMap(sb, types.DeputiesKeyPrefix, "deputies", types.DeputyKeyCodec, codec.CollValue[types.Deputy](cdc)),
 
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,

@@ -4,12 +4,17 @@
 package types
 
 import (
+	context "context"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/gogoproto/gogoproto"
+	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -25,6 +30,101 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+type MsgUpdateParams struct {
+	// authority is the address that controls the module (defaults to x/gov unless overwritten).
+	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
+	// params defines the module parameters to update.
+	//
+	// NOTE: All parameters must be supplied.
+	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
+}
+
+func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
+func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateParams) ProtoMessage()    {}
+func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8776d5690e46d2ba, []int{0}
+}
+func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateParams.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateParams.Merge(m, src)
+}
+func (m *MsgUpdateParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateParams proto.InternalMessageInfo
+
+func (m *MsgUpdateParams) GetAuthority() string {
+	if m != nil {
+		return m.Authority
+	}
+	return ""
+}
+
+func (m *MsgUpdateParams) GetParams() Params {
+	if m != nil {
+		return m.Params
+	}
+	return Params{}
+}
+
+// MsgUpdateParamsResponse defines the response structure for executing a
+// MsgUpdateParams message.
+type MsgUpdateParamsResponse struct {
+}
+
+func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse{} }
+func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateParamsResponse) ProtoMessage()    {}
+func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8776d5690e46d2ba, []int{1}
+}
+func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateParamsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateParamsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateParamsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateParamsResponse.Merge(m, src)
+}
+func (m *MsgUpdateParamsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateParamsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgDeclareBlob
 type MsgDeclareBlob struct {
@@ -42,7 +142,7 @@ func (m *MsgDeclareBlob) Reset()         { *m = MsgDeclareBlob{} }
 func (m *MsgDeclareBlob) String() string { return proto.CompactTextString(m) }
 func (*MsgDeclareBlob) ProtoMessage()    {}
 func (*MsgDeclareBlob) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{0}
+	return fileDescriptor_8776d5690e46d2ba, []int{2}
 }
 func (m *MsgDeclareBlob) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -121,7 +221,7 @@ func (m *MsgDeclareBlobResponse) Reset()         { *m = MsgDeclareBlobResponse{}
 func (m *MsgDeclareBlobResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgDeclareBlobResponse) ProtoMessage()    {}
 func (*MsgDeclareBlobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{1}
+	return fileDescriptor_8776d5690e46d2ba, []int{3}
 }
 func (m *MsgDeclareBlobResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -163,7 +263,7 @@ func (m *MsgBundleCommitments) Reset()         { *m = MsgBundleCommitments{} }
 func (m *MsgBundleCommitments) String() string { return proto.CompactTextString(m) }
 func (*MsgBundleCommitments) ProtoMessage()    {}
 func (*MsgBundleCommitments) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{2}
+	return fileDescriptor_8776d5690e46d2ba, []int{4}
 }
 func (m *MsgBundleCommitments) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -221,7 +321,7 @@ func (m *MsgBundleCommitmentsResponse) Reset()         { *m = MsgBundleCommitmen
 func (m *MsgBundleCommitmentsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgBundleCommitmentsResponse) ProtoMessage()    {}
 func (*MsgBundleCommitmentsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{3}
+	return fileDescriptor_8776d5690e46d2ba, []int{5}
 }
 func (m *MsgBundleCommitmentsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -265,7 +365,7 @@ func (m *AvailabilityCommitment) Reset()         { *m = AvailabilityCommitment{}
 func (m *AvailabilityCommitment) String() string { return proto.CompactTextString(m) }
 func (*AvailabilityCommitment) ProtoMessage()    {}
 func (*AvailabilityCommitment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{4}
+	return fileDescriptor_8776d5690e46d2ba, []int{6}
 }
 func (m *AvailabilityCommitment) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -339,7 +439,7 @@ func (m *ShardAvailability) Reset()         { *m = ShardAvailability{} }
 func (m *ShardAvailability) String() string { return proto.CompactTextString(m) }
 func (*ShardAvailability) ProtoMessage()    {}
 func (*ShardAvailability) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{5}
+	return fileDescriptor_8776d5690e46d2ba, []int{7}
 }
 func (m *ShardAvailability) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -393,7 +493,7 @@ func (m *MsgChallengeUnavailability) Reset()         { *m = MsgChallengeUnavaila
 func (m *MsgChallengeUnavailability) String() string { return proto.CompactTextString(m) }
 func (*MsgChallengeUnavailability) ProtoMessage()    {}
 func (*MsgChallengeUnavailability) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{6}
+	return fileDescriptor_8776d5690e46d2ba, []int{8}
 }
 func (m *MsgChallengeUnavailability) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -451,7 +551,7 @@ func (m *MsgChallengeUnavailabilityResponse) Reset()         { *m = MsgChallenge
 func (m *MsgChallengeUnavailabilityResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgChallengeUnavailabilityResponse) ProtoMessage()    {}
 func (*MsgChallengeUnavailabilityResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{7}
+	return fileDescriptor_8776d5690e46d2ba, []int{9}
 }
 func (m *MsgChallengeUnavailabilityResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -494,7 +594,7 @@ func (m *MsgRespondToChallenge) Reset()         { *m = MsgRespondToChallenge{} }
 func (m *MsgRespondToChallenge) String() string { return proto.CompactTextString(m) }
 func (*MsgRespondToChallenge) ProtoMessage()    {}
 func (*MsgRespondToChallenge) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{8}
+	return fileDescriptor_8776d5690e46d2ba, []int{10}
 }
 func (m *MsgRespondToChallenge) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -573,7 +673,7 @@ func (m *MsgRespondToChallengeResponse) Reset()         { *m = MsgRespondToChall
 func (m *MsgRespondToChallengeResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgRespondToChallengeResponse) ProtoMessage()    {}
 func (*MsgRespondToChallengeResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{9}
+	return fileDescriptor_8776d5690e46d2ba, []int{11}
 }
 func (m *MsgRespondToChallengeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -612,7 +712,7 @@ func (m *MsgRegisterDeputy) Reset()         { *m = MsgRegisterDeputy{} }
 func (m *MsgRegisterDeputy) String() string { return proto.CompactTextString(m) }
 func (*MsgRegisterDeputy) ProtoMessage()    {}
 func (*MsgRegisterDeputy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{10}
+	return fileDescriptor_8776d5690e46d2ba, []int{12}
 }
 func (m *MsgRegisterDeputy) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -663,7 +763,7 @@ func (m *MsgRegisterDeputyResponse) Reset()         { *m = MsgRegisterDeputyResp
 func (m *MsgRegisterDeputyResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgRegisterDeputyResponse) ProtoMessage()    {}
 func (*MsgRegisterDeputyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{11}
+	return fileDescriptor_8776d5690e46d2ba, []int{13}
 }
 func (m *MsgRegisterDeputyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -701,7 +801,7 @@ func (m *MsgUnregisterDeputy) Reset()         { *m = MsgUnregisterDeputy{} }
 func (m *MsgUnregisterDeputy) String() string { return proto.CompactTextString(m) }
 func (*MsgUnregisterDeputy) ProtoMessage()    {}
 func (*MsgUnregisterDeputy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{12}
+	return fileDescriptor_8776d5690e46d2ba, []int{14}
 }
 func (m *MsgUnregisterDeputy) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -745,7 +845,7 @@ func (m *MsgUnregisterDeputyResponse) Reset()         { *m = MsgUnregisterDeputy
 func (m *MsgUnregisterDeputyResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUnregisterDeputyResponse) ProtoMessage()    {}
 func (*MsgUnregisterDeputyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8776d5690e46d2ba, []int{13}
+	return fileDescriptor_8776d5690e46d2ba, []int{15}
 }
 func (m *MsgUnregisterDeputyResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -775,6 +875,8 @@ func (m *MsgUnregisterDeputyResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUnregisterDeputyResponse proto.InternalMessageInfo
 
 func init() {
+	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.da.v1.MsgUpdateParams")
+	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.da.v1.MsgUpdateParamsResponse")
 	proto.RegisterType((*MsgDeclareBlob)(nil), "sunrise.da.v1.MsgDeclareBlob")
 	proto.RegisterType((*MsgDeclareBlobResponse)(nil), "sunrise.da.v1.MsgDeclareBlobResponse")
 	proto.RegisterType((*MsgBundleCommitments)(nil), "sunrise.da.v1.MsgBundleCommitments")
@@ -794,62 +896,450 @@ func init() {
 func init() { proto.RegisterFile("sunrise/da/v1/tx.proto", fileDescriptor_8776d5690e46d2ba) }
 
 var fileDescriptor_8776d5690e46d2ba = []byte{
-	// 871 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xce, 0xda, 0x49, 0x94, 0x3c, 0xdb, 0x81, 0x4c, 0x4d, 0xba, 0x49, 0x88, 0xe3, 0x9a, 0x56,
-	0xb2, 0x22, 0xb2, 0xdb, 0x94, 0x5b, 0x11, 0x82, 0x3a, 0x39, 0xd0, 0xc3, 0x8a, 0x6a, 0x43, 0x91,
-	0xe0, 0xb2, 0x9a, 0xf5, 0x4e, 0xc7, 0xa3, 0xec, 0xee, 0x58, 0x33, 0x63, 0x13, 0xfb, 0xc8, 0x5f,
-	0xc0, 0x89, 0xbf, 0x83, 0x43, 0xaf, 0x48, 0x48, 0x5c, 0x2a, 0x4e, 0x55, 0x4f, 0x9c, 0x10, 0x4a,
-	0x0e, 0xfc, 0x1b, 0x68, 0x67, 0xc7, 0xf6, 0x6e, 0x7e, 0x70, 0x88, 0x90, 0xb8, 0x79, 0xbe, 0xef,
-	0xbd, 0x37, 0xef, 0xfb, 0xe6, 0xcd, 0xac, 0x61, 0x4b, 0x8e, 0x52, 0xc1, 0x24, 0x71, 0x23, 0xec,
-	0x8e, 0x8f, 0x5c, 0x75, 0xee, 0x0c, 0x05, 0x57, 0x1c, 0x35, 0x0c, 0xee, 0x44, 0xd8, 0x19, 0x1f,
-	0xed, 0xb4, 0xfa, 0x5c, 0x26, 0x5c, 0xba, 0x21, 0x96, 0xc4, 0x1d, 0x1f, 0x85, 0x44, 0xe1, 0x23,
-	0xb7, 0xcf, 0x59, 0x9a, 0x87, 0xef, 0xdc, 0x37, 0x7c, 0x22, 0x69, 0x56, 0x26, 0x91, 0xd4, 0x10,
-	0xdb, 0x39, 0x11, 0xe8, 0x95, 0x9b, 0x2f, 0x0c, 0xd5, 0xa4, 0x9c, 0xf2, 0x1c, 0xcf, 0x7e, 0xe5,
-	0x68, 0xe7, 0xd7, 0x0a, 0x6c, 0x78, 0x92, 0x9e, 0x90, 0x7e, 0x8c, 0x05, 0xe9, 0xc5, 0x3c, 0x44,
-	0x8f, 0x61, 0x55, 0x92, 0x34, 0x22, 0xc2, 0xb6, 0xda, 0x56, 0x77, 0xbd, 0x67, 0xbf, 0x7b, 0x7d,
-	0xd8, 0x34, 0xa5, 0x9e, 0x45, 0x91, 0x20, 0x52, 0x9e, 0x2a, 0xc1, 0x52, 0xea, 0x9b, 0x38, 0xf4,
-	0x11, 0x34, 0x12, 0xa2, 0x70, 0x84, 0x15, 0x0e, 0x24, 0x9b, 0x12, 0xbb, 0xd2, 0xb6, 0xba, 0xcb,
-	0x7e, 0x7d, 0x06, 0x9e, 0xb2, 0x29, 0x41, 0x1f, 0x03, 0x92, 0x03, 0x2c, 0x22, 0x19, 0x24, 0x44,
-	0x9c, 0xc5, 0x24, 0x10, 0x9c, 0x2b, 0xbb, 0xda, 0xb6, 0xba, 0x75, 0xff, 0xfd, 0x9c, 0xf1, 0x34,
-	0xe1, 0x73, 0xae, 0xd0, 0x2e, 0xac, 0x87, 0x31, 0x0f, 0xf3, 0x72, 0xcb, 0xba, 0xdc, 0x5a, 0x06,
-	0xe8, 0x52, 0x9f, 0xc1, 0xee, 0xd9, 0x94, 0x06, 0x7d, 0x9e, 0x24, 0x4c, 0x25, 0x24, 0x55, 0xe5,
-	0x9a, 0x2b, 0xba, 0xa6, 0x7d, 0x36, 0xa5, 0xc7, 0x8b, 0x88, 0x42, 0xed, 0x2f, 0x60, 0x23, 0x1c,
-	0xa5, 0x51, 0x4c, 0x44, 0x20, 0xc8, 0xf7, 0x58, 0x44, 0xf6, 0x6a, 0xdb, 0xea, 0xd6, 0x9e, 0x6c,
-	0x3b, 0x46, 0x65, 0x66, 0xbb, 0x63, 0x6c, 0x77, 0x8e, 0x39, 0x4b, 0xfd, 0x86, 0x49, 0xf0, 0x75,
-	0xfc, 0xd3, 0xda, 0x0f, 0x7f, 0xff, 0x7c, 0x60, 0xd4, 0x77, 0x6c, 0xd8, 0x2a, 0x3b, 0xe8, 0x13,
-	0x39, 0xe4, 0xa9, 0x24, 0x9d, 0xdf, 0x2d, 0x68, 0x7a, 0x92, 0xf6, 0x74, 0x6e, 0xa1, 0x97, 0x3b,
-	0x58, 0xec, 0x41, 0xad, 0x20, 0xd7, 0xae, 0xb4, 0xab, 0xdd, 0xda, 0x93, 0x47, 0x4e, 0x69, 0x6c,
-	0x9c, 0x67, 0x63, 0xcc, 0x62, 0x1c, 0xb2, 0x98, 0xa9, 0xc9, 0x62, 0xbb, 0xde, 0xf2, 0x9b, 0x3f,
-	0xf7, 0x97, 0xfc, 0x62, 0x3e, 0x7a, 0x08, 0x20, 0x19, 0x4d, 0xb1, 0x1a, 0x09, 0x22, 0xed, 0x6a,
-	0xbb, 0xda, 0xad, 0x9b, 0xb0, 0x02, 0x5e, 0x96, 0xd9, 0x82, 0x0f, 0x6f, 0xd2, 0x32, 0x17, 0xfb,
-	0x5b, 0x05, 0xb6, 0x6e, 0x6e, 0x00, 0x1d, 0x02, 0x8a, 0xb4, 0x3d, 0x58, 0x31, 0x9e, 0x06, 0x03,
-	0xc2, 0xe8, 0x40, 0x69, 0xe9, 0x55, 0x7f, 0xb3, 0xc0, 0x7c, 0xa9, 0x89, 0x5b, 0x26, 0xa5, 0x72,
-	0xcb, 0xa4, 0x7c, 0x0e, 0xeb, 0x63, 0x1c, 0xb3, 0x08, 0x2b, 0x2e, 0xf4, 0x38, 0xad, 0xf7, 0x1e,
-	0xbc, 0x7b, 0x7d, 0xb8, 0x67, 0xec, 0xfc, 0x66, 0xc6, 0x95, 0x7d, 0x5d, 0xe4, 0xa0, 0xc7, 0xd0,
-	0x64, 0x32, 0xd0, 0xeb, 0xa0, 0xd0, 0x8c, 0x9e, 0xba, 0x35, 0x1f, 0x31, 0xa9, 0x4b, 0x9c, 0x2c,
-	0x18, 0xf4, 0x2d, 0x34, 0x75, 0x1b, 0x01, 0x5e, 0xe8, 0x65, 0x44, 0xda, 0x2b, 0xfa, 0x54, 0xda,
-	0x57, 0x4e, 0xe5, 0x34, 0x0b, 0x2d, 0x3a, 0x63, 0x9c, 0xbe, 0x27, 0xaf, 0x10, 0x8c, 0xc8, 0x8e,
-	0x07, 0x9b, 0xd7, 0xe2, 0x51, 0x13, 0x56, 0x58, 0x1a, 0x91, 0x73, 0x6d, 0x59, 0xc3, 0xcf, 0x17,
-	0xa8, 0x03, 0xf5, 0xc2, 0xfe, 0x13, 0x6d, 0xd0, 0x9a, 0x5f, 0xc2, 0x3a, 0xbf, 0x58, 0xb0, 0xe3,
-	0x49, 0x7a, 0x3c, 0xc0, 0x71, 0x4c, 0x52, 0x4a, 0x5e, 0xa6, 0x45, 0xfa, 0x0e, 0x73, 0x58, 0x72,
-	0xbb, 0x72, 0x07, 0xb7, 0xf7, 0xa1, 0x96, 0x7b, 0x97, 0x2b, 0xaa, 0x6a, 0x45, 0xa0, 0xa1, 0xe7,
-	0x19, 0x52, 0x1e, 0xba, 0x87, 0xd0, 0xb9, 0xbd, 0xfd, 0xc5, 0x3d, 0xab, 0xc0, 0x07, 0x9e, 0xa4,
-	0xf9, 0x3a, 0xfa, 0x9a, 0xcf, 0xe3, 0xff, 0x0f, 0x81, 0x0f, 0xa0, 0xde, 0x9f, 0xed, 0x1f, 0xb0,
-	0x48, 0x2b, 0x5c, 0xf6, 0x6b, 0x73, 0xec, 0x79, 0x84, 0x1e, 0xc1, 0x46, 0xf9, 0xfd, 0xd2, 0xb3,
-	0x56, 0xf7, 0x1b, 0xa5, 0x27, 0x0b, 0x7d, 0x0a, 0x3b, 0xe5, 0xb0, 0xd9, 0x7d, 0x18, 0x62, 0x35,
-	0x30, 0xaf, 0xdc, 0xfd, 0x52, 0x4a, 0x7e, 0x2d, 0x5e, 0x60, 0x35, 0x40, 0x07, 0xb0, 0x99, 0x25,
-	0xf3, 0x21, 0x49, 0x59, 0x4a, 0xb3, 0x0f, 0x02, 0x7f, 0xa5, 0xdf, 0xb9, 0xba, 0xff, 0xde, 0xd9,
-	0x94, 0x7e, 0x95, 0xe3, 0x2f, 0x32, 0xb8, 0x6c, 0xf9, 0x3e, 0xec, 0xdd, 0xe8, 0xe5, 0xdc, 0xed,
-	0x9f, 0x2c, 0xd8, 0xd4, 0x11, 0x94, 0x49, 0x45, 0xc4, 0x09, 0x19, 0x8e, 0xd4, 0xa4, 0xec, 0x9b,
-	0x75, 0xa7, 0x6b, 0xb8, 0x1a, 0xe9, 0x52, 0xc6, 0xf5, 0x7f, 0x39, 0xaa, 0x3c, 0xee, 0xe9, 0x46,
-	0xd6, 0xf6, 0xa2, 0x42, 0x67, 0x17, 0xb6, 0xaf, 0xf5, 0x35, 0xef, 0xfa, 0x15, 0xdc, 0xf3, 0x24,
-	0x7d, 0x99, 0x8a, 0xff, 0xb6, 0xed, 0x6b, 0x4d, 0xec, 0xc1, 0xee, 0x0d, 0xfb, 0xcc, 0xda, 0xe8,
-	0x9d, 0xbc, 0xb9, 0x68, 0x59, 0x6f, 0x2f, 0x5a, 0xd6, 0x5f, 0x17, 0x2d, 0xeb, 0xc7, 0xcb, 0xd6,
-	0xd2, 0xdb, 0xcb, 0xd6, 0xd2, 0x1f, 0x97, 0xad, 0xa5, 0xef, 0x0e, 0x28, 0x53, 0x83, 0x51, 0xe8,
-	0xf4, 0x79, 0xe2, 0x9a, 0x07, 0x24, 0xc6, 0x13, 0x22, 0x66, 0x0b, 0xf7, 0x3c, 0xfb, 0xd3, 0xa0,
-	0x26, 0x43, 0x22, 0xc3, 0x55, 0xfd, 0xf1, 0xfe, 0xe4, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7f,
-	0x75, 0x73, 0x6b, 0x4f, 0x08, 0x00, 0x00,
+	// 1069 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x41, 0x4f, 0x1b, 0x47,
+	0x14, 0x66, 0x6d, 0x40, 0xf0, 0x6c, 0x48, 0x98, 0x38, 0x60, 0x96, 0x62, 0x1c, 0x07, 0x2a, 0x97,
+	0x06, 0x3b, 0x10, 0xa9, 0x87, 0x54, 0x55, 0x1b, 0xc3, 0xa1, 0x39, 0x58, 0x45, 0x4b, 0x13, 0xa9,
+	0x55, 0xa5, 0xd5, 0xd8, 0x3b, 0x59, 0x8f, 0xd8, 0xdd, 0xb1, 0x76, 0xc6, 0x04, 0x73, 0xaa, 0xfa,
+	0x03, 0xaa, 0x9e, 0xfa, 0x3b, 0x72, 0xc8, 0xb5, 0x52, 0xa5, 0xaa, 0x52, 0xd4, 0x53, 0x94, 0x53,
+	0x4f, 0x55, 0x05, 0x87, 0xfc, 0x8d, 0x6a, 0x67, 0xc7, 0xeb, 0x5d, 0xaf, 0x0d, 0x08, 0x55, 0xca,
+	0xcd, 0xf3, 0xbe, 0xef, 0x7d, 0xf3, 0xde, 0xe7, 0x37, 0x33, 0x0b, 0xcb, 0xbc, 0xe7, 0xf9, 0x94,
+	0x93, 0xba, 0x85, 0xeb, 0x27, 0xbb, 0x75, 0x71, 0x5a, 0xeb, 0xfa, 0x4c, 0x30, 0xb4, 0xa0, 0xe2,
+	0x35, 0x0b, 0xd7, 0x4e, 0x76, 0xf5, 0x52, 0x9b, 0x71, 0x97, 0xf1, 0x7a, 0x0b, 0x73, 0x52, 0x3f,
+	0xd9, 0x6d, 0x11, 0x81, 0x77, 0xeb, 0x6d, 0x46, 0xbd, 0x90, 0xae, 0xaf, 0x28, 0xdc, 0xe5, 0x76,
+	0x20, 0xe3, 0x72, 0x5b, 0x01, 0xab, 0x21, 0x60, 0xca, 0x55, 0x3d, 0x5c, 0x28, 0xa8, 0x60, 0x33,
+	0x9b, 0x85, 0xf1, 0xe0, 0x97, 0x8a, 0xea, 0xc9, 0x82, 0xba, 0xd8, 0xc7, 0xae, 0xca, 0xa8, 0xfc,
+	0xac, 0xc1, 0xad, 0x26, 0xb7, 0x9f, 0x75, 0x2d, 0x2c, 0xc8, 0xa1, 0x44, 0xd0, 0x67, 0x30, 0x8f,
+	0x7b, 0xa2, 0xc3, 0x7c, 0x2a, 0xfa, 0x45, 0xad, 0xac, 0x55, 0xe7, 0x1b, 0xc5, 0x77, 0xaf, 0x77,
+	0x0a, 0x6a, 0xab, 0x27, 0x96, 0xe5, 0x13, 0xce, 0x8f, 0x84, 0x4f, 0x3d, 0xdb, 0x18, 0x52, 0xd1,
+	0x23, 0x98, 0x0d, 0xb5, 0x8b, 0x99, 0xb2, 0x56, 0xcd, 0xed, 0xdd, 0xad, 0x25, 0x3a, 0xae, 0x85,
+	0xf2, 0x8d, 0xe9, 0x37, 0xff, 0x6c, 0x4c, 0x19, 0x8a, 0xfa, 0x78, 0xf1, 0xa7, 0xf7, 0xaf, 0xb6,
+	0x87, 0x22, 0x95, 0x55, 0x58, 0x19, 0xa9, 0xc7, 0x20, 0xbc, 0xcb, 0x3c, 0x4e, 0x2a, 0xbf, 0x67,
+	0x60, 0xb1, 0xc9, 0xed, 0x03, 0xd2, 0x76, 0xb0, 0x4f, 0x1a, 0x0e, 0x6b, 0xa1, 0x87, 0x30, 0xcb,
+	0x89, 0x67, 0x11, 0xff, 0xca, 0x3a, 0x15, 0x0f, 0xdd, 0x87, 0x05, 0x97, 0x08, 0x6c, 0x61, 0x81,
+	0x4d, 0x4e, 0xcf, 0x88, 0xac, 0x75, 0xda, 0xc8, 0x0f, 0x82, 0x47, 0xf4, 0x8c, 0xa0, 0x07, 0x80,
+	0x78, 0x07, 0xfb, 0x16, 0x37, 0x5d, 0xe2, 0x1f, 0x3b, 0xc4, 0xf4, 0x19, 0x13, 0xc5, 0x6c, 0x59,
+	0xab, 0xe6, 0x8d, 0xdb, 0x21, 0xd2, 0x94, 0x80, 0xc1, 0x98, 0x40, 0x6b, 0x30, 0xdf, 0x72, 0x58,
+	0x2b, 0x94, 0x9b, 0x96, 0x72, 0x73, 0x41, 0x40, 0x4a, 0x7d, 0x01, 0x6b, 0xc7, 0x67, 0xb6, 0xd9,
+	0x66, 0xae, 0x4b, 0x85, 0x4b, 0x3c, 0x91, 0xd4, 0x9c, 0x91, 0x9a, 0xc5, 0xe3, 0x33, 0x7b, 0x7f,
+	0xc8, 0x88, 0x69, 0x7f, 0x05, 0x8b, 0xad, 0x9e, 0x67, 0x39, 0xc4, 0x37, 0x7d, 0xf2, 0x12, 0xfb,
+	0x56, 0x71, 0x56, 0x7a, 0xbb, 0x5a, 0x53, 0x5d, 0x06, 0xe3, 0x53, 0x53, 0xe3, 0x53, 0xdb, 0x67,
+	0xd4, 0x33, 0x16, 0x54, 0x82, 0x21, 0xf9, 0x8f, 0x73, 0x81, 0xc1, 0xaa, 0xfb, 0x4a, 0x11, 0x96,
+	0x93, 0x0e, 0x46, 0xe6, 0xfe, 0xa5, 0x41, 0xa1, 0xc9, 0xed, 0x86, 0xcc, 0x8d, 0xd5, 0x72, 0x03,
+	0x8b, 0x9b, 0x90, 0x8b, 0xb5, 0x5b, 0xcc, 0x94, 0xb3, 0xd5, 0xdc, 0xde, 0xd6, 0xc8, 0x30, 0x3c,
+	0x39, 0xc1, 0xd4, 0xc1, 0x2d, 0xea, 0x50, 0xd1, 0x1f, 0x6e, 0xa7, 0x86, 0x23, 0x9e, 0x8f, 0x36,
+	0x01, 0x38, 0xb5, 0x3d, 0x2c, 0x7a, 0x3e, 0xe1, 0xc5, 0x6c, 0x39, 0x5b, 0xcd, 0x2b, 0x5a, 0x2c,
+	0x9e, 0x6c, 0xb3, 0x04, 0x1f, 0x8d, 0xeb, 0x25, 0x6a, 0xf6, 0x8f, 0x0c, 0x2c, 0x8f, 0x2f, 0x00,
+	0xed, 0x00, 0xb2, 0xa4, 0x3d, 0x58, 0x50, 0xe6, 0x99, 0x1d, 0x42, 0xed, 0x8e, 0x90, 0xad, 0x67,
+	0x8d, 0xa5, 0x18, 0xf2, 0xb5, 0x04, 0x26, 0x4c, 0x4a, 0x66, 0xc2, 0xa4, 0x7c, 0x09, 0xf3, 0x27,
+	0xd8, 0xa1, 0x16, 0x16, 0xcc, 0x97, 0xe3, 0x34, 0xdf, 0xb8, 0xf7, 0xee, 0xf5, 0xce, 0xba, 0xb2,
+	0xf3, 0xf9, 0x00, 0x1b, 0x39, 0x62, 0x51, 0x0e, 0x7a, 0x08, 0x05, 0xca, 0x4d, 0xb9, 0x36, 0x63,
+	0xc5, 0xc8, 0xa9, 0x9b, 0x33, 0x10, 0xe5, 0x52, 0xe2, 0x60, 0x88, 0xa0, 0xef, 0xa0, 0x20, 0xcb,
+	0x30, 0xf1, 0xb0, 0x5f, 0x4a, 0x78, 0x71, 0x46, 0xfe, 0x2b, 0xe5, 0x91, 0x7f, 0xe5, 0x28, 0xa0,
+	0xc6, 0x9d, 0x51, 0x4e, 0xdf, 0xe1, 0x23, 0x00, 0x25, 0xbc, 0xd2, 0x84, 0xa5, 0x14, 0x1f, 0x15,
+	0x60, 0x86, 0x7a, 0x16, 0x39, 0x95, 0x96, 0x2d, 0x18, 0xe1, 0x02, 0x55, 0x20, 0x1f, 0xdb, 0xbf,
+	0x2f, 0x0d, 0x9a, 0x33, 0x12, 0xb1, 0xca, 0x6f, 0x1a, 0xe8, 0x4d, 0x6e, 0xef, 0x77, 0xb0, 0xe3,
+	0x10, 0xcf, 0x26, 0xcf, 0xbc, 0x38, 0x7c, 0x83, 0x39, 0x4c, 0xb8, 0x9d, 0xb9, 0x81, 0xdb, 0x1b,
+	0x90, 0x0b, 0xbd, 0x0b, 0x3b, 0xca, 0xca, 0x8e, 0x40, 0x86, 0x9e, 0x06, 0x91, 0xe4, 0xd0, 0x6d,
+	0x42, 0x65, 0x72, 0xf9, 0xc3, 0x73, 0x96, 0x81, 0xbb, 0x4d, 0x6e, 0x87, 0x6b, 0xeb, 0x5b, 0x16,
+	0xf1, 0x3f, 0x44, 0x83, 0xf7, 0x20, 0xdf, 0x1e, 0xec, 0x6f, 0x52, 0x4b, 0x76, 0x38, 0x6d, 0xe4,
+	0xa2, 0xd8, 0x53, 0x0b, 0x6d, 0xc1, 0x62, 0xf2, 0xfe, 0x92, 0xb3, 0x96, 0x37, 0x16, 0x12, 0x57,
+	0x16, 0xfa, 0x1c, 0xf4, 0x24, 0x6d, 0x70, 0x1e, 0xba, 0x58, 0x74, 0xd4, 0x2d, 0xb7, 0x92, 0x48,
+	0x09, 0x8f, 0xc5, 0x21, 0x16, 0x1d, 0xb4, 0x0d, 0x4b, 0x41, 0x32, 0xeb, 0x12, 0x8f, 0x7a, 0x76,
+	0xf0, 0xb0, 0xb1, 0x17, 0xf2, 0x9e, 0xcb, 0x1b, 0xb7, 0x8e, 0xcf, 0xec, 0x6f, 0xc2, 0xf8, 0x61,
+	0x10, 0x4e, 0x5a, 0xbe, 0x01, 0xeb, 0x63, 0xbd, 0x8c, 0xdc, 0xfe, 0x55, 0x83, 0x25, 0xc9, 0xb0,
+	0x29, 0x17, 0xc4, 0x3f, 0x20, 0xdd, 0x9e, 0xe8, 0x27, 0x7d, 0xd3, 0x6e, 0x74, 0x0c, 0x67, 0x2d,
+	0x29, 0xa5, 0x5c, 0xbf, 0xe4, 0xaf, 0x0a, 0x79, 0xea, 0x99, 0x8b, 0x14, 0x2a, 0x6b, 0xb0, 0x9a,
+	0xaa, 0x2b, 0xaa, 0xfa, 0x05, 0xdc, 0x09, 0xde, 0x40, 0xcf, 0xff, 0x7f, 0xcb, 0x4e, 0x15, 0xb1,
+	0x0e, 0x6b, 0x63, 0xf6, 0x19, 0x94, 0xb1, 0xf7, 0xe7, 0x0c, 0x64, 0x9b, 0xdc, 0x46, 0xcf, 0x21,
+	0x9f, 0xf8, 0x3e, 0x28, 0x8d, 0x5c, 0x1a, 0x23, 0xef, 0xb5, 0xfe, 0xf1, 0xe5, 0xf8, 0x40, 0x1f,
+	0x1d, 0x41, 0x2e, 0xfe, 0x96, 0xaf, 0xa7, 0xd3, 0x62, 0xb0, 0xbe, 0x75, 0x29, 0x1c, 0x89, 0x12,
+	0x58, 0x4a, 0xbf, 0x61, 0xf7, 0xd3, 0xb9, 0x29, 0x92, 0xfe, 0xe9, 0x35, 0x48, 0xd1, 0x36, 0x2f,
+	0x61, 0x65, 0xd2, 0x45, 0xf5, 0x49, 0x5a, 0x67, 0x02, 0x55, 0xdf, 0xbd, 0x36, 0x35, 0xda, 0xb8,
+	0x03, 0x68, 0xcc, 0xdd, 0xb1, 0x99, 0x16, 0x4a, 0xb3, 0xf4, 0x07, 0xd7, 0x61, 0x45, 0x3b, 0xfd,
+	0x00, 0x8b, 0x23, 0xe7, 0xa6, 0x3c, 0x2e, 0x3f, 0xce, 0xd0, 0xab, 0x57, 0x31, 0x22, 0xf5, 0x16,
+	0xdc, 0x4e, 0x0d, 0x78, 0x65, 0xcc, 0xe0, 0x8c, 0x70, 0xf4, 0xed, 0xab, 0x39, 0x83, 0x3d, 0xf4,
+	0x99, 0x1f, 0xdf, 0xbf, 0xda, 0xd6, 0x1a, 0x07, 0x6f, 0xce, 0x4b, 0xda, 0xdb, 0xf3, 0x92, 0xf6,
+	0xef, 0x79, 0x49, 0xfb, 0xe5, 0xa2, 0x34, 0xf5, 0xf6, 0xa2, 0x34, 0xf5, 0xf7, 0x45, 0x69, 0xea,
+	0xfb, 0x6d, 0x9b, 0x8a, 0x4e, 0xaf, 0x55, 0x6b, 0x33, 0xb7, 0xae, 0x64, 0x1d, 0xdc, 0x27, 0xfe,
+	0x60, 0x51, 0x3f, 0x0d, 0xbe, 0x99, 0x45, 0xbf, 0x4b, 0x78, 0x6b, 0x56, 0x7e, 0x30, 0x3f, 0xfa,
+	0x2f, 0x00, 0x00, 0xff, 0xff, 0xad, 0x59, 0xc0, 0xd5, 0xdf, 0x0b, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// MsgClient is the client API for Msg service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type MsgClient interface {
+	// UpdateParams defines a (governance) operation for updating the module
+	// parameters. The authority defaults to the x/gov module account.
+	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// DeclareBlob defines a (user) operation for declaring a blob.
+	DeclareBlob(ctx context.Context, in *MsgDeclareBlob, opts ...grpc.CallOption) (*MsgDeclareBlobResponse, error)
+	// BundleCommitments defines a (user) operation for bundling commitments.
+	BundleCommitments(ctx context.Context, in *MsgBundleCommitments, opts ...grpc.CallOption) (*MsgBundleCommitmentsResponse, error)
+	// ChallengeUnavailability defines a (user) operation for challenging the unavailability of a blob.
+	ChallengeUnavailability(ctx context.Context, in *MsgChallengeUnavailability, opts ...grpc.CallOption) (*MsgChallengeUnavailabilityResponse, error)
+	// RespondToChallenge defines a (user) operation for responding to a challenge.
+	RespondToChallenge(ctx context.Context, in *MsgRespondToChallenge, opts ...grpc.CallOption) (*MsgRespondToChallengeResponse, error)
+	// RegisterDeputy defines a (user) operation for registering a deputy.
+	RegisterDeputy(ctx context.Context, in *MsgRegisterDeputy, opts ...grpc.CallOption) (*MsgRegisterDeputyResponse, error)
+	// UnregisterDeputy defines a (user) operation for unregistering a deputy.
+	UnregisterDeputy(ctx context.Context, in *MsgUnregisterDeputy, opts ...grpc.CallOption) (*MsgUnregisterDeputyResponse, error)
+}
+
+type msgClient struct {
+	cc grpc1.ClientConn
+}
+
+func NewMsgClient(cc grpc1.ClientConn) MsgClient {
+	return &msgClient{cc}
+}
+
+func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
+	out := new(MsgUpdateParamsResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/UpdateParams", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeclareBlob(ctx context.Context, in *MsgDeclareBlob, opts ...grpc.CallOption) (*MsgDeclareBlobResponse, error) {
+	out := new(MsgDeclareBlobResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/DeclareBlob", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) BundleCommitments(ctx context.Context, in *MsgBundleCommitments, opts ...grpc.CallOption) (*MsgBundleCommitmentsResponse, error) {
+	out := new(MsgBundleCommitmentsResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/BundleCommitments", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ChallengeUnavailability(ctx context.Context, in *MsgChallengeUnavailability, opts ...grpc.CallOption) (*MsgChallengeUnavailabilityResponse, error) {
+	out := new(MsgChallengeUnavailabilityResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/ChallengeUnavailability", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RespondToChallenge(ctx context.Context, in *MsgRespondToChallenge, opts ...grpc.CallOption) (*MsgRespondToChallengeResponse, error) {
+	out := new(MsgRespondToChallengeResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/RespondToChallenge", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RegisterDeputy(ctx context.Context, in *MsgRegisterDeputy, opts ...grpc.CallOption) (*MsgRegisterDeputyResponse, error) {
+	out := new(MsgRegisterDeputyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/RegisterDeputy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UnregisterDeputy(ctx context.Context, in *MsgUnregisterDeputy, opts ...grpc.CallOption) (*MsgUnregisterDeputyResponse, error) {
+	out := new(MsgUnregisterDeputyResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.da.v1.Msg/UnregisterDeputy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// MsgServer is the server API for Msg service.
+type MsgServer interface {
+	// UpdateParams defines a (governance) operation for updating the module
+	// parameters. The authority defaults to the x/gov module account.
+	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// DeclareBlob defines a (user) operation for declaring a blob.
+	DeclareBlob(context.Context, *MsgDeclareBlob) (*MsgDeclareBlobResponse, error)
+	// BundleCommitments defines a (user) operation for bundling commitments.
+	BundleCommitments(context.Context, *MsgBundleCommitments) (*MsgBundleCommitmentsResponse, error)
+	// ChallengeUnavailability defines a (user) operation for challenging the unavailability of a blob.
+	ChallengeUnavailability(context.Context, *MsgChallengeUnavailability) (*MsgChallengeUnavailabilityResponse, error)
+	// RespondToChallenge defines a (user) operation for responding to a challenge.
+	RespondToChallenge(context.Context, *MsgRespondToChallenge) (*MsgRespondToChallengeResponse, error)
+	// RegisterDeputy defines a (user) operation for registering a deputy.
+	RegisterDeputy(context.Context, *MsgRegisterDeputy) (*MsgRegisterDeputyResponse, error)
+	// UnregisterDeputy defines a (user) operation for unregistering a deputy.
+	UnregisterDeputy(context.Context, *MsgUnregisterDeputy) (*MsgUnregisterDeputyResponse, error)
+}
+
+// UnimplementedMsgServer can be embedded to have forward compatible implementations.
+type UnimplementedMsgServer struct {
+}
+
+func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) DeclareBlob(ctx context.Context, req *MsgDeclareBlob) (*MsgDeclareBlobResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeclareBlob not implemented")
+}
+func (*UnimplementedMsgServer) BundleCommitments(ctx context.Context, req *MsgBundleCommitments) (*MsgBundleCommitmentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BundleCommitments not implemented")
+}
+func (*UnimplementedMsgServer) ChallengeUnavailability(ctx context.Context, req *MsgChallengeUnavailability) (*MsgChallengeUnavailabilityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChallengeUnavailability not implemented")
+}
+func (*UnimplementedMsgServer) RespondToChallenge(ctx context.Context, req *MsgRespondToChallenge) (*MsgRespondToChallengeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RespondToChallenge not implemented")
+}
+func (*UnimplementedMsgServer) RegisterDeputy(ctx context.Context, req *MsgRegisterDeputy) (*MsgRegisterDeputyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterDeputy not implemented")
+}
+func (*UnimplementedMsgServer) UnregisterDeputy(ctx context.Context, req *MsgUnregisterDeputy) (*MsgUnregisterDeputyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnregisterDeputy not implemented")
+}
+
+func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
+	s.RegisterService(&_Msg_serviceDesc, srv)
+}
+
+func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/UpdateParams",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateParams(ctx, req.(*MsgUpdateParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeclareBlob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeclareBlob)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeclareBlob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/DeclareBlob",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeclareBlob(ctx, req.(*MsgDeclareBlob))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_BundleCommitments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBundleCommitments)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).BundleCommitments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/BundleCommitments",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).BundleCommitments(ctx, req.(*MsgBundleCommitments))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ChallengeUnavailability_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgChallengeUnavailability)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ChallengeUnavailability(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/ChallengeUnavailability",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ChallengeUnavailability(ctx, req.(*MsgChallengeUnavailability))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RespondToChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRespondToChallenge)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RespondToChallenge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/RespondToChallenge",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RespondToChallenge(ctx, req.(*MsgRespondToChallenge))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RegisterDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRegisterDeputy)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RegisterDeputy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/RegisterDeputy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RegisterDeputy(ctx, req.(*MsgRegisterDeputy))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UnregisterDeputy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUnregisterDeputy)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UnregisterDeputy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.da.v1.Msg/UnregisterDeputy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UnregisterDeputy(ctx, req.(*MsgUnregisterDeputy))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var Msg_serviceDesc = _Msg_serviceDesc
+var _Msg_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "sunrise.da.v1.Msg",
+	HandlerType: (*MsgServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "UpdateParams",
+			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "DeclareBlob",
+			Handler:    _Msg_DeclareBlob_Handler,
+		},
+		{
+			MethodName: "BundleCommitments",
+			Handler:    _Msg_BundleCommitments_Handler,
+		},
+		{
+			MethodName: "ChallengeUnavailability",
+			Handler:    _Msg_ChallengeUnavailability_Handler,
+		},
+		{
+			MethodName: "RespondToChallenge",
+			Handler:    _Msg_RespondToChallenge_Handler,
+		},
+		{
+			MethodName: "RegisterDeputy",
+			Handler:    _Msg_RegisterDeputy_Handler,
+		},
+		{
+			MethodName: "UnregisterDeputy",
+			Handler:    _Msg_UnregisterDeputy_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sunrise/da/v1/tx.proto",
+}
+
+func (m *MsgUpdateParams) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateParams) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Authority) > 0 {
+		i -= len(m.Authority)
+		copy(dAtA[i:], m.Authority)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Authority)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateParamsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateParamsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
 }
 
 func (m *MsgDeclareBlob) Marshal() (dAtA []byte, err error) {
@@ -1396,6 +1886,30 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *MsgUpdateParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Authority)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.Params.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgUpdateParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func (m *MsgDeclareBlob) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1637,6 +2151,171 @@ func sovTx(x uint64) (n int) {
 }
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *MsgUpdateParams) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateParams: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateParams: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Authority = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateParamsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *MsgDeclareBlob) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
