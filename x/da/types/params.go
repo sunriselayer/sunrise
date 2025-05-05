@@ -15,7 +15,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/sunriselayer/sunrise/app/consts"
-	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
 // NewParams creates a new Params instance.
@@ -90,32 +89,6 @@ func DefaultParams() Params {
 		255,
 		1000000, // 1MB
 	)
-}
-
-func GenerateZkpKeys() (string, string) {
-	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &zkp.ValidityProofCircuit{})
-	if err != nil {
-		panic(err)
-	}
-
-	provingKey, verifyingKey, err := groth16.Setup(ccs)
-	if err != nil {
-		panic(err)
-	}
-
-	zkpProvingKeyBz, err := zkp.MarshalProvingKey(provingKey)
-	if err != nil {
-		panic(err)
-	}
-
-	zkpVerifyingKeyBz, err := zkp.MarshalVerifyingKey(verifyingKey)
-	if err != nil {
-		panic(err)
-	}
-
-	provingKeyBase64 := base64.StdEncoding.EncodeToString(zkpProvingKeyBz)
-	verifyingKeyBase64 := base64.StdEncoding.EncodeToString(zkpVerifyingKeyBz)
-	return provingKeyBase64, verifyingKeyBase64
 }
 
 // Validate validates the set of params.

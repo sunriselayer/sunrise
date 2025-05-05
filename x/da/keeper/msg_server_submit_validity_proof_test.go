@@ -18,7 +18,6 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/sunriselayer/sunrise/x/da/types"
-	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
 type mockValidator struct {

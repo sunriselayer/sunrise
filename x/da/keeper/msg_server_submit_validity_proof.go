@@ -14,7 +14,6 @@ import (
 	groth16bn254 "github.com/consensys/gnark/backend/groth16/bn254"
 	"github.com/consensys/gnark/frontend"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/da/zkp"
 )
 
 func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmitValidityProof) (*types.MsgSubmitValidityProofResponse, error) {
