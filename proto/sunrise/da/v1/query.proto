@@ -1,0 +1,42 @@
+syntax = "proto3";
+package sunrise.da.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "sunrise/da/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/params";
+  }
+  // Deputy
+  rpc Deputy(QueryDeputyRequest) returns (QueryDeputyResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/validators/{validator_address}/deputy";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDeputyRequest is request type for the
+// Query/Deputy RPC method.
+message QueryDeputyRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryDeputyResponse is response type for the
+// Query/Deputy RPC method.
+message QueryDeputyResponse {
+  string deputy_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}

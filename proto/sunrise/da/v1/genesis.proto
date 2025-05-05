@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.da.v1;
+
+import "gogoproto/gogo.proto";
+import "sunrise/da/v1/blob.proto";
+import "sunrise/da/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// GenesisState defines the da module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated BlobDeclaration blob_declarations = 2 [(gogoproto.nullable) = false];
+  repeated ValidatorPowerSnapshot validator_power_snapshots = 3 [(gogoproto.nullable) = false];
+  repeated BlobIncluded blob_includeds = 4 [(gogoproto.nullable) = false];
+}
