@@ -3,42 +3,22 @@ package sunrise.da.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
-import "cosmos/tx/v1beta1/tx.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
-import "sunrise/da/v1/blob.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
-
-// BlobTx
-message BlobTx {
-  cosmos.tx.v1beta1.Tx tx = 1;
-  repeated Shard shards = 2 [(gogoproto.nullable) = false];
-  // Max 256 peers, each max 256 characters
-  repeated string uri_peers = 3;
-  // Max 8 webhooks, each max 256 characters
-  repeated string commitment_webhook_urls = 4;
-}
-
-// Shard
-message Shard {
-  // Poseidon
-  bytes hash = 1;
-  bytes kzg_commitment = 2;
-  // ipfs:// or ar://
-  string uri = 3;
-}
 
 // MsgDeclareBlob
 message MsgDeclareBlob {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 metadata_size = 2;
   // Poseidon
-  bytes shards_merkle_root = 2;
-  uint64 size = 3;
+  bytes shards_merkle_root = 3;
+  uint64 blob_size = 4;
   // Poseidon
-  bytes kzg_commitments_merkle_root = 4;
-  cosmos.base.v1beta1.Coin aggregation_reward = 5;
+  bytes kzg_commitments_merkle_root = 5;
+  cosmos.base.v1beta1.Coin bundler_reward = 6;
 }
 
 // MsgDeclareBlobResponse
@@ -59,10 +39,13 @@ message MsgBundleCommitmentsResponse {}
 
 // AvailabilityCommitment
 message AvailabilityCommitment {
-  BlobId blob_id = 1;
-  string validator = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  bool is_valid_declaration = 3;
-  repeated ShardAvailability shard_availabilities = 4 [(gogoproto.nullable) = false];
+  // Replay protection
+  int64 declaration_height = 1;
+  // Poseidon
+  bytes shards_merkle_root = 2;
+  string validator = 3 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  bool is_valid_declaration = 4;
+  repeated ShardAvailability shard_availabilities = 5 [(gogoproto.nullable) = false];
 }
 
 // ShardAvailability

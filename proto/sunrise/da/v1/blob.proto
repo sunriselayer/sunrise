@@ -8,21 +8,16 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
-// BlobId
-message BlobId {
-  int64 declaration_height = 1;
-  // Poseidon
-  bytes shards_merkle_root = 2;
-}
-
 // BlobDeclaration
 message BlobDeclaration {
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  BlobId blob_id = 2;
-  uint32 shard_count = 3;
-  bytes kzg_commitments_merkle_root = 4;
-  cosmos.base.v1beta1.Coin bundler_reward = 5;
-  google.protobuf.Timestamp expiry = 6 [
+  int64 declaration_height = 2;
+  // Poseidon
+  bytes shards_merkle_root = 3;
+  uint32 shard_count = 4;
+  bytes kzg_commitments_merkle_root = 5;
+  cosmos.base.v1beta1.Coin bundler_reward = 6;
+  google.protobuf.Timestamp expiry = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
@@ -41,14 +36,14 @@ message ValidatorPowerSnapshot {
 
 // Directly included in block as Tx
 message Blob {
-  BlobId blob_id = 1;
+  bytes shards_merkle_root = 1;
   uint32 shard_count = 2;
   bytes kzg_commitments_merkle_root = 3;
 }
 
 // BlobIncluded
 message BlobIncluded {
-  BlobId blob_id = 1;
+  bytes shards_merkle_root = 1;
   uint32 shard_count = 2;
   bytes kzg_commitments_merkle_root = 3;
   google.protobuf.Timestamp expiry = 4 [
