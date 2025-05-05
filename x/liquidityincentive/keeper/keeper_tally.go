@@ -51,22 +51,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	results := make(map[uint64]math.LegacyDec)
 
 	// <sunrise>
-	// Deduct shareclass module's delegations
 	shareclassAddr := k.accountKeeper.GetModuleAddress(shareclasstypes.ModuleName)
-	// shareclassVotingPower := math.LegacyZeroDec()
-	err = k.stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
-		valAddrStr := delegation.GetValidatorAddr()
-		if val, ok := validators[valAddrStr]; ok {
-			val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
-			validators[valAddrStr] = val
-
-			// shareclassVotingPower = shareclassVotingPower.Add(delegation.GetShares())
-		}
-		return false
-	})
-	if err != nil {
-		return []types.TallyResult{}, err
-	}
 	// </sunrise>
 
 	// iterate over all votes, tally up the voting power of each validator
@@ -140,29 +125,34 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		}
 	}
 
-	// iterate over the validators again to tally their voting power
-	for _, val := range validators {
-		if len(val.PoolWeights) == 0 {
-			continue
-		}
-
-		sharesAfterDeductions := val.DelegatorShares.Sub(val.DelegatorDeductions)
-		votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
-
-		for _, poolWeight := range val.PoolWeights {
-			weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
-			if err != nil {
-				return []types.TallyResult{}, err
+	// <sunrise>
+	// Disallow validators to vote with non voting delegators' power.
+	/*
+		// iterate over the validators again to tally their voting power
+		for _, val := range validators {
+			if len(val.PoolWeights) == 0 {
+				continue
 			}
-			subPower := votingPower.Mul(weight)
-			oldWeight := results[poolWeight.PoolId]
-			if oldWeight.IsNil() {
-				oldWeight = math.LegacyZeroDec()
+
+			sharesAfterDeductions := val.DelegatorShares.Sub(val.DelegatorDeductions)
+			votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+
+			for _, poolWeight := range val.PoolWeights {
+				weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
+				if err != nil {
+					return []types.TallyResult{}, err
+				}
+				subPower := votingPower.Mul(weight)
+				oldWeight := results[poolWeight.PoolId]
+				if oldWeight.IsNil() {
+					oldWeight = math.LegacyZeroDec()
+				}
+				results[poolWeight.PoolId] = oldWeight.Add(subPower)
 			}
-			results[poolWeight.PoolId] = oldWeight.Add(subPower)
+			totalVotingPower = totalVotingPower.Add(votingPower)
 		}
-		totalVotingPower = totalVotingPower.Add(votingPower)
-	}
+	*/
+	// </sunrise>
 
 	// If there is no staked coins, the proposal fails
 	totalBonded, err := k.stakingKeeper.TotalBondedTokens(ctx)
