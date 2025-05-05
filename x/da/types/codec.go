@@ -8,12 +8,12 @@ import (
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgRegisterCommitmentKey{},
+		&MsgUnregisterCommitmentKey{},
 		&MsgDeclareBlob{},
 		&MsgBundleCommitments{},
 		&MsgChallengeUnavailability{},
 		&MsgRespondToChallenge{},
-		&MsgRegisterDeputy{},
-		&MsgUnregisterDeputy{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),

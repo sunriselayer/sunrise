@@ -9,7 +9,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func TestMsgRegisterProofDeputy(t *testing.T) {
+func TestMsgRegisterCommitmentKey(t *testing.T) {
 	k, _, ms, ctx := setupMsgServer(t)
 
 	sender := sdk.AccAddress("sender")

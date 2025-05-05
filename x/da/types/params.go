@@ -9,14 +9,14 @@ import (
 
 // NewParams creates a new Params instance.
 func NewParams(
-	gasPerShard uint64,
+	gasPerByte uint64,
 	gasChallengeUnavailability uint64,
 	declarationPeriod time.Duration,
 	preservationPeriod time.Duration,
 	challengeResponsePeriod time.Duration,
 ) Params {
 	return Params{
-		GasPerShard:                gasPerShard,
+		GasPerByte:                 gasPerByte,
 		GasChallengeUnavailability: gasChallengeUnavailability,
 		DeclarationPeriod:          declarationPeriod,
 		PreservationPeriod:         preservationPeriod,
@@ -27,7 +27,7 @@ func NewParams(
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		1000,
+		10,
 		1000000,
 		time.Hour*24,
 		time.Hour*24*12,
@@ -37,8 +37,8 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.GasPerShard <= 0 {
-		return errorsmod.Wrap(ErrInvalidPublishDataGas, "gas per shard must be positive")
+	if p.GasPerByte <= 0 {
+		return errorsmod.Wrap(ErrInvalidPublishDataGas, "gas per byte must be positive")
 	}
 
 	if p.GasChallengeUnavailability <= 0 {

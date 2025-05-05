@@ -9,7 +9,7 @@ import (
 )
 
 func xs() []fr.Element {
-	xs := make([]fr.Element, 32)
+	xs := make([]fr.Element, EvaluationPointCount)
 	for i := range xs {
 		xs[i].SetUint64(uint64(i))
 	}
@@ -19,11 +19,11 @@ func xs() []fr.Element {
 // ys converts 1024 bytes of data into 32 fr.Element points
 // Each point is 32 bytes (256 bits)
 func ys(data []byte) ([]fr.Element, error) {
-	if len(data) != 1024 {
-		return nil, fmt.Errorf("data must be exactly 1024 bytes")
+	if len(data) != DataSize {
+		return nil, fmt.Errorf("data must be exactly %d bytes", DataSize)
 	}
 
-	points := make([]fr.Element, 32)
+	points := make([]fr.Element, EvaluationPointCount)
 	for i := range points {
 		// Convert each 32-byte chunk to fr.Element
 		points[i].SetBytes(data[i*32 : (i+1)*32])
@@ -59,8 +59,8 @@ func KzgCommit(data []byte, srs kzg.SRS) ([]byte, error) {
 // pointIndex: index of the point to prove (0-31)
 // data: original 1024 bytes of data
 // srs: SRS containing proving key
-func KzgOpen(pointIndex int, data []byte, srs kzg.SRS) (kzg.OpeningProof, fr.Element, error) {
-	if pointIndex < 0 || pointIndex >= 32 {
+func KzgOpen(pointIndex int, data []byte) (kzg.OpeningProof, fr.Element, error) {
+	if pointIndex < 0 || pointIndex >= EvaluationPointCount {
 		return kzg.OpeningProof{}, fr.Element{}, fmt.Errorf("pointIndex must be between 0 and 31")
 	}
 
@@ -75,7 +75,7 @@ func KzgOpen(pointIndex int, data []byte, srs kzg.SRS) (kzg.OpeningProof, fr.Ele
 	value := ys[pointIndex]
 
 	// Generate opening proof
-	proof, err := kzg.Open(poly, point, srs.Pk)
+	proof, err := kzg.Open(poly, point, Srs.Pk)
 	if err != nil {
 		return kzg.OpeningProof{}, fr.Element{}, err
 	}
@@ -88,14 +88,20 @@ func KzgOpen(pointIndex int, data []byte, srs kzg.SRS) (kzg.OpeningProof, fr.Ele
 // pointIndex: index of the point being proved (0-31)
 // proof: the opening proof
 // srs: SRS containing verification key
-func KzgVerify(commitment kzg.Digest, proof kzg.OpeningProof, pointIndex int, srs kzg.SRS) error {
-	if pointIndex < 0 || pointIndex >= 32 {
+func KzgVerify(commitment []byte, proof kzg.OpeningProof, pointIndex int) error {
+	if pointIndex < 0 || pointIndex >= EvaluationPointCount {
 		return fmt.Errorf("pointIndex must be between 0 and 31")
+	}
+
+	commitmentDigest := kzg.Digest{}
+	_, err := commitmentDigest.SetBytes(commitment)
+	if err != nil {
+		return err
 	}
 
 	// Get point from index
 	point := xs()[pointIndex]
 
 	// Verify the proof
-	return kzg.Verify(&commitment, &proof, point, srs.Vk)
+	return kzg.Verify(&commitmentDigest, &proof, point, Srs.Vk)
 }

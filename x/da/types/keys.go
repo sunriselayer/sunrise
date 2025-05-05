@@ -23,19 +23,21 @@ var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey = collections.NewPrefix("params/")
 
+	CommitmentKeysKeyPrefix          = collections.NewPrefix("commitment_keys/")
 	BlobDeclarationsKeyPrefix        = collections.NewPrefix("blob_declarations/")
 	BlobDeclarationsByExpiryPrefix   = collections.NewPrefix("blob_declarations_by_expiry/")
 	ValidatorPowerSnapshotsKeyPrefix = collections.NewPrefix("validator_power_snapshots/")
 	BlobCommitmentsKeyPrefix         = collections.NewPrefix("blob_commitments/")
 	BlobCommitmentsByExpiryPrefix    = collections.NewPrefix("blob_commitments_by_expiry/")
-	DeputiesKeyPrefix                = collections.NewPrefix("proof_deputies/")
+	ChallengesKeyPrefix              = collections.NewPrefix("challenges/")
 )
 
 var (
+	CommitmentKeyCodec             = collections.BytesKey
 	BlobDeclarationKeyCodec        = collections.PairKeyCodec(collections.Int64Key, collections.BytesKey)
 	ValidatorPowerSnapshotKeyCodec = collections.PairKeyCodec(collections.Int64Key, collections.BytesKey)
 	BlobCommitmentKeyCodec         = collections.BytesKey
-	DeputyKeyCodec                 = collections.BytesKey
+	ChallengeKeyCodec              = collections.TripleKeyCodec(collections.BytesKey, collections.Uint32Key, collections.Uint32Key)
 )
 
 type BlobDeclarationIndexes struct {

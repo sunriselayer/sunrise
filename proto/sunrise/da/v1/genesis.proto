@@ -3,6 +3,7 @@ package sunrise.da.v1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
 import "sunrise/da/v1/blob.proto";
 import "sunrise/da/v1/params.proto";
 
@@ -12,16 +13,17 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 message GenesisState {
   // params defines all the parameters of the module.
   Params params = 1 [(gogoproto.nullable) = false];
-  repeated Deputy deputies = 2 [(gogoproto.nullable) = false];
+  repeated CommitmentKey commitment_keys = 2 [(gogoproto.nullable) = false];
   repeated BlobDeclaration blob_declarations = 3 [(gogoproto.nullable) = false];
   repeated ValidatorPowerSnapshot validator_power_snapshots = 4 [(gogoproto.nullable) = false];
   repeated BlobCommitment blob_commitments = 5 [(gogoproto.nullable) = false];
+  repeated Challenge challenges = 6 [(gogoproto.nullable) = false];
 }
 
-// Deputy
-message Deputy {
+// CommitmentKey
+message CommitmentKey {
   string validator = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  google.protobuf.Any pubkey = 2 [(cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey"];
 }
 
 // ValidatorPowerSnapshot
@@ -33,4 +35,11 @@ message ValidatorPowerSnapshot {
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
+}
+
+// Challenge
+message Challenge {
+  bytes shards_merkle_root = 1;
+  uint32 shard_index = 2;
+  uint32 evaluation_point_index = 3;
 }

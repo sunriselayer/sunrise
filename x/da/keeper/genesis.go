@@ -8,12 +8,12 @@ import (
 
 // InitGenesis initializes the module's state from a provided genesis state.
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) error {
-	for _, deputy := range genState.Deputies {
-		validator, err := k.StakingKeeper.ValidatorAddressCodec().StringToBytes(deputy.Validator)
+	for _, commitmentKey := range genState.CommitmentKeys {
+		validator, err := k.StakingKeeper.ValidatorAddressCodec().StringToBytes(commitmentKey.Validator)
 		if err != nil {
 			return err
 		}
-		if err := k.SetDeputy(ctx, validator, deputy.Address); err != nil {
+		if err := k.SetCommitmentKey(ctx, validator, commitmentKey); err != nil {
 			return err
 		}
 	}
@@ -46,7 +46,7 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 
-	genesis.Deputies, err = k.GetAllDeputies(ctx)
+	genesis.CommitmentKeys, err = k.GetAllCommitmentKeys(ctx)
 	if err != nil {
 		return nil, err
 	}

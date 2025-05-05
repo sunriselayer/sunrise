@@ -1,12 +1,12 @@
 package types
 
 import (
-	"crypto/sha256"
 	"encoding/binary"
 	"math"
 	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/iden3/go-iden3-crypto/poseidon"
 )
 
 func CalculateShardCount(blobSize uint64) uint32 {
@@ -25,16 +25,20 @@ func CorrespondingShardIndices(
 	addr sdk.AccAddress,
 	shardCount uint32,
 	shardCountPerValidator uint32,
-) map[uint32]bool {
+) (map[uint32]bool, error) {
 	indices := make(map[uint32]bool)
 
 	i := uint32(0)
 	j := uint32(0)
 	for {
-		hasher := sha256.New()
+		hasher, err := poseidon.New(16)
+		if err != nil {
+			return nil, err
+		}
 		hasher.Write(shardsMerkleRoot)
 		hasher.Write(addr.Bytes())
-		hash := hasher.Sum(uint32ToBytes(i))
+		hasher.Write(uint32ToBytes(i))
+		hash := hasher.Sum(nil)
 
 		hashInt := new(big.Int).SetBytes(hash)
 		hashInt.Mod(hashInt, big.NewInt(int64(shardCount)))
@@ -52,7 +56,7 @@ func CorrespondingShardIndices(
 		i++
 	}
 
-	return indices
+	return indices, nil
 }
 
 func uint32ToBytes(n uint32) []byte {

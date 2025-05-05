@@ -9,7 +9,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
-  uint64 gas_per_shard = 1;
+  uint64 gas_per_byte = 1;
   uint64 gas_challenge_unavailability = 2;
 
   google.protobuf.Duration declaration_period = 3 [
