@@ -8,8 +8,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/sunriselayer/sunrise/x/da/das/consts"
-	"github.com/sunriselayer/sunrise/x/da/das/kzg"
-	"github.com/sunriselayer/sunrise/x/da/das/metadata"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
@@ -26,7 +24,7 @@ func (k msgServer) ChallengeUnavailability(ctx context.Context, msg *types.MsgCh
 		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "blob commitment not found")
 	}
 
-	shardCount := metadata.CalculateShardCount(blob.Rows, blob.Cols)
+	shardCount := consts.CalculateShardCount(blob.Rows, blob.Cols)
 	if msg.ShardIndex >= shardCount {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "shard index out of range")
 	}
@@ -40,7 +38,7 @@ func (k msgServer) ChallengeUnavailability(ctx context.Context, msg *types.MsgCh
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "blob commitment has expired")
 	}
 
-	id, err = k.AppendChallenge(ctx, types.Challenge{
+	id, err := k.AppendChallenge(ctx, types.Challenge{
 		ShardsMerkleRoot:     msg.ShardsMerkleRoot,
 		ShardIndex:           msg.ShardIndex,
 		EvaluationPointIndex: msg.EvaluationPointIndex,

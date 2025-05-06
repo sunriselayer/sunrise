@@ -5,10 +5,9 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/iden3/go-iden3-crypto/poseidon"
 
 	"github.com/sunriselayer/sunrise/x/da/das/kzg"
-	//"github.com/sunriselayer/sunrise/x/da/das/merkle"
+	"github.com/sunriselayer/sunrise/x/da/das/merkle"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
@@ -18,7 +17,7 @@ func (k msgServer) RespondToChallenge(ctx context.Context, msg *types.MsgRespond
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 
-	_, found, err := k.GetChallenge(ctx, msg.ShardsMerkleRoot, msg.ShardIndex, msg.EvaluationPointIndex)
+	challenge, found, err := k.GetChallenge(ctx, msg.ChallengeId)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to get challenge")
 	}
@@ -34,16 +33,12 @@ func (k msgServer) RespondToChallenge(ctx context.Context, msg *types.MsgRespond
 		merklePath[i] = [33]byte(path)
 	}
 
-	hash := func(data []byte) [32]byte {
-		return [32]byte(poseidon.Sum(data))
-	}
-
-	inclusion := types.InclusionProof(hash(msg.ShardsMerkleRoot), merklePath, msg.KzgCommitment, hash)
+	inclusion := merkle.InclusionProof(merkle.Hash(challenge.ShardsMerkleRoot), merklePath, [32]byte(msg.KzgCommitment))
 	if !inclusion {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "failed to verify kzg commitment inclusion proof")
 	}
 
-	err = kzg.KzgVerify(msg.KzgCommitment, msg.KzgOpeningProof, int(msg.EvaluationPointIndex))
+	err = kzg.KzgVerify(msg.KzgCommitment, msg.KzgOpeningProof, int(challenge.EvaluationPointIndex))
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to verify kzg commitment")
 	}
