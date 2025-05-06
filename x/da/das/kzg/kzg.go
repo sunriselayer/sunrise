@@ -5,8 +5,12 @@ import (
 	"runtime"
 
 	bls12381 "github.com/consensys/gnark-crypto/ecc/bls12-381"
-	fr "github.com/consensys/gnark-crypto/ecc/bls12-381/fr"
-	kzg "github.com/consensys/gnark-crypto/ecc/bls12-381/kzg"
+	"github.com/consensys/gnark-crypto/ecc/bls12-381/fr"
+	"github.com/consensys/gnark-crypto/ecc/bls12-381/kzg"
+
+	"github.com/sunriselayer/sunrise/x/da/das/consts"
+	"github.com/sunriselayer/sunrise/x/da/das/erasurecoding"
+	"github.com/sunriselayer/sunrise/x/da/das/types"
 )
 
 func KzgCommit(coeffs []fr.Element, srs kzg.SRS) ([]byte, error) {
@@ -26,22 +30,22 @@ func KzgCommit(coeffs []fr.Element, srs kzg.SRS) ([]byte, error) {
 // pointIndex: index of the point to prove (0-31)
 // data: original 1024 bytes of data
 // srs: SRS containing proving key
-func KzgOpen(coeffs []fr.Element, pointIndex int) (OpeningProof, error) {
+func KzgOpen(coeffs []fr.Element, pointIndex int) (types.OpeningProof, error) {
 	if pointIndex < 0 || pointIndex >= len(coeffs) {
-		return OpeningProof{}, fmt.Errorf("pointIndex must be between 0 and %d", len(coeffs)-1)
+		return types.OpeningProof{}, fmt.Errorf("pointIndex must be between 0 and %d", len(coeffs)-1)
 	}
 
-	point := EvaluationPoints(uint64(pointIndex + 1))[pointIndex]
+	point := erasurecoding.EvaluationPoints(uint64(pointIndex + 1))[pointIndex]
 
 	// Generate opening proof
-	proof, err := kzg.Open(coeffs, point, Srs.Pk)
+	proof, err := kzg.Open(coeffs, point, consts.Srs.Pk)
 	if err != nil {
-		return OpeningProof{}, err
+		return types.OpeningProof{}, err
 	}
 
 	h := proof.H.Bytes()
 	claimedValue := proof.ClaimedValue.Bytes()
-	proofSerializable := OpeningProof{
+	proofSerializable := types.OpeningProof{
 		H:            h[:],
 		ClaimedValue: claimedValue[:],
 	}
@@ -54,7 +58,7 @@ func KzgOpen(coeffs []fr.Element, pointIndex int) (OpeningProof, error) {
 // pointIndex: index of the point being proved (0-31)
 // proof: the opening proof
 // srs: SRS containing verification key
-func KzgVerify(commitment []byte, proof OpeningProof, pointIndex int) error {
+func KzgVerify(commitment []byte, proof types.OpeningProof, pointIndex int) error {
 	commitmentDigest := kzg.Digest{}
 	_, err := commitmentDigest.SetBytes(commitment)
 	if err != nil {
@@ -76,8 +80,8 @@ func KzgVerify(commitment []byte, proof OpeningProof, pointIndex int) error {
 	}
 
 	// Get point from index
-	point := EvaluationPoints(uint64(pointIndex + 1))[pointIndex]
+	point := erasurecoding.EvaluationPoints(uint64(pointIndex + 1))[pointIndex]
 
 	// Verify the proof
-	return kzg.Verify(&commitmentDigest, &proofRaw, point, Srs.Vk)
+	return kzg.Verify(&commitmentDigest, &proofRaw, point, consts.Srs.Vk)
 }

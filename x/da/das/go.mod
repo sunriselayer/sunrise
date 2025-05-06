@@ -1,4 +1,4 @@
-module github.com/sunriselayer/sunrise/x/da/kzg
+module github.com/sunriselayer/sunrise/x/da/das
 
 go 1.23.6
 

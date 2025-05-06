@@ -1,8 +1,10 @@
-package kzg
+package erasurecoding
 
 import (
 	"github.com/consensys/gnark-crypto/ecc/bls12-381/fr"
 	"github.com/consensys/gnark-crypto/ecc/bls12-381/fr/fft"
+
+	"github.com/sunriselayer/sunrise/x/da/das/consts"
 )
 
 func CalculateCoefficients(elements []fr.Element) ([]fr.Element, uint64) {
@@ -22,8 +24,8 @@ func CalculateCoefficients(elements []fr.Element) ([]fr.Element, uint64) {
 
 // Erasure Coding
 func CalculateExtendedEvaluationPoints(coeffs []fr.Element, domainCardinality uint64) []fr.Element {
-	if domainCardinality < ElementsSideLengthPerShard {
-		domainCardinality = ElementsSideLengthPerShard
+	if domainCardinality < consts.ElementsLenPerShard {
+		domainCardinality = consts.ElementsLenPerShard
 	}
 	extDomain := fft.NewDomain(2 * domainCardinality)
 	m := int(extDomain.Cardinality)
