@@ -71,6 +71,11 @@ func RecoverCoefficients(extendedElements map[uint64][]fr.Element, domainCardina
 }
 
 func RecoverElements(coeffs []fr.Element, elemsLen uint64) []fr.Element {
+	// Return empty slice if elemsLen is 0
+	if elemsLen == 0 {
+		return []fr.Element{}
+	}
+
 	// Get evaluation points for the original domain
 	xPoints := EvaluationPoints(elemsLen)
 

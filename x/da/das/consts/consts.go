@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	ExtensionRatio      = 2
 	SrsLen              = 4096
 	ElementSize         = 32
 	MaxRowSize          = SrsLen * ElementSize
