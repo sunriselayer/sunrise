@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"math"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -53,7 +52,7 @@ func (k msgServer) DeclareBlob(ctx context.Context, msg *types.MsgDeclareBlob) (
 	// Consume gas
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.GasMeter().ConsumeGas(params.GasPerByte*msg.MetadataSize, "declare blob metadata size")
-	sdkCtx.GasMeter().ConsumeGas(params.GasPerByte*types.CalculateShardsTotalSize(msg.ShardCount), "declare blob size")
+	sdkCtx.GasMeter().ConsumeGas(params.GasPerByte*consts.CalculateTotalSize(msg.Rows, msg.Cols), "declare blob size")
 
 	_, has, err := k.GetBlobDeclaration(ctx, msg.ShardsMerkleRoot)
 	if err != nil {
@@ -67,7 +66,8 @@ func (k msgServer) DeclareBlob(ctx context.Context, msg *types.MsgDeclareBlob) (
 		Sender:                   msg.Sender,
 		BlockHeight:              sdkCtx.BlockHeight(),
 		ShardsMerkleRoot:         msg.ShardsMerkleRoot,
-		ShardCount:               msg.ShardCount,
+		Rows:                     msg.Rows,
+		Cols:                     msg.Cols,
 		KzgCommitmentsMerkleRoot: msg.KzgCommitmentsMerkleRoot,
 		BundlerRewards:           msg.BundlerRewards,
 		Expiry:                   sdkCtx.BlockTime().Add(params.DeclarationPeriod),

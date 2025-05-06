@@ -31,7 +31,7 @@ func GenerateMetadata(blob []byte, upload func(shard []byte) (uri string, err er
 		}
 		rowElements[i] = points
 
-		shardsLen := len(points) / consts.ElementsLenPerShard
+		shardsLen := consts.CalculateShardCountPerRow(consts.ExtensionRatio * colsLen)
 		rows[i].Shards = make([]types.Shard, shardsLen)
 		shardHashes := make([][32]byte, shardsLen)
 
@@ -50,7 +50,7 @@ func GenerateMetadata(blob []byte, upload func(shard []byte) (uri string, err er
 		rows[i].ShardsMerkleRoot = root[:]
 	}
 
-	indices, err := CalculateOpeningProofIndices(rowsLen, colsLen)
+	indices, err := CalculateOpeningProofIndices(rowsLen, consts.ExtensionRatio*colsLen)
 	if err != nil {
 		return types.Metadata{}, err
 	}

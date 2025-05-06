@@ -7,7 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/sunriselayer/sunrise/x/da/das/consts"
 	"github.com/sunriselayer/sunrise/x/da/das/kzg"
+	"github.com/sunriselayer/sunrise/x/da/das/metadata"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
@@ -24,21 +26,13 @@ func (k msgServer) ChallengeUnavailability(ctx context.Context, msg *types.MsgCh
 		return nil, errorsmod.Wrap(sdkerrors.ErrNotFound, "blob commitment not found")
 	}
 
-	if msg.ShardIndex >= blob.ShardCount {
+	shardCount := metadata.CalculateShardCount(blob.Rows, blob.Cols)
+	if msg.ShardIndex >= shardCount {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "shard index out of range")
 	}
 
-	if msg.EvaluationPointIndex >= kzg.EvaluationPointCount {
+	if msg.EvaluationPointIndex >= consts.ElementsLenPerShard {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "evaluation point out of range (0-31)")
-	}
-
-	_, found, err = k.GetChallenge(ctx, msg.ShardsMerkleRoot, msg.ShardIndex, msg.EvaluationPointIndex)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "failed to get challenge")
-	}
-	if found {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "challenge already exists")
-
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -46,7 +40,7 @@ func (k msgServer) ChallengeUnavailability(ctx context.Context, msg *types.MsgCh
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "blob commitment has expired")
 	}
 
-	err = k.SetChallenge(ctx, types.Challenge{
+	id, err = k.AppendChallenge(ctx, types.Challenge{
 		ShardsMerkleRoot:     msg.ShardsMerkleRoot,
 		ShardIndex:           msg.ShardIndex,
 		EvaluationPointIndex: msg.EvaluationPointIndex,
@@ -62,5 +56,5 @@ func (k msgServer) ChallengeUnavailability(ctx context.Context, msg *types.MsgCh
 
 	sdkCtx.GasMeter().ConsumeGas(params.GasChallengeUnavailability, "ChallengeUnavailability")
 
-	return &types.MsgChallengeUnavailabilityResponse{}, nil
+	return &types.MsgChallengeUnavailabilityResponse{ChallengeId: id}, nil
 }

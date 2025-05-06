@@ -67,16 +67,19 @@ func (k Keeper) DeleteExpiredBlobCommitments(ctx sdk.Context) error {
 			}
 
 			// Remove related challenges
-			err = k.Challenges.Walk(
-				ctx,
-				collections.NewPrefixedTripleRange[[]byte, uint32, uint32](shardsMerkleRoot),
-				func(challengeKey collections.Triple[[]byte, uint32, uint32], challenge types.Challenge) (stop bool, err error) {
-					err = k.Challenges.Remove(ctx, challengeKey)
+			challenges, err := k.GetAllChallengesByShardsMerkleRoot(ctx, shardsMerkleRoot)
+			if err != nil {
+				return false, err
+			}
 
+			for _, challenge := range challenges {
+				err = k.Challenges.Remove(ctx, challenge.Id)
+				if err != nil {
 					return false, err
-				},
-			)
-			return false, err
+				}
+			}
+
+			return false, nil
 		},
 	)
 

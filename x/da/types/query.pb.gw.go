@@ -404,37 +404,15 @@ func request_Query_Challenge_0(ctx context.Context, marshaler runtime.Marshaler,
 		_   = err
 	)
 
-	val, ok = pathParams["shards_merkle_root"]
+	val, ok = pathParams["challenge_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "shards_merkle_root")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "challenge_id")
 	}
 
-	protoReq.ShardsMerkleRoot, err = runtime.Bytes(val)
+	protoReq.ChallengeId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "shards_merkle_root", err)
-	}
-
-	val, ok = pathParams["shard_index"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "shard_index")
-	}
-
-	protoReq.ShardIndex, err = runtime.Uint32(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "shard_index", err)
-	}
-
-	val, ok = pathParams["evaluation_point_index"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "evaluation_point_index")
-	}
-
-	protoReq.EvaluationPointIndex, err = runtime.Uint32(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "evaluation_point_index", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "challenge_id", err)
 	}
 
 	msg, err := client.Challenge(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -453,37 +431,15 @@ func local_request_Query_Challenge_0(ctx context.Context, marshaler runtime.Mars
 		_   = err
 	)
 
-	val, ok = pathParams["shards_merkle_root"]
+	val, ok = pathParams["challenge_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "shards_merkle_root")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "challenge_id")
 	}
 
-	protoReq.ShardsMerkleRoot, err = runtime.Bytes(val)
+	protoReq.ChallengeId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "shards_merkle_root", err)
-	}
-
-	val, ok = pathParams["shard_index"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "shard_index")
-	}
-
-	protoReq.ShardIndex, err = runtime.Uint32(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "shard_index", err)
-	}
-
-	val, ok = pathParams["evaluation_point_index"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "evaluation_point_index")
-	}
-
-	protoReq.EvaluationPointIndex, err = runtime.Uint32(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "evaluation_point_index", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "challenge_id", err)
 	}
 
 	msg, err := server.Challenge(ctx, &protoReq)
@@ -898,9 +854,9 @@ var (
 
 	pattern_Query_BlobCommitment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "da", "v1", "blob_commitments", "shards_merkle_root"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Challenges_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "da", "v1", "challenges", "shards_merkle_root"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Challenges_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "da", "v1", "challenges", "shards_merkle_roots", "shards_merkle_root"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Challenge_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"sunrise", "da", "v1", "challenges", "shards_merkle_root", "shard_index", "evaluation_point_index"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Challenge_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "da", "v1", "challenges", "challenge_id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

@@ -31,6 +31,8 @@ var (
 	BlobCommitmentsKeyPrefix            = collections.NewPrefix("blob_commitments/")
 	BlobCommitmentsByExpiryPrefix       = collections.NewPrefix("blob_commitments_by_expiry/")
 	ChallengesKeyPrefix                 = collections.NewPrefix("challenges/")
+	ChallengesByShardsMerkleRootPrefix  = collections.NewPrefix("challenges_by_shards_merkle_root/")
+	ChallengeIdKeyPrefix                = collections.NewPrefix("challenge_id/")
 )
 
 var (
@@ -38,7 +40,7 @@ var (
 	BlobDeclarationKeyCodec         = collections.BytesKey
 	ValidatorsPowerSnapshotKeyCodec = collections.Int64Key
 	BlobCommitmentKeyCodec          = collections.BytesKey
-	ChallengeKeyCodec               = collections.TripleKeyCodec(collections.BytesKey, collections.Uint32Key, collections.Uint32Key)
+	ChallengeKeyCodec               = collections.Uint64Key
 )
 
 type BlobDeclarationIndexes struct {
@@ -98,6 +100,31 @@ func NewBlobCommitmentIndexes(sb *collections.SchemaBuilder) BlobCommitmentIndex
 			BlobCommitmentKeyCodec,
 			func(_ []byte, v BlobCommitment) (int64, error) {
 				return v.Expiry.Unix(), nil
+			},
+		),
+	}
+}
+
+type ChallengeIndexes struct {
+	ShardsMerkleRoot *indexes.Multi[collections.Pair[[]byte, uint64], uint64, Challenge]
+}
+
+func (i ChallengeIndexes) IndexesList() []collections.Index[uint64, Challenge] {
+	return []collections.Index[uint64, Challenge]{
+		i.ShardsMerkleRoot,
+	}
+}
+
+func NewChallengeIndexes(sb *collections.SchemaBuilder) ChallengeIndexes {
+	return ChallengeIndexes{
+		ShardsMerkleRoot: indexes.NewMulti(
+			sb,
+			ChallengesByShardsMerkleRootPrefix,
+			"challenges_by_shards_merkle_root",
+			collections.PairKeyCodec(collections.BytesKey, collections.Uint64Key),
+			ChallengeKeyCodec,
+			func(_ uint64, v Challenge) (collections.Pair[[]byte, uint64], error) {
+				return collections.Join(v.ShardsMerkleRoot, v.Id), nil
 			},
 		),
 	}

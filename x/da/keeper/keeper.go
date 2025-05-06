@@ -29,7 +29,8 @@ type Keeper struct {
 	BlobDeclarations         *collections.IndexedMap[[]byte, types.BlobDeclaration, types.BlobDeclarationIndexes]
 	ValidatorsPowerSnapshots collections.Map[int64, types.ValidatorsPowerSnapshot]
 	BlobCommitments          *collections.IndexedMap[[]byte, types.BlobCommitment, types.BlobCommitmentIndexes]
-	Challenges               collections.Map[collections.Triple[[]byte, uint32, uint32], types.Challenge]
+	Challenges               *collections.IndexedMap[uint64, types.Challenge, types.ChallengeIndexes]
+	ChallengeId              collections.Sequence
 
 	BankKeeper     types.BankKeeper
 	StakingKeeper  types.StakingKeeper
@@ -64,7 +65,8 @@ func NewKeeper(
 		BlobDeclarations:         collections.NewIndexedMap(sb, types.BlobDeclarationsKeyPrefix, "blob_declarations", types.BlobDeclarationKeyCodec, codec.CollValue[types.BlobDeclaration](cdc), types.NewBlobDeclarationIndexes(sb)),
 		ValidatorsPowerSnapshots: collections.NewMap(sb, types.ValidatorsPowerSnapshotsKeyPrefix, "validators_power_snapshots", types.ValidatorsPowerSnapshotKeyCodec, codec.CollValue[types.ValidatorsPowerSnapshot](cdc)),
 		BlobCommitments:          collections.NewIndexedMap(sb, types.BlobCommitmentsKeyPrefix, "blob_commitments", types.BlobCommitmentKeyCodec, codec.CollValue[types.BlobCommitment](cdc), types.NewBlobCommitmentIndexes(sb)),
-		Challenges:               collections.NewMap(sb, types.ChallengesKeyPrefix, "challenges", types.ChallengeKeyCodec, codec.CollValue[types.Challenge](cdc)),
+		Challenges:               collections.NewIndexedMap(sb, types.ChallengesKeyPrefix, "challenges", types.ChallengeKeyCodec, codec.CollValue[types.Challenge](cdc), types.NewChallengeIndexes(sb)),
+		ChallengeId:              collections.NewSequence(sb, types.ChallengeIdKeyPrefix, "challenge_id"),
 
 		BankKeeper:     bankKeeper,
 		StakingKeeper:  stakingKeeper,

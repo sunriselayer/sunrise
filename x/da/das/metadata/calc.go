@@ -1,13 +1,8 @@
 package metadata
 
 import (
-	"github.com/sunriselayer/sunrise/x/da/das/consts"
 	"github.com/sunriselayer/sunrise/x/da/das/types"
 )
-
-func CalculateTotalSize(rows uint32, cols uint32) uint64 {
-	return uint64(rows) * uint64(cols) * consts.ElementSize
-}
 
 func CalculateOpeningProofCount(rows uint32, cols uint32) uint32 {
 	i := uint32(0)
@@ -21,5 +16,5 @@ func CalculateOpeningProofCount(rows uint32, cols uint32) uint32 {
 }
 
 func CalculateOpeningProofIndices(rows uint32, cols uint32) ([]types.OpeningProofIndex, error) {
-
+	return nil, nil
 }

@@ -44,7 +44,7 @@ func (q queryServer) Challenges(ctx context.Context, req *types.QueryChallengesR
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	challenges, err := q.k.GetAllChallenges(ctx)
+	challenges, err := q.k.GetAllChallengesByShardsMerkleRoot(ctx, req.ShardsMerkleRoot)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -57,7 +57,7 @@ func (q queryServer) Challenge(ctx context.Context, req *types.QueryChallengeReq
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	challenge, found, err := q.k.GetChallenge(ctx, req.ShardsMerkleRoot, req.ShardIndex, req.EvaluationPointIndex)
+	challenge, found, err := q.k.GetChallenge(ctx, req.ChallengeId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

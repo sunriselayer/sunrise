@@ -45,12 +45,12 @@ service Query {
 
   // Challenges
   rpc Challenges(QueryChallengesRequest) returns (QueryChallengesResponse) {
-    option (google.api.http).get = "/sunrise/da/v1/challenges/{shards_merkle_root}";
+    option (google.api.http).get = "/sunrise/da/v1/challenges/shards_merkle_roots/{shards_merkle_root}";
   }
 
   // Challenge
   rpc Challenge(QueryChallengeRequest) returns (QueryChallengeResponse) {
-    option (google.api.http).get = "/sunrise/da/v1/challenges/{shards_merkle_root}/{shard_index}/{evaluation_point_index}";
+    option (google.api.http).get = "/sunrise/da/v1/challenges/{challenge_id}";
   }
 }
 
@@ -146,9 +146,7 @@ message QueryChallengesResponse {
 // QueryChallengeRequest is request type for the
 // Query/Challenge RPC method.
 message QueryChallengeRequest {
-  bytes shards_merkle_root = 1;
-  uint32 shard_index = 2;
-  uint32 evaluation_point_index = 3;
+  uint64 challenge_id = 1;
 }
 
 // QueryChallengeResponse is response type for the

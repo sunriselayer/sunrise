@@ -11,10 +11,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/das/consts"
 )
 
-func CalculateShardsTotalSize(rows uint32, cols uint32) uint64 {
-	return uint64(rows) * uint64(cols) * consts.ElementSize
-}
-
 func CalculateShardCountPerValidator(shardCount uint32, validatorCount uint32) uint32 {
 	return uint32(math.Min(
 		float64(shardCount),
