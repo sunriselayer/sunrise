@@ -29,7 +29,7 @@ func ConvertToElements(input []byte) []fr.Element {
 	return elements
 }
 
-func SplitElementsIntoRows(elements []fr.Element) [][]fr.Element {
+func SplitElementsIntoRows(elements []fr.Element) ([][]fr.Element, uint32, uint32) {
 	numElems := len(elements)
 	domain := fft.NewDomain(uint64(numElems))
 
@@ -52,18 +52,22 @@ func SplitElementsIntoRows(elements []fr.Element) [][]fr.Element {
 		// Extra elements (if any) are added to the first rows in order
 		rows := make([][]fr.Element, numRows)
 		start := 0
+		maxRowSize := rowSize
 		for rowIndex := range numRows {
 			// Add one extra element to the first 'remainder' rows
 			currentRowSize := rowSize
 			if rowIndex < remainder {
 				currentRowSize++
+
 			}
 			rows[rowIndex] = elements[start : start+currentRowSize]
 			start += currentRowSize
+
+			maxRowSize = max(maxRowSize, currentRowSize)
 		}
-		return rows
+		return rows, uint32(numRows), uint32(maxRowSize)
 	}
 
 	// If we don't need to split, return the original elements as a single row
-	return [][]fr.Element{elements}
+	return [][]fr.Element{elements}, 1, uint32(numElems)
 }

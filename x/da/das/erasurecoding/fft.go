@@ -28,7 +28,7 @@ func CalculateCoefficients(elements []fr.Element) []fr.Element {
 }
 
 // Erasure Coding
-func CalculateExtendedEvaluationPoints(coeffs []fr.Element) ([]fr.Element, error) {
+func CalculateExtendedPoints(coeffs []fr.Element) ([]fr.Element, error) {
 	domainCardinality := len(coeffs)
 	if domainCardinality == 0 {
 		return nil, fmt.Errorf("coefficients cannot be empty")
@@ -41,14 +41,14 @@ func CalculateExtendedEvaluationPoints(coeffs []fr.Element) ([]fr.Element, error
 	m := int(extDomain.Cardinality)
 
 	// Create a copy of coefficients and pad with zeros
-	extendedEvals := make([]fr.Element, m)
-	copy(extendedEvals, coeffs)
+	extendedPoints := make([]fr.Element, m)
+	copy(extendedPoints, coeffs)
 
 	// Perform FFT on the extended domain
-	fft.BitReverse(extendedEvals)
-	extDomain.FFT(extendedEvals, fft.DIT)
+	fft.BitReverse(extendedPoints)
+	extDomain.FFT(extendedPoints, fft.DIT)
 
-	return extendedEvals, nil
+	return extendedPoints, nil
 }
 
 func EvaluationPoints(len uint64) []fr.Element {

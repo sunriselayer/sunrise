@@ -6,6 +6,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
+import "sunrise/da/v1/index.proto";
 import "sunrise/da/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
@@ -52,13 +53,14 @@ message BlobDeclaration {
   // Poseidon
   bytes shards_merkle_root = 2;
   int64 block_height = 3;
-  uint32 shard_count = 4;
-  bytes kzg_commitments_merkle_root = 5;
-  repeated cosmos.base.v1beta1.Coin bundler_rewards = 6 [
+  uint32 rows = 4;
+  uint32 cols = 5;
+  bytes kzg_commitments_merkle_root = 6;
+  repeated cosmos.base.v1beta1.Coin bundler_rewards = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-  google.protobuf.Timestamp expiry = 7 [
+  google.protobuf.Timestamp expiry = 8 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
@@ -68,10 +70,11 @@ message BlobDeclaration {
 message BlobCommitment {
   bytes shards_merkle_root = 1;
   int64 block_height = 2;
-  uint32 shard_count = 3;
-  bytes kzg_commitments_merkle_root = 4;
-  repeated ShardCommitment shard_commitments = 5 [(gogoproto.nullable) = false];
-  google.protobuf.Timestamp expiry = 6 [
+  uint32 rows = 3;
+  uint32 cols = 4;
+  bytes kzg_commitments_merkle_root = 5;
+  repeated ShardCommitment shard_commitments = 6 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp expiry = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
@@ -86,7 +89,7 @@ message ShardCommitment {
 // Challenge
 message Challenge {
   bytes shards_merkle_root = 1;
-  uint32 shard_index = 2;
+  sunrise.da.v1.ShardIndex shard_index = 2;
   uint32 evaluation_point_index = 3;
   bool responded = 4;
 }

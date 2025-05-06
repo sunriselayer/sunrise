@@ -51,7 +51,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
-	github.com/sunriselayer/sunrise/x/da/kzg v0.0.0-20250505075959-b869454c4863
+	github.com/sunriselayer/sunrise/x/da/das v0.0.0-20250506050507-a85077b2bb5d
 	go.uber.org/mock v0.5.2
 	golang.org/x/tools v0.31.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250414145226-207652e42e2e

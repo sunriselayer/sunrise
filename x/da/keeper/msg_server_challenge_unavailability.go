@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/sunriselayer/sunrise/x/da/kzg"
+	"github.com/sunriselayer/sunrise/x/da/das/kzg"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 

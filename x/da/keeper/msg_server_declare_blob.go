@@ -2,11 +2,13 @@ package keeper
 
 import (
 	"context"
+	"math"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/sunriselayer/sunrise/x/da/das/consts"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
@@ -22,8 +24,19 @@ func (k msgServer) DeclareBlob(ctx context.Context, msg *types.MsgDeclareBlob) (
 	if len(msg.ShardsMerkleRoot) != 32 {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "shards merkle root must be 32 bytes poseidon hash")
 	}
-	if msg.ShardCount == 0 {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "shard count must be positive")
+	if msg.Rows == 0 {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "rows must be positive")
+	}
+	if msg.Cols == 0 {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cols must be positive")
+	}
+	// cols must be 2^n
+	if (msg.Cols & (msg.Cols - 1)) != 0 {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cols must be 2^n")
+	}
+	// rows > 1, cols must be 2*srs length
+	if msg.Rows > 1 && msg.Cols != consts.ExtensionRatio*consts.SrsLen {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "if rows > 1, cols must be %d", consts.ExtensionRatio*consts.SrsLen)
 	}
 	if len(msg.KzgCommitmentsMerkleRoot) != 32 {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "kzg commitments merkle root must be 32 bytes poseidon hash")

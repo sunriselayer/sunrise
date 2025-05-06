@@ -6,6 +6,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 // Directly included in block as Tx
 message Blob {
   bytes shards_merkle_root = 1;
-  uint32 shard_count = 2;
-  bytes kzg_commitments_merkle_root = 3;
+  uint32 rows = 2;
+  uint32 cols = 3;
+  bytes kzg_commitments_merkle_root = 4;
 }

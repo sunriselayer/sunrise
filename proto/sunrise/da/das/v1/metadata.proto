@@ -1,0 +1,35 @@
+syntax = "proto3";
+package sunrise.da.das.v1;
+
+import "gogoproto/gogo.proto";
+import "sunrise/da/das/v1/opening_proof.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/das/types";
+
+// Metadata
+message Metadata {
+  repeated Row rows = 1 [(gogoproto.nullable) = false];
+  repeated OpeningProofIndex opening_proof_indices = 2 [(gogoproto.nullable) = false];
+  repeated OpeningProof opening_proofs = 3 [(gogoproto.nullable) = false];
+}
+
+// Shard
+message Shard {
+  // Poseidon
+  bytes hash = 1;
+  // ipfs:// or ar://
+  string uri = 2;
+}
+
+// Row
+message Row {
+  bytes shards_merkle_root = 1;
+  bytes kzg_commitment = 2;
+  repeated Shard shards = 3 [(gogoproto.nullable) = false];
+}
+
+// OpeningProofIndex
+message OpeningProofIndex {
+  uint32 row_index = 1;
+  uint32 col_index = 2;
+}

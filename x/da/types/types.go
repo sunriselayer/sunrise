@@ -8,11 +8,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/iden3/go-iden3-crypto/poseidon"
-	"github.com/sunriselayer/sunrise/x/da/kzg"
+	"github.com/sunriselayer/sunrise/x/da/das/consts"
 )
 
-func CalculateShardsTotalSize(shardCount uint32) uint64 {
-	return uint64(shardCount) * ShardSize
+func CalculateShardsTotalSize(rows uint32, cols uint32) uint64 {
+	return uint64(rows) * uint64(cols) * consts.ElementSize
 }
 
 func CalculateShardCountPerValidator(shardCount uint32, validatorCount uint32) uint32 {
@@ -80,7 +80,7 @@ func CorrespondingEvaluationPointIndex(
 	hash := hasher.Sum(nil)
 
 	hashInt := new(big.Int).SetBytes(hash)
-	hashInt.Mod(hashInt, big.NewInt(int64(kzg.EvaluationPointCount)))
+	hashInt.Mod(hashInt, big.NewInt(int64(consts.ElementsLenPerShard)))
 
 	return uint32(hashInt.Uint64()), nil
 }

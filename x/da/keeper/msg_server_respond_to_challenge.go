@@ -7,7 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/iden3/go-iden3-crypto/poseidon"
 
-	"github.com/sunriselayer/sunrise/x/da/kzg"
+	"github.com/sunriselayer/sunrise/x/da/das/kzg"
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 

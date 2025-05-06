@@ -5,6 +5,7 @@ go 1.23.6
 require (
 	github.com/consensys/gnark-crypto v0.15.0
 	github.com/cosmos/gogoproto v1.7.0
+	github.com/iden3/go-iden3-crypto v0.0.17
 	github.com/stretchr/testify v1.10.0
 )
 

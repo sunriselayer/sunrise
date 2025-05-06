@@ -116,7 +116,7 @@ func TestCalculateExtendedEvaluationPoints(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			points, err := CalculateExtendedEvaluationPoints(tt.coeffs)
+			points, err := CalculateExtendedPoints(tt.coeffs)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -180,7 +180,7 @@ func TestFFTFullProcess(t *testing.T) {
 	require.Equal(t, 4, len(coeffs))
 
 	// Calculate extended evaluation points
-	extendedPoints, err := CalculateExtendedEvaluationPoints(coeffs)
+	extendedPoints, err := CalculateExtendedPoints(coeffs)
 	require.NoError(t, err)
 	require.Equal(t, 128, len(extendedPoints))
 
