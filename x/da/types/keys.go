@@ -23,43 +23,108 @@ var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey = collections.NewPrefix("params/")
 
-	PublishedDataKeyPrefix             = collections.NewPrefix("published_data/")
-	PublishedDataStatusTimeIndexPrefix = collections.NewPrefix("published_data_by_status_time/")
-	ChallengeCountsKeyPrefix           = collections.NewPrefix("challenge_counts/")
-	FaultCountsKeyPrefix               = collections.NewPrefix("fault_counts/")
-	ProofKeyPrefix                     = collections.NewPrefix("proofs/")
-	InvalidityKeyPrefix                = collections.NewPrefix("invalidities/")
-	ProofDeputiesKeyPrefix             = collections.NewPrefix("proof_deputies/")
+	CommitmentKeysKeyPrefix             = collections.NewPrefix("commitment_keys/")
+	BlobDeclarationsKeyPrefix           = collections.NewPrefix("blob_declarations/")
+	BlobDeclarationsByExpiryPrefix      = collections.NewPrefix("blob_declarations_by_expiry/")
+	BlobDeclarationsByBlockHeightPrefix = collections.NewPrefix("blob_declarations_by_block_height/")
+	ValidatorsPowerSnapshotsKeyPrefix   = collections.NewPrefix("validators_power_snapshots/")
+	BlobCommitmentsKeyPrefix            = collections.NewPrefix("blob_commitments/")
+	BlobCommitmentsByExpiryPrefix       = collections.NewPrefix("blob_commitments_by_expiry/")
+	ChallengesKeyPrefix                 = collections.NewPrefix("challenges/")
+	ChallengesByShardsMerkleRootPrefix  = collections.NewPrefix("challenges_by_shards_merkle_root/")
+	ChallengeIdKeyPrefix                = collections.NewPrefix("challenge_id/")
 )
 
 var (
-	PublishedDataKeyCodec = collections.StringKey
-	FaultCounterKeyCodec  = collections.BytesKey
-	ProofKeyCodec         = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
-	InvalidityKeyCodec    = collections.PairKeyCodec(collections.StringKey, collections.BytesKey)
-	ProofDeputyKeyCodec   = collections.BytesKey
+	CommitmentKeyCodec              = collections.BytesKey
+	BlobDeclarationKeyCodec         = collections.BytesKey
+	ValidatorsPowerSnapshotKeyCodec = collections.Int64Key
+	BlobCommitmentKeyCodec          = collections.BytesKey
+	ChallengeKeyCodec               = collections.Uint64Key
 )
 
-type PublishedDataIndexes struct {
-	StatusTime *indexes.Multi[collections.Pair[string, int64], string, PublishedData]
+type BlobDeclarationIndexes struct {
+	Expiry      *indexes.Multi[int64, []byte, BlobDeclaration]
+	BlockHeight *indexes.Multi[int64, []byte, BlobDeclaration]
 }
 
-func (i PublishedDataIndexes) IndexesList() []collections.Index[string, PublishedData] {
-	return []collections.Index[string, PublishedData]{
-		i.StatusTime,
+func (i BlobDeclarationIndexes) IndexesList() []collections.Index[[]byte, BlobDeclaration] {
+	return []collections.Index[[]byte, BlobDeclaration]{
+		i.Expiry,
+		i.BlockHeight,
 	}
 }
 
-func NewPublishedDataIndexes(sb *collections.SchemaBuilder) PublishedDataIndexes {
-	return PublishedDataIndexes{
-		StatusTime: indexes.NewMulti(
+func NewBlobDeclarationIndexes(sb *collections.SchemaBuilder) BlobDeclarationIndexes {
+	return BlobDeclarationIndexes{
+		Expiry: indexes.NewMulti(
 			sb,
-			PublishedDataStatusTimeIndexPrefix,
-			"published_data_by_status_time",
-			collections.PairKeyCodec(collections.StringKey, collections.Int64Key),
-			collections.StringKey,
-			func(_ string, v PublishedData) (collections.Pair[string, int64], error) {
-				return collections.Join(v.Status.String(), v.Timestamp.Unix()), nil
+			BlobDeclarationsByExpiryPrefix,
+			"blob_declaration_by_expiry",
+			collections.Int64Key,
+			BlobDeclarationKeyCodec,
+			func(_ []byte, v BlobDeclaration) (int64, error) {
+				return v.Expiry.Unix(), nil
+			},
+		),
+		BlockHeight: indexes.NewMulti(
+			sb,
+			BlobDeclarationsByBlockHeightPrefix,
+			"blob_declaration_by_block_height",
+			collections.Int64Key,
+			BlobDeclarationKeyCodec,
+			func(_ []byte, v BlobDeclaration) (int64, error) {
+				return v.BlockHeight, nil
+			},
+		),
+	}
+}
+
+type BlobCommitmentIndexes struct {
+	Expiry *indexes.Multi[int64, []byte, BlobCommitment]
+}
+
+func (i BlobCommitmentIndexes) IndexesList() []collections.Index[[]byte, BlobCommitment] {
+	return []collections.Index[[]byte, BlobCommitment]{
+		i.Expiry,
+	}
+}
+
+func NewBlobCommitmentIndexes(sb *collections.SchemaBuilder) BlobCommitmentIndexes {
+	return BlobCommitmentIndexes{
+		Expiry: indexes.NewMulti(
+			sb,
+			BlobCommitmentsByExpiryPrefix,
+			"blob_commitment_by_expiry",
+			collections.Int64Key,
+			BlobCommitmentKeyCodec,
+			func(_ []byte, v BlobCommitment) (int64, error) {
+				return v.Expiry.Unix(), nil
+			},
+		),
+	}
+}
+
+type ChallengeIndexes struct {
+	ShardsMerkleRoot *indexes.Multi[collections.Pair[[]byte, uint64], uint64, Challenge]
+}
+
+func (i ChallengeIndexes) IndexesList() []collections.Index[uint64, Challenge] {
+	return []collections.Index[uint64, Challenge]{
+		i.ShardsMerkleRoot,
+	}
+}
+
+func NewChallengeIndexes(sb *collections.SchemaBuilder) ChallengeIndexes {
+	return ChallengeIndexes{
+		ShardsMerkleRoot: indexes.NewMulti(
+			sb,
+			ChallengesByShardsMerkleRootPrefix,
+			"challenges_by_shards_merkle_root",
+			collections.PairKeyCodec(collections.BytesKey, collections.Uint64Key),
+			ChallengeKeyCodec,
+			func(_ uint64, v Challenge) (collections.Pair[[]byte, uint64], error) {
+				return collections.Join(v.ShardsMerkleRoot, v.Id), nil
 			},
 		),
 	}

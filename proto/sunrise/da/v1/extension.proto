@@ -1,0 +1,14 @@
+syntax = "proto3";
+package sunrise.da.v1;
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// BlobExtension
+message BlobExtension {
+  // ipfs:// or ar://
+  string metadata_uri = 1;
+  // Max 128 peers, each max 128 characters
+  repeated string resource_peers = 2;
+  // Max 8 webhooks, each max 128 characters
+  repeated string commitment_webhook_urls = 3;
+}

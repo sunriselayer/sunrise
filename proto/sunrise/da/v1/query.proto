@@ -1,12 +1,13 @@
 syntax = "proto3";
 package sunrise.da.v1;
 
-import "amino/amino.proto";
+// import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "sunrise/da/v1/genesis.proto";
 import "sunrise/da/v1/params.proto";
-import "sunrise/da/v1/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
@@ -14,43 +15,42 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 service Query {
   // Params queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/params";
+    option (google.api.http).get = "/sunrise/da/v1/params";
   }
-  // PublishedData queries published data
-  rpc PublishedData(QueryPublishedDataRequest) returns (QueryPublishedDataResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/published-data";
+
+  // ValidatorsPowerSnapshot
+  rpc ValidatorsPowerSnapshot(QueryValidatorsPowerSnapshotRequest) returns (QueryValidatorsPowerSnapshotResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/validators/power_snapshots/{block_height}";
   }
-  // AllPublishedData queries published data
-  rpc AllPublishedData(QueryAllPublishedDataRequest) returns (QueryAllPublishedDataResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/all-published-data";
+
+  // CommitmentKey
+  rpc CommitmentKey(QueryCommitmentKeyRequest) returns (QueryCommitmentKeyResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/validators/{validator_address}/commitment_key";
   }
-  // ValidityProof queries validity proof from the validator
-  rpc ValidityProof(QueryValidityProofRequest) returns (QueryValidityProofResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/validity-proof";
+
+  // ShardIndices
+  rpc ShardIndices(QueryShardIndicesRequest) returns (QueryShardIndicesResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/validators/{validator_address}/shard_indices";
   }
-  // AllValidityProofs queries all validity proofs
-  rpc AllValidityProofs(QueryAllValidityProofsRequest) returns (QueryAllValidityProofsResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/all-validity-proofs";
+
+  // BlobDeclaration
+  rpc BlobDeclaration(QueryBlobDeclarationRequest) returns (QueryBlobDeclarationResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/blob_declarations/{shards_merkle_root}";
   }
-  // Invalidity queries invalidity report
-  rpc Invalidity(QueryInvalidityRequest) returns (QueryInvalidityResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/invalidity";
+
+  // BlobCommitment
+  rpc BlobCommitment(QueryBlobCommitmentRequest) returns (QueryBlobCommitmentResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/blob_commitments/{shards_merkle_root}";
   }
-  // AllInvalidity queries all invalidity reports
-  rpc AllInvalidity(QueryAllInvalidityRequest) returns (QueryAllInvalidityResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/all-invalidity";
+
+  // Challenges
+  rpc Challenges(QueryChallengesRequest) returns (QueryChallengesResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/challenges/shards_merkle_roots/{shards_merkle_root}";
   }
-  // ValidatorShardIndices
-  rpc ValidatorShardIndices(QueryValidatorShardIndicesRequest) returns (QueryValidatorShardIndicesResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/validator-shard-indices";
-  }
-  // ZkpProofThreshold
-  rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/zkp-proof-threshold";
-  }
-  // ProofDeputy
-  rpc ProofDeputy(QueryProofDeputyRequest) returns (QueryProofDeputyResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/proof-deputy";
+
+  // Challenge
+  rpc Challenge(QueryChallengeRequest) returns (QueryChallengeResponse) {
+    option (google.api.http).get = "/sunrise/da/v1/challenges/{challenge_id}";
   }
 }
 
@@ -60,117 +60,97 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryValidatorsPowerSnapshotRequest is request type for the
+// Query/ValidatorsPowerSnapshot RPC method.
+message QueryValidatorsPowerSnapshotRequest {
+  int64 block_height = 1;
+}
+
+// QueryValidatorsPowerSnapshotResponse is response type for the
+// Query/ValidatorsPowerSnapshot RPC method.
+message QueryValidatorsPowerSnapshotResponse {
+  ValidatorsPowerSnapshot validators_power_snapshot = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryCommitmentKeyRequest is request type for the
+// Query/CommitmentKey RPC method.
+message QueryCommitmentKeyRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryCommitmentKeyResponse is response type for the
+// Query/CommitmentKey RPC method.
+message QueryCommitmentKeyResponse {
+  google.protobuf.Any pubkey = 1 [
+    (cosmos_proto.accepts_interface) = "cosmos.crypto.PubKey",
+    (gogoproto.nullable) = false
   ];
 }
 
-// QueryPublishedDataRequest is request type for the Query/PublishedData RPC
-// method.
-message QueryPublishedDataRequest {
-  string metadata_uri = 1;
-}
-
-// QueryPublishedDataResponse is response type for the Query/PublishedData RPC
-// method.
-message QueryPublishedDataResponse {
-  PublishedData data = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryAllPublishedDataRequest is request type for the
-// Query/AllPublishedData RPC method.
-message QueryAllPublishedDataRequest {}
-
-// QueryAllPublishedDataResponse is response type for the
-// Query/AllPublishedData RPC method.
-message QueryAllPublishedDataResponse {
-  repeated PublishedData data = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryValidityProofRequest is request type for the Query/ValidityProof RPC
-// method.
-message QueryValidityProofRequest {
-  string metadata_uri = 1;
-  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-}
-
-// QueryValidityProofResponse is response type for the Query/ValidityProof RPC
-// method.
-message QueryValidityProofResponse {
-  Proof proof = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryAllValidityProofsRequest is request type for the Query/AllValidityProofs RPC
-// method.
-message QueryAllValidityProofsRequest {
-  string metadata_uri = 1;
-}
-
-// QueryAllValidityProofsResponse is response type for the Query/AllValidityProofs RPC
-// method.
-message QueryAllValidityProofsResponse {
-  repeated Proof proofs = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryInvalidityProofRequest is request type for the Query/Invalidity RPC
-// method.
-message QueryInvalidityRequest {
-  string metadata_uri = 1;
-  string sender_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-}
-
-// QueryInvalidityResponse is response type for the Query/Invalidity RPC
-// method.
-message QueryInvalidityResponse {
-  Invalidity invalidity = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryAllInvalidityProofRequest is request type for the Query/AllInvalidity RPC
-// method.
-message QueryAllInvalidityRequest {
-  string metadata_uri = 1;
-}
-
-// QueryAllInvalidityResponse is response type for the Query/AllInvalidity RPC
-// method.
-message QueryAllInvalidityResponse {
-  repeated Invalidity invalidity = 1 [(gogoproto.nullable) = false];
-}
-
-// QueryValidatorShardIndicesRequest is request type for the
-// Query/ValidatorShardIndices RPC method.
-message QueryValidatorShardIndicesRequest {
+// QueryShardIndicesRequest is request type for the
+// Query/ShardIndices RPC method.
+message QueryShardIndicesRequest {
   string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  uint64 shard_count = 2;
+  bytes shards_merkle_root = 2;
+  uint32 shard_count = 3;
+  uint32 shard_count_per_validator = 4;
 }
 
-// QueryValidatorShardIndicesResponse is response type for the
-// Query/ValidatorShardIndices RPC method.
-message QueryValidatorShardIndicesResponse {
-  repeated uint64 shard_indices = 1;
+// QueryShardIndicesResponse is response type for the
+// Query/ShardIndices RPC method.
+message QueryShardIndicesResponse {
+  repeated uint32 shard_indices = 1;
 }
 
-// QueryZkpProofThresholdRequest is request type for the
-// Query/ZkpProofThreshold RPC method.
-message QueryZkpProofThresholdRequest {
-  uint64 shard_count = 1;
+// QueryBlobDeclarationRequest is request type for the
+// Query/BlobDeclaration RPC method.
+message QueryBlobDeclarationRequest {
+  bytes shards_merkle_root = 1;
 }
 
-// QueryZkpProofThresholdResponse is response type for the
-// Query/ZkpProofThreshold RPC method.
-message QueryZkpProofThresholdResponse {
-  uint64 threshold = 1 [(amino.dont_omitempty) = true];
+// QueryBlobDeclarationResponse is response type for the
+// Query/BlobDeclaration RPC method.
+message QueryBlobDeclarationResponse {
+  BlobDeclaration blob_declaration = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryProofDeputyRequest is request type for the
-// Query/ProofDeputy RPC method.
-message QueryProofDeputyRequest {
-  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+// QueryBlobCommitmentRequest is request type for the
+// Query/BlobCommitment RPC method.
+message QueryBlobCommitmentRequest {
+  bytes shards_merkle_root = 1;
 }
 
-// QueryProofDeputyResponse is response type for the
-// Query/ProofDeputy RPC method.
-message QueryProofDeputyResponse {
-  string deputy_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+// QueryBlobCommitmentResponse is response type for the
+// Query/BlobCommitment RPC method.
+message QueryBlobCommitmentResponse {
+  BlobCommitment blob_commitment = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryChallengesRequest is request type for the
+// Query/Challenges RPC method.
+message QueryChallengesRequest {
+  bytes shards_merkle_root = 1;
+  // cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryChallengesResponse is response type for the
+// Query/Challenges RPC method.
+message QueryChallengesResponse {
+  repeated Challenge challenges = 1 [(gogoproto.nullable) = false];
+  // cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryChallengeRequest is request type for the
+// Query/Challenge RPC method.
+message QueryChallengeRequest {
+  uint64 challenge_id = 1;
+}
+
+// QueryChallengeResponse is response type for the
+// Query/Challenge RPC method.
+message QueryChallengeResponse {
+  Challenge challenge = 1 [(gogoproto.nullable) = false];
 }

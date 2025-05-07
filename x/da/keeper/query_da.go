@@ -3,163 +3,67 @@ package keeper
 import (
 	"context"
 
-	errorsmod "cosmossdk.io/errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/sunriselayer/sunrise/x/da/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-func (q queryServer) PublishedData(goCtx context.Context, req *types.QueryPublishedDataRequest) (*types.QueryPublishedDataResponse, error) {
+func (q queryServer) BlobDeclaration(ctx context.Context, req *types.QueryBlobDeclarationRequest) (*types.QueryBlobDeclarationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	data, found, err := q.k.GetPublishedData(ctx, req.MetadataUri)
+	data, found, err := q.k.GetBlobDeclaration(ctx, req.ShardsMerkleRoot)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if !found {
-		return nil, types.ErrDataNotFound
+		return nil, status.Error(codes.NotFound, "blob declaration not found")
 	}
-	return &types.QueryPublishedDataResponse{Data: data}, nil
+	return &types.QueryBlobDeclarationResponse{BlobDeclaration: data}, nil
 }
 
-func (q queryServer) AllPublishedData(goCtx context.Context, req *types.QueryAllPublishedDataRequest) (*types.QueryAllPublishedDataResponse, error) {
+func (q queryServer) BlobCommitment(ctx context.Context, req *types.QueryBlobCommitmentRequest) (*types.QueryBlobCommitmentResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	data, err := q.k.GetAllPublishedData(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	return &types.QueryAllPublishedDataResponse{Data: data}, nil
-}
-
-func (q queryServer) ValidatorShardIndices(goCtx context.Context, req *types.QueryValidatorShardIndicesRequest) (*types.QueryValidatorShardIndicesResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	validator, err := q.k.StakingKeeper.ValidatorAddressCodec().StringToBytes(req.ValidatorAddress)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid validator address")
-	}
-	threshold, err := q.k.GetZkpThreshold(ctx, req.ShardCount)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	indices := types.ShardIndicesForValidator(validator, int64(threshold), int64(req.ShardCount))
-	shardIndices := make([]uint64, len(indices))
-	for i, index := range indices {
-		shardIndices[i] = uint64(index)
-	}
-	return &types.QueryValidatorShardIndicesResponse{ShardIndices: shardIndices}, nil
-}
-
-func (q queryServer) ZkpProofThreshold(goCtx context.Context, req *types.QueryZkpProofThresholdRequest) (*types.QueryZkpProofThresholdResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	threshold, err := q.k.GetZkpThreshold(ctx, req.ShardCount)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	return &types.QueryZkpProofThresholdResponse{Threshold: threshold}, nil
-}
-
-func (q queryServer) ProofDeputy(goCtx context.Context, req *types.QueryProofDeputyRequest) (*types.QueryProofDeputyResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	validator, err := q.k.StakingKeeper.ValidatorAddressCodec().StringToBytes(req.ValidatorAddress)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid validator address")
-	}
-	deputy, found, err := q.k.GetProofDeputy(ctx, validator)
+	data, found, err := q.k.GetBlobCommitment(ctx, req.ShardsMerkleRoot)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if !found {
-		return nil, types.ErrDeputyNotFound
+		return nil, status.Error(codes.NotFound, "blob commitment not found")
 	}
-
-	return &types.QueryProofDeputyResponse{DeputyAddress: sdk.AccAddress(deputy).String()}, nil
+	return &types.QueryBlobCommitmentResponse{BlobCommitment: data}, nil
 }
 
-func (q queryServer) ValidityProof(goCtx context.Context, req *types.QueryValidityProofRequest) (*types.QueryValidityProofResponse, error) {
+func (q queryServer) Challenges(ctx context.Context, req *types.QueryChallengesRequest) (*types.QueryChallengesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	validator, err := q.k.StakingKeeper.ValidatorAddressCodec().StringToBytes(req.ValidatorAddress)
+	challenges, err := q.k.GetAllChallengesByShardsMerkleRoot(ctx, req.ShardsMerkleRoot)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid validator address")
+		return nil, status.Error(codes.Internal, err.Error())
 	}
-	proof, found, err := q.k.GetProof(ctx, req.MetadataUri, validator)
+
+	return &types.QueryChallengesResponse{Challenges: challenges}, nil
+}
+
+func (q queryServer) Challenge(ctx context.Context, req *types.QueryChallengeRequest) (*types.QueryChallengeResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	challenge, found, err := q.k.GetChallenge(ctx, req.ChallengeId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if !found {
-		return nil, types.ErrProofNotFound
+		return nil, status.Error(codes.NotFound, "challenge not found")
 	}
 
-	return &types.QueryValidityProofResponse{Proof: proof}, nil
-}
-
-func (q queryServer) AllValidityProofs(goCtx context.Context, req *types.QueryAllValidityProofsRequest) (*types.QueryAllValidityProofsResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	proofs, err := q.k.GetAllProofs(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	return &types.QueryAllValidityProofsResponse{Proofs: proofs}, nil
-}
-
-func (q queryServer) Invalidity(goCtx context.Context, req *types.QueryInvalidityRequest) (*types.QueryInvalidityResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	sender, err := q.k.addressCodec.StringToBytes(req.SenderAddress)
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid sender address")
-	}
-	invalidity, found, err := q.k.GetInvalidity(ctx, req.MetadataUri, sender)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	if !found {
-		return nil, types.ErrProofNotFound
-	}
-
-	return &types.QueryInvalidityResponse{Invalidity: invalidity}, nil
-}
-
-func (q queryServer) AllInvalidity(goCtx context.Context, req *types.QueryAllInvalidityRequest) (*types.QueryAllInvalidityResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid request")
-	}
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	invalidities, err := q.k.GetAllInvalidities(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &types.QueryAllInvalidityResponse{Invalidity: invalidities}, nil
+	return &types.QueryChallengeResponse{Challenge: challenge}, nil
 }

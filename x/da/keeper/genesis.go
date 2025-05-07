@@ -8,13 +8,27 @@ import (
 
 // InitGenesis initializes the module's state from a provided genesis state.
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) error {
-	for _, data := range genState.PublishedData {
-		if err := k.SetPublishedData(ctx, data); err != nil {
+	for _, snapshot := range genState.ValidatorsPowerSnapshots {
+		if err := k.SetValidatorsPowerSnapshot(ctx, snapshot); err != nil {
 			return err
 		}
 	}
-	for _, proof := range genState.Proofs {
-		if err := k.SetProof(ctx, proof); err != nil {
+	for _, commitmentKey := range genState.CommitmentKeys {
+		validator, err := k.StakingKeeper.ValidatorAddressCodec().StringToBytes(commitmentKey.Validator)
+		if err != nil {
+			return err
+		}
+		if err := k.SetCommitmentKey(ctx, validator, commitmentKey); err != nil {
+			return err
+		}
+	}
+	for _, declaration := range genState.BlobDeclarations {
+		if err := k.SetBlobDeclaration(ctx, declaration); err != nil {
+			return err
+		}
+	}
+	for _, commitment := range genState.BlobCommitments {
+		if err := k.SetBlobCommitment(ctx, commitment); err != nil {
 			return err
 		}
 	}
@@ -32,11 +46,19 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 
-	genesis.PublishedData, err = k.GetAllPublishedData(ctx)
+	genesis.ValidatorsPowerSnapshots, err = k.GetAllValidatorsPowerSnapshots(ctx)
 	if err != nil {
 		return nil, err
 	}
-	genesis.Proofs, err = k.GetAllProofs(ctx)
+	genesis.CommitmentKeys, err = k.GetAllCommitmentKeys(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.BlobDeclarations, err = k.GetAllBlobDeclarations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	genesis.BlobCommitments, err = k.GetAllBlobCommitments(ctx)
 	if err != nil {
 		return nil, err
 	}
