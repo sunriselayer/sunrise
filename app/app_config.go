@@ -200,6 +200,10 @@ var (
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						distrtypes.ModuleName,
+						// <sunrise>
+						// Before staking initGenesis
+						feemoduletypes.ModuleName,
+						// </sunrise>
 						stakingtypes.ModuleName,
 						slashingtypes.ModuleName,
 						govtypes.ModuleName,
@@ -219,7 +223,6 @@ var (
 						icatypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
-						feemoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
 						shareclassmoduletypes.ModuleName,
 						lockupmoduletypes.ModuleName,
