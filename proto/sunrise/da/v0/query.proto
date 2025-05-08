@@ -1,12 +1,12 @@
 syntax = "proto3";
-package sunrise.da.v1;
+package sunrise.da.v0;
 
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "sunrise/da/v1/params.proto";
-import "sunrise/da/v1/published_data.proto";
+import "sunrise/da/v0/params.proto";
+import "sunrise/da/v0/published_data.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
@@ -14,43 +14,43 @@ option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 service Query {
   // Params queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/params";
+    option (google.api.http).get = "/sunrise/da/v0/params";
   }
   // PublishedData queries published data
   rpc PublishedData(QueryPublishedDataRequest) returns (QueryPublishedDataResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/published-data";
+    option (google.api.http).get = "/sunrise/da/v0/published-data";
   }
   // AllPublishedData queries published data
   rpc AllPublishedData(QueryAllPublishedDataRequest) returns (QueryAllPublishedDataResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/all-published-data";
+    option (google.api.http).get = "/sunrise/da/v0/all-published-data";
   }
   // ValidityProof queries validity proof from the validator
   rpc ValidityProof(QueryValidityProofRequest) returns (QueryValidityProofResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/validity-proof";
+    option (google.api.http).get = "/sunrise/da/v0/validity-proof";
   }
   // AllValidityProofs queries all validity proofs
   rpc AllValidityProofs(QueryAllValidityProofsRequest) returns (QueryAllValidityProofsResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/all-validity-proofs";
+    option (google.api.http).get = "/sunrise/da/v0/all-validity-proofs";
   }
   // Invalidity queries invalidity report
   rpc Invalidity(QueryInvalidityRequest) returns (QueryInvalidityResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/invalidity";
+    option (google.api.http).get = "/sunrise/da/v0/invalidity";
   }
   // AllInvalidity queries all invalidity reports
   rpc AllInvalidity(QueryAllInvalidityRequest) returns (QueryAllInvalidityResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/all-invalidity";
+    option (google.api.http).get = "/sunrise/da/v0/all-invalidity";
   }
   // ValidatorShardIndices
   rpc ValidatorShardIndices(QueryValidatorShardIndicesRequest) returns (QueryValidatorShardIndicesResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/validator-shard-indices";
+    option (google.api.http).get = "/sunrise/da/v0/validator-shard-indices";
   }
   // ZkpProofThreshold
   rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/zkp-proof-threshold";
+    option (google.api.http).get = "/sunrise/da/v0/zkp-proof-threshold";
   }
   // ProofDeputy
   rpc ProofDeputy(QueryProofDeputyRequest) returns (QueryProofDeputyResponse) {
-    option (google.api.http).get = "/sunrise/v1/da/proof-deputy";
+    option (google.api.http).get = "/sunrise/da/v0/proof-deputy";
   }
 }
 

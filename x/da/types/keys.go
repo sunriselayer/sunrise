@@ -21,15 +21,15 @@ const (
 // should be changed to use collections
 var (
 	// ParamsKey is the prefix to retrieve all Params
-	ParamsKey = collections.NewPrefix("params/")
+	ParamsKey = collections.NewPrefix("v0_params/")
 
-	PublishedDataKeyPrefix             = collections.NewPrefix("published_data/")
-	PublishedDataStatusTimeIndexPrefix = collections.NewPrefix("published_data_by_status_time/")
-	ChallengeCountsKeyPrefix           = collections.NewPrefix("challenge_counts/")
-	FaultCountsKeyPrefix               = collections.NewPrefix("fault_counts/")
-	ProofKeyPrefix                     = collections.NewPrefix("proofs/")
-	InvalidityKeyPrefix                = collections.NewPrefix("invalidities/")
-	ProofDeputiesKeyPrefix             = collections.NewPrefix("proof_deputies/")
+	PublishedDataKeyPrefix             = collections.NewPrefix("v0_published_data/")
+	PublishedDataStatusTimeIndexPrefix = collections.NewPrefix("v0_published_data_by_status_time/")
+	ChallengeCountsKeyPrefix           = collections.NewPrefix("v0_challenge_counts/")
+	FaultCountsKeyPrefix               = collections.NewPrefix("v0_fault_counts/")
+	ProofKeyPrefix                     = collections.NewPrefix("v0_proofs/")
+	InvalidityKeyPrefix                = collections.NewPrefix("v0_invalidities/")
+	ProofDeputiesKeyPrefix             = collections.NewPrefix("v0_proof_deputies/")
 )
 
 var (
