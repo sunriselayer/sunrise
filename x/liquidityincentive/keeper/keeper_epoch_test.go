@@ -13,6 +13,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 func TestCreateEpoch(t *testing.T) {
@@ -48,6 +49,7 @@ func TestCreateEpoch(t *testing.T) {
 			var (
 				numVals       = 10
 				numDelegators = 5
+				moduleAddr    = simtestutil.CreateRandomAccounts(2)
 				addrs         = simtestutil.CreateRandomAccounts(numVals + numDelegators)
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
@@ -68,6 +70,21 @@ func TestCreateEpoch(t *testing.T) {
 						}
 						return nil
 					})
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(shareclasstypes.ModuleName).
+				Return(moduleAddr[0]).
+				AnyTimes()
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(types.ModuleName).
+				Return(moduleAddr[1]).
+				AnyTimes()
+			mocks.StakingKeeper.EXPECT().
+				IterateDelegations(ctx, moduleAddr[0], gomock.Any()).
+				DoAndReturn(
+					func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+						return nil
+					},
+				)
 
 			suite := tallyFixture{
 				t:        t,
