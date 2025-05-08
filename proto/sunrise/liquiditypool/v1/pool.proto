@@ -24,6 +24,6 @@ message Pool {
 message TickParams {
   // Basically 1.0001
   string price_ratio = 1 [(cosmos_proto.scalar) = "cosmos.Dec"];
-  // basically 0 and [0, 1). In the 1:1 stable pair, 0.5 would work
+  // basically 0 and (-1, 0]. In the 1:1 stable pair, -0.5 would work
   string base_offset = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
