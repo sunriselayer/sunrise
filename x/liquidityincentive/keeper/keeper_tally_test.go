@@ -12,6 +12,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
@@ -177,6 +178,7 @@ func TestTally_Standard(t *testing.T) {
 				addrs         = simtestutil.CreateRandomAccounts(numVals + numDelegators)
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
+				moduleAddr    = simtestutil.CreateRandomAccounts(2)
 			)
 			// Mocks a bunch of validators
 			mocks.StakingKeeper.EXPECT().
@@ -195,6 +197,21 @@ func TestTally_Standard(t *testing.T) {
 						}
 						return nil
 					})
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(shareclasstypes.ModuleName).
+				Return(moduleAddr[0]).
+				AnyTimes()
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(types.ModuleName).
+				Return(moduleAddr[1]).
+				AnyTimes()
+			mocks.StakingKeeper.EXPECT().
+				IterateDelegations(ctx, moduleAddr[0], gomock.Any()).
+				DoAndReturn(
+					func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+						return nil
+					},
+				)
 
 			suite := tallyFixture{
 				t:        t,
@@ -332,6 +349,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				addrs         = simtestutil.CreateRandomAccounts(numVals + numDelegators)
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
+				moduleAddr    = simtestutil.CreateRandomAccounts(2)
 			)
 			// Mocks a bunch of validators
 			mocks.StakingKeeper.EXPECT().
@@ -350,6 +368,21 @@ func TestTally_MultipleChoice(t *testing.T) {
 						}
 						return nil
 					})
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(shareclasstypes.ModuleName).
+				Return(moduleAddr[0]).
+				AnyTimes()
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(types.ModuleName).
+				Return(moduleAddr[1]).
+				AnyTimes()
+			mocks.StakingKeeper.EXPECT().
+				IterateDelegations(ctx, moduleAddr[0], gomock.Any()).
+				DoAndReturn(
+					func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+						return nil
+					},
+				)
 
 			suite := tallyFixture{
 				t:        t,

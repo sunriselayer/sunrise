@@ -48,7 +48,19 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		results[v1.OptionNoWithVeto] = math.LegacyZeroDec()
 
 		// <sunrise>
+		// Deduct shareclass module's delegations
 		shareclassAddr := authKeeper.GetModuleAddress(shareclasstypes.ModuleName)
+		err = stakingKeeper.IterateDelegations(ctx, shareclassAddr, func(index int64, delegation stakingtypes.DelegationI) (stop bool) {
+			valAddrStr := delegation.GetValidatorAddr()
+			if val, ok := validators[valAddrStr]; ok {
+				val.DelegatorDeductions = val.DelegatorDeductions.Add(delegation.GetShares())
+				validators[valAddrStr] = val
+			}
+			return false
+		})
+		if err != nil {
+			return math.LegacyDec{}, nil, err
+		}
 		// </sunrise>
 
 		// iterate over all votes, tally up the voting power of each validator
@@ -120,27 +132,22 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			}
 		}
 
-		// <sunrise>
-		// Disallow validators to vote with non voting delegators' power.
-		/*
-			// iterate over the validators again to tally their voting power
-			for _, val := range validators {
-				if len(val.Vote) == 0 {
-					continue
-				}
-
-				sharesAfterDeductions := val.DelegatorShares.Sub(val.DelegatorDeductions)
-				votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
-
-				for _, option := range val.Vote {
-					weight, _ := math.LegacyNewDecFromStr(option.Weight)
-					subPower := votingPower.Mul(weight)
-					results[option.Option] = results[option.Option].Add(subPower)
-				}
-				totalVotingPower = totalVotingPower.Add(votingPower)
+		// iterate over the validators again to tally their voting power
+		for _, val := range validators {
+			if len(val.Vote) == 0 {
+				continue
 			}
-		*/
-		// </sunrise>
+
+			sharesAfterDeductions := val.DelegatorShares.Sub(val.DelegatorDeductions)
+			votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+
+			for _, option := range val.Vote {
+				weight, _ := math.LegacyNewDecFromStr(option.Weight)
+				subPower := votingPower.Mul(weight)
+				results[option.Option] = results[option.Option].Add(subPower)
+			}
+			totalVotingPower = totalVotingPower.Add(votingPower)
+		}
 
 		// <sunrise>
 		// To cancel the effect to quorum, we need to adjust the total voting power.

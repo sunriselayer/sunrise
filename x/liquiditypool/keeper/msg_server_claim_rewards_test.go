@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"fmt"
 	"testing"
 
 	"cosmossdk.io/math"
@@ -71,7 +70,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
 				Return(consts.FeeDenom, nil).AnyTimes()
 
-			res, err := srv.CreatePool(wctx, &types.MsgCreatePool{
+			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
 				DenomBase:  "base",
 				DenomQuote: quoteDenom,
@@ -80,8 +79,6 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				BaseOffset: "0.5",
 			})
 			require.NoError(t, err)
-			fmt.Println("res", res)
-			fmt.Println("err", err)
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),
