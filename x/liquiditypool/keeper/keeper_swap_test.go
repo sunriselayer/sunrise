@@ -44,7 +44,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			denomOut:     quoteDenom,
 			feeEnabled:   false,
 			expAmountOut: math.NewInt(99994),
-			expTickIndex: -2,
+			expTickIndex: -1,
 		},
 		{
 			desc:         "Quote to base",
@@ -52,7 +52,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			denomOut:     quoteDenom,
 			feeEnabled:   false,
 			expAmountOut: math.NewInt(99994),
-			expTickIndex: -2,
+			expTickIndex: -1,
 		},
 		{
 			desc:         "Fee enabled",
@@ -60,7 +60,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 			denomOut:     quoteDenom,
 			feeEnabled:   true,
 			expAmountOut: math.NewInt(98994),
-			expTickIndex: -2,
+			expTickIndex: -1,
 		},
 		{
 			desc:       "Ran out of ticks",
@@ -109,7 +109,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -164,7 +164,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 			denomOut:     quoteDenom,
 			feeEnabled:   false,
 			expAmountOut: math.NewInt(109947),
-			expTickIndex: -11,
+			expTickIndex: -10,
 		},
 		{
 			desc:       "Ran out of ticks",
@@ -189,7 +189,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -256,7 +256,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			denomIn:      quoteDenom,
 			feeEnabled:   false,
 			expAmountIn:  math.NewInt(100006),
-			expTickIndex: 0,
+			expTickIndex: 1,
 		},
 		{
 			desc:         "Quote to base",
@@ -264,7 +264,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			denomIn:      quoteDenom,
 			feeEnabled:   false,
 			expAmountIn:  math.NewInt(100006),
-			expTickIndex: 0,
+			expTickIndex: 1,
 		},
 		{
 			desc:         "Fee enabled",
@@ -272,7 +272,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 			denomIn:      quoteDenom,
 			feeEnabled:   true,
 			expAmountIn:  math.NewInt(101017),
-			expTickIndex: 0,
+			expTickIndex: 1,
 		},
 		{
 			desc:       "Ran out of ticks",
@@ -321,7 +321,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -375,8 +375,8 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 			tokenOut:     sdk.NewInt64Coin("base", 110000),
 			denomIn:      quoteDenom,
 			feeEnabled:   false,
-			expAmountIn:  math.NewInt(110053),
-			expTickIndex: 9,
+			expAmountIn:  math.NewInt(110054),
+			expTickIndex: 10,
 		},
 		{
 			desc:       "Ran out of ticks",
@@ -401,7 +401,7 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -580,7 +580,7 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -695,7 +695,7 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 

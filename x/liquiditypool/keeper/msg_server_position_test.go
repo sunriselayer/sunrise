@@ -28,7 +28,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
-		BaseOffset: "0.5",
+		BaseOffset: "-0.5",
 	})
 	require.NoError(t, err)
 
@@ -48,9 +48,9 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.Equal(t, resp.Id, uint64(0))
-	require.Equal(t, resp.AmountBase.String(), "10001")
-	require.Equal(t, resp.AmountQuote.String(), "0")
-	require.Equal(t, resp.Liquidity, "200020000.062502249619530703")
+	require.Equal(t, resp.AmountBase.String(), "10000")
+	require.Equal(t, resp.AmountQuote.String(), "10000")
+	require.Equal(t, resp.Liquidity, "400024997.187355990380704326")
 
 	// Create 2nd position with same tick
 	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
@@ -65,9 +65,9 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.Equal(t, resp.Id, uint64(1))
-	require.Equal(t, resp.AmountBase.String(), "10001")
-	require.Equal(t, resp.AmountQuote.String(), "0")
-	require.Equal(t, resp.Liquidity, "200020000.062502249619530703")
+	require.Equal(t, resp.AmountBase.String(), "10000")
+	require.Equal(t, resp.AmountQuote.String(), "10000")
+	require.Equal(t, resp.Liquidity, "400024997.187355990380704326")
 
 	// Create 3rd position with different tick
 	resp, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
@@ -82,9 +82,9 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.Equal(t, resp.Id, uint64(2))
-	require.Equal(t, resp.AmountBase.String(), "10000")
-	require.Equal(t, resp.AmountQuote.String(), "9048")
-	require.Equal(t, resp.Liquidity, "19053571.850177307210510444")
+	require.Equal(t, resp.AmountBase.String(), "9048")
+	require.Equal(t, resp.AmountQuote.String(), "10000")
+	require.Equal(t, resp.Liquidity, "19053571.855846596797818151")
 }
 
 func TestMsgServerIncreaseLiquidity(t *testing.T) {
@@ -146,7 +146,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -167,7 +167,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, resp.AmountBase.String(), "106468")
+				require.Equal(t, resp.AmountBase.String(), "106400")
 				require.Equal(t, resp.AmountQuote.String(), "110000")
 				require.Equal(t, resp.PositionId, uint64(1))
 			}
@@ -191,7 +191,7 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
-		BaseOffset: "0.5",
+		BaseOffset: "-0.5",
 	})
 	require.NoError(t, err)
 
@@ -246,8 +246,8 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, res.AmountBase.String(), "10000")
-				require.Equal(t, res.AmountQuote.String(), "9047")
+				require.Equal(t, res.AmountBase.String(), "9047")
+				require.Equal(t, res.AmountQuote.String(), "10000")
 			}
 		})
 	}

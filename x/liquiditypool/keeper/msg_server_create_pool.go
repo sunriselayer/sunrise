@@ -58,7 +58,7 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid base offset")
 	}
-	if baseOffset.GT(math.LegacyOneDec()) {
+	if baseOffset.GT(math.LegacyZeroDec()) {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "base offset must be less than or equal to 0")
 	}
 
