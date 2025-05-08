@@ -26,13 +26,13 @@ func TestAllocateIncentive(t *testing.T) {
 			desc:            "Single token allocation",
 			poolId:          0,
 			allocation:      sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
-			expAccumulation: "0.000052483597714026xyz",
+			expAccumulation: "0.000052483597698410xyz",
 		},
 		{
 			desc:            "Multiple tokens allocation",
 			poolId:          0,
 			allocation:      sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
-			expAccumulation: "0.000052483597714026uvw,0.000052483597714026xyz",
+			expAccumulation: "0.000052483597698410uvw,0.000052483597698410xyz",
 		},
 		{
 			desc:            "Not available pool",
@@ -65,7 +65,7 @@ func TestAllocateIncentive(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -76,7 +76,7 @@ func TestAllocateIncentive(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
@@ -101,7 +101,7 @@ func TestAllocateIncentive(t *testing.T) {
 				resp, err := k.GetFeeAccumulator(wctx, tc.poolId)
 				require.NoError(t, err)
 				require.Equal(t, resp.AccumValue.String(), tc.expAccumulation)
-				require.Equal(t, resp.TotalShares, "19053571.850177307210510444")
+				require.Equal(t, resp.TotalShares, "19053571.855846596797818151")
 			}
 		})
 	}

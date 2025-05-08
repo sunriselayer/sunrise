@@ -31,7 +31,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				PositionIds: []uint64{0},
 			},
 			allocation: sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
-			expRewards: sdk.Coins{sdk.NewInt64Coin("xyz", 999)},
+			expRewards: sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
 		},
 		{
 			desc: "Multiple token rewards",
@@ -40,7 +40,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				PositionIds: []uint64{0},
 			},
 			allocation: sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
-			expRewards: sdk.Coins{sdk.NewInt64Coin("uvw", 999), sdk.NewInt64Coin("xyz", 999)},
+			expRewards: sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
 		},
 		{
 			desc: "Empty rewards",
@@ -76,7 +76,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
 
