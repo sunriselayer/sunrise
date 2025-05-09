@@ -30,11 +30,6 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) er
 		}
 		gauges = append(gauges, gauge)
 	}
-	// Remove all votes
-	err = k.RemoveAllVotes(ctx)
-	if err != nil {
-		return err
-	}
 
 	params, err := k.Params.Get(ctx)
 	if err != nil {

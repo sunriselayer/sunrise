@@ -66,6 +66,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	}
 	// </sunrise>
 
+	votesToRemove := []sdk.AccAddress{}
 	// iterate over all votes, tally up the voting power of each validator
 	if err := k.Votes.Walk(ctx, nil, func(key sdk.AccAddress, vote types.Vote) (bool, error) {
 		// if validator, just record it in the map
@@ -77,6 +78,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		// <sunrise>
 		// Skip shareclass module's votes
 		if sdk.AccAddress(voter).Equals(shareclassAddr) {
+			votesToRemove = append(votesToRemove, key)
 			return false, nil
 		}
 		// </sunrise>
@@ -122,9 +124,17 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 			return false, err
 		}
 
+		votesToRemove = append(votesToRemove, key)
 		return false, nil
 	}); err != nil {
 		return []types.TallyResult{}, err
+	}
+
+	// remove all votes from store
+	for _, key := range votesToRemove {
+		if err := k.Votes.Remove(ctx, key); err != nil {
+			return []types.TallyResult{}, err
+		}
 	}
 
 	// iterate over the validators again to tally their voting power
