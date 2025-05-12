@@ -8,8 +8,7 @@ import (
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors" // aliased by user
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/types/query" // Still needed for PageResponse type in QueryBribeAllocationsResponse
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors" // Still needed for PageResponse type in QueryBribeAllocationsResponse
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -23,8 +22,6 @@ func (q queryServer) BribeAllocations(ctx context.Context, req *types.QueryBribe
 	}
 
 	var allocations []types.BribeAllocation
-	var err error
-
 	if req.Address != "" {
 		addr, errDecode := q.k.addressCodec.StringToBytes(req.Address)
 		if errDecode != nil {
@@ -43,37 +40,21 @@ func (q queryServer) BribeAllocations(ctx context.Context, req *types.QueryBribe
 			return nil, status.Errorf(codes.Internal, "failed to query bribe allocations by address %s: %v", req.Address, errWalk)
 		}
 	} else {
-
-		// No address filter, retrieve all allocations.
-		var pageResIgnored *query.PageResponse
-		// If req.Pagination is always nil because we removed it from the request message (or should be ignored),
-		// then we can pass nil directly. Otherwise, we ensure it's nil.
-		finalPaginationReq := req.Pagination // req.Pagination might still exist on the type
-		if finalPaginationReq != nil {       // We ignore it by choice here
-			finalPaginationReq = nil
-		}
-
-		allocations, pageResIgnored, err = query.CollectionPaginate(
-			ctx,
-			q.k.BribeAllocations,
-			finalPaginationReq, // Pass nil to fetch all
-			func(key collections.Triple[sdk.AccAddress, uint64, uint64], value types.BribeAllocation) (types.BribeAllocation, error) {
-				return value, nil
-			},
-		)
+		a, err := q.k.GetAllBribeAllocations(ctx)
 		if err != nil {
-			q.k.Logger().Error("failed to retrieve all bribe allocations", "error", err)
-			return nil, status.Errorf(codes.Internal, "failed to query all bribe allocations: %v", err)
+			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
+				q.k.Logger().Error("failed to get all bribe allocations", "error", err)
+				return nil, status.Errorf(codes.Internal, "failed to query all bribe allocations: %v", err)
+			}
 		}
-		_ = pageResIgnored
+		if a != nil {
+			allocations = a
+		}
 	}
 
 	// Pagination field in response is nil.
-	return &types.QueryBribeAllocationsResponse{BribeAllocations: allocations, Pagination: nil}, nil
+	return &types.QueryBribeAllocationsResponse{BribeAllocations: allocations}, nil
 }
-
-// BribeAllocationsByAddress DEPRECATED: Use BribeAllocations with address filter.
-// func (q queryServer) BribeAllocationsByAddress(ctx context.Context, req *types.QueryBribeAllocationsByAddressRequest) (*types.QueryBribeAllocationsByAddressResponse, error) { ... }
 
 // BribeAllocation queries a BribeAllocation by address, epoch ID, and pool ID.
 func (q queryServer) BribeAllocation(ctx context.Context, req *types.QueryBribeAllocationRequest) (*types.QueryBribeAllocationResponse, error) {
