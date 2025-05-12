@@ -48,7 +48,6 @@ service Query {
   }
 
   // Bribes queries bribes with optional filters for epoch_id and pool_id.
-  // Pagination is supported.
   rpc Bribes(QueryBribesRequest) returns (QueryBribesResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes";
   }
@@ -58,7 +57,6 @@ service Query {
   }
 
   // BribeAllocations queries bribe allocations with an optional filter for address.
-  // Pagination is supported.
   rpc BribeAllocations(QueryBribeAllocationsRequest) returns (QueryBribeAllocationsResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe-allocations";
   }

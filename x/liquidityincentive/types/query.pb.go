@@ -1203,12 +1203,10 @@ type QueryClient interface {
 	// Votes
 	Votes(ctx context.Context, in *QueryVotesRequest, opts ...grpc.CallOption) (*QueryVotesResponse, error)
 	// Bribes queries bribes with optional filters for epoch_id and pool_id.
-	// Pagination is supported.
 	Bribes(ctx context.Context, in *QueryBribesRequest, opts ...grpc.CallOption) (*QueryBribesResponse, error)
 	// Bribe queries a Bribe by its ID.
 	Bribe(ctx context.Context, in *QueryBribeRequest, opts ...grpc.CallOption) (*QueryBribeResponse, error)
 	// BribeAllocations queries bribe allocations with an optional filter for address.
-	// Pagination is supported.
 	BribeAllocations(ctx context.Context, in *QueryBribeAllocationsRequest, opts ...grpc.CallOption) (*QueryBribeAllocationsResponse, error)
 	// BribeAllocation queries a BribeAllocation by address, epoch ID, and pool ID.
 	BribeAllocation(ctx context.Context, in *QueryBribeAllocationRequest, opts ...grpc.CallOption) (*QueryBribeAllocationResponse, error)
@@ -1338,12 +1336,10 @@ type QueryServer interface {
 	// Votes
 	Votes(context.Context, *QueryVotesRequest) (*QueryVotesResponse, error)
 	// Bribes queries bribes with optional filters for epoch_id and pool_id.
-	// Pagination is supported.
 	Bribes(context.Context, *QueryBribesRequest) (*QueryBribesResponse, error)
 	// Bribe queries a Bribe by its ID.
 	Bribe(context.Context, *QueryBribeRequest) (*QueryBribeResponse, error)
 	// BribeAllocations queries bribe allocations with an optional filter for address.
-	// Pagination is supported.
 	BribeAllocations(context.Context, *QueryBribeAllocationsRequest) (*QueryBribeAllocationsResponse, error)
 	// BribeAllocation queries a BribeAllocation by address, epoch ID, and pool ID.
 	BribeAllocation(context.Context, *QueryBribeAllocationRequest) (*QueryBribeAllocationResponse, error)
