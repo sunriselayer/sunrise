@@ -144,15 +144,13 @@ message QueryVotesResponse {
 
 // QueryBribesRequest
 message QueryBribesRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-  string epoch_id = 2; // Optional filter by epoch_id. If empty, not applied.
-  string pool_id = 3;  // Optional filter by pool_id. If empty, not applied.
+  string epoch_id = 1; // Optional filter by epoch_id. If empty, not applied.
+  string pool_id = 2;  // Optional filter by pool_id. If empty, not applied.
 }
 
 // QueryBribesResponse
 message QueryBribesResponse {
   repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryBribeRequest
@@ -167,15 +165,13 @@ message QueryBribeResponse {
 
 // QueryBribeAllocationsRequest
 message QueryBribeAllocationsRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-  string address = 2; // Optional filter by address. If empty, not applied.
+  string address = 1; // Optional filter by address. If empty, not applied.
 }
 
 
 // QueryBribeAllocationsResponse
 message QueryBribeAllocationsResponse {
   repeated BribeAllocation bribe_allocations = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryBribeAllocationRequest
