@@ -22,12 +22,12 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	feeDenom, err := k.feeKeeper.FeeDenom(cacheCtx)
 	if err != nil {
 		k.Logger().Error("failed to get fee denom", "error", err)
-		return err
+		return nil
 	}
 	bondDenom, err := k.stakingKeeper.BondDenom(cacheCtx)
 	if err != nil {
 		k.Logger().Error("failed to get bond denom", "error", err)
-		return err
+		return nil
 	}
 
 	// Check the Gauge count is not zero.
@@ -35,7 +35,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	lastEpoch, found, err := k.GetLastEpoch(cacheCtx)
 	if err != nil {
 		k.Logger().Error("failed to get last epoch", "error", err)
-		return err
+		return nil
 	}
 	if !found {
 		k.Logger().Info("last epoch not found")
@@ -58,25 +58,25 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	params, err := k.Params.Get(cacheCtx)
 	if err != nil {
 		k.Logger().Error("failed to get params", "error", err)
-		return err
+		return nil
 	}
 	stakingRewardRatioDec, err := math.LegacyNewDecFromStr(params.StakingRewardRatio)
 	if err != nil {
 		k.Logger().Error("failed to parse staking reward ratio", "error", err)
-		return err
+		return nil
 	}
 	incentiveAmount := feeCollectorAmountDec.Mul(math.LegacyOneDec().Sub(stakingRewardRatioDec)).TruncateInt()
 	err = k.bankKeeper.SendCoinsFromModuleToModule(cacheCtx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(feeDenom, incentiveAmount)))
 	if err != nil {
 		k.Logger().Error("failed to send coins from fee collector to liquidity incentive module", "error", err)
-		return err
+		return nil
 	}
 
 	// Convert fee denom to bond denom in the `x/liquidityincentive` module account.
 	err = k.tokenConverterKeeper.ConvertReverse(cacheCtx, incentiveAmount, incentiveModule)
 	if err != nil {
 		k.Logger().Error("failed to convert fee denom to bond denom", "error", err)
-		return err
+		return nil
 	}
 
 	// Get `x/liquidityincentive` module's incentive balance.
@@ -95,7 +95,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 			)
 			if err != nil {
 				k.Logger().Error("failure in incentive allocation", "error", err)
-				return err
+				return nil
 			}
 		}
 	}
