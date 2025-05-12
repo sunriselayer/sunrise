@@ -62,7 +62,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						{ProtoField: "owner"},
 						{ProtoField: "start_time"},
 						{ProtoField: "end_time"},
-						{ProtoField: "amount"},
+						{ProtoField: "amount", Varargs: true},
 					},
 				},
 				{

@@ -47,18 +47,24 @@ func (k Keeper) StartNewEpoch(ctx context.Context, msg *types.MsgStartNewEpoch) 
 	if err != nil {
 		return nil, err
 	}
-	if len(epochs) > 2 {
-		epoch := epochs[0]
-		err := k.RemoveEpoch(sdkCtx, epoch.Id)
+	params, err := k.Params.Get(sdkCtx)
+	if err != nil {
+		return nil, err
+	}
+	for len(epochs) > int(params.BribeClaimEpochs)+1 {
+		epochToRemove := epochs[0]
+		err := k.RemoveEpoch(sdkCtx, epochToRemove.Id)
 		if err != nil {
 			return nil, err
 		}
-		for _, gauge := range epoch.Gauges {
+		for _, gauge := range epochToRemove.Gauges {
 			err := k.RemoveGauge(sdkCtx, gauge.PreviousEpochId, gauge.PoolId)
 			if err != nil {
 				return nil, err
 			}
 		}
+		// Remove the processed epoch from the slice to correctly check the condition in the next iteration
+		epochs = epochs[1:]
 	}
 
 	// Event is emitted in CreateEpoch
