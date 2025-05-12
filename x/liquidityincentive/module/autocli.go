@@ -75,7 +75,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "epoch_id"},
 						{ProtoField: "pool_id"},
-						{ProtoField: "amount"},
+						{ProtoField: "amount", Varargs: true},
 					},
 				},
 				{
