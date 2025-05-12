@@ -47,36 +47,22 @@ service Query {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/votes";
   }
 
-  // Bribes
+  // Bribes queries bribes with optional filters for epoch_id and pool_id.
+  // Pagination is supported.
   rpc Bribes(QueryBribesRequest) returns (QueryBribesResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes";
   }
-  // Bribe
+  // Bribe queries a Bribe by its ID.
   rpc Bribe(QueryBribeRequest) returns (QueryBribeResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/{id}";
   }
-  // BribesByEpochId
-  rpc BribesByEpochId(QueryBribesByEpochIdRequest) returns (QueryBribesByEpochIdResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/epoch/{epoch_id}";
-  }
-  // BribesByPoolId
-  rpc BribesByPoolId(QueryBribesByPoolIdRequest) returns (QueryBribesByPoolIdResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/pool/{pool_id}";
-  }
-  // BribesByEpochAndPoolId
-  rpc BribesByEpochAndPoolId(QueryBribesByEpochAndPoolIdRequest) returns (QueryBribesByEpochAndPoolIdResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribes/epoch/{epoch_id}/pool/{pool_id}";
-  }
 
-  // BribeAllocations
+  // BribeAllocations queries bribe allocations with an optional filter for address.
+  // Pagination is supported.
   rpc BribeAllocations(QueryBribeAllocationsRequest) returns (QueryBribeAllocationsResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe-allocations";
   }
-  // BribeAllocationsByAddress
-  rpc BribeAllocationsByAddress(QueryBribeAllocationsByAddressRequest) returns (QueryBribeAllocationsByAddressResponse) {
-    option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe_allocations/{address}";
-  }
-  // BribeAllocation
+  // BribeAllocation queries a BribeAllocation by address, epoch ID, and pool ID.
   rpc BribeAllocation(QueryBribeAllocationRequest) returns (QueryBribeAllocationResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe-allocations/{address}/{epoch_id}/{pool_id}";
   }
@@ -159,6 +145,8 @@ message QueryVotesResponse {
 // QueryBribesRequest
 message QueryBribesRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  string epoch_id = 2; // Optional filter by epoch_id. If empty, not applied.
+  string pool_id = 3;  // Optional filter by pool_id. If empty, not applied.
 }
 
 // QueryBribesResponse
@@ -177,43 +165,10 @@ message QueryBribeResponse {
   Bribe bribe = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryBribesByEpochIdRequest
-message QueryBribesByEpochIdRequest {
-  uint64 epoch_id = 1;
-}
-
-// QueryBribesByEpochIdResponse
-message QueryBribesByEpochIdResponse {
-  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-// QueryBribesByPoolIdRequest
-message QueryBribesByPoolIdRequest {
-  uint64 pool_id = 1;
-}
-
-// QueryBribesByPoolIdResponse
-message QueryBribesByPoolIdResponse {
-  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-// QueryBribesByEpochAndPoolIdRequest
-message QueryBribesByEpochAndPoolIdRequest {
-  uint64 epoch_id = 1;
-  uint64 pool_id = 2;
-}
-
-// QueryBribesByEpochAndPoolIdResponse
-message QueryBribesByEpochAndPoolIdResponse {
-  repeated Bribe bribes = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
 // QueryBribeAllocationsRequest
 message QueryBribeAllocationsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  string address = 2; // Optional filter by address. If empty, not applied.
 }
 
 
@@ -223,21 +178,11 @@ message QueryBribeAllocationsResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-// QueryBribeAllocationsByAddressRequest
-message QueryBribeAllocationsByAddressRequest {
-  string address = 1;
-}
-
-// QueryBribeAllocationsByAddressResponse
-message QueryBribeAllocationsByAddressResponse {
-  repeated BribeAllocation bribe_allocations = 1 [(gogoproto.nullable) = false];
-}
-
 // QueryBribeAllocationRequest
 message QueryBribeAllocationRequest {
   string address = 1;
-  uint64 epoch_id = 2;
-  uint64 pool_id = 3;
+  string epoch_id = 2;
+  string pool_id = 3;
 }
 
 // QueryBribeAllocationResponse
