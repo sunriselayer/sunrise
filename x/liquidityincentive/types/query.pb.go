@@ -696,6 +696,8 @@ func (m *QueryVotesResponse) GetPagination() *query.PageResponse {
 // QueryBribesRequest
 type QueryBribesRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	EpochId    string             `protobuf:"bytes,2,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
+	PoolId     string             `protobuf:"bytes,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 }
 
 func (m *QueryBribesRequest) Reset()         { *m = QueryBribesRequest{} }
@@ -736,6 +738,20 @@ func (m *QueryBribesRequest) GetPagination() *query.PageRequest {
 		return m.Pagination
 	}
 	return nil
+}
+
+func (m *QueryBribesRequest) GetEpochId() string {
+	if m != nil {
+		return m.EpochId
+	}
+	return ""
+}
+
+func (m *QueryBribesRequest) GetPoolId() string {
+	if m != nil {
+		return m.PoolId
+	}
+	return ""
 }
 
 // QueryBribesResponse
@@ -881,318 +897,17 @@ func (m *QueryBribeResponse) GetBribe() Bribe {
 	return Bribe{}
 }
 
-// QueryBribesByEpochIdRequest
-type QueryBribesByEpochIdRequest struct {
-	EpochId uint64 `protobuf:"varint,1,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
-}
-
-func (m *QueryBribesByEpochIdRequest) Reset()         { *m = QueryBribesByEpochIdRequest{} }
-func (m *QueryBribesByEpochIdRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryBribesByEpochIdRequest) ProtoMessage()    {}
-func (*QueryBribesByEpochIdRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{18}
-}
-func (m *QueryBribesByEpochIdRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribesByEpochIdRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribesByEpochIdRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribesByEpochIdRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribesByEpochIdRequest.Merge(m, src)
-}
-func (m *QueryBribesByEpochIdRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribesByEpochIdRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribesByEpochIdRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribesByEpochIdRequest proto.InternalMessageInfo
-
-func (m *QueryBribesByEpochIdRequest) GetEpochId() uint64 {
-	if m != nil {
-		return m.EpochId
-	}
-	return 0
-}
-
-// QueryBribesByEpochIdResponse
-type QueryBribesByEpochIdResponse struct {
-	Bribes     []Bribe             `protobuf:"bytes,1,rep,name=bribes,proto3" json:"bribes"`
-	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryBribesByEpochIdResponse) Reset()         { *m = QueryBribesByEpochIdResponse{} }
-func (m *QueryBribesByEpochIdResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryBribesByEpochIdResponse) ProtoMessage()    {}
-func (*QueryBribesByEpochIdResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{19}
-}
-func (m *QueryBribesByEpochIdResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribesByEpochIdResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribesByEpochIdResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribesByEpochIdResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribesByEpochIdResponse.Merge(m, src)
-}
-func (m *QueryBribesByEpochIdResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribesByEpochIdResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribesByEpochIdResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribesByEpochIdResponse proto.InternalMessageInfo
-
-func (m *QueryBribesByEpochIdResponse) GetBribes() []Bribe {
-	if m != nil {
-		return m.Bribes
-	}
-	return nil
-}
-
-func (m *QueryBribesByEpochIdResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
-}
-
-// QueryBribesByPoolIdRequest
-type QueryBribesByPoolIdRequest struct {
-	PoolId uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-}
-
-func (m *QueryBribesByPoolIdRequest) Reset()         { *m = QueryBribesByPoolIdRequest{} }
-func (m *QueryBribesByPoolIdRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryBribesByPoolIdRequest) ProtoMessage()    {}
-func (*QueryBribesByPoolIdRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{20}
-}
-func (m *QueryBribesByPoolIdRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribesByPoolIdRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribesByPoolIdRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribesByPoolIdRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribesByPoolIdRequest.Merge(m, src)
-}
-func (m *QueryBribesByPoolIdRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribesByPoolIdRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribesByPoolIdRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribesByPoolIdRequest proto.InternalMessageInfo
-
-func (m *QueryBribesByPoolIdRequest) GetPoolId() uint64 {
-	if m != nil {
-		return m.PoolId
-	}
-	return 0
-}
-
-// QueryBribesByPoolIdResponse
-type QueryBribesByPoolIdResponse struct {
-	Bribes     []Bribe             `protobuf:"bytes,1,rep,name=bribes,proto3" json:"bribes"`
-	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryBribesByPoolIdResponse) Reset()         { *m = QueryBribesByPoolIdResponse{} }
-func (m *QueryBribesByPoolIdResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryBribesByPoolIdResponse) ProtoMessage()    {}
-func (*QueryBribesByPoolIdResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{21}
-}
-func (m *QueryBribesByPoolIdResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribesByPoolIdResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribesByPoolIdResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribesByPoolIdResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribesByPoolIdResponse.Merge(m, src)
-}
-func (m *QueryBribesByPoolIdResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribesByPoolIdResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribesByPoolIdResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribesByPoolIdResponse proto.InternalMessageInfo
-
-func (m *QueryBribesByPoolIdResponse) GetBribes() []Bribe {
-	if m != nil {
-		return m.Bribes
-	}
-	return nil
-}
-
-func (m *QueryBribesByPoolIdResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
-}
-
-// QueryBribesByEpochAndPoolIdRequest
-type QueryBribesByEpochAndPoolIdRequest struct {
-	EpochId uint64 `protobuf:"varint,1,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
-	PoolId  uint64 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-}
-
-func (m *QueryBribesByEpochAndPoolIdRequest) Reset()         { *m = QueryBribesByEpochAndPoolIdRequest{} }
-func (m *QueryBribesByEpochAndPoolIdRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryBribesByEpochAndPoolIdRequest) ProtoMessage()    {}
-func (*QueryBribesByEpochAndPoolIdRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{22}
-}
-func (m *QueryBribesByEpochAndPoolIdRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribesByEpochAndPoolIdRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribesByEpochAndPoolIdRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribesByEpochAndPoolIdRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribesByEpochAndPoolIdRequest.Merge(m, src)
-}
-func (m *QueryBribesByEpochAndPoolIdRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribesByEpochAndPoolIdRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribesByEpochAndPoolIdRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribesByEpochAndPoolIdRequest proto.InternalMessageInfo
-
-func (m *QueryBribesByEpochAndPoolIdRequest) GetEpochId() uint64 {
-	if m != nil {
-		return m.EpochId
-	}
-	return 0
-}
-
-func (m *QueryBribesByEpochAndPoolIdRequest) GetPoolId() uint64 {
-	if m != nil {
-		return m.PoolId
-	}
-	return 0
-}
-
-// QueryBribesByEpochAndPoolIdResponse
-type QueryBribesByEpochAndPoolIdResponse struct {
-	Bribes     []Bribe             `protobuf:"bytes,1,rep,name=bribes,proto3" json:"bribes"`
-	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryBribesByEpochAndPoolIdResponse) Reset()         { *m = QueryBribesByEpochAndPoolIdResponse{} }
-func (m *QueryBribesByEpochAndPoolIdResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryBribesByEpochAndPoolIdResponse) ProtoMessage()    {}
-func (*QueryBribesByEpochAndPoolIdResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{23}
-}
-func (m *QueryBribesByEpochAndPoolIdResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribesByEpochAndPoolIdResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribesByEpochAndPoolIdResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribesByEpochAndPoolIdResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribesByEpochAndPoolIdResponse.Merge(m, src)
-}
-func (m *QueryBribesByEpochAndPoolIdResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribesByEpochAndPoolIdResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribesByEpochAndPoolIdResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribesByEpochAndPoolIdResponse proto.InternalMessageInfo
-
-func (m *QueryBribesByEpochAndPoolIdResponse) GetBribes() []Bribe {
-	if m != nil {
-		return m.Bribes
-	}
-	return nil
-}
-
-func (m *QueryBribesByEpochAndPoolIdResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
-}
-
 // QueryBribeAllocationsRequest
 type QueryBribeAllocationsRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Address    string             `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
 }
 
 func (m *QueryBribeAllocationsRequest) Reset()         { *m = QueryBribeAllocationsRequest{} }
 func (m *QueryBribeAllocationsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryBribeAllocationsRequest) ProtoMessage()    {}
 func (*QueryBribeAllocationsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{24}
+	return fileDescriptor_39654157ab2e8902, []int{18}
 }
 func (m *QueryBribeAllocationsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1228,6 +943,13 @@ func (m *QueryBribeAllocationsRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
+func (m *QueryBribeAllocationsRequest) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
 // QueryBribeAllocationsResponse
 type QueryBribeAllocationsResponse struct {
 	BribeAllocations []BribeAllocation   `protobuf:"bytes,1,rep,name=bribe_allocations,json=bribeAllocations,proto3" json:"bribe_allocations"`
@@ -1238,7 +960,7 @@ func (m *QueryBribeAllocationsResponse) Reset()         { *m = QueryBribeAllocat
 func (m *QueryBribeAllocationsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryBribeAllocationsResponse) ProtoMessage()    {}
 func (*QueryBribeAllocationsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{25}
+	return fileDescriptor_39654157ab2e8902, []int{19}
 }
 func (m *QueryBribeAllocationsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1281,110 +1003,18 @@ func (m *QueryBribeAllocationsResponse) GetPagination() *query.PageResponse {
 	return nil
 }
 
-// QueryBribeAllocationsByAddressRequest
-type QueryBribeAllocationsByAddressRequest struct {
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-}
-
-func (m *QueryBribeAllocationsByAddressRequest) Reset()         { *m = QueryBribeAllocationsByAddressRequest{} }
-func (m *QueryBribeAllocationsByAddressRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryBribeAllocationsByAddressRequest) ProtoMessage()    {}
-func (*QueryBribeAllocationsByAddressRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{26}
-}
-func (m *QueryBribeAllocationsByAddressRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribeAllocationsByAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribeAllocationsByAddressRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribeAllocationsByAddressRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribeAllocationsByAddressRequest.Merge(m, src)
-}
-func (m *QueryBribeAllocationsByAddressRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribeAllocationsByAddressRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribeAllocationsByAddressRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribeAllocationsByAddressRequest proto.InternalMessageInfo
-
-func (m *QueryBribeAllocationsByAddressRequest) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
-
-// QueryBribeAllocationsByAddressResponse
-type QueryBribeAllocationsByAddressResponse struct {
-	BribeAllocations []BribeAllocation `protobuf:"bytes,1,rep,name=bribe_allocations,json=bribeAllocations,proto3" json:"bribe_allocations"`
-}
-
-func (m *QueryBribeAllocationsByAddressResponse) Reset() {
-	*m = QueryBribeAllocationsByAddressResponse{}
-}
-func (m *QueryBribeAllocationsByAddressResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryBribeAllocationsByAddressResponse) ProtoMessage()    {}
-func (*QueryBribeAllocationsByAddressResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{27}
-}
-func (m *QueryBribeAllocationsByAddressResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryBribeAllocationsByAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryBribeAllocationsByAddressResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryBribeAllocationsByAddressResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBribeAllocationsByAddressResponse.Merge(m, src)
-}
-func (m *QueryBribeAllocationsByAddressResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryBribeAllocationsByAddressResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBribeAllocationsByAddressResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryBribeAllocationsByAddressResponse proto.InternalMessageInfo
-
-func (m *QueryBribeAllocationsByAddressResponse) GetBribeAllocations() []BribeAllocation {
-	if m != nil {
-		return m.BribeAllocations
-	}
-	return nil
-}
-
 // QueryBribeAllocationRequest
 type QueryBribeAllocationRequest struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	EpochId uint64 `protobuf:"varint,2,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
-	PoolId  uint64 `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	EpochId string `protobuf:"bytes,2,opt,name=epoch_id,json=epochId,proto3" json:"epoch_id,omitempty"`
+	PoolId  string `protobuf:"bytes,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 }
 
 func (m *QueryBribeAllocationRequest) Reset()         { *m = QueryBribeAllocationRequest{} }
 func (m *QueryBribeAllocationRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryBribeAllocationRequest) ProtoMessage()    {}
 func (*QueryBribeAllocationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{28}
+	return fileDescriptor_39654157ab2e8902, []int{20}
 }
 func (m *QueryBribeAllocationRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1420,18 +1050,18 @@ func (m *QueryBribeAllocationRequest) GetAddress() string {
 	return ""
 }
 
-func (m *QueryBribeAllocationRequest) GetEpochId() uint64 {
+func (m *QueryBribeAllocationRequest) GetEpochId() string {
 	if m != nil {
 		return m.EpochId
 	}
-	return 0
+	return ""
 }
 
-func (m *QueryBribeAllocationRequest) GetPoolId() uint64 {
+func (m *QueryBribeAllocationRequest) GetPoolId() string {
 	if m != nil {
 		return m.PoolId
 	}
-	return 0
+	return ""
 }
 
 // QueryBribeAllocationResponse
@@ -1443,7 +1073,7 @@ func (m *QueryBribeAllocationResponse) Reset()         { *m = QueryBribeAllocati
 func (m *QueryBribeAllocationResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryBribeAllocationResponse) ProtoMessage()    {}
 func (*QueryBribeAllocationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39654157ab2e8902, []int{29}
+	return fileDescriptor_39654157ab2e8902, []int{21}
 }
 func (m *QueryBribeAllocationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1498,16 +1128,8 @@ func init() {
 	proto.RegisterType((*QueryBribesResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribesResponse")
 	proto.RegisterType((*QueryBribeRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribeRequest")
 	proto.RegisterType((*QueryBribeResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribeResponse")
-	proto.RegisterType((*QueryBribesByEpochIdRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribesByEpochIdRequest")
-	proto.RegisterType((*QueryBribesByEpochIdResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribesByEpochIdResponse")
-	proto.RegisterType((*QueryBribesByPoolIdRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribesByPoolIdRequest")
-	proto.RegisterType((*QueryBribesByPoolIdResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribesByPoolIdResponse")
-	proto.RegisterType((*QueryBribesByEpochAndPoolIdRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribesByEpochAndPoolIdRequest")
-	proto.RegisterType((*QueryBribesByEpochAndPoolIdResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribesByEpochAndPoolIdResponse")
 	proto.RegisterType((*QueryBribeAllocationsRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribeAllocationsRequest")
 	proto.RegisterType((*QueryBribeAllocationsResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribeAllocationsResponse")
-	proto.RegisterType((*QueryBribeAllocationsByAddressRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribeAllocationsByAddressRequest")
-	proto.RegisterType((*QueryBribeAllocationsByAddressResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribeAllocationsByAddressResponse")
 	proto.RegisterType((*QueryBribeAllocationRequest)(nil), "sunrise.liquidityincentive.v1.QueryBribeAllocationRequest")
 	proto.RegisterType((*QueryBribeAllocationResponse)(nil), "sunrise.liquidityincentive.v1.QueryBribeAllocationResponse")
 }
@@ -1517,87 +1139,74 @@ func init() {
 }
 
 var fileDescriptor_39654157ab2e8902 = []byte{
-	// 1279 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x59, 0xcf, 0x6f, 0x1b, 0x55,
-	0x10, 0xce, 0x73, 0x63, 0x07, 0x1e, 0x52, 0x93, 0x3c, 0xaa, 0xd2, 0x2e, 0xad, 0x41, 0x9b, 0x26,
-	0x85, 0x28, 0xdd, 0x8d, 0x03, 0x44, 0x21, 0x0d, 0xd0, 0x18, 0xd2, 0x50, 0x04, 0x22, 0xb5, 0x50,
-	0xa9, 0x0a, 0x52, 0xb4, 0xb6, 0x17, 0x77, 0x85, 0xe3, 0x75, 0xbc, 0x6b, 0x0b, 0x2b, 0x8a, 0x90,
-	0x38, 0x21, 0x71, 0x41, 0x42, 0x5c, 0x38, 0x54, 0x85, 0x23, 0xdc, 0xb8, 0x71, 0xe3, 0x82, 0xa8,
-	0xe0, 0x52, 0x89, 0x0b, 0x27, 0x84, 0x12, 0x8e, 0x88, 0xbf, 0x01, 0xed, 0xbc, 0x79, 0xde, 0x1f,
-	0xb6, 0xb3, 0x6f, 0x37, 0x06, 0xe5, 0x66, 0x7b, 0xdf, 0xcc, 0x7c, 0xdf, 0x37, 0xf3, 0x66, 0x67,
-	0x64, 0xfa, 0xac, 0xd3, 0x6e, 0xb4, 0x2c, 0xc7, 0xd4, 0xeb, 0xd6, 0x6e, 0xdb, 0xaa, 0x5a, 0x6e,
-	0xd7, 0x6a, 0x54, 0xcc, 0x86, 0x6b, 0x75, 0x4c, 0xbd, 0x53, 0xd0, 0x77, 0xdb, 0x66, 0xab, 0xab,
-	0x35, 0x5b, 0xb6, 0x6b, 0xb3, 0x8b, 0x78, 0x54, 0xeb, 0x3f, 0xaa, 0x75, 0x0a, 0xca, 0x7c, 0xc5,
-	0x76, 0x76, 0x6c, 0x47, 0x2f, 0x1b, 0x8e, 0xc9, 0xed, 0xf4, 0x4e, 0xa1, 0x6c, 0xba, 0x46, 0x41,
-	0x6f, 0x1a, 0x35, 0xab, 0x61, 0xb8, 0x96, 0xdd, 0xe0, 0xae, 0x94, 0x33, 0x35, 0xbb, 0x66, 0xc3,
-	0x47, 0xdd, 0xfb, 0x84, 0xbf, 0x5e, 0xa8, 0xd9, 0x76, 0xad, 0x6e, 0xea, 0x46, 0xd3, 0xd2, 0x8d,
-	0x46, 0xc3, 0x76, 0xc1, 0xc4, 0xc1, 0xa7, 0x31, 0x48, 0xcd, 0xa6, 0x5d, 0xb9, 0x2b, 0x77, 0xb4,
-	0x66, 0xb4, 0x6b, 0x26, 0x1e, 0x9d, 0x3f, 0xfa, 0x68, 0xd3, 0x68, 0x19, 0x3b, 0x92, 0x08, 0xca,
-	0x2d, 0xab, 0x8c, 0x6e, 0xd5, 0x33, 0x94, 0xdd, 0xf4, 0x24, 0xd8, 0x02, 0xfb, 0x92, 0xb9, 0xdb,
-	0x36, 0x1d, 0x57, 0xbd, 0x43, 0x1f, 0x0f, 0xfd, 0xea, 0x34, 0xed, 0x86, 0x63, 0xb2, 0x57, 0x69,
-	0x8e, 0xc7, 0x39, 0x47, 0x9e, 0x26, 0xcf, 0x3c, 0xb6, 0x34, 0xab, 0x1d, 0xa9, 0xb4, 0xc6, 0xcd,
-	0x8b, 0xe3, 0x0f, 0xfe, 0x78, 0x6a, 0xac, 0x84, 0xa6, 0xea, 0x0c, 0x9d, 0x06, 0xdf, 0x1b, 0x9e,
-	0x0e, 0x18, 0x90, 0x9d, 0xa6, 0x19, 0xab, 0x0a, 0x5e, 0xc7, 0x4b, 0x19, 0xab, 0xaa, 0xde, 0x42,
-	0x58, 0x78, 0x08, 0xe3, 0x5f, 0xa3, 0x59, 0x50, 0x0f, 0xc3, 0x5f, 0x8a, 0x09, 0x0f, 0xc6, 0x18,
-	0x9d, 0x1b, 0xaa, 0xef, 0x07, 0xfd, 0x0a, 0xba, 0xec, 0x3a, 0xa5, 0x7e, 0xe6, 0xd1, 0xf9, 0x9c,
-	0xc6, 0xcb, 0x44, 0xf3, 0xca, 0x44, 0xe3, 0xe5, 0x85, 0x65, 0xa2, 0x6d, 0x19, 0x35, 0x13, 0x6d,
-	0x4b, 0x01, 0x4b, 0xf5, 0x1b, 0x82, 0xba, 0x09, 0xf7, 0x88, 0xbb, 0x48, 0x73, 0x10, 0xde, 0xd3,
-	0xed, 0x54, 0x42, 0xe0, 0x68, 0xc9, 0x36, 0x43, 0x18, 0x33, 0x80, 0xf1, 0x72, 0x2c, 0x46, 0x0e,
-	0x20, 0x04, 0xf2, 0x36, 0xea, 0xbf, 0xe9, 0x15, 0x97, 0x50, 0x60, 0x9e, 0x4e, 0x37, 0x5b, 0x66,
-	0xc7, 0xb2, 0xdb, 0xce, 0x36, 0x04, 0xdc, 0xee, 0xa5, 0x63, 0x52, 0x3c, 0x00, 0x54, 0x37, 0xaa,
-	0xec, 0x09, 0x3a, 0xd1, 0xb4, 0xed, 0xba, 0x77, 0x22, 0x03, 0x27, 0x72, 0xde, 0xd7, 0x1b, 0x7e,
-	0xd2, 0xd0, 0xb3, 0x9f, 0x34, 0xa8, 0x63, 0xc9, 0xa4, 0x81, 0xb1, 0x48, 0x1a, 0x18, 0xaa, 0x9f,
-	0x92, 0xa0, 0x63, 0x27, 0x0d, 0xe6, 0xeb, 0x03, 0xd4, 0x4b, 0x93, 0xe1, 0xfb, 0x22, 0xc3, 0x02,
-	0x4a, 0x3f, 0xc9, 0x53, 0xa9, 0x48, 0x8e, 0x2e, 0xbf, 0x0b, 0x74, 0x0a, 0x10, 0xde, 0xb2, 0xdd,
-	0x5e, 0x7a, 0xcf, 0xd1, 0x09, 0xa3, 0x5a, 0x6d, 0x99, 0x0e, 0xbf, 0xb9, 0x8f, 0x96, 0xc4, 0x57,
-	0xb5, 0x84, 0xd5, 0xc0, 0x4f, 0x23, 0x9b, 0x97, 0xe8, 0x78, 0xc7, 0x76, 0x45, 0xc6, 0x66, 0x62,
-	0xc8, 0x78, 0xa6, 0xc8, 0x05, 0xcc, 0xd4, 0xf7, 0x02, 0x3e, 0x47, 0x7e, 0xc7, 0xee, 0x89, 0x62,
-	0x40, 0xef, 0x08, 0xf9, 0x15, 0x9a, 0xf5, 0x62, 0x8b, 0x1b, 0x96, 0x00, 0x33, 0xb7, 0x1b, 0x9d,
-	0xfe, 0xa2, 0xc5, 0x14, 0xbd, 0x2e, 0xfb, 0xdf, 0xb5, 0x18, 0xe1, 0xde, 0x6f, 0x31, 0xd0, 0xd6,
-	0x65, 0x5b, 0x0c, 0x98, 0x8b, 0x16, 0xc3, 0x2d, 0x47, 0x27, 0x81, 0x68, 0xf1, 0x10, 0x24, 0xae,
-	0xc5, 0xe3, 0x21, 0xff, 0x22, 0x01, 0x1a, 0xc9, 0x6e, 0x11, 0xa4, 0xc1, 0x0d, 0xd5, 0x15, 0xfa,
-	0x64, 0x40, 0xa0, 0x62, 0x17, 0x5b, 0x80, 0x80, 0x71, 0x9e, 0x3e, 0x12, 0x69, 0x16, 0x13, 0x26,
-	0x3f, 0xa1, 0x7e, 0x47, 0xe8, 0x85, 0xc1, 0xa6, 0x27, 0x51, 0xe4, 0x17, 0xa8, 0x12, 0x02, 0xbb,
-	0x05, 0x4d, 0x58, 0xd0, 0x0c, 0x34, 0x69, 0x12, 0x6a, 0xd2, 0xdf, 0x92, 0x88, 0x3e, 0xc2, 0xee,
-	0x24, 0x72, 0xbc, 0x4d, 0xd5, 0xfe, 0x84, 0xac, 0x37, 0xaa, 0x61, 0xae, 0xc3, 0x53, 0x3a, 0xfc,
-	0x5d, 0xf5, 0x3d, 0xa1, 0x33, 0x47, 0xba, 0x3e, 0x89, 0x72, 0x7c, 0x10, 0xac, 0xcf, 0xf5, 0x7a,
-	0xdd, 0xae, 0xf0, 0xc1, 0x73, 0xd4, 0x4d, 0xe6, 0x57, 0x42, 0x2f, 0x0e, 0x09, 0x84, 0xb2, 0x18,
-	0x74, 0x1a, 0xc8, 0x6d, 0x1b, 0xfe, 0x43, 0x54, 0x48, 0x93, 0x51, 0xc8, 0xf7, 0x89, 0x5a, 0x4d,
-	0x95, 0x23, 0xa1, 0x46, 0xa7, 0xda, 0x3a, 0x9d, 0x1d, 0x48, 0xa6, 0xd8, 0x5d, 0xe7, 0x2f, 0xc1,
-	0xf8, 0xb7, 0xe4, 0x67, 0x84, 0xce, 0xc5, 0xf9, 0xf8, 0xdf, 0x94, 0x51, 0x3f, 0x0c, 0xde, 0x60,
-	0xff, 0x41, 0x2c, 0x8d, 0xd0, 0x45, 0xc9, 0x0c, 0xbd, 0x28, 0xa7, 0x42, 0x17, 0xe5, 0xe3, 0xc1,
-	0x35, 0xd7, 0xe3, 0xbb, 0x4d, 0xa7, 0xa2, 0x7c, 0xb1, 0xf2, 0xd2, 0xd1, 0x9d, 0x8c, 0xd0, 0x5d,
-	0xfa, 0xf2, 0x2c, 0xcd, 0x02, 0x02, 0x76, 0x8f, 0xd0, 0x1c, 0x5f, 0x29, 0x58, 0x21, 0xc6, 0x77,
-	0xff, 0x4e, 0xa3, 0x2c, 0x25, 0x31, 0xe1, 0xe4, 0xd4, 0x2b, 0x9f, 0xfc, 0xf6, 0xd7, 0x17, 0x99,
-	0xcb, 0x6c, 0x56, 0x97, 0xd9, 0xbe, 0xd8, 0x7d, 0x42, 0xb3, 0xd0, 0x47, 0xd8, 0xa2, 0x4c, 0xb0,
-	0xe0, 0x06, 0xa4, 0x14, 0x12, 0x58, 0x20, 0xba, 0x25, 0x40, 0xb7, 0xc0, 0xe6, 0x75, 0x89, 0x8d,
-	0xd3, 0xd1, 0xf7, 0xac, 0xea, 0x3e, 0x68, 0xc8, 0xb7, 0x13, 0x26, 0x1f, 0x31, 0x99, 0x86, 0xe1,
-	0xe5, 0x47, 0x5a, 0x43, 0xdc, 0x73, 0x7e, 0x24, 0x34, 0x0b, 0xe3, 0xb1, 0x9c, 0x86, 0xc1, 0x2d,
-	0x46, 0x4e, 0xc3, 0xd0, 0x76, 0xa2, 0x96, 0x00, 0xdd, 0x9b, 0xec, 0x0d, 0x49, 0x0d, 0xfb, 0x36,
-	0x8e, 0x7d, 0xbe, 0xa5, 0x7b, 0x8f, 0xf8, 0xfd, 0xd9, 0x67, 0x3f, 0x10, 0x9a, 0xe3, 0xfb, 0x01,
-	0x93, 0x47, 0x94, 0x4c, 0xe3, 0xf0, 0xfa, 0xa1, 0xbe, 0x0e, 0x2c, 0x8a, 0xec, 0xda, 0x71, 0x59,
-	0xb0, 0xaf, 0x09, 0x1d, 0xf7, 0x86, 0x63, 0xa6, 0xcb, 0xc0, 0x08, 0xec, 0x18, 0xca, 0xa2, 0xbc,
-	0x01, 0xa2, 0x5e, 0x06, 0xd4, 0x8b, 0x4c, 0x8b, 0x41, 0x0d, 0x03, 0xba, 0xbe, 0x87, 0x5d, 0x6c,
-	0x9f, 0x7d, 0x45, 0x68, 0x16, 0xa6, 0x7f, 0x26, 0x1d, 0xd3, 0x49, 0x54, 0x22, 0xa1, 0xd5, 0x42,
-	0x5d, 0x00, 0x98, 0x73, 0xec, 0x92, 0x0c, 0x4c, 0xb8, 0x60, 0x7c, 0xa6, 0x90, 0x4b, 0x7e, 0x68,
-	0x4d, 0x90, 0x4b, 0x7e, 0x78, 0xf4, 0x97, 0xbe, 0x60, 0x38, 0x8d, 0x78, 0x4d, 0x0a, 0x3c, 0xc8,
-	0xa9, 0x17, 0x9c, 0xe1, 0x95, 0x42, 0x02, 0x8b, 0x84, 0x4d, 0x8a, 0xa3, 0xe3, 0x4d, 0xea, 0x17,
-	0x42, 0x27, 0x23, 0x33, 0x38, 0x5b, 0x95, 0x57, 0x26, 0x3a, 0xf3, 0x2b, 0x57, 0x53, 0xd9, 0x22,
-	0x81, 0x97, 0x81, 0xc0, 0x0a, 0x5b, 0x96, 0x23, 0x00, 0x37, 0x4a, 0xdf, 0xeb, 0x5d, 0x2c, 0xf6,
-	0x13, 0xa1, 0xa7, 0xc3, 0xb3, 0x36, 0x7b, 0x31, 0x09, 0x9e, 0xd0, 0xac, 0xab, 0xac, 0xa6, 0x31,
-	0x45, 0x26, 0x6b, 0xc0, 0x64, 0x99, 0x3d, 0x2f, 0xc7, 0xc4, 0xeb, 0x67, 0x81, 0xae, 0xf6, 0x0f,
-	0xa1, 0x67, 0x07, 0x0f, 0xcb, 0x6c, 0x3d, 0xb1, 0xbe, 0xd1, 0x19, 0x5e, 0x29, 0x1e, 0xc7, 0x05,
-	0xf2, 0x7b, 0x0b, 0xf8, 0x6d, 0xb2, 0x8d, 0x74, 0x99, 0x8a, 0x12, 0xfe, 0x99, 0xd0, 0xa9, 0xe8,
-	0xbc, 0xc7, 0xe4, 0x4b, 0xa9, 0x7f, 0x3e, 0x57, 0xd6, 0xd2, 0x19, 0x23, 0xbd, 0x15, 0xa0, 0xb7,
-	0xc4, 0x16, 0x65, 0xe8, 0x5d, 0x09, 0x8c, 0x9f, 0xec, 0x6f, 0x42, 0xcf, 0x0f, 0x9d, 0x5c, 0xd9,
-	0x6b, 0x69, 0x50, 0x45, 0x87, 0x67, 0x65, 0xe3, 0x98, 0x5e, 0x90, 0x64, 0x11, 0x48, 0xae, 0xb1,
-	0x55, 0x19, 0x92, 0xc1, 0x19, 0x3b, 0xf0, 0x7e, 0x38, 0x14, 0xed, 0xc3, 0x8f, 0x94, 0xa0, 0x7d,
-	0xf4, 0x0d, 0xd4, 0xca, 0xd5, 0x54, 0xb6, 0x48, 0xe8, 0x5d, 0x20, 0x74, 0x93, 0xbd, 0x9d, 0x34,
-	0x6b, 0x3e, 0xa1, 0x60, 0x8d, 0xf6, 0xca, 0xb3, 0xf8, 0xce, 0x83, 0x83, 0x3c, 0x79, 0x78, 0x90,
-	0x27, 0x7f, 0x1e, 0xe4, 0xc9, 0xe7, 0x87, 0xf9, 0xb1, 0x87, 0x87, 0xf9, 0xb1, 0xdf, 0x0f, 0xf3,
-	0x63, 0x77, 0x56, 0x6b, 0x96, 0x7b, 0xb7, 0x5d, 0xd6, 0x2a, 0xf6, 0x8e, 0x08, 0x5a, 0x37, 0xba,
-	0x66, 0xab, 0x87, 0xe0, 0xa3, 0x41, 0x18, 0xdc, 0x6e, 0xd3, 0x74, 0xca, 0x39, 0xf8, 0x5b, 0xe0,
-	0xb9, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0xe1, 0xca, 0x80, 0x35, 0x6f, 0x19, 0x00, 0x00,
+	// 1064 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xce, 0x38, 0xb1, 0x0b, 0x83, 0x44, 0x92, 0xa1, 0x12, 0xc5, 0xb4, 0x06, 0x6d, 0x7f, 0x41,
+	0x94, 0xee, 0xc6, 0x46, 0x42, 0xa8, 0x05, 0x51, 0x8c, 0x68, 0x29, 0x42, 0xa2, 0xb5, 0x50, 0x41,
+	0x05, 0x29, 0x5a, 0xdb, 0xa3, 0xed, 0x0a, 0x67, 0x67, 0xb3, 0xbb, 0xb6, 0xb0, 0x22, 0x0b, 0xc4,
+	0x89, 0x63, 0x25, 0x6e, 0x1c, 0xaa, 0xc0, 0x7f, 0xc1, 0x8d, 0x1b, 0x95, 0xb8, 0x54, 0xe2, 0xc2,
+	0x09, 0xa1, 0x98, 0x3f, 0x04, 0xed, 0x9b, 0x37, 0xde, 0x5d, 0xdb, 0x64, 0x67, 0x17, 0xdf, 0x6c,
+	0xcf, 0x7c, 0xef, 0x7d, 0xef, 0x7b, 0x33, 0x6f, 0xbe, 0x84, 0xbe, 0x1e, 0x0e, 0xbd, 0xc0, 0x0d,
+	0xb9, 0x35, 0x70, 0x0f, 0x87, 0x6e, 0xdf, 0x8d, 0xc6, 0xae, 0xd7, 0xe3, 0x5e, 0xe4, 0x8e, 0xb8,
+	0x35, 0x6a, 0x5a, 0x87, 0x43, 0x1e, 0x8c, 0x4d, 0x3f, 0x10, 0x91, 0x60, 0x17, 0x70, 0xab, 0xb9,
+	0xb8, 0xd5, 0x1c, 0x35, 0xeb, 0x3b, 0x3d, 0x11, 0x1e, 0x88, 0xd0, 0xea, 0xda, 0x21, 0x97, 0x38,
+	0x6b, 0xd4, 0xec, 0xf2, 0xc8, 0x6e, 0x5a, 0xbe, 0xed, 0xb8, 0x9e, 0x1d, 0xb9, 0xc2, 0x93, 0xa1,
+	0xea, 0x67, 0x1d, 0xe1, 0x08, 0xf8, 0x68, 0xc5, 0x9f, 0xf0, 0xd7, 0xf3, 0x8e, 0x10, 0xce, 0x80,
+	0x5b, 0xb6, 0xef, 0x5a, 0xb6, 0xe7, 0x89, 0x08, 0x20, 0x21, 0xae, 0xe6, 0x30, 0xe5, 0xbe, 0xe8,
+	0x3d, 0xd4, 0xdb, 0xea, 0xd8, 0x43, 0x87, 0xe3, 0xd6, 0x9d, 0xd3, 0xb7, 0xfa, 0x76, 0x60, 0x1f,
+	0x68, 0x32, 0xe8, 0x06, 0x6e, 0x17, 0xc3, 0x1a, 0x67, 0x29, 0xbb, 0x17, 0x4b, 0x70, 0x17, 0xf0,
+	0x1d, 0x7e, 0x38, 0xe4, 0x61, 0x64, 0x3c, 0xa0, 0x2f, 0x64, 0x7e, 0x0d, 0x7d, 0xe1, 0x85, 0x9c,
+	0xbd, 0x4f, 0x6b, 0x32, 0xcf, 0x39, 0xf2, 0x2a, 0x79, 0xed, 0xb9, 0xd6, 0x65, 0xf3, 0x54, 0xa5,
+	0x4d, 0x09, 0x6f, 0x6f, 0x3c, 0xf9, 0xeb, 0x95, 0xb5, 0x0e, 0x42, 0x8d, 0x8b, 0x74, 0x1b, 0x62,
+	0x7f, 0x10, 0xeb, 0x80, 0x09, 0xd9, 0xf3, 0xb4, 0xe2, 0xf6, 0x21, 0xea, 0x46, 0xa7, 0xe2, 0xf6,
+	0x8d, 0xfb, 0x48, 0x0b, 0x37, 0x61, 0xfe, 0x9b, 0xb4, 0x0a, 0xea, 0x61, 0xfa, 0x4b, 0x39, 0xe9,
+	0x01, 0x8c, 0xd9, 0x25, 0xd0, 0xf8, 0x32, 0x1d, 0x57, 0x95, 0xcb, 0x6e, 0x51, 0x9a, 0x74, 0x1e,
+	0x83, 0x5f, 0x31, 0xe5, 0x31, 0x31, 0xe3, 0x63, 0x62, 0xca, 0xe3, 0x85, 0xc7, 0xc4, 0xbc, 0x6b,
+	0x3b, 0x1c, 0xb1, 0x9d, 0x14, 0xd2, 0xf8, 0x99, 0xa0, 0x6e, 0x2a, 0x3c, 0xf2, 0x6e, 0xd3, 0x1a,
+	0xa4, 0x8f, 0x75, 0x5b, 0x2f, 0x48, 0x1c, 0x91, 0xec, 0x76, 0x86, 0x63, 0x05, 0x38, 0x5e, 0xcd,
+	0xe5, 0x28, 0x09, 0x64, 0x48, 0x7e, 0x8e, 0xfa, 0xdf, 0x8e, 0x0f, 0x97, 0x52, 0x60, 0x87, 0x6e,
+	0xfb, 0x01, 0x1f, 0xb9, 0x62, 0x18, 0xee, 0x43, 0xc2, 0xfd, 0x59, 0x3b, 0x36, 0xd5, 0x02, 0xb0,
+	0xba, 0xd3, 0x67, 0x2f, 0xd2, 0x33, 0xbe, 0x10, 0x83, 0x78, 0x47, 0x05, 0x76, 0xd4, 0xe2, 0xaf,
+	0x77, 0x92, 0xa6, 0x61, 0xe4, 0xa4, 0x69, 0x70, 0x8e, 0x35, 0x9b, 0x06, 0x60, 0xd5, 0x34, 0x00,
+	0x1a, 0xdf, 0x93, 0x74, 0xe0, 0xb0, 0x0c, 0xe7, 0x5b, 0x4b, 0xd4, 0x2b, 0xd3, 0xe1, 0x63, 0xd5,
+	0x61, 0x45, 0x65, 0xb1, 0xc8, 0xf5, 0x52, 0x45, 0xae, 0xae, 0xbf, 0xbb, 0x74, 0x0b, 0x18, 0xde,
+	0x17, 0xd1, 0xac, 0xbd, 0xe7, 0xe8, 0x19, 0xbb, 0xdf, 0x0f, 0x78, 0x28, 0x6f, 0xee, 0xb3, 0x1d,
+	0xf5, 0xd5, 0xe8, 0xe0, 0x69, 0x90, 0xbb, 0xb1, 0x9a, 0x77, 0xe8, 0xc6, 0x48, 0x44, 0xaa, 0x63,
+	0x17, 0x73, 0x8a, 0x89, 0xa1, 0x58, 0x0b, 0xc0, 0x8c, 0x2f, 0x52, 0x31, 0x57, 0x7e, 0xc7, 0x1e,
+	0xab, 0xc3, 0x80, 0xd1, 0x91, 0xf2, 0xbb, 0xb4, 0x1a, 0xe7, 0x56, 0x37, 0xac, 0x00, 0x67, 0x89,
+	0x5b, 0x9d, 0xfe, 0x8f, 0x14, 0xc1, 0x76, 0x3c, 0x66, 0x57, 0x5d, 0x3f, 0x7b, 0x89, 0x3e, 0x33,
+	0x3b, 0xec, 0x15, 0xd9, 0x4b, 0xbe, 0x78, 0x31, 0xd7, 0x61, 0x45, 0x5d, 0xcc, 0xd9, 0x5c, 0x52,
+	0x94, 0x92, 0xb9, 0x04, 0x6f, 0x81, 0xee, 0x5c, 0x02, 0xb8, 0x9a, 0x4b, 0x12, 0xb9, 0x3a, 0xdd,
+	0xd4, 0xbb, 0x00, 0x49, 0xf2, 0xde, 0x05, 0xdc, 0x94, 0xdc, 0x3e, 0x60, 0xa3, 0x39, 0x62, 0xd2,
+	0x65, 0x48, 0xa0, 0xf1, 0x2d, 0xa1, 0xe7, 0x93, 0xc0, 0xef, 0x0d, 0x06, 0xa2, 0x27, 0xdf, 0xf4,
+	0x55, 0xb7, 0x2f, 0x75, 0x13, 0x2b, 0xd9, 0x9b, 0xf8, 0x3b, 0xa1, 0x17, 0xfe, 0x83, 0x02, 0x96,
+	0x69, 0xd3, 0x6d, 0x60, 0xbb, 0x6f, 0x27, 0x8b, 0xd8, 0x39, 0x53, 0xa7, 0xe4, 0x24, 0x26, 0x16,
+	0xbf, 0xd5, 0x9d, 0x4b, 0xb5, 0xba, 0x6e, 0x7e, 0x45, 0x5f, 0x5e, 0x56, 0x4c, 0xee, 0x40, 0x2a,
+	0x75, 0xbe, 0xbf, 0x59, 0xde, 0xbc, 0x99, 0x70, 0xfb, 0x74, 0x6b, 0x5e, 0x38, 0x6c, 0x61, 0x39,
+	0xdd, 0x36, 0xe7, 0x74, 0x6b, 0x1d, 0x6f, 0xd2, 0x2a, 0x30, 0x60, 0x8f, 0x09, 0xad, 0x49, 0xdb,
+	0xc3, 0x9a, 0x39, 0xb1, 0x17, 0x7d, 0x57, 0xbd, 0x55, 0x04, 0x22, 0x8b, 0x33, 0xae, 0x7d, 0xf7,
+	0xc7, 0x3f, 0x3f, 0x54, 0xae, 0xb2, 0xcb, 0x96, 0x8e, 0x43, 0x64, 0xc7, 0x84, 0x56, 0xe1, 0x55,
+	0x64, 0x7b, 0x3a, 0xc9, 0xd2, 0x2e, 0xad, 0xde, 0x2c, 0x80, 0x40, 0x76, 0x2d, 0x60, 0xb7, 0xcb,
+	0x76, 0x2c, 0x0d, 0x57, 0x1c, 0x5a, 0x47, 0x6e, 0x7f, 0x02, 0x1a, 0x4a, 0x07, 0xc5, 0xf4, 0x33,
+	0x16, 0xd3, 0x30, 0x6b, 0xd0, 0xb4, 0x35, 0x44, 0x2f, 0xf6, 0x2b, 0xa1, 0x55, 0x78, 0xc2, 0xf5,
+	0x34, 0x4c, 0x3b, 0x2d, 0x3d, 0x0d, 0x33, 0x0e, 0xca, 0xe8, 0x00, 0xbb, 0x8f, 0xd9, 0x47, 0x9a,
+	0x1a, 0x2e, 0xb8, 0xa2, 0x89, 0xfc, 0x4b, 0x22, 0x5e, 0x92, 0xf7, 0x67, 0xc2, 0x7e, 0x21, 0xb4,
+	0x26, 0x3d, 0x0c, 0xd3, 0x67, 0x54, 0x4c, 0xe3, 0xac, 0x45, 0x32, 0x3e, 0x84, 0x2a, 0xda, 0xec,
+	0xe6, 0xff, 0xad, 0x82, 0xfd, 0x44, 0xe8, 0x46, 0xfc, 0x80, 0x33, 0x4b, 0x87, 0x46, 0xca, 0x07,
+	0xd5, 0xf7, 0xf4, 0x01, 0xc8, 0xfa, 0x4d, 0x60, 0xbd, 0xc7, 0xcc, 0x1c, 0xd6, 0x60, 0x22, 0xac,
+	0x23, 0x9c, 0x62, 0x13, 0xf6, 0x23, 0xa1, 0x55, 0x70, 0x28, 0x4c, 0x3b, 0x67, 0x58, 0xe8, 0x88,
+	0x64, 0xec, 0x8f, 0xb1, 0x0b, 0x34, 0xaf, 0xb0, 0x4b, 0x3a, 0x34, 0xe1, 0x82, 0x49, 0x2b, 0xa0,
+	0xd7, 0xfc, 0x8c, 0x93, 0xd1, 0x6b, 0x7e, 0xd6, 0x69, 0x68, 0x5f, 0x30, 0x34, 0x15, 0xf1, 0x90,
+	0x82, 0x08, 0x7a, 0xea, 0xa5, 0x2d, 0x43, 0xbd, 0x59, 0x00, 0x51, 0x70, 0x48, 0x49, 0x76, 0x72,
+	0x48, 0xfd, 0x46, 0xe8, 0xd6, 0xfc, 0x4b, 0xcd, 0x6e, 0x68, 0xe7, 0x5e, 0xb4, 0x18, 0xf5, 0xb7,
+	0xcb, 0x81, 0xb1, 0x86, 0xb7, 0xa0, 0x86, 0x16, 0xdb, 0xd3, 0xa9, 0xe1, 0x5a, 0xca, 0x41, 0xb0,
+	0x29, 0xa1, 0x9b, 0x73, 0x61, 0xd9, 0xf5, 0x12, 0x5c, 0x54, 0x1d, 0x37, 0x4a, 0x61, 0xb1, 0x8c,
+	0xcf, 0xa0, 0x8c, 0x7b, 0xec, 0x93, 0xa2, 0x65, 0x24, 0x77, 0xcf, 0x3a, 0x4a, 0x26, 0xc6, 0x6c,
+	0xe0, 0xb5, 0x3f, 0x7d, 0x72, 0xd2, 0x20, 0x4f, 0x4f, 0x1a, 0xe4, 0xef, 0x93, 0x06, 0x79, 0x34,
+	0x6d, 0xac, 0x3d, 0x9d, 0x36, 0xd6, 0xfe, 0x9c, 0x36, 0xd6, 0x1e, 0x5c, 0x77, 0xdc, 0xe8, 0xe1,
+	0xb0, 0x6b, 0xf6, 0xc4, 0x81, 0x4a, 0x3a, 0xb0, 0xc7, 0x3c, 0x98, 0x31, 0xf8, 0x7a, 0x19, 0x87,
+	0x68, 0xec, 0xf3, 0xb0, 0x5b, 0x83, 0xff, 0xa2, 0xbc, 0xf1, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0xe7, 0xf1, 0x62, 0xfa, 0x9e, 0x12, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1626,21 +1235,15 @@ type QueryClient interface {
 	Vote(ctx context.Context, in *QueryVoteRequest, opts ...grpc.CallOption) (*QueryVoteResponse, error)
 	// Votes
 	Votes(ctx context.Context, in *QueryVotesRequest, opts ...grpc.CallOption) (*QueryVotesResponse, error)
-	// Bribes
+	// Bribes queries bribes with optional filters for epoch_id and pool_id.
+	// Pagination is supported.
 	Bribes(ctx context.Context, in *QueryBribesRequest, opts ...grpc.CallOption) (*QueryBribesResponse, error)
-	// Bribe
+	// Bribe queries a Bribe by its ID.
 	Bribe(ctx context.Context, in *QueryBribeRequest, opts ...grpc.CallOption) (*QueryBribeResponse, error)
-	// BribesByEpochId
-	BribesByEpochId(ctx context.Context, in *QueryBribesByEpochIdRequest, opts ...grpc.CallOption) (*QueryBribesByEpochIdResponse, error)
-	// BribesByPoolId
-	BribesByPoolId(ctx context.Context, in *QueryBribesByPoolIdRequest, opts ...grpc.CallOption) (*QueryBribesByPoolIdResponse, error)
-	// BribesByEpochAndPoolId
-	BribesByEpochAndPoolId(ctx context.Context, in *QueryBribesByEpochAndPoolIdRequest, opts ...grpc.CallOption) (*QueryBribesByEpochAndPoolIdResponse, error)
-	// BribeAllocations
+	// BribeAllocations queries bribe allocations with an optional filter for address.
+	// Pagination is supported.
 	BribeAllocations(ctx context.Context, in *QueryBribeAllocationsRequest, opts ...grpc.CallOption) (*QueryBribeAllocationsResponse, error)
-	// BribeAllocationsByAddress
-	BribeAllocationsByAddress(ctx context.Context, in *QueryBribeAllocationsByAddressRequest, opts ...grpc.CallOption) (*QueryBribeAllocationsByAddressResponse, error)
-	// BribeAllocation
+	// BribeAllocation queries a BribeAllocation by address, epoch ID, and pool ID.
 	BribeAllocation(ctx context.Context, in *QueryBribeAllocationRequest, opts ...grpc.CallOption) (*QueryBribeAllocationResponse, error)
 }
 
@@ -1733,45 +1336,9 @@ func (c *queryClient) Bribe(ctx context.Context, in *QueryBribeRequest, opts ...
 	return out, nil
 }
 
-func (c *queryClient) BribesByEpochId(ctx context.Context, in *QueryBribesByEpochIdRequest, opts ...grpc.CallOption) (*QueryBribesByEpochIdResponse, error) {
-	out := new(QueryBribesByEpochIdResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.v1.Query/BribesByEpochId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) BribesByPoolId(ctx context.Context, in *QueryBribesByPoolIdRequest, opts ...grpc.CallOption) (*QueryBribesByPoolIdResponse, error) {
-	out := new(QueryBribesByPoolIdResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.v1.Query/BribesByPoolId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) BribesByEpochAndPoolId(ctx context.Context, in *QueryBribesByEpochAndPoolIdRequest, opts ...grpc.CallOption) (*QueryBribesByEpochAndPoolIdResponse, error) {
-	out := new(QueryBribesByEpochAndPoolIdResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.v1.Query/BribesByEpochAndPoolId", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *queryClient) BribeAllocations(ctx context.Context, in *QueryBribeAllocationsRequest, opts ...grpc.CallOption) (*QueryBribeAllocationsResponse, error) {
 	out := new(QueryBribeAllocationsResponse)
 	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.v1.Query/BribeAllocations", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) BribeAllocationsByAddress(ctx context.Context, in *QueryBribeAllocationsByAddressRequest, opts ...grpc.CallOption) (*QueryBribeAllocationsByAddressResponse, error) {
-	out := new(QueryBribeAllocationsByAddressResponse)
-	err := c.cc.Invoke(ctx, "/sunrise.liquidityincentive.v1.Query/BribeAllocationsByAddress", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1803,21 +1370,15 @@ type QueryServer interface {
 	Vote(context.Context, *QueryVoteRequest) (*QueryVoteResponse, error)
 	// Votes
 	Votes(context.Context, *QueryVotesRequest) (*QueryVotesResponse, error)
-	// Bribes
+	// Bribes queries bribes with optional filters for epoch_id and pool_id.
+	// Pagination is supported.
 	Bribes(context.Context, *QueryBribesRequest) (*QueryBribesResponse, error)
-	// Bribe
+	// Bribe queries a Bribe by its ID.
 	Bribe(context.Context, *QueryBribeRequest) (*QueryBribeResponse, error)
-	// BribesByEpochId
-	BribesByEpochId(context.Context, *QueryBribesByEpochIdRequest) (*QueryBribesByEpochIdResponse, error)
-	// BribesByPoolId
-	BribesByPoolId(context.Context, *QueryBribesByPoolIdRequest) (*QueryBribesByPoolIdResponse, error)
-	// BribesByEpochAndPoolId
-	BribesByEpochAndPoolId(context.Context, *QueryBribesByEpochAndPoolIdRequest) (*QueryBribesByEpochAndPoolIdResponse, error)
-	// BribeAllocations
+	// BribeAllocations queries bribe allocations with an optional filter for address.
+	// Pagination is supported.
 	BribeAllocations(context.Context, *QueryBribeAllocationsRequest) (*QueryBribeAllocationsResponse, error)
-	// BribeAllocationsByAddress
-	BribeAllocationsByAddress(context.Context, *QueryBribeAllocationsByAddressRequest) (*QueryBribeAllocationsByAddressResponse, error)
-	// BribeAllocation
+	// BribeAllocation queries a BribeAllocation by address, epoch ID, and pool ID.
 	BribeAllocation(context.Context, *QueryBribeAllocationRequest) (*QueryBribeAllocationResponse, error)
 }
 
@@ -1852,20 +1413,8 @@ func (*UnimplementedQueryServer) Bribes(ctx context.Context, req *QueryBribesReq
 func (*UnimplementedQueryServer) Bribe(ctx context.Context, req *QueryBribeRequest) (*QueryBribeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Bribe not implemented")
 }
-func (*UnimplementedQueryServer) BribesByEpochId(ctx context.Context, req *QueryBribesByEpochIdRequest) (*QueryBribesByEpochIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BribesByEpochId not implemented")
-}
-func (*UnimplementedQueryServer) BribesByPoolId(ctx context.Context, req *QueryBribesByPoolIdRequest) (*QueryBribesByPoolIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BribesByPoolId not implemented")
-}
-func (*UnimplementedQueryServer) BribesByEpochAndPoolId(ctx context.Context, req *QueryBribesByEpochAndPoolIdRequest) (*QueryBribesByEpochAndPoolIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BribesByEpochAndPoolId not implemented")
-}
 func (*UnimplementedQueryServer) BribeAllocations(ctx context.Context, req *QueryBribeAllocationsRequest) (*QueryBribeAllocationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BribeAllocations not implemented")
-}
-func (*UnimplementedQueryServer) BribeAllocationsByAddress(ctx context.Context, req *QueryBribeAllocationsByAddressRequest) (*QueryBribeAllocationsByAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BribeAllocationsByAddress not implemented")
 }
 func (*UnimplementedQueryServer) BribeAllocation(ctx context.Context, req *QueryBribeAllocationRequest) (*QueryBribeAllocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BribeAllocation not implemented")
@@ -2037,60 +1586,6 @@ func _Query_Bribe_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_BribesByEpochId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBribesByEpochIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).BribesByEpochId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.liquidityincentive.v1.Query/BribesByEpochId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).BribesByEpochId(ctx, req.(*QueryBribesByEpochIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_BribesByPoolId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBribesByPoolIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).BribesByPoolId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.liquidityincentive.v1.Query/BribesByPoolId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).BribesByPoolId(ctx, req.(*QueryBribesByPoolIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_BribesByEpochAndPoolId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBribesByEpochAndPoolIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).BribesByEpochAndPoolId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.liquidityincentive.v1.Query/BribesByEpochAndPoolId",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).BribesByEpochAndPoolId(ctx, req.(*QueryBribesByEpochAndPoolIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Query_BribeAllocations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryBribeAllocationsRequest)
 	if err := dec(in); err != nil {
@@ -2105,24 +1600,6 @@ func _Query_BribeAllocations_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).BribeAllocations(ctx, req.(*QueryBribeAllocationsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_BribeAllocationsByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBribeAllocationsByAddressRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).BribeAllocationsByAddress(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/sunrise.liquidityincentive.v1.Query/BribeAllocationsByAddress",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).BribeAllocationsByAddress(ctx, req.(*QueryBribeAllocationsByAddressRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2187,24 +1664,8 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Bribe_Handler,
 		},
 		{
-			MethodName: "BribesByEpochId",
-			Handler:    _Query_BribesByEpochId_Handler,
-		},
-		{
-			MethodName: "BribesByPoolId",
-			Handler:    _Query_BribesByPoolId_Handler,
-		},
-		{
-			MethodName: "BribesByEpochAndPoolId",
-			Handler:    _Query_BribesByEpochAndPoolId_Handler,
-		},
-		{
 			MethodName: "BribeAllocations",
 			Handler:    _Query_BribeAllocations_Handler,
-		},
-		{
-			MethodName: "BribeAllocationsByAddress",
-			Handler:    _Query_BribeAllocationsByAddress_Handler,
 		},
 		{
 			MethodName: "BribeAllocation",
@@ -2738,6 +2199,20 @@ func (m *QueryBribesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.PoolId) > 0 {
+		i -= len(m.PoolId)
+		copy(dAtA[i:], m.PoolId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PoolId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.EpochId) > 0 {
+		i -= len(m.EpochId)
+		copy(dAtA[i:], m.EpochId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.EpochId)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.Pagination != nil {
 		{
 			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
@@ -2863,242 +2338,6 @@ func (m *QueryBribeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryBribesByEpochIdRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribesByEpochIdRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribesByEpochIdRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.EpochId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.EpochId))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryBribesByEpochIdResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribesByEpochIdResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribesByEpochIdResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Bribes) > 0 {
-		for iNdEx := len(m.Bribes) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Bribes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryBribesByPoolIdRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribesByPoolIdRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribesByPoolIdRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.PoolId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryBribesByPoolIdResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribesByPoolIdResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribesByPoolIdResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Bribes) > 0 {
-		for iNdEx := len(m.Bribes) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Bribes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryBribesByEpochAndPoolIdRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribesByEpochAndPoolIdRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribesByEpochAndPoolIdRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.PoolId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.EpochId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.EpochId))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryBribesByEpochAndPoolIdResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribesByEpochAndPoolIdResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribesByEpochAndPoolIdResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Bribes) > 0 {
-		for iNdEx := len(m.Bribes) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Bribes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *QueryBribeAllocationsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3119,6 +2358,13 @@ func (m *QueryBribeAllocationsRequest) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.Pagination != nil {
 		{
 			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
@@ -3183,73 +2429,6 @@ func (m *QueryBribeAllocationsResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryBribeAllocationsByAddressRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribeAllocationsByAddressRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribeAllocationsByAddressRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryBribeAllocationsByAddressResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryBribeAllocationsByAddressResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryBribeAllocationsByAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.BribeAllocations) > 0 {
-		for iNdEx := len(m.BribeAllocations) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.BribeAllocations[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *QueryBribeAllocationRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3270,15 +2449,19 @@ func (m *QueryBribeAllocationRequest) MarshalToSizedBuffer(dAtA []byte) (int, er
 	_ = i
 	var l int
 	_ = l
-	if m.PoolId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
+	if len(m.PoolId) > 0 {
+		i -= len(m.PoolId)
+		copy(dAtA[i:], m.PoolId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PoolId)))
 		i--
-		dAtA[i] = 0x18
+		dAtA[i] = 0x1a
 	}
-	if m.EpochId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.EpochId))
+	if len(m.EpochId) > 0 {
+		i -= len(m.EpochId)
+		copy(dAtA[i:], m.EpochId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.EpochId)))
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x12
 	}
 	if len(m.Address) > 0 {
 		i -= len(m.Address)
@@ -3536,6 +2719,14 @@ func (m *QueryBribesRequest) Size() (n int) {
 		l = m.Pagination.Size()
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	l = len(m.EpochId)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	l = len(m.PoolId)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -3581,102 +2772,6 @@ func (m *QueryBribeResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryBribesByEpochIdRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EpochId != 0 {
-		n += 1 + sovQuery(uint64(m.EpochId))
-	}
-	return n
-}
-
-func (m *QueryBribesByEpochIdResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Bribes) > 0 {
-		for _, e := range m.Bribes {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryBribesByPoolIdRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PoolId != 0 {
-		n += 1 + sovQuery(uint64(m.PoolId))
-	}
-	return n
-}
-
-func (m *QueryBribesByPoolIdResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Bribes) > 0 {
-		for _, e := range m.Bribes {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryBribesByEpochAndPoolIdRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EpochId != 0 {
-		n += 1 + sovQuery(uint64(m.EpochId))
-	}
-	if m.PoolId != 0 {
-		n += 1 + sovQuery(uint64(m.PoolId))
-	}
-	return n
-}
-
-func (m *QueryBribesByEpochAndPoolIdResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Bribes) > 0 {
-		for _, e := range m.Bribes {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
 func (m *QueryBribeAllocationsRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3685,6 +2780,10 @@ func (m *QueryBribeAllocationsRequest) Size() (n int) {
 	_ = l
 	if m.Pagination != nil {
 		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
@@ -3709,34 +2808,6 @@ func (m *QueryBribeAllocationsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryBribeAllocationsByAddressRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryBribeAllocationsByAddressResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.BribeAllocations) > 0 {
-		for _, e := range m.BribeAllocations {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
-
 func (m *QueryBribeAllocationRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3747,11 +2818,13 @@ func (m *QueryBribeAllocationRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
-	if m.EpochId != 0 {
-		n += 1 + sovQuery(uint64(m.EpochId))
+	l = len(m.EpochId)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
 	}
-	if m.PoolId != 0 {
-		n += 1 + sovQuery(uint64(m.PoolId))
+	l = len(m.PoolId)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -5096,6 +4169,70 @@ func (m *QueryBribesRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EpochId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EpochId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PoolId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -5389,592 +4526,6 @@ func (m *QueryBribeResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryBribesByEpochIdRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribesByEpochIdRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribesByEpochIdRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EpochId", wireType)
-			}
-			m.EpochId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.EpochId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryBribesByEpochIdResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribesByEpochIdResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribesByEpochIdResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Bribes", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Bribes = append(m.Bribes, Bribe{})
-			if err := m.Bribes[len(m.Bribes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryBribesByPoolIdRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribesByPoolIdRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribesByPoolIdRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
-			}
-			m.PoolId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PoolId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryBribesByPoolIdResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribesByPoolIdResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribesByPoolIdResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Bribes", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Bribes = append(m.Bribes, Bribe{})
-			if err := m.Bribes[len(m.Bribes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryBribesByEpochAndPoolIdRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribesByEpochAndPoolIdRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribesByEpochAndPoolIdRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EpochId", wireType)
-			}
-			m.EpochId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.EpochId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
-			}
-			m.PoolId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PoolId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryBribesByEpochAndPoolIdResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribesByEpochAndPoolIdResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribesByEpochAndPoolIdResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Bribes", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Bribes = append(m.Bribes, Bribe{})
-			if err := m.Bribes[len(m.Bribes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *QueryBribeAllocationsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -6039,6 +4590,38 @@ func (m *QueryBribeAllocationsRequest) Unmarshal(dAtA []byte) error {
 			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6181,172 +4764,6 @@ func (m *QueryBribeAllocationsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryBribeAllocationsByAddressRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribeAllocationsByAddressRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribeAllocationsByAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryBribeAllocationsByAddressResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBribeAllocationsByAddressResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBribeAllocationsByAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BribeAllocations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BribeAllocations = append(m.BribeAllocations, BribeAllocation{})
-			if err := m.BribeAllocations[len(m.BribeAllocations)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *QueryBribeAllocationRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -6409,10 +4826,10 @@ func (m *QueryBribeAllocationRequest) Unmarshal(dAtA []byte) error {
 			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EpochId", wireType)
 			}
-			m.EpochId = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowQuery
@@ -6422,16 +4839,29 @@ func (m *QueryBribeAllocationRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.EpochId |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EpochId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 3:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
 			}
-			m.PoolId = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowQuery
@@ -6441,11 +4871,24 @@ func (m *QueryBribeAllocationRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PoolId |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PoolId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
