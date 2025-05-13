@@ -70,17 +70,10 @@ func (k Keeper) SaveVoteWeightsForBribes(ctx context.Context, epochId uint64) er
 	return nil
 }
 
-// FinalizeBribeForEpoch ends the current epoch and starts a new one
-func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
-
-	// Get the ID of the epoch to end
-	currentEpochId, err := k.GetEpochCount(ctx)
-	if err != nil {
-		return err
-	}
-
+// FinalizeBribeForEpoch saves vote weights for bribes distribution and processes unclaimed bribes for old epochs that have passed their claim period
+func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context, epochId uint64) error {
 	// Save vote weights
-	if err := k.SaveVoteWeightsForBribes(ctx, currentEpochId); err != nil {
+	if err := k.SaveVoteWeightsForBribes(ctx, epochId); err != nil {
 		return err
 	}
 
@@ -92,12 +85,25 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context) error {
 
 	// Use EpochBlocks as the claim period for now
 	expiredEpochId := k.GetBribeExpiredEpochId(ctx)
-	if currentEpochId > params.BribeClaimEpochs {
-		newExpiredEpochId := currentEpochId - params.BribeClaimEpochs
+	if epochId > params.BribeClaimEpochs {
+		newExpiredEpochId := epochId - params.BribeClaimEpochs
 		if newExpiredEpochId > expiredEpochId {
 			for epochId := expiredEpochId; epochId < newExpiredEpochId; epochId++ {
 				if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
 					return err
+				}
+				epoch, _, err := k.GetEpoch(ctx, epochId)
+				if err != nil {
+					return err
+				}
+
+				if err := k.RemoveEpoch(ctx, epochId); err != nil {
+					return err
+				}
+				for _, gauge := range epoch.Gauges {
+					if err := k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId); err != nil {
+						return err
+					}
 				}
 			}
 		}
