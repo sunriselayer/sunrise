@@ -2,6 +2,7 @@ syntax = "proto3";
 package sunrise.liquidityincentive.v1;
 
 import "gogoproto/gogo.proto";
+import "sunrise/liquidityincentive/v1/bribe.proto";
 import "sunrise/liquidityincentive/v1/epoch.proto";
 import "sunrise/liquidityincentive/v1/gauge.proto";
 import "sunrise/liquidityincentive/v1/params.proto";
@@ -14,6 +15,8 @@ message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   repeated Epoch epochs = 2 [(gogoproto.nullable) = false];
   uint64 epoch_count = 3;
-  repeated Gauge gauges = 4 [(gogoproto.nullable) = false];
-  repeated Vote votes = 5 [(gogoproto.nullable) = false];
+  repeated Vote votes = 4 [(gogoproto.nullable) = false];
+  repeated Bribe bribes = 5 [(gogoproto.nullable) = false];
+  uint64 bribe_count = 6;
+  repeated BribeAllocation bribe_allocations = 7 [(gogoproto.nullable) = false];
 }
