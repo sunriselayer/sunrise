@@ -28,6 +28,25 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 			return err
 		}
 	}
+	// Set all the bribes
+	for _, bribe := range genState.Bribes {
+		err := k.SetBribe(ctx, bribe)
+		if err != nil {
+			return err
+		}
+	}
+	// Set bribe count
+	err = k.SetBribeCount(ctx, genState.BribeCount)
+	if err != nil {
+		return err
+	}
+	// Set all the bribe allocations
+	for _, bribeAllocation := range genState.BribeAllocations {
+		err := k.SetBribeAllocation(ctx, bribeAllocation)
+		if err != nil {
+			return err
+		}
+	}
 
 	return k.Params.Set(ctx, genState.Params)
 }

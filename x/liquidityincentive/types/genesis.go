@@ -3,7 +3,9 @@ package types
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		Params: DefaultParams(),
+		Params:     DefaultParams(),
+		EpochCount: 1,
+		BribeCount: 1,
 	}
 }
 
