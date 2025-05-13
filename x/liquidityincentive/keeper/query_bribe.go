@@ -55,36 +55,29 @@ func (q queryServer) Bribes(ctx context.Context, req *types.QueryBribesRequest) 
 			bribes = b
 		}
 	} else if applyEpochIdFilter {
-		b, errGet := q.k.GetAllBribeByEpochId(ctx, epochId)
-		if errGet != nil {
-			if !errors.Is(errGet, collections.ErrNotFound) && !errors.Is(errGet, sdkerrors.ErrKeyNotFound) {
-				q.k.Logger().Error("failed to get bribes by epoch id", "epoch_id", epochId, "error", errGet)
-				return nil, status.Errorf(codes.Internal, "failed to query bribes by epoch id %d: %v", epochId, errGet)
+		bribes, err = q.k.GetAllBribeByEpochId(ctx, epochId)
+		if err != nil {
+			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
+				q.k.Logger().Error("failed to get bribes by epoch id", "epoch_id", epochId, "error", err)
+				return nil, status.Errorf(codes.Internal, "failed to query bribes by epoch id %d: %v", epochId, err)
 			}
-		}
-		if b != nil {
-			bribes = b
 		}
 	} else if applyPoolIdFilter {
-		b, errGet := q.k.GetAllBribeByPoolId(ctx, poolId)
-		if errGet != nil {
-			if !errors.Is(errGet, collections.ErrNotFound) && !errors.Is(errGet, sdkerrors.ErrKeyNotFound) {
-				q.k.Logger().Error("failed to get bribes by pool id", "pool_id", poolId, "error", errGet)
-				return nil, status.Errorf(codes.Internal, "failed to query bribes by pool id %d: %v", poolId, errGet)
+		bribes, err = q.k.GetAllBribeByPoolId(ctx, poolId)
+		if err != nil {
+			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
+				q.k.Logger().Error("failed to get bribes by pool id", "pool_id", poolId, "error", err)
+				return nil, status.Errorf(codes.Internal, "failed to query bribes by pool id %d: %v", poolId, err)
 			}
-		}
-		if b != nil {
-			bribes = b
 		}
 	} else {
-		b, errGet := q.k.GetAllBribes(ctx)
-		if errGet != nil {
-			if !errors.Is(errGet, collections.ErrNotFound) && !errors.Is(errGet, sdkerrors.ErrKeyNotFound) {
-				q.k.Logger().Error("failed to get all bribes", "error", errGet)
-				return nil, status.Errorf(codes.Internal, "failed to query all bribes: %v", errGet)
+		bribes, err = q.k.GetAllBribes(ctx)
+		if err != nil {
+			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
+				q.k.Logger().Error("failed to get all bribes", "error", err)
+				return nil, status.Errorf(codes.Internal, "failed to query all bribes: %v", err)
 			}
 		}
-		bribes = b
 	}
 
 	return &types.QueryBribesResponse{Bribes: bribes}, nil
