@@ -164,6 +164,7 @@ message QueryBribeResponse {
 // QueryBribeAllocationsRequest
 message QueryBribeAllocationsRequest {
   string address = 1; // Optional filter by address. If empty, not applied.
+  string epoch_id = 2; // Optional filter by epoch_id. If empty, not applied.
 }
 
 
