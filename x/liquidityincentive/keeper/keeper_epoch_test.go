@@ -96,7 +96,7 @@ func TestCreateEpoch(t *testing.T) {
 			}
 			tt.setup(suite)
 
-			err := k.CreateEpoch(sdk.UnwrapSDKContext(ctx), 0, 1)
+			err := k.CreateEpoch(sdk.UnwrapSDKContext(ctx), 1)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {

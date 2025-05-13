@@ -88,12 +88,12 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context, epochId uint64) error {
 	if epochId > params.BribeClaimEpochs {
 		newExpiredEpochId := epochId - params.BribeClaimEpochs
 		if newExpiredEpochId > expiredEpochId {
-			for epochId := expiredEpochId; epochId < newExpiredEpochId; epochId++ {
-				if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
+			for id := expiredEpochId; id < newExpiredEpochId; id++ {
+				if err := k.ProcessUnclaimedBribes(ctx, id); err != nil {
 					return err
 				}
 				// Remove epoch
-				if err := k.RemoveEpoch(ctx, epochId); err != nil {
+				if err := k.RemoveEpoch(ctx, id); err != nil {
 					return err
 				}
 			}
