@@ -38,15 +38,15 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	}
 
 	if !feeRate.IsPositive() {
-		return nil, errorsmod.Wrap(err, "fee rate must be positive")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "fee rate must be positive")
 	}
 
 	if feeRate.GTE(math.LegacyOneDec()) {
-		return nil, errorsmod.Wrap(err, "fee rate must be less than 1")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "fee rate must be less than 1")
 	}
 
 	if msg.PriceRatio != "1.0001" {
-		return nil, errorsmod.Wrap(err, "price ratio must be 1.0001")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "price ratio must be 1.0001")
 	}
 
 	priceRatio, err := math.LegacyNewDecFromStr(msg.PriceRatio)
