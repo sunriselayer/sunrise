@@ -29,18 +29,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				{
-					RpcMethod:      "Gauges",
-					Use:            "all-gauges [previous_epoch_id]",
-					Short:          "List all gauge",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
-				},
-				{
-					RpcMethod:      "Gauge",
-					Use:            "gauge [previous_epoch_id] [pool_id]",
-					Short:          "Shows a gauge",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
-				},
-				{
 					RpcMethod: "Votes",
 					Use:       "all-votes",
 					Short:     "List all gauge votes",
@@ -83,7 +71,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "claim-bribes [bribe_id]",
 					Short:     "Send a claim-bribes tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "bribe_id"},
+						{ProtoField: "bribe_ids"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

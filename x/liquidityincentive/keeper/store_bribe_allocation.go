@@ -53,3 +53,31 @@ func (k Keeper) GetAllBribeAllocations(ctx context.Context) (list []types.BribeA
 
 	return list, nil
 }
+
+// GetBribeAllocationsByAddress returns all bribe allocations by address
+func (k Keeper) GetBribeAllocationsByAddress(ctx context.Context, address sdk.AccAddress) (list []types.BribeAllocation, err error) {
+	prefix := collections.NewPrefixedTripleRange[sdk.AccAddress, uint64, uint64](address)
+	err = k.BribeAllocations.Walk(ctx, prefix, func(key collections.Triple[sdk.AccAddress, uint64, uint64], value types.BribeAllocation) (stop bool, err error) {
+		list = append(list, value)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
+
+// GetBribeAllocationsByAddressAndEpochId returns all bribe allocations by address and epoch id
+func (k Keeper) GetBribeAllocationsByAddressAndEpochId(ctx context.Context, address sdk.AccAddress, epochId uint64) (list []types.BribeAllocation, err error) {
+	prefix := collections.NewSuperPrefixedTripleRange[sdk.AccAddress, uint64, uint64](address, epochId)
+	err = k.BribeAllocations.Walk(ctx, prefix, func(key collections.Triple[sdk.AccAddress, uint64, uint64], value types.BribeAllocation) (stop bool, err error) {
+		list = append(list, value)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}

@@ -13,9 +13,10 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func TesStartNewEpoch(t *testing.T) {
+func TestStartNewEpoch(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
@@ -66,6 +67,7 @@ func TesStartNewEpoch(t *testing.T) {
 				addrs         = simtestutil.CreateRandomAccounts(numVals + numDelegators)
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
+				moduleAddr    = simtestutil.CreateRandomAccounts(2)
 			)
 			// Mocks a bunch of validators
 			mocks.StakingKeeper.EXPECT().
@@ -83,6 +85,21 @@ func TesStartNewEpoch(t *testing.T) {
 						}
 						return nil
 					})
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(shareclasstypes.ModuleName).
+				Return(moduleAddr[0]).
+				AnyTimes()
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(types.ModuleName).
+				Return(moduleAddr[1]).
+				AnyTimes()
+			mocks.StakingKeeper.EXPECT().
+				IterateDelegations(ctx, moduleAddr[0], gomock.Any()).
+				DoAndReturn(
+					func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+						return nil
+					},
+				)
 
 			suite := tallyFixture{
 				t:        t,
@@ -114,13 +131,6 @@ func TesStartNewEpoch(t *testing.T) {
 				require.Equal(t, epoch.StartBlock, int64(0))
 				require.Equal(t, epoch.EndBlock, int64(5))
 				require.Len(t, epoch.Gauges, 1)
-
-				gauges, err := k.GetAllGauges(ctx)
-				require.NoError(t, err)
-				require.Len(t, gauges, 1)
-				require.GreaterOrEqual(t, gauges[0].PreviousEpochId, uint64(0))
-				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Count.String(), tt.expectedTally[0].Weight)
 			} else {
 				_, found, err := k.GetLastEpoch(ctx)
 				require.NoError(t, err)

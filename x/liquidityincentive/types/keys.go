@@ -34,7 +34,6 @@ var (
 
 	EpochsKeyPrefix           = collections.NewPrefix("epochs/")
 	EpochIdKey                = collections.NewPrefix("epoch_id/")
-	GaugesKeyPrefix           = collections.NewPrefix("gauges/")
 	VotesKeyPrefix            = collections.NewPrefix("votes/")
 	BribesKeyPrefix           = collections.NewPrefix("bribes/")
 	BribeIdKey                = collections.NewPrefix("bribe_id/")
@@ -81,7 +80,6 @@ func NewBribesIndexes(sb *collections.SchemaBuilder) BribesIndexes {
 
 var (
 	EpochsKeyCodec           = collections.Uint64Key
-	GaugesKeyCodec           = collections.PairKeyCodec(collections.Uint64Key, collections.Uint64Key)
 	VotesKeyCodec            = sdk.AccAddressKey
 	BribesKeyCodec           = collections.Uint64Key
 	BribeAllocationsKeyCodec = collections.TripleKeyCodec(sdk.AccAddressKey, collections.Uint64Key, collections.Uint64Key)

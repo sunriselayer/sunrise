@@ -11,6 +11,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 message Epoch {
   uint64 id = 1 [(amino.dont_omitempty) = true];
   int64 start_block = 2 [(amino.dont_omitempty) = true];
-  int64 end_block = 3 [(amino.dont_omitempty) = true];
-  repeated Gauge gauges = 4 [(gogoproto.nullable) = false];
+  int64 start_time = 3 [(amino.dont_omitempty) = true];
+  int64 end_block = 4 [(amino.dont_omitempty) = true];
+  repeated Gauge gauges = 5 [(gogoproto.nullable) = false];
 }

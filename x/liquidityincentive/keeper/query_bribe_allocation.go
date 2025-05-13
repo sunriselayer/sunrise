@@ -22,33 +22,50 @@ func (q queryServer) BribeAllocations(ctx context.Context, req *types.QueryBribe
 	}
 
 	var allocations []types.BribeAllocation
-	if req.Address != "" {
-		addr, errDecode := q.k.addressCodec.StringToBytes(req.Address)
-		if errDecode != nil {
-			q.k.Logger().Error("failed to decode address string", "address", req.Address, "error", errDecode)
-			return nil, status.Errorf(codes.InvalidArgument, "invalid address format '%s': %v", req.Address, errDecode)
-		}
+	var err error
 
-		// var allAllocationsForAddress []types.BribeAllocation // This line seems to be a leftover from pagination logic
-		prefix := collections.NewPrefixedTripleRange[sdk.AccAddress, uint64, uint64](addr)
-		errWalk := q.k.BribeAllocations.Walk(ctx, prefix, func(key collections.Triple[sdk.AccAddress, uint64, uint64], value types.BribeAllocation) (stop bool, err error) {
-			allocations = append(allocations, value)
-			return false, nil
-		})
-		if errWalk != nil {
-			q.k.Logger().Error("failed to walk bribe allocations by address", "address", req.Address, "error", errWalk)
-			return nil, status.Errorf(codes.Internal, "failed to query bribe allocations by address %s: %v", req.Address, errWalk)
+	applyAddressFilter := req.Address != ""
+	applyEpochIdFilter := req.EpochId != ""
+
+	var address sdk.AccAddress
+	if applyAddressFilter {
+		address, err = q.k.addressCodec.StringToBytes(req.Address)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid address format '%s': %v", req.Address, err)
+		}
+	}
+
+	var epochId uint64
+	if applyEpochIdFilter {
+		epochId, err = strconv.ParseUint(req.EpochId, 10, 64)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid epoch_id format '%s': %v", req.EpochId, err)
+		}
+	}
+
+	if applyAddressFilter && applyEpochIdFilter {
+		allocations, err = q.k.GetBribeAllocationsByAddressAndEpochId(ctx, address, epochId)
+		if err != nil {
+			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
+				q.k.Logger().Error("failed to get bribe allocations by address and epoch id", "address", req.Address, "epoch_id", req.EpochId, "error", err)
+				return nil, status.Errorf(codes.Internal, "failed to query bribe allocations by address %s and epoch id %s: %v", req.Address, req.EpochId, err)
+			}
+		}
+	} else if applyAddressFilter {
+		allocations, err = q.k.GetBribeAllocationsByAddress(ctx, address)
+		if err != nil {
+			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
+				q.k.Logger().Error("failed to get bribe allocations by address", "address", req.Address, "error", err)
+				return nil, status.Errorf(codes.Internal, "failed to query bribe allocations by address %s: %v", req.Address, err)
+			}
 		}
 	} else {
-		a, err := q.k.GetAllBribeAllocations(ctx)
+		allocations, err = q.k.GetAllBribeAllocations(ctx)
 		if err != nil {
 			if !errors.Is(err, collections.ErrNotFound) && !errors.Is(err, sdkerrors.ErrKeyNotFound) {
 				q.k.Logger().Error("failed to get all bribe allocations", "error", err)
 				return nil, status.Errorf(codes.Internal, "failed to query all bribe allocations: %v", err)
 			}
-		}
-		if a != nil {
-			allocations = a
 		}
 	}
 
