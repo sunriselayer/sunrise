@@ -21,27 +21,19 @@ func (k Keeper) StartNewEpoch(ctx context.Context, msg *types.MsgStartNewEpoch) 
 	if err != nil {
 		return nil, err
 	}
-	var lastEpochId uint64
-	var newEpochId uint64
+	var epochId uint64
 	if !found {
-		lastEpochId = 0
-		newEpochId = 1
+		epochId = 1
 	} else {
-		lastEpochId = lastEpoch.Id
-		newEpochId = lastEpochId + 1
+		epochId = lastEpoch.Id + 1
 
 		if sdkCtx.BlockHeight() < lastEpoch.EndBlock {
 			return nil, types.ErrEpochNotEnded
 		}
 	}
 
-	err = k.CreateEpoch(sdkCtx, lastEpochId, newEpochId)
+	err = k.CreateEpoch(sdkCtx, epochId)
 	if err != nil {
-		return nil, err
-	}
-
-	// Finalize bribe for new epoch & remove old epochs
-	if err := k.FinalizeBribeForEpoch(sdkCtx, newEpochId); err != nil {
 		return nil, err
 	}
 
