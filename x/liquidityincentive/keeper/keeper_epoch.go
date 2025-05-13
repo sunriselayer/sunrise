@@ -29,6 +29,7 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, epochId uint64) error {
 	epoch := types.Epoch{
 		Id:         epochId,
 		StartBlock: ctx.BlockHeight(),
+		StartTime:  ctx.BlockTime().Unix(),
 		EndBlock:   ctx.BlockHeight() + params.EpochBlocks,
 		Gauges:     gauges,
 	}
