@@ -67,7 +67,7 @@ func TestTally_Standard(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
-		expectedTally []types.TallyResult
+		expectedTally []types.Gauge
 		expectError   bool
 	}{
 		{
@@ -75,14 +75,14 @@ func TestTally_Standard(t *testing.T) {
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 0)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "no votes: tally fails",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one validator votes",
@@ -90,7 +90,7 @@ func TestTally_Standard(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1000000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(1000000)}},
 		},
 		{
 			name: "one account votes without delegation",
@@ -98,7 +98,7 @@ func TestTally_Standard(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one delegator votes",
@@ -115,7 +115,7 @@ func TestTally_Standard(t *testing.T) {
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(42)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(42)}},
 		},
 		{
 			name: "one delegator votes, validator votes",
@@ -133,7 +133,7 @@ func TestTally_Standard(t *testing.T) {
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1000000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(1000000)}},
 		},
 		{
 			name: "delegator with mixed delegations",
@@ -162,7 +162,7 @@ func TestTally_Standard(t *testing.T) {
 				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(3000000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(3000000)}},
 		},
 	}
 	for _, tt := range tests {
@@ -238,7 +238,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
-		expectedTally []types.TallyResult
+		expectedTally []types.Gauge
 		expectError   bool
 	}{
 		{
@@ -246,14 +246,14 @@ func TestTally_MultipleChoice(t *testing.T) {
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 0)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "no votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one validator votes",
@@ -261,7 +261,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(500000)}, {PoolId: 2, Count: math.NewIntFromUint64(500000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(500000)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(500000)}},
 		},
 		{
 			name: "one account votes without delegation",
@@ -269,7 +269,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one delegator votes",
@@ -286,7 +286,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(21)}, {PoolId: 2, Count: math.NewIntFromUint64(21)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(21)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(21)}},
 		},
 		{
 			name: "one delegator votes, validator votes",
@@ -304,7 +304,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(500000)}, {PoolId: 2, Count: math.NewIntFromUint64(500000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(500000)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(500000)}},
 		},
 		{
 			name: "delegator with mixed delegations",
@@ -333,7 +333,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1500000)}, {PoolId: 2, Count: math.NewIntFromUint64(1500000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(1500000)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(1500000)}},
 		},
 	}
 	for _, tt := range tests {

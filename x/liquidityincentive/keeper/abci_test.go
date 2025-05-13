@@ -36,9 +36,8 @@ func TestBeginBlocker(t *testing.T) {
 					EndBlock:   0,
 					Gauges: []types.Gauge{
 						{
-							PreviousEpochId: 0,
-							PoolId:          1,
-							Count:           math.OneInt(),
+							PoolId:      1,
+							VotingPower: math.OneInt(),
 						},
 					},
 				})
@@ -61,9 +60,8 @@ func TestBeginBlocker(t *testing.T) {
 					EndBlock:   0,
 					Gauges: []types.Gauge{
 						{
-							PreviousEpochId: 0,
-							PoolId:          1,
-							Count:           math.OneInt(),
+							PoolId:      1,
+							VotingPower: math.OneInt(),
 						},
 					},
 				})
@@ -86,9 +84,8 @@ func TestBeginBlocker(t *testing.T) {
 					EndBlock:   0,
 					Gauges: []types.Gauge{
 						{
-							PreviousEpochId: 0,
-							PoolId:          1,
-							Count:           math.OneInt(),
+							PoolId:      1,
+							VotingPower: math.OneInt(),
 						},
 					},
 				})

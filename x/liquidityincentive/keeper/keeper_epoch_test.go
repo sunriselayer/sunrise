@@ -111,13 +111,6 @@ func TestCreateEpoch(t *testing.T) {
 				require.Equal(t, epochs[0].StartBlock, int64(0))
 				require.Equal(t, epochs[0].EndBlock, int64(5))
 				require.Len(t, epochs[0].Gauges, 1)
-
-				gauges, err := k.GetAllGauges(ctx)
-				require.NoError(t, err)
-				require.Len(t, gauges, 1)
-				require.Equal(t, gauges[0].PreviousEpochId, uint64(0))
-				require.Equal(t, gauges[0].PoolId, tt.expectedTally[0].PoolId)
-				require.Equal(t, gauges[0].Count.String(), tt.expectedTally[0].Weight)
 			}
 		})
 	}
