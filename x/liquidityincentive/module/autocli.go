@@ -71,7 +71,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "claim-bribes [bribe_id]",
 					Short:     "Send a claim-bribes tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "bribe_id"},
+						{ProtoField: "bribe_ids"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
