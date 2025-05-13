@@ -6,29 +6,20 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
-func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) error {
-	results, err := k.Tally(ctx)
+func (k Keeper) CreateEpoch(ctx sdk.Context, epochId uint64) error {
+	// Finalize bribe for new epoch & remove old epochs
+	if err := k.FinalizeBribeForEpoch(ctx, epochId); err != nil {
+		return err
+	}
+
+	// Tally voting power to create gauges and delete votes
+	gauges, err := k.Tally(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(results) == 0 {
+	if len(gauges) == 0 {
 		return nil
-	}
-
-	// Create new gauges
-	gauges := []types.Gauge{}
-	for _, result := range results {
-		gauge := types.Gauge{
-			PreviousEpochId: previousEpochId,
-			PoolId:          result.PoolId,
-			Count:           result.Count,
-		}
-		err := k.SetGauge(ctx, gauge)
-		if err != nil {
-			return err
-		}
-		gauges = append(gauges, gauge)
 	}
 
 	params, err := k.Params.Get(ctx)

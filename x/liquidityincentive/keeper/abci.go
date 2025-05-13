@@ -42,12 +42,12 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 		return nil
 	}
 
-	totalCount := math.LegacyZeroDec()
+	totalPower := math.LegacyZeroDec()
 	for _, gauge := range lastEpoch.Gauges {
-		totalCount = totalCount.Add(math.LegacyNewDecFromInt(gauge.Count))
+		totalPower = totalPower.Add(math.LegacyNewDecFromInt(gauge.VotingPower))
 	}
 
-	if totalCount.IsZero() {
+	if totalPower.IsZero() {
 		k.Logger().Info("total count is zero")
 		return nil
 	}
@@ -84,7 +84,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 
 	// Distribute incentives to gauges
 	for _, gauge := range lastEpoch.Gauges {
-		weight := math.LegacyNewDecFromInt(gauge.Count).Quo(totalCount)
+		weight := math.LegacyNewDecFromInt(gauge.VotingPower).Quo(totalPower)
 		allocationDec := math.LegacyNewDecFromInt(incentiveBalance.Amount).Mul(weight)
 		if allocationDec.IsPositive() {
 			err := k.liquidityPoolKeeper.AllocateIncentive(

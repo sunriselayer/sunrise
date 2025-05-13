@@ -22,7 +22,7 @@ type ValidatorGovInfo struct {
 	PoolWeights         []types.PoolWeight // Vote of the validator
 }
 
-func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
+func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
 	validators := make(map[string]ValidatorGovInfo)
 
 	// fetch all the bonded validators, insert them into currValidators
@@ -42,7 +42,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		return false
 	})
 	if err != nil {
-		return []types.TallyResult{}, err
+		return []types.Gauge{}, err
 	}
 
 	// Hereafter it is analogy with gov CalculateVoteResultsAndVotingPowerFn
@@ -62,7 +62,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		return false
 	})
 	if err != nil {
-		return []types.TallyResult{}, err
+		return []types.Gauge{}, err
 	}
 	// </sunrise>
 
@@ -127,13 +127,13 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		votesToRemove = append(votesToRemove, key)
 		return false, nil
 	}); err != nil {
-		return []types.TallyResult{}, err
+		return []types.Gauge{}, err
 	}
 
 	// remove all votes from store
 	for _, key := range votesToRemove {
 		if err := k.Votes.Remove(ctx, key); err != nil {
-			return []types.TallyResult{}, err
+			return []types.Gauge{}, err
 		}
 	}
 
@@ -149,7 +149,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 		for _, poolWeight := range val.PoolWeights {
 			weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
 			if err != nil {
-				return []types.TallyResult{}, err
+				return []types.Gauge{}, err
 			}
 			subPower := votingPower.Mul(weight)
 			oldWeight := results[poolWeight.PoolId]
@@ -164,28 +164,28 @@ func (k Keeper) Tally(ctx context.Context) ([]types.TallyResult, error) {
 	// If there is no staked coins, the proposal fails
 	totalBonded, err := k.stakingKeeper.TotalBondedTokens(ctx)
 	if err != nil {
-		return []types.TallyResult{}, err
+		return []types.Gauge{}, err
 	}
 
 	if totalBonded.IsZero() {
-		return []types.TallyResult{}, nil
+		return []types.Gauge{}, nil
 	}
 
-	tallyResults := NewTallyResultFromMap(results)
-	sort.SliceStable(tallyResults, func(i, j int) bool {
-		return tallyResults[i].PoolId < tallyResults[j].PoolId
+	gauges := NewGaugeFromMap(results)
+	sort.SliceStable(gauges, func(i, j int) bool {
+		return gauges[i].PoolId < gauges[j].PoolId
 	})
 
-	return tallyResults, nil
+	return gauges, nil
 }
 
-// NewTallyResultFromMap creates a new TallyResult instance from a pool_id -> Dec map
-func NewTallyResultFromMap(results map[uint64]math.LegacyDec) []types.TallyResult {
-	tallyResults := []types.TallyResult{}
-	for poolId, count := range results {
-		tallyResults = append(tallyResults, types.TallyResult{
-			PoolId: poolId,
-			Count:  count.TruncateInt(),
+// NewGaugeFromMap creates a new Gauge instance from a pool_id -> Dec map
+func NewGaugeFromMap(results map[uint64]math.LegacyDec) []types.Gauge {
+	tallyResults := []types.Gauge{}
+	for poolId, power := range results {
+		tallyResults = append(tallyResults, types.Gauge{
+			PoolId:      poolId,
+			VotingPower: power.TruncateInt(),
 		})
 	}
 	return tallyResults

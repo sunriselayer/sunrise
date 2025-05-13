@@ -28,7 +28,6 @@ type Keeper struct {
 	Params              collections.Item[types.Params]
 	Epochs              collections.Map[uint64, types.Epoch]
 	EpochId             collections.Sequence
-	Gauges              collections.Map[collections.Pair[uint64, uint64], types.Gauge]
 	Votes               collections.Map[sdk.AccAddress, types.Vote]
 	Bribes              *collections.IndexedMap[uint64, types.Bribe, types.BribesIndexes]
 	BribeId             collections.Sequence
@@ -72,7 +71,6 @@ func NewKeeper(
 		Params:  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Epochs:  collections.NewMap(sb, types.EpochsKeyPrefix, "epochs", types.EpochsKeyCodec, codec.CollValue[types.Epoch](cdc)),
 		EpochId: collections.NewSequence(sb, types.EpochIdKey, "epoch_id"),
-		Gauges:  collections.NewMap(sb, types.GaugesKeyPrefix, "gauges", types.GaugesKeyCodec, codec.CollValue[types.Gauge](cdc)),
 		Votes:   collections.NewMap(sb, types.VotesKeyPrefix, "votes", types.VotesKeyCodec, codec.CollValue[types.Vote](cdc)),
 		Bribes: collections.NewIndexedMap(
 			sb,
