@@ -7,28 +7,13 @@ import (
 )
 
 func (k Keeper) CreateEpoch(ctx sdk.Context, previousEpochId, epochId uint64) error {
-	results, err := k.Tally(ctx)
+	gauges, err := k.Tally(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(results) == 0 {
+	if len(gauges) == 0 {
 		return nil
-	}
-
-	// Create new gauges
-	gauges := []types.Gauge{}
-	for _, result := range results {
-		gauge := types.Gauge{
-			PreviousEpochId: previousEpochId,
-			PoolId:          result.PoolId,
-			Count:           result.Count,
-		}
-		err := k.SetGauge(ctx, gauge)
-		if err != nil {
-			return err
-		}
-		gauges = append(gauges, gauge)
 	}
 
 	params, err := k.Params.Get(ctx)

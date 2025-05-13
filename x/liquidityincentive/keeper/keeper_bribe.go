@@ -92,18 +92,9 @@ func (k Keeper) FinalizeBribeForEpoch(ctx sdk.Context, epochId uint64) error {
 				if err := k.ProcessUnclaimedBribes(ctx, epochId); err != nil {
 					return err
 				}
-				epoch, _, err := k.GetEpoch(ctx, epochId)
-				if err != nil {
-					return err
-				}
-
+				// Remove epoch
 				if err := k.RemoveEpoch(ctx, epochId); err != nil {
 					return err
-				}
-				for _, gauge := range epoch.Gauges {
-					if err := k.RemoveGauge(ctx, gauge.PreviousEpochId, gauge.PoolId); err != nil {
-						return err
-					}
 				}
 			}
 		}
