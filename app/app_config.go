@@ -123,7 +123,7 @@ var (
 		shareclassmoduletypes.ModuleName,
 		lockupmoduletypes.ModuleName,
 		liquiditypoolmoduletypes.ModuleName,
-		liquidityincentivemoduletypes.ModuleName,
+		// liquidityincentivemoduletypes.ModuleName,
 		swapmoduletypes.ModuleName,
 	}
 
