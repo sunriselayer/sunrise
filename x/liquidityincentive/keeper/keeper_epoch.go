@@ -19,7 +19,7 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, epochId uint64) error {
 	}
 
 	if len(gauges) == 0 {
-		return nil
+		return types.ErrNoValidVotes
 	}
 
 	params, err := k.Params.Get(ctx)
