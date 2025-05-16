@@ -161,5 +161,6 @@ message QueryTallyResultRequest {}
 
 // QueryTallyResultResponse
 message QueryTallyResultResponse {
-  repeated Gauge gauges = 1 [(gogoproto.nullable) = false];
+  int64 total_voting_power = 1;
+  repeated Gauge gauges = 2 [(gogoproto.nullable) = false];
 }
