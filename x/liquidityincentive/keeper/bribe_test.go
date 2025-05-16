@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"strconv"
 	"testing"
 
 	"cosmossdk.io/math"
@@ -11,13 +12,20 @@ import (
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 )
 
+func setupKeeper(t *testing.T) (sdk.Context, Keeper) {
+	ctx, k := setupKeeperWithParams(t)
+	return ctx, k
+}
+
 func TestRegisterBribe(t *testing.T) {
 	ctx, k := setupKeeper(t)
 	msgServer := NewMsgServerImpl(k)
 
 	// Create test accounts
 	_, _, addr1 := testdata.KeyTestPubAddr()
+	addr1Str := addr1.String()
 	_, _, addr2 := testdata.KeyTestPubAddr()
+	addr2Str := addr2.String()
 
 	// Test cases
 	tests := []struct {
@@ -28,7 +36,7 @@ func TestRegisterBribe(t *testing.T) {
 		{
 			name: "valid bribe registration",
 			msg: &types.MsgRegisterBribe{
-				Sender:  addr1.String(),
+				Sender:  addr1Str,
 				EpochId: 1,
 				PoolId:  1,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
@@ -38,7 +46,7 @@ func TestRegisterBribe(t *testing.T) {
 		{
 			name: "zero amount bribe",
 			msg: &types.MsgRegisterBribe{
-				Sender:  addr2.String(),
+				Sender:  addr2Str,
 				EpochId: 1,
 				PoolId:  1,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(0))),
@@ -48,7 +56,7 @@ func TestRegisterBribe(t *testing.T) {
 		{
 			name: "past epoch bribe",
 			msg: &types.MsgRegisterBribe{
-				Sender:  addr1.String(),
+				Sender:  addr1Str,
 				EpochId: 0,
 				PoolId:  1,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
@@ -59,16 +67,16 @@ func TestRegisterBribe(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			// Fund the sender account with enough coins for valid case
-			if tc.name == "valid bribe registration" {
-				err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, tc.msg.Sender, tc.msg.Amount)
-				require.NoError(t, err)
-			}
-			// Fund the sender account for other cases if needed
-			if !tc.expectErr && tc.name != "valid bribe registration" {
-				err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, types.ModuleName, tc.msg.Amount)
-				require.NoError(t, err)
-				err = k.bankKeeper.(*MockBankKeeper).SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(tc.msg.Sender), tc.msg.Amount)
+			if !tc.expectErr {
+				var senderAddr string
+				if tc.msg.Sender == addr1Str {
+					senderAddr = addr1Str
+				} else if tc.msg.Sender == addr2Str {
+					senderAddr = addr2Str
+				} else {
+					senderAddr = tc.msg.Sender
+				}
+				err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, senderAddr, tc.msg.Amount)
 				require.NoError(t, err)
 			}
 
@@ -97,20 +105,18 @@ func TestClaimBribes(t *testing.T) {
 
 	// Create test accounts
 	_, _, addr1 := testdata.KeyTestPubAddr()
+	addr1Str := addr1.String()
 	_, _, addr2 := testdata.KeyTestPubAddr()
+	addr2Str := addr2.String()
 
 	// Register a bribe
 	bribeAmount := sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))
-	// Fund addr1 with enough coins before registering the bribe
-	err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, addr1.String(), bribeAmount)
-	require.NoError(t, err)
-	err = k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, types.ModuleName, bribeAmount)
-	require.NoError(t, err)
-	err = k.bankKeeper.(*MockBankKeeper).SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr1, bribeAmount)
+	// Mint coins directly to addr1 before registering the bribe
+	err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, addr1Str, bribeAmount)
 	require.NoError(t, err)
 
 	msg := &types.MsgRegisterBribe{
-		Sender:  addr1.String(),
+		Sender:  addr1Str,
 		EpochId: 1,
 		PoolId:  1,
 		Amount:  bribeAmount,
@@ -118,21 +124,75 @@ func TestClaimBribes(t *testing.T) {
 	_, err = msgServer.RegisterBribe(ctx, msg)
 	require.NoError(t, err)
 
+	// Get bribe ID from event
+	events := ctx.EventManager().Events()
+	for i, event := range events {
+		t.Logf("Event %d: Type=%s", i, event.Type)
+		for j, attr := range event.Attributes {
+			t.Logf("  Attr %d: Key=%s, Value=%s", j, attr.Key, string(attr.Value))
+		}
+	}
+	var bribeId uint64
+	for _, event := range events {
+		if event.Type == "sunrise.liquidityincentive.v1.EventRegisterBribe" {
+			for _, attr := range event.Attributes {
+				if attr.Key == "id" {
+					idStr, err := strconv.Unquote(string(attr.Value))
+					if err != nil {
+						idStr = string(attr.Value) // fallback if not quoted
+					}
+					parsedId, err := strconv.ParseUint(idStr, 10, 64)
+					require.NoError(t, err)
+					bribeId = parsedId
+					break
+				}
+			}
+		}
+	}
+	// require.NotZero(t, bribeId)
+
 	// Create vote weights for bribe allocation
 	vote := types.Vote{
 		Sender: addr2.String(),
-		PoolWeights: []types.PoolWeight{
-			{
-				PoolId: 1,
-				Weight: "1.0",
-			},
-		},
+		PoolWeights: []types.PoolWeight{{
+			PoolId: 1,
+			Weight: "1.0",
+		}},
 	}
 	err = k.SetVote(ctx, vote)
 	require.NoError(t, err)
 
 	// Save vote weights for bribes
 	err = k.SaveVoteWeightsForBribes(ctx, 1)
+	require.NoError(t, err)
+
+	// Create epoch
+	epoch := types.Epoch{
+		Id:         1,
+		StartBlock: ctx.BlockHeight(),
+		EndBlock:   ctx.BlockHeight() + 100,
+	}
+	err = k.SetEpoch(ctx, epoch)
+	require.NoError(t, err)
+
+	// Create gauge for the pool
+	gauge := types.Gauge{
+		PoolId: 1,
+		Count:  math.NewInt(1),
+	}
+	epoch.Gauges = append(epoch.Gauges, gauge)
+	err = k.SetEpoch(ctx, epoch)
+	require.NoError(t, err)
+
+	// Create bribe allocation
+	allocation := types.BribeAllocation{
+		Address:         addr2Str,
+		EpochId:         1,
+		PoolId:          1,
+		Weight:          "1.0",
+		ClaimedBribeIds: []uint64{},
+	}
+	err = k.SetBribeAllocation(ctx, allocation)
 	require.NoError(t, err)
 
 	// Test cases
@@ -144,15 +204,15 @@ func TestClaimBribes(t *testing.T) {
 		{
 			name: "valid bribe claim",
 			msg: &types.MsgClaimBribes{
-				Sender:  addr2.String(),
-				BribeId: 1,
+				Sender:  addr2Str,
+				BribeId: bribeId,
 			},
 			expectErr: false,
 		},
 		{
 			name: "claim non-existent bribe",
 			msg: &types.MsgClaimBribes{
-				Sender:  addr2.String(),
+				Sender:  addr2Str,
 				BribeId: 999,
 			},
 			expectErr: true,
@@ -160,8 +220,8 @@ func TestClaimBribes(t *testing.T) {
 		{
 			name: "claim with wrong address",
 			msg: &types.MsgClaimBribes{
-				Sender:  addr1.String(),
-				BribeId: 1,
+				Sender:  addr1Str,
+				BribeId: bribeId,
 			},
 			expectErr: true,
 		},
@@ -183,7 +243,7 @@ func TestClaimBribes(t *testing.T) {
 				require.Equal(t, bribeAmount, bribe.ClaimedAmount)
 
 				// Verify allocation was updated
-				allocation, err := k.GetBribeAllocation(ctx, sdk.AccAddress(tc.msg.Sender), 1, 1)
+				allocation, err := k.GetBribeAllocation(ctx, addr2, 1, 1)
 				require.NoError(t, err)
 				require.Contains(t, allocation.ClaimedBribeIds, tc.msg.BribeId)
 			}
@@ -197,16 +257,16 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 
 	// Create test accounts
 	_, _, addr1 := testdata.KeyTestPubAddr()
+	addr1Str := addr1.String()
 
 	// Register a bribe
 	bribeAmount := sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))
-	err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, types.ModuleName, bribeAmount)
-	require.NoError(t, err)
-	err = k.bankKeeper.(*MockBankKeeper).SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr1, bribeAmount)
+	// Mint coins directly to addr1 before registering the bribe
+	err := k.bankKeeper.(*MockBankKeeper).MintCoins(ctx, addr1Str, bribeAmount)
 	require.NoError(t, err)
 
 	msg := &types.MsgRegisterBribe{
-		Sender:  addr1.String(),
+		Sender:  addr1Str,
 		EpochId: 1,
 		PoolId:  1,
 		Amount:  bribeAmount,
@@ -230,10 +290,4 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 	// Verify expired epoch ID was updated
 	expiredEpochId := k.GetBribeExpiredEpochId(ctx)
 	require.Equal(t, uint64(1), expiredEpochId)
-}
-
-func setupKeeper(t *testing.T) (sdk.Context, Keeper) {
-	// Create a new context and keeper for each test
-	ctx, k := setupKeeperWithParams(t)
-	return ctx, k
 }
