@@ -223,13 +223,13 @@ func TestTally_Standard(t *testing.T) {
 			}
 			tt.setup(suite)
 
-			tallyWeights, err := k.Tally(ctx)
+			_, gauges, err := k.Tally(ctx)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
 			}
-			assert.Equal(t, tt.expectedTally, tallyWeights)
+			assert.Equal(t, tt.expectedTally, gauges)
 		})
 	}
 }
@@ -394,13 +394,13 @@ func TestTally_MultipleChoice(t *testing.T) {
 			}
 			tt.setup(suite)
 
-			tallyWeights, err := k.Tally(ctx)
+			_, gauges, err := k.Tally(ctx)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
 			}
-			assert.Equal(t, tt.expectedTally, tallyWeights)
+			assert.Equal(t, tt.expectedTally, gauges)
 		})
 	}
 }

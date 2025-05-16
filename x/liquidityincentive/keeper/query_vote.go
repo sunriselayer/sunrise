@@ -56,10 +56,10 @@ func (q queryServer) TallyResult(ctx context.Context, req *types.QueryTallyResul
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	gauges, err := q.k.Tally(ctx)
+	totalVotingPower, gauges, err := q.k.Tally(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryTallyResultResponse{Gauges: gauges}, nil
+	return &types.QueryTallyResultResponse{TotalVotingPower: totalVotingPower.TruncateInt64(), Gauges: gauges}, nil
 }

@@ -22,11 +22,11 @@ type ValidatorGovInfo struct {
 	PoolWeights         []types.PoolWeight // Vote of the validator
 }
 
-func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
+func (k Keeper) Tally(ctx context.Context) (totalVoterPower math.LegacyDec, gauges []types.Gauge, err error) {
 	validators := make(map[string]ValidatorGovInfo)
 
 	// fetch all the bonded validators, insert them into currValidators
-	err := k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
+	err = k.stakingKeeper.IterateBondedValidatorsByPower(ctx, func(index int64, validator stakingtypes.ValidatorI) (stop bool) {
 		valBz, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validator.GetOperator())
 		if err != nil {
 			return false
@@ -42,7 +42,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
 		return false
 	})
 	if err != nil {
-		return []types.Gauge{}, err
+		return math.LegacyZeroDec(), []types.Gauge{}, err
 	}
 
 	// Hereafter it is analogy with gov CalculateVoteResultsAndVotingPowerFn
@@ -62,7 +62,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
 		return false
 	})
 	if err != nil {
-		return []types.Gauge{}, err
+		return math.LegacyZeroDec(), []types.Gauge{}, err
 	}
 	// </sunrise>
 
@@ -127,13 +127,13 @@ func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
 		votesToRemove = append(votesToRemove, key)
 		return false, nil
 	}); err != nil {
-		return []types.Gauge{}, err
+		return math.LegacyZeroDec(), []types.Gauge{}, err
 	}
 
 	// remove all votes from store
 	for _, key := range votesToRemove {
 		if err := k.Votes.Remove(ctx, key); err != nil {
-			return []types.Gauge{}, err
+			return math.LegacyZeroDec(), []types.Gauge{}, err
 		}
 	}
 
@@ -149,7 +149,7 @@ func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
 		for _, poolWeight := range val.PoolWeights {
 			weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
 			if err != nil {
-				return []types.Gauge{}, err
+				return math.LegacyZeroDec(), []types.Gauge{}, err
 			}
 			subPower := votingPower.Mul(weight)
 			oldWeight := results[poolWeight.PoolId]
@@ -164,19 +164,19 @@ func (k Keeper) Tally(ctx context.Context) ([]types.Gauge, error) {
 	// If there is no staked coins, the proposal fails
 	totalBonded, err := k.stakingKeeper.TotalBondedTokens(ctx)
 	if err != nil {
-		return []types.Gauge{}, err
+		return math.LegacyZeroDec(), []types.Gauge{}, err
 	}
 
 	if totalBonded.IsZero() {
-		return []types.Gauge{}, nil
+		return math.LegacyZeroDec(), []types.Gauge{}, nil
 	}
 
-	gauges := NewGaugeFromMap(results)
+	gauges = NewGaugeFromMap(results)
 	sort.SliceStable(gauges, func(i, j int) bool {
 		return gauges[i].PoolId < gauges[j].PoolId
 	})
 
-	return gauges, nil
+	return totalVotingPower, gauges, nil
 }
 
 // NewGaugeFromMap creates a new Gauge instance from a pool_id -> Dec map

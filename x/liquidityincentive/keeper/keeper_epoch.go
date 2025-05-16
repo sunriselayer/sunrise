@@ -13,7 +13,7 @@ func (k Keeper) CreateEpoch(ctx sdk.Context, epochId uint64) error {
 	}
 
 	// Tally voting power to create gauges and delete votes
-	gauges, err := k.Tally(ctx)
+	_, gauges, err := k.Tally(ctx)
 	if err != nil {
 		return err
 	}
