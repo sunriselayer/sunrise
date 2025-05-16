@@ -53,6 +53,11 @@ service Query {
   rpc BribeAllocation(QueryBribeAllocationRequest) returns (QueryBribeAllocationResponse) {
     option (google.api.http).get = "/sunrise/liquidityincentive/v1/bribe-allocations/{address}/{epoch_id}/{pool_id}";
   }
+
+  // TallyResult queries the tally of next epoch.
+  rpc TallyResult(QueryTallyResultRequest) returns (QueryTallyResultResponse) {
+    option (google.api.http).get = "/sunrise/liquidityincentive/v1/tally";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -149,4 +154,12 @@ message QueryBribeAllocationRequest {
 // QueryBribeAllocationResponse
 message QueryBribeAllocationResponse {
   BribeAllocation bribe_allocation = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryTallyResultRequest
+message QueryTallyResultRequest {}
+
+// QueryTallyResultResponse
+message QueryTallyResultResponse {
+  repeated Gauge gauges = 1 [(gogoproto.nullable) = false];
 }
