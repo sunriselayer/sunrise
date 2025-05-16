@@ -29,6 +29,7 @@ func TestStartNewEpoch(t *testing.T) {
 				setTotalBonded(s, 0)
 			},
 			expectedTally: []types.PoolWeight{},
+			expectError:   true,
 		},
 		{
 			name: "one validator votes",
