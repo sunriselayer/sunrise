@@ -53,8 +53,13 @@ func TestCreateEpoch(t *testing.T) {
 				fx.Mocks.StakingKeeper.EXPECT().
 					TotalBondedTokens(gomock.Any()).
 					Return(math.NewInt(0), nil).AnyTimes()
+
+				// Mock AddressCodec for AccountKeeper
+				fx.Mocks.AccountKeeper.EXPECT().
+					AddressCodec().
+					Return(bech32Codec).AnyTimes()
 			},
-			expectErr: false, // Should not error, just create an empty epoch
+			expectErr: true, // Should error because no votes are present
 		},
 		{
 			name: "one validator votes",
@@ -88,6 +93,11 @@ func TestCreateEpoch(t *testing.T) {
 				fx.Mocks.StakingKeeper.EXPECT().
 					TotalBondedTokens(gomock.Any()).
 					Return(math.NewInt(1000000), nil).AnyTimes()
+
+				// Mock AddressCodec for AccountKeeper
+				fx.Mocks.AccountKeeper.EXPECT().
+					AddressCodec().
+					Return(bech32Codec).AnyTimes()
 
 				// Set up a vote with a valid address
 				vote := types.Vote{

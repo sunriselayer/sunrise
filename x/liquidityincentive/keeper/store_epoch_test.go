@@ -58,10 +58,21 @@ func TestEpochGetAll(t *testing.T) {
 
 func TestEpochCount(t *testing.T) {
 	f := initFixture(t)
-	items := createNEpoch(f.keeper, f.ctx, 10)
-	count, err := f.keeper.GetEpochCount(f.ctx)
+	count := uint64(10)
+
+	// Add epochs 2 through 11 using AppendEpoch
+	for i := uint64(2); i <= count+1; i++ {
+		epoch := types.Epoch{
+			StartBlock: int64(i),
+			EndBlock:   int64(i + 1),
+			Gauges:     []types.Gauge{},
+		}
+		_, err := f.keeper.AppendEpoch(f.ctx, epoch)
+		require.NoError(t, err)
+	}
+	epochCount, err := f.keeper.GetEpochCount(f.ctx)
 	require.NoError(t, err)
-	require.Equal(t, uint64(len(items)), count)
+	require.Equal(t, count+1, epochCount)
 }
 
 func TestGetLastEpoch(t *testing.T) {

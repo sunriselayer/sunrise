@@ -63,6 +63,11 @@ func initFixture(t *testing.T) *fixture {
 		t.Fatalf("failed to set params: %v", err)
 	}
 
+	// Set initial EpochId to 1
+	if err := k.SetEpochCount(ctx, 1); err != nil {
+		t.Fatalf("failed to set initial epoch count: %v", err)
+	}
+
 	return &fixture{
 		ctx:          ctx,
 		keeper:       k,

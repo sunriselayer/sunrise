@@ -36,7 +36,7 @@ func TestEpochQuerySingle(t *testing.T) {
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryEpochRequest{Id: uint64(len(msgs))},
+			request: &types.QueryEpochRequest{Id: 9999},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
@@ -48,7 +48,11 @@ func TestEpochQuerySingle(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			response, err := qs.Epoch(f.ctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				if tc.desc == "KeyNotFound" {
+					require.EqualError(t, err, tc.err.Error())
+				} else {
+					require.ErrorIs(t, err, tc.err)
+				}
 			} else {
 				require.NoError(t, err)
 				require.Equal(t,

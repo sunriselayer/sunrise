@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
@@ -35,9 +36,9 @@ func toInterfaces(coins sdk.Coins) []interface{} {
 
 func setupEpochs(ctx sdk.Context, k *keeper.Keeper) error {
 	// Set up initial epoch
-	_ = k.SetEpochCount(ctx, 0)
+	_ = k.SetEpochCount(ctx, 1)
 	initialEpoch := types.Epoch{
-		Id:         0,
+		Id:         1,
 		StartBlock: ctx.BlockHeight() - 100,
 		EndBlock:   ctx.BlockHeight(),
 		Gauges: []types.Gauge{{
@@ -51,7 +52,7 @@ func setupEpochs(ctx sdk.Context, k *keeper.Keeper) error {
 
 	// Set up current epoch
 	epoch := types.Epoch{
-		Id:         1,
+		Id:         2,
 		StartBlock: ctx.BlockHeight(),
 		EndBlock:   ctx.BlockHeight() + 100,
 		Gauges: []types.Gauge{{
@@ -59,7 +60,12 @@ func setupEpochs(ctx sdk.Context, k *keeper.Keeper) error {
 			VotingPower: math.NewInt(1),
 		}},
 	}
-	return k.SetEpoch(ctx, epoch)
+	if err := k.SetEpoch(ctx, epoch); err != nil {
+		return err
+	}
+
+	// Set the current epoch ID to 2
+	return k.SetEpochCount(ctx, 2)
 }
 
 func TestRegisterBribe(t *testing.T) {
@@ -68,6 +74,8 @@ func TestRegisterBribe(t *testing.T) {
 	addr1Str := addr1.String()
 	_, _, addr2 := testdata.KeyTestPubAddr()
 	addr2Str := addr2.String()
+
+	bech32Codec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	// Test cases
 	tests := []struct {
@@ -80,12 +88,17 @@ func TestRegisterBribe(t *testing.T) {
 			name: "valid bribe registration",
 			msg: &types.MsgRegisterBribe{
 				Sender:  addr1Str,
-				EpochId: 1,
+				EpochId: 2,
 				PoolId:  1,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
 			},
 			expectErr: false,
 			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+				// Mock AddressCodec for AccountKeeper
+				fx.Mocks.AccountKeeper.EXPECT().
+					AddressCodec().
+					Return(bech32Codec).AnyTimes()
+
 				fx.Mocks.LiquidityPoolKeeper.EXPECT().
 					GetPool(gomock.Any(), uint64(1)).
 					Return(liquiditypooltypes.Pool{}, true, nil)
@@ -101,32 +114,49 @@ func TestRegisterBribe(t *testing.T) {
 			name: "zero amount bribe",
 			msg: &types.MsgRegisterBribe{
 				Sender:  addr2Str,
-				EpochId: 1,
+				EpochId: 2,
 				PoolId:  1,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(0))),
 			},
 			expectErr: true,
+			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+				// Mock AddressCodec for AccountKeeper
+				fx.Mocks.AccountKeeper.EXPECT().
+					AddressCodec().
+					Return(bech32Codec).AnyTimes()
+			},
 		},
 		{
 			name: "past epoch bribe",
 			msg: &types.MsgRegisterBribe{
 				Sender:  addr1Str,
-				EpochId: 0,
+				EpochId: 1,
 				PoolId:  1,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
 			},
 			expectErr: true,
+			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+				// Mock AddressCodec for AccountKeeper
+				fx.Mocks.AccountKeeper.EXPECT().
+					AddressCodec().
+					Return(bech32Codec).AnyTimes()
+			},
 		},
 		{
 			name: "invalid pool id",
 			msg: &types.MsgRegisterBribe{
 				Sender:  addr1Str,
-				EpochId: 1,
+				EpochId: 2,
 				PoolId:  999,
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
 			},
 			expectErr: true,
 			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+				// Mock AddressCodec for AccountKeeper
+				fx.Mocks.AccountKeeper.EXPECT().
+					AddressCodec().
+					Return(bech32Codec).AnyTimes()
+
 				fx.Mocks.LiquidityPoolKeeper.EXPECT().
 					GetPool(gomock.Any(), uint64(999)).
 					Return(liquiditypooltypes.Pool{}, false, nil)
@@ -149,6 +179,10 @@ func TestRegisterBribe(t *testing.T) {
 			err := setupEpochs(ctx, &fx.Keeper)
 			require.NoError(t, err)
 
+			// Set bribe count to 1 for test consistency
+			err = fx.Keeper.SetBribeCount(ctx, 1)
+			require.NoError(t, err)
+
 			// Set up test-specific mocks
 			if tc.setup != nil {
 				tc.setup(fx, ctx)
@@ -169,11 +203,7 @@ func TestRegisterBribe(t *testing.T) {
 				require.Equal(t, tc.msg.Amount, bribes[0].Amount)
 				require.Equal(t, tc.msg.Sender, bribes[0].Address)
 				bribeId := bribes[0].Id
-				require.NotZero(t, bribeId)
-				// Fallback: If bribeId is still zero, set to 1 for test continuity (workaround for test env)
-				if bribeId == 0 {
-					bribeId = 1
-				}
+				require.Equal(t, uint64(1), bribeId) // Ensure BribeId starts at 1
 			}
 		})
 	}
@@ -198,6 +228,10 @@ func TestClaimBribes(t *testing.T) {
 		err := setupEpochs(ctx, &fx.Keeper)
 		require.NoError(t, err)
 
+		// Set bribe count to 1 for test consistency
+		err = fx.Keeper.SetBribeCount(ctx, 1)
+		require.NoError(t, err)
+
 		// Set up vote and allocation
 		vote := types.Vote{
 			Sender: addr2.String(),
@@ -209,12 +243,12 @@ func TestClaimBribes(t *testing.T) {
 		err = fx.Keeper.SetVote(ctx, vote)
 		require.NoError(t, err)
 
-		err = fx.Keeper.SaveVoteWeightsForBribes(ctx, 1)
+		err = fx.Keeper.SaveVoteWeightsForBribes(ctx, 2)
 		require.NoError(t, err)
 
 		allocation := types.BribeAllocation{
 			Address:         addr2Str,
-			EpochId:         1,
+			EpochId:         2,
 			PoolId:          1,
 			Weight:          "1.0",
 			ClaimedBribeIds: []uint64{},
@@ -236,7 +270,7 @@ func TestClaimBribes(t *testing.T) {
 			Return(nil)
 		msg := &types.MsgRegisterBribe{
 			Sender:  addr1Str,
-			EpochId: 1,
+			EpochId: 2,
 			PoolId:  1,
 			Amount:  bribeAmount,
 		}
@@ -244,7 +278,7 @@ func TestClaimBribes(t *testing.T) {
 		require.NoError(t, err)
 
 		// Get the bribe ID from the store
-		bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, 1)
+		bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, 2)
 		require.NoError(t, err)
 		require.Len(t, bribes, 1)
 		bribeId := bribes[0].Id
@@ -338,7 +372,7 @@ func TestClaimBribes(t *testing.T) {
 				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, bribeAmount, bribe.ClaimedAmount)
-				allocation, err := fx.Keeper.GetBribeAllocation(ctx, addr2, 1, 1)
+				allocation, err := fx.Keeper.GetBribeAllocation(ctx, addr2, 2, 1)
 				require.NoError(t, err)
 				require.Contains(t, allocation.ClaimedBribeIds, bribeId)
 			}
@@ -362,6 +396,10 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 	err := setupEpochs(ctx, &fx.Keeper)
 	require.NoError(t, err)
 
+	// Set bribe count to 1 for test consistency
+	err = fx.Keeper.SetBribeCount(ctx, 1)
+	require.NoError(t, err)
+
 	// Set up vote and allocation
 	vote := types.Vote{
 		Sender: addr2.String(),
@@ -373,12 +411,12 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 	err = fx.Keeper.SetVote(ctx, vote)
 	require.NoError(t, err)
 
-	err = fx.Keeper.SaveVoteWeightsForBribes(ctx, 1)
+	err = fx.Keeper.SaveVoteWeightsForBribes(ctx, 2)
 	require.NoError(t, err)
 
 	allocation := types.BribeAllocation{
 		Address:         addr2Str,
-		EpochId:         1,
+		EpochId:         2,
 		PoolId:          1,
 		Weight:          "1.0",
 		ClaimedBribeIds: []uint64{},
@@ -400,7 +438,7 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 		Return(nil)
 	msg := &types.MsgRegisterBribe{
 		Sender:  addr1Str,
-		EpochId: 1,
+		EpochId: 2,
 		PoolId:  1,
 		Amount:  bribeAmount,
 	}
@@ -409,7 +447,7 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 	require.NoError(t, err)
 
 	// Set expired epoch ID
-	_ = fx.Keeper.SetBribeExpiredEpochId(ctx, 0)
+	_ = fx.Keeper.SetBribeExpiredEpochId(ctx, 1)
 
 	// Set up mocks for processing unclaimed bribes
 	fx.Mocks.AccountKeeper.EXPECT().
@@ -420,15 +458,15 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 		Return(nil)
 
 	// Process unclaimed bribes
-	err = fx.Keeper.ProcessUnclaimedBribes(ctx, 1)
+	err = fx.Keeper.ProcessUnclaimedBribes(ctx, 2)
 	require.NoError(t, err)
 
 	// Verify bribes are removed
-	bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, 1)
+	bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, 2)
 	require.NoError(t, err)
 	require.Len(t, bribes, 0)
 
 	// Verify expired epoch ID is updated
 	expiredEpochId := fx.Keeper.GetBribeExpiredEpochId(ctx)
-	require.Equal(t, uint64(1), expiredEpochId)
+	require.Equal(t, uint64(2), expiredEpochId)
 }
