@@ -71,7 +71,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "CreatePool",
 					Use:       "create-pool [denom_base] [denom_quote] [fee_rate] [price_ratio] [base_offset]",
-					Short:     "Create pool",
+					Short:     "Send a create-pool tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "denom_base"},
 						{ProtoField: "denom_quote"},
@@ -83,7 +83,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "CreatePosition",
 					Use:       "create-position [pool_id] [lower_tick] [upper_tick] [token_base] [token_quote] [min_amount_base] [min_amount_quote]",
-					Short:     "Create position",
+					Short:     "Send a create-position tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "pool_id"},
 						{ProtoField: "lower_tick"},
@@ -97,7 +97,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "IncreaseLiquidity",
 					Use:       "increase-liquidity [id] [amount_base] [amount_quote] [min_amount_base] [min_amount_quote]",
-					Short:     "Increase liquidity",
+					Short:     "Send a increase-liquidity tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "amount_base"},
@@ -109,7 +109,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "DecreaseLiquidity",
 					Use:       "decrease-liquidity [id] [liquidity]",
-					Short:     "Decrease liquidity",
+					Short:     "Send a decrease-liquidity tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "liquidity"},

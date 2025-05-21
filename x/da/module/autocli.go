@@ -82,7 +82,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod:      "SubmitInvalidity",
 					Use:            "submit-invalidity [metadata_uri] [index],[index],...",
-					Short:          "Submit invalidity to the data",
+					Short:          "Send a submit-invalidity tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata_uri"}, {ProtoField: "indices"}},
 				},
 				{
@@ -92,13 +92,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod:      "RegisterProofDeputy",
 					Use:            "register-proof-deputy [deputy_address]",
-					Short:          "Register proof deputy",
+					Short:          "Send a register-proof-deputy tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "deputy_address"}},
 				},
 				{
 					RpcMethod:      "UnregisterProofDeputy",
 					Use:            "unregister-proof-deputy",
-					Short:          "Unregister proof deputy",
+					Short:          "Send a unregister-proof-deputy tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
