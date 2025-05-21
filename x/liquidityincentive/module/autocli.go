@@ -39,6 +39,33 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Shows a gauge vote",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
 				},
+				{
+					RpcMethod: "Bribes",
+					Use:       "bribes",
+					Short:     "List bribes",
+				},
+				{
+					RpcMethod:      "Bribe",
+					Use:            "bribe [id]",
+					Short:          "Shows a bribe",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod: "BribeAllocations",
+					Use:       "bribe-allocations",
+					Short:     "List bribe allocations",
+				},
+				{
+					RpcMethod:      "BribeAllocation",
+					Use:            "bribe-allocation [address] [epoch_id] [pool_id]",
+					Short:          "Shows a bribe allocation",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}, {ProtoField: "epoch_id"}, {ProtoField: "pool_id"}},
+				},
+				{
+					RpcMethod: "TallyResult",
+					Use:       "tally-result",
+					Short:     "Shows the tally result",
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -73,6 +100,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "bribe_ids"},
 					},
+				},
+				{
+					RpcMethod: "StartNewEpoch",
+					Use:       "start-new-epoch",
+					Short:     "Send a start-new-epoch tx",
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

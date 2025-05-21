@@ -25,9 +25,10 @@ func TestCreateEpoch(t *testing.T) {
 	bech32Codec := address.NewBech32Codec("cosmos")
 
 	tests := []struct {
-		name      string
-		setup     func(fx *testutil.Fixture, ctx sdk.Context)
-		expectErr bool
+		name          string
+		setup         func(fx *testutil.Fixture, ctx sdk.Context)
+		expectedTally []types.Gauge
+		expectError   bool
 	}{
 		{
 			name: "no votes",
@@ -59,7 +60,8 @@ func TestCreateEpoch(t *testing.T) {
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 			},
-			expectErr: true, // Should error because no votes are present
+			expectedTally: []types.Gauge{},
+			expectError:   true,
 		},
 		{
 			name: "one validator votes",
@@ -110,7 +112,11 @@ func TestCreateEpoch(t *testing.T) {
 				err := fx.Keeper.SetVote(ctx, vote)
 				require.NoError(t, err)
 			},
-			expectErr: false,
+			expectedTally: []types.Gauge{{
+				PoolId:      1,
+				VotingPower: math.NewInt(1000000),
+			}},
+			expectError: false,
 		},
 	}
 
@@ -126,7 +132,7 @@ func TestCreateEpoch(t *testing.T) {
 			}
 
 			err := fx.Keeper.CreateEpoch(ctx, 1)
-			if tc.expectErr {
+			if tc.expectError {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
@@ -134,6 +140,7 @@ func TestCreateEpoch(t *testing.T) {
 				require.NoError(t, err)
 				require.True(t, found)
 				require.NotNil(t, epoch)
+				require.Equal(t, tc.expectedTally, epoch.Gauges)
 			}
 		})
 	}
