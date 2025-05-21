@@ -27,7 +27,7 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 		if err != nil {
 			return err
 		}
-		rewardMultiplier, err := math.NewDecFromString(elem.RewardMultiplier)
+		rewardMultiplier, err := math.LegacyNewDecFromStr(elem.RewardMultiplier)
 		if err != nil {
 			return err
 		}
@@ -47,7 +47,7 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 		if err != nil {
 			return err
 		}
-		rewardMultiplier, err := math.NewDecFromString(elem.RewardMultiplier)
+		rewardMultiplier, err := math.LegacyNewDecFromStr(elem.RewardMultiplier)
 		if err != nil {
 			return err
 		}

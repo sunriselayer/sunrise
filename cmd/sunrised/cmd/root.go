@@ -5,11 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	authv1 "cosmossdk.io/api/cosmos/auth/module/v1"
-	stakingv1 "cosmossdk.io/api/cosmos/staking/module/v1"
 	"cosmossdk.io/client/v2/autocli"
-	"cosmossdk.io/core/address"
-	"cosmossdk.io/core/registry"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
@@ -31,10 +27,10 @@ import (
 // NewRootCmd creates a new root command for sunrised. It is called once in the main function.
 func NewRootCmd() *cobra.Command {
 	var (
-		appCodec      codec.Codec
-		autoCliOpts   autocli.AppOptions
-		moduleManager *module.Manager
-		clientCtx     client.Context
+		appCodec           codec.Codec
+		autoCliOpts        autocli.AppOptions
+		moduleBasicManager module.BasicManager
+		clientCtx          client.Context
 	)
 
 	if err := depinject.Inject(
@@ -45,7 +41,7 @@ func NewRootCmd() *cobra.Command {
 			),
 		),
 		&autoCliOpts,
-		&moduleManager,
+		&moduleBasicManager,
 		&clientCtx,
 
 		&appCodec,
@@ -68,7 +64,7 @@ func NewRootCmd() *cobra.Command {
 				return err
 			}
 
-			clientCtx, err = config.CreateClientConfig(clientCtx, "", nil)
+			clientCtx, err = config.ReadFromClientConfig(clientCtx)
 			if err != nil {
 				return err
 			}
@@ -87,16 +83,16 @@ func NewRootCmd() *cobra.Command {
 	// Since the IBC modules don't support dependency injection, we need to
 	// manually register the modules on the client side.
 	// This needs to be removed after IBC supports App Wiring.
-	ibcModules := app.RegisterIBC(appCodec, clientCtx.InterfaceRegistry)
+	ibcModules := app.RegisterIBC(clientCtx.Codec, clientCtx.InterfaceRegistry)
 	for name, mod := range ibcModules {
-		moduleManager.Modules[name] = mod
+		moduleBasicManager[name] = module.CoreAppModuleBasicAdaptor(name, mod)
 		autoCliOpts.Modules[name] = mod
 	}
 	// <sunrise>
-	custom.ReplaceCustomModules(moduleManager, appCodec)
+	custom.ReplaceCustomModules(moduleBasicManager)
 	// </sunrise>
 
-	initRootCmd(rootCmd, moduleManager)
+	initRootCmd(rootCmd, clientCtx.TxConfig, moduleBasicManager)
 
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {
 		panic(err)
@@ -109,39 +105,19 @@ func ProvideClientContext(
 	appCodec codec.Codec,
 	interfaceRegistry codectypes.InterfaceRegistry,
 	txConfigOpts tx.ConfigOptions,
-	legacyAmino registry.AminoRegistrar,
-	addressCodec address.Codec,
-	validatorAddressCodec address.ValidatorAddressCodec,
-	consensusAddressCodec address.ConsensusAddressCodec,
-	authConfig *authv1.Module,
-	stakingConfig *stakingv1.Module,
+	legacyAmino *codec.LegacyAmino,
 ) client.Context {
-	var err error
-
-	amino, ok := legacyAmino.(*codec.LegacyAmino)
-	if !ok {
-		panic("ProvideClientContext requires a *codec.LegacyAmino instance")
-	}
-
 	clientCtx := client.Context{}.
 		WithCodec(appCodec).
 		WithInterfaceRegistry(interfaceRegistry).
-		WithLegacyAmino(amino).
+		WithLegacyAmino(legacyAmino).
 		WithInput(os.Stdin).
 		WithAccountRetriever(types.AccountRetriever{}).
-		WithAddressCodec(addressCodec).
-		WithValidatorAddressCodec(validatorAddressCodec).
-		WithConsensusAddressCodec(consensusAddressCodec).
 		WithHomeDir(app.DefaultNodeHome).
-		WithViper(app.Name). // env variable prefix
-		WithAddressPrefix(authConfig.Bech32Prefix).
-		WithValidatorPrefix(stakingConfig.Bech32PrefixValidator)
+		WithViper(app.Name) // env variable prefix
 
-	// Read the config to overwrite the default values with the values from the config file
-	clientCtx, err = config.CreateClientConfig(clientCtx, "", nil)
-	if err != nil {
-		panic(err)
-	}
+	// Read the config again to overwrite the default values with the values from the config file
+	clientCtx, _ = config.ReadFromClientConfig(clientCtx)
 
 	// textual is enabled by default, we need to re-create the tx config grpc instead of bank keeper.
 	txConfigOpts.TextualCoinMetadataQueryFn = authtxconfig.NewGRPCCoinMetadataQueryFn(clientCtx)

@@ -18,6 +18,11 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, errorsmod.Wrap(err, "invalid validator address")
 	}
 
+	err = msg.Amount.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	share, rewards, err := k.Delegate(ctx, sender, validatorAddr, msg.Amount)
 	if err != nil {
 		return nil, err

@@ -1,0 +1,176 @@
+syntax = "proto3";
+package sunrise.da.v0;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "sunrise/da/v0/params.proto";
+import "sunrise/da/v0/published_data.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/da/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/params";
+  }
+  // PublishedData queries published data
+  rpc PublishedData(QueryPublishedDataRequest) returns (QueryPublishedDataResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/published-data";
+  }
+  // AllPublishedData queries published data
+  rpc AllPublishedData(QueryAllPublishedDataRequest) returns (QueryAllPublishedDataResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/all-published-data";
+  }
+  // ValidityProof queries validity proof from the validator
+  rpc ValidityProof(QueryValidityProofRequest) returns (QueryValidityProofResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/validity-proof";
+  }
+  // AllValidityProofs queries all validity proofs
+  rpc AllValidityProofs(QueryAllValidityProofsRequest) returns (QueryAllValidityProofsResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/all-validity-proofs";
+  }
+  // Invalidity queries invalidity report
+  rpc Invalidity(QueryInvalidityRequest) returns (QueryInvalidityResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/invalidity";
+  }
+  // AllInvalidity queries all invalidity reports
+  rpc AllInvalidity(QueryAllInvalidityRequest) returns (QueryAllInvalidityResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/all-invalidity";
+  }
+  // ValidatorShardIndices
+  rpc ValidatorShardIndices(QueryValidatorShardIndicesRequest) returns (QueryValidatorShardIndicesResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/validator-shard-indices";
+  }
+  // ZkpProofThreshold
+  rpc ZkpProofThreshold(QueryZkpProofThresholdRequest) returns (QueryZkpProofThresholdResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/zkp-proof-threshold";
+  }
+  // ProofDeputy
+  rpc ProofDeputy(QueryProofDeputyRequest) returns (QueryProofDeputyResponse) {
+    option (google.api.http).get = "/sunrise/da/v0/proof-deputy";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryPublishedDataRequest is request type for the Query/PublishedData RPC
+// method.
+message QueryPublishedDataRequest {
+  string metadata_uri = 1;
+}
+
+// QueryPublishedDataResponse is response type for the Query/PublishedData RPC
+// method.
+message QueryPublishedDataResponse {
+  PublishedData data = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAllPublishedDataRequest is request type for the
+// Query/AllPublishedData RPC method.
+message QueryAllPublishedDataRequest {}
+
+// QueryAllPublishedDataResponse is response type for the
+// Query/AllPublishedData RPC method.
+message QueryAllPublishedDataResponse {
+  repeated PublishedData data = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryValidityProofRequest is request type for the Query/ValidityProof RPC
+// method.
+message QueryValidityProofRequest {
+  string metadata_uri = 1;
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryValidityProofResponse is response type for the Query/ValidityProof RPC
+// method.
+message QueryValidityProofResponse {
+  Proof proof = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAllValidityProofsRequest is request type for the Query/AllValidityProofs RPC
+// method.
+message QueryAllValidityProofsRequest {
+  string metadata_uri = 1;
+}
+
+// QueryAllValidityProofsResponse is response type for the Query/AllValidityProofs RPC
+// method.
+message QueryAllValidityProofsResponse {
+  repeated Proof proofs = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryInvalidityProofRequest is request type for the Query/Invalidity RPC
+// method.
+message QueryInvalidityRequest {
+  string metadata_uri = 1;
+  string sender_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// QueryInvalidityResponse is response type for the Query/Invalidity RPC
+// method.
+message QueryInvalidityResponse {
+  Invalidity invalidity = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAllInvalidityProofRequest is request type for the Query/AllInvalidity RPC
+// method.
+message QueryAllInvalidityRequest {
+  string metadata_uri = 1;
+}
+
+// QueryAllInvalidityResponse is response type for the Query/AllInvalidity RPC
+// method.
+message QueryAllInvalidityResponse {
+  repeated Invalidity invalidity = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryValidatorShardIndicesRequest is request type for the
+// Query/ValidatorShardIndices RPC method.
+message QueryValidatorShardIndicesRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  uint64 shard_count = 2;
+}
+
+// QueryValidatorShardIndicesResponse is response type for the
+// Query/ValidatorShardIndices RPC method.
+message QueryValidatorShardIndicesResponse {
+  repeated uint64 shard_indices = 1;
+}
+
+// QueryZkpProofThresholdRequest is request type for the
+// Query/ZkpProofThreshold RPC method.
+message QueryZkpProofThresholdRequest {
+  uint64 shard_count = 1;
+}
+
+// QueryZkpProofThresholdResponse is response type for the
+// Query/ZkpProofThreshold RPC method.
+message QueryZkpProofThresholdResponse {
+  uint64 threshold = 1 [(amino.dont_omitempty) = true];
+}
+
+// QueryProofDeputyRequest is request type for the
+// Query/ProofDeputy RPC method.
+message QueryProofDeputyRequest {
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+}
+
+// QueryProofDeputyResponse is response type for the
+// Query/ProofDeputy RPC method.
+message QueryProofDeputyResponse {
+  string deputy_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}

@@ -7,7 +7,9 @@ import (
 	"testing"
 	"time"
 
+	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
@@ -21,7 +23,7 @@ import (
 )
 
 type mockValidator struct {
-	sdk.ValidatorI
+	stakingtypes.ValidatorI
 }
 
 func (mv mockValidator) IsBonded() bool {
@@ -37,6 +39,9 @@ func TestMsgSubmitValidityProof(t *testing.T) {
 	validatorAcc := sdk.AccAddress(validator)
 	mockVal := mockValidator{}
 	mocks.StakingKeeper.EXPECT().Validator(gomock.Any(), gomock.Any()).Return(mockVal, nil).AnyTimes()
+	mocks.StakingKeeper.EXPECT().
+		ValidatorAddressCodec().
+		Return(addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())).AnyTimes()
 	_, err := ms.RegisterProofDeputy(ctx, &types.MsgRegisterProofDeputy{
 		Sender:        validatorAcc.String(),
 		DeputyAddress: sender.String(),

@@ -28,7 +28,7 @@ func TestCalculateAnnualProvision(t *testing.T) {
 		// inflation rate cap = 0.1 * (1 - 0.05)^1 = 0.095 (> 0.02)
 		// next supply = (1 + 0.095) * 100000 = 109500
 		// provision = 109500 - 100000 = 9500
-		require.Equal(t, "9500", provision.String())
+		require.Equal(t, "9500", provision.TruncateInt().String())
 	})
 
 	t.Run("hits minimum inflation rate", func(t *testing.T) {
@@ -45,7 +45,7 @@ func TestCalculateAnnualProvision(t *testing.T) {
 		// inflation rate cap = 0.1 * (1 - 0.2)^10 = 0.0107 (< 0.02)
 		// next supply = (1 + 0.02) * 100000 = 102000
 		// provision = 102000 - 100000 = 2000
-		require.Equal(t, "2000", provision.String())
+		require.Equal(t, "2000", provision.TruncateInt().String())
 	})
 
 	t.Run("hits supply cap", func(t *testing.T) {
@@ -59,7 +59,7 @@ func TestCalculateAnnualProvision(t *testing.T) {
 			math.NewInt(100000), // Total supply
 		)
 		// supply cap - total supply = 105000 - 100000 = 5000
-		require.Equal(t, "5000", provision.String())
+		require.Equal(t, "5000", provision.TruncateInt().String())
 	})
 
 	t.Run("zero disinflation rate", func(t *testing.T) {
@@ -72,7 +72,7 @@ func TestCalculateAnnualProvision(t *testing.T) {
 			genesis,
 			math.NewInt(100000),
 		)
-		require.Equal(t, "10000", provision.String())
+		require.Equal(t, "10000", provision.TruncateInt().String())
 	})
 
 	t.Run("prevents supply decrease", func(t *testing.T) {
@@ -85,6 +85,6 @@ func TestCalculateAnnualProvision(t *testing.T) {
 			genesis,
 			math.NewInt(100000),
 		)
-		require.Equal(t, "0", provision.String())
+		require.Equal(t, "0", provision.TruncateInt().String())
 	})
 }

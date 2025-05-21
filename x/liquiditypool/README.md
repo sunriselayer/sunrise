@@ -22,7 +22,7 @@ Each pool has these parameters
 There are two parameters in each pool
 
 - `price_ratio`: typically `1.0001`
-- `base_offset`: typically `0` otherwise in `[0, 1)`
+- `base_offset`: typically `0` otherwise in `(-1, 0]`
 
 The tick-price conversion formula is this:
 

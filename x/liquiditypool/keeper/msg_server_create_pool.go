@@ -38,15 +38,15 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	}
 
 	if !feeRate.IsPositive() {
-		return nil, errorsmod.Wrap(err, "fee rate must be positive")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "fee rate must be positive")
 	}
 
 	if feeRate.GTE(math.LegacyOneDec()) {
-		return nil, errorsmod.Wrap(err, "fee rate must be less than 1")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "fee rate must be less than 1")
 	}
 
 	if msg.PriceRatio != "1.0001" {
-		return nil, errorsmod.Wrap(err, "price ratio must be 1.0001")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "price ratio must be 1.0001")
 	}
 
 	priceRatio, err := math.LegacyNewDecFromStr(msg.PriceRatio)
@@ -58,16 +58,21 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid base offset")
 	}
-
-	if baseOffset.GTE(math.LegacyOneDec()) {
-		return nil, errorsmod.Wrap(err, "base offset must be less than 1")
+	if baseOffset.GT(math.LegacyZeroDec()) {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "base offset must be less than or equal to 0")
 	}
 
 	if baseOffset.LTE(math.LegacyNewDec(-1)) {
-		return nil, errorsmod.Wrap(err, "base offset must be greater than -1")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "base offset must be greater than -1")
 	}
 
 	// end static validation
+
+	// Validate denom base and denom quote are sendable tokens
+	err = k.bankKeeper.IsSendEnabledCoins(ctx, sdk.NewCoin(msg.DenomBase, math.ZeroInt()), sdk.NewCoin(msg.DenomQuote, math.ZeroInt()))
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "denom base and denom quote must be sendable tokens")
+	}
 
 	// Validate quote denom and consume gas if authority is not gov
 	if !sdk.AccAddress(sender).Equals(sdk.AccAddress(k.authority)) {

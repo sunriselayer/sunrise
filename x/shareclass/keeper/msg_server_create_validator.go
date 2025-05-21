@@ -8,7 +8,7 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 
-	stakingtypes "cosmossdk.io/x/staking/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {

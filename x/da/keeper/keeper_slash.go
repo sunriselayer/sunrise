@@ -72,7 +72,7 @@ func (k Keeper) IterateFaultCounters(ctx context.Context,
 		},
 	)
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger().Error(err.Error())
 		return
 	}
 }
@@ -80,7 +80,7 @@ func (k Keeper) IterateFaultCounters(ctx context.Context,
 func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger().Error(err.Error())
 		return
 	}
 	slashFaultThreshold := math.LegacyMustNewDecFromStr(params.SlashFaultThreshold) // TODO: remove with Dec
@@ -89,7 +89,7 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 	// reset counter
 	err = k.SetChallengeCounter(ctx, 0)
 	if err != nil {
-		k.Logger.Error(err.Error())
+		k.Logger().Error(err.Error())
 		return
 	}
 	threshold := slashFaultThreshold.MulInt64(int64(challengeCount)).Ceil().TruncateInt().Uint64()
@@ -97,14 +97,14 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 	k.IterateFaultCounters(ctx, func(operator sdk.ValAddress, faultCount uint64) bool {
 		validator, err := k.StakingKeeper.Validator(ctx, operator)
 		if err != nil {
-			k.Logger.Error(err.Error())
+			k.Logger().Error(err.Error())
 			return false
 		}
 
 		defer func() {
 			err := k.DeleteFaultCounter(ctx, operator)
 			if err != nil {
-				k.Logger.Error(err.Error())
+				k.Logger().Error(err.Error())
 			}
 		}()
 		if validator.IsJailed() || !validator.IsBonded() {
@@ -117,7 +117,7 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
-			k.Logger.Error(err.Error())
+			k.Logger().Error(err.Error())
 			return false
 		}
 
@@ -127,12 +127,12 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) {
 			ctx.BlockHeight()-sdk.ValidatorUpdateDelay-1,
 		)
 		if err != nil {
-			k.Logger.Error(err.Error())
+			k.Logger().Error(err.Error())
 			return false
 		}
 		err = k.SlashingKeeper.Jail(ctx, consAddr)
 		if err != nil {
-			k.Logger.Error(err.Error())
+			k.Logger().Error(err.Error())
 			return false
 		}
 		return false

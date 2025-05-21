@@ -10,13 +10,15 @@ import (
 
 	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
-	stakingtypes "cosmossdk.io/x/staking/types"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type tallyFixture struct {
@@ -48,7 +50,7 @@ var (
 		s.mocks.StakingKeeper.EXPECT().
 			IterateDelegations(s.ctx, voter, gomock.Any()).
 			DoAndReturn(
-				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d sdk.DelegationI) bool) error {
+				func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
 					for i, d := range delegations {
 						fn(int64(i), d)
 					}
@@ -65,7 +67,7 @@ func TestTally_Standard(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
-		expectedTally []types.TallyResult
+		expectedTally []types.Gauge
 		expectError   bool
 	}{
 		{
@@ -73,14 +75,14 @@ func TestTally_Standard(t *testing.T) {
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 0)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "no votes: tally fails",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one validator votes",
@@ -88,7 +90,7 @@ func TestTally_Standard(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1000000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(1000000)}},
 		},
 		{
 			name: "one account votes without delegation",
@@ -96,7 +98,7 @@ func TestTally_Standard(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one delegator votes",
@@ -113,7 +115,7 @@ func TestTally_Standard(t *testing.T) {
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(42)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(42)}},
 		},
 		{
 			name: "one delegator votes, validator votes",
@@ -131,7 +133,7 @@ func TestTally_Standard(t *testing.T) {
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1000000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(1000000)}},
 		},
 		{
 			name: "delegator with mixed delegations",
@@ -160,7 +162,7 @@ func TestTally_Standard(t *testing.T) {
 				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(3000000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(3000000)}},
 		},
 	}
 	for _, tt := range tests {
@@ -176,12 +178,13 @@ func TestTally_Standard(t *testing.T) {
 				addrs         = simtestutil.CreateRandomAccounts(numVals + numDelegators)
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
+				moduleAddr    = simtestutil.CreateRandomAccounts(2)
 			)
 			// Mocks a bunch of validators
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -194,6 +197,21 @@ func TestTally_Standard(t *testing.T) {
 						}
 						return nil
 					})
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(shareclasstypes.ModuleName).
+				Return(moduleAddr[0]).
+				AnyTimes()
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(types.ModuleName).
+				Return(moduleAddr[1]).
+				AnyTimes()
+			mocks.StakingKeeper.EXPECT().
+				IterateDelegations(ctx, moduleAddr[0], gomock.Any()).
+				DoAndReturn(
+					func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+						return nil
+					},
+				)
 
 			suite := tallyFixture{
 				t:        t,
@@ -205,13 +223,13 @@ func TestTally_Standard(t *testing.T) {
 			}
 			tt.setup(suite)
 
-			tallyWeights, err := k.Tally(ctx)
+			_, gauges, err := k.Tally(ctx)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
 			}
-			assert.Equal(t, tt.expectedTally, tallyWeights)
+			assert.Equal(t, tt.expectedTally, gauges)
 		})
 	}
 }
@@ -220,7 +238,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 	tests := []struct {
 		name          string
 		setup         func(tallyFixture)
-		expectedTally []types.TallyResult
+		expectedTally []types.Gauge
 		expectError   bool
 	}{
 		{
@@ -228,14 +246,14 @@ func TestTally_MultipleChoice(t *testing.T) {
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 0)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "no votes",
 			setup: func(s tallyFixture) {
 				setTotalBonded(s, 10000000)
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one validator votes",
@@ -243,7 +261,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(500000)}, {PoolId: 2, Count: math.NewIntFromUint64(500000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(500000)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(500000)}},
 		},
 		{
 			name: "one account votes without delegation",
@@ -251,7 +269,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				setTotalBonded(s, 10000000)
 				delegatorVote(s, s.delAddrs[0], nil, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{},
+			expectedTally: []types.Gauge{},
 		},
 		{
 			name: "one delegator votes",
@@ -268,7 +286,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(21)}, {PoolId: 2, Count: math.NewIntFromUint64(21)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(21)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(21)}},
 		},
 		{
 			name: "one delegator votes, validator votes",
@@ -286,7 +304,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(500000)}, {PoolId: 2, Count: math.NewIntFromUint64(500000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(500000)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(500000)}},
 		},
 		{
 			name: "delegator with mixed delegations",
@@ -315,7 +333,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				validatorVote(s, s.valAddrs[1], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 				validatorVote(s, s.valAddrs[2], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
-			expectedTally: []types.TallyResult{{PoolId: 1, Count: math.NewIntFromUint64(1500000)}, {PoolId: 2, Count: math.NewIntFromUint64(1500000)}},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(1500000)}, {PoolId: 2, VotingPower: math.NewIntFromUint64(1500000)}},
 		},
 	}
 	for _, tt := range tests {
@@ -331,12 +349,13 @@ func TestTally_MultipleChoice(t *testing.T) {
 				addrs         = simtestutil.CreateRandomAccounts(numVals + numDelegators)
 				valAddrs      = simtestutil.ConvertAddrsToValAddrs(addrs[:numVals])
 				delAddrs      = addrs[numVals:]
+				moduleAddr    = simtestutil.CreateRandomAccounts(2)
 			)
 			// Mocks a bunch of validators
 			mocks.StakingKeeper.EXPECT().
 				IterateBondedValidatorsByPower(ctx, gomock.Any()).
 				DoAndReturn(
-					func(ctx context.Context, fn func(index int64, validator sdk.ValidatorI) bool) error {
+					func(ctx context.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						for i := int64(0); i < int64(numVals); i++ {
 							valAddr, err := mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(valAddrs[i])
 							require.NoError(t, err)
@@ -349,6 +368,21 @@ func TestTally_MultipleChoice(t *testing.T) {
 						}
 						return nil
 					})
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(shareclasstypes.ModuleName).
+				Return(moduleAddr[0]).
+				AnyTimes()
+			mocks.AcctKeeper.EXPECT().
+				GetModuleAddress(types.ModuleName).
+				Return(moduleAddr[1]).
+				AnyTimes()
+			mocks.StakingKeeper.EXPECT().
+				IterateDelegations(ctx, moduleAddr[0], gomock.Any()).
+				DoAndReturn(
+					func(ctx context.Context, voter sdk.AccAddress, fn func(index int64, d stakingtypes.DelegationI) bool) error {
+						return nil
+					},
+				)
 
 			suite := tallyFixture{
 				t:        t,
@@ -360,13 +394,13 @@ func TestTally_MultipleChoice(t *testing.T) {
 			}
 			tt.setup(suite)
 
-			tallyWeights, err := k.Tally(ctx)
+			_, gauges, err := k.Tally(ctx)
 			if tt.expectError {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
 			}
-			assert.Equal(t, tt.expectedTally, tallyWeights)
+			assert.Equal(t, tt.expectedTally, gauges)
 		})
 	}
 }

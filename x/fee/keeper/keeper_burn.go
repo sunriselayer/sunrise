@@ -10,7 +10,13 @@ import (
 	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 
+// fees means whole tx fees, not amount to burn
 func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
+	err := fees.Validate()
+	if err != nil {
+		return err
+	}
+
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return err
@@ -20,19 +26,16 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 		return err
 	}
 
-	for _, fee := range fees {
-		// skip if fee is not the fee denom
-		if fee.Denom != params.FeeDenom {
-			continue
-		}
-		burnAmount := burnRatio.MulInt(fee.Amount).TruncateInt()
+	found, feeCoin := fees.Find(params.FeeDenom)
+	if found {
+		burnAmount := burnRatio.MulInt(feeCoin.Amount).TruncateInt()
 
 		// skip if burn amount is zero
 		if burnAmount.IsZero() {
-			continue
+			return nil
 		}
 
-		burnCoin := sdk.NewCoin(fee.Denom, burnAmount)
+		burnCoin := sdk.NewCoin(feeCoin.Denom, burnAmount)
 		burnCoins := sdk.NewCoins(burnCoin)
 
 		// burn coins from the fee module account
@@ -45,10 +48,9 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 		}
 
 		// Event is emitted in the bank keeper
-		if err := k.bankKeeper.BurnCoins(ctx, k.accountKeeper.GetModuleAddress(types.ModuleName), burnCoins); err != nil {
+		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
 			return err
 		}
 	}
-
 	return nil
 }

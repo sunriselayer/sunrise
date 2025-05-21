@@ -1,43 +1,19 @@
 package app
 
 import (
-	"fmt"
 	"io"
 
 	clienthelpers "cosmossdk.io/client/v2/helpers"
 	"cosmossdk.io/core/appmodule"
-	"cosmossdk.io/core/registry"
-	corestore "cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
-	"cosmossdk.io/x/accounts"
-	authzkeeper "cosmossdk.io/x/authz/keeper"
-	bankkeeper "cosmossdk.io/x/bank/keeper"
 	circuitkeeper "cosmossdk.io/x/circuit/keeper"
-	consensuskeeper "cosmossdk.io/x/consensus/keeper"
-	distrkeeper "cosmossdk.io/x/distribution/keeper"
-	epochskeeper "cosmossdk.io/x/epochs/keeper"
-	evidencekeeper "cosmossdk.io/x/evidence/keeper"
 	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
-	govkeeper "cosmossdk.io/x/gov/keeper"
-	groupkeeper "cosmossdk.io/x/group/keeper"
-	mintkeeper "cosmossdk.io/x/mint/keeper"
-	nftkeeper "cosmossdk.io/x/nft/keeper"
-	paramskeeper "cosmossdk.io/x/params/keeper"
-	paramstypes "cosmossdk.io/x/params/types"
-	_ "cosmossdk.io/x/protocolpool"
-	poolkeeper "cosmossdk.io/x/protocolpool/keeper"
-	slashingkeeper "cosmossdk.io/x/slashing/keeper"
-	stakingkeeper "cosmossdk.io/x/staking/keeper"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante/unorderedtx"
-	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -49,12 +25,27 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-
-	icacontrollerkeeper "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/controller/keeper"
-	icahostkeeper "github.com/cosmos/ibc-go/v9/modules/apps/27-interchain-accounts/host/keeper"
-	ibcfeekeeper "github.com/cosmos/ibc-go/v9/modules/apps/29-fee/keeper"
-	ibctransferkeeper "github.com/cosmos/ibc-go/v9/modules/apps/transfer/keeper"
-	ibckeeper "github.com/cosmos/ibc-go/v9/modules/core/keeper"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
+	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	poolkeeper "github.com/cosmos/cosmos-sdk/x/protocolpool/keeper"
+	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	icacontrollerkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/controller/keeper"
+	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
+	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
+	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 
 	"github.com/sunriselayer/sunrise/docs"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
@@ -64,6 +55,7 @@ import (
 	lockupmodulekeeper "github.com/sunriselayer/sunrise/x/lockup/keeper"
 	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
+	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
@@ -89,7 +81,7 @@ var (
 // capabilities aren't needed for testing.
 type App struct {
 	*runtime.App
-	legacyAmino       registry.AminoRegistrar
+	legacyAmino       *codec.LegacyAmino
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
@@ -97,29 +89,23 @@ type App struct {
 	// keepers
 	// only keepers required by the app are exposed
 	// the list of all modules is available in the app_config
-	AccountsKeeper        accounts.Keeper
 	AuthKeeper            authkeeper.AccountKeeper
 	BankKeeper            bankkeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	SlashingKeeper        slashingkeeper.Keeper
-	MintKeeper            *mintkeeper.Keeper
+	MintKeeper            mintkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
+	FeeGrantKeeper        feegrantkeeper.Keeper
 	GovKeeper             *govkeeper.Keeper
 	UpgradeKeeper         *upgradekeeper.Keeper
 	AuthzKeeper           authzkeeper.Keeper
-	EvidenceKeeper        evidencekeeper.Keeper
-	FeeGrantKeeper        feegrantkeeper.Keeper
-	GroupKeeper           groupkeeper.Keeper
-	NFTKeeper             nftkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
 	CircuitBreakerKeeper  circuitkeeper.Keeper
 	PoolKeeper            poolkeeper.Keeper
-	EpochsKeeper          *epochskeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 
 	// ibc keepers
 	IBCKeeper           *ibckeeper.Keeper
-	IBCFeeKeeper        ibcfeekeeper.Keeper
 	ICAControllerKeeper icacontrollerkeeper.Keeper
 	ICAHostKeeper       icahostkeeper.Keeper
 	TransferKeeper      ibctransferkeeper.Keeper
@@ -127,11 +113,11 @@ type App struct {
 	DaKeeper                 damodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
 	TokenconverterKeeper     tokenconvertermodulekeeper.Keeper
+	ShareclassKeeper         shareclassmodulekeeper.Keeper
+	LockupKeeper             lockupmodulekeeper.Keeper
 	LiquiditypoolKeeper      liquiditypoolmodulekeeper.Keeper
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
-	ShareclassKeeper         shareclassmodulekeeper.Keeper
-	LockupKeeper             lockupmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -151,6 +137,12 @@ func init() {
 func AppConfig() depinject.Config {
 	return depinject.Configs(
 		appConfig,
+		depinject.Supply(
+			// supply custom module basics
+			map[string]module.AppModuleBasic{
+				genutiltypes.ModuleName: genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
+			},
+		),
 		depinject.Provide(mint.ProvideMintFn),
 		depinject.Provide(gov.ProvideCalculateVoteResultsAndVotingPowerFn),
 	)
@@ -159,7 +151,7 @@ func AppConfig() depinject.Config {
 // New returns a reference to an initialized App.
 func New(
 	logger log.Logger,
-	db corestore.KVStoreWithBatch,
+	db dbm.DB,
 	traceStore io.Writer,
 	loadLatest bool,
 	appOpts servertypes.AppOptions,
@@ -193,32 +185,27 @@ func New(
 		&app.txConfig,
 		&app.interfaceRegistry,
 		&app.AuthKeeper,
-		&app.AccountsKeeper,
 		&app.BankKeeper,
 		&app.StakingKeeper,
 		&app.SlashingKeeper,
 		&app.MintKeeper,
 		&app.DistrKeeper,
+		&app.FeeGrantKeeper,
 		&app.GovKeeper,
 		&app.UpgradeKeeper,
 		&app.AuthzKeeper,
-		&app.EvidenceKeeper,
-		&app.FeeGrantKeeper,
-		&app.GroupKeeper,
-		&app.NFTKeeper,
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.PoolKeeper,
-		&app.EpochsKeeper,
 		&app.ParamsKeeper,
 		&app.DaKeeper,
 		&app.FeeKeeper,
 		&app.TokenconverterKeeper,
+		&app.ShareclassKeeper,
+		&app.LockupKeeper,
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
-		&app.ShareclassKeeper,
-		&app.LockupKeeper,
 	); err != nil {
 		panic(err)
 	}
@@ -240,27 +227,33 @@ func New(
 	// </sunrise>
 
 	// register streaming services
-	if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
-		panic(err)
-	}
+	// if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
+	// panic(err)
+	// }
 
 	/****  Module Options ****/
 	// <sunrise>
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
-			ante.HandlerOptions{
-				AccountKeeper:            app.AuthKeeper,
-				BankKeeper:               app.BankKeeper,
-				ConsensusKeeper:          app.ConsensusParamsKeeper,
-				SignModeHandler:          app.txConfig.SignModeHandler(),
-				FeegrantKeeper:           app.FeeGrantKeeper,
-				SigGasConsumer:           ante.DefaultSigVerificationGasConsumer,
-				UnorderedTxManager:       app.UnorderedTxManager,
-				Environment:              app.AuthKeeper.Environment,
-				AccountAbstractionKeeper: app.AccountsKeeper,
+			HandlerOptions: ante.HandlerOptions{
+				AccountKeeper: app.AuthKeeper,
+				BankKeeper:    app.BankKeeper,
+				ExtensionOptionChecker: func(a *codectypes.Any) bool {
+					switch a.TypeUrl {
+					case codectypes.MsgTypeURL(&swaptypes.SwapBeforeFeeExtension{}):
+						return true
+					default:
+						return false
+					}
+				},
+				SignModeHandler: app.txConfig.SignModeHandler(),
+				FeegrantKeeper:  app.FeeGrantKeeper,
+				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
-			&app.CircuitBreakerKeeper,
-			app.FeeKeeper,
+			IBCKeeper:     app.IBCKeeper,
+			CircuitKeeper: &app.CircuitBreakerKeeper,
+			FeeKeeper:     &app.FeeKeeper,
+			SwapKeeper:    &app.SwapKeeper,
 		},
 	)
 	if err != nil {
@@ -280,12 +273,12 @@ func New(
 
 	app.BaseApp.SetPrepareProposal(daProposalHandler.PrepareProposal())
 	app.BaseApp.SetProcessProposal(daProposalHandler.ProcessProposal())
-	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker)
+	app.BaseApp.SetPreBlocker(daProposalHandler.PreBlocker())
 	// </sunrise>
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	overrideModules := map[string]module.AppModuleSimulation{
-		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AuthKeeper, &app.AccountsKeeper, authsims.RandomGenesisAccounts, nil),
+		authtypes.ModuleName: auth.NewAppModule(app.appCodec, app.AuthKeeper, authsims.RandomGenesisAccounts, nil),
 	}
 	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, overrideModules)
 
@@ -295,21 +288,12 @@ func New(
 	// This is necessary for manually registered modules that do not support app wiring.
 	// Manually set the module version map as shown below.
 	// The upgrade module will automatically handle de-duplication of the module version map.
-	app.SetInitChainer(func(ctx sdk.Context, req *abci.InitChainRequest) (*abci.InitChainResponse, error) {
+	app.SetInitChainer(func(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
 		if err := app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap()); err != nil {
 			return nil, err
 		}
 		return app.App.InitChainer(ctx, req)
 	})
-
-	// register custom snapshot extensions (if any)
-	if manager := app.SnapshotManager(); manager != nil {
-		if err := manager.RegisterExtensions(
-			unorderedtx.NewSnapshotter(app.UnorderedTxManager),
-		); err != nil {
-			panic(fmt.Errorf("failed to register snapshot extension: %w", err))
-		}
-	}
 
 	if err := app.Load(loadLatest); err != nil {
 		panic(err)
@@ -329,12 +313,7 @@ func (app *App) GetSubspace(moduleName string) paramstypes.Subspace {
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
 func (app *App) LegacyAmino() *codec.LegacyAmino {
-	switch cdc := app.legacyAmino.(type) {
-	case *codec.LegacyAmino:
-		return cdc
-	default:
-		panic("unexpected codec type")
-	}
+	return app.legacyAmino
 }
 
 // AppCodec returns App's app codec.
@@ -355,16 +334,13 @@ func (app *App) TxConfig() client.TxConfig {
 	return app.txConfig
 }
 
-// kvStoreKeys returns all the kv store keys registered inside App.
-func (app *App) kvStoreKeys() map[string]*storetypes.KVStoreKey {
-	keys := make(map[string]*storetypes.KVStoreKey)
-	for _, k := range app.GetStoreKeys() {
-		if kv, ok := k.(*storetypes.KVStoreKey); ok {
-			keys[kv.Name()] = kv
-		}
+// GetKey returns the KVStoreKey for the provided store key.
+func (app *App) GetKey(storeKey string) *storetypes.KVStoreKey {
+	kvStoreKey, ok := app.UnsafeFindStoreKey(storeKey).(*storetypes.KVStoreKey)
+	if !ok {
+		return nil
 	}
-
-	return keys
+	return kvStoreKey
 }
 
 // SimulationManager implements the SimulationApp interface

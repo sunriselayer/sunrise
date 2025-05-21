@@ -6,8 +6,8 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "sunrise/shareclass/v1/params.proto";
 import "sunrise/shareclass/v1/bond.proto";
+import "sunrise/shareclass/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 
@@ -15,32 +15,32 @@ option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/params";
+    option (google.api.http).get = "/sunrise/shareclass/v1/params";
   }
 
   // CalculateBondingAmount
   rpc CalculateBondingAmount(QueryCalculateBondingAmountRequest) returns (QueryCalculateBondingAmountResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/calculate-bonding-amount";
+    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-bonding-amount";
   }
 
   // CalculateShare
   rpc CalculateShare(QueryCalculateShareRequest) returns (QueryCalculateShareResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/calculate-share";
+    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-share";
   }
 
   // AddressBonded
   rpc AddressBonded(QueryAddressBondedRequest) returns (QueryAddressBondedResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/bonded/{address}";
+    option (google.api.http).get = "/sunrise/shareclass/v1/bonded/{address}";
   }
 
   // ClaimableRewards
   rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/claimable-rewards";
+    option (google.api.http).get = "/sunrise/shareclass/v1/claimable-rewards";
   }
 
   // AddressUnbonding
   rpc AddressUnbonding(QueryAddressUnbondingRequest) returns (QueryAddressUnbondingResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/shareclass/v1/unbonding/{address}";
+    option (google.api.http).get = "/sunrise/shareclass/v1/unbonding/{address}";
   }
 }
 

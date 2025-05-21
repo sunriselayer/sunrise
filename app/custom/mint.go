@@ -5,22 +5,21 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"cosmossdk.io/x/mint"
-	minttypes "cosmossdk.io/x/mint/types"
+	"github.com/cosmos/cosmos-sdk/x/mint"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 
 	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 type CustomMintModule struct {
-	mint.AppModule
-	cdc codec.Codec
+	mint.AppModuleBasic
 }
 
-func (cm CustomMintModule) DefaultGenesis() json.RawMessage {
+func (cm CustomMintModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := minttypes.DefaultGenesisState()
 
 	// Params wil not be used anyway because there is a custom MintFn
 	genesis.Params.MintDenom = consts.FeeDenom
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	return cdc.MustMarshalJSON(genesis)
 }

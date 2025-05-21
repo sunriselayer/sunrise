@@ -1,0 +1,18 @@
+syntax = "proto3";
+package sunrise.swap.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/swap/v1/route.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
+
+// SwapBeforeFeeExtension
+message SwapBeforeFeeExtension {
+  Route route = 1 [(gogoproto.nullable) = false];
+  string max_amount_in = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}

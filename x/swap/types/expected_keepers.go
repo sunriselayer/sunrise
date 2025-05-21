@@ -5,7 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	transfertypes "github.com/cosmos/ibc-go/v9/modules/apps/transfer/types"
+	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	lptypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
@@ -29,8 +29,6 @@ type BankKeeper interface {
 // TransferKeeper defines the expected interface for the IBC Transfer module.
 type TransferKeeper interface {
 	Transfer(ctx context.Context, msg *transfertypes.MsgTransfer) (*transfertypes.MsgTransferResponse, error)
-	GetTotalEscrowForDenom(ctx context.Context, denom string) sdk.Coin
-	SetTotalEscrowForDenom(ctx context.Context, coin sdk.Coin)
 }
 
 // LiquidityPoolKeeper defines the expected interface for the liquidity pool module.

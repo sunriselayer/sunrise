@@ -16,7 +16,7 @@ func CalculateAnnualProvision(
 	supplyCap math.Int,
 	genesis time.Time,
 	totalSupply math.Int,
-) math.Int {
+) math.LegacyDec {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	years := yearsSinceGenesis(genesis, sdkCtx.BlockTime())
 
@@ -25,16 +25,19 @@ func CalculateAnnualProvision(
 		inflationRateCap = inflationRateCapMinimum
 	}
 
-	nextSupply := math.LegacyOneDec().Add(inflationRateCap).MulInt(totalSupply).TruncateInt()
+	nextSupply := math.LegacyOneDec().Add(inflationRateCap).MulInt(totalSupply)
 
-	if nextSupply.GT(supplyCap) {
-		nextSupply = supplyCap
+	supplyCapDec := math.LegacyNewDecFromInt(supplyCap)
+	totalSupplyDec := math.LegacyNewDecFromInt(totalSupply)
+
+	if nextSupply.GT(supplyCapDec) {
+		nextSupply = supplyCapDec
 	}
-	if nextSupply.LT(totalSupply) {
-		nextSupply = totalSupply
+	if nextSupply.LT(totalSupplyDec) {
+		nextSupply = totalSupplyDec
 	}
 
-	return nextSupply.Sub(totalSupply)
+	return nextSupply.Sub(totalSupplyDec)
 }
 
 func yearsSinceGenesis(genesis time.Time, current time.Time) (years uint64) {

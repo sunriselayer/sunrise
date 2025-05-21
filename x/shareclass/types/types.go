@@ -30,32 +30,27 @@ func CalculateShareByAmount(totalShare, totalBonded, amount math.Int) (math.Int,
 		return amount, nil
 	}
 
-	amountDec, err := math.NewDecFromString(amount.String())
+	amountDec, err := math.LegacyNewDecFromStr(amount.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	totalShareDec, err := math.NewDecFromString(totalShare.String())
+	totalShareDec, err := math.LegacyNewDecFromStr(totalShare.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	totalBondedDec, err := math.NewDecFromString(totalBonded.String())
+	totalBondedDec, err := math.LegacyNewDecFromStr(totalBonded.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	ratio, err := amountDec.Quo(totalBondedDec)
-	if err != nil {
-		return math.Int{}, err
-	}
+	// totalBonded is not zero
+	ratio := amountDec.Quo(totalBondedDec)
 
-	shareDec, err := ratio.Mul(totalShareDec)
-	if err != nil {
-		return math.Int{}, err
-	}
+	shareDec := ratio.Mul(totalShareDec)
 
-	return shareDec.SdkIntTrim()
+	return shareDec.TruncateInt(), nil
 }
 
 func CalculateAmountByShare(totalShare, totalBonded, share math.Int) (math.Int, error) {
@@ -63,77 +58,59 @@ func CalculateAmountByShare(totalShare, totalBonded, share math.Int) (math.Int, 
 		return share, nil
 	}
 
-	shareDec, err := math.NewDecFromString(share.String())
+	shareDec, err := math.LegacyNewDecFromStr(share.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	totalShareDec, err := math.NewDecFromString(totalShare.String())
+	totalShareDec, err := math.LegacyNewDecFromStr(totalShare.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	totalBondedDec, err := math.NewDecFromString(totalBonded.String())
+	totalBondedDec, err := math.LegacyNewDecFromStr(totalBonded.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	ratio, err := shareDec.Quo(totalShareDec)
-	if err != nil {
-		return math.Int{}, err
-	}
+	// totalShare is not zero
+	ratio := shareDec.Quo(totalShareDec)
 
-	outputAmountDec, err := totalBondedDec.Mul(ratio)
-	if err != nil {
-		return math.Int{}, err
-	}
+	outputAmountDec := totalBondedDec.Mul(ratio)
 
-	return outputAmountDec.SdkIntTrim()
+	return outputAmountDec.TruncateInt(), nil
 }
 
 // CalculateReward calculates the reward for a user
 // reward = (rewardMultiplier - userLastRewardMultiplier) * principal
-func CalculateReward(rewardMultiplier, userLastRewardMultiplier math.Dec, share math.Int) (math.Int, error) {
-	shareDec, err := math.NewDecFromString(share.String())
+func CalculateReward(rewardMultiplier, userLastRewardMultiplier math.LegacyDec, share math.Int) (math.Int, error) {
+	shareDec, err := math.LegacyNewDecFromStr(share.String())
 	if err != nil {
 		return math.Int{}, err
 	}
 
-	multiplierDiff, err := rewardMultiplier.Sub(userLastRewardMultiplier)
-	if err != nil {
-		return math.Int{}, err
-	}
-
-	rewardAmountDec, err := multiplierDiff.Mul(shareDec)
-	if err != nil {
-		return math.Int{}, err
-	}
-	rewardAmount, err := rewardAmountDec.SdkIntTrim()
-	if err != nil {
-		return math.Int{}, err
-	}
+	multiplierDiff := rewardMultiplier.Sub(userLastRewardMultiplier)
+	rewardAmountDec := multiplierDiff.Mul(shareDec)
+	rewardAmount := rewardAmountDec.TruncateInt()
 
 	return rewardAmount, nil
 }
 
-func CalculateRewardMultiplierNew(rewardMultiplierOld math.Dec, rewardAmount math.Int, totalShare math.Int) (math.Dec, error) {
-	multiplierDiffNumerator, err := math.NewDecFromString(rewardAmount.String())
+func CalculateRewardMultiplierNew(rewardMultiplierOld math.LegacyDec, rewardAmount math.Int, totalShare math.Int) (math.LegacyDec, error) {
+	multiplierDiffNumerator, err := math.LegacyNewDecFromStr(rewardAmount.String())
 	if err != nil {
-		return math.Dec{}, err
+		return math.LegacyDec{}, err
 	}
-	multiplierDiffDenominator, err := math.NewDecFromString(totalShare.String())
+	multiplierDiffDenominator, err := math.LegacyNewDecFromStr(totalShare.String())
 	if err != nil {
-		return math.Dec{}, err
+		return math.LegacyDec{}, err
 	}
-	multiplierDiff, err := multiplierDiffNumerator.Quo(multiplierDiffDenominator)
-	if err != nil {
-		return math.Dec{}, err
+	if multiplierDiffDenominator.IsZero() {
+		return math.LegacyDec{}, fmt.Errorf("total share is zero")
 	}
+	multiplierDiff := multiplierDiffNumerator.Quo(multiplierDiffDenominator)
 
-	multiplierNew, err := rewardMultiplierOld.Add(multiplierDiff)
-	if err != nil {
-		return math.Dec{}, err
-	}
+	multiplierNew := rewardMultiplierOld.Add(multiplierDiff)
 
 	return multiplierNew, nil
 }

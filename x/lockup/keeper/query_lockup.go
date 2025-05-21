@@ -42,7 +42,7 @@ func (q queryServer) LockupAccount(ctx context.Context, req *types.QueryLockupAc
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	lockupAccount, err := q.k.GetLockupAccount(ctx, owner, req.Id)
+	lockupAccount, err := q.k.GetLockupAccount(ctx, owner, req.LockupAccountId)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
@@ -70,7 +70,7 @@ func (q queryServer) SpendableAmount(ctx context.Context, req *types.QuerySpenda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	lockupAccount, err := q.k.GetLockupAccount(ctx, owner, req.Id)
+	lockupAccount, err := q.k.GetLockupAccount(ctx, owner, req.LockupAccountId)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
@@ -94,7 +94,7 @@ func (q queryServer) SpendableAmount(ctx context.Context, req *types.QuerySpenda
 	}
 
 	// refresh ubd entries to make sure delegation locking amount is up to date
-	err = q.k.CheckUnbondingEntriesMature(ctx, owner, req.Id)
+	err = q.k.CheckUnbondingEntriesMature(ctx, owner, req.LockupAccountId)
 	if err != nil {
 		return nil, err
 	}

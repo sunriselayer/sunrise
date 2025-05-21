@@ -12,22 +12,22 @@ option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/params";
+    option (google.api.http).get = "/sunrise/lockup/v1/params";
   }
 
   // LockupAccounts queries all lockup accounts for a given owner.
   rpc LockupAccounts(QueryLockupAccountsRequest) returns (QueryLockupAccountsResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}";
+    option (google.api.http).get = "/sunrise/lockup/v1/lockup-accounts/{owner}";
   }
 
   // LockupAccount queries a lockup account for a given owner and id.
   rpc LockupAccount(QueryLockupAccountRequest) returns (QueryLockupAccountResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/lockup-accounts/{owner}/{id}";
+    option (google.api.http).get = "/sunrise/lockup/v1/lockup-accounts/{owner}/{lockup_account_id}";
   }
 
   // SpendableAmount queries the spendable amount for a given owner and id.
   rpc SpendableAmount(QuerySpendableAmountRequest) returns (QuerySpendableAmountResponse) {
-    option (google.api.http).get = "/sunriselayer/sunrise/lockup/v1/spendable-amount/{owner}/{id}";
+    option (google.api.http).get = "/sunrise/lockup/v1/spendable-amount/{owner}/{lockup_account_id}";
   }
 }
 
@@ -53,7 +53,7 @@ message QueryLockupAccountsResponse {
 // QueryLockupAccountRequest is request type for the Query/LockupAccount RPC method.
 message QueryLockupAccountRequest {
   string owner = 1;
-  uint64 id = 2;
+  uint64 lockup_account_id = 2;
 }
 
 // QueryLockupAccountResponse is response type for the Query/LockupAccount RPC method.
@@ -66,7 +66,7 @@ message QueryLockupAccountResponse {
 // QuerySpendableAmountRequest is request type for the Query/SpendableAmount RPC method.
 message QuerySpendableAmountRequest {
   string owner = 1;
-  uint64 id = 2;
+  uint64 lockup_account_id = 2;
 }
 
 // QuerySpendableAmountResponse is response type for the Query/SpendableAmount RPC method.

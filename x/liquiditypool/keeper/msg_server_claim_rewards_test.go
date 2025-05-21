@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"fmt"
 	"testing"
 
 	"cosmossdk.io/math"
@@ -32,7 +31,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				PositionIds: []uint64{0},
 			},
 			allocation: sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
-			expRewards: sdk.Coins{sdk.NewInt64Coin("xyz", 999)},
+			expRewards: sdk.Coins{sdk.NewInt64Coin("xyz", 1000)},
 		},
 		{
 			desc: "Multiple token rewards",
@@ -41,7 +40,7 @@ func TestMsgServerClaimRewards(t *testing.T) {
 				PositionIds: []uint64{0},
 			},
 			allocation: sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
-			expRewards: sdk.Coins{sdk.NewInt64Coin("uvw", 999), sdk.NewInt64Coin("xyz", 999)},
+			expRewards: sdk.Coins{sdk.NewInt64Coin("uvw", 1000), sdk.NewInt64Coin("xyz", 1000)},
 		},
 		{
 			desc: "Empty rewards",
@@ -71,17 +70,15 @@ func TestMsgServerClaimRewards(t *testing.T) {
 			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
 				Return(consts.FeeDenom, nil).AnyTimes()
 
-			res, err := srv.CreatePool(wctx, &types.MsgCreatePool{
+			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
 				DenomBase:  "base",
 				DenomQuote: quoteDenom,
 				FeeRate:    "0.01",
 				PriceRatio: "1.0001",
-				BaseOffset: "0.5",
+				BaseOffset: "-0.5",
 			})
 			require.NoError(t, err)
-			fmt.Println("res", res)
-			fmt.Println("err", err)
 
 			_, err = srv.CreatePosition(wctx, &types.MsgCreatePosition{
 				Sender:         sender.String(),

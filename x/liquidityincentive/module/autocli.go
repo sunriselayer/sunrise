@@ -24,21 +24,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Epoch",
-					Use:            "epoch <id>",
+					Use:            "epoch [id]",
 					Short:          "Shows a epoch by id",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
-				},
-				{
-					RpcMethod:      "Gauges",
-					Use:            "all-gauges <previous_epoch_id]",
-					Short:          "List all gauge",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}},
-				},
-				{
-					RpcMethod:      "Gauge",
-					Use:            "gauge <previous_epoch_id> <pool_id>",
-					Short:          "Shows a gauge",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "previous_epoch_id"}, {ProtoField: "pool_id"}},
 				},
 				{
 					RpcMethod: "Votes",
@@ -47,9 +35,36 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Vote",
-					Use:            "vote <address>",
+					Use:            "vote [address]",
 					Short:          "Shows a gauge vote",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}},
+				},
+				{
+					RpcMethod: "Bribes",
+					Use:       "bribes",
+					Short:     "List bribes",
+				},
+				{
+					RpcMethod:      "Bribe",
+					Use:            "bribe [id]",
+					Short:          "Shows a bribe",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
+				{
+					RpcMethod: "BribeAllocations",
+					Use:       "bribe-allocations",
+					Short:     "List bribe allocations",
+				},
+				{
+					RpcMethod:      "BribeAllocation",
+					Use:            "bribe-allocation [address] [epoch_id] [pool_id]",
+					Short:          "Shows a bribe allocation",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "address"}, {ProtoField: "epoch_id"}, {ProtoField: "pool_id"}},
+				},
+				{
+					RpcMethod: "TallyResult",
+					Use:       "tally-result",
+					Short:     "Shows the tally result",
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
@@ -70,13 +85,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "RegisterBribe",
-					Use:       "register-bribe [epoch_id] [pool_id] [amount] [denom]",
+					Use:       "register-bribe [epoch_id] [pool_id] [amount]",
 					Short:     "Send a register-bribe tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "epoch_id"},
 						{ProtoField: "pool_id"},
-						{ProtoField: "amount.amount"},
-						{ProtoField: "amount.denom"},
+						{ProtoField: "amount", Varargs: true},
 					},
 				},
 				{
@@ -84,8 +98,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "claim-bribes [bribe_id]",
 					Short:     "Send a claim-bribes tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "bribe_id"},
+						{ProtoField: "bribe_ids"},
 					},
+				},
+				{
+					RpcMethod: "StartNewEpoch",
+					Use:       "start-new-epoch",
+					Short:     "Send a start-new-epoch tx",
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

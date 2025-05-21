@@ -15,6 +15,7 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	k, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
+	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
@@ -26,7 +27,7 @@ func TestPoolMsgServerCreate(t *testing.T) {
 		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
-		BaseOffset: "0.5",
+		BaseOffset: "-0.5",
 	})
 	require.NoError(t, err)
 	require.Equal(t, uint64(0), resp.Id)
@@ -36,7 +37,7 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, found)
 	require.Equal(t, pool.TickParams.PriceRatio, "1.000100000000000000")
-	require.Equal(t, pool.TickParams.BaseOffset, "0.500000000000000000")
+	require.Equal(t, pool.TickParams.BaseOffset, "-0.500000000000000000")
 	require.Equal(t, pool.FeeRate, "0.010000000000000000")
 	require.Equal(t, pool.CurrentTick, int64(0))
 	require.Equal(t, pool.CurrentTickLiquidity, "0.000000000000000000")
@@ -51,7 +52,7 @@ func TestPoolMsgServerCreate(t *testing.T) {
 		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
-		BaseOffset: "0.5",
+		BaseOffset: "-0.5",
 	})
 	require.NoError(t, err)
 }

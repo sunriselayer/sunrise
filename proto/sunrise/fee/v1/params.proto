@@ -12,5 +12,4 @@ message Params {
 
   string fee_denom = 1;
   string burn_ratio = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
-  repeated string bypass_denoms = 3;
 }

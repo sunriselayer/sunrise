@@ -21,16 +21,28 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 	if err != nil {
 		return err
 	}
-	// Set all the gauges
-	for _, elem := range genState.Gauges {
-		err := k.SetGauge(ctx, elem)
+	// Set all the votes
+	for _, vote := range genState.Votes {
+		err := k.SetVote(ctx, vote)
 		if err != nil {
 			return err
 		}
 	}
-	// Set all the votes
-	for _, vote := range genState.Votes {
-		err := k.SetVote(ctx, vote)
+	// Set all the bribes
+	for _, bribe := range genState.Bribes {
+		err := k.SetBribe(ctx, bribe)
+		if err != nil {
+			return err
+		}
+	}
+	// Set bribe count
+	err = k.SetBribeCount(ctx, genState.BribeCount)
+	if err != nil {
+		return err
+	}
+	// Set all the bribe allocations
+	for _, bribeAllocation := range genState.BribeAllocations {
+		err := k.SetBribeAllocation(ctx, bribeAllocation)
 		if err != nil {
 			return err
 		}
@@ -54,10 +66,6 @@ func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) 
 		return nil, err
 	}
 	genesis.EpochCount, err = k.GetEpochCount(ctx)
-	if err != nil {
-		return nil, err
-	}
-	genesis.Gauges, err = k.GetAllGauges(ctx)
 	if err != nil {
 		return nil, err
 	}

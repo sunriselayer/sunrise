@@ -108,7 +108,7 @@ func TestUpsertTick(t *testing.T) {
 		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
-		BaseOffset: "0.5",
+		BaseOffset: "-0.5",
 	})
 	require.NoError(t, err)
 
@@ -175,7 +175,7 @@ func TestNewTickInfo(t *testing.T) {
 		DenomQuote: quoteDenom,
 		FeeRate:    "0.01",
 		PriceRatio: "1.0001",
-		BaseOffset: "0.5",
+		BaseOffset: "-0.5",
 	})
 	require.NoError(t, err)
 

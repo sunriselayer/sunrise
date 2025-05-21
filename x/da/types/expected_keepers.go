@@ -3,9 +3,12 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/core/address"
 	corestore "cosmossdk.io/core/store"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // AccountKeeper defines the expected interface for the Account module.
@@ -31,7 +34,9 @@ type SlashingKeeper interface {
 
 // StakingKeeper is expected keeper for staking module
 type StakingKeeper interface {
-	Validator(ctx context.Context, address sdk.ValAddress) (sdk.ValidatorI, error)
+	ValidatorAddressCodec() address.Codec
+
+	Validator(ctx context.Context, address sdk.ValAddress) (stakingtypes.ValidatorI, error)
 	PowerReduction(ctx context.Context) (res math.Int)
 	ValidatorsPowerStoreIterator(ctx context.Context) (corestore.Iterator, error)
 	TotalBondedTokens(ctx context.Context) (math.Int, error)

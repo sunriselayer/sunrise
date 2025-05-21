@@ -20,6 +20,20 @@ func (k Keeper) SetBribeExpiredEpochId(ctx context.Context, id uint64) error {
 	return k.BribeExpiredEpochId.Set(ctx, id)
 }
 
+// GetBribeCount get the total number of bribe
+func (k Keeper) GetBribeCount(ctx context.Context) (count uint64, err error) {
+	count, err = k.BribeId.Peek(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+// SetBribeCount set the total number of bribe
+func (k Keeper) SetBribeCount(ctx context.Context, count uint64) error {
+	return k.BribeId.Set(ctx, count)
+}
+
 // AppendBribe appends a bribe in the store with a new id and update the count
 func (k Keeper) AppendBribe(ctx context.Context, bribe types.Bribe) (id uint64, err error) {
 	id, err = k.BribeId.Next(ctx)

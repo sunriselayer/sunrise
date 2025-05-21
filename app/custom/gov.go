@@ -8,16 +8,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"cosmossdk.io/x/gov"
-	govtypes "cosmossdk.io/x/gov/types/v1"
+	"github.com/cosmos/cosmos-sdk/x/gov"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 )
 
 type CustomGovModule struct {
-	gov.AppModule
-	cdc codec.Codec
+	gov.AppModuleBasic
 }
 
-func (cm CustomGovModule) DefaultGenesis() json.RawMessage {
+func (cm CustomGovModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := govtypes.DefaultGenesisState()
 
 	day := time.Duration(time.Hour * 24)
@@ -34,5 +33,10 @@ func (cm CustomGovModule) DefaultGenesis() json.RawMessage {
 	genesis.Params.MaxDepositPeriod = &oneWeek
 	genesis.Params.VotingPeriod = &oneWeek
 
-	return cm.cdc.MustMarshalJSON(genesis)
+	// 20.0%
+	// Because we disallow validators to vote with non voting delegators' power,
+	// we need to allow lower quorum.
+	genesis.Params.Quorum = math.LegacyNewDecWithPrec(200, 3).String()
+
+	return cdc.MustMarshalJSON(genesis)
 }
