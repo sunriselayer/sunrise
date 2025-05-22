@@ -54,7 +54,7 @@ func NewUnbondingsIndexes(sb *collections.SchemaBuilder, addressCodec address.Co
 			sdk.AccAddressKey,
 			collections.Uint64Key,
 			func(_ uint64, v Unbonding) (sdk.AccAddress, error) {
-				return addressCodec.StringToBytes(v.Address)
+				return addressCodec.StringToBytes(v.RecipientAddress)
 			},
 		),
 		CompletionTime: indexes.NewMulti(

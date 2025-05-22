@@ -119,9 +119,11 @@ func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient
 
 	// Append Unstaking state
 	_, err = k.AppendUnbonding(ctx, types.Unbonding{
-		Address:        recipient.String(),
-		CompletionTime: completionTime,
-		Amount:         output,
+		RecipientAddress: recipient.String(),
+		DelegatorAddress: sender.String(),
+		ValidatorAddress: valAddr.String(),
+		CompletionTime:   completionTime,
+		Amount:           output,
 	})
 	if err != nil {
 		return sdk.Coin{}, nil, time.Time{}, err

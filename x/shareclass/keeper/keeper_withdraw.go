@@ -56,13 +56,13 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 
 	feeCoin := sdk.NewCoin(feeDenom, unbonding.Amount.Amount)
 
-	// Send coin to sender
-	sender, err := k.addressCodec.StringToBytes(unbonding.Address)
+	// Send coin to recipient
+	recipient, err := k.addressCodec.StringToBytes(unbonding.RecipientAddress)
 	if err != nil {
 		return err
 	}
 
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, sdk.NewCoins(feeCoin))
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(feeCoin))
 	if err != nil {
 		return err
 	}
