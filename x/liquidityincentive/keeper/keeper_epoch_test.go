@@ -11,7 +11,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/cosmos/cosmos-sdk/codec/address"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper/testutil"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
 )
@@ -26,37 +25,37 @@ func TestCreateEpoch(t *testing.T) {
 
 	tests := []struct {
 		name          string
-		setup         func(fx *testutil.Fixture, ctx sdk.Context)
+		setup         func(fx *fixture, ctx sdk.Context)
 		expectedTally []types.Gauge
 		expectError   bool
 	}{
 		{
 			name: "no votes",
-			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+			setup: func(fx *fixture, ctx sdk.Context) {
 				// Mock GetModuleAddress for shareclass module
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					GetModuleAddress(shareclasstypes.ModuleName).
 					Return(moduleAddr).
 					AnyTimes()
 
 				// Mock IterateBondedValidatorsByPower to return no validators
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					IterateBondedValidatorsByPower(gomock.Any(), gomock.Any()).
 					Return(nil)
 
 				// Mock IterateDelegations and ValidatorAddressCodec
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					IterateDelegations(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					ValidatorAddressCodec().
 					Return(bech32Codec).AnyTimes()
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					TotalBondedTokens(gomock.Any()).
 					Return(math.NewInt(0), nil).AnyTimes()
 
 				// Mock AddressCodec for AccountKeeper
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 			},
@@ -65,15 +64,15 @@ func TestCreateEpoch(t *testing.T) {
 		},
 		{
 			name: "one validator votes",
-			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+			setup: func(fx *fixture, ctx sdk.Context) {
 				// Mock GetModuleAddress for shareclass module
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					GetModuleAddress(shareclasstypes.ModuleName).
 					Return(moduleAddr).
 					AnyTimes()
 
 				// Mock IterateBondedValidatorsByPower to return one validator
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					IterateBondedValidatorsByPower(gomock.Any(), gomock.Any()).
 					DoAndReturn(func(ctx sdk.Context, fn func(index int64, validator stakingtypes.ValidatorI) bool) error {
 						fn(0, stakingtypes.Validator{
@@ -86,18 +85,18 @@ func TestCreateEpoch(t *testing.T) {
 					})
 
 				// Mock IterateDelegations and ValidatorAddressCodec
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					IterateDelegations(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil).AnyTimes()
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					ValidatorAddressCodec().
 					Return(bech32Codec).AnyTimes()
-				fx.Mocks.StakingKeeper.EXPECT().
+				fx.mocks.StakingKeeper.EXPECT().
 					TotalBondedTokens(gomock.Any()).
 					Return(math.NewInt(1000000), nil).AnyTimes()
 
 				// Mock AddressCodec for AccountKeeper
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 
@@ -109,7 +108,7 @@ func TestCreateEpoch(t *testing.T) {
 						Weight: "1.0",
 					}},
 				}
-				err := fx.Keeper.SetVote(ctx, vote)
+				err := fx.keeper.SetVote(ctx, vote)
 				require.NoError(t, err)
 			},
 			expectedTally: []types.Gauge{{
@@ -122,21 +121,19 @@ func TestCreateEpoch(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
-			fx := testutil.InitFixture(t)
-			ctx, _ := fx.Ctx.(sdk.Context)
+			fx := initFixture(t)
+			ctx, _ := fx.ctx.(sdk.Context)
 
 			if tc.setup != nil {
 				tc.setup(fx, ctx)
 			}
 
-			err := fx.Keeper.CreateEpoch(ctx, 1)
+			err := fx.keeper.CreateEpoch(ctx, 1)
 			if tc.expectError {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				epoch, found, err := fx.Keeper.GetLastEpoch(ctx)
+				epoch, found, err := fx.keeper.GetLastEpoch(ctx)
 				require.NoError(t, err)
 				require.True(t, found)
 				require.NotNil(t, epoch)
