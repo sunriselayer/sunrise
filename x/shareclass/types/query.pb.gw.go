@@ -52,7 +52,7 @@ func local_request_Query_Params_0(ctx context.Context, marshaler runtime.Marshal
 }
 
 func request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateBondingAmountRequest
+	var protoReq QueryCalculationBondingAmountRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -90,7 +90,7 @@ func request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler runti
 }
 
 func local_request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateBondingAmountRequest
+	var protoReq QueryCalculationBondingAmountRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -128,7 +128,7 @@ func local_request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler
 }
 
 func request_Query_CalculateShare_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateShareRequest
+	var protoReq QueryCalculationShareRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -166,7 +166,7 @@ func request_Query_CalculateShare_0(ctx context.Context, marshaler runtime.Marsh
 }
 
 func local_request_Query_CalculateShare_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateShareRequest
+	var protoReq QueryCalculationShareRequest
 	var metadata runtime.ServerMetadata
 
 	var (
