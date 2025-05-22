@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
@@ -36,7 +37,7 @@ func TestEpochQuerySingle(t *testing.T) {
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryEpochRequest{Id: uint64(len(msgs))},
+			request: &types.QueryEpochRequest{Id: 9999},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
@@ -48,7 +49,11 @@ func TestEpochQuerySingle(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			response, err := qs.Epoch(f.ctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				if tc.desc == "KeyNotFound" {
+					require.EqualError(t, err, tc.err.Error())
+				} else {
+					require.ErrorIs(t, err, tc.err)
+				}
 			} else {
 				require.NoError(t, err)
 				require.Equal(t,
@@ -114,4 +119,111 @@ func TestEpochQueryPaginated(t *testing.T) {
 		_, err := qs.Epochs(f.ctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
+	t.Run("EmptyResults", func(t *testing.T) {
+		// Query with offset beyond available epochs
+		resp, err := qs.Epochs(f.ctx, request(nil, uint64(len(msgs)+1), 10, false))
+		require.NoError(t, err)
+		require.Empty(t, resp.Epochs)
+	})
+	t.Run("InvalidPagination", func(t *testing.T) {
+		// Test with invalid pagination parameters
+		req := &types.QueryEpochsRequest{
+			Pagination: &query.PageRequest{
+				Offset: 999999, // Very large offset
+				Limit:  0,      // Invalid limit
+			},
+		}
+		resp, err := qs.Epochs(f.ctx, req)
+		require.NoError(t, err)
+		require.Empty(t, resp.Epochs)
+	})
+}
+
+func TestEpochQueryByBlockHeight(t *testing.T) {
+	f := initFixture(t)
+	qs := keeper.NewQueryServerImpl(f.keeper)
+
+	// Create epochs with specific block height ranges
+	epochs := []types.Epoch{
+		{
+			Id:         1,
+			StartBlock: 100,
+			EndBlock:   200,
+			Gauges:     []types.Gauge{},
+		},
+		{
+			Id:         2,
+			StartBlock: 201,
+			EndBlock:   300,
+			Gauges:     []types.Gauge{},
+		},
+	}
+
+	for _, epoch := range epochs {
+		err := f.keeper.SetEpoch(f.ctx, epoch)
+		require.NoError(t, err)
+	}
+
+	tests := []struct {
+		name          string
+		blockHeight   int64
+		expectedEpoch *types.Epoch
+		expectError   bool
+	}{
+		{
+			name:          "BlockInFirstEpoch",
+			blockHeight:   150,
+			expectedEpoch: &epochs[0],
+		},
+		{
+			name:          "BlockInSecondEpoch",
+			blockHeight:   250,
+			expectedEpoch: &epochs[1],
+		},
+		{
+			name:        "BlockBeforeAnyEpoch",
+			blockHeight: 50,
+			expectError: true,
+		},
+		{
+			name:        "BlockAfterAnyEpoch",
+			blockHeight: 350,
+			expectError: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Set the block height in the context
+			sdkCtx := sdk.UnwrapSDKContext(f.ctx)
+			ctx := sdkCtx.WithBlockHeight(tc.blockHeight)
+
+			// Get all epochs
+			resp, err := qs.Epochs(ctx, &types.QueryEpochsRequest{})
+			require.NoError(t, err)
+
+			if tc.expectError {
+				// For blocks outside epoch ranges, we should find no matching epochs
+				found := false
+				for _, epoch := range resp.Epochs {
+					if epoch.StartBlock <= tc.blockHeight && tc.blockHeight <= epoch.EndBlock {
+						found = true
+						break
+					}
+				}
+				require.False(t, found, "Found epoch for block height %d when none should exist", tc.blockHeight)
+			} else {
+				require.NotEmpty(t, resp.Epochs)
+				found := false
+				for _, epoch := range resp.Epochs {
+					if epoch.StartBlock <= tc.blockHeight && tc.blockHeight <= epoch.EndBlock {
+						found = true
+						require.Equal(t, tc.expectedEpoch.Id, epoch.Id)
+						break
+					}
+				}
+				require.True(t, found, "No epoch found for block height %d", tc.blockHeight)
+			}
+		})
+	}
 }

@@ -17,6 +17,15 @@ import (
 var _ = strconv.IntSize
 
 func createNBribe(keeper keeper.Keeper, ctx context.Context, n int) []types.Bribe {
+	// Ensure epoch 1 exists
+	epoch := types.Epoch{
+		Id:         1,
+		StartBlock: 0,
+		EndBlock:   100,
+		Gauges:     []types.Gauge{},
+	}
+	_ = keeper.SetEpoch(ctx, epoch)
+
 	items := make([]types.Bribe, n)
 	for i := range items {
 		items[i].EpochId = 1

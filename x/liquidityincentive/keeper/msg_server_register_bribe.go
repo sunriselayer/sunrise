@@ -24,7 +24,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	}
 
 	if found && msg.EpochId <= currentEpoch.Id {
-		return nil, errorsmod.Wrap(types.ErrInvalidBribe, "epoch is in the past")
+		return nil, errorsmod.Wrap(types.ErrInvalidBribe, "epoch must be in the future")
 	}
 
 	// Check if amount is valid
@@ -40,6 +40,15 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	// Check if send enabled coins
 	if err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.Amount...); err != nil {
 		return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
+	}
+
+	// Check if pool exists before any bank keeper calls
+	_, found, err = k.liquidityPoolKeeper.GetPool(ctx, msg.PoolId)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get pool")
+	}
+	if !found {
+		return nil, errorsmod.Wrapf(types.ErrInvalidBribe, "pool %d not found", msg.PoolId)
 	}
 
 	// Send coins from sender to module
