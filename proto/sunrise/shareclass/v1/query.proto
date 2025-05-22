@@ -20,12 +20,12 @@ service Query {
 
   // CalculateBondingAmount
   rpc CalculateBondingAmount(QueryCalculateBondingAmountRequest) returns (QueryCalculateBondingAmountResponse) {
-    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-bonding-amount";
+    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-bonding-amount/{validator_address}/{share}";
   }
 
   // CalculateShare
   rpc CalculateShare(QueryCalculateShareRequest) returns (QueryCalculateShareResponse) {
-    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-share";
+    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-share/{validator_address}/{amount}";
   }
 
   // AddressBonded
@@ -35,7 +35,7 @@ service Query {
 
   // ClaimableRewards
   rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
-    option (google.api.http).get = "/sunrise/shareclass/v1/claimable-rewards";
+    option (google.api.http).get = "/sunrise/shareclass/v1/claimable-rewards/{address}/{validator_address}";
   }
 
   // AddressUnbonding
