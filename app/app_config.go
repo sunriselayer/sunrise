@@ -115,16 +115,6 @@ var (
 		stakingtypes.NotBondedPoolName,
 		// We allow the following module accounts to receive funds:
 		// govtypes.ModuleName
-		// pooltypes.ModuleName
-
-		damoduletypes.ModuleName,
-		feemoduletypes.ModuleName,
-		tokenconvertermoduletypes.ModuleName,
-		shareclassmoduletypes.ModuleName,
-		lockupmoduletypes.ModuleName,
-		liquiditypoolmoduletypes.ModuleName,
-		// liquidityincentivemoduletypes.ModuleName,
-		swapmoduletypes.ModuleName,
 	}
 
 	// application configuration (used by depinject)

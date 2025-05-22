@@ -51,19 +51,37 @@ func local_request_Query_Params_0(ctx context.Context, marshaler runtime.Marshal
 
 }
 
-var (
-	filter_Query_CalculateBondingAmount_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
-
 func request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateBondingAmountRequest
+	var protoReq QueryCalculationBondingAmountRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["validator_address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "validator_address")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CalculateBondingAmount_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.ValidatorAddress, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "validator_address", err)
+	}
+
+	val, ok = pathParams["share"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "share")
+	}
+
+	protoReq.Share, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "share", err)
 	}
 
 	msg, err := client.CalculateBondingAmount(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -72,14 +90,36 @@ func request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler runti
 }
 
 func local_request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateBondingAmountRequest
+	var protoReq QueryCalculationBondingAmountRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["validator_address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "validator_address")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CalculateBondingAmount_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.ValidatorAddress, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "validator_address", err)
+	}
+
+	val, ok = pathParams["share"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "share")
+	}
+
+	protoReq.Share, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "share", err)
 	}
 
 	msg, err := server.CalculateBondingAmount(ctx, &protoReq)
@@ -87,19 +127,37 @@ func local_request_Query_CalculateBondingAmount_0(ctx context.Context, marshaler
 
 }
 
-var (
-	filter_Query_CalculateShare_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
-
 func request_Query_CalculateShare_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateShareRequest
+	var protoReq QueryCalculationShareRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["validator_address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "validator_address")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CalculateShare_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.ValidatorAddress, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "validator_address", err)
+	}
+
+	val, ok = pathParams["amount"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "amount")
+	}
+
+	protoReq.Amount, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "amount", err)
 	}
 
 	msg, err := client.CalculateShare(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -108,14 +166,36 @@ func request_Query_CalculateShare_0(ctx context.Context, marshaler runtime.Marsh
 }
 
 func local_request_Query_CalculateShare_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCalculateShareRequest
+	var protoReq QueryCalculationShareRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["validator_address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "validator_address")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CalculateShare_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.ValidatorAddress, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "validator_address", err)
+	}
+
+	val, ok = pathParams["amount"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "amount")
+	}
+
+	protoReq.Amount, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "amount", err)
 	}
 
 	msg, err := server.CalculateShare(ctx, &protoReq)
@@ -177,19 +257,37 @@ func local_request_Query_AddressBonded_0(ctx context.Context, marshaler runtime.
 
 }
 
-var (
-	filter_Query_ClaimableRewards_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
-
 func request_Query_ClaimableRewards_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq QueryClaimableRewardsRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "address")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_ClaimableRewards_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.Address, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "address", err)
+	}
+
+	val, ok = pathParams["validator_address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "validator_address")
+	}
+
+	protoReq.ValidatorAddress, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "validator_address", err)
 	}
 
 	msg, err := client.ClaimableRewards(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -201,11 +299,33 @@ func local_request_Query_ClaimableRewards_0(ctx context.Context, marshaler runti
 	var protoReq QueryClaimableRewardsRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "address")
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_ClaimableRewards_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+
+	protoReq.Address, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "address", err)
+	}
+
+	val, ok = pathParams["validator_address"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "validator_address")
+	}
+
+	protoReq.ValidatorAddress, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "validator_address", err)
 	}
 
 	msg, err := server.ClaimableRewards(ctx, &protoReq)
@@ -578,13 +698,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculateBondingAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "calculate-bonding-amount"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculateBondingAmount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "shareclass", "v1", "calculate-bonding-amount", "validator_address", "share"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_CalculateShare_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "calculate-share"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_CalculateShare_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "shareclass", "v1", "calculate-share", "validator_address", "amount"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_AddressBonded_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "shareclass", "v1", "bonded", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ClaimableRewards_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sunrise", "shareclass", "v1", "claimable-rewards"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ClaimableRewards_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"sunrise", "shareclass", "v1", "claimable-rewards", "address", "validator_address"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_AddressUnbonding_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sunrise", "shareclass", "v1", "unbonding", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 )

@@ -19,13 +19,13 @@ service Query {
   }
 
   // CalculateBondingAmount
-  rpc CalculateBondingAmount(QueryCalculateBondingAmountRequest) returns (QueryCalculateBondingAmountResponse) {
-    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-bonding-amount";
+  rpc CalculateBondingAmount(QueryCalculationBondingAmountRequest) returns (QueryCalculationBondingAmountResponse) {
+    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-bonding-amount/{validator_address}/{share}";
   }
 
   // CalculateShare
-  rpc CalculateShare(QueryCalculateShareRequest) returns (QueryCalculateShareResponse) {
-    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-share";
+  rpc CalculateShare(QueryCalculationShareRequest) returns (QueryCalculationShareResponse) {
+    option (google.api.http).get = "/sunrise/shareclass/v1/calculate-share/{validator_address}/{amount}";
   }
 
   // AddressBonded
@@ -35,7 +35,7 @@ service Query {
 
   // ClaimableRewards
   rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
-    option (google.api.http).get = "/sunrise/shareclass/v1/claimable-rewards";
+    option (google.api.http).get = "/sunrise/shareclass/v1/claimable-rewards/{address}/{validator_address}";
   }
 
   // AddressUnbonding
@@ -53,33 +53,25 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryCalculateAmountRequest
-message QueryCalculateBondingAmountRequest {
+// QueryCalculationAmountRequest
+message QueryCalculationBondingAmountRequest {
   string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string share = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
+  string share = 2;
 }
 
-// QueryCalculateBondingAmountResponse
-message QueryCalculateBondingAmountResponse {
+// QueryCalculationBondingAmountResponse
+message QueryCalculationBondingAmountResponse {
   cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
 }
 
-// QueryCalculateShareRequest
-message QueryCalculateShareRequest {
+// QueryCalculationShareRequest
+message QueryCalculationShareRequest {
   string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
-  string amount = 2 [
-    (cosmos_proto.scalar) = "cosmos.Int",
-    (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable) = false
-  ];
+  string amount = 2;
 }
 
-// QueryCalculateShareResponse
-message QueryCalculateShareResponse {
+// QueryCalculationShareResponse
+message QueryCalculationShareResponse {
   string share = 1 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
