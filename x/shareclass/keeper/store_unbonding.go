@@ -38,6 +38,8 @@ func (k Keeper) AppendUnbonding(ctx context.Context, unbonding types.Unbonding) 
 	}
 
 	// Set the ID of the appended value
+	unbonding.Id = id
+
 	err = k.SetUnbonding(ctx, unbonding)
 	if err != nil {
 		return 0, err
