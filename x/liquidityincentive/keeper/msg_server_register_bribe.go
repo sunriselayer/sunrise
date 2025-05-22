@@ -24,7 +24,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 	}
 
 	if found && msg.EpochId < currentEpoch.Id {
-		return nil, errorsmod.Wrap(types.ErrInvalidBribe, "epoch is in the past")
+		return nil, errorsmod.Wrap(types.ErrBribeCannotBeCreated, "Cannot be created in the current epoch. The process has already been completed.")
 	}
 
 	// Check if amount is valid

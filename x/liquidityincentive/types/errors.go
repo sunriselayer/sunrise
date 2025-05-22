@@ -20,4 +20,5 @@ var (
 	ErrBribeAlreadyClaimed    = errors.Register(ModuleName, 10, "bribe already claimed")
 	ErrEpochNotEnded          = errors.Register(ModuleName, 11, "epoch not ended")
 	ErrNoValidVotes           = errors.Register(ModuleName, 12, "no valid vote")
+	ErrBribeCannotBeCreated   = errors.Register(ModuleName, 13, "Cannot be created in the current epoch. The process has already been completed.")
 )

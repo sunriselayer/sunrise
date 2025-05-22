@@ -11,19 +11,9 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
-	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper/testutil"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
-
-func setupFixture(t *testing.T) (*testutil.Fixture, sdk.Context) {
-	fx := testutil.InitFixture(t)
-	ctx, ok := fx.Ctx.(sdk.Context)
-	if !ok {
-		t.Fatalf("fx.Ctx is not sdk.Context")
-	}
-	return fx, ctx
-}
 
 // Helper to convert sdk.Coins to []interface{} for gomock variadic matching
 func toInterfaces(coins sdk.Coins) []interface{} {
@@ -82,7 +72,7 @@ func TestRegisterBribe(t *testing.T) {
 		name      string
 		msg       *types.MsgRegisterBribe
 		expectErr bool
-		setup     func(fx *testutil.Fixture, ctx sdk.Context)
+		setup     func(fx *fixture, ctx sdk.Context)
 	}{
 		{
 			name: "valid bribe registration",
@@ -93,19 +83,19 @@ func TestRegisterBribe(t *testing.T) {
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
 			},
 			expectErr: false,
-			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+			setup: func(fx *fixture, ctx sdk.Context) {
 				// Mock AddressCodec for AccountKeeper
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 
-				fx.Mocks.LiquidityPoolKeeper.EXPECT().
+				fx.mocks.LiquiditypoolKeeper.EXPECT().
 					GetPool(gomock.Any(), uint64(1)).
 					Return(liquiditypooltypes.Pool{}, true, nil)
-				fx.Mocks.BankKeeper.EXPECT().
-					IsSendEnabledCoins(gomock.Any(), toInterfaces(sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))))...).
+				fx.mocks.BankKeeper.EXPECT().
+					IsSendEnabledCoins(gomock.Any(), sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 					Return(nil)
-				fx.Mocks.BankKeeper.EXPECT().
+				fx.mocks.BankKeeper.EXPECT().
 					SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.BribeAccount, sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 					Return(nil)
 			},
@@ -119,9 +109,9 @@ func TestRegisterBribe(t *testing.T) {
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(0))),
 			},
 			expectErr: true,
-			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+			setup: func(fx *fixture, ctx sdk.Context) {
 				// Mock AddressCodec for AccountKeeper
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 			},
@@ -135,9 +125,9 @@ func TestRegisterBribe(t *testing.T) {
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
 			},
 			expectErr: true,
-			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+			setup: func(fx *fixture, ctx sdk.Context) {
 				// Mock AddressCodec for AccountKeeper
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 			},
@@ -151,17 +141,17 @@ func TestRegisterBribe(t *testing.T) {
 				Amount:  sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100))),
 			},
 			expectErr: true,
-			setup: func(fx *testutil.Fixture, ctx sdk.Context) {
+			setup: func(fx *fixture, ctx sdk.Context) {
 				// Mock AddressCodec for AccountKeeper
-				fx.Mocks.AccountKeeper.EXPECT().
+				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
 
-				fx.Mocks.LiquidityPoolKeeper.EXPECT().
+				fx.mocks.LiquiditypoolKeeper.EXPECT().
 					GetPool(gomock.Any(), uint64(999)).
 					Return(liquiditypooltypes.Pool{}, false, nil)
-				fx.Mocks.BankKeeper.EXPECT().
-					IsSendEnabledCoins(gomock.Any(), gomock.Any()).
+				fx.mocks.BankKeeper.EXPECT().
+					IsSendEnabledCoins(gomock.Any(), sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 					Return(nil).AnyTimes()
 			},
 		},
@@ -171,32 +161,32 @@ func TestRegisterBribe(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
-			fx := testutil.InitFixture(t)
-			ctx, _ := fx.Ctx.(sdk.Context)
-			msgServer := keeper.NewMsgServerImpl(fx.Keeper)
+			fx := initFixture(t)
+			sdkCtx := fx.ctx.(sdk.Context)
+			msgServer := keeper.NewMsgServerImpl(fx.keeper)
 
 			// Set up epochs
-			err := setupEpochs(ctx, &fx.Keeper)
+			err := setupEpochs(sdkCtx, &fx.keeper)
 			require.NoError(t, err)
 
 			// Set bribe count to 1 for test consistency
-			err = fx.Keeper.SetBribeCount(ctx, 1)
+			err = fx.keeper.SetBribeCount(sdkCtx, 1)
 			require.NoError(t, err)
 
 			// Set up test-specific mocks
 			if tc.setup != nil {
-				tc.setup(fx, ctx)
+				tc.setup(fx, sdkCtx)
 			}
 
 			// Reset event manager for clean event tracking
-			ctx = ctx.WithEventManager(sdk.NewEventManager())
+			sdkCtx = sdkCtx.WithEventManager(sdk.NewEventManager())
 
-			_, err = msgServer.RegisterBribe(ctx, tc.msg)
+			_, err = msgServer.RegisterBribe(sdkCtx, tc.msg)
 			if tc.expectErr {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, tc.msg.EpochId)
+				bribes, err := fx.keeper.GetAllBribeByEpochId(sdkCtx, tc.msg.EpochId)
 				require.NoError(t, err)
 				require.Len(t, bribes, 1)
 				require.Equal(t, tc.msg.PoolId, bribes[0].PoolId)
@@ -217,19 +207,19 @@ func TestClaimBribes(t *testing.T) {
 	addr2Str := addr2.String()
 
 	// Helper to set up a fresh fixture, context, and register a bribe, returning the bribeId
-	setupBribe := func(t *testing.T) (*testutil.Fixture, sdk.Context, types.MsgServer, uint64, sdk.Coins) {
+	setupBribe := func(t *testing.T) (*fixture, sdk.Context, types.MsgServer, uint64, sdk.Coins) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
-		fx := testutil.InitFixture(t)
-		ctx, _ := fx.Ctx.(sdk.Context)
-		msgServer := keeper.NewMsgServerImpl(fx.Keeper)
+		fx := initFixture(t)
+		sdkCtx := fx.ctx.(sdk.Context)
+		msgServer := keeper.NewMsgServerImpl(fx.keeper)
 
 		// Set up epochs
-		err := setupEpochs(ctx, &fx.Keeper)
+		err := setupEpochs(sdkCtx, &fx.keeper)
 		require.NoError(t, err)
 
 		// Set bribe count to 1 for test consistency
-		err = fx.Keeper.SetBribeCount(ctx, 1)
+		err = fx.keeper.SetBribeCount(sdkCtx, 1)
 		require.NoError(t, err)
 
 		// Set up vote and allocation
@@ -240,10 +230,10 @@ func TestClaimBribes(t *testing.T) {
 				Weight: "1.0",
 			}},
 		}
-		err = fx.Keeper.SetVote(ctx, vote)
+		err = fx.keeper.SetVote(sdkCtx, vote)
 		require.NoError(t, err)
 
-		err = fx.Keeper.SaveVoteWeightsForBribes(ctx, 2)
+		err = fx.keeper.SaveVoteWeightsForBribes(sdkCtx, 2)
 		require.NoError(t, err)
 
 		allocation := types.BribeAllocation{
@@ -253,20 +243,20 @@ func TestClaimBribes(t *testing.T) {
 			Weight:          "1.0",
 			ClaimedBribeIds: []uint64{},
 		}
-		err = fx.Keeper.SetBribeAllocation(ctx, allocation)
+		err = fx.keeper.SetBribeAllocation(sdkCtx, allocation)
 		require.NoError(t, err)
 
 		// Register a bribe
 		bribeAmount := sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))
-		ctx = ctx.WithEventManager(sdk.NewEventManager())
-		fx.Mocks.LiquidityPoolKeeper.EXPECT().
+		sdkCtx = sdkCtx.WithEventManager(sdk.NewEventManager())
+		fx.mocks.LiquiditypoolKeeper.EXPECT().
 			GetPool(gomock.Any(), uint64(1)).
 			Return(liquiditypooltypes.Pool{}, true, nil)
-		fx.Mocks.BankKeeper.EXPECT().
-			IsSendEnabledCoins(gomock.Any(), toInterfaces(bribeAmount)...).
+		fx.mocks.BankKeeper.EXPECT().
+			IsSendEnabledCoins(gomock.Any(), sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 			Return(nil)
-		fx.Mocks.BankKeeper.EXPECT().
-			SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.BribeAccount, bribeAmount).
+		fx.mocks.BankKeeper.EXPECT().
+			SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.BribeAccount, sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 			Return(nil)
 		msg := &types.MsgRegisterBribe{
 			Sender:  addr1Str,
@@ -274,11 +264,11 @@ func TestClaimBribes(t *testing.T) {
 			PoolId:  1,
 			Amount:  bribeAmount,
 		}
-		_, err = msgServer.RegisterBribe(ctx, msg)
+		_, err = msgServer.RegisterBribe(sdkCtx, msg)
 		require.NoError(t, err)
 
 		// Get the bribe ID from the store
-		bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, 2)
+		bribes, err := fx.keeper.GetAllBribeByEpochId(sdkCtx, 2)
 		require.NoError(t, err)
 		require.Len(t, bribes, 1)
 		bribeId := bribes[0].Id
@@ -288,14 +278,14 @@ func TestClaimBribes(t *testing.T) {
 			bribeId = 1
 		}
 
-		return fx, ctx, msgServer, bribeId, bribeAmount
+		return fx, sdkCtx, msgServer, bribeId, bribeAmount
 	}
 
 	tests := []struct {
 		name      string
 		msg       func(bribeId uint64) *types.MsgClaimBribes
 		expectErr bool
-		setup     func(fx *testutil.Fixture, ctx sdk.Context, bribeId uint64, bribeAmount sdk.Coins)
+		setup     func(fx *fixture, ctx sdk.Context, bribeId uint64, bribeAmount sdk.Coins)
 	}{
 		{
 			name: "valid bribe claim",
@@ -306,8 +296,8 @@ func TestClaimBribes(t *testing.T) {
 				}
 			},
 			expectErr: false,
-			setup: func(fx *testutil.Fixture, ctx sdk.Context, bribeId uint64, bribeAmount sdk.Coins) {
-				fx.Mocks.BankKeeper.EXPECT().
+			setup: func(fx *fixture, ctx sdk.Context, bribeId uint64, bribeAmount sdk.Coins) {
+				fx.mocks.BankKeeper.EXPECT().
 					SendCoinsFromModuleToAccount(gomock.Any(), types.BribeAccount, addr2, bribeAmount).
 					Return(nil)
 			},
@@ -341,12 +331,12 @@ func TestClaimBribes(t *testing.T) {
 				}
 			},
 			expectErr: true,
-			setup: func(fx *testutil.Fixture, ctx sdk.Context, bribeId uint64, bribeAmount sdk.Coins) {
+			setup: func(fx *fixture, ctx sdk.Context, bribeId uint64, bribeAmount sdk.Coins) {
 				// First claim should succeed
-				fx.Mocks.BankKeeper.EXPECT().
+				fx.mocks.BankKeeper.EXPECT().
 					SendCoinsFromModuleToAccount(gomock.Any(), types.BribeAccount, addr2, bribeAmount).
 					Return(nil)
-				msgServer := keeper.NewMsgServerImpl(fx.Keeper)
+				msgServer := keeper.NewMsgServerImpl(fx.keeper)
 				_, err := msgServer.ClaimBribes(ctx, &types.MsgClaimBribes{
 					Sender:   addr2Str,
 					BribeIds: []uint64{bribeId},
@@ -358,21 +348,21 @@ func TestClaimBribes(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			fx, ctx, msgServer, bribeId, bribeAmount := setupBribe(t)
-			ctx = ctx.WithEventManager(sdk.NewEventManager())
+			fx, sdkCtx, msgServer, bribeId, bribeAmount := setupBribe(t)
+			sdkCtx = sdkCtx.WithEventManager(sdk.NewEventManager())
 			if tc.setup != nil {
-				tc.setup(fx, ctx, bribeId, bribeAmount)
+				tc.setup(fx, sdkCtx, bribeId, bribeAmount)
 			}
-			_, err := msgServer.ClaimBribes(ctx, tc.msg(bribeId))
+			_, err := msgServer.ClaimBribes(sdkCtx, tc.msg(bribeId))
 			if tc.expectErr {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				bribe, found, err := fx.Keeper.GetBribe(ctx, bribeId)
+				bribe, found, err := fx.keeper.GetBribe(sdkCtx, bribeId)
 				require.NoError(t, err)
 				require.True(t, found)
 				require.Equal(t, bribeAmount, bribe.ClaimedAmount)
-				allocation, err := fx.Keeper.GetBribeAllocation(ctx, addr2, 2, 1)
+				allocation, err := fx.keeper.GetBribeAllocation(sdkCtx, addr2, 2, 1)
 				require.NoError(t, err)
 				require.Contains(t, allocation.ClaimedBribeIds, bribeId)
 			}
@@ -389,15 +379,15 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	fx := testutil.InitFixture(t)
-	ctx, _ := fx.Ctx.(sdk.Context)
+	fx := initFixture(t)
+	sdkCtx := fx.ctx.(sdk.Context)
 
 	// Set up epochs
-	err := setupEpochs(ctx, &fx.Keeper)
+	err := setupEpochs(sdkCtx, &fx.keeper)
 	require.NoError(t, err)
 
 	// Set bribe count to 1 for test consistency
-	err = fx.Keeper.SetBribeCount(ctx, 1)
+	err = fx.keeper.SetBribeCount(sdkCtx, 1)
 	require.NoError(t, err)
 
 	// Set up vote and allocation
@@ -408,10 +398,10 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 			Weight: "1.0",
 		}},
 	}
-	err = fx.Keeper.SetVote(ctx, vote)
+	err = fx.keeper.SetVote(sdkCtx, vote)
 	require.NoError(t, err)
 
-	err = fx.Keeper.SaveVoteWeightsForBribes(ctx, 2)
+	err = fx.keeper.SaveVoteWeightsForBribes(sdkCtx, 2)
 	require.NoError(t, err)
 
 	allocation := types.BribeAllocation{
@@ -421,20 +411,20 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 		Weight:          "1.0",
 		ClaimedBribeIds: []uint64{},
 	}
-	err = fx.Keeper.SetBribeAllocation(ctx, allocation)
+	err = fx.keeper.SetBribeAllocation(sdkCtx, allocation)
 	require.NoError(t, err)
 
 	// Register a bribe
 	bribeAmount := sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))
-	ctx = ctx.WithEventManager(sdk.NewEventManager())
-	fx.Mocks.LiquidityPoolKeeper.EXPECT().
+	sdkCtx = sdkCtx.WithEventManager(sdk.NewEventManager())
+	fx.mocks.LiquiditypoolKeeper.EXPECT().
 		GetPool(gomock.Any(), uint64(1)).
 		Return(liquiditypooltypes.Pool{}, true, nil)
-	fx.Mocks.BankKeeper.EXPECT().
-		IsSendEnabledCoins(gomock.Any(), toInterfaces(bribeAmount)...).
+	fx.mocks.BankKeeper.EXPECT().
+		IsSendEnabledCoins(gomock.Any(), sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 		Return(nil)
-	fx.Mocks.BankKeeper.EXPECT().
-		SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.BribeAccount, bribeAmount).
+	fx.mocks.BankKeeper.EXPECT().
+		SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), types.BribeAccount, sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))).
 		Return(nil)
 	msg := &types.MsgRegisterBribe{
 		Sender:  addr1Str,
@@ -442,31 +432,31 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 		PoolId:  1,
 		Amount:  bribeAmount,
 	}
-	msgServer := keeper.NewMsgServerImpl(fx.Keeper)
-	_, err = msgServer.RegisterBribe(ctx, msg)
+	msgServer := keeper.NewMsgServerImpl(fx.keeper)
+	_, err = msgServer.RegisterBribe(sdkCtx, msg)
 	require.NoError(t, err)
 
 	// Set expired epoch ID
-	_ = fx.Keeper.SetBribeExpiredEpochId(ctx, 1)
+	_ = fx.keeper.SetBribeExpiredEpochId(sdkCtx, 1)
 
 	// Set up mocks for processing unclaimed bribes
-	fx.Mocks.AccountKeeper.EXPECT().
+	fx.mocks.AcctKeeper.EXPECT().
 		GetModuleAddress("fee_collector").
 		Return(addr1)
-	fx.Mocks.BankKeeper.EXPECT().
+	fx.mocks.BankKeeper.EXPECT().
 		SendCoinsFromModuleToAccount(gomock.Any(), types.BribeAccount, addr1, bribeAmount).
 		Return(nil)
 
 	// Process unclaimed bribes
-	err = fx.Keeper.ProcessUnclaimedBribes(ctx, 2)
+	err = fx.keeper.ProcessUnclaimedBribes(sdkCtx, 2)
 	require.NoError(t, err)
 
 	// Verify bribes are removed
-	bribes, err := fx.Keeper.GetAllBribeByEpochId(ctx, 2)
+	bribes, err := fx.keeper.GetAllBribeByEpochId(sdkCtx, 2)
 	require.NoError(t, err)
 	require.Len(t, bribes, 0)
 
 	// Verify expired epoch ID is updated
-	expiredEpochId := fx.Keeper.GetBribeExpiredEpochId(ctx)
+	expiredEpochId := fx.keeper.GetBribeExpiredEpochId(sdkCtx)
 	require.Equal(t, uint64(2), expiredEpochId)
 }
