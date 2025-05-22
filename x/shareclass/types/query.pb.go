@@ -117,24 +117,24 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
-// QueryCalculationAmountRequest
-type QueryCalculationBondingAmountRequest struct {
+// QueryCalculateAmountRequest
+type QueryCalculateBondingAmountRequest struct {
 	ValidatorAddress string `protobuf:"bytes,1,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
 	Share            string `protobuf:"bytes,2,opt,name=share,proto3" json:"share,omitempty"`
 }
 
-func (m *QueryCalculationBondingAmountRequest) Reset()         { *m = QueryCalculationBondingAmountRequest{} }
-func (m *QueryCalculationBondingAmountRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculationBondingAmountRequest) ProtoMessage()    {}
-func (*QueryCalculationBondingAmountRequest) Descriptor() ([]byte, []int) {
+func (m *QueryCalculateBondingAmountRequest) Reset()         { *m = QueryCalculateBondingAmountRequest{} }
+func (m *QueryCalculateBondingAmountRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculateBondingAmountRequest) ProtoMessage()    {}
+func (*QueryCalculateBondingAmountRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{2}
 }
-func (m *QueryCalculationBondingAmountRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculateBondingAmountRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculationBondingAmountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculateBondingAmountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculationBondingAmountRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculateBondingAmountRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -144,49 +144,49 @@ func (m *QueryCalculationBondingAmountRequest) XXX_Marshal(b []byte, determinist
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculationBondingAmountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculationBondingAmountRequest.Merge(m, src)
+func (m *QueryCalculateBondingAmountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculateBondingAmountRequest.Merge(m, src)
 }
-func (m *QueryCalculationBondingAmountRequest) XXX_Size() int {
+func (m *QueryCalculateBondingAmountRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculationBondingAmountRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculationBondingAmountRequest.DiscardUnknown(m)
+func (m *QueryCalculateBondingAmountRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculateBondingAmountRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculationBondingAmountRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculateBondingAmountRequest proto.InternalMessageInfo
 
-func (m *QueryCalculationBondingAmountRequest) GetValidatorAddress() string {
+func (m *QueryCalculateBondingAmountRequest) GetValidatorAddress() string {
 	if m != nil {
 		return m.ValidatorAddress
 	}
 	return ""
 }
 
-func (m *QueryCalculationBondingAmountRequest) GetShare() string {
+func (m *QueryCalculateBondingAmountRequest) GetShare() string {
 	if m != nil {
 		return m.Share
 	}
 	return ""
 }
 
-// QueryCalculationBondingAmountResponse
-type QueryCalculationBondingAmountResponse struct {
+// QueryCalculateBondingAmountResponse
+type QueryCalculateBondingAmountResponse struct {
 	Amount types.Coin `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount"`
 }
 
-func (m *QueryCalculationBondingAmountResponse) Reset()         { *m = QueryCalculationBondingAmountResponse{} }
-func (m *QueryCalculationBondingAmountResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculationBondingAmountResponse) ProtoMessage()    {}
-func (*QueryCalculationBondingAmountResponse) Descriptor() ([]byte, []int) {
+func (m *QueryCalculateBondingAmountResponse) Reset()         { *m = QueryCalculateBondingAmountResponse{} }
+func (m *QueryCalculateBondingAmountResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculateBondingAmountResponse) ProtoMessage()    {}
+func (*QueryCalculateBondingAmountResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{3}
 }
-func (m *QueryCalculationBondingAmountResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculateBondingAmountResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculationBondingAmountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculateBondingAmountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculationBondingAmountResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculateBondingAmountResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -196,43 +196,43 @@ func (m *QueryCalculationBondingAmountResponse) XXX_Marshal(b []byte, determinis
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculationBondingAmountResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculationBondingAmountResponse.Merge(m, src)
+func (m *QueryCalculateBondingAmountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculateBondingAmountResponse.Merge(m, src)
 }
-func (m *QueryCalculationBondingAmountResponse) XXX_Size() int {
+func (m *QueryCalculateBondingAmountResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculationBondingAmountResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculationBondingAmountResponse.DiscardUnknown(m)
+func (m *QueryCalculateBondingAmountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculateBondingAmountResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculationBondingAmountResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculateBondingAmountResponse proto.InternalMessageInfo
 
-func (m *QueryCalculationBondingAmountResponse) GetAmount() types.Coin {
+func (m *QueryCalculateBondingAmountResponse) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
 	return types.Coin{}
 }
 
-// QueryCalculationShareRequest
-type QueryCalculationShareRequest struct {
+// QueryCalculateShareRequest
+type QueryCalculateShareRequest struct {
 	ValidatorAddress string `protobuf:"bytes,1,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty"`
 	Amount           string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 }
 
-func (m *QueryCalculationShareRequest) Reset()         { *m = QueryCalculationShareRequest{} }
-func (m *QueryCalculationShareRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculationShareRequest) ProtoMessage()    {}
-func (*QueryCalculationShareRequest) Descriptor() ([]byte, []int) {
+func (m *QueryCalculateShareRequest) Reset()         { *m = QueryCalculateShareRequest{} }
+func (m *QueryCalculateShareRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculateShareRequest) ProtoMessage()    {}
+func (*QueryCalculateShareRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{4}
 }
-func (m *QueryCalculationShareRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculateShareRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculationShareRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculateShareRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculationShareRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculateShareRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -242,49 +242,49 @@ func (m *QueryCalculationShareRequest) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculationShareRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculationShareRequest.Merge(m, src)
+func (m *QueryCalculateShareRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculateShareRequest.Merge(m, src)
 }
-func (m *QueryCalculationShareRequest) XXX_Size() int {
+func (m *QueryCalculateShareRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculationShareRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculationShareRequest.DiscardUnknown(m)
+func (m *QueryCalculateShareRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculateShareRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculationShareRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculateShareRequest proto.InternalMessageInfo
 
-func (m *QueryCalculationShareRequest) GetValidatorAddress() string {
+func (m *QueryCalculateShareRequest) GetValidatorAddress() string {
 	if m != nil {
 		return m.ValidatorAddress
 	}
 	return ""
 }
 
-func (m *QueryCalculationShareRequest) GetAmount() string {
+func (m *QueryCalculateShareRequest) GetAmount() string {
 	if m != nil {
 		return m.Amount
 	}
 	return ""
 }
 
-// QueryCalculationShareResponse
-type QueryCalculationShareResponse struct {
+// QueryCalculateShareResponse
+type QueryCalculateShareResponse struct {
 	Share cosmossdk_io_math.Int `protobuf:"bytes,1,opt,name=share,proto3,customtype=cosmossdk.io/math.Int" json:"share"`
 }
 
-func (m *QueryCalculationShareResponse) Reset()         { *m = QueryCalculationShareResponse{} }
-func (m *QueryCalculationShareResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryCalculationShareResponse) ProtoMessage()    {}
-func (*QueryCalculationShareResponse) Descriptor() ([]byte, []int) {
+func (m *QueryCalculateShareResponse) Reset()         { *m = QueryCalculateShareResponse{} }
+func (m *QueryCalculateShareResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryCalculateShareResponse) ProtoMessage()    {}
+func (*QueryCalculateShareResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b90b1443cb3702b3, []int{5}
 }
-func (m *QueryCalculationShareResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryCalculateShareResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryCalculationShareResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryCalculateShareResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryCalculationShareResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryCalculateShareResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -294,17 +294,17 @@ func (m *QueryCalculationShareResponse) XXX_Marshal(b []byte, deterministic bool
 		return b[:n], nil
 	}
 }
-func (m *QueryCalculationShareResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryCalculationShareResponse.Merge(m, src)
+func (m *QueryCalculateShareResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCalculateShareResponse.Merge(m, src)
 }
-func (m *QueryCalculationShareResponse) XXX_Size() int {
+func (m *QueryCalculateShareResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryCalculationShareResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryCalculationShareResponse.DiscardUnknown(m)
+func (m *QueryCalculateShareResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCalculateShareResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryCalculationShareResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryCalculateShareResponse proto.InternalMessageInfo
 
 // QueryAddressBondedRequest
 type QueryAddressBondedRequest struct {
@@ -587,10 +587,10 @@ func (m *QueryAddressUnbondingResponse) GetUnbondings() []Unbonding {
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "sunrise.shareclass.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "sunrise.shareclass.v1.QueryParamsResponse")
-	proto.RegisterType((*QueryCalculationBondingAmountRequest)(nil), "sunrise.shareclass.v1.QueryCalculationBondingAmountRequest")
-	proto.RegisterType((*QueryCalculationBondingAmountResponse)(nil), "sunrise.shareclass.v1.QueryCalculationBondingAmountResponse")
-	proto.RegisterType((*QueryCalculationShareRequest)(nil), "sunrise.shareclass.v1.QueryCalculationShareRequest")
-	proto.RegisterType((*QueryCalculationShareResponse)(nil), "sunrise.shareclass.v1.QueryCalculationShareResponse")
+	proto.RegisterType((*QueryCalculateBondingAmountRequest)(nil), "sunrise.shareclass.v1.QueryCalculateBondingAmountRequest")
+	proto.RegisterType((*QueryCalculateBondingAmountResponse)(nil), "sunrise.shareclass.v1.QueryCalculateBondingAmountResponse")
+	proto.RegisterType((*QueryCalculateShareRequest)(nil), "sunrise.shareclass.v1.QueryCalculateShareRequest")
+	proto.RegisterType((*QueryCalculateShareResponse)(nil), "sunrise.shareclass.v1.QueryCalculateShareResponse")
 	proto.RegisterType((*QueryAddressBondedRequest)(nil), "sunrise.shareclass.v1.QueryAddressBondedRequest")
 	proto.RegisterType((*QueryAddressBondedResponse)(nil), "sunrise.shareclass.v1.QueryAddressBondedResponse")
 	proto.RegisterType((*QueryClaimableRewardsRequest)(nil), "sunrise.shareclass.v1.QueryClaimableRewardsRequest")
@@ -602,63 +602,62 @@ func init() {
 func init() { proto.RegisterFile("sunrise/shareclass/v1/query.proto", fileDescriptor_b90b1443cb3702b3) }
 
 var fileDescriptor_b90b1443cb3702b3 = []byte{
-	// 883 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x4d, 0x4f, 0x24, 0x55,
-	0x14, 0xed, 0x02, 0x69, 0xf5, 0x11, 0x0d, 0x3e, 0x1b, 0x02, 0x1d, 0xba, 0x1b, 0x2a, 0x10, 0x01,
-	0xed, 0x7a, 0x74, 0x63, 0xe2, 0x02, 0x17, 0xd2, 0x44, 0x22, 0x41, 0x51, 0x9b, 0xe8, 0xc2, 0x85,
-	0xf8, 0xaa, 0xeb, 0xa5, 0xa8, 0x50, 0x5d, 0xaf, 0xa9, 0x57, 0xdd, 0x4a, 0x08, 0x1b, 0x63, 0x58,
-	0xb9, 0x30, 0xf1, 0x1f, 0x98, 0xb8, 0x71, 0x67, 0xc2, 0x8f, 0x60, 0x33, 0x09, 0x61, 0x36, 0x93,
-	0x59, 0x30, 0x13, 0x98, 0xc5, 0xac, 0xe7, 0x17, 0x4c, 0xea, 0x7d, 0x14, 0xfd, 0x51, 0xd5, 0xcd,
-	0x47, 0x66, 0x05, 0x75, 0xeb, 0x9e, 0x7b, 0xcf, 0xb9, 0xf7, 0xd6, 0x01, 0x30, 0xcb, 0x9a, 0x9e,
-	0xef, 0x30, 0x82, 0xd8, 0x1e, 0xf6, 0x49, 0xcd, 0xc5, 0x8c, 0xa1, 0x56, 0x09, 0x1d, 0x34, 0x89,
-	0x7f, 0x68, 0x34, 0x7c, 0x1a, 0x50, 0x38, 0x2e, 0x53, 0x8c, 0x9b, 0x14, 0xa3, 0x55, 0xca, 0x2e,
-	0xd5, 0x28, 0xab, 0x53, 0x86, 0x4c, 0xcc, 0x88, 0xc8, 0x47, 0xad, 0x92, 0x49, 0x02, 0x5c, 0x42,
-	0x0d, 0x6c, 0x3b, 0x1e, 0x0e, 0x1c, 0xea, 0x89, 0x12, 0xd9, 0x7c, 0x7b, 0xae, 0xca, 0xaa, 0x51,
-	0x47, 0xbd, 0x9f, 0x12, 0xef, 0x77, 0xf9, 0x13, 0x12, 0x0f, 0xf2, 0x55, 0xc6, 0xa6, 0x36, 0x15,
-	0xf1, 0xf0, 0x37, 0x19, 0x9d, 0xb6, 0x29, 0xb5, 0x5d, 0x82, 0x70, 0xc3, 0x41, 0xd8, 0xf3, 0x68,
-	0xc0, 0xbb, 0x29, 0xcc, 0x4c, 0xbc, 0x28, 0x93, 0x7a, 0x96, 0xcc, 0xd0, 0xe3, 0x33, 0x1a, 0xd8,
-	0xc7, 0x75, 0x59, 0x45, 0xcf, 0x00, 0xf8, 0x7d, 0x28, 0xeb, 0x3b, 0x1e, 0xac, 0x92, 0x83, 0x26,
-	0x61, 0x81, 0x5e, 0x05, 0x1f, 0x76, 0x44, 0x59, 0x83, 0x7a, 0x8c, 0xc0, 0x55, 0x90, 0x16, 0xe0,
-	0x49, 0x6d, 0x46, 0x5b, 0x18, 0x2d, 0xe7, 0x8c, 0xd8, 0xa9, 0x19, 0x02, 0x56, 0x79, 0xeb, 0xec,
-	0xb2, 0x90, 0xaa, 0x4a, 0x88, 0xfe, 0xa7, 0x06, 0xe6, 0x78, 0xd1, 0x75, 0xec, 0xd6, 0x9a, 0x2e,
-	0xd7, 0x52, 0xa1, 0x9e, 0xe5, 0x78, 0xf6, 0x5a, 0x9d, 0x36, 0xbd, 0x40, 0x36, 0x87, 0xdb, 0xe0,
-	0x83, 0x16, 0x76, 0x1d, 0x0b, 0x07, 0xd4, 0xdf, 0xc5, 0x96, 0xe5, 0x13, 0x26, 0x1a, 0xbe, 0x5b,
-	0x99, 0xbd, 0x38, 0x2d, 0xe6, 0xe4, 0xe4, 0x7e, 0x54, 0x39, 0x6b, 0x22, 0x65, 0x27, 0xf0, 0x1d,
-	0xcf, 0xae, 0x8e, 0xb5, 0xba, 0xe2, 0x30, 0x03, 0x46, 0x38, 0xbd, 0xc9, 0xa1, 0xb0, 0x46, 0x55,
-	0x3c, 0xe8, 0xbf, 0x80, 0xf9, 0x01, 0x6c, 0xa4, 0xe8, 0xcf, 0x40, 0x1a, 0xf3, 0x88, 0x14, 0x3d,
-	0x65, 0x48, 0x02, 0xe1, 0x9e, 0x0d, 0xb9, 0x67, 0x63, 0x9d, 0x3a, 0x9e, 0x12, 0x2c, 0xd2, 0xf5,
-	0x13, 0x0d, 0x4c, 0x77, 0xb7, 0xd8, 0x09, 0x7b, 0xbf, 0x29, 0xa1, 0x13, 0x11, 0x53, 0xa1, 0x54,
-	0x11, 0x31, 0x41, 0x2e, 0x81, 0x87, 0x94, 0xb8, 0xa6, 0x26, 0x24, 0x9a, 0x7f, 0x1c, 0xca, 0x78,
-	0x7a, 0x59, 0x18, 0x17, 0x04, 0x98, 0xb5, 0x6f, 0x38, 0x14, 0xd5, 0x71, 0xb0, 0x67, 0x6c, 0x7a,
-	0xc1, 0xc5, 0x69, 0x11, 0x48, 0x66, 0x9b, 0x5e, 0xa0, 0xc6, 0xf9, 0x2d, 0x98, 0xe2, 0x3d, 0x24,
-	0x97, 0x70, 0x94, 0xc4, 0x52, 0x42, 0xcb, 0xe0, 0xed, 0x4e, 0x79, 0x93, 0x17, 0xa7, 0xc5, 0x8c,
-	0x2c, 0xd2, 0xa9, 0x4a, 0x25, 0xea, 0x3f, 0x83, 0x6c, 0x5c, 0x41, 0xc9, 0xf8, 0x0b, 0x30, 0x12,
-	0x1e, 0x7a, 0x58, 0x6f, 0x78, 0x61, 0xb4, 0x3c, 0x97, 0x70, 0x88, 0xd1, 0xe8, 0x42, 0xb8, 0x5c,
-	0x8f, 0x00, 0xea, 0xff, 0x44, 0xdb, 0x71, 0xb1, 0x53, 0xc7, 0xa6, 0x4b, 0xaa, 0xe4, 0x57, 0xec,
-	0x5b, 0xec, 0x01, 0xa4, 0xe3, 0x37, 0x3a, 0x74, 0xef, 0x8d, 0xea, 0x7f, 0x68, 0x6a, 0x75, 0x3d,
-	0x24, 0xe5, 0x20, 0x6a, 0x6d, 0xd7, 0x39, 0xdc, 0xff, 0x3a, 0x97, 0x43, 0xf9, 0xff, 0x3d, 0x2b,
-	0x2c, 0xd8, 0x4e, 0xb0, 0xd7, 0x34, 0x8d, 0x1a, 0xad, 0x4b, 0x17, 0x92, 0x3f, 0x8a, 0xcc, 0xda,
-	0x47, 0xc1, 0x61, 0x83, 0x30, 0x0e, 0x60, 0xd1, 0x01, 0x55, 0xe5, 0xa8, 0x24, 0xad, 0x1f, 0x3c,
-	0x53, 0x7c, 0x29, 0x0f, 0xd9, 0xaf, 0x2d, 0x95, 0xf5, 0xd6, 0x94, 0xca, 0x36, 0x00, 0x68, 0xaa,
-	0xa0, 0xda, 0xf3, 0x4c, 0xc2, 0x9e, 0x23, 0xb4, 0xdc, 0x71, 0x1b, 0xb2, 0xfc, 0xea, 0x1d, 0x30,
-	0xc2, 0x3b, 0xc1, 0x13, 0x0d, 0xa4, 0x85, 0x35, 0xc1, 0xc5, 0x84, 0x42, 0xbd, 0x5e, 0x98, 0x5d,
-	0xba, 0x4d, 0xaa, 0xe0, 0xac, 0xcf, 0xff, 0xfe, 0xf8, 0xc5, 0xdf, 0x43, 0x05, 0x98, 0x43, 0xfd,
-	0xac, 0x17, 0xbe, 0xd4, 0xc0, 0x84, 0xfa, 0x18, 0x49, 0x87, 0xeb, 0xc0, 0xd5, 0x7e, 0xdd, 0x06,
-	0x38, 0x67, 0xf6, 0xf3, 0xfb, 0x81, 0x25, 0xf9, 0x1d, 0x4e, 0xfe, 0x1b, 0xb8, 0x95, 0x40, 0xbe,
-	0xa6, 0x18, 0x17, 0xe5, 0x6c, 0x8b, 0xe2, 0x3c, 0xd0, 0x51, 0xcf, 0xcd, 0x1f, 0xa3, 0x23, 0x8e,
-	0x3d, 0x86, 0x67, 0x1a, 0x78, 0x3f, 0x92, 0xca, 0x5d, 0x07, 0xae, 0xdc, 0x92, 0x65, 0xbb, 0x57,
-	0x66, 0x3f, 0xbd, 0x1b, 0x48, 0x4a, 0xda, 0xe2, 0x92, 0xbe, 0x84, 0xeb, 0x03, 0x25, 0xf1, 0x78,
-	0xbc, 0x12, 0xa1, 0xf2, 0x18, 0xfe, 0xab, 0x81, 0xf7, 0x3a, 0xdc, 0x08, 0x2e, 0xf7, 0x23, 0x15,
-	0xe7, 0x84, 0xd9, 0xd2, 0x1d, 0x10, 0x52, 0x03, 0xe2, 0x1a, 0x16, 0xe1, 0x47, 0x28, 0xf9, 0x0f,
-	0x3e, 0xb1, 0xd0, 0x91, 0x22, 0x0c, 0x1f, 0x69, 0x60, 0xac, 0xdb, 0x2f, 0x06, 0x0c, 0x3d, 0xde,
-	0x02, 0x07, 0x0c, 0x3d, 0xc1, 0x92, 0xf4, 0x6d, 0x4e, 0xf8, 0x2b, 0xb8, 0x91, 0x34, 0x74, 0x05,
-	0x2c, 0xfa, 0x02, 0x79, 0xc3, 0x3d, 0x6e, 0x01, 0xf0, 0x7f, 0x0d, 0x8c, 0x75, 0xbb, 0x44, 0x7f,
-	0x3d, 0x09, 0x3e, 0xd5, 0x5f, 0x4f, 0x92, 0x11, 0xe9, 0x65, 0xae, 0xe7, 0x13, 0xb8, 0x94, 0xa0,
-	0x27, 0xf2, 0x9a, 0x1b, 0x1d, 0x95, 0xaf, 0xcf, 0xae, 0xf2, 0xda, 0xf9, 0x55, 0x5e, 0x7b, 0x7e,
-	0x95, 0xd7, 0xfe, 0xba, 0xce, 0xa7, 0xce, 0xaf, 0xf3, 0xa9, 0x27, 0xd7, 0xf9, 0xd4, 0x4f, 0xe5,
-	0x36, 0xf7, 0x95, 0xf5, 0x5c, 0x7c, 0x48, 0xfc, 0xa8, 0xf8, 0x6f, 0xed, 0xe5, 0xb9, 0x1b, 0x9b,
-	0x69, 0xfe, 0xbf, 0xda, 0xca, 0xeb, 0x00, 0x00, 0x00, 0xff, 0xff, 0xca, 0x1c, 0xe4, 0x0c, 0xc8,
-	0x0a, 0x00, 0x00,
+	// 880 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xcf, 0x4f, 0x2b, 0x55,
+	0x14, 0xee, 0x80, 0x54, 0xbd, 0x44, 0x83, 0xd7, 0x42, 0x60, 0xa4, 0x2d, 0x8c, 0x1a, 0x01, 0xed,
+	0x5c, 0x5a, 0x4c, 0x8c, 0xba, 0x91, 0x12, 0x89, 0x04, 0x45, 0x2d, 0xd1, 0x85, 0x0b, 0xf0, 0xb6,
+	0x73, 0x33, 0x4c, 0x98, 0xce, 0x2d, 0x73, 0xa7, 0x55, 0x42, 0xd8, 0x18, 0xe3, 0xc2, 0x95, 0x89,
+	0xff, 0x81, 0x89, 0x1b, 0x77, 0x26, 0xfc, 0x09, 0x2e, 0xd8, 0x98, 0x10, 0xde, 0xe6, 0xe5, 0x2d,
+	0x78, 0x2f, 0xc0, 0xea, 0xfd, 0x15, 0x2f, 0x73, 0xef, 0x99, 0xd2, 0x96, 0x99, 0x79, 0xfc, 0xc8,
+	0x5b, 0xc1, 0x9c, 0x39, 0xdf, 0x39, 0xdf, 0x77, 0xce, 0xe9, 0xd7, 0xa2, 0x59, 0xd1, 0xf6, 0x7c,
+	0x47, 0x30, 0x22, 0x76, 0xa8, 0xcf, 0x1a, 0x2e, 0x15, 0x82, 0x74, 0xca, 0x64, 0xaf, 0xcd, 0xfc,
+	0x7d, 0xb3, 0xe5, 0xf3, 0x80, 0xe3, 0x71, 0x48, 0x31, 0xaf, 0x52, 0xcc, 0x4e, 0x59, 0x5f, 0x68,
+	0x70, 0xd1, 0xe4, 0x82, 0xd4, 0xa9, 0x60, 0x2a, 0x9f, 0x74, 0xca, 0x75, 0x16, 0xd0, 0x32, 0x69,
+	0x51, 0xdb, 0xf1, 0x68, 0xe0, 0x70, 0x4f, 0x95, 0xd0, 0x0b, 0xbd, 0xb9, 0x51, 0x56, 0x83, 0x3b,
+	0xd1, 0xfb, 0x29, 0xf5, 0x7e, 0x5b, 0x3e, 0x11, 0xf5, 0x00, 0xaf, 0x72, 0x36, 0xb7, 0xb9, 0x8a,
+	0x87, 0xff, 0x41, 0x74, 0xda, 0xe6, 0xdc, 0x76, 0x19, 0xa1, 0x2d, 0x87, 0x50, 0xcf, 0xe3, 0x81,
+	0xec, 0x16, 0x61, 0x66, 0xe2, 0x45, 0xd5, 0xb9, 0x67, 0x41, 0x86, 0x11, 0x9f, 0xd1, 0xa2, 0x3e,
+	0x6d, 0x42, 0x15, 0x23, 0x87, 0xf0, 0xb7, 0xa1, 0xac, 0x6f, 0x64, 0xb0, 0xc6, 0xf6, 0xda, 0x4c,
+	0x04, 0x46, 0x0d, 0xbd, 0xd9, 0x17, 0x15, 0x2d, 0xee, 0x09, 0x86, 0x3f, 0x45, 0x59, 0x05, 0x9e,
+	0xd4, 0x66, 0xb4, 0xb9, 0xd1, 0x4a, 0xde, 0x8c, 0x9d, 0x9a, 0xa9, 0x60, 0xd5, 0x97, 0x8e, 0xcf,
+	0x8a, 0x99, 0x1a, 0x40, 0x8c, 0xdf, 0x35, 0x64, 0xc8, 0xa2, 0x2b, 0xd4, 0x6d, 0xb4, 0x5d, 0x1a,
+	0xb0, 0x2a, 0xf7, 0x2c, 0xc7, 0xb3, 0x97, 0x9b, 0xbc, 0xed, 0x05, 0xd0, 0x1a, 0x6f, 0xa0, 0x37,
+	0x3a, 0xd4, 0x75, 0x2c, 0x1a, 0x70, 0x7f, 0x9b, 0x5a, 0x96, 0xcf, 0x84, 0x6a, 0xf7, 0x6a, 0x75,
+	0xf6, 0xf4, 0xa8, 0x94, 0x87, 0xb9, 0x7d, 0x1f, 0xe5, 0x2c, 0xab, 0x94, 0xcd, 0xc0, 0x77, 0x3c,
+	0xbb, 0x36, 0xd6, 0x19, 0x88, 0xe3, 0x1c, 0x1a, 0x91, 0xe4, 0x26, 0x87, 0xc2, 0x1a, 0x35, 0xf5,
+	0x60, 0x6c, 0xa1, 0xb7, 0x53, 0xb9, 0x80, 0xe0, 0x8f, 0x50, 0x96, 0xca, 0x08, 0x08, 0x9e, 0x32,
+	0xa1, 0x7d, 0xb8, 0x63, 0x13, 0x76, 0x6c, 0xae, 0x70, 0xc7, 0x8b, 0xc4, 0xaa, 0x74, 0xe3, 0x57,
+	0x0d, 0xe9, 0xfd, 0x0d, 0x36, 0xc3, 0xbe, 0x2f, 0x4a, 0xe4, 0x44, 0x97, 0xa7, 0x52, 0x19, 0xd1,
+	0xf8, 0x11, 0xbd, 0x15, 0xcb, 0x02, 0xe4, 0x2d, 0x47, 0xb3, 0x51, 0xad, 0xdf, 0x0f, 0x25, 0x3c,
+	0x3a, 0x2b, 0x8e, 0xab, 0xf6, 0xc2, 0xda, 0x35, 0x1d, 0x4e, 0x9a, 0x34, 0xd8, 0x31, 0xd7, 0xbc,
+	0xe0, 0xf4, 0xa8, 0x84, 0x80, 0xd7, 0x9a, 0x17, 0x44, 0x83, 0xfc, 0x1a, 0x4d, 0xc9, 0x0e, 0xc0,
+	0x24, 0x1c, 0x23, 0xb3, 0x22, 0x99, 0x15, 0xf4, 0x72, 0xbf, 0xb8, 0xc9, 0xd3, 0xa3, 0x52, 0x0e,
+	0x8a, 0xf4, 0x6b, 0x8a, 0x12, 0x8d, 0x2d, 0x18, 0xdc, 0x40, 0x41, 0x60, 0xfc, 0x19, 0x1a, 0x09,
+	0x0f, 0x3c, 0xac, 0x37, 0x3c, 0x37, 0x5a, 0x79, 0x27, 0xe1, 0x00, 0xbb, 0x83, 0x0b, 0xe1, 0xb0,
+	0x1a, 0x05, 0x34, 0xfe, 0xd2, 0xd0, 0xb4, 0x9a, 0x89, 0x4b, 0x9d, 0x26, 0xad, 0xbb, 0xac, 0xc6,
+	0x7e, 0xa2, 0xbe, 0x25, 0xee, 0x41, 0x3a, 0x7e, 0x9f, 0x43, 0x77, 0xde, 0x67, 0x78, 0x3e, 0xf9,
+	0x04, 0x92, 0x30, 0x88, 0x46, 0xcf, 0x65, 0x0e, 0xa7, 0x5f, 0xe6, 0x62, 0x28, 0xff, 0x9f, 0xc7,
+	0xc5, 0x39, 0xdb, 0x09, 0x76, 0xda, 0x75, 0xb3, 0xc1, 0x9b, 0xe0, 0x3e, 0xf0, 0xa7, 0x24, 0xac,
+	0x5d, 0x12, 0xec, 0xb7, 0x98, 0x90, 0x00, 0xd1, 0x3d, 0x9f, 0x1a, 0x8c, 0x0a, 0x68, 0x7d, 0xe7,
+	0xd5, 0xd5, 0xa7, 0xe4, 0x3e, 0xfb, 0xb5, 0x41, 0xd9, 0xf5, 0x9a, 0xa0, 0x6c, 0x15, 0xa1, 0x76,
+	0x14, 0x8c, 0xf6, 0x3c, 0x93, 0xb0, 0xe7, 0x2e, 0x1a, 0x76, 0xdc, 0x83, 0xac, 0x3c, 0x7d, 0x05,
+	0x8d, 0xc8, 0x4e, 0xf8, 0x37, 0x0d, 0x65, 0x95, 0x25, 0xe1, 0xf9, 0x84, 0x42, 0xd7, 0x3d, 0x50,
+	0x5f, 0xb8, 0x49, 0xaa, 0xe2, 0x6c, 0xbc, 0xfb, 0xcb, 0x83, 0xcb, 0x3f, 0x87, 0x8a, 0x38, 0x4f,
+	0xd2, 0x2c, 0x17, 0x5f, 0x6a, 0x68, 0x22, 0xde, 0x71, 0xf0, 0xc7, 0x69, 0xdd, 0x52, 0x1d, 0x53,
+	0xff, 0xe4, 0x2e, 0x50, 0x20, 0xbe, 0x29, 0x89, 0x7f, 0x85, 0xd7, 0x13, 0x88, 0x37, 0x22, 0x78,
+	0x09, 0xe6, 0x5a, 0x52, 0xa7, 0x41, 0x0e, 0xae, 0xdd, 0xfb, 0x21, 0x39, 0x90, 0xd8, 0x43, 0xfc,
+	0x9f, 0x86, 0x5e, 0xef, 0x77, 0x1c, 0x5c, 0xbe, 0x11, 0xc7, 0x5e, 0x8f, 0xd4, 0x2b, 0xb7, 0x81,
+	0x80, 0x9c, 0x75, 0x29, 0xe7, 0x73, 0xbc, 0xf2, 0x5c, 0x39, 0x32, 0x1e, 0xaf, 0x42, 0x29, 0x3c,
+	0xc4, 0x7f, 0x6b, 0xe8, 0xb5, 0x3e, 0x17, 0xc2, 0x8b, 0x69, 0x94, 0xe2, 0x1c, 0x50, 0x2f, 0xdf,
+	0x02, 0x01, 0x1a, 0x88, 0xd4, 0x30, 0x8f, 0xdf, 0x23, 0xc9, 0x5f, 0xf0, 0xcc, 0x22, 0x07, 0x11,
+	0x61, 0xfc, 0xbf, 0x86, 0xc6, 0x06, 0x7d, 0x02, 0x2f, 0xa5, 0x4e, 0x2f, 0xde, 0xfa, 0xf4, 0x0f,
+	0x6f, 0x07, 0x02, 0xc2, 0x1b, 0x92, 0xf0, 0x17, 0x78, 0x35, 0x69, 0xe8, 0x11, 0xb0, 0xe4, 0x2b,
+	0xe4, 0x15, 0xf7, 0xb8, 0x05, 0xe0, 0x7f, 0x35, 0x34, 0x36, 0xe8, 0x0e, 0xe9, 0x7a, 0x12, 0xfc,
+	0x29, 0x5d, 0x4f, 0x92, 0x01, 0x19, 0x15, 0xa9, 0xe7, 0x03, 0xbc, 0x90, 0xa0, 0xa7, 0xeb, 0x31,
+	0x57, 0x3a, 0xaa, 0x5f, 0x1e, 0x9f, 0x17, 0xb4, 0x93, 0xf3, 0x82, 0xf6, 0xe4, 0xbc, 0xa0, 0xfd,
+	0x71, 0x51, 0xc8, 0x9c, 0x5c, 0x14, 0x32, 0x0f, 0x2f, 0x0a, 0x99, 0x1f, 0x2a, 0x3d, 0xae, 0x0b,
+	0xf5, 0x5c, 0xba, 0xcf, 0xfc, 0x6e, 0xf1, 0x9f, 0x7b, 0xcb, 0x4b, 0x17, 0xae, 0x67, 0xe5, 0x6f,
+	0xb3, 0xa5, 0x67, 0x01, 0x00, 0x00, 0xff, 0xff, 0x17, 0x50, 0xbc, 0xb3, 0xb8, 0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -676,9 +675,9 @@ type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// CalculateBondingAmount
-	CalculateBondingAmount(ctx context.Context, in *QueryCalculationBondingAmountRequest, opts ...grpc.CallOption) (*QueryCalculationBondingAmountResponse, error)
+	CalculateBondingAmount(ctx context.Context, in *QueryCalculateBondingAmountRequest, opts ...grpc.CallOption) (*QueryCalculateBondingAmountResponse, error)
 	// CalculateShare
-	CalculateShare(ctx context.Context, in *QueryCalculationShareRequest, opts ...grpc.CallOption) (*QueryCalculationShareResponse, error)
+	CalculateShare(ctx context.Context, in *QueryCalculateShareRequest, opts ...grpc.CallOption) (*QueryCalculateShareResponse, error)
 	// AddressBonded
 	AddressBonded(ctx context.Context, in *QueryAddressBondedRequest, opts ...grpc.CallOption) (*QueryAddressBondedResponse, error)
 	// ClaimableRewards
@@ -704,8 +703,8 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) CalculateBondingAmount(ctx context.Context, in *QueryCalculationBondingAmountRequest, opts ...grpc.CallOption) (*QueryCalculationBondingAmountResponse, error) {
-	out := new(QueryCalculationBondingAmountResponse)
+func (c *queryClient) CalculateBondingAmount(ctx context.Context, in *QueryCalculateBondingAmountRequest, opts ...grpc.CallOption) (*QueryCalculateBondingAmountResponse, error) {
+	out := new(QueryCalculateBondingAmountResponse)
 	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/CalculateBondingAmount", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -713,8 +712,8 @@ func (c *queryClient) CalculateBondingAmount(ctx context.Context, in *QueryCalcu
 	return out, nil
 }
 
-func (c *queryClient) CalculateShare(ctx context.Context, in *QueryCalculationShareRequest, opts ...grpc.CallOption) (*QueryCalculationShareResponse, error) {
-	out := new(QueryCalculationShareResponse)
+func (c *queryClient) CalculateShare(ctx context.Context, in *QueryCalculateShareRequest, opts ...grpc.CallOption) (*QueryCalculateShareResponse, error) {
+	out := new(QueryCalculateShareResponse)
 	err := c.cc.Invoke(ctx, "/sunrise.shareclass.v1.Query/CalculateShare", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -754,9 +753,9 @@ type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// CalculateBondingAmount
-	CalculateBondingAmount(context.Context, *QueryCalculationBondingAmountRequest) (*QueryCalculationBondingAmountResponse, error)
+	CalculateBondingAmount(context.Context, *QueryCalculateBondingAmountRequest) (*QueryCalculateBondingAmountResponse, error)
 	// CalculateShare
-	CalculateShare(context.Context, *QueryCalculationShareRequest) (*QueryCalculationShareResponse, error)
+	CalculateShare(context.Context, *QueryCalculateShareRequest) (*QueryCalculateShareResponse, error)
 	// AddressBonded
 	AddressBonded(context.Context, *QueryAddressBondedRequest) (*QueryAddressBondedResponse, error)
 	// ClaimableRewards
@@ -772,10 +771,10 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (*UnimplementedQueryServer) CalculateBondingAmount(ctx context.Context, req *QueryCalculationBondingAmountRequest) (*QueryCalculationBondingAmountResponse, error) {
+func (*UnimplementedQueryServer) CalculateBondingAmount(ctx context.Context, req *QueryCalculateBondingAmountRequest) (*QueryCalculateBondingAmountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CalculateBondingAmount not implemented")
 }
-func (*UnimplementedQueryServer) CalculateShare(ctx context.Context, req *QueryCalculationShareRequest) (*QueryCalculationShareResponse, error) {
+func (*UnimplementedQueryServer) CalculateShare(ctx context.Context, req *QueryCalculateShareRequest) (*QueryCalculateShareResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CalculateShare not implemented")
 }
 func (*UnimplementedQueryServer) AddressBonded(ctx context.Context, req *QueryAddressBondedRequest) (*QueryAddressBondedResponse, error) {
@@ -811,7 +810,7 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 }
 
 func _Query_CalculateBondingAmount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculationBondingAmountRequest)
+	in := new(QueryCalculateBondingAmountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -823,13 +822,13 @@ func _Query_CalculateBondingAmount_Handler(srv interface{}, ctx context.Context,
 		FullMethod: "/sunrise.shareclass.v1.Query/CalculateBondingAmount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculateBondingAmount(ctx, req.(*QueryCalculationBondingAmountRequest))
+		return srv.(QueryServer).CalculateBondingAmount(ctx, req.(*QueryCalculateBondingAmountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Query_CalculateShare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryCalculationShareRequest)
+	in := new(QueryCalculateShareRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -841,7 +840,7 @@ func _Query_CalculateShare_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/sunrise.shareclass.v1.Query/CalculateShare",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).CalculateShare(ctx, req.(*QueryCalculationShareRequest))
+		return srv.(QueryServer).CalculateShare(ctx, req.(*QueryCalculateShareRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -990,7 +989,7 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculationBondingAmountRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculateBondingAmountRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1000,12 +999,12 @@ func (m *QueryCalculationBondingAmountRequest) Marshal() (dAtA []byte, err error
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculationBondingAmountRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculationBondingAmountRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1027,7 +1026,7 @@ func (m *QueryCalculationBondingAmountRequest) MarshalToSizedBuffer(dAtA []byte)
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculationBondingAmountResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculateBondingAmountResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1037,12 +1036,12 @@ func (m *QueryCalculationBondingAmountResponse) Marshal() (dAtA []byte, err erro
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculationBondingAmountResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculationBondingAmountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculateBondingAmountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1060,7 +1059,7 @@ func (m *QueryCalculationBondingAmountResponse) MarshalToSizedBuffer(dAtA []byte
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculationShareRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculateShareRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1070,12 +1069,12 @@ func (m *QueryCalculationShareRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculationShareRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculateShareRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculationShareRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculateShareRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1097,7 +1096,7 @@ func (m *QueryCalculationShareRequest) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryCalculationShareResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryCalculateShareResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1107,12 +1106,12 @@ func (m *QueryCalculationShareResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryCalculationShareResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryCalculateShareResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryCalculationShareResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryCalculateShareResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1369,7 +1368,7 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculationBondingAmountRequest) Size() (n int) {
+func (m *QueryCalculateBondingAmountRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1386,7 +1385,7 @@ func (m *QueryCalculationBondingAmountRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculationBondingAmountResponse) Size() (n int) {
+func (m *QueryCalculateBondingAmountResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1397,7 +1396,7 @@ func (m *QueryCalculationBondingAmountResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculationShareRequest) Size() (n int) {
+func (m *QueryCalculateShareRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1414,7 +1413,7 @@ func (m *QueryCalculationShareRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryCalculationShareResponse) Size() (n int) {
+func (m *QueryCalculateShareResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1652,7 +1651,7 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculationBondingAmountRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculateBondingAmountRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1675,10 +1674,10 @@ func (m *QueryCalculationBondingAmountRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculationBondingAmountRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculateBondingAmountRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculationBondingAmountRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculateBondingAmountRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1766,7 +1765,7 @@ func (m *QueryCalculationBondingAmountRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculationBondingAmountResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculateBondingAmountResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1789,10 +1788,10 @@ func (m *QueryCalculationBondingAmountResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculationBondingAmountResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculateBondingAmountResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculationBondingAmountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculateBondingAmountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1849,7 +1848,7 @@ func (m *QueryCalculationBondingAmountResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculationShareRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculateShareRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1872,10 +1871,10 @@ func (m *QueryCalculationShareRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculationShareRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculateShareRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculationShareRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculateShareRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1963,7 +1962,7 @@ func (m *QueryCalculationShareRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryCalculationShareResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryCalculateShareResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1986,10 +1985,10 @@ func (m *QueryCalculationShareResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryCalculationShareResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryCalculateShareResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryCalculationShareResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryCalculateShareResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
