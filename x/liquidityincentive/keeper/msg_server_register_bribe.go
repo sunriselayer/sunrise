@@ -23,7 +23,7 @@ func (k msgServer) RegisterBribe(ctx context.Context, msg *types.MsgRegisterBrib
 		return nil, errorsmod.Wrap(err, "failed to get current epoch")
 	}
 
-	if found && msg.EpochId < currentEpoch.Id {
+	if found && msg.EpochId <= currentEpoch.Id {
 		return nil, errorsmod.Wrap(types.ErrBribeCannotBeCreated, "Cannot be created in the current epoch. The process has already been completed.")
 	}
 
