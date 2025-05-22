@@ -19,6 +19,10 @@ func (k Keeper) AllocateIncentive(ctx sdk.Context, poolId uint64, sender sdk.Acc
 	if err != nil {
 		return err
 	}
+	// If the pool has no liquidity, do not allocate incentives
+	if liquidity.IsZero() {
+		return nil
+	}
 	feeGrowth := sdk.NewDecCoinsFromCoins(incentiveCoins...).QuoDecTruncate(liquidity)
 	err = k.AddToAccumulator(ctx, feeAccumulator, feeGrowth)
 	if err != nil {
