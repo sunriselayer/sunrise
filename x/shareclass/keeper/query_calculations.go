@@ -12,7 +12,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
-func (q queryServer) CalculateBondingAmount(ctx context.Context, req *types.QueryCalculationBondingAmountRequest) (*types.QueryCalculationBondingAmountResponse, error) {
+func (q queryServer) CalculateBondingAmount(ctx context.Context, req *types.QueryCalculateBondingAmountRequest) (*types.QueryCalculateBondingAmountResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -32,10 +32,10 @@ func (q queryServer) CalculateBondingAmount(ctx context.Context, req *types.Quer
 	}
 	coin := sdk.NewCoin(feeDenom, amount)
 
-	return &types.QueryCalculationBondingAmountResponse{Amount: coin}, nil
+	return &types.QueryCalculateBondingAmountResponse{Amount: coin}, nil
 }
 
-func (q queryServer) CalculateShare(ctx context.Context, req *types.QueryCalculationShareRequest) (*types.QueryCalculationShareResponse, error) {
+func (q queryServer) CalculateShare(ctx context.Context, req *types.QueryCalculateShareRequest) (*types.QueryCalculateShareResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -49,5 +49,5 @@ func (q queryServer) CalculateShare(ctx context.Context, req *types.QueryCalcula
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryCalculationShareResponse{Share: share}, nil
+	return &types.QueryCalculateShareResponse{Share: share}, nil
 }
