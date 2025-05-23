@@ -4,6 +4,8 @@ import (
 	"context"
 
 	errorsmod "cosmossdk.io/errors"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
@@ -52,12 +54,24 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		return nil, err
 	}
 
+	// MsgCreateValidator in cosmos-sdk reads CachedValue, so create it here.
+	var pk cryptotypes.PubKey
+	err = k.cdc.UnpackAny(msg.Pubkey, &pk)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to unpack public key from Any")
+	}
+
+	pkAny, err := codectypes.NewAnyWithValue(pk)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to pack public key into Any")
+	}
+
 	_, err = k.StakingMsgServer.CreateValidator(ctx, &stakingtypes.MsgCreateValidator{
 		Description:       msg.Description,
 		Commission:        msg.Commission,
 		MinSelfDelegation: msg.MinSelfDelegation,
 		ValidatorAddress:  msg.ValidatorAddress,
-		Pubkey:            msg.Pubkey,
+		Pubkey:            pkAny,
 		Value:             sdk.NewCoin(bondDenom, msg.Amount.Amount),
 	})
 
