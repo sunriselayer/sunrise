@@ -42,7 +42,7 @@ func TestMsgVoteGauge(t *testing.T) {
 			name: "available pools",
 			input: &types.MsgVoteGauge{
 				Sender:      sender.String(),
-				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 1, Weight: "0.5"}},
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}},
 			},
 			expErr: false,
 		},
@@ -52,7 +52,8 @@ func TestMsgVoteGauge(t *testing.T) {
 				Sender:      sender.String(),
 				PoolWeights: []types.PoolWeight{},
 			},
-			expErr: false,
+			expErr:    true,
+			expErrMsg: "total weight lower",
 		},
 	}
 
@@ -100,9 +101,45 @@ func TestMsgVoteGaugePartial(t *testing.T) {
 			name: "partial pool",
 			input: &types.MsgVoteGauge{
 				Sender:      sender.String(),
-				PoolWeights: []types.PoolWeight{{PoolId: 2, Weight: "0.5"}},
+				PoolWeights: []types.PoolWeight{{PoolId: 2, Weight: "1"}},
 			},
 			expErr: false,
+		},
+		{
+			name: "duplicated pool",
+			input: &types.MsgVoteGauge{
+				Sender:      sender.String(),
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 1, Weight: "0.5"}},
+			},
+			expErr:    true,
+			expErrMsg: "duplicated pool",
+		},
+		{
+			name: "negative weight",
+			input: &types.MsgVoteGauge{
+				Sender:      sender.String(),
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "-0.5"}},
+			},
+			expErr:    true,
+			expErrMsg: "negative weight",
+		},
+		{
+			name: "total weight overflow",
+			input: &types.MsgVoteGauge{
+				Sender:      sender.String(),
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.9"}, {PoolId: 2, Weight: "0.5"}},
+			},
+			expErr:    true,
+			expErrMsg: "total weight overflow",
+		},
+		{
+			name: "total weight lower than 1.00",
+			input: &types.MsgVoteGauge{
+				Sender:      sender.String(),
+				PoolWeights: []types.PoolWeight{{PoolId: 1, Weight: "0.4"}, {PoolId: 2, Weight: "0.5"}},
+			},
+			expErr:    true,
+			expErrMsg: "total weight lower",
 		},
 	}
 
