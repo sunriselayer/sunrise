@@ -114,8 +114,8 @@ func (k Keeper) Tally(ctx context.Context) (totalVoterPower math.LegacyDec, gaug
 						oldWeight = math.LegacyZeroDec()
 					}
 					results[poolWeight.PoolId] = oldWeight.Add(subPower)
+					totalVotingPower = totalVotingPower.Add(subPower)
 				}
-				totalVotingPower = totalVotingPower.Add(votingPower)
 			}
 
 			return false
@@ -157,8 +157,8 @@ func (k Keeper) Tally(ctx context.Context) (totalVoterPower math.LegacyDec, gaug
 				oldWeight = math.LegacyZeroDec()
 			}
 			results[poolWeight.PoolId] = oldWeight.Add(subPower)
+			totalVotingPower = totalVotingPower.Add(subPower)
 		}
-		totalVotingPower = totalVotingPower.Add(votingPower)
 	}
 
 	// If there is no staked coins, the proposal fails
