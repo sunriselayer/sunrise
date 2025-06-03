@@ -32,6 +32,8 @@ import (
 	solomachine "github.com/cosmos/ibc-go/v10/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v10/modules/light-clients/07-tendermint"
 
+	"github.com/sunriselayer/sunrise/app/wasmclient"
+
 	// ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
 	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
@@ -147,6 +149,7 @@ func (app *App) registerIBCModules() error {
 			"/ibc.core.client.v1.Query/ConsensusState",
 			"/ibc.core.connection.v1.Query/Connection",
 		}, app.GRPCQueryRouter()),
+		Custom: wasmclient.CustomQuerier(),
 	}
 
 	app.WasmClientKeeper = ibcwasmkeeper.NewKeeperWithConfig(
