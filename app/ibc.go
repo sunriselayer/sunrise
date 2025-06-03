@@ -9,6 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	ibcwasm "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10"
+	ibcwasmkeeper "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10/keeper"
+	ibcwasmtypes "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10/types"
 	icamodule "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts"
 	icacontroller "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/controller"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/controller/keeper"
@@ -136,6 +139,27 @@ func (app *App) registerIBCModules() error {
 	tmLightClientModule := ibctm.NewLightClientModule(app.appCodec, storeProvider)
 	soloLightClientModule := solomachine.NewLightClientModule(app.appCodec, storeProvider)
 
+	// <sunrise>
+	wasmConfig := ibcwasmtypes.DefaultWasmConfig(DefaultNodeHome)
+	wasmLightClientQuerier := ibcwasmkeeper.QueryPlugins{
+		Stargate: ibcwasmkeeper.AcceptListStargateQuerier([]string{
+			"/ibc.core.client.v1.Query/ClientState",
+			"/ibc.core.client.v1.Query/ConsensusState",
+			"/ibc.core.connection.v1.Query/Connection",
+		}, app.GRPCQueryRouter()),
+	}
+
+	app.WasmClientKeeper = ibcwasmkeeper.NewKeeperWithConfig(
+		app.appCodec,
+		runtime.NewKVStoreService(app.GetKey(ibcwasmtypes.StoreKey)),
+		app.IBCKeeper.ClientKeeper,
+		govModuleAddr,
+		wasmConfig,
+		app.GRPCQueryRouter(),
+		ibcwasmkeeper.WithQueryPlugins(&wasmLightClientQuerier),
+	)
+	// </sunrise>
+
 	// register IBC modules
 	if err := app.RegisterModules(
 		ibc.NewAppModule(app.IBCKeeper),
@@ -143,6 +167,7 @@ func (app *App) registerIBCModules() error {
 		icamodule.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
 		ibctm.NewAppModule(tmLightClientModule),
 		solomachine.NewAppModule(soloLightClientModule),
+		ibcwasm.NewAppModule(app.WasmClientKeeper),
 	); err != nil {
 		return err
 	}
@@ -160,6 +185,7 @@ func RegisterIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[strin
 		icatypes.ModuleName:         icamodule.NewAppModule(&icacontrollerkeeper.Keeper{}, &icahostkeeper.Keeper{}),
 		ibctm.ModuleName:            ibctm.NewAppModule(ibctm.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 		solomachine.ModuleName:      solomachine.NewAppModule(solomachine.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
+		ibcwasmtypes.ModuleName:     ibcwasm.NewAppModule(ibcwasmkeeper.Keeper{}),
 	}
 
 	for _, m := range modules {
