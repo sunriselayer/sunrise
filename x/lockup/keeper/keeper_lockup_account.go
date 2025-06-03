@@ -31,8 +31,8 @@ func (k Keeper) GetAndIncrementNextLockupAccountID(ctx context.Context, owner sd
 	currentID, err = k.NextLockupAccountId.Get(ctx, owner)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			// Owner not found, start from ID 0
-			currentID = 0
+			// Owner not found, start from ID 1
+			currentID = 1
 		} else {
 			// Other error occurred
 			return 0, 0, fmt.Errorf("failed to get next lockup account id for owner %s: %w", owner.String(), err)
