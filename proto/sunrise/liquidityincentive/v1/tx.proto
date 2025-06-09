@@ -7,7 +7,6 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/liquidityincentive/v1/gauge.proto";
 import "sunrise/liquidityincentive/v1/params.proto";
-import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
@@ -73,8 +72,6 @@ message MsgRegisterBribe {
   uint64 pool_id = 3;
   repeated cosmos.base.v1beta1.Coin amount = 4 [
     (gogoproto.nullable) = false,
-    (amino.dont_omitempty)   = true,
-    (amino.encoding)         = "legacy_coins",
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
 }
@@ -93,8 +90,6 @@ message MsgClaimBribes {
 message MsgClaimBribesResponse {
   repeated cosmos.base.v1beta1.Coin amount = 1 [
     (gogoproto.nullable) = false,
-    (amino.dont_omitempty)   = true,
-    (amino.encoding)         = "legacy_coins",
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
 }
