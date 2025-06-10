@@ -38,6 +38,7 @@ require (
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.53.2
 	github.com/cosmos/gogoproto v1.7.0
+	github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10 v10.0.0-20250430124006-e120ef5d4778
 	github.com/cosmos/ibc-go/v10 v10.2.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/mock v1.6.0
@@ -116,7 +117,6 @@ require (
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/gogogateway v1.2.0 // indirect
 	github.com/cosmos/iavl v1.2.6 // indirect
-	github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10 v10.0.0-20250430124006-e120ef5d4778 // indirect
 	github.com/cosmos/ics23/go v0.11.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.14.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
