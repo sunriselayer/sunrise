@@ -50,6 +50,7 @@ func (app *App) registerIBCModules() error {
 		storetypes.NewKVStoreKey(ibctransfertypes.StoreKey),
 		storetypes.NewKVStoreKey(icahosttypes.StoreKey),
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
+		storetypes.NewKVStoreKey(ibcwasmtypes.StoreKey),
 	); err != nil {
 		return err
 	}
