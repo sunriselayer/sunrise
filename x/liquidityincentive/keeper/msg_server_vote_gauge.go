@@ -18,6 +18,7 @@ func (k msgServer) VoteGauge(ctx context.Context, msg *types.MsgVoteGauge) (*typ
 	}
 
 	totalWeight := math.LegacyZeroDec()
+	usedPools := make(map[uint64]bool)
 	for _, poolWeight := range msg.PoolWeights {
 		weight, err := math.LegacyNewDecFromStr(poolWeight.Weight)
 		if err != nil {
@@ -27,9 +28,16 @@ func (k msgServer) VoteGauge(ctx context.Context, msg *types.MsgVoteGauge) (*typ
 			return nil, errorsmod.Wrapf(types.ErrInvalidWeight, "negative weight (pool %d)", poolWeight.PoolId)
 		}
 		totalWeight = totalWeight.Add(weight)
+		if usedPools[poolWeight.PoolId] {
+			return nil, errorsmod.Wrapf(types.ErrInvalidWeight, "duplicated pool: %d", poolWeight.PoolId)
+		}
+		usedPools[poolWeight.PoolId] = true
 	}
 	if totalWeight.GT(math.LegacyOneDec()) {
-		return nil, errorsmod.Wrapf(types.ErrTotalWeightGTOne, "total weight: %s", totalWeight.String())
+		return nil, errorsmod.Wrapf(types.ErrInvalidWeight, "total weight overflow 1.00: %s", totalWeight.String())
+	}
+	if totalWeight.LT(math.LegacyOneDec()) {
+		return nil, errorsmod.Wrapf(types.ErrInvalidWeight, "total weight lower than 1.00: %s", totalWeight.String())
 	}
 	// end static validation
 
