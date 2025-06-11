@@ -1,7 +1,6 @@
 syntax = "proto3";
 package sunrise.lockup.v1;
 
-import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -11,7 +10,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/lockup/types";
 message LockupAccount {
   string address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 id = 3 [(amino.dont_omitempty) = true];
+  uint64 id = 3;
   int64 start_time = 4;
   int64 end_time = 5;
   string original_locking = 6 [

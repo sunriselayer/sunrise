@@ -1,17 +1,16 @@
 syntax = "proto3";
 package sunrise.liquiditypool.v1;
 
-import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Position
 message Position {
-  uint64 id = 1 [(amino.dont_omitempty) = true];
+  uint64 id = 1;
   string address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  uint64 pool_id = 3 [(amino.dont_omitempty) = true];
-  int64 lower_tick = 4 [(amino.dont_omitempty) = true];
-  int64 upper_tick = 5 [(amino.dont_omitempty) = true];
+  uint64 pool_id = 3;
+  int64 lower_tick = 4;
+  int64 upper_tick = 5;
   string liquidity = 6 [(cosmos_proto.scalar) = "cosmos.Dec"];
 }
