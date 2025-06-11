@@ -149,6 +149,9 @@ var (
 						authz.ModuleName,
 						// ibc modules
 						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcwasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -165,6 +168,11 @@ var (
 						feegrant.ModuleName,
 						protocolpooltypes.ModuleName,
 
+						// ibc modules
+						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcwasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
