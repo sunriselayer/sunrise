@@ -13,6 +13,8 @@ import (
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 
 	abci "github.com/cometbft/cometbft/abci/types"
+	cmtos "github.com/cometbft/cometbft/libs/os"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -225,6 +227,16 @@ func New(
 		panic(err)
 	}
 
+	// register snapshot extensions
+	if manager := app.SnapshotManager(); manager != nil {
+		err := manager.RegisterExtensions(
+			ibcwasmkeeper.NewWasmSnapshotter(app.CommitMultiStore(), &app.WasmClientKeeper),
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	// <sunrise>
 	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
 	// </sunrise>
@@ -300,6 +312,13 @@ func New(
 
 	if err := app.Load(loadLatest); err != nil {
 		panic(err)
+	}
+
+	if loadLatest {
+		ctx := app.BaseApp.NewUncachedContext(true, cmtproto.Header{})
+		if err := app.WasmClientKeeper.InitializePinnedCodes(ctx); err != nil {
+			cmtos.Exit(err.Error())
+		}
 	}
 
 	return app
