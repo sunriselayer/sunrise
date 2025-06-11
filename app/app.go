@@ -210,7 +210,6 @@ func New(
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
-		&app.WasmClientKeeper,
 	); err != nil {
 		panic(err)
 	}
