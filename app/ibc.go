@@ -164,6 +164,11 @@ func (app *App) registerIBCModules() error {
 	)
 	// </sunrise>
 
+	wasmLightClientModule := ibcwasm.NewLightClientModule(app.WasmClientKeeper, storeProvider)
+	app.IBCKeeper.ClientKeeper.AddRoute(ibctm.ModuleName, &tmLightClientModule)
+	app.IBCKeeper.ClientKeeper.AddRoute(solomachine.ModuleName, &soloLightClientModule)
+	app.IBCKeeper.ClientKeeper.AddRoute(ibcwasmtypes.ModuleName, &wasmLightClientModule)
+
 	// register IBC modules
 	if err := app.RegisterModules(
 		ibc.NewAppModule(app.IBCKeeper),
