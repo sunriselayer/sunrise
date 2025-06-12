@@ -1,7 +1,6 @@
 syntax = "proto3";
 package sunrise.liquiditypool.v1;
 
-import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
@@ -9,7 +8,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Pool
 message Pool {
-  uint64 id = 1 [(amino.dont_omitempty) = true];
+  uint64 id = 1;
   string denom_base = 2;
   string denom_quote = 3;
   string fee_rate = 4 [(cosmos_proto.scalar) = "cosmos.Dec"];
