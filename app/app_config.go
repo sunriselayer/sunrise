@@ -58,6 +58,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	ibcwasmtypes "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10/types"
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
@@ -148,6 +149,9 @@ var (
 						authz.ModuleName,
 						// ibc modules
 						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcwasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -164,6 +168,11 @@ var (
 						feegrant.ModuleName,
 						protocolpooltypes.ModuleName,
 
+						// ibc modules
+						ibcexported.ModuleName,
+						ibctransfertypes.ModuleName,
+						icatypes.ModuleName,
+						ibcwasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -211,6 +220,7 @@ var (
 						ibcexported.ModuleName,
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
+						ibcwasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
