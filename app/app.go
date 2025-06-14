@@ -61,6 +61,7 @@ import (
 	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	ybtbasemodulekeeper "github.com/sunriselayer/sunrise/x/ybtbase/keeper"
+	ybtbrandmodulekeeper "github.com/sunriselayer/sunrise/x/ybtbrand/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
@@ -124,6 +125,7 @@ type App struct {
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
 	YbtbaseKeeper            ybtbasemodulekeeper.Keeper
+	YbtbrandKeeper           ybtbrandmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -213,6 +215,7 @@ func New(
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
 		&app.YbtbaseKeeper,
+		&app.YbtbrandKeeper,
 	); err != nil {
 		panic(err)
 	}
