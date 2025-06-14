@@ -28,6 +28,54 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "Create",
+					Use:            "create [admin] [permissioned]",
+					Short:          "Send a create tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "admin"}, {ProtoField: "permissioned"}},
+				},
+				{
+					RpcMethod:      "Mint",
+					Use:            "mint [creator] [amount]",
+					Short:          "Send a mint tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "amount"}},
+				},
+				{
+					RpcMethod:      "Burn",
+					Use:            "burn [creator] [amount]",
+					Short:          "Send a burn tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "amount"}},
+				},
+				{
+					RpcMethod:      "AddYield",
+					Use:            "add-yield [creator] [amount]",
+					Short:          "Send a add-yield tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "amount"}},
+				},
+				{
+					RpcMethod:      "GrantYieldPermission",
+					Use:            "grant-yield-permission [creator] [target]",
+					Short:          "Send a grant-yield-permission tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "target"}},
+				},
+				{
+					RpcMethod:      "RevokeYieldPermission",
+					Use:            "revoke-yield-permission [creator] [target]",
+					Short:          "Send a revoke-yield-permission tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "target"}},
+				},
+				{
+					RpcMethod:      "ClaimYield",
+					Use:            "claim-yield [token-creator]",
+					Short:          "Send a claim-yield tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}},
+				},
+				{
+					RpcMethod:      "UpdateAdmin",
+					Use:            "update-admin [new-admin]",
+					Short:          "Send a update-admin tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "new_admin"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
