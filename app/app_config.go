@@ -34,7 +34,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	_ "github.com/cosmos/cosmos-sdk/x/authz/module" // import for side-effects
 
-	_ "github.com/cosmos/cosmos-sdk/x/bank" // import for side-effects
+	// _ "github.com/cosmos/cosmos-sdk/x/bank" // import for side-effects
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	_ "github.com/cosmos/cosmos-sdk/x/consensus" // import for side-effects
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
@@ -62,6 +62,8 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
+
+	_ "github.com/sunriselayer/sunrise/x/bank/module" // import for side-effects
 
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
