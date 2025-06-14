@@ -1,0 +1,14 @@
+syntax = "proto3";
+package sunrise.ybtbase.v1;
+
+import "gogoproto/gogo.proto";
+import "sunrise/ybtbase/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/ybtbase/types";
+
+// Token
+message Token {
+  string creator = 1;
+  string admin = 2;
+  bool permissioned = 3;
+}

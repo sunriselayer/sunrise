@@ -107,6 +107,7 @@ message MsgClaimYields {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated string denoms = 3 [(gogoproto.nullable) = false];
 }
 
 // MsgClaimYieldsResponse defines the MsgClaimYieldsResponse message.
