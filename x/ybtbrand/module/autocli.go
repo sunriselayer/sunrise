@@ -28,6 +28,42 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "Create",
+					Use:            "create [admin]",
+					Short:          "Send a create tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "admin"}},
+				},
+				{
+					RpcMethod:      "Mint",
+					Use:            "mint [token-creator] [amount]",
+					Short:          "Send a mint tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "amount"}},
+				},
+				{
+					RpcMethod:      "Burn",
+					Use:            "burn [token-creator] [amount]",
+					Short:          "Send a burn tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "amount"}},
+				},
+				{
+					RpcMethod:      "AddYields",
+					Use:            "add-yields [token-creator] [amount]",
+					Short:          "Send a add-yields tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "amount", Varargs: true}},
+				},
+				{
+					RpcMethod:      "ClaimYields",
+					Use:            "claim-yields [token-creator]",
+					Short:          "Send a claim-yields tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}},
+				},
+				{
+					RpcMethod:      "UpdateAdmin",
+					Use:            "update-admin [new-admin]",
+					Short:          "Send a update-admin tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "new_admin"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

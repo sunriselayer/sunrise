@@ -1,7 +1,8 @@
 syntax = "proto3";
+
 package sunrise.ybtbrand.v1;
 
-import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -16,25 +17,108 @@ service Msg {
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // Create defines the Create RPC.
+  rpc Create(MsgCreate) returns (MsgCreateResponse);
+
+  // Mint defines the Mint RPC.
+  rpc Mint(MsgMint) returns (MsgMintResponse);
+
+  // Burn defines the Burn RPC.
+  rpc Burn(MsgBurn) returns (MsgBurnResponse);
+
+  // AddYields defines the AddYields RPC.
+  rpc AddYields(MsgAddYields) returns (MsgAddYieldsResponse);
+
+  // ClaimYields defines the ClaimYields RPC.
+  rpc ClaimYields(MsgClaimYields) returns (MsgClaimYieldsResponse);
+
+  // UpdateAdmin defines the UpdateAdmin RPC.
+  rpc UpdateAdmin(MsgUpdateAdmin) returns (MsgUpdateAdminResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "sunrise/x/ybtbrand/MsgUpdateParams";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // params defines the module parameters to update.
-  //
+
   // NOTE: All parameters must be supplied.
-  Params params = 2 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 2 [(gogoproto.nullable) = false];
 }
 
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
+
+// MsgCreate defines the MsgCreate message.
+message MsgCreate {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string admin = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string base_ybt_creator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgCreateResponse defines the MsgCreateResponse message.
+message MsgCreateResponse {}
+
+// MsgMint defines the MsgMint message.
+message MsgMint {
+  option (cosmos.msg.v1.signer) = "admin";
+  string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin ybt = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgMintResponse defines the MsgMintResponse message.
+message MsgMintResponse {}
+
+// MsgBurn defines the MsgBurn message.
+message MsgBurn {
+  option (cosmos.msg.v1.signer) = "admin";
+  string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// MsgBurnResponse defines the MsgBurnResponse message.
+message MsgBurnResponse {}
+
+// MsgAddYields defines the MsgAddYields message.
+message MsgAddYields {
+  option (cosmos.msg.v1.signer) = "admin";
+  string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgAddYieldsResponse defines the MsgAddYieldsResponse message.
+message MsgAddYieldsResponse {}
+
+// MsgClaimYields defines the MsgClaimYields message.
+message MsgClaimYields {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgClaimYieldsResponse defines the MsgClaimYieldsResponse message.
+message MsgClaimYieldsResponse {}
+
+// MsgUpdateAdmin defines the MsgUpdateAdmin message.
+message MsgUpdateAdmin {
+  option (cosmos.msg.v1.signer) = "admin";
+  string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string new_admin = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgUpdateAdminResponse defines the MsgUpdateAdminResponse message.
+message MsgUpdateAdminResponse {}

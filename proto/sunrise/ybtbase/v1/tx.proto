@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package sunrise.ybtbase.v1;
 
-import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -46,7 +45,6 @@ service Msg {
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "sunrise/x/ybtbase/MsgUpdateParams";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -54,10 +52,7 @@ message MsgUpdateParams {
   // params defines the module parameters to update.
 
   // NOTE: All parameters must be supplied.
-  Params params = 2 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 2 [(gogoproto.nullable) = false];
 }
 
 // MsgUpdateParamsResponse defines the response structure for executing a
@@ -68,7 +63,7 @@ message MsgUpdateParamsResponse {}
 message MsgCreate {
   option (cosmos.msg.v1.signer) = "creator";
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string admin = 2;
+  string admin = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   bool permissioned = 3;
 }
 
@@ -79,8 +74,12 @@ message MsgCreateResponse {}
 message MsgMint {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string token_creator = 2;
-  int64 amount = 3;
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgMintResponse defines the MsgMintResponse message.
@@ -90,8 +89,12 @@ message MsgMintResponse {}
 message MsgBurn {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string token_creator = 2;
-  int64 amount = 3;
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgBurnResponse defines the MsgBurnResponse message.
@@ -101,8 +104,12 @@ message MsgBurnResponse {}
 message MsgAddYield {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string token_creator = 2;
-  int64 amount = 3;
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgAddYieldResponse defines the MsgAddYieldResponse message.
@@ -112,8 +119,8 @@ message MsgAddYieldResponse {}
 message MsgGrantYieldPermission {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string token_creator = 2;
-  string target = 3;
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string target = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgGrantYieldPermissionResponse defines the MsgGrantYieldPermissionResponse message.
@@ -123,8 +130,8 @@ message MsgGrantYieldPermissionResponse {}
 message MsgRevokeYieldPermission {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string token_creator = 2;
-  string target = 3;
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string target = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgRevokeYieldPermissionResponse defines the MsgRevokeYieldPermissionResponse message.
@@ -134,7 +141,7 @@ message MsgRevokeYieldPermissionResponse {}
 message MsgClaimYield {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string token_creator = 2;
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgClaimYieldResponse defines the MsgClaimYieldResponse message.
@@ -144,7 +151,8 @@ message MsgClaimYieldResponse {}
 message MsgUpdateAdmin {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string new_admin = 2;
+  string new_admin = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgUpdateAdminResponse defines the MsgUpdateAdminResponse message.
