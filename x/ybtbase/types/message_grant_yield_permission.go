@@ -1,9 +1,9 @@
 package types
 
-func NewMsgGrantYieldPermission(admin string, creator string, target string) *MsgGrantYieldPermission {
+func NewMsgGrantYieldPermission(admin string, tokenCreator string, target string) *MsgGrantYieldPermission {
 	return &MsgGrantYieldPermission{
-		Admin:   admin,
-		Creator: creator,
-		Target:  target,
+		Admin:        admin,
+		TokenCreator: tokenCreator,
+		Target:       target,
 	}
 }

@@ -1,9 +1,11 @@
 package types
 
-func NewMsgAddYield(admin string, creator string, amount int64) *MsgAddYield {
+import "cosmossdk.io/math"
+
+func NewMsgAddYield(admin string, tokenCreator string, amount math.Int) *MsgAddYield {
 	return &MsgAddYield{
-		Admin:   admin,
-		Creator: creator,
-		Amount:  amount,
+		Admin:        admin,
+		TokenCreator: tokenCreator,
+		Amount:       amount,
 	}
 }

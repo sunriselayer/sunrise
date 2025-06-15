@@ -1,9 +1,9 @@
 package types
 
-func NewMsgRevokeYieldPermission(admin string, creator string, target string) *MsgRevokeYieldPermission {
+func NewMsgRevokeYieldPermission(admin string, tokenCreator string, target string) *MsgRevokeYieldPermission {
 	return &MsgRevokeYieldPermission{
-		Admin:   admin,
-		Creator: creator,
-		Target:  target,
+		Admin:        admin,
+		TokenCreator: tokenCreator,
+		Target:       target,
 	}
 }

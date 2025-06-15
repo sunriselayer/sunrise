@@ -1,9 +1,11 @@
 package types
 
-func NewMsgMint(admin string, creator string, amount int64) *MsgMint {
+import "cosmossdk.io/math"
+
+func NewMsgMint(admin string, tokenCreator string, amount math.Int) *MsgMint {
 	return &MsgMint{
-		Admin:   admin,
-		Creator: creator,
-		Amount:  amount,
+		Admin:        admin,
+		TokenCreator: tokenCreator,
+		Amount:       amount,
 	}
 }

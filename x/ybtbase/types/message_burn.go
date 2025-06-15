@@ -1,9 +1,11 @@
 package types
 
-func NewMsgBurn(admin string, creator string, amount int64) *MsgBurn {
+import "cosmossdk.io/math"
+
+func NewMsgBurn(admin string, tokenCreator string, amount math.Int) *MsgBurn {
 	return &MsgBurn{
-		Admin:   admin,
-		Creator: creator,
-		Amount:  amount,
+		Admin:        admin,
+		TokenCreator: tokenCreator,
+		Amount:       amount,
 	}
 }
