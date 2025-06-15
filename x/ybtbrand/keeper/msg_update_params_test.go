@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sunriselayer/sunrise/x/ybtbrand/keeper"
@@ -16,8 +17,8 @@ func TestMsgUpdateParams(t *testing.T) {
 	params := types.DefaultParams()
 	require.NoError(t, f.keeper.Params.Set(f.ctx, params))
 
-	authorityStr, err := f.addressCodec.BytesToString(f.keeper.GetAuthority())
-	require.NoError(t, err)
+	authority := f.keeper.GetAuthority()
+	authorityStr := sdk.AccAddress(authority).String()
 
 	// default params
 	testCases := []struct {

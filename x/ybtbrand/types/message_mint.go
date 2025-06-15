@@ -1,9 +1,13 @@
 package types
 
-func NewMsgMint(admin string, tokenCreator string, amount int64) *MsgMint {
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+func NewMsgMint(admin string, tokenCreator string, ybt sdk.Coin) *MsgMint {
 	return &MsgMint{
 		Admin:        admin,
 		TokenCreator: tokenCreator,
-		Amount:       amount,
+		Ybt:          ybt,
 	}
 }

@@ -1,8 +1,10 @@
 package types
 
-import sdk "github.com/cosmos/cosmos-sdk/types"
+import (
+	"cosmossdk.io/math"
+)
 
-func NewMsgBurn(admin string, tokenCreator string, amount sdk.Coin) *MsgBurn {
+func NewMsgBurn(admin string, tokenCreator string, amount math.Int) *MsgBurn {
 	return &MsgBurn{
 		Admin:        admin,
 		TokenCreator: tokenCreator,

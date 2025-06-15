@@ -6,8 +6,8 @@ import (
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/depinject/appconfig"
+	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/sunriselayer/sunrise/x/ybtbrand/keeper"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/types"
@@ -32,9 +32,11 @@ type ModuleInputs struct {
 	StoreService store.KVStoreService
 	Cdc          codec.Codec
 	AddressCodec address.Codec
+	Logger       log.Logger
 
-	AuthKeeper types.AuthKeeper
-	BankKeeper types.BankKeeper
+	AuthKeeper    types.AuthKeeper
+	BankKeeper    types.BankKeeper
+	YbtbaseKeeper types.YbtbaseKeeper
 }
 
 type ModuleOutputs struct {
@@ -45,17 +47,19 @@ type ModuleOutputs struct {
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
-	// default to governance authority if not provided
-	authority := authtypes.NewModuleAddress(types.GovModuleName)
-	if in.Config.Authority != "" {
-		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
-	}
-	k := keeper.NewKeeper(
-		in.StoreService,
+	k, err := keeper.NewKeeper(
 		in.Cdc,
+		in.StoreService,
+		in.Logger,
+		in.AuthKeeper,
+		in.BankKeeper,
+		in.YbtbaseKeeper,
 		in.AddressCodec,
-		authority,
 	)
+	if err != nil {
+		panic(err)
+	}
+	
 	m := NewAppModule(in.Cdc, k, in.AuthKeeper, in.BankKeeper)
 
 	return ModuleOutputs{YbtbrandKeeper: k, Module: m}
