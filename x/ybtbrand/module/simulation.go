@@ -119,6 +119,21 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		weightMsgUpdateAdmin,
 		ybtbrandsimulation.SimulateMsgUpdateAdmin(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
+	const (
+		opWeightMsgClaimCollateralYield          = "op_weight_msg_ybtbrand"
+		defaultWeightMsgClaimCollateralYield int = 100
+	)
+
+	var weightMsgClaimCollateralYield int
+	simState.AppParams.GetOrGenerate(opWeightMsgClaimCollateralYield, &weightMsgClaimCollateralYield, nil,
+		func(_ *rand.Rand) {
+			weightMsgClaimCollateralYield = defaultWeightMsgClaimCollateralYield
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgClaimCollateralYield,
+		ybtbrandsimulation.SimulateMsgClaimCollateralYield(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+	))
 
 	return operations
 }

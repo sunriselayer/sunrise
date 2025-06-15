@@ -26,7 +26,7 @@ type Keeper struct {
 
 	Schema collections.Schema
 	Params collections.Item[types.Params]
-	
+
 	// Collections for YBT base tokens
 	Tokens              collections.Map[string, types.Token]
 	GlobalRewardIndex   collections.Map[string, math.LegacyDec]

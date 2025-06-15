@@ -9,8 +9,8 @@ import (
 	reflect "reflect"
 
 	math "cosmossdk.io/math"
-	gomock "github.com/golang/mock/gomock"
 	types "github.com/cosmos/cosmos-sdk/types"
+	gomock "github.com/golang/mock/gomock"
 	ybtbasetypes "github.com/sunriselayer/sunrise/x/ybtbase/types"
 )
 

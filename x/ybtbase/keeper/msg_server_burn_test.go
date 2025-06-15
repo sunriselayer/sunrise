@@ -43,17 +43,17 @@ func TestMsgServerBurn(t *testing.T) {
 				denom := keeper.GetTokenDenom(testAddress)
 				coins := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(500)))
 				adminAddr := sdk.MustAccAddressFromBech32(testAddress)
-				
+
 				// Mock balance check
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), adminAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(1000)))
-				
+
 				// Expect send from admin to module
 				mocks.BankKeeper.EXPECT().
 					SendCoinsFromAccountToModule(gomock.Any(), adminAddr, types.ModuleName, coins).
 					Return(nil)
-				
+
 				// Expect burn from module
 				mocks.BankKeeper.EXPECT().
 					BurnCoins(gomock.Any(), types.ModuleName, coins).
@@ -116,7 +116,7 @@ func TestMsgServerBurn(t *testing.T) {
 			setupMock: func(mocks moduleMocks) {
 				denom := keeper.GetTokenDenom(testAddress)
 				adminAddr := sdk.MustAccAddressFromBech32(testAddress)
-				
+
 				// Mock balance check - insufficient balance
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), adminAddr, denom).

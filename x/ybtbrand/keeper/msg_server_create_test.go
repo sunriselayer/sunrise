@@ -7,9 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	ybtbasetypes "github.com/sunriselayer/sunrise/x/ybtbase/types"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/keeper"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/types"
-	ybtbasetypes "github.com/sunriselayer/sunrise/x/ybtbase/types"
 )
 
 func TestMsgServerCreate(t *testing.T) {

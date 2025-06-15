@@ -2,14 +2,14 @@ package types
 
 // Event types
 const (
-	EventTypeCreateToken = "create_token"
-	EventTypeMint        = "mint"
-	EventTypeBurn        = "burn"
-	EventTypeAddYield    = "add_yield"
-	EventTypeClaimYield  = "claim_yield"
-	EventTypeGrantPermission = "grant_yield_permission"
+	EventTypeCreateToken      = "create_token"
+	EventTypeMint             = "mint"
+	EventTypeBurn             = "burn"
+	EventTypeAddYield         = "add_yield"
+	EventTypeClaimYield       = "claim_yield"
+	EventTypeGrantPermission  = "grant_yield_permission"
 	EventTypeRevokePermission = "revoke_yield_permission"
-	EventTypeUpdateAdmin = "update_admin"
+	EventTypeUpdateAdmin      = "update_admin"
 
 	// Attribute keys
 	AttributeKeyCreator      = "creator"

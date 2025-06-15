@@ -35,6 +35,9 @@ service Msg {
 
   // UpdateAdmin defines the UpdateAdmin RPC.
   rpc UpdateAdmin(MsgUpdateAdmin) returns (MsgUpdateAdminResponse);
+
+  // ClaimCollateralYield defines the ClaimCollateralYield RPC.
+  rpc ClaimCollateralYield(MsgClaimCollateralYield) returns (MsgClaimCollateralYieldResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -123,3 +126,14 @@ message MsgUpdateAdmin {
 
 // MsgUpdateAdminResponse defines the MsgUpdateAdminResponse message.
 message MsgUpdateAdminResponse {}
+
+// MsgClaimCollateralYield defines the MsgClaimCollateralYield message.
+message MsgClaimCollateralYield {
+  option (cosmos.msg.v1.signer) = "admin";
+  string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string base_ybt_creator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgClaimCollateralYieldResponse defines the MsgClaimCollateralYieldResponse message.
+message MsgClaimCollateralYieldResponse {}

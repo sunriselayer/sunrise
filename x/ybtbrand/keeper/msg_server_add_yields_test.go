@@ -86,7 +86,7 @@ func TestMsgServerAddYields(t *testing.T) {
 				usdcIndex, found := k.GetYieldIndex(ctx, testAddress, "uusdc")
 				require.True(t, found)
 				require.Equal(t, math.LegacyNewDecWithPrec(11, 1), usdcIndex)
-				
+
 				usdtIndex, found := k.GetYieldIndex(ctx, testAddress, "uusdt")
 				require.True(t, found)
 				require.Equal(t, math.LegacyNewDecWithPrec(105, 2), usdtIndex)

@@ -43,7 +43,7 @@ func YbtbaseBeforeSendHook(k Keeper) func(ctx context.Context, from, to sdk.AccA
 			// This formula ensures that:
 			// 1. Rewards are fairly distributed based on when tokens were acquired
 			// 2. Negative indexes are properly handled (when sender's index < receiver's index)
-			
+
 			// Convert to Dec for calculation
 			receiverBalanceDec := math.LegacyNewDecFromInt(toBalance.Amount)
 			transferAmountDec := math.LegacyNewDecFromInt(coin.Amount)

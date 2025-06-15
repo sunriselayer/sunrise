@@ -32,11 +32,11 @@ func TestMsgServerClaimYield(t *testing.T) {
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
-				
+
 				// Set global reward index to 1.5 (50% yield accumulated)
 				err = k.SetGlobalRewardIndex(ctx, testAddress, math.LegacyNewDecWithPrec(15, 1))
 				require.NoError(t, err)
-				
+
 				// Set user's last reward index to 1.0
 				err = k.SetUserLastRewardIndex(ctx, testAddress, testAddress2, math.LegacyOneDec())
 				require.NoError(t, err)
@@ -49,20 +49,20 @@ func TestMsgServerClaimYield(t *testing.T) {
 				denom := keeper.GetTokenDenom(testAddress)
 				userAddr := sdk.MustAccAddressFromBech32(testAddress2)
 				yieldPoolAddr := keeper.GetYieldPoolAddress(testAddress)
-				
+
 				// Mock user balance - 1000 tokens
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), userAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(1000)))
-				
+
 				// Expected yield: 1000 * (1.5 - 1.0) = 500
 				yieldCoins := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(500)))
-				
+
 				// Mock yield pool balance check
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), yieldPoolAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(2000)))
-				
+
 				// Expect transfer from yield pool to user
 				mocks.BankKeeper.EXPECT().
 					SendCoins(gomock.Any(), yieldPoolAddr, userAddr, yieldCoins).
@@ -86,15 +86,15 @@ func TestMsgServerClaimYield(t *testing.T) {
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
-				
+
 				// Grant permission
 				err = k.SetYieldPermission(ctx, testAddress, testAddress2, true)
 				require.NoError(t, err)
-				
+
 				// Set global reward index to 2.0 (100% yield accumulated)
 				err = k.SetGlobalRewardIndex(ctx, testAddress, math.LegacyNewDec(2))
 				require.NoError(t, err)
-				
+
 				// Set user's last reward index to 1.0
 				err = k.SetUserLastRewardIndex(ctx, testAddress, testAddress2, math.LegacyOneDec())
 				require.NoError(t, err)
@@ -107,20 +107,20 @@ func TestMsgServerClaimYield(t *testing.T) {
 				denom := keeper.GetTokenDenom(testAddress)
 				userAddr := sdk.MustAccAddressFromBech32(testAddress2)
 				yieldPoolAddr := keeper.GetYieldPoolAddress(testAddress)
-				
+
 				// Mock user balance - 500 tokens
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), userAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(500)))
-				
+
 				// Expected yield: 500 * (2.0 - 1.0) = 500
 				yieldCoins := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(500)))
-				
+
 				// Mock yield pool balance check
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), yieldPoolAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(2000)))
-				
+
 				// Expect transfer from yield pool to user
 				mocks.BankKeeper.EXPECT().
 					SendCoins(gomock.Any(), yieldPoolAddr, userAddr, yieldCoins).
@@ -144,7 +144,7 @@ func TestMsgServerClaimYield(t *testing.T) {
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
-				
+
 				// Set both indexes to same value
 				err = k.SetGlobalRewardIndex(ctx, testAddress, math.LegacyNewDec(2))
 				require.NoError(t, err)
@@ -158,7 +158,7 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setupMock: func(mocks moduleMocks) {
 				denom := keeper.GetTokenDenom(testAddress)
 				userAddr := sdk.MustAccAddressFromBech32(testAddress2)
-				
+
 				// Mock user balance
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), userAddr, denom).
@@ -178,7 +178,7 @@ func TestMsgServerClaimYield(t *testing.T) {
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
-				
+
 				// Set global reward index
 				err = k.SetGlobalRewardIndex(ctx, testAddress, math.LegacyNewDec(2))
 				require.NoError(t, err)
@@ -190,7 +190,7 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setupMock: func(mocks moduleMocks) {
 				denom := keeper.GetTokenDenom(testAddress)
 				userAddr := sdk.MustAccAddressFromBech32(testAddress2)
-				
+
 				// Mock user balance - zero
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), userAddr, denom).
@@ -210,11 +210,11 @@ func TestMsgServerClaimYield(t *testing.T) {
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
-				
+
 				// Set global reward index
 				err = k.SetGlobalRewardIndex(ctx, testAddress, math.LegacyNewDec(2))
 				require.NoError(t, err)
-				
+
 				// Set user's last reward index
 				err = k.SetUserLastRewardIndex(ctx, testAddress, testAddress2, math.LegacyOneDec())
 				require.NoError(t, err)
@@ -227,12 +227,12 @@ func TestMsgServerClaimYield(t *testing.T) {
 				denom := keeper.GetTokenDenom(testAddress)
 				userAddr := sdk.MustAccAddressFromBech32(testAddress2)
 				yieldPoolAddr := keeper.GetYieldPoolAddress(testAddress)
-				
+
 				// Mock user balance
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), userAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(1000)))
-				
+
 				// Mock yield pool balance - insufficient
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), yieldPoolAddr, denom).
@@ -299,7 +299,7 @@ func TestMsgServerClaimYield(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				require.NotNil(t, resp)
-				
+
 				if tt.validate != nil {
 					tt.validate(t, ctx, k)
 				}

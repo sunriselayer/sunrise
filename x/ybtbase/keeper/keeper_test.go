@@ -40,7 +40,7 @@ type fixture struct {
 
 func initFixture(t *testing.T) *fixture {
 	t.Helper()
-	
+
 	ctrl := gomock.NewController(t)
 	t.Cleanup(ctrl.Finish)
 

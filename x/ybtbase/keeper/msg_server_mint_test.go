@@ -42,12 +42,12 @@ func TestMsgServerMint(t *testing.T) {
 			setupMock: func(mocks moduleMocks) {
 				denom := keeper.GetTokenDenom(testAddress)
 				coins := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(1000)))
-				
+
 				// Expect mint coins to module account
 				mocks.BankKeeper.EXPECT().
 					MintCoins(gomock.Any(), types.ModuleName, coins).
 					Return(nil)
-				
+
 				// Expect send from module to admin
 				mocks.BankKeeper.EXPECT().
 					SendCoinsFromModuleToAccount(gomock.Any(), types.ModuleName, sdk.MustAccAddressFromBech32(testAddress), coins).

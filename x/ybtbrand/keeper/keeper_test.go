@@ -17,8 +17,8 @@ import (
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	ybtbrand "github.com/sunriselayer/sunrise/x/ybtbrand/module"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/keeper"
+	ybtbrand "github.com/sunriselayer/sunrise/x/ybtbrand/module"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/testutil"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/types"
 )

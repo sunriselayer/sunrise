@@ -74,11 +74,11 @@ func (k msgServer) AddYields(ctx context.Context, msg *types.MsgAddYields) (*typ
 			if currentIndex.IsZero() {
 				currentIndex = math.LegacyOneDec()
 			}
-			
+
 			// Calculate yield per token
 			yieldPerToken := math.LegacyNewDecFromInt(coin.Amount).Quo(math.LegacyNewDecFromInt(supply.Amount))
 			newIndex := currentIndex.Add(yieldPerToken)
-			
+
 			if err := k.Keeper.SetYieldIndex(ctx, msg.TokenCreator, coin.Denom, newIndex); err != nil {
 				return nil, err
 			}

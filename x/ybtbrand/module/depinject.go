@@ -59,7 +59,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	m := NewAppModule(in.Cdc, k, in.AuthKeeper, in.BankKeeper)
 
 	return ModuleOutputs{YbtbrandKeeper: k, Module: m}

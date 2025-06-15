@@ -49,7 +49,7 @@ func YbtbrandBeforeSendHook(k Keeper) func(ctx context.Context, from, to sdk.Acc
 				// This formula ensures that:
 				// 1. Rewards are fairly distributed based on when tokens were acquired
 				// 2. Negative indexes are properly handled (when sender's index < receiver's index)
-				
+
 				// Convert to Dec for calculation
 				receiverBalanceDec := math.LegacyNewDecFromInt(toBalance.Amount)
 				transferAmountDec := math.LegacyNewDecFromInt(coin.Amount)
@@ -81,7 +81,7 @@ func YbtbrandBeforeSendHook(k Keeper) func(ctx context.Context, from, to sdk.Acc
 func (k Keeper) getActiveYieldDenoms(ctx context.Context, creator string) []string {
 	// Iterate through all yield indexes to find active denoms
 	denoms := make([]string, 0)
-	
+
 	// Use the YieldIndex collection to find all denoms
 	iter, err := k.YieldIndex.Iterate(ctx, collections.NewPrefixedPairRange[string, string](creator))
 	if err != nil {

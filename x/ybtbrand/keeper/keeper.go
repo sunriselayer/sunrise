@@ -33,9 +33,9 @@ type Keeper struct {
 	Params collections.Item[types.Params]
 
 	// State
-	Tokens              collections.Map[string, types.Token]
-	YieldIndex          collections.Map[collections.Pair[string, string], math.LegacyDec]
-	UserLastYieldIndex  collections.Map[collections.Triple[string, string, string], math.LegacyDec]
+	Tokens             collections.Map[string, types.Token]
+	YieldIndex         collections.Map[collections.Pair[string, string], math.LegacyDec]
+	UserLastYieldIndex collections.Map[collections.Triple[string, string, string], math.LegacyDec]
 }
 
 func NewKeeper(

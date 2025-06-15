@@ -64,6 +64,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a update-admin tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "new_admin"}},
 				},
+				{
+					RpcMethod:      "ClaimCollateralYield",
+					Use:            "claim-collateral-yield [token-creator] [base-ybt-creator]",
+					Short:          "Send a claim-collateral-yield tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "base_ybt_creator"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

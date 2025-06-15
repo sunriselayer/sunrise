@@ -17,8 +17,8 @@ const (
 
 // State key prefixes
 var (
-	ParamsKey              = collections.NewPrefix("p_ybtbrand")
-	TokensKey              = collections.NewPrefix([]byte{0x02})
-	YieldIndexKey          = collections.NewPrefix([]byte{0x03})
-	UserLastYieldIndexKey  = collections.NewPrefix([]byte{0x04})
+	ParamsKey             = collections.NewPrefix("p_ybtbrand")
+	TokensKey             = collections.NewPrefix([]byte{0x02})
+	YieldIndexKey         = collections.NewPrefix([]byte{0x03})
+	UserLastYieldIndexKey = collections.NewPrefix([]byte{0x04})
 )

@@ -45,18 +45,18 @@ func TestMsgServerAddYield(t *testing.T) {
 				coins := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(1000)))
 				adminAddr := sdk.MustAccAddressFromBech32(testAddress)
 				yieldPoolAddr := keeper.GetYieldPoolAddress(testAddress)
-				
+
 				// Mock balance check
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), adminAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(5000)))
-				
+
 				// Get total supply
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), gomock.Any(), denom).
 					Return(sdk.NewCoin(denom, math.NewInt(10000))).
 					AnyTimes()
-				
+
 				// Expect send from admin to yield pool
 				mocks.BankKeeper.EXPECT().
 					SendCoins(gomock.Any(), adminAddr, yieldPoolAddr, coins).
@@ -96,18 +96,18 @@ func TestMsgServerAddYield(t *testing.T) {
 				coins := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(2000)))
 				adminAddr := sdk.MustAccAddressFromBech32(testAddress)
 				yieldPoolAddr := keeper.GetYieldPoolAddress(testAddress)
-				
+
 				// Mock balance check
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), adminAddr, denom).
 					Return(sdk.NewCoin(denom, math.NewInt(5000)))
-				
+
 				// Get total supply
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), gomock.Any(), denom).
 					Return(sdk.NewCoin(denom, math.NewInt(10000))).
 					AnyTimes()
-				
+
 				// Expect send from admin to yield pool
 				mocks.BankKeeper.EXPECT().
 					SendCoins(gomock.Any(), adminAddr, yieldPoolAddr, coins).
@@ -179,7 +179,7 @@ func TestMsgServerAddYield(t *testing.T) {
 			setupMock: func(mocks moduleMocks) {
 				denom := keeper.GetTokenDenom(testAddress)
 				adminAddr := sdk.MustAccAddressFromBech32(testAddress)
-				
+
 				// Mock balance check - insufficient balance
 				mocks.BankKeeper.EXPECT().
 					GetBalance(gomock.Any(), adminAddr, denom).
@@ -233,7 +233,7 @@ func TestMsgServerAddYield(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				require.NotNil(t, resp)
-				
+
 				if tt.validate != nil {
 					tt.validate(t, ctx, k)
 				}

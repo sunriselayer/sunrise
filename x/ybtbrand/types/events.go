@@ -2,10 +2,10 @@ package types
 
 // Event types
 const (
-	EventTypeCreate     = "create_ybtbrand"
-	EventTypeMint       = "mint_ybtbrand"
-	EventTypeBurn       = "burn_ybtbrand"
-	EventTypeAddYields  = "add_yields"
+	EventTypeCreate      = "create_ybtbrand"
+	EventTypeMint        = "mint_ybtbrand"
+	EventTypeBurn        = "burn_ybtbrand"
+	EventTypeAddYields   = "add_yields"
 	EventTypeClaimYields = "claim_yields"
 	EventTypeUpdateAdmin = "update_admin"
 
