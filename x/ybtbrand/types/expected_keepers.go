@@ -33,4 +33,5 @@ type YbtbaseKeeper interface {
 	GetGlobalRewardIndex(ctx context.Context, creator string) math.LegacyDec
 	GetUserLastRewardIndex(ctx context.Context, creator, user string) math.LegacyDec
 	SetUserLastRewardIndex(ctx context.Context, creator, user string, index math.LegacyDec) error
+	HasYieldPermission(ctx context.Context, creator, user string) bool
 }
