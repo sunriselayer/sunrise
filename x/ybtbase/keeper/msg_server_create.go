@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
@@ -26,11 +25,16 @@ func (k msgServer) Create(ctx context.Context, msg *types.MsgCreate) (*types.Msg
 		return nil, types.ErrTokenAlreadyExists
 	}
 
+	// Validate permission mode
+	if msg.PermissionMode == types.PermissionMode_PERMISSION_MODE_UNSPECIFIED {
+		return nil, errors.Wrap(types.ErrInvalidRequest, "permission mode must be specified")
+	}
+
 	// Create the token
 	token := types.Token{
-		Creator:      msg.Creator,
-		Admin:        msg.Admin,
-		Permissioned: msg.Permissioned,
+		Creator:        msg.Creator,
+		Admin:          msg.Admin,
+		PermissionMode: msg.PermissionMode,
 	}
 
 	// Save the token
@@ -43,6 +47,15 @@ func (k msgServer) Create(ctx context.Context, msg *types.MsgCreate) (*types.Msg
 		return nil, err
 	}
 
+	// Get the denom for this token
+	denom := types.GetDenom(msg.Creator)
+
+	// Disable bank send for non-permissionless tokens
+	if msg.PermissionMode != types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS {
+		// Set SendEnabled to false for this denom
+		k.bankKeeper.SetSendEnabled(ctx, denom, false)
+	}
+
 	// Emit event
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
@@ -50,7 +63,7 @@ func (k msgServer) Create(ctx context.Context, msg *types.MsgCreate) (*types.Msg
 			types.EventTypeCreateToken,
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
 			sdk.NewAttribute(types.AttributeKeyAdmin, msg.Admin),
-			sdk.NewAttribute(types.AttributeKeyPermissioned, fmt.Sprintf("%t", msg.Permissioned)),
+			sdk.NewAttribute("permission_mode", msg.PermissionMode.String()),
 		),
 	})
 

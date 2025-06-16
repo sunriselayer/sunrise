@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/ybtbase/types"
@@ -26,11 +27,24 @@ func (k msgServer) ClaimYield(ctx context.Context, msg *types.MsgClaimYield) (*t
 		return nil, types.ErrTokenNotFound
 	}
 
-	// Check permission if token is permissioned
-	if token.Permissioned {
-		if !k.Keeper.HasYieldPermission(ctx, msg.TokenCreator, msg.Sender) {
+	// Check permission based on permission mode
+	switch token.PermissionMode {
+	case types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS:
+		// No restrictions
+	case types.PermissionMode_PERMISSION_MODE_WHITELIST:
+		// Check if sender is whitelisted
+		allowed, err := k.Keeper.Permissions.Get(ctx, collections.Join(msg.TokenCreator, msg.Sender))
+		if err != nil || !allowed {
 			return nil, types.ErrNoPermission
 		}
+	case types.PermissionMode_PERMISSION_MODE_BLACKLIST:
+		// Check if sender is blacklisted
+		blacklisted, _ := k.Keeper.Permissions.Get(ctx, collections.Join(msg.TokenCreator, msg.Sender))
+		if blacklisted {
+			return nil, types.ErrNoPermission
+		}
+	default:
+		return nil, errors.Wrap(types.ErrInvalidRequest, "invalid permission mode")
 	}
 
 	// Get user balance

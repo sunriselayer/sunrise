@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/ybtbrand/types"
+	ybtbasetypes "github.com/sunriselayer/sunrise/x/ybtbase/types"
 )
 
 func (k msgServer) ClaimCollateralYield(ctx context.Context, msg *types.MsgClaimCollateralYield) (*types.MsgClaimCollateralYieldResponse, error) {
@@ -48,7 +49,7 @@ func (k msgServer) ClaimCollateralYield(ctx context.Context, msg *types.MsgClaim
 	}
 
 	// For permissioned base YBT, check if admin has yield permission
-	if baseToken.Permissioned {
+	if baseToken.PermissionMode == ybtbasetypes.PermissionMode_PERMISSION_MODE_WHITELIST {
 		if !k.ybtbaseKeeper.HasYieldPermission(ctx, msg.BaseYbtCreator, msg.Admin) {
 			return nil, errors.Wrap(types.ErrUnauthorized, "no yield permission")
 		}

@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"github.com/sunriselayer/sunrise/x/ybtbase/keeper"
 	"github.com/sunriselayer/sunrise/x/ybtbase/types"
@@ -21,9 +22,9 @@ func TestMsgServerCreate(t *testing.T) {
 		{
 			name: "successful creation - permissionless",
 			msg: &types.MsgCreate{
-				Creator:      testAddress,
-				Admin:        testAddress,
-				Permissioned: false,
+				Creator:        testAddress,
+				Admin:          testAddress,
+				PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 			},
 			setupMock: func(mocks moduleMocks) {
 				// No bank operations needed for creation
@@ -33,21 +34,22 @@ func TestMsgServerCreate(t *testing.T) {
 		{
 			name: "successful creation - permissioned",
 			msg: &types.MsgCreate{
-				Creator:      testAddress,
-				Admin:        testAddress2,
-				Permissioned: true,
+				Creator:        testAddress,
+				Admin:          testAddress2,
+				PermissionMode: types.PermissionMode_PERMISSION_MODE_WHITELIST,
 			},
 			setupMock: func(mocks moduleMocks) {
-				// No bank operations needed for creation
+				// SetSendEnabled should be called for non-permissionless tokens
+				mocks.BankKeeper.EXPECT().SetSendEnabled(gomock.Any(), "ybtbase/"+testAddress, false)
 			},
 			wantErr: false,
 		},
 		{
 			name: "token already exists",
 			msg: &types.MsgCreate{
-				Creator:      testAddress,
-				Admin:        testAddress,
-				Permissioned: false,
+				Creator:        testAddress,
+				Admin:          testAddress,
+				PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 			},
 			setupMock: func(mocks moduleMocks) {
 				// No bank operations needed for creation
@@ -57,9 +59,9 @@ func TestMsgServerCreate(t *testing.T) {
 		{
 			name: "invalid creator address",
 			msg: &types.MsgCreate{
-				Creator:      "invalid",
-				Admin:        testAddress,
-				Permissioned: false,
+				Creator:        "invalid",
+				Admin:          testAddress,
+				PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 			},
 			setupMock: func(mocks moduleMocks) {},
 			wantErr:   true,
@@ -68,9 +70,9 @@ func TestMsgServerCreate(t *testing.T) {
 		{
 			name: "invalid admin address",
 			msg: &types.MsgCreate{
-				Creator:      testAddress,
-				Admin:        "invalid",
-				Permissioned: false,
+				Creator:        testAddress,
+				Admin:          "invalid",
+				PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 			},
 			setupMock: func(mocks moduleMocks) {},
 			wantErr:   true,
@@ -102,7 +104,7 @@ func TestMsgServerCreate(t *testing.T) {
 				require.True(t, found)
 				require.Equal(t, tt.msg.Creator, token.Creator)
 				require.Equal(t, tt.msg.Admin, token.Admin)
-				require.Equal(t, tt.msg.Permissioned, token.Permissioned)
+				require.Equal(t, tt.msg.PermissionMode, token.PermissionMode)
 
 				// Verify initial global reward index is set to 1
 				globalIndex := k.GetGlobalRewardIndex(ctx, tt.msg.Creator)

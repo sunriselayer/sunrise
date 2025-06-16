@@ -24,9 +24,9 @@ func TestMsgServerUpdateAdmin(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -51,9 +51,9 @@ func TestMsgServerUpdateAdmin(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -89,9 +89,9 @@ func TestMsgServerUpdateAdmin(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token with different admin
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress2,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress2,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -109,9 +109,9 @@ func TestMsgServerUpdateAdmin(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)

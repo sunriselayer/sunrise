@@ -31,7 +31,7 @@ type Keeper struct {
 	Tokens              collections.Map[string, types.Token]
 	GlobalRewardIndex   collections.Map[string, math.LegacyDec]
 	UserLastRewardIndex collections.Map[collections.Pair[string, string], math.LegacyDec]
-	YieldPermissions    collections.Map[collections.Pair[string, string], bool]
+	Permissions         collections.Map[collections.Pair[string, string], bool]
 }
 
 func NewKeeper(
@@ -57,10 +57,10 @@ func NewKeeper(
 		bankKeeper:   bankKeeper,
 
 		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		Tokens:              collections.NewMap(sb, collections.NewPrefix(0), "tokens", collections.StringKey, codec.CollValue[types.Token](cdc)),
-		GlobalRewardIndex:   collections.NewMap(sb, collections.NewPrefix(1), "global_reward_index", collections.StringKey, sdk.LegacyDecValue),
-		UserLastRewardIndex: collections.NewMap(sb, collections.NewPrefix(2), "user_last_reward_index", collections.PairKeyCodec(collections.StringKey, collections.StringKey), sdk.LegacyDecValue),
-		YieldPermissions:    collections.NewMap(sb, collections.NewPrefix(3), "yield_permissions", collections.PairKeyCodec(collections.StringKey, collections.StringKey), collections.BoolValue),
+		Tokens:              collections.NewMap(sb, types.TokensKey, "tokens", collections.StringKey, codec.CollValue[types.Token](cdc)),
+		GlobalRewardIndex:   collections.NewMap(sb, types.GlobalRewardIndexKey, "global_reward_index", collections.StringKey, sdk.LegacyDecValue),
+		UserLastRewardIndex: collections.NewMap(sb, types.UserLastRewardIndexKey, "user_last_reward_index", collections.PairKeyCodec(collections.StringKey, collections.StringKey), sdk.LegacyDecValue),
+		Permissions:         collections.NewMap(sb, types.PermissionsKey, "permissions", collections.PairKeyCodec(collections.StringKey, collections.StringKey), collections.BoolValue),
 	}
 
 	schema, err := sb.Build()

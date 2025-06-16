@@ -15,5 +15,20 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_ybtbase")
+// Collection keys
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params")
+
+	// TokensKey is the prefix for tokens collection
+	TokensKey = collections.NewPrefix("tokens")
+
+	// GlobalRewardIndexKey is the prefix for global reward index collection
+	GlobalRewardIndexKey = collections.NewPrefix("global_reward_index")
+
+	// UserLastRewardIndexKey is the prefix for user last reward index collection
+	UserLastRewardIndexKey = collections.NewPrefix("user_last_reward_index")
+
+	// PermissionsKey is the prefix for permissions collection
+	PermissionsKey = collections.NewPrefix("permissions")
+)

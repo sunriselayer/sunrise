@@ -35,9 +35,9 @@ func TestMsgServerCreate(t *testing.T) {
 			setupMock: func(mocks moduleMocks) {
 				// Mock base YBT token exists
 				baseToken := ybtbasetypes.Token{
-					Creator:      testAddress2,
-					Admin:        testAddress3,
-					Permissioned: false,
+					Creator:        testAddress2,
+					Admin:          testAddress3,
+					PermissionMode: ybtbasetypes.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				mocks.YbtbaseKeeper.EXPECT().
 					GetToken(gomock.Any(), testAddress2).

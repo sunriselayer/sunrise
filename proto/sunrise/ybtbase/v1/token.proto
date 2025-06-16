@@ -6,9 +6,21 @@ import "sunrise/ybtbase/v1/params.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/ybtbase/types";
 
+// PermissionMode defines the permission mode for yield and transfers
+enum PermissionMode {
+  // PERMISSION_MODE_UNSPECIFIED is the default value (invalid)
+  PERMISSION_MODE_UNSPECIFIED = 0;
+  // PERMISSION_MODE_PERMISSIONLESS allows all addresses (no restrictions)
+  PERMISSION_MODE_PERMISSIONLESS = 1;
+  // PERMISSION_MODE_WHITELIST allows only whitelisted addresses
+  PERMISSION_MODE_WHITELIST = 2;
+  // PERMISSION_MODE_BLACKLIST blocks only blacklisted addresses
+  PERMISSION_MODE_BLACKLIST = 3;
+}
+
 // Token
 message Token {
   string creator = 1;
   string admin = 2;
-  bool permissioned = 3;
+  PermissionMode permission_mode = 3; // Single permission mode for both yield and transfers
 }

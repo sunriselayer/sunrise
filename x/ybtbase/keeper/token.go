@@ -56,25 +56,25 @@ func (k Keeper) SetUserLastRewardIndex(ctx context.Context, tokenCreator, userAd
 	return k.UserLastRewardIndex.Set(ctx, key, index)
 }
 
-// HasYieldPermission checks if a user has yield permission for a token
-func (k Keeper) HasYieldPermission(ctx context.Context, tokenCreator, userAddr string) bool {
+// HasPermission checks if a user has permission for a token
+func (k Keeper) HasPermission(ctx context.Context, tokenCreator, userAddr string) bool {
 	key := collections.Join(tokenCreator, userAddr)
-	has, err := k.YieldPermissions.Get(ctx, key)
+	has, err := k.Permissions.Get(ctx, key)
 	if err != nil {
 		return false
 	}
 	return has
 }
 
-// SetYieldPermission sets the yield permission for a user on a token
-func (k Keeper) SetYieldPermission(ctx context.Context, tokenCreator, userAddr string, hasPermission bool) error {
+// SetPermission sets the permission for a user on a token
+func (k Keeper) SetPermission(ctx context.Context, tokenCreator, userAddr string, hasPermission bool) error {
 	key := collections.Join(tokenCreator, userAddr)
-	return k.YieldPermissions.Set(ctx, key, hasPermission)
+	return k.Permissions.Set(ctx, key, hasPermission)
 }
 
 // GetTokenDenom returns the denom for a YBT token
 func GetTokenDenom(tokenCreator string) string {
-	return "ybtbase/" + tokenCreator
+	return types.GetDenom(tokenCreator)
 }
 
 // GetYieldPoolAddress returns the module account address for a token's yield pool

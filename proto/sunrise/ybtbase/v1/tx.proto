@@ -6,6 +6,7 @@ import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/ybtbase/v1/params.proto";
+import "sunrise/ybtbase/v1/token.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/ybtbase/types";
 
@@ -29,17 +30,20 @@ service Msg {
   // AddYield defines the AddYield RPC.
   rpc AddYield(MsgAddYield) returns (MsgAddYieldResponse);
 
-  // GrantYieldPermission defines the GrantYieldPermission RPC.
-  rpc GrantYieldPermission(MsgGrantYieldPermission) returns (MsgGrantYieldPermissionResponse);
+  // GrantPermission defines the GrantPermission RPC.
+  rpc GrantPermission(MsgGrantPermission) returns (MsgGrantPermissionResponse);
 
-  // RevokeYieldPermission defines the RevokeYieldPermission RPC.
-  rpc RevokeYieldPermission(MsgRevokeYieldPermission) returns (MsgRevokeYieldPermissionResponse);
+  // RevokePermission defines the RevokePermission RPC.
+  rpc RevokePermission(MsgRevokePermission) returns (MsgRevokePermissionResponse);
 
   // ClaimYield defines the ClaimYield RPC.
   rpc ClaimYield(MsgClaimYield) returns (MsgClaimYieldResponse);
 
   // UpdateAdmin defines the UpdateAdmin RPC.
   rpc UpdateAdmin(MsgUpdateAdmin) returns (MsgUpdateAdminResponse);
+
+  // Send defines the Send RPC for base YBT transfers with permission checks.
+  rpc Send(MsgSend) returns (MsgSendResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -64,7 +68,7 @@ message MsgCreate {
   option (cosmos.msg.v1.signer) = "creator";
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string admin = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  bool permissioned = 3;
+  PermissionMode permission_mode = 3;
 }
 
 // MsgCreateResponse defines the MsgCreateResponse message.
@@ -115,27 +119,27 @@ message MsgAddYield {
 // MsgAddYieldResponse defines the MsgAddYieldResponse message.
 message MsgAddYieldResponse {}
 
-// MsgGrantYieldPermission defines the MsgGrantYieldPermission message.
-message MsgGrantYieldPermission {
+// MsgGrantPermission defines the MsgGrantPermission message.
+message MsgGrantPermission {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string target = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
-// MsgGrantYieldPermissionResponse defines the MsgGrantYieldPermissionResponse message.
-message MsgGrantYieldPermissionResponse {}
+// MsgGrantPermissionResponse defines the MsgGrantPermissionResponse message.
+message MsgGrantPermissionResponse {}
 
-// MsgRevokeYieldPermission defines the MsgRevokeYieldPermission message.
-message MsgRevokeYieldPermission {
+// MsgRevokePermission defines the MsgRevokePermission message.
+message MsgRevokePermission {
   option (cosmos.msg.v1.signer) = "admin";
   string admin = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string token_creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string target = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
-// MsgRevokeYieldPermissionResponse defines the MsgRevokeYieldPermissionResponse message.
-message MsgRevokeYieldPermissionResponse {}
+// MsgRevokePermissionResponse defines the MsgRevokePermissionResponse message.
+message MsgRevokePermissionResponse {}
 
 // MsgClaimYield defines the MsgClaimYield message.
 message MsgClaimYield {
@@ -157,3 +161,19 @@ message MsgUpdateAdmin {
 
 // MsgUpdateAdminResponse defines the MsgUpdateAdminResponse message.
 message MsgUpdateAdminResponse {}
+
+// MsgSend defines the MsgSend message for base YBT transfers.
+message MsgSend {
+  option (cosmos.msg.v1.signer) = "from_address";
+  string from_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string to_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string token_creator = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// MsgSendResponse defines the MsgSendResponse message.
+message MsgSendResponse {}

@@ -30,9 +30,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "Create",
-					Use:            "create [admin] [permissioned]",
-					Short:          "Send a create tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "admin"}, {ProtoField: "permissioned"}},
+					Use:            "create [admin] [permission-mode]",
+					Short:          "Create a new base YBT token",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "admin"}, {ProtoField: "permission_mode"}},
 				},
 				{
 					RpcMethod:      "Mint",
@@ -53,16 +53,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "amount"}},
 				},
 				{
-					RpcMethod:      "GrantYieldPermission",
-					Use:            "grant-yield-permission [creator] [target]",
-					Short:          "Send a grant-yield-permission tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "target"}},
+					RpcMethod:      "GrantPermission",
+					Use:            "grant-permission [token-creator] [target]",
+					Short:          "Grant permission to an address (whitelist mode only)",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "target"}},
 				},
 				{
-					RpcMethod:      "RevokeYieldPermission",
-					Use:            "revoke-yield-permission [creator] [target]",
-					Short:          "Send a revoke-yield-permission tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}, {ProtoField: "target"}},
+					RpcMethod:      "RevokePermission",
+					Use:            "revoke-permission [token-creator] [target]",
+					Short:          "Revoke permission or block an address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "target"}},
 				},
 				{
 					RpcMethod:      "ClaimYield",
@@ -72,9 +72,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "UpdateAdmin",
-					Use:            "update-admin [new-admin]",
-					Short:          "Send a update-admin tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "new_admin"}},
+					Use:            "update-admin [token-creator] [new-admin]",
+					Short:          "Transfer admin rights for a token",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "token_creator"}, {ProtoField: "new_admin"}},
+				},
+				{
+					RpcMethod:      "Send",
+					Use:            "send [to-address] [token-creator] [amount]",
+					Short:          "Send base YBT tokens (for restricted tokens)",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "to_address"}, {ProtoField: "token_creator"}, {ProtoField: "amount"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

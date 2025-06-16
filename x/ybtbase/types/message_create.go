@@ -1,9 +1,9 @@
 package types
 
-func NewMsgCreate(creator string, admin string, permissioned bool) *MsgCreate {
+func NewMsgCreate(creator string, admin string, permissionMode PermissionMode) *MsgCreate {
 	return &MsgCreate{
-		Creator:      creator,
-		Admin:        admin,
-		Permissioned: permissioned,
+		Creator:        creator,
+		Admin:          admin,
+		PermissionMode: permissionMode,
 	}
 }

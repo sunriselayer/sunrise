@@ -90,34 +90,34 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		ybtbasesimulation.SimulateMsgAddYield(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
 	const (
-		opWeightMsgGrantYieldPermission          = "op_weight_msg_ybtbase"
-		defaultWeightMsgGrantYieldPermission int = 100
+		opWeightMsgGrantPermission          = "op_weight_msg_grant_permission"
+		defaultWeightMsgGrantPermission int = 100
 	)
 
-	var weightMsgGrantYieldPermission int
-	simState.AppParams.GetOrGenerate(opWeightMsgGrantYieldPermission, &weightMsgGrantYieldPermission, nil,
+	var weightMsgGrantPermission int
+	simState.AppParams.GetOrGenerate(opWeightMsgGrantPermission, &weightMsgGrantPermission, nil,
 		func(_ *rand.Rand) {
-			weightMsgGrantYieldPermission = defaultWeightMsgGrantYieldPermission
+			weightMsgGrantPermission = defaultWeightMsgGrantPermission
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgGrantYieldPermission,
-		ybtbasesimulation.SimulateMsgGrantYieldPermission(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+		weightMsgGrantPermission,
+		ybtbasesimulation.SimulateMsgGrantPermission(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
 	const (
-		opWeightMsgRevokeYieldPermission          = "op_weight_msg_ybtbase"
-		defaultWeightMsgRevokeYieldPermission int = 100
+		opWeightMsgRevokePermission          = "op_weight_msg_revoke_permission"
+		defaultWeightMsgRevokePermission int = 100
 	)
 
-	var weightMsgRevokeYieldPermission int
-	simState.AppParams.GetOrGenerate(opWeightMsgRevokeYieldPermission, &weightMsgRevokeYieldPermission, nil,
+	var weightMsgRevokePermission int
+	simState.AppParams.GetOrGenerate(opWeightMsgRevokePermission, &weightMsgRevokePermission, nil,
 		func(_ *rand.Rand) {
-			weightMsgRevokeYieldPermission = defaultWeightMsgRevokeYieldPermission
+			weightMsgRevokePermission = defaultWeightMsgRevokePermission
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgRevokeYieldPermission,
-		ybtbasesimulation.SimulateMsgRevokeYieldPermission(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+		weightMsgRevokePermission,
+		ybtbasesimulation.SimulateMsgRevokePermission(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
 	const (
 		opWeightMsgClaimYield          = "op_weight_msg_ybtbase"
@@ -148,6 +148,21 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgUpdateAdmin,
 		ybtbasesimulation.SimulateMsgUpdateAdmin(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+	))
+	const (
+		opWeightMsgSend          = "op_weight_msg_send"
+		defaultWeightMsgSend int = 100
+	)
+
+	var weightMsgSend int
+	simState.AppParams.GetOrGenerate(opWeightMsgSend, &weightMsgSend, nil,
+		func(_ *rand.Rand) {
+			weightMsgSend = defaultWeightMsgSend
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgSend,
+		ybtbasesimulation.SimulateMsgSend(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
 
 	return operations

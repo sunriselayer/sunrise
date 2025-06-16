@@ -7,9 +7,10 @@ const (
 	EventTypeBurn             = "burn"
 	EventTypeAddYield         = "add_yield"
 	EventTypeClaimYield       = "claim_yield"
-	EventTypeGrantPermission  = "grant_yield_permission"
-	EventTypeRevokePermission = "revoke_yield_permission"
+	EventTypeGrantPermission  = "grant_permission"
+	EventTypeRevokePermission = "revoke_permission"
 	EventTypeUpdateAdmin      = "update_admin"
+	EventTypeSend             = "send"
 
 	// Attribute keys
 	AttributeKeyCreator      = "creator"
@@ -21,4 +22,7 @@ const (
 	AttributeKeyDenom        = "denom"
 	AttributeKeyClaimer      = "claimer"
 	AttributeKeyYieldAmount  = "yield_amount"
+	AttributeKeyFrom         = "from"
+	AttributeKeyTo           = "to"
+	AttributeKeyTokenCreator = "token_creator"
 )

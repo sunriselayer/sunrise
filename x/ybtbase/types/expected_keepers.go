@@ -1,5 +1,7 @@
 package types
 
+//go:generate mockgen -destination ../testutil/expected_keepers_mocks.go -package testutil . AuthKeeper,BankKeeper
+
 import (
 	"context"
 
@@ -26,6 +28,7 @@ type BankKeeper interface {
 	SendCoinsFromModuleToModule(ctx context.Context, senderModule, recipientModule string, amt sdk.Coins) error
 	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
 	BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error
+	SetSendEnabled(ctx context.Context, denom string, value bool)
 }
 
 // ParamSubspace defines the expected Subspace interface for parameters.

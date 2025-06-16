@@ -26,9 +26,9 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create permissionless token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -80,15 +80,15 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create permissioned token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: true,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_WHITELIST,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
 
 				// Grant permission
-				err = k.SetYieldPermission(ctx, testAddress, testAddress2, true)
+				err = k.SetPermission(ctx, testAddress, testAddress2, true)
 				require.NoError(t, err)
 
 				// Set global reward index to 2.0 (100% yield accumulated)
@@ -138,9 +138,9 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -172,9 +172,9 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -204,9 +204,9 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: false,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)
@@ -246,9 +246,9 @@ func TestMsgServerClaimYield(t *testing.T) {
 			setup: func(ctx sdk.Context, k keeper.Keeper) {
 				// Create permissioned token
 				token := types.Token{
-					Creator:      testAddress,
-					Admin:        testAddress,
-					Permissioned: true,
+					Creator:        testAddress,
+					Admin:          testAddress,
+					PermissionMode: types.PermissionMode_PERMISSION_MODE_WHITELIST,
 				}
 				err := k.SetToken(ctx, testAddress, token)
 				require.NoError(t, err)

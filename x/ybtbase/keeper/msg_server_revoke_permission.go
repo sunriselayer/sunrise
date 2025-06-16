@@ -3,12 +3,13 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/ybtbase/types"
 )
 
-func (k msgServer) GrantYieldPermission(ctx context.Context, msg *types.MsgGrantYieldPermission) (*types.MsgGrantYieldPermissionResponse, error) {
+func (k msgServer) RevokePermission(ctx context.Context, msg *types.MsgRevokePermission) (*types.MsgRevokePermissionResponse, error) {
 	// Validate admin address
 	if _, err := k.addressCodec.StringToBytes(msg.Admin); err != nil {
 		return nil, errors.Wrap(err, "invalid admin address")
@@ -30,31 +31,37 @@ func (k msgServer) GrantYieldPermission(ctx context.Context, msg *types.MsgGrant
 		return nil, types.ErrTokenNotFound
 	}
 
-	// Check if token is permissioned
-	if !token.Permissioned {
-		return nil, errors.Wrap(types.ErrInvalidRequest, "token is not permissioned")
-	}
-
 	// Check if msg sender is admin
 	if token.Admin != msg.Admin {
 		return nil, types.ErrUnauthorized
 	}
 
-	// Grant permission
-	if err := k.Keeper.SetYieldPermission(ctx, msg.TokenCreator, msg.Target, true); err != nil {
-		return nil, err
+	// Handle based on permission mode
+	switch token.PermissionMode {
+	case types.PermissionMode_PERMISSION_MODE_WHITELIST:
+		// For whitelist, revoke means removing permission (delete from map)
+		if err := k.Keeper.Permissions.Remove(ctx, collections.Join(msg.TokenCreator, msg.Target)); err != nil {
+			return nil, err
+		}
+	case types.PermissionMode_PERMISSION_MODE_BLACKLIST:
+		// For blacklist, revoke means adding to blacklist (set to true)
+		if err := k.Keeper.Permissions.Set(ctx, collections.Join(msg.TokenCreator, msg.Target), true); err != nil {
+			return nil, err
+		}
+	default:
+		return nil, errors.Wrap(types.ErrInvalidRequest, "cannot revoke permissions in permissionless mode")
 	}
 
 	// Emit event
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeGrantPermission,
+			types.EventTypeRevokePermission,
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.TokenCreator),
 			sdk.NewAttribute(types.AttributeKeyAdmin, msg.Admin),
 			sdk.NewAttribute(types.AttributeKeyTarget, msg.Target),
 		),
 	})
 
-	return &types.MsgGrantYieldPermissionResponse{}, nil
+	return &types.MsgRevokePermissionResponse{}, nil
 }

@@ -4,8 +4,10 @@ import (
 	"context"
 	"strings"
 
+	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sunriselayer/sunrise/x/ybtbase/types"
 )
 
 // YbtbaseBeforeSendHook returns a BeforeSendHook for ybtbase transfers
@@ -29,6 +31,13 @@ func YbtbaseBeforeSendHook(k Keeper) func(ctx context.Context, from, to sdk.AccA
 			token, found := k.GetToken(ctx, creator)
 			if !found {
 				continue
+			}
+
+			// Check if transfers are restricted (non-permissionless tokens should use MsgSend)
+			if token.PermissionMode != types.PermissionMode_PERMISSION_MODE_UNSPECIFIED && 
+				token.PermissionMode != types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS {
+				// This should be blocked by bank SendEnabled=false, but double check
+				return errors.Wrap(types.ErrUnauthorized, "transfers for this token must use MsgSend")
 			}
 
 			// Get sender's last reward index
@@ -65,12 +74,6 @@ func YbtbaseBeforeSendHook(k Keeper) func(ctx context.Context, from, to sdk.AccA
 				return err
 			}
 
-			// For permissioned tokens, check if transfer should grant permission
-			if token.Permissioned {
-				// If sender has permission and receiver doesn't, consider granting
-				// This is a policy decision - we'll leave permission unchanged
-				// Admin must explicitly grant permissions
-			}
 		}
 
 		return nil

@@ -12,7 +12,8 @@ import (
 	"github.com/sunriselayer/sunrise/x/ybtbase/types"
 )
 
-func SimulateMsgRevokeYieldPermission(
+// SimulateMsgSend simulates sending base YBT tokens
+func SimulateMsgSend(
 	ak types.AuthKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -21,12 +22,11 @@ func SimulateMsgRevokeYieldPermission(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-		msg := &types.MsgRevokeYieldPermission{
-			Admin: simAccount.Address.String(),
+		msg := &types.MsgSend{
+			FromAddress: simAccount.Address.String(),
 		}
 
-		// TODO: Handle the RevokeYieldPermission simulation
-
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "RevokeYieldPermission simulation not implemented"), nil, nil
+		// TODO: Implement proper simulation logic
+		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "Send simulation not implemented"), nil, nil
 	}
 }

@@ -8,39 +8,17 @@ import (
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgUpdateAdmin{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgClaimYield{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgRevokeYieldPermission{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgGrantYieldPermission{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgAddYield{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgBurn{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgMint{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgCreate{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
+		&MsgCreate{},
+		&MsgMint{},
+		&MsgBurn{},
+		&MsgAddYield{},
+		&MsgGrantPermission{},
+		&MsgRevokePermission{},
+		&MsgClaimYield{},
+		&MsgUpdateAdmin{},
+		&MsgSend{},
 	)
+
 	msgservice.RegisterMsgServiceDesc(registrar, &_Msg_serviceDesc)
 }
