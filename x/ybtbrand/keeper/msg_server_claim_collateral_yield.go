@@ -48,10 +48,17 @@ func (k msgServer) ClaimCollateralYield(ctx context.Context, msg *types.MsgClaim
 		return nil, errors.Wrap(types.ErrInvalidRequest, "base YBT token not found")
 	}
 
-	// For permissioned base YBT, check if admin has yield permission
-	if baseToken.PermissionMode == ybtbasetypes.PermissionMode_PERMISSION_MODE_WHITELIST {
-		if !k.ybtbaseKeeper.HasYieldPermission(ctx, msg.BaseYbtCreator, msg.Admin) {
-			return nil, errors.Wrap(types.ErrUnauthorized, "no yield permission")
+	// Check permission based on permission mode
+	switch baseToken.PermissionMode {
+	case ybtbasetypes.PermissionMode_PERMISSION_MODE_PERMISSIONLESS:
+		// No restrictions
+	case ybtbasetypes.PermissionMode_PERMISSION_MODE_WHITELIST:
+		if !k.ybtbaseKeeper.HasPermission(ctx, msg.BaseYbtCreator, msg.Admin) {
+			return nil, errors.Wrap(types.ErrUnauthorized, "no permission for base YBT")
+		}
+	case ybtbasetypes.PermissionMode_PERMISSION_MODE_BLACKLIST:
+		if k.ybtbaseKeeper.HasPermission(ctx, msg.BaseYbtCreator, msg.Admin) {
+			return nil, errors.Wrap(types.ErrUnauthorized, "address is blacklisted for base YBT")
 		}
 	}
 

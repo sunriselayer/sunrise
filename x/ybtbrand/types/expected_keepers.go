@@ -1,5 +1,7 @@
 package types
 
+//go:generate mockgen -destination ../testutil/expected_keepers_mocks.go -package testutil . AuthKeeper,BankKeeper,YbtbaseKeeper
+
 import (
 	"context"
 
@@ -33,5 +35,5 @@ type YbtbaseKeeper interface {
 	GetGlobalRewardIndex(ctx context.Context, creator string) math.LegacyDec
 	GetUserLastRewardIndex(ctx context.Context, creator, user string) math.LegacyDec
 	SetUserLastRewardIndex(ctx context.Context, creator, user string, index math.LegacyDec) error
-	HasYieldPermission(ctx context.Context, creator, user string) bool
+	HasPermission(ctx context.Context, creator, user string) bool
 }

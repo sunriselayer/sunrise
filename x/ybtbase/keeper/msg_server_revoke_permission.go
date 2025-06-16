@@ -43,6 +43,23 @@ func (k msgServer) RevokePermission(ctx context.Context, msg *types.MsgRevokePer
 		if err := k.Keeper.Permissions.Remove(ctx, collections.Join(msg.TokenCreator, msg.Target)); err != nil {
 			return nil, err
 		}
+		
+		// Check if there are any remaining permissions
+		hasAnyPermissions := false
+		iter, err := k.Keeper.Permissions.Iterate(ctx, collections.NewPrefixedPairRange[string, string](msg.TokenCreator))
+		if err != nil {
+			return nil, err
+		}
+		defer iter.Close()
+		
+		if iter.Valid() {
+			hasAnyPermissions = true
+		}
+		
+		// Update send enabled status based on whether any permissions remain
+		denom := types.GetDenom(msg.TokenCreator)
+		k.bankKeeper.SetSendEnabled(ctx, denom, hasAnyPermissions)
+		
 	case types.PermissionMode_PERMISSION_MODE_BLACKLIST:
 		// For blacklist, revoke means adding to blacklist (set to true)
 		if err := k.Keeper.Permissions.Set(ctx, collections.Join(msg.TokenCreator, msg.Target), true); err != nil {

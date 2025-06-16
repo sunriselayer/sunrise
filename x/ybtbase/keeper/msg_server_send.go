@@ -32,9 +32,18 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 	case types.PermissionMode_PERMISSION_MODE_PERMISSIONLESS:
 		// No restrictions, anyone can send
 	case types.PermissionMode_PERMISSION_MODE_WHITELIST:
-		// Check if both sender and receiver are whitelisted
-		fromAllowed, _ := k.Keeper.Permissions.Get(ctx, collections.Join(msg.TokenCreator, msg.FromAddress))
-		toAllowed, _ := k.Keeper.Permissions.Get(ctx, collections.Join(msg.TokenCreator, msg.ToAddress))
+		// Admin always has permission
+		fromAllowed := msg.FromAddress == token.Admin
+		toAllowed := msg.ToAddress == token.Admin
+		
+		// Check if addresses are whitelisted
+		if !fromAllowed {
+			fromAllowed, _ = k.Keeper.Permissions.Get(ctx, collections.Join(msg.TokenCreator, msg.FromAddress))
+		}
+		if !toAllowed {
+			toAllowed, _ = k.Keeper.Permissions.Get(ctx, collections.Join(msg.TokenCreator, msg.ToAddress))
+		}
+		
 		if !fromAllowed || !toAllowed {
 			return nil, errors.Wrap(types.ErrUnauthorized, "address not whitelisted")
 		}

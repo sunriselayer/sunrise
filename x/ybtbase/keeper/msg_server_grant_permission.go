@@ -47,6 +47,10 @@ func (k msgServer) GrantPermission(ctx context.Context, msg *types.MsgGrantPermi
 		return nil, err
 	}
 
+	// Update send enabled status - enable sending since at least one permission exists
+	denom := types.GetDenom(msg.TokenCreator)
+	k.bankKeeper.SetSendEnabled(ctx, denom, true)
+
 	// Emit event
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{

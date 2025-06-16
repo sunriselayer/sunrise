@@ -118,7 +118,7 @@ func TestMsgServerClaimCollateralYield(t *testing.T) {
 				
 				// Mock check permission - admin has permission
 				mocks.YbtbaseKeeper.EXPECT().
-					HasYieldPermission(gomock.Any(), testAddress2, testAddress).
+					HasPermission(gomock.Any(), testAddress2, testAddress).
 					Return(true)
 				
 				// Mock collateral balance - 5000 base YBT
@@ -263,11 +263,11 @@ func TestMsgServerClaimCollateralYield(t *testing.T) {
 				
 				// Mock check permission - admin has NO permission
 				mocks.YbtbaseKeeper.EXPECT().
-					HasYieldPermission(gomock.Any(), testAddress2, testAddress).
+					HasPermission(gomock.Any(), testAddress2, testAddress).
 					Return(false)
 			},
 			wantErr: true,
-			errMsg:  "no yield permission",
+			errMsg:  "no permission for base YBT",
 		},
 		{
 			name: "no collateral balance",
