@@ -16,6 +16,11 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
 	// end static validation
+
+	// Validate denom base and denom quote are sendable tokens
+	if err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.TokenBase, msg.TokenQuote); err != nil {
+		return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
+	}
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -115,9 +120,6 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 	// Transfer amounts to the pool
 	coins := sdk.Coins{sdk.NewCoin(msg.TokenBase.Denom, amountBase)}
 	coins = coins.Add(sdk.NewCoin(msg.TokenQuote.Denom, amountQuote))
-	if err := k.bankKeeper.IsSendEnabledCoins(ctx, coins...); err != nil {
-		return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
-	}
 	err = k.bankKeeper.SendCoins(ctx, sender, pool.GetAddress(), coins)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to send coins")
