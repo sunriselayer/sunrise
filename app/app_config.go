@@ -64,6 +64,10 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 
 	_ "github.com/sunriselayer/sunrise/x/bank/module" // import for side-effects
+	_ "github.com/sunriselayer/sunrise/x/ybtbase/module"
+	ybtbasemoduletypes "github.com/sunriselayer/sunrise/x/ybtbase/types"
+	_ "github.com/sunriselayer/sunrise/x/ybtbrand/module"
+	ybtbrandmoduletypes "github.com/sunriselayer/sunrise/x/ybtbrand/types"
 
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
@@ -162,6 +166,8 @@ var (
 						lockupmoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
+						ybtbasemoduletypes.ModuleName,
+						ybtbrandmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -184,6 +190,8 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
+						ybtbasemoduletypes.ModuleName,
+						ybtbrandmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -231,6 +239,8 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
+						ybtbasemoduletypes.ModuleName,
+						ybtbrandmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -346,6 +356,14 @@ var (
 			{
 				Name:   swapmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&swapmoduletypes.Module{}),
+			},
+			{
+				Name:   ybtbasemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&ybtbasemoduletypes.Module{}),
+			},
+			{
+				Name:   ybtbrandmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&ybtbrandmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

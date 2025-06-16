@@ -12,8 +12,8 @@ import (
 	store "cosmossdk.io/core/store"
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
-	gomock "go.uber.org/mock/gomock"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
