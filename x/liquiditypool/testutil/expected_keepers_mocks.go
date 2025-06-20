@@ -170,4 +170,3 @@ func (mr *MockFeeKeeperMockRecorder) FeeDenom(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FeeDenom", reflect.TypeOf((*MockFeeKeeper)(nil).FeeDenom), ctx)
 }
-
