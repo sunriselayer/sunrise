@@ -4,6 +4,7 @@ package sunrise.lending.v1;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/lending/v1/params.proto";
+import "sunrise/lending/v1/lending.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/lending/types";
 
@@ -14,4 +15,16 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+  
+  // markets defines all the lending markets
+  repeated Market markets = 2 [(gogoproto.nullable) = false];
+  
+  // user_positions defines all user supply positions
+  repeated UserPosition user_positions = 3 [(gogoproto.nullable) = false];
+  
+  // borrows defines all active borrows
+  repeated Borrow borrows = 4 [(gogoproto.nullable) = false];
+  
+  // borrow_count tracks the next available borrow id
+  uint64 borrow_count = 5;
 }

@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package sunrise.lending.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/lending/types";
+
+// Market represents a lending market for a specific token
+message Market {
+  // denom is the denomination of the token
+  string denom = 1;
+  
+  // total_supplied is the total amount supplied to the market
+  string total_supplied = 2 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  
+  // total_borrowed is the total amount borrowed from the market
+  string total_borrowed = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  
+  // global_reward_index tracks the global interest accrual for yield distribution
+  string global_reward_index = 4 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+  
+  // rise_denom is the denomination of the yield-bearing token (e.g., "riseUSDC")
+  string rise_denom = 5;
+}
+
+// UserPosition tracks a user's supply position in a specific market
+message UserPosition {
+  // user_address is the address of the user
+  string user_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  
+  // denom is the denomination of the supplied token
+  string denom = 2;
+  
+  // amount is the amount of rise tokens the user holds
+  string amount = 3 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+  
+  // last_reward_index is the user's last recorded reward index for yield calculation
+  string last_reward_index = 4 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// Borrow represents an active borrow position
+message Borrow {
+  // id is the unique identifier of the borrow
+  uint64 id = 1;
+  
+  // borrower is the address of the borrower
+  string borrower = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  
+  // amount is the borrowed amount with denomination
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  
+  // collateral_pool_id is the liquidity pool id used as collateral
+  uint64 collateral_pool_id = 4;
+  
+  // collateral_position_id is the position id within the pool
+  uint64 collateral_position_id = 5;
+  
+  // block_height is the block height when the borrow was created
+  int64 block_height = 6;
+}

@@ -2,6 +2,7 @@ syntax = "proto3";
 package sunrise.lending.v1;
 
 import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/lending/types";
@@ -10,4 +11,25 @@ option go_package = "github.com/sunriselayer/sunrise/x/lending/types";
 message Params {
   option (amino.name) = "sunrise/x/lending/Params";
   option (gogoproto.equal) = true;
+  
+  // ltv_ratio is the loan-to-value ratio for collateralized borrowing (e.g., 0.8 = 80%)
+  string ltv_ratio = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+  
+  // liquidation_threshold is the ratio at which positions can be liquidated (e.g., 0.85 = 85%)
+  string liquidation_threshold = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+  
+  // base_interest_rate is a placeholder for interest rate calculation (will use TWAP later)
+  string base_interest_rate = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
 }

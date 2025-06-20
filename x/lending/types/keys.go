@@ -15,5 +15,16 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_lending")
+// Collection keys
+var (
+	// ParamsKey is the prefix to retrieve all Params
+	ParamsKey = collections.NewPrefix("params")
+	// MarketsKey is the prefix for markets
+	MarketsKey = collections.NewPrefix(0)
+	// UserPositionsKey is the prefix for user positions
+	UserPositionsKey = collections.NewPrefix(1)
+	// BorrowsKey is the prefix for borrows
+	BorrowsKey = collections.NewPrefix(2)
+	// BorrowIdKey is the prefix for borrow id sequence
+	BorrowIdKey = collections.NewPrefix(3)
+)

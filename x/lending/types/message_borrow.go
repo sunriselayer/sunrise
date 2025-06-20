@@ -1,9 +1,11 @@
 package types
 
-func NewMsgBorrow(sender string, borrowDenom string, collateralPoolId uint64, collateralPositionId uint64) *MsgBorrow {
+import sdk "github.com/cosmos/cosmos-sdk/types"
+
+func NewMsgBorrow(sender string, amount sdk.Coin, collateralPoolId uint64, collateralPositionId uint64) *MsgBorrow {
 	return &MsgBorrow{
 		Sender:               sender,
-		BorrowDenom:          borrowDenom,
+		Amount:               amount,
 		CollateralPoolId:     collateralPoolId,
 		CollateralPositionId: collateralPositionId,
 	}

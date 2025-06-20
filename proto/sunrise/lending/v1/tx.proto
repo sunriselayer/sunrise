@@ -62,7 +62,7 @@ message MsgSupplyResponse {}
 message MsgBorrow {
   option (cosmos.msg.v1.signer) = "sender";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  string borrow_denom = 2;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
   uint64 collateral_pool_id = 3;
   uint64 collateral_position_id = 4;
 }
