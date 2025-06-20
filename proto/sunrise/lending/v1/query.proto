@@ -6,6 +6,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "sunrise/lending/v1/params.proto";
+import "sunrise/lending/v1/lending.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/lending/types";
 
@@ -14,6 +15,36 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/params";
+  }
+  
+  // Market queries a specific lending market by denom.
+  rpc Market(QueryMarketRequest) returns (QueryMarketResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/markets/{denom}";
+  }
+  
+  // Markets queries all lending markets with pagination.
+  rpc Markets(QueryMarketsRequest) returns (QueryMarketsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/markets";
+  }
+  
+  // UserPosition queries a user's position in a specific market.
+  rpc UserPosition(QueryUserPositionRequest) returns (QueryUserPositionResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/positions/{user_address}/{denom}";
+  }
+  
+  // UserPositions queries all positions for a user.
+  rpc UserPositions(QueryUserPositionsRequest) returns (QueryUserPositionsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/positions/{user_address}";
+  }
+  
+  // Borrow queries a specific borrow by ID.
+  rpc Borrow(QueryBorrowRequest) returns (QueryBorrowResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/borrows/{borrow_id}";
+  }
+  
+  // UserBorrows queries all borrows for a specific user.
+  rpc UserBorrows(QueryUserBorrowsRequest) returns (QueryUserBorrowsResponse) {
+    option (google.api.http).get = "/sunriselayer/sunrise/lending/v1/borrows/user/{borrower}";
   }
 }
 
@@ -27,4 +58,88 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryMarketRequest is request type for the Query/Market RPC method.
+message QueryMarketRequest {
+  // denom defines the denomination of the market to query for.
+  string denom = 1;
+}
+
+// QueryMarketResponse is response type for the Query/Market RPC method.
+message QueryMarketResponse {
+  // market defines the lending market info.
+  Market market = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryMarketsRequest is request type for the Query/Markets RPC method.
+message QueryMarketsRequest {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryMarketsResponse is response type for the Query/Markets RPC method.
+message QueryMarketsResponse {
+  // markets defines the lending market list.
+  repeated Market markets = 1 [(gogoproto.nullable) = false];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryUserPositionRequest is request type for the Query/UserPosition RPC method.
+message QueryUserPositionRequest {
+  // user_address defines the address of the user to query for.
+  string user_address = 1;
+  // denom defines the denomination of the position to query for.
+  string denom = 2;
+}
+
+// QueryUserPositionResponse is response type for the Query/UserPosition RPC method.
+message QueryUserPositionResponse {
+  // position defines the user's lending position.
+  UserPosition position = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryUserPositionsRequest is request type for the Query/UserPositions RPC method.
+message QueryUserPositionsRequest {
+  // user_address defines the address of the user to query for.
+  string user_address = 1;
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryUserPositionsResponse is response type for the Query/UserPositions RPC method.
+message QueryUserPositionsResponse {
+  // positions defines the user's lending positions.
+  repeated UserPosition positions = 1 [(gogoproto.nullable) = false];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryBorrowRequest is request type for the Query/Borrow RPC method.
+message QueryBorrowRequest {
+  // borrow_id defines the unique id of the borrow to query for.
+  uint64 borrow_id = 1;
+}
+
+// QueryBorrowResponse is response type for the Query/Borrow RPC method.
+message QueryBorrowResponse {
+  // borrow defines the borrow info.
+  Borrow borrow = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryUserBorrowsRequest is request type for the Query/UserBorrows RPC method.
+message QueryUserBorrowsRequest {
+  // borrower defines the borrower address to query for.
+  string borrower = 1;
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryUserBorrowsResponse is response type for the Query/UserBorrows RPC method.
+message QueryUserBorrowsResponse {
+  // borrows defines the borrow list for the user.
+  repeated Borrow borrows = 1 [(gogoproto.nullable) = false];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
