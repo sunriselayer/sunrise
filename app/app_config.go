@@ -66,6 +66,8 @@ import (
 	_ "github.com/sunriselayer/sunrise/x/bank/module" // import for side-effects
 	_ "github.com/sunriselayer/sunrise/x/lending/module"
 	lendingmoduletypes "github.com/sunriselayer/sunrise/x/lending/types"
+	_ "github.com/sunriselayer/sunrise/x/rfq/module"
+	rfqmoduletypes "github.com/sunriselayer/sunrise/x/rfq/types"
 
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
@@ -165,6 +167,7 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						lendingmoduletypes.ModuleName,
+						rfqmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -188,6 +191,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						lendingmoduletypes.ModuleName,
+						rfqmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -236,6 +240,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						lendingmoduletypes.ModuleName,
+						rfqmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -355,6 +360,10 @@ var (
 			{
 				Name:   lendingmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&lendingmoduletypes.Module{}),
+			},
+			{
+				Name:   rfqmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&rfqmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

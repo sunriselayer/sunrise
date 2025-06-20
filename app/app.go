@@ -57,6 +57,7 @@ import (
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	liquiditypoolmodulekeeper "github.com/sunriselayer/sunrise/x/liquiditypool/keeper"
 	lockupmodulekeeper "github.com/sunriselayer/sunrise/x/lockup/keeper"
+	rfqmodulekeeper "github.com/sunriselayer/sunrise/x/rfq/keeper"
 	shareclassmodulekeeper "github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
@@ -124,6 +125,7 @@ type App struct {
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
 	LendingKeeper            lendingmodulekeeper.Keeper
+	RfqKeeper                rfqmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -213,6 +215,7 @@ func New(
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
 		&app.LendingKeeper,
+		&app.RfqKeeper,
 	); err != nil {
 		panic(err)
 	}
