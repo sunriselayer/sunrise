@@ -20,11 +20,17 @@ var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey = collections.NewPrefix("params")
 	// MarketsKey is the prefix for markets
-	MarketsKey = collections.NewPrefix(0)
+	MarketsKey = collections.NewPrefix("markets")
 	// UserPositionsKey is the prefix for user positions
-	UserPositionsKey = collections.NewPrefix(1)
+	UserPositionsKey = collections.NewPrefix("user_positions")
 	// BorrowsKey is the prefix for borrows
-	BorrowsKey = collections.NewPrefix(2)
+	BorrowsKey = collections.NewPrefix("borrows")
 	// BorrowIdKey is the prefix for borrow id sequence
-	BorrowIdKey = collections.NewPrefix(3)
+	BorrowIdKey = collections.NewPrefix("borrow_id")
+)
+
+// Key codecs
+var (
+	// UserPositionKeyCodec is the key codec for user positions
+	UserPositionKeyCodec = collections.PairKeyCodec(collections.StringKey, collections.StringKey)
 )
