@@ -105,17 +105,18 @@ func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient
 	if err != nil {
 		return sdk.Coin{}, nil, time.Time{}, err
 	}
-	output = sdk.NewCoin(bondDenom, amount.Amount)
+	amount = sdk.NewCoin(bondDenom, amount.Amount)
 
 	res, err := k.StakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
 		DelegatorAddress: moduleAddr.String(),
 		ValidatorAddress: valAddr.String(),
-		Amount:           output,
+		Amount:           amount,
 	})
 	if err != nil {
 		return sdk.Coin{}, nil, time.Time{}, err
 	}
 	completionTime := res.CompletionTime
+	output = res.Amount
 
 	// Append Unstaking state
 	_, err = k.AppendUnbonding(ctx, types.Unbonding{
