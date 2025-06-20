@@ -1,7 +1,8 @@
 syntax = "proto3";
+
 package sunrise.lending.v1;
 
-import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -16,25 +17,77 @@ service Msg {
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // Supply defines the Supply RPC.
+  rpc Supply(MsgSupply) returns (MsgSupplyResponse);
+
+  // Borrow defines the Borrow RPC.
+  rpc Borrow(MsgBorrow) returns (MsgBorrowResponse);
+
+  // Repay defines the Repay RPC.
+  rpc Repay(MsgRepay) returns (MsgRepayResponse);
+
+  // Liquidate defines the Liquidate RPC.
+  rpc Liquidate(MsgLiquidate) returns (MsgLiquidateResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "sunrise/x/lending/MsgUpdateParams";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // params defines the module parameters to update.
-  //
+
   // NOTE: All parameters must be supplied.
-  Params params = 2 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 2 [(gogoproto.nullable) = false];
 }
 
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
+
+// MsgSupply defines the MsgSupply message.
+message MsgSupply {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgSupplyResponse defines the MsgSupplyResponse message.
+message MsgSupplyResponse {}
+
+// MsgBorrow defines the MsgBorrow message.
+message MsgBorrow {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string borrow_denom = 2;
+  uint64 collateral_pool_id = 3;
+  uint64 collateral_position_id = 4;
+}
+
+// MsgBorrowResponse defines the MsgBorrowResponse message.
+message MsgBorrowResponse {}
+
+// MsgRepay defines the MsgRepay message.
+message MsgRepay {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 borrow_id = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgRepayResponse defines the MsgRepayResponse message.
+message MsgRepayResponse {}
+
+// MsgLiquidate defines the MsgLiquidate message.
+message MsgLiquidate {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 borrow_id = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgLiquidateResponse defines the MsgLiquidateResponse message.
+message MsgLiquidateResponse {}
