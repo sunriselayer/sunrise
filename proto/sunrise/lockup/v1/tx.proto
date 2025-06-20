@@ -27,6 +27,14 @@ service Msg {
   rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResponse);
   // Send
   rpc Send(MsgSend) returns (MsgSendResponse);
+  // Sell Lockup Account
+  rpc SellLockupAccount(MsgSellLockupAccount) returns (MsgSellLockupAccountResponse);
+  // Cancel Sell Lockup Account
+  rpc CancelSellLockupAccount(MsgCancelSellLockupAccount) returns (MsgCancelSellLockupAccountResponse);
+  // Buy Lockup Account
+  rpc BuyLockupAccount(MsgBuyLockupAccount) returns (MsgBuyLockupAccountResponse);
+  // Deposit Market Incentive
+  rpc DepositMarketIncentive(MsgDepositMarketIncentive) returns (MsgDepositMarketIncentiveResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -110,3 +118,45 @@ message MsgSend {
 
 // MsgSendResponse
 message MsgSendResponse {}
+
+// MsgSellLockupAccount
+message MsgSellLockupAccount {
+  option (cosmos.msg.v1.signer) = "owner";
+  string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 lockup_account_id = 2;
+  cosmos.base.v1beta1.Coin price = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgSellLockupAccountResponse
+message MsgSellLockupAccountResponse {}
+
+// MsgCancelSellLockupAccount
+message MsgCancelSellLockupAccount {
+  option (cosmos.msg.v1.signer) = "owner";
+  string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 lockup_account_id = 2;
+}
+
+// MsgCancelSellLockupAccountResponse
+message MsgCancelSellLockupAccountResponse {}
+
+// MsgBuyLockupAccount
+message MsgBuyLockupAccount {
+  option (cosmos.msg.v1.signer) = "buyer";
+  string buyer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string seller = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 lockup_account_id = 3;
+}
+
+// MsgBuyLockupAccountResponse
+message MsgBuyLockupAccountResponse {}
+
+// MsgDepositMarketIncentive
+message MsgDepositMarketIncentive {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgDepositMarketIncentiveResponse
+message MsgDepositMarketIncentiveResponse {}
