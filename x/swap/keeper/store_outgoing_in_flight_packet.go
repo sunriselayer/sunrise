@@ -22,7 +22,7 @@ func (k Keeper) SetOutgoingInFlightPacket(ctx context.Context, outgoingInFlightP
 	return nil
 }
 
-// OutgoingInFlightPacket returns a outgoingInFlightPacket from its index
+// GetOutgoingInFlightPacket returns a outgoingInFlightPacket from its index
 func (k Keeper) GetOutgoingInFlightPacket(
 	ctx context.Context,
 	srcPortId string,
@@ -68,7 +68,7 @@ func (k Keeper) RemoveOutgoingInFlightPacket(
 	return nil
 }
 
-// OutgoingInFlightPackets returns all outgoingInFlightPacket
+// GetOutgoingInFlightPackets returns all outgoingInFlightPacket
 func (k Keeper) GetOutgoingInFlightPackets(ctx context.Context) (list []types.OutgoingInFlightPacket, err error) {
 	err = k.OutgoingInFlightPackets.Walk(
 		ctx,

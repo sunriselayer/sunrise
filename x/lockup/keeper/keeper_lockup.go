@@ -89,7 +89,7 @@ func (k Keeper) TrackUndelegation(ctx context.Context,
 	return k.SetLockupAccount(ctx, lockup)
 }
 
-// checkUnbondingEntriesMature iterates through all the unbonding entries and check if any of the entries are matured and handled.
+// CheckUnbondingEntriesMature iterates through all the unbonding entries and check if any of the entries are matured and handled.
 func (k Keeper) CheckUnbondingEntriesMature(ctx context.Context, owner sdk.AccAddress, id uint64) error {
 	lockup, err := k.GetLockupAccount(ctx, owner, id)
 	if err != nil {
