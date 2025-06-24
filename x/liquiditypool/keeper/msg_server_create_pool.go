@@ -68,14 +68,14 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 
 	// end static validation
 
-	// Validate denom base and denom quote are sendable tokens
-	err = k.bankKeeper.IsSendEnabledCoins(ctx, sdk.NewCoin(msg.DenomBase, math.ZeroInt()), sdk.NewCoin(msg.DenomQuote, math.ZeroInt()))
-	if err != nil {
-		return nil, errorsmod.Wrap(err, "denom base and denom quote must be sendable tokens")
-	}
-
 	// Validate quote denom and consume gas if authority is not gov
 	if !sdk.AccAddress(sender).Equals(sdk.AccAddress(k.authority)) {
+		// Validate denom base and denom quote are sendable tokens
+		err = k.bankKeeper.IsSendEnabledCoins(ctx, sdk.NewCoin(msg.DenomBase, math.ZeroInt()), sdk.NewCoin(msg.DenomQuote, math.ZeroInt()))
+		if err != nil {
+			return nil, errorsmod.Wrap(err, "denom base and denom quote must be sendable tokens")
+		}
+
 		feeDenom, err := k.feeKeeper.FeeDenom(ctx)
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "failed to get fee denom")
