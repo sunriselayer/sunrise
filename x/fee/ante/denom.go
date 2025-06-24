@@ -28,8 +28,12 @@ func (fdvd FeeDenomValidationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, s
 
 	fee := feeTx.GetFee()
 
+	if fee.Empty() {
+		return next(ctx, tx, simulate)
+	}
+
 	// check len(fee) == 1 and fee[0].Denom == feeKeeper.Params.FeeDenom
-	if len(fee) != 1 {
+	if len(fee) > 1 {
 		return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "only one fee denomination is allowed")
 	}
 	params, err := fdvd.feeKeeper.Params.Get(ctx)
