@@ -13,4 +13,5 @@ message Params {
   uint64 create_pool_gas = 1;
   // For reservation, not used yet
   string withdraw_fee_rate = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  repeated string allowed_quote_denoms = 3;
 }
