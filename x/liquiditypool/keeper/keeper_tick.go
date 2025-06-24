@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -22,6 +23,9 @@ func (k Keeper) UpsertTick(ctx context.Context, poolId uint64, tickIndex int64, 
 		return false, err
 	}
 	liquidityAfter := liquidityBefore.Add(liquidityDelta)
+	if liquidityAfter.IsNegative() {
+		return false, errorsmod.Wrap(types.ErrNegativeLiquidity, "liquidityAfter is negative")
+	}
 	tickInfo.LiquidityGross = liquidityAfter.String()
 
 	liquidityNet, err := math.LegacyNewDecFromStr(tickInfo.LiquidityNet)
