@@ -102,7 +102,12 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 					validators[valAddrStr] = val
 
 					// delegation shares * bonded / total shares
-					votingPower := delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+					var votingPower math.LegacyDec
+					if val.DelegatorShares.IsZero() {
+						votingPower = math.LegacyZeroDec()
+					} else {
+						votingPower = delegation.GetShares().MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+					}
 
 					for _, option := range vote.Options {
 						weight, _ := math.LegacyNewDecFromStr(option.Weight)
@@ -139,7 +144,15 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			}
 
 			sharesAfterDeductions := val.DelegatorShares.Sub(val.DelegatorDeductions)
-			votingPower := sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+			var votingPower math.LegacyDec
+
+			if val.DelegatorShares.IsZero() {
+				votingPower = math.LegacyZeroDec()
+			} else if sharesAfterDeductions.LTE(math.LegacyZeroDec()) {
+				votingPower = math.LegacyZeroDec()
+			} else {
+				votingPower = sharesAfterDeductions.MulInt(val.BondedTokens).Quo(val.DelegatorShares)
+			}
 
 			for _, option := range val.Vote {
 				weight, _ := math.LegacyNewDecFromStr(option.Weight)
