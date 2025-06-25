@@ -217,9 +217,6 @@ func New(
 		&app.LiquiditypoolKeeper,
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
-		// <wasmd>
-		&app.WasmKeeper,
-		// </wasmd>
 	); err != nil {
 		panic(err)
 	}
@@ -236,10 +233,7 @@ func New(
 	if err != nil {
 		panic(fmt.Sprintf("error while reading wasm config: %s", err))
 	}
-	if err := app.registerWasmModules(appOpts, wasmConfig); err != nil {
-		panic(err)
-	}
-	if err := app.registerIBCModules(); err != nil {
+	if err := app.registerWasmAndIBCModules(appOpts, wasmConfig); err != nil {
 		panic(err)
 	}
 
