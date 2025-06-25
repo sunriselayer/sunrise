@@ -17,15 +17,20 @@ const (
 	// It should be synced with the gov module's name if it is ever changed.
 	// See: https://github.com/cosmos/cosmos-sdk/blob/v0.52.0-beta.2/x/gov/types/keys.go#L9
 	GovModuleName = "gov"
+
+	// IncentivePoolName defines the name of the module account that holds the incentives for the marketplace.
+	IncentivePoolName = "lockup_incentive_pool"
 )
 
 var (
 	ParamsKey                    = collections.NewPrefix("params")
 	NextLockupAccountIdKeyPrefix = collections.NewPrefix("next_lockup_account_id")
 	LockupAccountsKeyPrefix      = collections.NewPrefix("lockup_accounts")
+	ListingsKeyPrefix            = collections.NewPrefix("listings")
 )
 
 var (
 	NextLockupAccountIdKeyCodec = sdk.AccAddressKey
 	LockupAccountsKeyCodec      = collections.PairKeyCodec(collections.BytesKey, collections.Uint64Key)
+	ListingsKeyCodec            = collections.PairKeyCodec(collections.BytesKey, collections.Uint64Key)
 )
