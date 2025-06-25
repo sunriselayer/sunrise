@@ -215,12 +215,12 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		Custom: wasmclient.CustomQuerier(),
 	}
 
-	app.WasmClientKeeper = ibcwasmkeeper.NewKeeperWithConfig(
+	app.WasmClientKeeper = ibcwasmkeeper.NewKeeperWithVM(
 		app.appCodec,
 		runtime.NewKVStoreService(app.GetKey(ibcwasmtypes.StoreKey)),
 		app.IBCKeeper.ClientKeeper,
 		govModuleAddr,
-		wasmConfig,
+		wasmer,
 		app.GRPCQueryRouter(),
 		ibcwasmkeeper.WithQueryPlugins(&wasmLightClientQuerier),
 	)
