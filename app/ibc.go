@@ -144,7 +144,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	wasmConfig := ibcwasmtypes.DefaultWasmConfig(DefaultNodeHome)
 	wasmer, err := wasmvm.NewVM(
 		wasmConfig.DataDir,
-		wasmConfig.SupportedCapabilities,
+		wasmkeeper.BuiltInCapabilities(), //  wasmConfig.SupportedCapabilities support only `iterator`
 		ibcwasmtypes.ContractMemoryLimit, // default of 32
 		wasmConfig.ContractDebugMode,
 		ibcwasmtypes.MemoryCacheSize,
