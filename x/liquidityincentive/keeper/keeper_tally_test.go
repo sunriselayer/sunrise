@@ -9,7 +9,6 @@ import (
 	"go.uber.org/mock/gomock"
 
 	"cosmossdk.io/math"
-	sdkmath "cosmossdk.io/math"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	shareclasstypes "github.com/sunriselayer/sunrise/x/shareclass/types"
@@ -39,7 +38,7 @@ var (
 		s.mocks.StakingKeeper.EXPECT().
 			ValidatorAddressCodec().
 			Return(addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())).AnyTimes()
-		s.mocks.StakingKeeper.EXPECT().TotalBondedTokens(gomock.Any()).Return(sdkmath.NewInt(n), nil)
+		s.mocks.StakingKeeper.EXPECT().TotalBondedTokens(gomock.Any()).Return(math.NewInt(n), nil)
 	}
 	delegatorVote = func(s tallyFixture, voter sdk.AccAddress, delegations []stakingtypes.Delegation, weights []types.PoolWeight) {
 		err := s.keeper.SetVote(s.ctx, types.Vote{
@@ -111,7 +110,7 @@ func TestTally_Standard(t *testing.T) {
 				delegations := []stakingtypes.Delegation{{
 					DelegatorAddress: del0Addr,
 					ValidatorAddress: val0Addr,
-					Shares:           sdkmath.LegacyNewDec(42),
+					Shares:           math.LegacyNewDec(42),
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 			},
@@ -128,7 +127,7 @@ func TestTally_Standard(t *testing.T) {
 				delegations := []stakingtypes.Delegation{{
 					DelegatorAddress: del0Addr,
 					ValidatorAddress: val0Addr,
-					Shares:           sdkmath.LegacyNewDec(42),
+					Shares:           math.LegacyNewDec(42),
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "1"}})
@@ -149,12 +148,12 @@ func TestTally_Standard(t *testing.T) {
 					{
 						DelegatorAddress: del0Addr,
 						ValidatorAddress: val0Addr,
-						Shares:           sdkmath.LegacyNewDec(21),
+						Shares:           math.LegacyNewDec(21),
 					},
 					{
 						DelegatorAddress: del0Addr,
 						ValidatorAddress: val1Addr,
-						Shares:           sdkmath.LegacyNewDec(21),
+						Shares:           math.LegacyNewDec(21),
 					},
 				}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
@@ -191,8 +190,8 @@ func TestTally_Standard(t *testing.T) {
 							fn(i, stakingtypes.Validator{
 								OperatorAddress: valAddr,
 								Status:          stakingtypes.Bonded,
-								Tokens:          sdkmath.NewInt(1000000),
-								DelegatorShares: sdkmath.LegacyNewDec(1000000),
+								Tokens:          math.NewInt(1000000),
+								DelegatorShares: math.LegacyNewDec(1000000),
 							})
 						}
 						return nil
@@ -282,7 +281,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				delegations := []stakingtypes.Delegation{{
 					DelegatorAddress: del0Addr,
 					ValidatorAddress: val0Addr,
-					Shares:           sdkmath.LegacyNewDec(42),
+					Shares:           math.LegacyNewDec(42),
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 			},
@@ -299,7 +298,7 @@ func TestTally_MultipleChoice(t *testing.T) {
 				delegations := []stakingtypes.Delegation{{
 					DelegatorAddress: del0Addr,
 					ValidatorAddress: val0Addr,
-					Shares:           sdkmath.LegacyNewDec(42),
+					Shares:           math.LegacyNewDec(42),
 				}}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
 				validatorVote(s, s.valAddrs[0], []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
@@ -320,12 +319,12 @@ func TestTally_MultipleChoice(t *testing.T) {
 					{
 						DelegatorAddress: del0Addr,
 						ValidatorAddress: val0Addr,
-						Shares:           sdkmath.LegacyNewDec(21),
+						Shares:           math.LegacyNewDec(21),
 					},
 					{
 						DelegatorAddress: del0Addr,
 						ValidatorAddress: val1Addr,
-						Shares:           sdkmath.LegacyNewDec(21),
+						Shares:           math.LegacyNewDec(21),
 					},
 				}
 				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "0.5"}, {PoolId: 2, Weight: "0.5"}})
@@ -362,8 +361,8 @@ func TestTally_MultipleChoice(t *testing.T) {
 							fn(i, stakingtypes.Validator{
 								OperatorAddress: valAddr,
 								Status:          stakingtypes.Bonded,
-								Tokens:          sdkmath.NewInt(1000000),
-								DelegatorShares: sdkmath.LegacyNewDec(1000000),
+								Tokens:          math.NewInt(1000000),
+								DelegatorShares: math.LegacyNewDec(1000000),
 							})
 						}
 						return nil
