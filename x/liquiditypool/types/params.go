@@ -25,10 +25,6 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.CreatePoolGas < 0 {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "create pool gas must not be negative")
-	}
-
 	withdrawFeeRate, err := math.LegacyNewDecFromStr(p.WithdrawFeeRate)
 	if err != nil {
 		return err
