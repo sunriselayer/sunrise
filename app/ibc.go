@@ -54,7 +54,7 @@ import (
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
-// registerIBCModules register IBC keepers and non dependency inject modules.
+// registerWasmAndIBCModules register CosmWasm and IBC keepers and non dependency inject modules.
 func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeConfig wasmtypes.NodeConfig) error {
 	// set up non depinject support modules store keys
 	if err := app.RegisterStores(
@@ -250,7 +250,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 // Since the IBC modules don't support dependency injection, we need to
 // manually register the modules on the client side.
 // This needs to be removed after IBC supports App Wiring.
-func RegisterIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
+func RegisterWasmAndIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
 	modules := map[string]appmodule.AppModule{
 		ibcexported.ModuleName:      ibc.NewAppModule(&ibckeeper.Keeper{}),
 		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(ibctransferkeeper.Keeper{}),
