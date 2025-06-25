@@ -4,14 +4,17 @@ import (
 	"cosmossdk.io/math"
 
 	errorsmod "cosmossdk.io/errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 // NewParams creates a new Params instance.
-func NewParams(createPoolGas uint64, withdrawFeeRate math.LegacyDec) Params {
+func NewParams(createPoolGas uint64, withdrawFeeRate math.LegacyDec, allowedQuoteDenoms []string) Params {
 	return Params{
-		CreatePoolGas:   createPoolGas,
-		WithdrawFeeRate: withdrawFeeRate.String(),
+		CreatePoolGas:      createPoolGas,
+		WithdrawFeeRate:    withdrawFeeRate.String(),
+		AllowedQuoteDenoms: allowedQuoteDenoms,
 	}
 }
 
@@ -20,15 +23,12 @@ func DefaultParams() Params {
 	return NewParams(
 		1000000,
 		math.LegacyNewDecWithPrec(1, 2),
+		[]string{consts.FeeDenom},
 	)
 }
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if p.CreatePoolGas < 0 {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "create pool gas must not be negative")
-	}
-
 	withdrawFeeRate, err := math.LegacyNewDecFromStr(p.WithdrawFeeRate)
 	if err != nil {
 		return err
@@ -38,6 +38,12 @@ func (p Params) Validate() error {
 	}
 	if withdrawFeeRate.GT(math.LegacyOneDec()) {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "withdraw fee rate must be less than 1")
+	}
+
+	for _, denom := range p.AllowedQuoteDenoms {
+		if err := sdk.ValidateDenom(denom); err != nil {
+			return errorsmod.Wrapf(err, "invalid allowed quote denom: %s", denom)
+		}
 	}
 
 	return nil

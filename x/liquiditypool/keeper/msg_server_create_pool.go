@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"slices"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 
@@ -76,18 +77,13 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 			return nil, errorsmod.Wrap(err, "denom base and denom quote must be sendable tokens")
 		}
 
-		feeDenom, err := k.feeKeeper.FeeDenom(ctx)
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to get fee denom")
-		}
-
-		if msg.DenomQuote != feeDenom {
-			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "denom quote must be the same as fee denom")
-		}
-
 		params, err := k.Params.Get(ctx)
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "failed to get params")
+		}
+
+		if !slices.Contains(params.AllowedQuoteDenoms, msg.DenomQuote) {
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "denom quote %s is not in allowed list", msg.DenomQuote)
 		}
 
 		if params.CreatePoolGas > 0 {
