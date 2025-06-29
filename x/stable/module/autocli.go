@@ -28,7 +28,19 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:       true, // skipped because authority gated
 				},
-				// this line is used by ignite scaffolding # autocli/tx
+				{
+			RpcMethod: "Mint",
+			Use: "mint ",
+			Short: "Send a mint tx",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+		},
+		{
+			RpcMethod: "Burn",
+			Use: "burn ",
+			Short: "Send a burn tx",
+			PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+		},
+		// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
 	}
