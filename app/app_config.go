@@ -75,6 +75,8 @@ import (
 	lockupmoduletypes "github.com/sunriselayer/sunrise/x/lockup/types"
 	_ "github.com/sunriselayer/sunrise/x/shareclass/module"
 	shareclassmoduletypes "github.com/sunriselayer/sunrise/x/shareclass/types"
+	_ "github.com/sunriselayer/sunrise/x/stable/module"
+	stablemoduletypes "github.com/sunriselayer/sunrise/x/stable/types"
 	_ "github.com/sunriselayer/sunrise/x/swap/module"
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module"
@@ -160,7 +162,8 @@ var (
 						lockupmoduletypes.ModuleName,
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						// this line is used by starport scaffolding # stargate/app/beginBlockers
+						stablemoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
 						govtypes.ModuleName,
@@ -182,7 +185,8 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						// this line is used by starport scaffolding # stargate/app/endBlockers
+						stablemoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
@@ -229,7 +233,8 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
-						// this line is used by starport scaffolding # stargate/app/initGenesis
+						stablemoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
 			},
@@ -345,7 +350,11 @@ var (
 				Name:   swapmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&swapmoduletypes.Module{}),
 			},
-			// this line is used by starport scaffolding # stargate/app/moduleConfig
+			{
+				Name:   stablemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&stablemoduletypes.Module{}),
+			},
+// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
