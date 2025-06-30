@@ -23,67 +23,67 @@ import (
 //
 // 6. Transfers the calculated amount of collateral from the module account to the sender.
 // It returns the total amount of collateral returned or an error if any step fails.
-func (k Keeper) Burn(ctx context.Context, sender sdk.AccAddress, stableToBurn sdkmath.Int, outputDenom string) (sdkmath.Int, error) {
+func (k Keeper) Burn(ctx context.Context, sender sdk.AccAddress, stableToBurn sdkmath.Int, outputDenom string) (sdk.Coins, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 1. Validate sender is an authority
 	if !k.isAuthority(sender, params) {
-		return sdkmath.Int{}, errors.Wrapf(types.ErrInvalidSigner, "sender %s is not an authority", sender.String())
+		return nil, errors.Wrapf(types.ErrInvalidSigner, "sender %s is not an authority", sender.String())
 	}
 
 	// 2. Validate output denom
 	if err := k.validateOutputDenom(outputDenom, params); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 3. Transfer stable coins from sender to module
 	burnCoins := sdk.NewCoins(sdk.NewCoin(params.StableDenom, stableToBurn))
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, burnCoins); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 4. Burn the stable coins
 	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 5. Calculate collateral to return
 	stableExponent, err := k.getDenomExponent(ctx, params.StableDenom)
 	if err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 	collateralExponent, err := k.getDenomExponent(ctx, outputDenom)
 	if err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// collateralToReturn = stableToBurn * 10^(collateralExponent - stableExponent)
 	power := int(collateralExponent) - int(stableExponent)
-	var collateralToReturn sdkmath.Int
+	var collateralAmount sdkmath.Int
 	if power == 0 {
-		collateralToReturn = stableToBurn
+		collateralAmount = stableToBurn
 	} else if power > 0 {
 		multiplier := sdkmath.NewIntFromUint64(uint64(math.Pow(10, float64(power))))
-		collateralToReturn = stableToBurn.Mul(multiplier)
+		collateralAmount = stableToBurn.Mul(multiplier)
 	} else { // power < 0
 		divisor := sdkmath.NewIntFromUint64(uint64(math.Pow(10, float64(abs(power)))))
-		collateralToReturn = stableToBurn.Quo(divisor)
+		collateralAmount = stableToBurn.Quo(divisor)
 	}
 
-	if !collateralToReturn.IsPositive() {
-		return sdkmath.Int{}, errors.Wrapf(types.ErrInvalidAmount, "collateral to return must be positive, got %s", collateralToReturn.String())
+	if !collateralAmount.IsPositive() {
+		return nil, errors.Wrapf(types.ErrInvalidAmount, "collateral to return must be positive, got %s", collateralAmount.String())
 	}
 
 	// 6. Transfer collateral from module to sender
-	returnCoins := sdk.NewCoins(sdk.NewCoin(outputDenom, collateralToReturn))
+	returnCoins := sdk.NewCoins(sdk.NewCoin(outputDenom, collateralAmount))
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, returnCoins); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
-	return collateralToReturn, nil
+	return returnCoins, nil
 }
 
 func (k Keeper) validateOutputDenom(outputDenom string, params types.Params) error {

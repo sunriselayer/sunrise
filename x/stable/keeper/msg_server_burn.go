@@ -23,12 +23,12 @@ func (k msgServer) Burn(ctx context.Context, msg *types.MsgBurn) (*types.MsgBurn
 		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "burn amount must be positive")
 	}
 
-	returnedAmount, err := k.Keeper.Burn(ctx, sender, msg.Amount, msg.OutputDenom)
+	returnedCoins, err := k.Keeper.Burn(ctx, sender, msg.Amount, msg.OutputDenom)
 	if err != nil {
 		return nil, err
 	}
 
 	return &types.MsgBurnResponse{
-		Amount: sdk.NewCoins(sdk.NewCoin(msg.OutputDenom, returnedAmount)),
+		Amount: returnedCoins,
 	}, nil
 }
