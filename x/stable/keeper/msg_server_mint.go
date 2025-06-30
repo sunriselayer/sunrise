@@ -22,17 +22,12 @@ func (k msgServer) Mint(ctx context.Context, msg *types.MsgMint) (*types.MsgMint
 		return nil, errorsmod.Wrap(err, "invalid collateral amount")
 	}
 
-	mintedAmount, err := k.Keeper.Mint(ctx, sender, msg.Amount)
-	if err != nil {
-		return nil, err
-	}
-
-	params, err := k.Params.Get(ctx)
+	mintedCoins, err := k.Keeper.Mint(ctx, sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	return &types.MsgMintResponse{
-		Amount: sdk.NewCoins(sdk.NewCoin(params.StableDenom, mintedAmount)),
+		Amount: mintedCoins,
 	}, nil
 }

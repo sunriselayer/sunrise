@@ -5,6 +5,7 @@ package keeper
 import (
 	"context"
 	"math"
+	"slices"
 
 	"cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
@@ -25,38 +26,38 @@ import (
 // 5. Mints the calculated amount of stablecoins.
 // 6. Sends the newly minted stablecoins to the sender.
 // It returns the total amount of stablecoins minted or an error if any step fails.
-func (k Keeper) Mint(ctx context.Context, sender sdk.AccAddress, collateral sdk.Coins) (sdkmath.Int, error) {
+func (k Keeper) Mint(ctx context.Context, sender sdk.AccAddress, collateral sdk.Coins) (sdk.Coins, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 1. Validate sender is an authority
 	if !k.isAuthority(sender, params) {
-		return sdkmath.Int{}, errors.Wrapf(types.ErrInvalidSigner, "sender %s is not an authority", sender.String())
+		return nil, errors.Wrapf(types.ErrInvalidSigner, "sender %s is not an authority", sender.String())
 	}
 
 	// 2. Validate collateral denoms
 	if err := k.validateCollateralDenoms(collateral, params); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 3. Transfer collateral from sender to module
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, collateral); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 4. Calculate amount to mint
 	totalMintAmount := sdkmath.ZeroInt()
 	stableExponent, err := k.getDenomExponent(ctx, params.StableDenom)
 	if err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	for _, coin := range collateral {
 		collateralExponent, err := k.getDenomExponent(ctx, coin.Denom)
 		if err != nil {
-			return sdkmath.Int{}, err
+			return nil, err
 		}
 
 		// amountToMint = collateralAmount * 10^(stableExponent - collateralExponent)
@@ -77,30 +78,25 @@ func (k Keeper) Mint(ctx context.Context, sender sdk.AccAddress, collateral sdk.
 	}
 
 	if !totalMintAmount.IsPositive() {
-		return sdkmath.Int{}, errors.Wrap(types.ErrInvalidAmount, "mint amount must be positive")
+		return nil, errors.Wrap(types.ErrInvalidAmount, "mint amount must be positive")
 	}
 
 	// 5. Mint stable coins to module
 	stableCoins := sdk.NewCoins(sdk.NewCoin(params.StableDenom, totalMintAmount))
 	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, stableCoins); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
 	// 6. Send minted coins to sender
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, stableCoins); err != nil {
-		return sdkmath.Int{}, err
+		return nil, err
 	}
 
-	return totalMintAmount, nil
+	return stableCoins, nil
 }
 
 func (k Keeper) isAuthority(sender sdk.AccAddress, params types.Params) bool {
-	for _, addr := range params.AuthorityAddresses {
-		if addr == sender.String() {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(params.AuthorityAddresses, sender.String())
 }
 
 func (k Keeper) validateCollateralDenoms(collateral sdk.Coins, params types.Params) error {
