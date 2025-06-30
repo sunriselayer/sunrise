@@ -10,36 +10,25 @@ import (
 )
 
 func (k msgServer) Burn(ctx context.Context, msg *types.MsgBurn) (*types.MsgBurnResponse, error) {
-	authorityContract, err := k.addressCodec.StringToBytes(msg.AuthorityContract)
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return nil, errorsmod.Wrap(err, "invalid authority address")
+		return nil, errorsmod.Wrapf(err, "invalid sender address: %s", msg.Sender)
 	}
 
-	params, err := k.Params.Get(ctx)
-	if err != nil {
-		return nil, err
+	if err := sdk.ValidateDenom(msg.OutputDenom); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid output denom")
 	}
 
-	amount := sdk.NewCoins(sdk.NewCoin(params.StableDenom, msg.Amount))
+	if !msg.Amount.IsPositive() {
+		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "burn amount must be positive")
+	}
 
-	err = k.bankKeeper.SendCoinsFromAccountToModule(
-		ctx,
-		authorityContract,
-		types.ModuleName,
-		amount,
-	)
+	returnedAmount, err := k.Keeper.Burn(ctx, sender, msg.Amount, msg.OutputDenom)
 	if err != nil {
 		return nil, err
 	}
 
-	err = k.bankKeeper.BurnCoins(
-		ctx,
-		types.ModuleName,
-		amount,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.MsgBurnResponse{}, nil
+	return &types.MsgBurnResponse{
+		Amount: sdk.NewCoins(sdk.NewCoin(msg.OutputDenom, returnedAmount)),
+	}, nil
 }
