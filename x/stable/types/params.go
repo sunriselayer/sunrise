@@ -13,6 +13,12 @@ func NewParams(
 	authorityAddresses []string,
 	acceptedDenoms []string,
 ) Params {
+	if len(authorityAddresses) == 0 {
+		authorityAddresses = nil
+	}
+	if len(acceptedDenoms) == 0 {
+		acceptedDenoms = nil
+	}
 	return Params{
 		StableDenom:        stableDenom,
 		AuthorityAddresses: authorityAddresses,
@@ -27,6 +33,9 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if p.StableDenom == "" {
+		return fmt.Errorf("stable denom cannot be empty")
+	}
 	if err := sdk.ValidateDenom(p.StableDenom); err != nil {
 		return fmt.Errorf("invalid stable denom: %w", err)
 	}
