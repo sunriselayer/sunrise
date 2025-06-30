@@ -25,8 +25,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	AuthorityContract string `protobuf:"bytes,1,opt,name=authority_contract,json=authorityContract,proto3" json:"authority_contract,omitempty"`
-	StableDenom       string `protobuf:"bytes,2,opt,name=stable_denom,json=stableDenom,proto3" json:"stable_denom,omitempty"`
+	AuthorityAddresses []string `protobuf:"bytes,1,rep,name=authority_addresses,json=authorityAddresses,proto3" json:"authority_addresses,omitempty"`
+	StableDenoms       []string `protobuf:"bytes,2,rep,name=stable_denoms,json=stableDenoms,proto3" json:"stable_denoms,omitempty"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -62,18 +62,18 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetAuthorityContract() string {
+func (m *Params) GetAuthorityAddresses() []string {
 	if m != nil {
-		return m.AuthorityContract
+		return m.AuthorityAddresses
 	}
-	return ""
+	return nil
 }
 
-func (m *Params) GetStableDenom() string {
+func (m *Params) GetStableDenoms() []string {
 	if m != nil {
-		return m.StableDenom
+		return m.StableDenoms
 	}
-	return ""
+	return nil
 }
 
 func init() {
@@ -83,21 +83,21 @@ func init() {
 func init() { proto.RegisterFile("sunrise/stable/v1/params.proto", fileDescriptor_c646ed16cb11c90f) }
 
 var fileDescriptor_c646ed16cb11c90f = []byte{
-	// 212 bytes of a gzipped FileDescriptorProto
+	// 214 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2b, 0x2e, 0xcd, 0x2b,
 	0xca, 0x2c, 0x4e, 0xd5, 0x2f, 0x2e, 0x49, 0x4c, 0xca, 0x49, 0xd5, 0x2f, 0x33, 0xd4, 0x2f, 0x48,
 	0x2c, 0x4a, 0xcc, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x84, 0xca, 0xeb, 0x41,
 	0xe4, 0xf5, 0xca, 0x0c, 0xa5, 0x44, 0xd2, 0xf3, 0xd3, 0xf3, 0xc1, 0xb2, 0xfa, 0x20, 0x16, 0x44,
-	0xa1, 0x52, 0x02, 0x17, 0x5b, 0x00, 0x58, 0xa3, 0x90, 0x2e, 0x97, 0x50, 0x62, 0x69, 0x49, 0x46,
-	0x7e, 0x51, 0x66, 0x49, 0x65, 0x7c, 0x72, 0x7e, 0x5e, 0x49, 0x51, 0x62, 0x72, 0x89, 0x04, 0xa3,
-	0x02, 0xa3, 0x06, 0x67, 0x90, 0x20, 0x5c, 0xc6, 0x19, 0x2a, 0x21, 0xa4, 0xc8, 0xc5, 0x03, 0x31,
-	0x3b, 0x3e, 0x25, 0x35, 0x2f, 0x3f, 0x57, 0x82, 0x09, 0xac, 0x90, 0x1b, 0x22, 0xe6, 0x02, 0x12,
-	0xb2, 0x62, 0x79, 0xb1, 0x40, 0x9e, 0xd1, 0xc9, 0xe3, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4,
-	0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f,
-	0xe5, 0x18, 0xa2, 0xf4, 0xd2, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xa1,
-	0xee, 0xcd, 0x49, 0xac, 0x4c, 0x2d, 0x82, 0x71, 0xf4, 0x2b, 0x60, 0xde, 0x2b, 0xa9, 0x2c, 0x48,
-	0x2d, 0x4e, 0x62, 0x03, 0x3b, 0xd9, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0xe0, 0xbc, 0x7b, 0x77,
-	0xfd, 0x00, 0x00, 0x00,
+	0xa1, 0x52, 0x0a, 0x17, 0x5b, 0x00, 0x58, 0xa3, 0x90, 0x3e, 0x97, 0x70, 0x62, 0x69, 0x49, 0x46,
+	0x7e, 0x51, 0x66, 0x49, 0x65, 0x7c, 0x62, 0x4a, 0x4a, 0x51, 0x6a, 0x71, 0x71, 0x6a, 0xb1, 0x04,
+	0xa3, 0x02, 0xb3, 0x06, 0x67, 0x90, 0x10, 0x5c, 0xca, 0x11, 0x26, 0x23, 0xa4, 0xcc, 0xc5, 0x0b,
+	0x31, 0x3d, 0x3e, 0x25, 0x35, 0x2f, 0x3f, 0xb7, 0x58, 0x82, 0x09, 0xac, 0x94, 0x07, 0x22, 0xe8,
+	0x02, 0x16, 0xb3, 0x62, 0x79, 0xb1, 0x40, 0x9e, 0xd1, 0xc9, 0xe3, 0xc4, 0x23, 0x39, 0xc6, 0x0b,
+	0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86,
+	0x1b, 0x8f, 0xe5, 0x18, 0xa2, 0xf4, 0xd2, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73,
+	0xf5, 0xa1, 0x6e, 0xce, 0x49, 0xac, 0x4c, 0x2d, 0x82, 0x71, 0xf4, 0x2b, 0x60, 0x5e, 0x2c, 0xa9,
+	0x2c, 0x48, 0x2d, 0x4e, 0x62, 0x03, 0x3b, 0xdb, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0xc4, 0xb7,
+	0x94, 0x84, 0x01, 0x01, 0x00, 0x00,
 }
 
 func (this *Params) Equal(that interface{}) bool {
@@ -119,11 +119,21 @@ func (this *Params) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.AuthorityContract != that1.AuthorityContract {
+	if len(this.AuthorityAddresses) != len(that1.AuthorityAddresses) {
 		return false
 	}
-	if this.StableDenom != that1.StableDenom {
+	for i := range this.AuthorityAddresses {
+		if this.AuthorityAddresses[i] != that1.AuthorityAddresses[i] {
+			return false
+		}
+	}
+	if len(this.StableDenoms) != len(that1.StableDenoms) {
 		return false
+	}
+	for i := range this.StableDenoms {
+		if this.StableDenoms[i] != that1.StableDenoms[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -147,19 +157,23 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.StableDenom) > 0 {
-		i -= len(m.StableDenom)
-		copy(dAtA[i:], m.StableDenom)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.StableDenom)))
-		i--
-		dAtA[i] = 0x12
+	if len(m.StableDenoms) > 0 {
+		for iNdEx := len(m.StableDenoms) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.StableDenoms[iNdEx])
+			copy(dAtA[i:], m.StableDenoms[iNdEx])
+			i = encodeVarintParams(dAtA, i, uint64(len(m.StableDenoms[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
 	}
-	if len(m.AuthorityContract) > 0 {
-		i -= len(m.AuthorityContract)
-		copy(dAtA[i:], m.AuthorityContract)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.AuthorityContract)))
-		i--
-		dAtA[i] = 0xa
+	if len(m.AuthorityAddresses) > 0 {
+		for iNdEx := len(m.AuthorityAddresses) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AuthorityAddresses[iNdEx])
+			copy(dAtA[i:], m.AuthorityAddresses[iNdEx])
+			i = encodeVarintParams(dAtA, i, uint64(len(m.AuthorityAddresses[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -181,13 +195,17 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.AuthorityContract)
-	if l > 0 {
-		n += 1 + l + sovParams(uint64(l))
+	if len(m.AuthorityAddresses) > 0 {
+		for _, s := range m.AuthorityAddresses {
+			l = len(s)
+			n += 1 + l + sovParams(uint64(l))
+		}
 	}
-	l = len(m.StableDenom)
-	if l > 0 {
-		n += 1 + l + sovParams(uint64(l))
+	if len(m.StableDenoms) > 0 {
+		for _, s := range m.StableDenoms {
+			l = len(s)
+			n += 1 + l + sovParams(uint64(l))
+		}
 	}
 	return n
 }
@@ -229,7 +247,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthorityContract", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthorityAddresses", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -257,11 +275,11 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AuthorityContract = string(dAtA[iNdEx:postIndex])
+			m.AuthorityAddresses = append(m.AuthorityAddresses, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StableDenom", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field StableDenoms", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -289,7 +307,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.StableDenom = string(dAtA[iNdEx:postIndex])
+			m.StableDenoms = append(m.StableDenoms, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
