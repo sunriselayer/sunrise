@@ -1,10 +1,11 @@
 package stable
 
 import (
+	"math/rand"
+
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"math/rand"
 
 	stablesimulation "github.com/sunriselayer/sunrise/x/stable/simulation"
 	"github.com/sunriselayer/sunrise/x/stable/types"
@@ -29,7 +30,7 @@ func (am AppModule) RegisterStoreDecoder(_ simtypes.StoreDecoderRegistry) {}
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
 	const (
-		opWeightMsgMint          = "op_weight_msg_stable"
+		opWeightMsgMint          = "op_weight_msg_mint"
 		defaultWeightMsgMint int = 100
 	)
 
@@ -44,7 +45,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		stablesimulation.SimulateMsgMint(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
 	const (
-		opWeightMsgBurn          = "op_weight_msg_stable"
+		opWeightMsgBurn          = "op_weight_msg_burn"
 		defaultWeightMsgBurn int = 100
 	)
 
