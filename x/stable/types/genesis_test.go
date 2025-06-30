@@ -8,32 +8,58 @@ import (
 )
 
 func TestGenesisState_Validate(t *testing.T) {
-    tests := []struct {
-    		desc          string
-    		genState      *types.GenesisState
-    		valid bool
-    } {
-        {
-            desc:     "default is valid",
-            genState: types.DefaultGenesis(),
-            valid:    true,
-        },
-        {
-            desc:     "valid genesis state",
-            genState: &types.GenesisState{
-            	
-            },
-            valid:    true,
-        },
+	tests := []struct {
+		desc     string
+		genState *types.GenesisState
+		valid    bool
+	}{
+		{
+			desc:     "default is valid",
+			genState: types.DefaultGenesis(),
+			valid:    true,
+		},
+		{
+			desc: "invalid genesis state - invalid authority address",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					AuthorityAddresses: []string{"invalid-address"},
+					AcceptedDenoms:     []string{"uusdc"},
+					StableDenom:        "uusdrise",
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid genesis state - empty stable denom",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					AuthorityAddresses: []string{"cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn0kn67"},
+					AcceptedDenoms:     []string{"uusdc"},
+					StableDenom:        "",
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid genesis state - duplicate accepted denoms",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					AuthorityAddresses: []string{"cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn0kn67"},
+					AcceptedDenoms:     []string{"uusdc", "uusdc"},
+					StableDenom:        "uusdrise",
+				},
+			},
+			valid: false,
+		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-            err := tc.genState.Validate()
-            if tc.valid {
-                require.NoError(t, err)
-            } else {
-                require.Error(t, err)
-            }
-        })
-    }
+			err := tc.genState.Validate()
+			if tc.valid {
+				require.NoError(t, err)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
 }

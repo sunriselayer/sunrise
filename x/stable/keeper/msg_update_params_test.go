@@ -13,13 +13,19 @@ func TestMsgUpdateParams(t *testing.T) {
 	f := initFixture(t)
 	ms := keeper.NewMsgServerImpl(f.keeper)
 
-	params := types.DefaultParams()
-	require.NoError(t, f.keeper.Params.Set(f.ctx, params))
-
 	authorityStr, err := f.addressCodec.BytesToString(f.keeper.GetAuthority())
 	require.NoError(t, err)
 
-	// default params
+	validParams := types.Params{
+		AuthorityAddresses: []string{authorityStr},
+		AcceptedDenoms:     []string{"uusdc"},
+		StableDenom:        "uusdrise",
+	}
+	require.NoError(t, validParams.Validate())
+
+	// Set initial params
+	require.NoError(t, f.keeper.Params.Set(f.ctx, types.DefaultParams()))
+
 	testCases := []struct {
 		name      string
 		input     *types.MsgUpdateParams
@@ -30,24 +36,25 @@ func TestMsgUpdateParams(t *testing.T) {
 			name: "invalid authority",
 			input: &types.MsgUpdateParams{
 				Authority: "invalid",
-				Params:    params,
+				Params:    validParams,
 			},
 			expErr:    true,
 			expErrMsg: "invalid authority",
 		},
 		{
-			name: "send enabled param",
+			name: "invalid params",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params:    types.Params{},
+				Params:    types.Params{}, // Invalid because StableDenom is empty
 			},
-			expErr: false,
+			expErr:    true,
+			expErrMsg: "stable denom cannot be empty",
 		},
 		{
 			name: "all good",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params:    params,
+				Params:    validParams,
 			},
 			expErr: false,
 		},
@@ -62,6 +69,10 @@ func TestMsgUpdateParams(t *testing.T) {
 				require.Contains(t, err.Error(), tc.expErrMsg)
 			} else {
 				require.NoError(t, err)
+				// Check if params were updated
+				params, err := f.keeper.Params.Get(f.ctx)
+				require.NoError(t, err)
+				require.Equal(t, validParams, params)
 			}
 		})
 	}
