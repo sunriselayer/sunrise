@@ -1,12 +1,12 @@
 package types
 
 import (
-	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func NewMsgMint(authorityContract string, amount math.Int) *MsgMint {
+func NewMsgMint(sender string, amount sdk.Coins) *MsgMint {
 	return &MsgMint{
-		AuthorityContract: authorityContract,
-		Amount:            amount,
+		Sender: sender,
+		Amount: amount,
 	}
 }

@@ -4,9 +4,10 @@ import (
 	"cosmossdk.io/math"
 )
 
-func NewMsgBurn(authorityContract string, amount math.Int) *MsgBurn {
+func NewMsgBurn(sender string, amount math.Int, outputDenom string) *MsgBurn {
 	return &MsgBurn{
-		AuthorityContract: authorityContract,
-		Amount:            amount,
+		Sender:      sender,
+		Amount:      amount,
+		OutputDenom: outputDenom,
 	}
 }
