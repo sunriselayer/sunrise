@@ -4,7 +4,6 @@ package keeper
 
 import (
 	"context"
-	"math"
 	"slices"
 
 	"cosmossdk.io/errors"
@@ -67,10 +66,10 @@ func (k Keeper) Mint(ctx context.Context, sender sdk.AccAddress, collateral sdk.
 		if power == 0 {
 			amountToMint = coin.Amount
 		} else if power > 0 {
-			multiplier := sdkmath.NewIntFromUint64(uint64(math.Pow(10, float64(power))))
+			multiplier := sdkmath.NewIntWithDecimal(1, power)
 			amountToMint = coin.Amount.Mul(multiplier)
 		} else { // power < 0
-			divisor := sdkmath.NewIntFromUint64(uint64(math.Pow(10, float64(abs(power)))))
+			divisor := sdkmath.NewIntWithDecimal(1, -power)
 			amountToMint = coin.Amount.Quo(divisor)
 		}
 
