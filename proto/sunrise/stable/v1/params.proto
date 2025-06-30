@@ -9,6 +9,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/stable/types";
 message Params {
   option (gogoproto.equal) = true;
 
-  repeated string authority_addresses = 1;
-  repeated string stable_denoms = 2;
+  string stable_denom = 1;
+  repeated string authority_addresses = 2;
+  repeated string accepted_denoms = 3;
 }

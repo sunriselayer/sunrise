@@ -53,7 +53,12 @@ message MsgMint {
 }
 
 // MsgMintResponse defines the MsgMintResponse message.
-message MsgMintResponse {}
+message MsgMintResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
 
 // MsgBurn defines the MsgBurn message.
 message MsgBurn {
@@ -68,4 +73,9 @@ message MsgBurn {
 }
 
 // MsgBurnResponse defines the MsgBurnResponse message.
-message MsgBurnResponse {}
+message MsgBurnResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
