@@ -1,7 +1,12 @@
 package types
 
-func NewMsgBurn(creator string) *MsgBurn {
-  return &MsgBurn{
-		Creator: creator,
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgBurn(authorityContract string, amount math.Int) *MsgBurn {
+	return &MsgBurn{
+		AuthorityContract: authorityContract,
+		Amount:            amount,
 	}
 }

@@ -1,7 +1,12 @@
 package types
 
-func NewMsgMint(creator string) *MsgMint {
-  return &MsgMint{
-		Creator: creator,
+import (
+	"cosmossdk.io/math"
+)
+
+func NewMsgMint(authorityContract string, amount math.Int) *MsgMint {
+	return &MsgMint{
+		AuthorityContract: authorityContract,
+		Amount:            amount,
 	}
 }
