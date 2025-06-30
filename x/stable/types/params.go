@@ -4,15 +4,17 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 // NewParams creates a new Params instance.
 func NewParams(
+	stableDenom string,
 	authorityAddresses []string,
 	acceptedDenoms []string,
-	stableDenom string,
 ) Params {
 	return Params{
+		StableDenom:        stableDenom,
 		AuthorityAddresses: authorityAddresses,
 		AcceptedDenoms:     acceptedDenoms,
 	}
@@ -20,11 +22,15 @@ func NewParams(
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	return NewParams([]string{}, []string{}, "")
+	return NewParams(consts.StableDenom, []string{}, []string{})
 }
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
+	if err := sdk.ValidateDenom(p.StableDenom); err != nil {
+		return fmt.Errorf("invalid stable denom: %w", err)
+	}
+
 	for _, addr := range p.AuthorityAddresses {
 		if _, err := sdk.AccAddressFromBech32(addr); err != nil {
 			return fmt.Errorf("invalid authority address: %w", err)
