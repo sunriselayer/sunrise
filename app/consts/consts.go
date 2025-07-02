@@ -5,5 +5,7 @@ const (
 
 	FeeDenom = "urise"
 
+	StableDenom = "uusdrise"
+
 	DefaultMinGasPrice = 0.002
 )
