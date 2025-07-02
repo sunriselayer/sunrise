@@ -40,6 +40,7 @@ func TestMsgUpdateParams(t *testing.T) {
 				Authority: authorityStr,
 				Params: types.Params{
 					FeeDenom:  "fee",
+					BurnDenom: "burn",
 					BurnRatio: "0.1",
 				},
 			},
