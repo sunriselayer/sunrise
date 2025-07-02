@@ -18,7 +18,6 @@ func TestMsgUpdateParams(t *testing.T) {
 
 	validParams := types.Params{
 		AuthorityAddresses: []string{authorityStr},
-		AcceptedDenoms:     []string{"uusdc"},
 		StableDenom:        "uusdrise",
 	}
 	require.NoError(t, validParams.Validate())

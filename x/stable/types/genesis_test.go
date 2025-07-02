@@ -23,7 +23,6 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.Params{
 					AuthorityAddresses: []string{"invalid-address"},
-					AcceptedDenoms:     []string{"uusdc"},
 					StableDenom:        "uusdrise",
 				},
 			},
@@ -34,19 +33,7 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.Params{
 					AuthorityAddresses: []string{"cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn0kn67"},
-					AcceptedDenoms:     []string{"uusdc"},
 					StableDenom:        "",
-				},
-			},
-			valid: false,
-		},
-		{
-			desc: "invalid genesis state - duplicate accepted denoms",
-			genState: &types.GenesisState{
-				Params: types.Params{
-					AuthorityAddresses: []string{"cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn0kn67"},
-					AcceptedDenoms:     []string{"uusdc", "uusdc"},
-					StableDenom:        "uusdrise",
 				},
 			},
 			valid: false,
