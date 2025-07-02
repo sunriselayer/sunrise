@@ -3,7 +3,7 @@ package consts
 const (
 	BondDenom = "uvrise"
 
-	NativeDenom = "urise"
+	MintDenom = "urise"
 
 	StableDenom = "uusdrise"
 

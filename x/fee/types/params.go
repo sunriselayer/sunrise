@@ -24,7 +24,7 @@ func NewParams(feeDenom string, burnDenom string, burnRatio math.LegacyDec, burn
 func DefaultParams() Params {
 	return NewParams(
 		consts.StableDenom,
-		consts.NativeDenom,
+		consts.MintDenom,
 		math.LegacyNewDecWithPrec(50, 2),
 		0,
 		false,

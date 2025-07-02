@@ -82,8 +82,8 @@ func DefaultParams() Params {
 		time.Minute*10,                   // proof 10min
 		time.Hour*72,                     // rejected remove 3 days
 		time.Hour*336,                    // verified remove 2 weeks
-		sdk.NewCoins(sdk.NewCoin(consts.NativeDenom, math.NewInt(1_000_000_000))), // publish data collateral 1000RISE
-		sdk.NewCoins(sdk.NewCoin(consts.NativeDenom, math.NewInt(100_000_000))),   // submit invalidity collateral 100RISE
+		sdk.NewCoins(sdk.NewCoin(consts.MintDenom, math.NewInt(1_000_000_000))), // publish data collateral 1000RISE
+		sdk.NewCoins(sdk.NewCoin(consts.MintDenom, math.NewInt(100_000_000))),   // submit invalidity collateral 100RISE
 		verifyingKey,
 		provingKey,
 		10,

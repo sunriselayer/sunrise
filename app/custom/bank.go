@@ -16,7 +16,7 @@ type CustomBankModule struct {
 func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := banktypes.DefaultGenesisState()
 
-	metadataNative := banktypes.Metadata{
+	metadataMint := banktypes.Metadata{
 		Description: "The native token of the Sunrise network.",
 		DenomUnits: []*banktypes.DenomUnit{
 			{
@@ -71,7 +71,7 @@ func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 		Symbol:  "USDRISE",
 	}
 
-	sendEnabledNative := banktypes.SendEnabled{
+	sendEnabledMint := banktypes.SendEnabled{
 		Denom:   "urise",
 		Enabled: false,
 	}
@@ -80,11 +80,11 @@ func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 		Enabled: false,
 	}
 
-	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataNative)
+	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataMint)
 	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataBond)
 	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataStable)
 
-	genesis.SendEnabled = append(genesis.SendEnabled, sendEnabledNative)
+	genesis.SendEnabled = append(genesis.SendEnabled, sendEnabledMint)
 	genesis.SendEnabled = append(genesis.SendEnabled, sendEnabledVrise)
 
 	return cdc.MustMarshalJSON(genesis)
