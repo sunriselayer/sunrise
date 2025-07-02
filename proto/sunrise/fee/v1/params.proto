@@ -11,5 +11,8 @@ message Params {
   option (gogoproto.equal) = true;
 
   string fee_denom = 1;
-  string burn_ratio = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  string burn_denom = 2;
+  string burn_ratio = 3 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  uint64 burn_pool_id = 4;
+  bool burn_enabled = 5;
 }
