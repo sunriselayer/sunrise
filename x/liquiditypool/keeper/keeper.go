@@ -31,7 +31,6 @@ type Keeper struct {
 	PositionId collections.Sequence
 
 	bankKeeper types.BankKeeper
-	feeKeeper  types.FeeKeeper
 }
 
 func NewKeeper(
@@ -41,7 +40,6 @@ func NewKeeper(
 	authority string,
 	addressCodec address.Codec,
 	bankKeeper types.BankKeeper,
-	feeKeeper types.FeeKeeper,
 ) Keeper {
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -70,7 +68,6 @@ func NewKeeper(
 		PositionId: collections.NewSequence(sb, types.PositionIdKey, "position_id"),
 
 		bankKeeper: bankKeeper,
-		feeKeeper:  feeKeeper,
 	}
 
 	schema, err := sb.Build()

@@ -18,7 +18,6 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	quoteDenom := consts.StableDenom
@@ -139,7 +138,6 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
 				DenomBase:  "base",
@@ -184,7 +182,6 @@ func TestMsgServerDecreaseLiquidity(t *testing.T) {
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 		Sender:     sender.String(),
 		DenomBase:  "base",

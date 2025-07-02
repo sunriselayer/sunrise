@@ -16,7 +16,6 @@ func TestPoolMsgServerCreate(t *testing.T) {
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	quoteDenom := consts.StableDenom
