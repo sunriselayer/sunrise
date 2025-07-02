@@ -36,6 +36,9 @@ func (p Params) Validate() error {
 	if err := sdk.ValidateDenom(p.FeeDenom); err != nil {
 		return err
 	}
+	if err := sdk.ValidateDenom(p.BurnDenom); err != nil {
+		return err
+	}
 
 	burnRatio, err := math.LegacyNewDecFromStr(p.BurnRatio)
 	if err != nil {

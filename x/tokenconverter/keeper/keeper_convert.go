@@ -9,47 +9,36 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
-func (k Keeper) GetDenoms(ctx context.Context) (bondDenom string, feeDenom string, err error) {
-	bondDenom, err = k.stakingKeeper.BondDenom(ctx)
-	if err != nil {
-		return "", "", err
-	}
-	feeDenom, err = k.feeKeeper.FeeDenom(ctx)
-	if err != nil {
-		return "", "", err
-	}
-
-	return bondDenom, feeDenom, nil
-}
-
 func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
-	bondDenom, feeDenom, err := k.GetDenoms(ctx)
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		return err
 	}
+	fromDenom := params.FromDenom
+	toDenom := params.ToDenom
 
-	bondToken := sdk.NewCoin(bondDenom, amount)
-	if err := bondToken.Validate(); err != nil {
+	fromToken := sdk.NewCoin(fromDenom, amount)
+	if err := fromToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(feeDenom, amount)
-	if err := feeToken.Validate(); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
+	toToken := sdk.NewCoin(toDenom, amount)
+	if err := toToken.Validate(); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(fromToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(feeToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(fromToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(toToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(toToken)); err != nil {
 		return err
 	}
 
@@ -64,33 +53,35 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 }
 
 func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
-	bondDenom, feeDenom, err := k.GetDenoms(ctx)
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		return err
 	}
+	fromDenom := params.FromDenom
+	toDenom := params.ToDenom
 
-	bondToken := sdk.NewCoin(bondDenom, amount)
-	if err := bondToken.Validate(); err != nil {
+	fromToken := sdk.NewCoin(fromDenom, amount)
+	if err := fromToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(feeDenom, amount)
-	if err := feeToken.Validate(); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
+	toToken := sdk.NewCoin(toDenom, amount)
+	if err := toToken.Validate(); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(toToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(bondToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(toToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(fromToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(fromToken)); err != nil {
 		return err
 	}
 
