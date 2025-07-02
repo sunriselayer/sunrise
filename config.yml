@@ -5,15 +5,18 @@ accounts:
       coins:
         - 20000urise
         - 200000000uvrise
+        - 200000000uusdrise
     - name: bob
       coins:
         - 10000urise
         - 100000000uvrise
+        - 100000000uusdrise
 faucet:
     name: bob
     coins:
         - 5urise
         - 100000uvrise
+        - 100000000uusdrise
 client:
     typescript:
         path: ts-client
