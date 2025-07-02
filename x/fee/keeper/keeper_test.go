@@ -45,6 +45,7 @@ func initFixture(t *testing.T) *fixture {
 		addressCodec,
 		nil,
 		nil,
+		nil,
 	)
 
 	// Initialize params
