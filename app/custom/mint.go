@@ -19,7 +19,7 @@ func (cm CustomMintModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := minttypes.DefaultGenesisState()
 
 	// Params wil not be used anyway because there is a custom MintFn
-	genesis.Params.MintDenom = consts.FeeDenom
+	genesis.Params.MintDenom = consts.NativeDenom
 
 	return cdc.MustMarshalJSON(genesis)
 }

@@ -112,7 +112,7 @@ func TestBeginBlocker(t *testing.T) {
 			mocks.StakingKeeper.EXPECT().BondDenom(gomock.Any()).
 				Return(consts.BondDenom, nil).AnyTimes()
 			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
-				Return(consts.FeeDenom, nil).AnyTimes()
+				Return(consts.StableDenom, nil).AnyTimes()
 			mocks.TokenConverterKeeper.EXPECT().ConvertReverse(gomock.Any(), gomock.Any(), gomock.Any()).
 				Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoinsFromModuleToModule(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).

@@ -27,7 +27,7 @@ import (
 
 func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc         string
@@ -101,7 +101,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
@@ -147,7 +147,7 @@ func TestSwapExactAmountIn_SinglePosition(t *testing.T) {
 
 func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc         string
@@ -181,7 +181,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
@@ -239,7 +239,7 @@ func TestSwapExactAmountIn_MultiplePositions(t *testing.T) {
 
 func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc         string
@@ -313,7 +313,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
@@ -359,7 +359,7 @@ func TestSwapExactAmountOut_SinglePosition(t *testing.T) {
 
 func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc         string
@@ -393,7 +393,7 @@ func TestSwapExactAmountOut_MultiplePositions(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
@@ -453,7 +453,7 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 	f := initFixture(t)
 	ctx := sdk.UnwrapSDKContext(f.ctx)
 	k := f.keeper
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 	// when pool does not exist
 	_, _, err := k.GetValidatedPoolAndAccumulator(ctx, 1, "base", quoteDenom)
 	require.Error(t, err)
@@ -498,7 +498,7 @@ func TestGetValidatedPoolAndAccumulator(t *testing.T) {
 
 func TestCalculateResultExactAmountOut(t *testing.T) {
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc         string
@@ -572,7 +572,7 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
@@ -613,7 +613,7 @@ func TestCalculateResultExactAmountOut(t *testing.T) {
 
 func TestCalculateResultExactAmountIn(t *testing.T) {
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc         string
@@ -687,7 +687,7 @@ func TestCalculateResultExactAmountIn(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),

@@ -18,7 +18,7 @@ type CustomFeeModule struct {
 func (cm CustomFeeModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := feetypes.DefaultGenesis()
 
-	genesis.Params.FeeDenom = consts.FeeDenom
+	genesis.Params.FeeDenom = consts.StableDenom
 
 	return cdc.MustMarshalJSON(genesis)
 }

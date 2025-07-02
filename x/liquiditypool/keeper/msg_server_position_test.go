@@ -18,10 +18,10 @@ func TestMsgServerCreatePosition(t *testing.T) {
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 		Sender:     sender.String(),
 		DenomBase:  "base",
@@ -90,7 +90,7 @@ func TestMsgServerCreatePosition(t *testing.T) {
 func TestMsgServerIncreaseLiquidity(t *testing.T) {
 	initFixture(t)
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 	tests := []struct {
 		desc    string
 		request *types.MsgIncreaseLiquidity
@@ -139,7 +139,7 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),
 				DenomBase:  "base",
@@ -178,13 +178,13 @@ func TestMsgServerIncreaseLiquidity(t *testing.T) {
 func TestMsgServerDecreaseLiquidity(t *testing.T) {
 	initFixture(t)
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 	_, mocks, srv, ctx := setupMsgServer(t)
 	wctx := sdk.UnwrapSDKContext(ctx)
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 	_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 		Sender:     sender.String(),
 		DenomBase:  "base",

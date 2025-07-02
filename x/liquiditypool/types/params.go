@@ -23,7 +23,7 @@ func DefaultParams() Params {
 	return NewParams(
 		1000000,
 		math.LegacyNewDecWithPrec(1, 2),
-		[]string{consts.FeeDenom},
+		[]string{consts.NativeDenom, consts.StableDenom},
 	)
 }
 

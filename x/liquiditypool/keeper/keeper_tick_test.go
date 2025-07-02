@@ -88,7 +88,7 @@ func TestTickInfoStore(t *testing.T) {
 
 func TestUpsertTick(t *testing.T) {
 	k, mocks, srv, ctx := setupMsgServer(t)
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	// When pool does not exist
 	_, err := k.UpsertTick(ctx, 1, 0, math.LegacyNewDec(10), true)
@@ -99,7 +99,7 @@ func TestUpsertTick(t *testing.T) {
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
@@ -156,7 +156,7 @@ func TestUpsertTick(t *testing.T) {
 
 func TestNewTickInfo(t *testing.T) {
 	k, mocks, srv, ctx := setupMsgServer(t)
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 	// When pool does not exist
 	_, err := k.NewTickInfo(ctx, 1, 0)
 	require.Error(t, err)
@@ -166,7 +166,7 @@ func TestNewTickInfo(t *testing.T) {
 
 	mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 	mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.FeeDenom, nil).AnyTimes()
+	mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).Return(consts.StableDenom, nil).AnyTimes()
 
 	sender := sdk.AccAddress("sender")
 	_, err = srv.CreatePool(wctx, &types.MsgCreatePool{
