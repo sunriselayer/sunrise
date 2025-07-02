@@ -3,7 +3,7 @@ package consts
 const (
 	BondDenom = "uvrise"
 
-	FeeDenom = "urise"
+	NativeDenom = "urise"
 
 	StableDenom = "uusdrise"
 
