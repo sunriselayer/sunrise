@@ -34,18 +34,22 @@ func (k Keeper) GarbageCollectUnbonded(ctx context.Context) error {
 func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding) error {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
-	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return err
 	}
-
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	nonTransferableDenom := tokenconverterParams.NonTransferableDenom
+	transferableDenom := tokenconverterParams.TransferableDenom
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return err
 	}
 
 	if unbonding.Amount.Denom != bondDenom {
 		return types.ErrInvalidUnbondedDenom
+	}
+	if nonTransferableDenom != bondDenom {
+		return types.ErrNonTransferableDenomMustBeEqualToBondDenom
 	}
 
 	// Convert bond denom to fee denom
@@ -54,7 +58,7 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 		return err
 	}
 
-	feeCoin := sdk.NewCoin(feeDenom, unbonding.Amount.Amount)
+	transferableCoin := sdk.NewCoin(transferableDenom, unbonding.Amount.Amount)
 
 	// Send coin to recipient
 	recipient, err := k.addressCodec.StringToBytes(unbonding.RecipientAddress)
@@ -62,7 +66,7 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 		return err
 	}
 
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(feeCoin))
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(transferableCoin))
 	if err != nil {
 		return err
 	}

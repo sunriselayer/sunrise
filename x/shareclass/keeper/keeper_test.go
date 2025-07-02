@@ -50,7 +50,6 @@ func initFixture(t *testing.T) *fixture {
 		nil,
 		nil,
 		nil,
-		nil,
 	)
 
 	// Initialize params
