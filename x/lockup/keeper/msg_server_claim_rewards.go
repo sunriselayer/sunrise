@@ -30,12 +30,12 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 		return nil, err
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	found, coin := rewards.Find(feeDenom)
+	found, coin := rewards.Find(transferableDenom)
 
 	if found {
 		err = k.AddRewardsToLockupAccount(ctx, owner, msg.LockupAccountId, coin.Amount)

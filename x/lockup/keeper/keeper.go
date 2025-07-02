@@ -29,10 +29,10 @@ type Keeper struct {
 	NextLockupAccountId collections.Map[sdk.AccAddress, uint64]
 	LockupAccounts      collections.Map[collections.Pair[[]byte, uint64], types.LockupAccount]
 
-	accountKeeper types.AccountKeeper
-	bankKeeper    types.BankKeeper
-	stakingKeeper types.StakingKeeper
-	feeKeeper     types.FeeKeeper
+	accountKeeper        types.AccountKeeper
+	bankKeeper           types.BankKeeper
+	stakingKeeper        types.StakingKeeper
+	tokenConverterKeeper types.TokenConverterKeeper
 
 	shareclassKeeper types.ShareclassKeeper
 }
@@ -46,7 +46,7 @@ func NewKeeper(
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
-	feeKeeper types.FeeKeeper,
+	tokenConverterKeeper types.TokenConverterKeeper,
 	shareclassKeeper types.ShareclassKeeper,
 ) Keeper {
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
@@ -66,11 +66,11 @@ func NewKeeper(
 		NextLockupAccountId: collections.NewMap(sb, types.NextLockupAccountIdKeyPrefix, "next_lockup_account_id", types.NextLockupAccountIdKeyCodec, collections.Uint64Value),
 		LockupAccounts:      collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
 
-		accountKeeper:    accountKeeper,
-		bankKeeper:       bankKeeper,
-		stakingKeeper:    stakingKeeper,
-		feeKeeper:        feeKeeper,
-		shareclassKeeper: shareclassKeeper,
+		accountKeeper:        accountKeeper,
+		bankKeeper:           bankKeeper,
+		stakingKeeper:        stakingKeeper,
+		tokenConverterKeeper: tokenConverterKeeper,
+		shareclassKeeper:     shareclassKeeper,
 	}
 
 	schema, err := sb.Build()

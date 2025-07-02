@@ -61,13 +61,13 @@ func (k Keeper) InitLockupAccountFromMsg(ctx context.Context, msg *types.MsgInit
 		return errorsmod.Wrap(err, "invalid owner address")
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return err
 	}
 
-	if msg.Amount.Denom != feeDenom {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "amount denom must be fee denom")
+	if msg.Amount.Denom != transferableDenom {
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", transferableDenom, msg.Amount.Denom)
 	}
 
 	// Get the current ID for the owner and increment the counter

@@ -80,12 +80,12 @@ func (q queryServer) SpendableAmount(ctx context.Context, req *types.QuerySpenda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	feeDenom, err := q.k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := q.k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	balance := q.k.bankKeeper.GetBalance(ctx, lockupAcc, feeDenom)
+	balance := q.k.bankKeeper.GetBalance(ctx, lockupAcc, transferableDenom)
 
 	currentTime := sdk.UnwrapSDKContext(ctx).BlockTime().Unix()
 	_, lockedAmount, err := lockupAccount.GetLockCoinInfo(currentTime)

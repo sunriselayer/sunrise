@@ -33,16 +33,16 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		return nil, errorsmod.Wrap(err, "invalid lockup account address")
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	found, feeCoin := msg.Amount.Find(feeDenom)
+	found, feeCoin := msg.Amount.Find(transferableDenom)
 
 	// if amount is fee denom, check if the balance is enough
 	if found {
-		balance := k.bankKeeper.GetBalance(ctx, lockupAddr, feeDenom)
+		balance := k.bankKeeper.GetBalance(ctx, lockupAddr, transferableDenom)
 
 		sdkCtx := sdk.UnwrapSDKContext(ctx)
 		currentTime := sdkCtx.BlockTime().Unix()
