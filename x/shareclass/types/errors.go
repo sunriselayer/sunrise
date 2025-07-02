@@ -8,10 +8,10 @@ import (
 
 // x/shareclass module sentinel errors
 var (
-	ErrInvalidSigner                              = errors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
-	ErrInvalidRewardPeriod                        = errors.Register(ModuleName, 1101, "invalid reward period")
-	ErrInvalidUnbondedDenom                       = errors.Register(ModuleName, 1102, "invalid unbonded denom")
-	ErrInvalidCreateValidatorAmount               = errors.Register(ModuleName, 1103, "invalid create validator amount")
-	ErrInvalidCreateValidatorGas                  = errors.Register(ModuleName, 1104, "invalid create validator gas")
-	ErrNonTransferableDenomMustBeEqualToBondDenom = errors.Register(ModuleName, 1105, "non transferable denom must be equal to bond denom")
+	ErrInvalidSigner                = errors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
+	ErrInvalidRewardPeriod          = errors.Register(ModuleName, 1101, "invalid reward period")
+	ErrInvalidUnbondedDenom         = errors.Register(ModuleName, 1102, "invalid unbonded denom")
+	ErrInvalidCreateValidatorAmount = errors.Register(ModuleName, 1103, "invalid create validator amount")
+	ErrInvalidCreateValidatorGas    = errors.Register(ModuleName, 1104, "invalid create validator gas")
+	ErrInvalidTokenConverterParams  = errors.Register(ModuleName, 1105, "invalid token converter params")
 )

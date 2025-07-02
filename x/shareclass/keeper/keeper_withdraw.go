@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
@@ -46,10 +47,10 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 	}
 
 	if unbonding.Amount.Denom != bondDenom {
-		return types.ErrInvalidUnbondedDenom
+		return errorsmod.Wrapf(types.ErrInvalidUnbondedDenom, "invalid unbonded denom: expected %s, got %s", bondDenom, unbonding.Amount.Denom)
 	}
 	if nonTransferableDenom != bondDenom {
-		return types.ErrNonTransferableDenomMustBeEqualToBondDenom
+		return errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, nonTransferableDenom)
 	}
 
 	// Convert bond denom to fee denom

@@ -23,7 +23,7 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	powerReduction := k.stakingKeeper.PowerReduction(ctx)
 
 	if !msg.Amount.Amount.Equal(powerReduction) {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to power reduction in staking module, please refer the source code of PowerReduction() function of staking module for more details")
+		return nil, errorsmod.Wrapf(types.ErrInvalidCreateValidatorAmount, "invalid create validator amount: expected %s (power reduction in staking module), got %s", powerReduction, msg.Amount.Amount)
 	}
 
 	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(ctx)
@@ -35,10 +35,10 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		return nil, err
 	}
 	if tokenconverterParams.NonTransferableDenom != bondDenom {
-		return nil, types.ErrNonTransferableDenomMustBeEqualToBondDenom
+		return nil, errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, tokenconverterParams.NonTransferableDenom)
 	}
 	if msg.Amount.Denom != tokenconverterParams.TransferableDenom {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount denom must be equal to transferable denom, please refer the source code of TransferableDenom() function of tokenconverter module for more details")
+		return nil, errorsmod.Wrapf(types.ErrInvalidCreateValidatorAmount, "invalid denom: expected %s, got %s", tokenconverterParams.TransferableDenom, msg.Amount.Denom)
 	}
 
 	// Consume gas

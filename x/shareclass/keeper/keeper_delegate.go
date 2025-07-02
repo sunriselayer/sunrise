@@ -20,7 +20,7 @@ func (k Keeper) Delegate(ctx context.Context, sender sdk.AccAddress, valAddr sdk
 		return nil, nil, err
 	}
 	if amount.Denom != transferableDenom {
-		return nil, nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "delegate amount denom must be equal to transferable denom")
+		return nil, nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", transferableDenom, amount.Denom)
 	}
 
 	// Claim rewards
@@ -71,10 +71,10 @@ func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient
 		return sdk.Coin{}, nil, time.Time{}, err
 	}
 	if tokenconverterParams.NonTransferableDenom != bondDenom {
-		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "non transferable denom must be equal to bond denom")
+		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, tokenconverterParams.NonTransferableDenom)
 	}
 	if amount.Denom != tokenconverterParams.TransferableDenom {
-		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount denom must be equal to transferable denom")
+		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", tokenconverterParams.TransferableDenom, amount.Denom)
 	}
 	if !amount.IsPositive() {
 		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount must be positive")
@@ -147,7 +147,7 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 		return err
 	}
 	if tokenconverterParams.NonTransferableDenom != bondDenom {
-		return types.ErrNonTransferableDenomMustBeEqualToBondDenom
+		return errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, tokenconverterParams.NonTransferableDenom)
 	}
 	bondCoin := sdk.NewCoin(bondDenom, amount)
 	transferableCoin := sdk.NewCoin(tokenconverterParams.TransferableDenom, amount)
