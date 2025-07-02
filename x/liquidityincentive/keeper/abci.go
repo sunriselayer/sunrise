@@ -19,16 +19,13 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	// Transfer a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
 	feeCollector := authtypes.NewModuleAddress(authtypes.FeeCollectorName)
 	incentiveModule := authtypes.NewModuleAddress(types.ModuleName)
-	feeDenom, err := k.feeKeeper.FeeDenom(cacheCtx)
+	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(cacheCtx)
 	if err != nil {
-		k.Logger().Error("failed to get fee denom", "error", err)
+		k.Logger().Error("failed to get token converter params", "error", err)
 		return nil
 	}
-	bondDenom, err := k.stakingKeeper.BondDenom(cacheCtx)
-	if err != nil {
-		k.Logger().Error("failed to get bond denom", "error", err)
-		return nil
-	}
+	transferableDenom := tokenconverterParams.TransferableDenom
+	nonTransferableDenom := tokenconverterParams.NonTransferableDenom
 
 	// Check the Gauge count is not zero.
 	// Distribute incentives to gauges
@@ -53,7 +50,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	}
 
 	// Send a portion of inflation rewards from fee collector to `x/liquidityincentive` pool.
-	feeBalance := k.bankKeeper.GetBalance(cacheCtx, feeCollector, feeDenom)
+	feeBalance := k.bankKeeper.GetBalance(cacheCtx, feeCollector, transferableDenom)
 	feeCollectorAmountDec := math.LegacyNewDecFromInt(feeBalance.Amount)
 	params, err := k.Params.Get(cacheCtx)
 	if err != nil {
@@ -66,7 +63,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 		return nil
 	}
 	incentiveAmount := feeCollectorAmountDec.Mul(math.LegacyOneDec().Sub(stakingRewardRatioDec)).TruncateInt()
-	err = k.bankKeeper.SendCoinsFromModuleToModule(cacheCtx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(feeDenom, incentiveAmount)))
+	err = k.bankKeeper.SendCoinsFromModuleToModule(cacheCtx, authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(sdk.NewCoin(transferableDenom, incentiveAmount)))
 	if err != nil {
 		k.Logger().Error("failed to send coins from fee collector to liquidity incentive module", "error", err)
 		return nil
@@ -80,7 +77,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 	}
 
 	// Get `x/liquidityincentive` module's incentive balance.
-	incentiveBalance := k.bankKeeper.GetBalance(cacheCtx, incentiveModule, bondDenom)
+	incentiveBalance := k.bankKeeper.GetBalance(cacheCtx, incentiveModule, nonTransferableDenom)
 
 	// Distribute incentives to gauges
 	for _, gauge := range lastEpoch.Gauges {
@@ -91,7 +88,7 @@ func (k Keeper) BeginBlocker(ctx context.Context) error {
 				cacheCtx,
 				gauge.PoolId,
 				incentiveModule,
-				sdk.NewCoins(sdk.NewCoin(bondDenom, allocationDec.TruncateInt())),
+				sdk.NewCoins(sdk.NewCoin(nonTransferableDenom, allocationDec.TruncateInt())),
 			)
 			if err != nil {
 				k.Logger().Error("failure in incentive allocation", "error", err)

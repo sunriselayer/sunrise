@@ -9,6 +9,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // AccountKeeper defines the expected account keeper (noalias)
@@ -48,12 +49,9 @@ type StakingKeeper interface {
 	BondDenom(ctx context.Context) (string, error)
 }
 
-type FeeKeeper interface {
-	FeeDenom(ctx context.Context) (string, error)
-}
-
 type TokenConverterKeeper interface {
 	ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error
+	GetParams(ctx context.Context) (tokenconvertertypes.Params, error)
 }
 
 type LiquidityPoolKeeper interface {
