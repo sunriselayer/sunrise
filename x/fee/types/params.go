@@ -6,21 +6,28 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/sunriselayer/sunrise/app/consts"
 )
 
 // NewParams creates a new Params instance.
-func NewParams(feeDenom string, burnRatio math.LegacyDec) Params {
+func NewParams(feeDenom string, burnDenom string, burnRatio math.LegacyDec, burnPoolId uint64, burnEnabled bool) Params {
 	return Params{
-		FeeDenom:  feeDenom,
-		BurnRatio: burnRatio.String(),
+		FeeDenom:    feeDenom,
+		BurnDenom:   burnDenom,
+		BurnRatio:   burnRatio.String(),
+		BurnPoolId:  burnPoolId,
+		BurnEnabled: burnEnabled,
 	}
 }
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(
-		"token",
+		consts.StableDenom,
+		consts.NativeDenom,
 		math.LegacyNewDecWithPrec(50, 2),
+		0,
+		false,
 	)
 }
 
