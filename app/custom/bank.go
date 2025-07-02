@@ -67,7 +67,8 @@ func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 		},
 		Base:    "uusdrise",
 		Display: "usdrise",
-		Name:    "USDrise",
+		Name:    "Sunrise USDrise",
+		Symbol:  "USDRISE",
 	}
 
 	sendEnabledNative := banktypes.SendEnabled{
