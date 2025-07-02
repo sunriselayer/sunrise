@@ -107,6 +107,7 @@ var (
 		{Account: liquidityincentivemoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
 		{Account: liquidityincentivemoduletypes.BribeAccount},
 		{Account: swapmoduletypes.ModuleName},
+		{Account: stablemoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
@@ -163,7 +164,7 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/beginBlockers
+						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
 						govtypes.ModuleName,
@@ -186,7 +187,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/endBlockers
+						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
@@ -234,7 +235,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/initGenesis
+						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
 			},
@@ -354,7 +355,7 @@ var (
 				Name:   stablemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&stablemoduletypes.Module{}),
 			},
-// this line is used by starport scaffolding # stargate/app/moduleConfig
+			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
