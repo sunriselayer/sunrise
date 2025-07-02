@@ -14,31 +14,31 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 	if err != nil {
 		return err
 	}
-	fromDenom := params.FromDenom
-	toDenom := params.ToDenom
+	nonTransferableDenom := params.NonTransferableDenom
+	transferableDenom := params.TransferableDenom
 
-	fromToken := sdk.NewCoin(fromDenom, amount)
-	if err := fromToken.Validate(); err != nil {
+	nonTransferableToken := sdk.NewCoin(nonTransferableDenom, amount)
+	if err := nonTransferableToken.Validate(); err != nil {
 		return err
 	}
-	toToken := sdk.NewCoin(toDenom, amount)
-	if err := toToken.Validate(); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(fromToken)); err != nil {
+	transferableToken := sdk.NewCoin(transferableDenom, amount)
+	if err := transferableToken.Validate(); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(fromToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(nonTransferableToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(toToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(nonTransferableToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(toToken)); err != nil {
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(transferableToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(transferableToken)); err != nil {
 		return err
 	}
 
@@ -57,31 +57,31 @@ func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk
 	if err != nil {
 		return err
 	}
-	fromDenom := params.FromDenom
-	toDenom := params.ToDenom
+	nonTransferableDenom := params.NonTransferableDenom
+	transferableDenom := params.TransferableDenom
 
-	fromToken := sdk.NewCoin(fromDenom, amount)
-	if err := fromToken.Validate(); err != nil {
+	nonTransferableToken := sdk.NewCoin(nonTransferableDenom, amount)
+	if err := nonTransferableToken.Validate(); err != nil {
 		return err
 	}
-	toToken := sdk.NewCoin(toDenom, amount)
-	if err := toToken.Validate(); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(toToken)); err != nil {
+	transferableToken := sdk.NewCoin(transferableDenom, amount)
+	if err := transferableToken.Validate(); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(toToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(transferableToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(fromToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(transferableToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(fromToken)); err != nil {
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(nonTransferableToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(nonTransferableToken)); err != nil {
 		return err
 	}
 

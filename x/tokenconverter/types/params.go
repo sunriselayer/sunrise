@@ -6,10 +6,10 @@ import (
 )
 
 // NewParams creates a new Params instance.
-func NewParams(fromDenom string, toDenom string) Params {
+func NewParams(nonTransferableDenom string, transferableDenom string) Params {
 	return Params{
-		FromDenom: fromDenom,
-		ToDenom:   toDenom,
+		NonTransferableDenom: nonTransferableDenom,
+		TransferableDenom:    transferableDenom,
 	}
 }
 
@@ -20,10 +20,10 @@ func DefaultParams() Params {
 
 // Validate validates the set of params.
 func (p Params) Validate() error {
-	if err := sdk.ValidateDenom(p.FromDenom); err != nil {
+	if err := sdk.ValidateDenom(p.NonTransferableDenom); err != nil {
 		return err
 	}
-	if err := sdk.ValidateDenom(p.ToDenom); err != nil {
+	if err := sdk.ValidateDenom(p.TransferableDenom); err != nil {
 		return err
 	}
 	return nil

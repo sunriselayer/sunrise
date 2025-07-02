@@ -9,6 +9,6 @@ option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
 message Params {
   option (gogoproto.equal) = true;
 
-  string from_denom = 1;
-  string to_denom = 2;
+  string non_transferable_denom = 1;
+  string transferable_denom = 2;
 }

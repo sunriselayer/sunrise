@@ -18,18 +18,18 @@ func (k Keeper) SetParams(ctx context.Context, params types.Params) error {
 	return k.Params.Set(ctx, params)
 }
 
-func (k Keeper) GetFromDenom(ctx context.Context) (string, error) {
+func (k Keeper) GetNonTransferableDenom(ctx context.Context) (string, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return "", err
 	}
-	return params.FromDenom, nil
+	return params.NonTransferableDenom, nil
 }
 
-func (k Keeper) GetToDenom(ctx context.Context) (string, error) {
+func (k Keeper) GetTransferableDenom(ctx context.Context) (string, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return "", err
 	}
-	return params.ToDenom, nil
+	return params.TransferableDenom, nil
 }
