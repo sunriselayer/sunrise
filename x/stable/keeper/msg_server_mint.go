@@ -18,10 +18,6 @@ func (k msgServer) Mint(ctx context.Context, msg *types.MsgMint) (*types.MsgMint
 		return nil, errorsmod.Wrapf(err, "invalid sender address: %s", msg.Sender)
 	}
 
-	if err := msg.Amount.Validate(); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid collateral amount")
-	}
-
 	mintedCoins, err := k.Keeper.Mint(ctx, sender, msg.Amount)
 	if err != nil {
 		return nil, err

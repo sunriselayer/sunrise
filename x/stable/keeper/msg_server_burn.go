@@ -15,20 +15,10 @@ func (k msgServer) Burn(ctx context.Context, msg *types.MsgBurn) (*types.MsgBurn
 		return nil, errorsmod.Wrapf(err, "invalid sender address: %s", msg.Sender)
 	}
 
-	if err := sdk.ValidateDenom(msg.OutputDenom); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid output denom")
-	}
-
-	if !msg.Amount.IsPositive() {
-		return nil, errorsmod.Wrap(types.ErrInvalidAmount, "burn amount must be positive")
-	}
-
-	returnedCoins, err := k.Keeper.Burn(ctx, sender, msg.Amount, msg.OutputDenom)
+	err = k.Keeper.Burn(ctx, sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
-	return &types.MsgBurnResponse{
-		Amount: returnedCoins,
-	}, nil
+	return &types.MsgBurnResponse{}, nil
 }

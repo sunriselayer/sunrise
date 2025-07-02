@@ -1,10 +1,10 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 )
 
-func NewMsgMint(sender string, amount sdk.Coins) *MsgMint {
+func NewMsgMint(sender string, amount math.Int) *MsgMint {
 	return &MsgMint{
 		Sender: sender,
 		Amount: amount,
