@@ -51,5 +51,9 @@ func (p Params) Validate() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "burn ratio must be less than 1")
 	}
 
+	if p.BurnEnabled && p.FeeDenom != p.BurnDenom && p.BurnPoolId == 0 {
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "burn pool id must be set if burn is enabled and denoms are different")
+	}
+
 	return nil
 }
