@@ -10,6 +10,12 @@ import (
 	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 
+// Burn handles the burning of transaction fees.
+// It is designed to be fault-tolerant. If an error occurs during the burn process,
+// such as a non-existent liquidity pool or a failed swap, the error is logged,
+// and the function returns nil. This ensures that the underlying transaction
+// is not reverted due to issues in the fee-burning mechanism.
+//
 // fees means whole tx fees, not amount to burn
 func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	err := fees.Validate()
@@ -55,7 +61,8 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 		// burn coins from the fee module account
 		// Event is emitted in the bank keeper
 		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
-			return err
+			k.Logger().Error("failed to burn coins", "err", err)
+			return nil
 		}
 	} else {
 		// swap to burn denom and burn
