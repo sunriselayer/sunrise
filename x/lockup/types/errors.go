@@ -12,4 +12,5 @@ var (
 	ErrInvalidTimeRange           = errors.Register(ModuleName, 1101, "invalid time range")
 	ErrLockupAccountAlreadyExists = errors.Register(ModuleName, 1102, "lockup account already exists")
 	ErrInsufficientUnlockedFunds  = errors.Register(ModuleName, 1103, "insufficient unlocked funds")
+	ErrNotEnoughSpendableBalance  = errors.Register(ModuleName, 1104, "not enough spendable balance")
 )

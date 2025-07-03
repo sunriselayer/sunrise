@@ -67,9 +67,9 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		}
 
 		if spendable.LT(feeCoin.Amount) {
-			return nil, errorsmod.Wrapf(err,
-				"spendable balance %d is smaller than %d",
-				spendable, feeCoin.Amount,
+			return nil, errorsmod.Wrapf(types.ErrNotEnoughSpendableBalance,
+				"spendable balance %s is smaller than %s",
+				sdk.NewCoin(transferableDenom, spendable), feeCoin,
 			)
 		}
 	}
