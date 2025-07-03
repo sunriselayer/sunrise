@@ -42,36 +42,31 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	burnCoin := sdk.NewCoin(feeCoin.Denom, burnAmount)
 	burnCoins := sdk.NewCoins(burnCoin)
 
+	// Send coins to be burned from the fee collector to the fee module.
+	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
+		authtypes.FeeCollectorName,
+		types.ModuleName,
+		burnCoins,
+	); err != nil {
+		return errorsmod.Wrap(sdkerrors.ErrInsufficientFunds, err.Error())
+	}
+
 	if params.FeeDenom == params.BurnDenom {
 		// burn coins from the fee module account
-		if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
-			authtypes.FeeCollectorName,
-			types.ModuleName,
-			burnCoins,
-		); err != nil {
-			return errorsmod.Wrap(sdkerrors.ErrInsufficientFunds, err.Error())
-		}
-
 		// Event is emitted in the bank keeper
 		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
 			return err
 		}
 	} else {
 		// swap to burn denom and burn
-		if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
-			authtypes.FeeCollectorName,
-			types.ModuleName,
-			burnCoins,
-		); err != nil {
-			return errorsmod.Wrap(sdkerrors.ErrInsufficientFunds, err.Error())
-		}
-
 		pool, found, err := k.liquidityPoolKeeper.GetPool(ctx, params.BurnPoolId)
 		if err != nil {
-			return err
+			k.Logger().Error("failed to get pool for burning", "pool_id", params.BurnPoolId, "err", err)
+			return nil
 		}
 		if !found {
-			return errorsmod.Wrapf(sdkerrors.ErrNotFound, "pool %d not found", params.BurnPoolId)
+			k.Logger().Error("pool not found for burning", "pool_id", params.BurnPoolId)
+			return nil
 		}
 
 		// swap to burn denom
@@ -83,14 +78,16 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 			false,
 		)
 		if err != nil {
-			return err
+			k.Logger().Error("failed to swap to burn denom", "err", err)
+			return nil
 		}
 
 		// burn swapped coins from the fee module account
 		// Event is emitted in the bank keeper
 		swappedCoin := sdk.NewCoin(params.BurnDenom, swappedAmount)
 		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(swappedCoin)); err != nil {
-			return err
+			k.Logger().Error("failed to burn coins after swap", "err", err)
+			return nil
 		}
 	}
 
