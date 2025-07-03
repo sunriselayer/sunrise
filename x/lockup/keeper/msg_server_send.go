@@ -38,7 +38,7 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		return nil, err
 	}
 
-	found, feeCoin := msg.Amount.Find(transferableDenom)
+	found, transferableCoin := msg.Amount.Find(transferableDenom)
 
 	// if amount is fee denom, check if the balance is enough
 	if found {
@@ -66,10 +66,10 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 				"locked amount exceeds account balance funds: %d > %d", lockedAmount, balance.Amount)
 		}
 
-		if spendable.LT(feeCoin.Amount) {
+		if spendable.LT(transferableCoin.Amount) {
 			return nil, errorsmod.Wrapf(types.ErrNotEnoughSpendableBalance,
 				"spendable balance %s is smaller than %s",
-				sdk.NewCoin(transferableDenom, spendable), feeCoin,
+				sdk.NewCoin(transferableDenom, spendable), transferableCoin,
 			)
 		}
 	}
