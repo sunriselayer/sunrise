@@ -10,13 +10,12 @@ import (
 	"github.com/sunriselayer/sunrise/x/fee/types"
 )
 
-// Burn handles the burning of transaction fees.
-// It is designed to be fault-tolerant. If an error occurs during the burn process,
-// such as a non-existent liquidity pool or a failed swap, the error is logged,
-// and the function returns nil. This ensures that the underlying transaction
-// is not reverted due to issues in the fee-burning mechanism.
+// Burn handles burning a portion of transaction fees in a fault-tolerant way.
+// If an internal error like a swap failure occurs, the error is logged and the burn
+// is skipped, leaving the parent transaction unaffected. The burn itself is an
+// atomic operation to prevent funds from getting stuck.
 //
-// fees means whole tx fees, not amount to burn
+// `fees` represents the total transaction fees, not the amount to be burned.
 func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	err := fees.Validate()
 	if err != nil {
@@ -46,13 +45,29 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	}
 
 	burnCoin := sdk.NewCoin(feeCoin.Denom, burnAmount)
-	burnCoins := sdk.NewCoins(burnCoin)
 
+	// We use a cache context to make the burn process atomic.
+	cacheCtx, write := ctx.CacheContext()
+	if err := k.burnCoin(cacheCtx, burnCoin, params); err != nil {
+		k.Logger().Error("failed to burn fees", "err", err)
+		// Do not write cache context to main state if burning fails.
+		return nil
+	}
+
+	// Write cache context to main state only if burning is successful.
+	write()
+	return nil
+}
+
+// burnCoin performs the actual burning of a coin. It is designed to be called
+// within a cached context to ensure atomicity.
+func (k Keeper) burnCoin(ctx sdk.Context, coin sdk.Coin, params types.Params) error {
+	coins := sdk.NewCoins(coin)
 	// Send coins to be burned from the fee collector to the fee module.
 	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx,
 		authtypes.FeeCollectorName,
 		types.ModuleName,
-		burnCoins,
+		coins,
 	); err != nil {
 		return errorsmod.Wrap(sdkerrors.ErrInsufficientFunds, err.Error())
 	}
@@ -60,41 +75,36 @@ func (k Keeper) Burn(ctx sdk.Context, fees sdk.Coins) error {
 	if params.FeeDenom == params.BurnDenom {
 		// burn coins from the fee module account
 		// Event is emitted in the bank keeper
-		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnCoins); err != nil {
-			k.Logger().Error("failed to burn coins", "err", err)
-			return nil
+		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, coins); err != nil {
+			return errorsmod.Wrap(err, "failed to burn coins")
 		}
 	} else {
 		// swap to burn denom and burn
 		pool, found, err := k.liquidityPoolKeeper.GetPool(ctx, params.BurnPoolId)
 		if err != nil {
-			k.Logger().Error("failed to get pool for burning", "pool_id", params.BurnPoolId, "err", err)
-			return nil
+			return errorsmod.Wrap(err, "failed to get pool for burning")
 		}
 		if !found {
-			k.Logger().Error("pool not found for burning", "pool_id", params.BurnPoolId)
-			return nil
+			return errorsmod.Wrapf(types.ErrPoolNotFound, "pool not found for burning: %d", params.BurnPoolId)
 		}
 
 		// swap to burn denom
 		swappedAmount, err := k.liquidityPoolKeeper.SwapExactAmountIn(ctx,
 			authtypes.NewModuleAddress(types.ModuleName),
 			pool,
-			burnCoin,
+			coin,
 			params.BurnDenom,
 			false,
 		)
 		if err != nil {
-			k.Logger().Error("failed to swap to burn denom", "err", err)
-			return nil
+			return errorsmod.Wrap(err, "failed to swap to burn denom")
 		}
 
 		// burn swapped coins from the fee module account
 		// Event is emitted in the bank keeper
 		swappedCoin := sdk.NewCoin(params.BurnDenom, swappedAmount)
 		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(swappedCoin)); err != nil {
-			k.Logger().Error("failed to burn coins after swap", "err", err)
-			return nil
+			return errorsmod.Wrap(err, "failed to burn coins after swap")
 		}
 	}
 
