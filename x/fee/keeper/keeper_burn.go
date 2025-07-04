@@ -94,7 +94,7 @@ func (k Keeper) burnCoin(ctx sdk.Context, coin sdk.Coin, params types.Params) er
 			pool,
 			coin,
 			params.BurnDenom,
-			false,
+			true,
 		)
 		if err != nil {
 			return errorsmod.Wrap(err, "failed to swap to burn denom")
