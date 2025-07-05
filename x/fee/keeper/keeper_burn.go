@@ -8,6 +8,7 @@ import (
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/sunriselayer/sunrise/x/fee/types"
+	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 // Burn handles burning a portion of transaction fees in a fault-tolerant way.
@@ -79,22 +80,23 @@ func (k Keeper) burnCoin(ctx sdk.Context, coin sdk.Coin, params types.Params) er
 			return errorsmod.Wrap(err, "failed to burn coins")
 		}
 	} else {
-		// swap to burn denom and burn
-		pool, found, err := k.liquidityPoolKeeper.GetPool(ctx, params.BurnPoolId)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to get pool for burning")
-		}
-		if !found {
-			return errorsmod.Wrapf(types.ErrPoolNotFound, "pool not found for burning: %d", params.BurnPoolId)
-		}
-
 		// swap to burn denom
-		swappedAmount, err := k.liquidityPoolKeeper.SwapExactAmountIn(ctx,
+		route := swaptypes.Route{
+			DenomIn:  coin.Denom,
+			DenomOut: params.BurnDenom,
+			Strategy: &swaptypes.Route_Pool{
+				Pool: &swaptypes.RoutePool{
+					PoolId: params.BurnPoolId,
+				},
+			},
+		}
+		result, _, err := k.swapKeeper.SwapExactAmountIn(
+			ctx,
 			authtypes.NewModuleAddress(types.ModuleName),
-			pool,
-			coin,
-			params.BurnDenom,
-			true,
+			authtypes.NewModuleAddress(authtypes.FeeCollectorName).String(),
+			route,
+			coin.Amount,
+			math.ZeroInt(),
 		)
 		if err != nil {
 			return errorsmod.Wrap(err, "failed to swap to burn denom")
@@ -102,8 +104,7 @@ func (k Keeper) burnCoin(ctx sdk.Context, coin sdk.Coin, params types.Params) er
 
 		// burn swapped coins from the fee module account
 		// Event is emitted in the bank keeper
-		swappedCoin := sdk.NewCoin(params.BurnDenom, swappedAmount)
-		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(swappedCoin)); err != nil {
+		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(result.TokenOut)); err != nil {
 			return errorsmod.Wrap(err, "failed to burn coins after swap")
 		}
 	}
