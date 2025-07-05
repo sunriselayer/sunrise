@@ -90,21 +90,25 @@ func (k Keeper) burnCoin(ctx sdk.Context, coin sdk.Coin, params types.Params) er
 				},
 			},
 		}
-		result, _, err := k.swapKeeper.SwapExactAmountIn(
+		result, interfaceFee, err := k.swapKeeper.SwapExactAmountIn(
 			ctx,
 			authtypes.NewModuleAddress(types.ModuleName),
 			authtypes.NewModuleAddress(authtypes.FeeCollectorName).String(),
 			route,
 			coin.Amount,
-			math.ZeroInt(),
+			math.OneInt(),
 		)
 		if err != nil {
 			return errorsmod.Wrap(err, "failed to swap to burn denom")
 		}
 
+		// The amount to burn is the net amount after the interface fee has been sent to the FeeCollector.
+		amountToBurn := result.TokenOut.Amount.Sub(interfaceFee)
+		coinToBurn := sdk.NewCoin(result.TokenOut.Denom, amountToBurn)
+
 		// burn swapped coins from the fee module account
 		// Event is emitted in the bank keeper
-		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(result.TokenOut)); err != nil {
+		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(coinToBurn)); err != nil {
 			return errorsmod.Wrap(err, "failed to burn coins after swap")
 		}
 	}
