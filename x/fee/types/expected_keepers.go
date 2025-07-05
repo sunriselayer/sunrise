@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	lptypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 )
 
 // AccountKeeper defines the expected interface for the Account module.
@@ -24,5 +25,9 @@ type BankKeeper interface {
 // LiquidityPoolKeeper defines the expected interface for the liquidity pool module.
 type LiquidityPoolKeeper interface {
 	GetPool(ctx context.Context, id uint64) (val lptypes.Pool, found bool, err error)
-	SwapExactAmountIn(ctx sdk.Context, sender sdk.AccAddress, pool lptypes.Pool, tokenIn sdk.Coin, denomOut string, feeEnabled bool) (amountOut math.Int, err error)
+}
+
+// SwapKeeper defines the expected interface for the swap module.
+type SwapKeeper interface {
+	SwapExactAmountIn(ctx sdk.Context, sender sdk.AccAddress, interfaceProvider string, route swaptypes.Route, amountIn math.Int, minAmountOut math.Int) (result swaptypes.RouteResult, interfaceFee math.Int, err error)
 }
