@@ -22,7 +22,7 @@ func (cm CustomProtocolPoolModule) DefaultGenesis(cdc codec.JSONCodec) json.RawM
 	genesis := protocolpooltypes.DefaultGenesisState()
 
 	// Params wil not be used anyway because there is a custom MintFn
-	genesis.Params.EnabledDistributionDenoms = []string{consts.FeeDenom}
+	genesis.Params.EnabledDistributionDenoms = []string{consts.MintDenom, consts.StableDenom}
 
 	return cdc.MustMarshalJSON(genesis)
 }

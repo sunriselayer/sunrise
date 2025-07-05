@@ -169,11 +169,11 @@ type ModuleInputs struct {
 
 	AddressCodec address.Codec
 
-	AccountKeeper    types.AccountKeeper
-	BankKeeper       types.BankKeeper
-	StakingKeeper    types.StakingKeeper
-	FeeKeeper        types.FeeKeeper
-	ShareclassKeeper types.ShareclassKeeper
+	AccountKeeper        types.AccountKeeper
+	BankKeeper           types.BankKeeper
+	StakingKeeper        types.StakingKeeper
+	TokenConverterKeeper types.TokenConverterKeeper
+	ShareclassKeeper     types.ShareclassKeeper
 }
 
 type ModuleOutputs struct {
@@ -198,7 +198,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.StakingKeeper,
-		in.FeeKeeper,
+		in.TokenConverterKeeper,
 		in.ShareclassKeeper,
 	)
 	m := NewAppModule(in.Cdc, k)

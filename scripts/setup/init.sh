@@ -30,15 +30,15 @@ echo $USER_MNEMONIC_2 | $BINARY keys add $USER2 --home $NODE_HOME --recover --ke
 echo $USER_MNEMONIC_3 | $BINARY keys add $USER3 --home $NODE_HOME --recover --keyring-backend=test
 echo $USER_MNEMONIC_4 | $BINARY keys add $USER4 --home $NODE_HOME --recover --keyring-backend=test
 
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $VAL1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_FEE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $VAL1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 
 echo "Creating and collecting gentx..."
-$BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test --fees 100000$BINARY_FEE_TOKEN
+$BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test --fees 100000$BINARY_STABLE_TOKEN
 $BINARY genesis collect-gentxs --home $NODE_HOME
 
 echo "Changing defaults config files..."
@@ -63,4 +63,13 @@ jq ".consensus.params.feature.vote_extensions_enable_height = \"1\"" $NODE_HOME/
 jq ".app_state.da.params.challenge_period = \"30s\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 jq ".app_state.da.params.rejected_removal_period = \"60s\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 jq ".app_state.da.params.verified_removal_period  = \"60s\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+
+# Enable stable authority for user1
 jq ".app_state.stable.params.authority_addresses = [\"$($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a)\"]" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+
+# Enable fee burn
+jq ".app_state.fee.params.burn_pool_id = \"1\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+jq ".app_state.fee.params.burn_enabled = true" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+
+# Enable urise send
+jq '(.app_state.bank.send_enabled[] | select(.denom=="urise").enabled) = true' $NODE_HOME/config/genesis.json > $NODE_HOME/config/tmp_genesis.json && mv $NODE_HOME/config/tmp_genesis.json $NODE_HOME/config/genesis.json

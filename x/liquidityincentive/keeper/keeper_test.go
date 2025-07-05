@@ -53,7 +53,6 @@ func initFixture(t *testing.T) *fixture {
 		mocks.AcctKeeper,
 		mocks.BankKeeper,
 		mocks.StakingKeeper,
-		mocks.FeeKeeper,
 		mocks.TokenConverterKeeper,
 		mocks.LiquiditypoolKeeper,
 	)
@@ -80,7 +79,6 @@ type LiquidityIncentiveMocks struct {
 	AcctKeeper           *liquidityincentivetestutil.MockAccountKeeper
 	BankKeeper           *liquidityincentivetestutil.MockBankKeeper
 	StakingKeeper        *liquidityincentivetestutil.MockStakingKeeper
-	FeeKeeper            *liquidityincentivetestutil.MockFeeKeeper
 	TokenConverterKeeper *liquidityincentivetestutil.MockTokenConverterKeeper
 	LiquiditypoolKeeper  *liquidityincentivetestutil.MockLiquidityPoolKeeper
 }
@@ -92,7 +90,6 @@ func getMocks(t *testing.T) LiquidityIncentiveMocks {
 		AcctKeeper:           liquidityincentivetestutil.NewMockAccountKeeper(ctrl),
 		BankKeeper:           liquidityincentivetestutil.NewMockBankKeeper(ctrl),
 		StakingKeeper:        liquidityincentivetestutil.NewMockStakingKeeper(ctrl),
-		FeeKeeper:            liquidityincentivetestutil.NewMockFeeKeeper(ctrl),
 		TokenConverterKeeper: liquidityincentivetestutil.NewMockTokenConverterKeeper(ctrl),
 		LiquiditypoolKeeper:  liquidityincentivetestutil.NewMockLiquidityPoolKeeper(ctrl),
 	}

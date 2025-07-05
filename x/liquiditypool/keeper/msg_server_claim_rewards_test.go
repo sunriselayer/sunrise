@@ -15,7 +15,7 @@ import (
 func TestMsgServerClaimRewards(t *testing.T) {
 	initFixture(t)
 	sender := sdk.AccAddress("sender")
-	quoteDenom := consts.FeeDenom
+	quoteDenom := consts.StableDenom
 
 	tests := []struct {
 		desc       string
@@ -67,8 +67,6 @@ func TestMsgServerClaimRewards(t *testing.T) {
 
 			mocks.BankKeeper.EXPECT().IsSendEnabledCoins(gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
-				Return(consts.FeeDenom, nil).AnyTimes()
 
 			_, err := srv.CreatePool(wctx, &types.MsgCreatePool{
 				Sender:     sender.String(),

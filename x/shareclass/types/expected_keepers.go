@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 // AccountKeeper defines the expected interface for the Account module.
@@ -50,11 +51,9 @@ type DistributionKeeper interface {
 	WithdrawDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (sdk.Coins, error)
 }
 
-type FeeKeeper interface {
-	FeeDenom(ctx context.Context) (string, error)
-}
-
 type TokenConverterKeeper interface {
 	Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error
 	ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error
+	GetParams(ctx context.Context) (tokenconvertertypes.Params, error)
+	GetTransferableDenom(ctx context.Context) (string, error)
 }

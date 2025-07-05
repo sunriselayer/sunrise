@@ -37,7 +37,6 @@ type Keeper struct {
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
 	stakingKeeper        types.StakingKeeper
-	feeKeeper            types.FeeKeeper
 	tokenConverterKeeper types.TokenConverterKeeper
 	liquidityPoolKeeper  types.LiquidityPoolKeeper
 }
@@ -51,7 +50,6 @@ func NewKeeper(
 	authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
-	feeKeeper types.FeeKeeper,
 	tokenConverterKeeper types.TokenConverterKeeper,
 	liquidityPoolKeeper types.LiquidityPoolKeeper,
 ) Keeper {
@@ -93,7 +91,6 @@ func NewKeeper(
 		accountKeeper:        authKeeper,
 		bankKeeper:           bankKeeper,
 		stakingKeeper:        stakingKeeper,
-		feeKeeper:            feeKeeper,
 		tokenConverterKeeper: tokenConverterKeeper,
 		liquidityPoolKeeper:  liquidityPoolKeeper,
 	}
