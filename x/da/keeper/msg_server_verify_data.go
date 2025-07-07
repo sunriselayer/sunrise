@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
@@ -49,8 +51,20 @@ func (k msgServer) VerifyData(goCtx context.Context, msg *types.MsgVerifyData) (
 	}
 
 	// slash epoch moved from PreBlocker
-	if ctx.BlockHeight()%int64(params.SlashEpoch) == 0 {
+	lastSlashBlockHeight, err := k.LastSlashBlockHeight.Get(ctx)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			lastSlashBlockHeight = 0
+		} else {
+			return nil, err
+		}
+	}
+	if ctx.BlockHeight() >= lastSlashBlockHeight+int64(params.SlashEpoch) {
 		err = k.HandleSlashEpoch(ctx)
+		if err != nil {
+			return nil, err
+		}
+		err = k.LastSlashBlockHeight.Set(ctx, ctx.BlockHeight())
 		if err != nil {
 			return nil, err
 		}

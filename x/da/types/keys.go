@@ -30,6 +30,7 @@ var (
 	ProofKeyPrefix                     = collections.NewPrefix("v0_proofs/")
 	InvalidityKeyPrefix                = collections.NewPrefix("v0_invalidities/")
 	ProofDeputiesKeyPrefix             = collections.NewPrefix("v0_proof_deputies/")
+	LastSlashBlockHeightKey            = collections.NewPrefix("v0_last_slash_block_height/")
 )
 
 var (
