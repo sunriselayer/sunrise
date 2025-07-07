@@ -3,10 +3,14 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
+	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/fee/keeper"
 	"github.com/sunriselayer/sunrise/x/fee/types"
+	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
 
 func TestMsgUpdateParams(t *testing.T) {
@@ -35,19 +39,24 @@ func TestMsgUpdateParams(t *testing.T) {
 			expErrMsg: "invalid authority",
 		},
 		{
-			name: "send enabled param",
+			name: "burn enabled with invalid pool",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params: types.Params{
-					FeeDenom:  "fee",
-					BurnDenom: "burn",
-					BurnRatio: "0.1",
-				},
+				Params:    types.NewParams("fee", "burn", math.LegacyNewDecWithPrec(50, 2), 1, true),
+			},
+			expErr:    true,
+			expErrMsg: "invalid pool",
+		},
+		{
+			name: "burn enabled with valid pool",
+			input: &types.MsgUpdateParams{
+				Authority: authorityStr,
+				Params:    types.NewParams(consts.StableDenom, consts.MintDenom, math.LegacyNewDecWithPrec(50, 2), 1, true),
 			},
 			expErr: false,
 		},
 		{
-			name: "all good",
+			name: "burn disabled",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
 				Params:    params,
@@ -58,6 +67,11 @@ func TestMsgUpdateParams(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			f.mocks.LiquiditypoolKeeper.EXPECT().GetPool(gomock.Any(), gomock.Any()).Return(liquiditypooltypes.Pool{
+				Id:         1,
+				DenomBase:  consts.StableDenom,
+				DenomQuote: consts.MintDenom,
+			}, true, nil).AnyTimes()
 			_, err := ms.UpdateParams(f.ctx, tc.input)
 
 			if tc.expErr {
