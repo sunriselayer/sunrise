@@ -68,6 +68,24 @@ func (k Keeper) ChangeToChallengingFromChallengePeriod(ctx sdk.Context, threshol
 			thresholdDec := math.LegacyMustNewDecFromStr(threshold) // TODO: remove with Dec
 			invalidityThreshold := thresholdDec.MulInt64(int64(len(data.ShardDoubleHashes)))
 			if math.LegacyNewDec(int64(len(invalidIndices))).GTE(invalidityThreshold) {
+				// Get active validators
+				activeValidators := []string{}
+				iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
+				if err != nil {
+					return err
+				}
+				defer iterator.Close()
+				for ; iterator.Valid(); iterator.Next() {
+					validator, err := k.StakingKeeper.Validator(ctx, iterator.Value())
+					if err != nil {
+						return err
+					}
+					if validator.IsBonded() {
+						activeValidators = append(activeValidators, validator.GetOperator())
+					}
+				}
+				data.ChallengingValidators = activeValidators
+
 				data.Status = types.Status_STATUS_CHALLENGING
 				data.Timestamp = ctx.BlockTime()
 				err = k.SetPublishedData(ctx, data)
@@ -110,23 +128,6 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 		return err
 	}
 
-	activeValidators := []sdk.ValAddress{}
-	iterator, err := k.StakingKeeper.ValidatorsPowerStoreIterator(ctx)
-	if err != nil {
-		return err
-	}
-
-	defer iterator.Close()
-	for ; iterator.Valid(); iterator.Next() {
-		validator, err := k.StakingKeeper.Validator(ctx, iterator.Value())
-		if err != nil {
-			return err
-		}
-		if validator.IsBonded() {
-			activeValidators = append(activeValidators, sdk.ValAddress(iterator.Value()))
-		}
-	}
-
 	replicationFactorDec := math.LegacyMustNewDecFromStr(replicationFactor) // TODO: remove with Dec
 	faultValidators := make(map[string]sdk.ValAddress)
 
@@ -153,7 +154,11 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 				return err
 			}
 			indexedValidators := make(map[int64][]sdk.ValAddress)
-			for _, valAddr := range activeValidators {
+			for _, valAddrStr := range data.ChallengingValidators {
+				valAddr, err := sdk.ValAddressFromBech32(valAddrStr)
+				if err != nil {
+					return err
+				}
 				indices := types.ShardIndicesForValidator(valAddr, int64(threshold), int64(len(data.ShardDoubleHashes)))
 				for _, index := range indices {
 					indexedValidators[index] = append(indexedValidators[index], valAddr)
