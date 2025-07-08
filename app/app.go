@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"io"
 
 	clienthelpers "cosmossdk.io/client/v2/helpers"
@@ -49,6 +50,9 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
+
+	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 
 	"github.com/sunriselayer/sunrise/docs"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
@@ -114,6 +118,9 @@ type App struct {
 	ICAHostKeeper       icahostkeeper.Keeper
 	TransferKeeper      ibctransferkeeper.Keeper
 	WasmClientKeeper    ibcwasmkeeper.Keeper
+
+	// cosmwasm keeper
+	WasmKeeper wasmkeeper.Keeper
 
 	DaKeeper                 damodulekeeper.Keeper
 	FeeKeeper                feemodulekeeper.Keeper
@@ -225,7 +232,11 @@ func New(
 	app.App = appBuilder.Build(db, traceStore, baseAppOptions...)
 
 	// Register legacy modules
-	if err := app.registerIBCModules(); err != nil {
+	wasmConfig, err := wasm.ReadNodeConfig(appOpts)
+	if err != nil {
+		panic(fmt.Sprintf("error while reading wasm config: %s", err))
+	}
+	if err := app.registerWasmAndIBCModules(appOpts, wasmConfig); err != nil {
 		panic(err)
 	}
 
@@ -268,6 +279,7 @@ func New(
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
 			IBCKeeper:     app.IBCKeeper,
+			WasmConfig:    &wasmConfig,
 			CircuitKeeper: &app.CircuitBreakerKeeper,
 			FeeKeeper:     &app.FeeKeeper,
 			SwapKeeper:    &app.SwapKeeper,
@@ -312,6 +324,20 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	// <wasmd>
+	// must be before Loading version
+	// requires the snapshot store to be created and registered as a BaseAppOption
+	// see cmd/wasmd/root.go: 206 - 214 approx
+	if manager := app.SnapshotManager(); manager != nil {
+		err := manager.RegisterExtensions(
+			wasmkeeper.NewWasmSnapshotter(app.CommitMultiStore(), &app.WasmKeeper),
+		)
+		if err != nil {
+			panic(fmt.Errorf("failed to register snapshot extension: %s", err))
+		}
+	}
+	// </wasmd>
+
 	if err := app.Load(loadLatest); err != nil {
 		panic(err)
 	}
@@ -321,6 +347,12 @@ func New(
 		if err := app.WasmClientKeeper.InitializePinnedCodes(ctx); err != nil {
 			cmtos.Exit(err.Error())
 		}
+		// <wasmd>
+		// Initialize pinned codes in wasmvm as they are not persisted there
+		if err := app.WasmKeeper.InitializePinnedCodes(ctx); err != nil {
+			cmtos.Exit(fmt.Sprintf("failed initialize pinned codes %s", err))
+		}
+		// </wasmd>
 	}
 
 	return app
