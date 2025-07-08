@@ -63,6 +63,9 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 
+	_ "github.com/CosmWasm/wasmd/x/wasm" // import for side-effects
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module"
@@ -97,6 +100,8 @@ var (
 		{Account: ibctransfertypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		// {Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
+		// CosmWasm module account
+		{Account: wasmtypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
 		{Account: damoduletypes.ModuleName},
@@ -155,6 +160,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						ibcwasmtypes.ModuleName,
+						// CosmWasm module
+						wasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -177,6 +184,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						ibcwasmtypes.ModuleName,
+						// CosmWasm module
+						wasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -226,6 +235,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						ibcwasmtypes.ModuleName,
+						// CosmWasm module
+						wasmtypes.ModuleName,
 						// chain modules
 						damoduletypes.ModuleName,
 						tokenconvertermoduletypes.ModuleName,
