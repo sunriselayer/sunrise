@@ -166,23 +166,44 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 			}
 
 			safeShardIndices := []int64{}
-			for index, proofCount := range shardProofCount {
+			for index := 0; int64(index) < int64(len(data.ShardDoubleHashes)); index++ {
+				i := int64(index)
 				if len(data.ShardDoubleHashes) < int(data.ParityShardCount) {
 					return types.ErrInvalidShardCounts
 				}
+
 				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
 				replicationFactorWithParity := replicationFactorDec.
 					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
 					QuoInt64(int64(len(data.ShardDoubleHashes)))
 
-				// len(zkp_including_this_shard) / replication_factor_with_parity >= 2/3
-				if math.LegacyNewDec(proofCount).GTE(
-					replicationFactorWithParity.
+				// threshold_of_proofs_per_shard = ceil(replication_factor_with_parity * 2 / 3)
+				thresholdOfProofsPerShard := replicationFactorWithParity.
+					MulInt64(2).
+					QuoInt64(3).
+					Ceil().
+					TruncateInt64()
+
+				numAssignedValidators := int64(len(indexedValidators[i]))
+				proofCount := shardProofCount[i]
+
+				var requiredProofs int64
+				if numAssignedValidators < thresholdOfProofsPerShard {
+					// Use 2/3 of assigned validators as the threshold if it's smaller
+					requiredProofs = math.LegacyNewDec(numAssignedValidators).
 						MulInt64(2).
-						QuoInt64(3)) {
-					safeShardIndices = append(safeShardIndices, index)
-					for _, valAddr := range indexedValidators[index] {
-						if !shardProofSubmitted[index][sdk.AccAddress(valAddr).String()] {
+						QuoInt64(3).
+						Ceil().
+						TruncateInt64()
+				} else {
+					requiredProofs = thresholdOfProofsPerShard
+				}
+
+				// A shard is safe if the number of proofs is greater than or equal to the required number.
+				if proofCount >= requiredProofs {
+					safeShardIndices = append(safeShardIndices, i)
+					for _, valAddr := range indexedValidators[i] {
+						if !shardProofSubmitted[i][sdk.AccAddress(valAddr).String()] {
 							faultValidators[valAddr.String()] = valAddr
 						}
 					}
