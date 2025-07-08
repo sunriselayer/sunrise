@@ -98,7 +98,7 @@ func (k Keeper) ChangeToChallengingFromChallengePeriod(ctx sdk.Context, threshol
 	return nil
 }
 
-func (k Keeper) ChangeToVerifiedFromProofPeriod(ctx sdk.Context, duration time.Duration) error {
+func (k Keeper) ChangeToVerifiedFromChallengePeriod(ctx sdk.Context, duration time.Duration) error {
 	expiredChallengePeriodData, err := k.GetSpecificStatusDataBeforeTime(ctx, types.Status_STATUS_CHALLENGE_PERIOD, ctx.BlockTime().Add(-duration).Unix())
 	if err != nil {
 		return err

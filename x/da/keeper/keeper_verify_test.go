@@ -198,7 +198,7 @@ func TestChangeToVerifiedFromProofPeriod(t *testing.T) {
 
 	// Execute test
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	err := k.ChangeToVerifiedFromProofPeriod(sdkCtx, challengePeriod)
+	err := k.ChangeToVerifiedFromChallengePeriod(sdkCtx, challengePeriod)
 	require.NoError(t, err)
 
 	// Verify status has changed for expired data

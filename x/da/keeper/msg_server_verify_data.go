@@ -39,7 +39,7 @@ func (k msgServer) VerifyData(goCtx context.Context, msg *types.MsgVerifyData) (
 	}
 
 	// if STATUS_CHALLENGE_PERIOD is expired, change to STATUS_VERIFIED
-	err = k.ChangeToVerifiedFromProofPeriod(ctx, params.ChallengePeriod)
+	err = k.ChangeToVerifiedFromChallengePeriod(ctx, params.ChallengePeriod)
 	if err != nil {
 		return nil, err
 	}
