@@ -176,7 +176,6 @@ type ModuleInputs struct {
 	BankKeeper           types.BankKeeper
 	StakingKeeper        types.StakingKeeper
 	DistributionKeeper   types.DistributionKeeper
-	FeeKeeper            types.FeeKeeper
 	TokenConverterKeeper types.TokenConverterKeeper
 }
 
@@ -203,7 +202,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.BankKeeper,
 		in.StakingKeeper,
 		in.DistributionKeeper,
-		in.FeeKeeper,
 		in.TokenConverterKeeper,
 		stakingkeeper.NewMsgServerImpl(in.StakingKeeper.(*stakingkeeper.Keeper)),
 		stakingkeeper.NewQuerier(in.StakingKeeper.(*stakingkeeper.Keeper)),

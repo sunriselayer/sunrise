@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
@@ -34,18 +35,22 @@ func (k Keeper) GarbageCollectUnbonded(ctx context.Context) error {
 func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding) error {
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
+	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(ctx)
+	if err != nil {
+		return err
+	}
+	nonTransferableDenom := tokenconverterParams.NonTransferableDenom
+	transferableDenom := tokenconverterParams.TransferableDenom
 	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return err
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
-	if err != nil {
-		return err
-	}
-
 	if unbonding.Amount.Denom != bondDenom {
-		return types.ErrInvalidUnbondedDenom
+		return errorsmod.Wrapf(types.ErrInvalidUnbondedDenom, "invalid unbonded denom: expected %s, got %s", bondDenom, unbonding.Amount.Denom)
+	}
+	if nonTransferableDenom != bondDenom {
+		return errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, nonTransferableDenom)
 	}
 
 	// Convert bond denom to fee denom
@@ -54,7 +59,7 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 		return err
 	}
 
-	feeCoin := sdk.NewCoin(feeDenom, unbonding.Amount.Amount)
+	transferableCoin := sdk.NewCoin(transferableDenom, unbonding.Amount.Amount)
 
 	// Send coin to recipient
 	recipient, err := k.addressCodec.StringToBytes(unbonding.RecipientAddress)
@@ -62,7 +67,7 @@ func (k Keeper) WithdrawUnbonded(ctx context.Context, unbonding types.Unbonding)
 		return err
 	}
 
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(feeCoin))
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(transferableCoin))
 	if err != nil {
 		return err
 	}

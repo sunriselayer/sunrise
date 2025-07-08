@@ -50,7 +50,6 @@ func initFixture(t *testing.T) *fixture {
 		authority.String(),
 		addressCodec,
 		mocks.BankKeeper,
-		mocks.FeeKeeper,
 	)
 
 	// Initialize params
@@ -68,7 +67,6 @@ func initFixture(t *testing.T) *fixture {
 
 type LiquidityPoolMocks struct {
 	BankKeeper *liquiditypooltestutil.MockBankKeeper
-	FeeKeeper  *liquiditypooltestutil.MockFeeKeeper
 }
 
 func getMocks(t *testing.T) LiquidityPoolMocks {
@@ -76,6 +74,5 @@ func getMocks(t *testing.T) LiquidityPoolMocks {
 
 	return LiquidityPoolMocks{
 		BankKeeper: liquiditypooltestutil.NewMockBankKeeper(ctrl),
-		FeeKeeper:  liquiditypooltestutil.NewMockFeeKeeper(ctrl),
 	}
 }

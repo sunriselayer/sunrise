@@ -33,16 +33,16 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 		return nil, errorsmod.Wrap(err, "invalid lockup account address")
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	found, feeCoin := msg.Amount.Find(feeDenom)
+	found, transferableCoin := msg.Amount.Find(transferableDenom)
 
 	// if amount is fee denom, check if the balance is enough
 	if found {
-		balance := k.bankKeeper.GetBalance(ctx, lockupAddr, feeDenom)
+		balance := k.bankKeeper.GetBalance(ctx, lockupAddr, transferableDenom)
 
 		sdkCtx := sdk.UnwrapSDKContext(ctx)
 		currentTime := sdkCtx.BlockTime().Unix()
@@ -66,10 +66,10 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 				"locked amount exceeds account balance funds: %d > %d", lockedAmount, balance.Amount)
 		}
 
-		if spendable.LT(feeCoin.Amount) {
-			return nil, errorsmod.Wrapf(err,
-				"spendable balance %d is smaller than %d",
-				spendable, feeCoin.Amount,
+		if spendable.LT(transferableCoin.Amount) {
+			return nil, errorsmod.Wrapf(types.ErrNotEnoughSpendableBalance,
+				"spendable balance %s is smaller than %s",
+				sdk.NewCoin(transferableDenom, spendable), transferableCoin,
 			)
 		}
 	}

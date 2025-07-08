@@ -23,7 +23,7 @@ func (q queryServer) AddressBonded(ctx context.Context, req *types.QueryAddressB
 
 	balances := q.k.bankKeeper.GetAllBalances(ctx, address)
 
-	feeDenom, err := q.k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := q.k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (q queryServer) AddressBonded(ctx context.Context, req *types.QueryAddressB
 			}
 			bonds = append(bonds, types.ValidatorBond{
 				ValidatorAddress: validatorAddr,
-				Amount:           sdk.NewCoin(feeDenom, bondAmount),
+				Amount:           sdk.NewCoin(transferableDenom, bondAmount),
 			})
 		}
 	}

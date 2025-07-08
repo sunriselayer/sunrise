@@ -8,4 +8,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+
+  string non_transferable_denom = 1;
+  string transferable_denom = 2;
 }

@@ -9,47 +9,36 @@ import (
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
-func (k Keeper) GetDenoms(ctx context.Context) (bondDenom string, feeDenom string, err error) {
-	bondDenom, err = k.stakingKeeper.BondDenom(ctx)
-	if err != nil {
-		return "", "", err
-	}
-	feeDenom, err = k.feeKeeper.FeeDenom(ctx)
-	if err != nil {
-		return "", "", err
-	}
-
-	return bondDenom, feeDenom, nil
-}
-
 func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
-	bondDenom, feeDenom, err := k.GetDenoms(ctx)
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		return err
 	}
+	nonTransferableDenom := params.NonTransferableDenom
+	transferableDenom := params.TransferableDenom
 
-	bondToken := sdk.NewCoin(bondDenom, amount)
-	if err := bondToken.Validate(); err != nil {
+	nonTransferableToken := sdk.NewCoin(nonTransferableDenom, amount)
+	if err := nonTransferableToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(feeDenom, amount)
-	if err := feeToken.Validate(); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
+	transferableToken := sdk.NewCoin(transferableDenom, amount)
+	if err := transferableToken.Validate(); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(nonTransferableToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(feeToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(nonTransferableToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(transferableToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(transferableToken)); err != nil {
 		return err
 	}
 
@@ -64,33 +53,35 @@ func (k Keeper) Convert(ctx context.Context, amount math.Int, address sdk.AccAdd
 }
 
 func (k Keeper) ConvertReverse(ctx context.Context, amount math.Int, address sdk.AccAddress) error {
-	bondDenom, feeDenom, err := k.GetDenoms(ctx)
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		return err
 	}
+	nonTransferableDenom := params.NonTransferableDenom
+	transferableDenom := params.TransferableDenom
 
-	bondToken := sdk.NewCoin(bondDenom, amount)
-	if err := bondToken.Validate(); err != nil {
+	nonTransferableToken := sdk.NewCoin(nonTransferableDenom, amount)
+	if err := nonTransferableToken.Validate(); err != nil {
 		return err
 	}
-	feeToken := sdk.NewCoin(feeDenom, amount)
-	if err := feeToken.Validate(); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
-		return err
-	}
-
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(feeToken)); err != nil {
+	transferableToken := sdk.NewCoin(transferableDenom, amount)
+	if err := transferableToken.Validate(); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(bondToken)); err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, address, types.ModuleName, sdk.NewCoins(transferableToken)); err != nil {
 		return err
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(bondToken)); err != nil {
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(transferableToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(nonTransferableToken)); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, sdk.NewCoins(nonTransferableToken)); err != nil {
 		return err
 	}
 

@@ -46,8 +46,8 @@ func ProvideMintFn(bankKeeper BankKeeper) mintkeeper.MintFn {
 		}
 
 		supplyBond := bankKeeper.GetSupply(ctx, consts.BondDenom)
-		supplyFee := bankKeeper.GetSupply(ctx, consts.FeeDenom)
-		totalSupply := supplyBond.Amount.Add(supplyFee.Amount)
+		supplyMint := bankKeeper.GetSupply(ctx, consts.MintDenom)
+		totalSupply := supplyBond.Amount.Add(supplyMint.Amount)
 
 		annualProvisions := CalculateAnnualProvision(
 			ctx,
@@ -69,12 +69,12 @@ func ProvideMintFn(bankKeeper BankKeeper) mintkeeper.MintFn {
 		blockProvisions := annualProvisions.QuoInt(math.NewInt(int64(params.BlocksPerYear))).TruncateInt()
 
 		if blockProvisions.IsPositive() {
-			feeCoins := sdk.NewCoins(sdk.NewCoin(consts.FeeDenom, blockProvisions))
+			mintCoins := sdk.NewCoins(sdk.NewCoin(consts.MintDenom, blockProvisions))
 
-			if err := k.MintCoins(ctx, feeCoins); err != nil {
+			if err := k.MintCoins(ctx, mintCoins); err != nil {
 				return err
 			}
-			if err := k.AddCollectedFees(ctx, feeCoins); err != nil {
+			if err := k.AddCollectedFees(ctx, mintCoins); err != nil {
 				return err
 			}
 		}

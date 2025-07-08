@@ -173,7 +173,6 @@ type ModuleInputs struct {
 	AccountKeeper        types.AccountKeeper
 	BankKeeper           types.BankKeeper
 	StakingKeeper        types.StakingKeeper
-	FeeKeeper            types.FeeKeeper
 	TokenConverterKeeper types.TokenConverterKeeper
 	LiquidityPoolKeeper  types.LiquidityPoolKeeper
 }
@@ -200,7 +199,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AccountKeeper,
 		in.BankKeeper,
 		in.StakingKeeper,
-		in.FeeKeeper,
 		in.TokenConverterKeeper,
 		in.LiquidityPoolKeeper,
 	)

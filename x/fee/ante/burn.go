@@ -25,9 +25,17 @@ func (bfd BurnFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool
 		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
 	}
 
+	params, err := bfd.feeKeeper.Params.Get(ctx)
+	if err != nil {
+		return ctx, err
+	}
+	if !params.BurnEnabled {
+		return next(ctx, tx, simulate)
+	}
+
 	fee := feeTx.GetFee()
 
-	err := bfd.feeKeeper.Burn(ctx, fee)
+	err = bfd.feeKeeper.Burn(ctx, fee)
 	if err != nil {
 		return ctx, err
 	}

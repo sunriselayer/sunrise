@@ -11,9 +11,10 @@ import (
 	address "cosmossdk.io/core/address"
 	math "cosmossdk.io/math"
 	types "github.com/cosmos/cosmos-sdk/types"
-	types0 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
-	gomock "go.uber.org/mock/gomock"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	types0 "github.com/sunriselayer/sunrise/x/liquiditypool/types"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockAccountKeeper is a mock of AccountKeeper interface.
@@ -435,4 +436,17 @@ func (m *MockTokenConverterKeeper) ConvertReverse(ctx context.Context, amount ma
 func (mr *MockTokenConverterKeeperMockRecorder) ConvertReverse(ctx, amount, address interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConvertReverse", reflect.TypeOf((*MockTokenConverterKeeper)(nil).ConvertReverse), ctx, amount, address)
+}
+
+func (m *MockTokenConverterKeeper) GetParams(ctx context.Context) (tokenconvertertypes.Params, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetParams", ctx)
+	ret0, _ := ret[0].(tokenconvertertypes.Params)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+func (mr *MockTokenConverterKeeperMockRecorder) GetParams(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetParams", reflect.TypeOf((*MockTokenConverterKeeper)(nil).GetParams), ctx)
 }

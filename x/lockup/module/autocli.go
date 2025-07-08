@@ -101,7 +101,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "lockup_account_id"},
 						{ProtoField: "recipient"},
-						{ProtoField: "amount"},
+						{ProtoField: "amount", Varargs: true},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx

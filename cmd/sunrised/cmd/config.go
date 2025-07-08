@@ -46,7 +46,7 @@ func initAppConfig() (string, interface{}) {
 	// In tests, we set the min gas prices to 0.
 	// srvCfg.MinGasPrices = "0stake"
 	// <sunrise>
-	srvCfg.MinGasPrices = fmt.Sprintf("%v%s", consts.DefaultMinGasPrice, consts.FeeDenom)
+	srvCfg.MinGasPrices = fmt.Sprintf("%v%s", consts.DefaultMinGasPrice, consts.StableDenom)
 	// </sunrise>
 
 	customAppConfig := CustomAppConfig{
