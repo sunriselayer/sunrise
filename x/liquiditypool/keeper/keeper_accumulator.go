@@ -22,7 +22,7 @@ func (k Keeper) InitAccumulator(ctx context.Context, name string) error {
 		return err
 	}
 	if hasKey {
-		return errors.New("Accumulator with given name already exists in store")
+		return errors.New("accumulator with given name already exists in store")
 	}
 
 	return k.SetAccumulator(ctx, types.AccumulatorObject{
@@ -154,7 +154,7 @@ func (k Keeper) NewPositionIntervalAccumulation(ctx context.Context, accumName, 
 
 func (k Keeper) AddToPositionIntervalAccumulation(ctx context.Context, accumName, name string, newShares math.LegacyDec, intervalAccumulationPerShare sdk.DecCoins) error {
 	if !newShares.IsPositive() {
-		return errors.New("Adding non-positive number of shares to position")
+		return errors.New("adding non-positive number of shares to position")
 	}
 
 	position, err := k.GetAccumulatorPosition(ctx, accumName, name)

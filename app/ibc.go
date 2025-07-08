@@ -1,14 +1,22 @@
 package app
 
 import (
+	"path/filepath"
+
 	"cosmossdk.io/core/appmodule"
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	"github.com/spf13/cast"
+
+	// IBC Wasm imports
 	ibcwasm "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10"
 	ibcwasmkeeper "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10/keeper"
 	ibcwasmtypes "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10/types"
@@ -34,16 +42,20 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
-	// ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
 	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
+
+	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	wasmvm "github.com/CosmWasm/wasmvm/v2"
 
 	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
-// registerIBCModules register IBC keepers and non dependency inject modules.
-func (app *App) registerIBCModules() error {
+// registerWasmAndIBCModules register CosmWasm and IBC keepers and non dependency inject modules.
+func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeConfig wasmtypes.NodeConfig) error {
 	// set up non depinject support modules store keys
 	if err := app.RegisterStores(
 		storetypes.NewKVStoreKey(ibcexported.StoreKey),
@@ -51,6 +63,7 @@ func (app *App) registerIBCModules() error {
 		storetypes.NewKVStoreKey(icahosttypes.StoreKey),
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
 		storetypes.NewKVStoreKey(ibcwasmtypes.StoreKey),
+		storetypes.NewKVStoreKey(wasmtypes.StoreKey),
 	); err != nil {
 		return err
 	}
@@ -121,9 +134,59 @@ func (app *App) registerIBCModules() error {
 	transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
 	// </sunrise>
 
+	// <wasmd>
+	// https://github.com/CosmWasm/wasmd/blob/v0.60.0/app/app.go
+	// https://github.com/yerasyla/IgniteCLI-cosmwasm/blob/master/readme.md
+	homePath := cast.ToString(appOpts.Get(flags.FlagHome))
+	wasmDir := filepath.Join(homePath, "wasm")
+	// https://ibc.cosmos.network/v8/ibc/light-clients/wasm/integration/
+	// instantiate the Wasm VM with the chosen parameters
+	wasmConfig := ibcwasmtypes.DefaultWasmConfig(DefaultNodeHome)
+	wasmer, err := wasmvm.NewVM(
+		wasmConfig.DataDir,
+		wasmkeeper.BuiltInCapabilities(), //  wasmConfig.SupportedCapabilities support only `iterator`
+		ibcwasmtypes.ContractMemoryLimit, // default of 32
+		wasmConfig.ContractDebugMode,
+		ibcwasmtypes.MemoryCacheSize,
+	)
+	if err != nil {
+		return err
+	}
+	// create an Option slice (or append to an existing one)
+	// with the option to use a custom Wasm VM instance
+	wasmOpts := []wasmkeeper.Option{
+		wasmkeeper.WithWasmEngine(wasmer),
+	}
+	app.WasmKeeper = wasmkeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(app.GetKey(wasmtypes.StoreKey)),
+		app.AuthKeeper,
+		app.BankKeeper,
+		app.StakingKeeper,
+		distrkeeper.NewQuerier(app.DistrKeeper),
+		app.IBCKeeper.ChannelKeeper,
+		app.IBCKeeper.ChannelKeeper,
+		app.TransferKeeper,
+		app.MsgServiceRouter(),
+		app.GRPCQueryRouter(),
+		wasmDir,
+		nodeConfig,
+		wasmtypes.VMConfig{},
+		wasmkeeper.BuiltInCapabilities(),
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		wasmOpts...,
+	)
+
+	// Create fee enabled wasm ibc Stack
+	wasmStack := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
+	// </wasmd>
+
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
 		AddRoute(ibctransfertypes.ModuleName, transferStack).
+		// <wasmd>
+		AddRoute(wasmtypes.ModuleName, wasmStack).
+		// </wasmd>
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
 		AddRoute(icahosttypes.SubModuleName, icaHostStack)
 
@@ -143,7 +206,6 @@ func (app *App) registerIBCModules() error {
 	soloLightClientModule := solomachine.NewLightClientModule(app.appCodec, storeProvider)
 
 	// <sunrise>
-	wasmConfig := ibcwasmtypes.DefaultWasmConfig(DefaultNodeHome)
 	wasmLightClientQuerier := ibcwasmkeeper.QueryPlugins{
 		Stargate: ibcwasmkeeper.AcceptListStargateQuerier([]string{
 			"/ibc.core.client.v1.Query/ClientState",
@@ -153,12 +215,12 @@ func (app *App) registerIBCModules() error {
 		Custom: wasmclient.CustomQuerier(),
 	}
 
-	app.WasmClientKeeper = ibcwasmkeeper.NewKeeperWithConfig(
+	app.WasmClientKeeper = ibcwasmkeeper.NewKeeperWithVM(
 		app.appCodec,
 		runtime.NewKVStoreService(app.GetKey(ibcwasmtypes.StoreKey)),
 		app.IBCKeeper.ClientKeeper,
 		govModuleAddr,
-		wasmConfig,
+		wasmer,
 		app.GRPCQueryRouter(),
 		ibcwasmkeeper.WithQueryPlugins(&wasmLightClientQuerier),
 	)
@@ -177,6 +239,7 @@ func (app *App) registerIBCModules() error {
 		ibctm.NewAppModule(tmLightClientModule),
 		solomachine.NewAppModule(soloLightClientModule),
 		ibcwasm.NewAppModule(app.WasmClientKeeper),
+		wasm.NewAppModule(app.appCodec, &app.WasmKeeper, app.StakingKeeper, app.AuthKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 	); err != nil {
 		return err
 	}
@@ -187,7 +250,7 @@ func (app *App) registerIBCModules() error {
 // Since the IBC modules don't support dependency injection, we need to
 // manually register the modules on the client side.
 // This needs to be removed after IBC supports App Wiring.
-func RegisterIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
+func RegisterWasmAndIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[string]appmodule.AppModule {
 	modules := map[string]appmodule.AppModule{
 		ibcexported.ModuleName:      ibc.NewAppModule(&ibckeeper.Keeper{}),
 		ibctransfertypes.ModuleName: ibctransfer.NewAppModule(ibctransferkeeper.Keeper{}),
@@ -195,6 +258,7 @@ func RegisterIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) map[strin
 		ibctm.ModuleName:            ibctm.NewAppModule(ibctm.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 		solomachine.ModuleName:      solomachine.NewAppModule(solomachine.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 		ibcwasmtypes.ModuleName:     ibcwasm.NewAppModule(ibcwasmkeeper.Keeper{}),
+		wasmtypes.ModuleName:        wasm.NewAppModule(cdc, &wasmkeeper.Keeper{}, nil, nil, nil, nil, nil),
 	}
 
 	for _, m := range modules {

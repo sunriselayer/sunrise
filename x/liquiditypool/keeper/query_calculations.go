@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"cosmossdk.io/math"
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 	"google.golang.org/grpc/codes"
@@ -24,11 +23,11 @@ func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.Q
 		return nil, types.ErrPoolNotFound
 	}
 
-	lowerTick, ok := sdkmath.NewIntFromString(req.LowerTick)
+	lowerTick, ok := math.NewIntFromString(req.LowerTick)
 	if !ok {
 		return nil, types.ErrInvalidTickers
 	}
-	upperTick, ok := sdkmath.NewIntFromString(req.UpperTick)
+	upperTick, ok := math.NewIntFromString(req.UpperTick)
 	if !ok {
 		return nil, types.ErrInvalidTickers
 	}
@@ -36,7 +35,7 @@ func (q queryServer) CalculationCreatePosition(ctx context.Context, req *types.Q
 	if err != nil {
 		return nil, types.ErrInvalidTickers
 	}
-	amount, ok := sdkmath.NewIntFromString(req.Amount)
+	amount, ok := math.NewIntFromString(req.Amount)
 	if !ok {
 		return nil, types.ErrInvalidTokenAmounts
 	}
@@ -79,7 +78,7 @@ func (q queryServer) CalculationIncreaseLiquidity(ctx context.Context, req *type
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	amountIn, ok := sdkmath.NewIntFromString(req.AmountIn)
+	amountIn, ok := math.NewIntFromString(req.AmountIn)
 	if !ok {
 		return nil, types.ErrInvalidTokenAmounts
 	}
