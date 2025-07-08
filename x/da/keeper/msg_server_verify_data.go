@@ -54,7 +54,13 @@ func (k msgServer) VerifyData(goCtx context.Context, msg *types.MsgVerifyData) (
 	lastSlashBlockHeight, err := k.LastSlashBlockHeight.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			lastSlashBlockHeight = 0
+			// If LastSlashBlockHeight is not found (e.g., after a new deployment),
+			// initialize it with the current block height. This prevents the slash condition
+			// from triggering immediately.
+			lastSlashBlockHeight = ctx.BlockHeight()
+			if err := k.LastSlashBlockHeight.Set(ctx, lastSlashBlockHeight); err != nil {
+				return nil, err
+			}
 		} else {
 			return nil, err
 		}
