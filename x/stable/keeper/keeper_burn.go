@@ -24,7 +24,7 @@ func (k Keeper) Burn(ctx context.Context, sender sdk.AccAddress, amountToBurn sd
 
 	// 1. Validate sender is an authority
 	if !k.isAuthority(sender, params) {
-		return errors.Wrapf(types.ErrInvalidSigner, "sender %s is not an authority", sender.String())
+		return errors.Wrapf(types.ErrInvalidAuthority, "sender %s is not an authority", sender.String())
 	}
 
 	if !amountToBurn.IsAllPositive() {
