@@ -131,10 +131,12 @@ func (k Keeper) CheckUnbondingEntriesMature(ctx context.Context, owner sdk.AccAd
 	}
 
 	if matureEntriesFound {
-		lockup.UnbondEntries.Entries = keptEntries
-
-		return k.SetLockupAccount(ctx, lockup)
-
+		latestLockup, err := k.GetLockupAccount(ctx, owner, id)
+		if err != nil {
+			return err
+		}
+		latestLockup.UnbondEntries.Entries = keptEntries
+		return k.SetLockupAccount(ctx, latestLockup)
 	}
 
 	return nil
