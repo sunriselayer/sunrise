@@ -7,6 +7,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"errors"
+
+	"cosmossdk.io/collections"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 )
 
@@ -21,6 +24,9 @@ func (k msgServer) Send(ctx context.Context, msg *types.MsgSend) (*types.MsgSend
 	}
 	lockupAcc, err := k.GetLockupAccount(ctx, owner, msg.LockupAccountId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, types.ErrLockupAccountNotFound
+		}
 		return nil, err
 	}
 	err = msg.Amount.Validate()
