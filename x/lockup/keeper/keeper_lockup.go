@@ -23,10 +23,14 @@ func (k Keeper) TrackDelegation(
 		return err
 	}
 
-	// return error if the delegation amount is zero or if the base coins does not
-	// exceed the desired delegation amount.
+	// return error if the delegation amount is zero
 	if amount.IsZero() {
-		return sdkerrors.ErrInvalidCoins.Wrap("delegation attempt with zero coins for staking denom or insufficient funds")
+		return sdkerrors.ErrInvalidRequest.Wrap("delegation amount cannot be zero")
+	}
+
+	// return error if the delegation amount exceeds total balance
+	if balance.LT(amount) {
+		return sdkerrors.ErrInsufficientFunds.Wrapf("total balance is less than delegation amount: %s < %s", balance, amount)
 	}
 
 	delLocking := lockup.DelegatedLocking
@@ -38,10 +42,11 @@ func (k Keeper) TrackDelegation(
 	x := math.MinInt(math.MaxInt(locked.Sub(delLocking), math.ZeroInt()), amount)
 	y := amount.Sub(x)
 
-	// available for delegation is `balance - locked`
+	// available for delegation is `balance - locked - delFree`
 	// y is the amount to delegate from free funds
-	// if y > balance - locked, then it should fail
-	if y.GT(balance.Sub(locked)) {
+	// if y > balance - locked - delFree, then it should fail
+	availableFree := balance.Sub(locked).Sub(delFree)
+	if y.GT(availableFree) {
 		return types.ErrInsufficientUnlockedFunds
 	}
 
