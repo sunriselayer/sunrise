@@ -5,10 +5,47 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
+
+type mockIterator struct {
+	values [][]byte
+	idx    int
+}
+
+func (m *mockIterator) Domain() (start, end []byte) {
+	return nil, nil
+}
+
+func (m *mockIterator) Valid() bool {
+	return m.idx < len(m.values)
+}
+
+func (m *mockIterator) Next() {
+	if m.Valid() {
+		m.idx++
+	}
+}
+
+func (m *mockIterator) Key() (key []byte) {
+	return m.values[m.idx]
+}
+
+func (m *mockIterator) Value() (value []byte) {
+	return m.values[m.idx]
+}
+
+func (m *mockIterator) Error() error {
+	return nil
+}
+
+func (m *mockIterator) Close() error {
+	return nil
+}
 
 func TestDeleteRejectedDataOvertime(t *testing.T) {
 	k, _, _, ctx := setupMsgServer(t)
@@ -101,7 +138,7 @@ func TestDeleteVerifiedDataOvertime(t *testing.T) {
 }
 
 func TestChangeToChallengingFromChallengePeriod(t *testing.T) {
-	k, _, _, ctx := setupMsgServer(t)
+	k, mocks, _, ctx := setupMsgServer(t)
 
 	// Set challenge threshold
 	threshold := "0.5" // 50% threshold
@@ -136,6 +173,10 @@ func TestChangeToChallengingFromChallengePeriod(t *testing.T) {
 		ShardDoubleHashes: shardDoubleHashes,
 	}
 	require.NoError(t, k.SetPublishedData(ctx, dataWithInsufficientInvalidity))
+
+	// Set up mock for staking keeper
+	mocks.StakingKeeper.EXPECT().ValidatorsPowerStoreIterator(gomock.Any()).Return(new(mockIterator), nil).AnyTimes()
+	mocks.StakingKeeper.EXPECT().Validator(gomock.Any(), gomock.Any()).Return(nil, stakingtypes.ErrNoValidatorFound).AnyTimes()
 
 	// Execute test
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
