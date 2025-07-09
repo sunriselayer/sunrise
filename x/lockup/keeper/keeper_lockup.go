@@ -25,7 +25,7 @@ func (k Keeper) TrackDelegation(
 
 	// return error if the delegation amount is zero or if the base coins does not
 	// exceed the desired delegation amount.
-	if amount.IsZero() || balance.LT(amount) {
+	if amount.IsZero() {
 		return sdkerrors.ErrInvalidCoins.Wrap("delegation attempt with zero coins for staking denom or insufficient funds")
 	}
 
@@ -37,6 +37,13 @@ func (k Keeper) TrackDelegation(
 	// Y := D - X
 	x := math.MinInt(math.MaxInt(locked.Sub(delLocking), math.ZeroInt()), amount)
 	y := amount.Sub(x)
+
+	// available for delegation is `balance - locked`
+	// y is the amount to delegate from free funds
+	// if y > balance - locked, then it should fail
+	if y.GT(balance.Sub(locked)) {
+		return types.ErrInsufficientUnlockedFunds
+	}
 
 	if !x.IsZero() {
 		newDelLocking := delLocking.Add(x)
@@ -94,6 +101,10 @@ func (k Keeper) CheckUnbondingEntriesMature(ctx context.Context, owner sdk.AccAd
 	lockup, err := k.GetLockupAccount(ctx, owner, id)
 	if err != nil {
 		return err
+	}
+
+	if lockup.UnbondEntries == nil {
+		return nil
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)

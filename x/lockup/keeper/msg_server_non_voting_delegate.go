@@ -5,6 +5,9 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
+	"errors"
+
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
@@ -21,6 +24,9 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	}
 	lockup, err := k.GetLockupAccount(ctx, owner, msg.LockupAccountId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, errorsmod.Wrapf(types.ErrLockupAccountNotFound, "owner %s, id %d", msg.Owner, msg.LockupAccountId)
+		}
 		return nil, err
 	}
 	err = msg.Amount.Validate()
@@ -47,7 +53,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	currentTime := sdkCtx.BlockTime().Unix()
 
-	_, lockedAmount, err := lockup.GetLockCoinInfo(currentTime)
+	_, locked, err := lockup.GetLockCoinInfo(currentTime)
 	if err != nil {
 		return nil, err
 	}
@@ -58,10 +64,13 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, err
 	}
 
-	err = k.TrackDelegation(ctx, owner, msg.LockupAccountId, balance.Amount, lockedAmount, msg.Amount.Amount)
+	// Track the delegation
+	err = k.TrackDelegation(ctx, owner, msg.LockupAccountId, balance.Amount, locked, msg.Amount.Amount)
 	if err != nil {
 		return nil, err
 	}
+
+	// Delegate the tokens to the validator
 	_, rewards, err := k.shareclassKeeper.Delegate(ctx, lockupAddr, valAddr, msg.Amount)
 	if err != nil {
 		return nil, err
