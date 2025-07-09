@@ -28,6 +28,7 @@ type Keeper struct {
 	Params              collections.Item[types.Params]
 	NextLockupAccountId collections.Map[sdk.AccAddress, uint64]
 	LockupAccounts      collections.Map[collections.Pair[[]byte, uint64], types.LockupAccount]
+	Listings            collections.Map[collections.Pair[[]byte, uint64], sdk.Coin]
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
@@ -49,6 +50,7 @@ func NewKeeper(
 	feeKeeper types.FeeKeeper,
 	shareclassKeeper types.ShareclassKeeper,
 ) Keeper {
+	// authority is checked once on startup, so that we don't have to check it again on every message
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
 	}
@@ -65,6 +67,7 @@ func NewKeeper(
 		Params:              collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		NextLockupAccountId: collections.NewMap(sb, types.NextLockupAccountIdKeyPrefix, "next_lockup_account_id", types.NextLockupAccountIdKeyCodec, collections.Uint64Value),
 		LockupAccounts:      collections.NewMap(sb, types.LockupAccountsKeyPrefix, "lockup_accounts", types.LockupAccountsKeyCodec, codec.CollValue[types.LockupAccount](cdc)),
+		Listings:            collections.NewMap(sb, types.ListingsKeyPrefix, "listings", types.ListingsKeyCodec, codec.CollValue[sdk.Coin](cdc)),
 
 		accountKeeper:    accountKeeper,
 		bankKeeper:       bankKeeper,

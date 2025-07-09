@@ -657,6 +657,382 @@ func (m *MsgSendResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSendResponse proto.InternalMessageInfo
 
+// MsgSellLockupAccount
+type MsgSellLockupAccount struct {
+	Owner           string     `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	LockupAccountId uint64     `protobuf:"varint,2,opt,name=lockup_account_id,json=lockupAccountId,proto3" json:"lockup_account_id,omitempty"`
+	Price           types.Coin `protobuf:"bytes,3,opt,name=price,proto3" json:"price"`
+}
+
+func (m *MsgSellLockupAccount) Reset()         { *m = MsgSellLockupAccount{} }
+func (m *MsgSellLockupAccount) String() string { return proto.CompactTextString(m) }
+func (*MsgSellLockupAccount) ProtoMessage()    {}
+func (*MsgSellLockupAccount) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{12}
+}
+func (m *MsgSellLockupAccount) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSellLockupAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSellLockupAccount.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSellLockupAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSellLockupAccount.Merge(m, src)
+}
+func (m *MsgSellLockupAccount) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSellLockupAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSellLockupAccount.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSellLockupAccount proto.InternalMessageInfo
+
+func (m *MsgSellLockupAccount) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *MsgSellLockupAccount) GetLockupAccountId() uint64 {
+	if m != nil {
+		return m.LockupAccountId
+	}
+	return 0
+}
+
+func (m *MsgSellLockupAccount) GetPrice() types.Coin {
+	if m != nil {
+		return m.Price
+	}
+	return types.Coin{}
+}
+
+// MsgSellLockupAccountResponse
+type MsgSellLockupAccountResponse struct {
+}
+
+func (m *MsgSellLockupAccountResponse) Reset()         { *m = MsgSellLockupAccountResponse{} }
+func (m *MsgSellLockupAccountResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSellLockupAccountResponse) ProtoMessage()    {}
+func (*MsgSellLockupAccountResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{13}
+}
+func (m *MsgSellLockupAccountResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSellLockupAccountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSellLockupAccountResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSellLockupAccountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSellLockupAccountResponse.Merge(m, src)
+}
+func (m *MsgSellLockupAccountResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSellLockupAccountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSellLockupAccountResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSellLockupAccountResponse proto.InternalMessageInfo
+
+// MsgCancelSellLockupAccount
+type MsgCancelSellLockupAccount struct {
+	Owner           string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	LockupAccountId uint64 `protobuf:"varint,2,opt,name=lockup_account_id,json=lockupAccountId,proto3" json:"lockup_account_id,omitempty"`
+}
+
+func (m *MsgCancelSellLockupAccount) Reset()         { *m = MsgCancelSellLockupAccount{} }
+func (m *MsgCancelSellLockupAccount) String() string { return proto.CompactTextString(m) }
+func (*MsgCancelSellLockupAccount) ProtoMessage()    {}
+func (*MsgCancelSellLockupAccount) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{14}
+}
+func (m *MsgCancelSellLockupAccount) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCancelSellLockupAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCancelSellLockupAccount.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCancelSellLockupAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCancelSellLockupAccount.Merge(m, src)
+}
+func (m *MsgCancelSellLockupAccount) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCancelSellLockupAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCancelSellLockupAccount.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCancelSellLockupAccount proto.InternalMessageInfo
+
+func (m *MsgCancelSellLockupAccount) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *MsgCancelSellLockupAccount) GetLockupAccountId() uint64 {
+	if m != nil {
+		return m.LockupAccountId
+	}
+	return 0
+}
+
+// MsgCancelSellLockupAccountResponse
+type MsgCancelSellLockupAccountResponse struct {
+}
+
+func (m *MsgCancelSellLockupAccountResponse) Reset()         { *m = MsgCancelSellLockupAccountResponse{} }
+func (m *MsgCancelSellLockupAccountResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCancelSellLockupAccountResponse) ProtoMessage()    {}
+func (*MsgCancelSellLockupAccountResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{15}
+}
+func (m *MsgCancelSellLockupAccountResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCancelSellLockupAccountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCancelSellLockupAccountResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCancelSellLockupAccountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCancelSellLockupAccountResponse.Merge(m, src)
+}
+func (m *MsgCancelSellLockupAccountResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCancelSellLockupAccountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCancelSellLockupAccountResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCancelSellLockupAccountResponse proto.InternalMessageInfo
+
+// MsgBuyLockupAccount
+type MsgBuyLockupAccount struct {
+	Buyer           string `protobuf:"bytes,1,opt,name=buyer,proto3" json:"buyer,omitempty"`
+	Seller          string `protobuf:"bytes,2,opt,name=seller,proto3" json:"seller,omitempty"`
+	LockupAccountId uint64 `protobuf:"varint,3,opt,name=lockup_account_id,json=lockupAccountId,proto3" json:"lockup_account_id,omitempty"`
+}
+
+func (m *MsgBuyLockupAccount) Reset()         { *m = MsgBuyLockupAccount{} }
+func (m *MsgBuyLockupAccount) String() string { return proto.CompactTextString(m) }
+func (*MsgBuyLockupAccount) ProtoMessage()    {}
+func (*MsgBuyLockupAccount) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{16}
+}
+func (m *MsgBuyLockupAccount) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgBuyLockupAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgBuyLockupAccount.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgBuyLockupAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBuyLockupAccount.Merge(m, src)
+}
+func (m *MsgBuyLockupAccount) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgBuyLockupAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBuyLockupAccount.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgBuyLockupAccount proto.InternalMessageInfo
+
+func (m *MsgBuyLockupAccount) GetBuyer() string {
+	if m != nil {
+		return m.Buyer
+	}
+	return ""
+}
+
+func (m *MsgBuyLockupAccount) GetSeller() string {
+	if m != nil {
+		return m.Seller
+	}
+	return ""
+}
+
+func (m *MsgBuyLockupAccount) GetLockupAccountId() uint64 {
+	if m != nil {
+		return m.LockupAccountId
+	}
+	return 0
+}
+
+// MsgBuyLockupAccountResponse
+type MsgBuyLockupAccountResponse struct {
+}
+
+func (m *MsgBuyLockupAccountResponse) Reset()         { *m = MsgBuyLockupAccountResponse{} }
+func (m *MsgBuyLockupAccountResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgBuyLockupAccountResponse) ProtoMessage()    {}
+func (*MsgBuyLockupAccountResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{17}
+}
+func (m *MsgBuyLockupAccountResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgBuyLockupAccountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgBuyLockupAccountResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgBuyLockupAccountResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBuyLockupAccountResponse.Merge(m, src)
+}
+func (m *MsgBuyLockupAccountResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgBuyLockupAccountResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBuyLockupAccountResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgBuyLockupAccountResponse proto.InternalMessageInfo
+
+// MsgDepositMarketIncentive
+type MsgDepositMarketIncentive struct {
+	Sender string     `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Amount types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+}
+
+func (m *MsgDepositMarketIncentive) Reset()         { *m = MsgDepositMarketIncentive{} }
+func (m *MsgDepositMarketIncentive) String() string { return proto.CompactTextString(m) }
+func (*MsgDepositMarketIncentive) ProtoMessage()    {}
+func (*MsgDepositMarketIncentive) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{18}
+}
+func (m *MsgDepositMarketIncentive) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDepositMarketIncentive) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDepositMarketIncentive.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDepositMarketIncentive) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDepositMarketIncentive.Merge(m, src)
+}
+func (m *MsgDepositMarketIncentive) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDepositMarketIncentive) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDepositMarketIncentive.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDepositMarketIncentive proto.InternalMessageInfo
+
+func (m *MsgDepositMarketIncentive) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgDepositMarketIncentive) GetAmount() types.Coin {
+	if m != nil {
+		return m.Amount
+	}
+	return types.Coin{}
+}
+
+// MsgDepositMarketIncentiveResponse
+type MsgDepositMarketIncentiveResponse struct {
+}
+
+func (m *MsgDepositMarketIncentiveResponse) Reset()         { *m = MsgDepositMarketIncentiveResponse{} }
+func (m *MsgDepositMarketIncentiveResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgDepositMarketIncentiveResponse) ProtoMessage()    {}
+func (*MsgDepositMarketIncentiveResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_efb50c4019309976, []int{19}
+}
+func (m *MsgDepositMarketIncentiveResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDepositMarketIncentiveResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDepositMarketIncentiveResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDepositMarketIncentiveResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDepositMarketIncentiveResponse.Merge(m, src)
+}
+func (m *MsgDepositMarketIncentiveResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDepositMarketIncentiveResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDepositMarketIncentiveResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDepositMarketIncentiveResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "sunrise.lockup.v1.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sunrise.lockup.v1.MsgUpdateParamsResponse")
@@ -670,60 +1046,82 @@ func init() {
 	proto.RegisterType((*MsgClaimRewardsResponse)(nil), "sunrise.lockup.v1.MsgClaimRewardsResponse")
 	proto.RegisterType((*MsgSend)(nil), "sunrise.lockup.v1.MsgSend")
 	proto.RegisterType((*MsgSendResponse)(nil), "sunrise.lockup.v1.MsgSendResponse")
+	proto.RegisterType((*MsgSellLockupAccount)(nil), "sunrise.lockup.v1.MsgSellLockupAccount")
+	proto.RegisterType((*MsgSellLockupAccountResponse)(nil), "sunrise.lockup.v1.MsgSellLockupAccountResponse")
+	proto.RegisterType((*MsgCancelSellLockupAccount)(nil), "sunrise.lockup.v1.MsgCancelSellLockupAccount")
+	proto.RegisterType((*MsgCancelSellLockupAccountResponse)(nil), "sunrise.lockup.v1.MsgCancelSellLockupAccountResponse")
+	proto.RegisterType((*MsgBuyLockupAccount)(nil), "sunrise.lockup.v1.MsgBuyLockupAccount")
+	proto.RegisterType((*MsgBuyLockupAccountResponse)(nil), "sunrise.lockup.v1.MsgBuyLockupAccountResponse")
+	proto.RegisterType((*MsgDepositMarketIncentive)(nil), "sunrise.lockup.v1.MsgDepositMarketIncentive")
+	proto.RegisterType((*MsgDepositMarketIncentiveResponse)(nil), "sunrise.lockup.v1.MsgDepositMarketIncentiveResponse")
 }
 
 func init() { proto.RegisterFile("sunrise/lockup/v1/tx.proto", fileDescriptor_efb50c4019309976) }
 
 var fileDescriptor_efb50c4019309976 = []byte{
-	// 765 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x56, 0x41, 0x4f, 0x13, 0x41,
-	0x14, 0xee, 0xb6, 0xa5, 0xd8, 0x81, 0x88, 0x5d, 0x89, 0xb4, 0x1b, 0x59, 0x6a, 0x2f, 0xd6, 0x26,
-	0xec, 0x52, 0x4c, 0x20, 0xe1, 0x46, 0x31, 0x46, 0x12, 0x4b, 0x4c, 0x11, 0x0e, 0x1e, 0x68, 0xa6,
-	0xbb, 0x93, 0x65, 0x43, 0x77, 0xa6, 0xd9, 0x99, 0x16, 0xb8, 0x19, 0x2f, 0xc6, 0x8b, 0x31, 0xfe,
-	0x0c, 0x4f, 0x1c, 0xf8, 0x11, 0x78, 0x23, 0x9c, 0x3c, 0xa9, 0x81, 0x03, 0x7f, 0xc1, 0xa3, 0xd9,
-	0x99, 0x69, 0xbb, 0xa5, 0x5b, 0xc0, 0x83, 0x07, 0xe3, 0xa9, 0xdd, 0xf9, 0xbe, 0x79, 0xdf, 0x7b,
-	0xdf, 0x9b, 0x79, 0xbb, 0x40, 0xa3, 0x6d, 0xec, 0xbb, 0x14, 0x99, 0x4d, 0x62, 0xed, 0xb5, 0x5b,
-	0x66, 0xa7, 0x6c, 0xb2, 0x03, 0xa3, 0xe5, 0x13, 0x46, 0xd4, 0x8c, 0xc4, 0x0c, 0x81, 0x19, 0x9d,
-	0xb2, 0xa6, 0x5b, 0x84, 0x7a, 0x84, 0x9a, 0x0d, 0x48, 0x91, 0xd9, 0x29, 0x37, 0x10, 0x83, 0x65,
-	0xd3, 0x22, 0x2e, 0x16, 0x5b, 0xb4, 0x19, 0x89, 0x7b, 0xd4, 0x09, 0x42, 0x79, 0xd4, 0x91, 0x40,
-	0x4e, 0x00, 0x75, 0xfe, 0x64, 0x8a, 0x07, 0x09, 0x4d, 0x3b, 0xc4, 0x21, 0x62, 0x3d, 0xf8, 0x27,
-	0x57, 0xf5, 0xe1, 0xc4, 0x5a, 0xd0, 0x87, 0x9e, 0xdc, 0x55, 0xf8, 0xac, 0x80, 0xa9, 0x2a, 0x75,
-	0xb6, 0x5a, 0x36, 0x64, 0xe8, 0x15, 0x47, 0xd4, 0x25, 0x90, 0x86, 0x6d, 0xb6, 0x4b, 0x7c, 0x97,
-	0x1d, 0x66, 0x95, 0xbc, 0x52, 0x4c, 0x57, 0xb2, 0x67, 0xc7, 0xf3, 0xd3, 0x52, 0x6e, 0xd5, 0xb6,
-	0x7d, 0x44, 0xe9, 0x26, 0xf3, 0x5d, 0xec, 0xd4, 0xfa, 0x54, 0x75, 0x19, 0xa4, 0x44, 0xec, 0x6c,
-	0x3c, 0xaf, 0x14, 0x27, 0x16, 0x73, 0xc6, 0x50, 0xe5, 0x86, 0x90, 0xa8, 0x24, 0x4f, 0xbe, 0xcf,
-	0xc5, 0x6a, 0x92, 0xbe, 0x72, 0xf7, 0xdd, 0xe5, 0x51, 0xa9, 0x1f, 0xa8, 0x90, 0x03, 0x33, 0x57,
-	0x72, 0xaa, 0x21, 0xda, 0x22, 0x98, 0xa2, 0xc2, 0x2f, 0x05, 0x4c, 0x57, 0xa9, 0xb3, 0x8e, 0x5d,
-	0xf6, 0x92, 0x07, 0x5d, 0xb5, 0x2c, 0xd2, 0xc6, 0x4c, 0x5d, 0x00, 0x29, 0x8a, 0xb0, 0x8d, 0xfc,
-	0x1b, 0x33, 0x96, 0x3c, 0xd5, 0x00, 0x63, 0x64, 0x1f, 0x23, 0x9f, 0x67, 0x7b, 0xdd, 0x06, 0x41,
-	0x53, 0x67, 0x01, 0xa0, 0x0c, 0xfa, 0xac, 0xce, 0x5c, 0x0f, 0x65, 0x13, 0x79, 0xa5, 0x98, 0xa8,
-	0xa5, 0xf9, 0xca, 0x6b, 0xd7, 0x43, 0x6a, 0x0e, 0xdc, 0x41, 0xd8, 0x16, 0x60, 0x92, 0x83, 0xe3,
-	0x08, 0xdb, 0x1c, 0x5a, 0x06, 0x29, 0xe8, 0x05, 0x59, 0x66, 0xc7, 0xa4, 0x31, 0x52, 0x27, 0xe8,
-	0xbf, 0x21, 0xfb, 0x6f, 0xac, 0x11, 0x17, 0x77, 0x8d, 0x11, 0xf4, 0x95, 0x89, 0xc0, 0x18, 0x99,
-	0x6f, 0x41, 0x07, 0x0f, 0xa3, 0x2a, 0xef, 0x59, 0xf3, 0x3e, 0xce, 0xad, 0xd9, 0x20, 0x78, 0x9b,
-	0x30, 0x17, 0x3b, 0xcf, 0x50, 0x13, 0x39, 0x90, 0xa1, 0x7e, 0xa1, 0xca, 0xed, 0x0a, 0x2d, 0x81,
-	0x8c, 0x68, 0x58, 0x1d, 0x0a, 0x89, 0xba, 0x6b, 0x73, 0x93, 0x92, 0xb5, 0xa9, 0x66, 0x58, 0x7a,
-	0xdd, 0x56, 0x37, 0x40, 0xa6, 0x03, 0x9b, 0xae, 0x0d, 0x19, 0xf1, 0xeb, 0x50, 0x44, 0xe3, 0xde,
-	0xa4, 0x2b, 0x8f, 0xce, 0x8e, 0xe7, 0x67, 0xa5, 0xce, 0x76, 0x97, 0x33, 0x28, 0x78, 0xaf, 0x73,
-	0x65, 0x3d, 0x64, 0x55, 0xf2, 0xcf, 0xac, 0x02, 0x81, 0x55, 0xa2, 0x00, 0xe9, 0xd4, 0x90, 0x11,
-	0x3d, 0xa7, 0x3e, 0xc4, 0xc1, 0x83, 0x30, 0x61, 0x0b, 0xdb, 0xff, 0xad, 0x57, 0x79, 0xa0, 0x47,
-	0x5b, 0xd1, 0x73, 0xeb, 0xab, 0x18, 0x11, 0x6b, 0x4d, 0xe8, 0x7a, 0x35, 0xb4, 0x0f, 0x7d, 0x9b,
-	0xfe, 0x4b, 0x36, 0x0d, 0x54, 0x2b, 0x26, 0x4b, 0xb8, 0x94, 0x5e, 0x99, 0x1f, 0xe3, 0x60, 0xbc,
-	0x4a, 0x9d, 0x4d, 0x84, 0xed, 0xbf, 0x5a, 0xde, 0x12, 0x48, 0xfb, 0xc8, 0x72, 0x5b, 0x2e, 0xc2,
-	0x4c, 0x96, 0x75, 0xcd, 0x74, 0xed, 0x51, 0x55, 0x2b, 0xd4, 0xed, 0xc4, 0xf5, 0xdd, 0x5e, 0x08,
-	0xba, 0xfd, 0xe5, 0xc7, 0x5c, 0xd1, 0x71, 0xd9, 0x6e, 0xbb, 0x61, 0x58, 0xc4, 0x93, 0xef, 0x0a,
-	0xf9, 0x33, 0x4f, 0xed, 0x3d, 0x93, 0x1d, 0xb6, 0x10, 0xe5, 0x1b, 0x68, 0xe4, 0xc9, 0xc8, 0xf0,
-	0xb6, 0x07, 0x7e, 0x74, 0x3d, 0x5a, 0xbc, 0x4c, 0x82, 0x44, 0x95, 0x3a, 0xea, 0x0e, 0x98, 0x1c,
-	0x78, 0x63, 0x14, 0x22, 0x26, 0xfd, 0x95, 0x09, 0xae, 0x95, 0x6e, 0xe6, 0x74, 0x75, 0x54, 0x0f,
-	0x64, 0x86, 0x27, 0xfc, 0xe3, 0xe8, 0x00, 0x43, 0x44, 0xcd, 0xbc, 0x25, 0x31, 0x2c, 0x37, 0x3c,
-	0x35, 0x47, 0xc8, 0x0d, 0x11, 0x47, 0xc9, 0x8d, 0x1c, 0x3f, 0x2a, 0x05, 0xf7, 0xa3, 0x46, 0xcf,
-	0x93, 0x1b, 0xe2, 0xf4, 0xa9, 0x5a, 0xf9, 0xd6, 0xd4, 0x9e, 0xe8, 0x0e, 0x98, 0x1c, 0xb8, 0xc1,
-	0x23, 0x5a, 0x16, 0xe6, 0x8c, 0x6a, 0x59, 0xd4, 0xf5, 0x51, 0x9f, 0x83, 0x24, 0xbf, 0x3a, 0x5a,
-	0xf4, 0x9e, 0x00, 0xd3, 0x0a, 0xa3, 0xb1, 0x6e, 0x1c, 0x6d, 0xec, 0xed, 0xe5, 0x51, 0x49, 0xa9,
-	0xbc, 0x38, 0x39, 0xd7, 0x95, 0xd3, 0x73, 0x5d, 0xf9, 0x79, 0xae, 0x2b, 0x9f, 0x2e, 0xf4, 0xd8,
-	0xe9, 0x85, 0x1e, 0xfb, 0x76, 0xa1, 0xc7, 0xde, 0x18, 0xa1, 0x43, 0x2d, 0xc3, 0x35, 0xe1, 0x21,
-	0xf2, 0xbb, 0x0f, 0xe6, 0x41, 0xf7, 0x5b, 0x87, 0x1f, 0xf0, 0x46, 0x8a, 0x7f, 0xe8, 0x3c, 0xfd,
-	0x1d, 0x00, 0x00, 0xff, 0xff, 0xd8, 0xef, 0x7c, 0xbd, 0xa3, 0x09, 0x00, 0x00,
+	// 977 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x57, 0x41, 0x8f, 0xdb, 0x44,
+	0x14, 0x5e, 0x27, 0xd9, 0x6d, 0xf3, 0x5a, 0xd1, 0xc6, 0x5d, 0x75, 0x13, 0xc3, 0xba, 0xdb, 0x80,
+	0xe8, 0xb2, 0x62, 0xed, 0xa6, 0xd0, 0x56, 0xea, 0xad, 0x69, 0x85, 0x58, 0x89, 0x54, 0x28, 0x4b,
+	0x7b, 0xe0, 0xd0, 0x68, 0x62, 0x8f, 0xdc, 0x61, 0xed, 0x99, 0xc8, 0x33, 0x49, 0x1b, 0x09, 0x09,
+	0x84, 0x90, 0x10, 0x17, 0x84, 0xe0, 0x5f, 0x70, 0xa1, 0x87, 0xf2, 0x03, 0xb8, 0x95, 0x5b, 0xd5,
+	0x13, 0x27, 0x40, 0xbb, 0x87, 0xfe, 0x05, 0x8e, 0xc8, 0x9e, 0x89, 0xe3, 0xc4, 0xf6, 0x6e, 0x16,
+	0x54, 0x24, 0xc4, 0x69, 0xd7, 0x7e, 0xdf, 0xbc, 0xf7, 0x7d, 0xdf, 0xb3, 0xde, 0x9b, 0x80, 0xc1,
+	0x87, 0x34, 0x24, 0x1c, 0xdb, 0x3e, 0x73, 0xf6, 0x86, 0x03, 0x7b, 0xd4, 0xb2, 0xc5, 0x23, 0x6b,
+	0x10, 0x32, 0xc1, 0xf4, 0x9a, 0x8a, 0x59, 0x32, 0x66, 0x8d, 0x5a, 0x86, 0xe9, 0x30, 0x1e, 0x30,
+	0x6e, 0xf7, 0x11, 0xc7, 0xf6, 0xa8, 0xd5, 0xc7, 0x02, 0xb5, 0x6c, 0x87, 0x11, 0x2a, 0x8f, 0x18,
+	0x6b, 0x2a, 0x1e, 0x70, 0x2f, 0x4a, 0x15, 0x70, 0x4f, 0x05, 0x1a, 0x32, 0xd0, 0x8b, 0x9f, 0x6c,
+	0xf9, 0xa0, 0x42, 0xab, 0x1e, 0xf3, 0x98, 0x7c, 0x1f, 0xfd, 0xa7, 0xde, 0x9a, 0x59, 0x62, 0x03,
+	0x14, 0xa2, 0x40, 0x9d, 0x6a, 0x7e, 0xa7, 0xc1, 0x99, 0x0e, 0xf7, 0xee, 0x0e, 0x5c, 0x24, 0xf0,
+	0x87, 0x71, 0x44, 0xbf, 0x06, 0x55, 0x34, 0x14, 0x0f, 0x58, 0x48, 0xc4, 0xb8, 0xae, 0x6d, 0x68,
+	0x9b, 0xd5, 0x76, 0xfd, 0xf9, 0x93, 0xed, 0x55, 0x55, 0xee, 0xa6, 0xeb, 0x86, 0x98, 0xf3, 0x5d,
+	0x11, 0x12, 0xea, 0x75, 0xa7, 0x50, 0xfd, 0x3a, 0xac, 0xc8, 0xdc, 0xf5, 0xd2, 0x86, 0xb6, 0x79,
+	0xea, 0x4a, 0xc3, 0xca, 0x28, 0xb7, 0x64, 0x89, 0x76, 0xe5, 0xe9, 0x6f, 0x17, 0x96, 0xba, 0x0a,
+	0x7e, 0xe3, 0x95, 0x2f, 0x5e, 0x3c, 0xde, 0x9a, 0x26, 0x6a, 0x36, 0x60, 0x6d, 0x8e, 0x53, 0x17,
+	0xf3, 0x01, 0xa3, 0x1c, 0x37, 0xff, 0xd4, 0x60, 0xb5, 0xc3, 0xbd, 0x1d, 0x4a, 0xc4, 0x07, 0x71,
+	0xd2, 0x9b, 0x8e, 0xc3, 0x86, 0x54, 0xe8, 0x97, 0x61, 0x85, 0x63, 0xea, 0xe2, 0xf0, 0x48, 0xc6,
+	0x0a, 0xa7, 0x5b, 0xb0, 0xcc, 0x1e, 0x52, 0x1c, 0xc6, 0x6c, 0x0f, 0x3b, 0x20, 0x61, 0xfa, 0x3a,
+	0x00, 0x17, 0x28, 0x14, 0x3d, 0x41, 0x02, 0x5c, 0x2f, 0x6f, 0x68, 0x9b, 0xe5, 0x6e, 0x35, 0x7e,
+	0xf3, 0x11, 0x09, 0xb0, 0xde, 0x80, 0x93, 0x98, 0xba, 0x32, 0x58, 0x89, 0x83, 0x27, 0x30, 0x75,
+	0xe3, 0xd0, 0x75, 0x58, 0x41, 0x41, 0xc4, 0xb2, 0xbe, 0xac, 0x8c, 0x51, 0x75, 0xa2, 0xfe, 0x5b,
+	0xaa, 0xff, 0xd6, 0x2d, 0x46, 0xe8, 0xc4, 0x18, 0x09, 0xbf, 0x71, 0x2a, 0x32, 0x46, 0xf1, 0x6d,
+	0x9a, 0xf0, 0x5a, 0x9e, 0xf2, 0xc4, 0x9a, 0xaf, 0x4a, 0xb1, 0x35, 0x77, 0x18, 0xbd, 0xc7, 0x04,
+	0xa1, 0xde, 0x6d, 0xec, 0x63, 0x0f, 0x09, 0x3c, 0x15, 0xaa, 0x2d, 0x26, 0x74, 0x0b, 0x6a, 0xb2,
+	0x61, 0x3d, 0x24, 0x4b, 0xf4, 0x88, 0x1b, 0x9b, 0x54, 0xe9, 0x9e, 0xf1, 0xd3, 0xa5, 0x77, 0x5c,
+	0xfd, 0x0e, 0xd4, 0x46, 0xc8, 0x27, 0x2e, 0x12, 0x2c, 0xec, 0x21, 0x99, 0x2d, 0xf6, 0xa6, 0xda,
+	0xbe, 0xf8, 0xfc, 0xc9, 0xf6, 0xba, 0xaa, 0x73, 0x6f, 0x82, 0x99, 0x2d, 0x78, 0x76, 0x34, 0xf7,
+	0x3e, 0x65, 0x55, 0xe5, 0x78, 0x56, 0x41, 0x64, 0x95, 0x14, 0xa0, 0x9c, 0xca, 0x18, 0x91, 0x38,
+	0xf5, 0x75, 0x09, 0xce, 0xa7, 0x01, 0x77, 0xa9, 0xfb, 0xbf, 0xf5, 0x6a, 0x03, 0xcc, 0x7c, 0x2b,
+	0x12, 0xb7, 0x7e, 0x91, 0x23, 0xe2, 0x96, 0x8f, 0x48, 0xd0, 0xc5, 0x0f, 0x51, 0xe8, 0xf2, 0xff,
+	0x92, 0x4d, 0x33, 0x6a, 0xe5, 0x64, 0x49, 0x4b, 0x49, 0x64, 0x7e, 0x53, 0x82, 0x13, 0x1d, 0xee,
+	0xed, 0x62, 0xea, 0xbe, 0x54, 0x79, 0xd7, 0xa0, 0x1a, 0x62, 0x87, 0x0c, 0x08, 0xa6, 0x42, 0xc9,
+	0x3a, 0x64, 0xba, 0x26, 0x50, 0xdd, 0x49, 0x75, 0xbb, 0x7c, 0x78, 0xb7, 0x2f, 0x47, 0xdd, 0xfe,
+	0xe1, 0xf7, 0x0b, 0x9b, 0x1e, 0x11, 0x0f, 0x86, 0x7d, 0xcb, 0x61, 0x81, 0xda, 0x15, 0xea, 0xcf,
+	0x36, 0x77, 0xf7, 0x6c, 0x31, 0x1e, 0x60, 0x1e, 0x1f, 0xe0, 0xb9, 0x5f, 0x46, 0x2d, 0x6e, 0x7b,
+	0xe4, 0x47, 0xe2, 0xd1, 0x4f, 0x72, 0xfa, 0xee, 0x62, 0xdf, 0x9f, 0x9d, 0xbe, 0x2f, 0xd3, 0xb0,
+	0xab, 0xb0, 0x3c, 0x08, 0x89, 0x23, 0x47, 0xee, 0x02, 0x5f, 0xb9, 0x44, 0xe7, 0x0c, 0x84, 0x0c,
+	0xed, 0x44, 0xd7, 0x97, 0x1a, 0x18, 0xd1, 0x77, 0x81, 0xa8, 0x83, 0xfd, 0x7f, 0x55, 0xdd, 0x0c,
+	0xcd, 0x37, 0xa0, 0x59, 0xcc, 0x22, 0x21, 0xfb, 0xa3, 0x06, 0xe7, 0x3a, 0xdc, 0x6b, 0x0f, 0xc7,
+	0x19, 0x96, 0xfd, 0xe1, 0x78, 0x11, 0x96, 0x31, 0x4c, 0x6e, 0x4c, 0xdf, 0x5f, 0x60, 0x01, 0x2a,
+	0x5c, 0xbe, 0xae, 0xf2, 0x61, 0xba, 0xe2, 0x4a, 0xcd, 0x75, 0x78, 0x35, 0x87, 0x70, 0x22, 0xe8,
+	0x7b, 0x0d, 0x1a, 0x1d, 0xee, 0xdd, 0xc6, 0x03, 0xc6, 0x89, 0xe8, 0xa0, 0x70, 0x0f, 0x8b, 0x1d,
+	0xea, 0x60, 0x2a, 0xc8, 0x08, 0xff, 0x8d, 0xc5, 0x3e, 0x9d, 0x8b, 0xa5, 0x7f, 0xb0, 0x6e, 0x5f,
+	0x87, 0x8b, 0x85, 0xa4, 0x26, 0xd4, 0xaf, 0xfc, 0x7c, 0x12, 0xca, 0x1d, 0xee, 0xe9, 0xf7, 0xe1,
+	0xf4, 0xcc, 0x15, 0xaa, 0x99, 0x73, 0xf5, 0x99, 0xbb, 0xd2, 0x18, 0x5b, 0x47, 0x63, 0x26, 0x75,
+	0xf4, 0x00, 0x6a, 0xd9, 0x2b, 0xcf, 0xa5, 0xfc, 0x04, 0x19, 0xa0, 0x61, 0x2f, 0x08, 0x4c, 0x97,
+	0xcb, 0x5e, 0x23, 0x0a, 0xca, 0x65, 0x80, 0x45, 0xe5, 0x0a, 0xf7, 0xb1, 0xce, 0xe1, 0x5c, 0xde,
+	0x2e, 0x7e, 0xeb, 0x88, 0x3c, 0x53, 0xa8, 0xd1, 0x5a, 0x18, 0x9a, 0x14, 0xbd, 0x0f, 0xa7, 0x67,
+	0x56, 0x5a, 0x41, 0xcb, 0xd2, 0x98, 0xa2, 0x96, 0xe5, 0xed, 0x13, 0xfd, 0x3d, 0xa8, 0xc4, 0xbb,
+	0xc4, 0xc8, 0x3f, 0x13, 0xc5, 0x8c, 0x66, 0x71, 0x2c, 0xdd, 0x8b, 0xec, 0x44, 0xba, 0x54, 0x74,
+	0x70, 0x0e, 0x58, 0xd4, 0x8b, 0xc2, 0xe9, 0xa2, 0x7f, 0x06, 0x6b, 0x45, 0x63, 0x70, 0xbb, 0x40,
+	0x7d, 0x3e, 0xdc, 0xb8, 0x7a, 0x2c, 0x78, 0x42, 0xe0, 0x13, 0x38, 0x9b, 0x19, 0x6d, 0x6f, 0xe6,
+	0xa7, 0x9a, 0xc7, 0x19, 0xd6, 0x62, 0xb8, 0xa4, 0xd6, 0xa7, 0x70, 0xbe, 0x60, 0xea, 0xbc, 0x9d,
+	0x9f, 0x29, 0x1f, 0x6d, 0xbc, 0x7b, 0x1c, 0xf4, 0xa4, 0xba, 0xb1, 0xfc, 0xf9, 0x8b, 0xc7, 0x5b,
+	0x5a, 0xfb, 0xfd, 0xa7, 0xfb, 0xa6, 0xf6, 0x6c, 0xdf, 0xd4, 0xfe, 0xd8, 0x37, 0xb5, 0x6f, 0x0f,
+	0xcc, 0xa5, 0x67, 0x07, 0xe6, 0xd2, 0xaf, 0x07, 0xe6, 0xd2, 0xc7, 0x56, 0x6a, 0x7f, 0xab, 0x02,
+	0x3e, 0x1a, 0xe3, 0x70, 0xf2, 0x60, 0x3f, 0x9a, 0xfc, 0xac, 0x8b, 0x77, 0x79, 0x7f, 0x25, 0xfe,
+	0x4d, 0xf7, 0xce, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x37, 0xce, 0xc6, 0xe1, 0x8e, 0x0e, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -751,6 +1149,14 @@ type MsgClient interface {
 	ClaimRewards(ctx context.Context, in *MsgClaimRewards, opts ...grpc.CallOption) (*MsgClaimRewardsResponse, error)
 	// Send
 	Send(ctx context.Context, in *MsgSend, opts ...grpc.CallOption) (*MsgSendResponse, error)
+	// Sell Lockup Account
+	SellLockupAccount(ctx context.Context, in *MsgSellLockupAccount, opts ...grpc.CallOption) (*MsgSellLockupAccountResponse, error)
+	// Cancel Sell Lockup Account
+	CancelSellLockupAccount(ctx context.Context, in *MsgCancelSellLockupAccount, opts ...grpc.CallOption) (*MsgCancelSellLockupAccountResponse, error)
+	// Buy Lockup Account
+	BuyLockupAccount(ctx context.Context, in *MsgBuyLockupAccount, opts ...grpc.CallOption) (*MsgBuyLockupAccountResponse, error)
+	// Deposit Market Incentive
+	DepositMarketIncentive(ctx context.Context, in *MsgDepositMarketIncentive, opts ...grpc.CallOption) (*MsgDepositMarketIncentiveResponse, error)
 }
 
 type msgClient struct {
@@ -815,6 +1221,42 @@ func (c *msgClient) Send(ctx context.Context, in *MsgSend, opts ...grpc.CallOpti
 	return out, nil
 }
 
+func (c *msgClient) SellLockupAccount(ctx context.Context, in *MsgSellLockupAccount, opts ...grpc.CallOption) (*MsgSellLockupAccountResponse, error) {
+	out := new(MsgSellLockupAccountResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Msg/SellLockupAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CancelSellLockupAccount(ctx context.Context, in *MsgCancelSellLockupAccount, opts ...grpc.CallOption) (*MsgCancelSellLockupAccountResponse, error) {
+	out := new(MsgCancelSellLockupAccountResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Msg/CancelSellLockupAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) BuyLockupAccount(ctx context.Context, in *MsgBuyLockupAccount, opts ...grpc.CallOption) (*MsgBuyLockupAccountResponse, error) {
+	out := new(MsgBuyLockupAccountResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Msg/BuyLockupAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DepositMarketIncentive(ctx context.Context, in *MsgDepositMarketIncentive, opts ...grpc.CallOption) (*MsgDepositMarketIncentiveResponse, error) {
+	out := new(MsgDepositMarketIncentiveResponse)
+	err := c.cc.Invoke(ctx, "/sunrise.lockup.v1.Msg/DepositMarketIncentive", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
@@ -830,6 +1272,14 @@ type MsgServer interface {
 	ClaimRewards(context.Context, *MsgClaimRewards) (*MsgClaimRewardsResponse, error)
 	// Send
 	Send(context.Context, *MsgSend) (*MsgSendResponse, error)
+	// Sell Lockup Account
+	SellLockupAccount(context.Context, *MsgSellLockupAccount) (*MsgSellLockupAccountResponse, error)
+	// Cancel Sell Lockup Account
+	CancelSellLockupAccount(context.Context, *MsgCancelSellLockupAccount) (*MsgCancelSellLockupAccountResponse, error)
+	// Buy Lockup Account
+	BuyLockupAccount(context.Context, *MsgBuyLockupAccount) (*MsgBuyLockupAccountResponse, error)
+	// Deposit Market Incentive
+	DepositMarketIncentive(context.Context, *MsgDepositMarketIncentive) (*MsgDepositMarketIncentiveResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -853,6 +1303,18 @@ func (*UnimplementedMsgServer) ClaimRewards(ctx context.Context, req *MsgClaimRe
 }
 func (*UnimplementedMsgServer) Send(ctx context.Context, req *MsgSend) (*MsgSendResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
+}
+func (*UnimplementedMsgServer) SellLockupAccount(ctx context.Context, req *MsgSellLockupAccount) (*MsgSellLockupAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SellLockupAccount not implemented")
+}
+func (*UnimplementedMsgServer) CancelSellLockupAccount(ctx context.Context, req *MsgCancelSellLockupAccount) (*MsgCancelSellLockupAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelSellLockupAccount not implemented")
+}
+func (*UnimplementedMsgServer) BuyLockupAccount(ctx context.Context, req *MsgBuyLockupAccount) (*MsgBuyLockupAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BuyLockupAccount not implemented")
+}
+func (*UnimplementedMsgServer) DepositMarketIncentive(ctx context.Context, req *MsgDepositMarketIncentive) (*MsgDepositMarketIncentiveResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DepositMarketIncentive not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -967,6 +1429,78 @@ func _Msg_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SellLockupAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSellLockupAccount)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SellLockupAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.lockup.v1.Msg/SellLockupAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SellLockupAccount(ctx, req.(*MsgSellLockupAccount))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CancelSellLockupAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCancelSellLockupAccount)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CancelSellLockupAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.lockup.v1.Msg/CancelSellLockupAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CancelSellLockupAccount(ctx, req.(*MsgCancelSellLockupAccount))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_BuyLockupAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBuyLockupAccount)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).BuyLockupAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.lockup.v1.Msg/BuyLockupAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).BuyLockupAccount(ctx, req.(*MsgBuyLockupAccount))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DepositMarketIncentive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDepositMarketIncentive)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DepositMarketIncentive(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sunrise.lockup.v1.Msg/DepositMarketIncentive",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DepositMarketIncentive(ctx, req.(*MsgDepositMarketIncentive))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sunrise.lockup.v1.Msg",
@@ -995,6 +1529,22 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Send",
 			Handler:    _Msg_Send_Handler,
+		},
+		{
+			MethodName: "SellLockupAccount",
+			Handler:    _Msg_SellLockupAccount_Handler,
+		},
+		{
+			MethodName: "CancelSellLockupAccount",
+			Handler:    _Msg_CancelSellLockupAccount_Handler,
+		},
+		{
+			MethodName: "BuyLockupAccount",
+			Handler:    _Msg_BuyLockupAccount_Handler,
+		},
+		{
+			MethodName: "DepositMarketIncentive",
+			Handler:    _Msg_DepositMarketIncentive_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1438,6 +1988,260 @@ func (m *MsgSendResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgSellLockupAccount) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSellLockupAccount) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSellLockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Price.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	if m.LockupAccountId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.LockupAccountId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSellLockupAccountResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSellLockupAccountResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSellLockupAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCancelSellLockupAccount) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCancelSellLockupAccount) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCancelSellLockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LockupAccountId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.LockupAccountId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCancelSellLockupAccountResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCancelSellLockupAccountResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCancelSellLockupAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgBuyLockupAccount) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgBuyLockupAccount) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgBuyLockupAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LockupAccountId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.LockupAccountId))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Seller) > 0 {
+		i -= len(m.Seller)
+		copy(dAtA[i:], m.Seller)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Seller)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Buyer) > 0 {
+		i -= len(m.Buyer)
+		copy(dAtA[i:], m.Buyer)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Buyer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgBuyLockupAccountResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgBuyLockupAccountResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgBuyLockupAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDepositMarketIncentive) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDepositMarketIncentive) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDepositMarketIncentive) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDepositMarketIncentiveResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDepositMarketIncentiveResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDepositMarketIncentiveResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -1625,6 +2429,111 @@ func (m *MsgSend) Size() (n int) {
 }
 
 func (m *MsgSendResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSellLockupAccount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.LockupAccountId != 0 {
+		n += 1 + sovTx(uint64(m.LockupAccountId))
+	}
+	l = m.Price.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgSellLockupAccountResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgCancelSellLockupAccount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.LockupAccountId != 0 {
+		n += 1 + sovTx(uint64(m.LockupAccountId))
+	}
+	return n
+}
+
+func (m *MsgCancelSellLockupAccountResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgBuyLockupAccount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Buyer)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Seller)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.LockupAccountId != 0 {
+		n += 1 + sovTx(uint64(m.LockupAccountId))
+	}
+	return n
+}
+
+func (m *MsgBuyLockupAccountResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgDepositMarketIncentive) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.Amount.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgDepositMarketIncentiveResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2848,6 +3757,689 @@ func (m *MsgSendResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgSendResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSellLockupAccount) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSellLockupAccount: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSellLockupAccount: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LockupAccountId", wireType)
+			}
+			m.LockupAccountId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LockupAccountId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Price", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Price.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSellLockupAccountResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSellLockupAccountResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSellLockupAccountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCancelSellLockupAccount) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCancelSellLockupAccount: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCancelSellLockupAccount: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LockupAccountId", wireType)
+			}
+			m.LockupAccountId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LockupAccountId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCancelSellLockupAccountResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCancelSellLockupAccountResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCancelSellLockupAccountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgBuyLockupAccount) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgBuyLockupAccount: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgBuyLockupAccount: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Buyer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Buyer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Seller", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Seller = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LockupAccountId", wireType)
+			}
+			m.LockupAccountId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LockupAccountId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgBuyLockupAccountResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgBuyLockupAccountResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgBuyLockupAccountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDepositMarketIncentive) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDepositMarketIncentive: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDepositMarketIncentive: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDepositMarketIncentiveResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDepositMarketIncentiveResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDepositMarketIncentiveResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

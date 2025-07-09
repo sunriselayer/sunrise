@@ -189,6 +189,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 	if in.Config.Authority != "" {
 		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
 	}
+
 	k := keeper.NewKeeper(
 		in.Cdc,
 		in.StoreService,
