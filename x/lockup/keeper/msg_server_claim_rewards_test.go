@@ -17,7 +17,7 @@ import (
 // Test for ClaimRewards msg server.
 // It covers success cases with and without transferable rewards, and various failure scenarios.
 func TestMsgServer_ClaimRewards(t *testing.T) {
-	owner := sdk.AccAddress([]byte("owner"))
+	owner := sdk.AccAddress(("owner"))
 	valAddr := sdk.ValAddress([]byte("validator"))
 	transferableDenom := "transferable"
 	valAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())

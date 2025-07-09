@@ -15,7 +15,7 @@ import (
 // Test for InitLockupAccount msg server.
 // It includes test cases for success, account already exists, and invalid owner address.
 func TestMsgServer_InitLockupAccount(t *testing.T) {
-	sender := sdk.AccAddress([]byte("sender"))
+	sender := sdk.AccAddress(("sender"))
 	stakeDenom := "stake"
 
 	testCases := []struct {
@@ -86,7 +86,7 @@ func TestMsgServer_InitLockupAccount(t *testing.T) {
 func TestMsgServer_InitLockupAccount_MultipleAccounts(t *testing.T) {
 	f := initFixture(t)
 	msgServer := keeper.NewMsgServerImpl(f.keeper)
-	sender := sdk.AccAddress([]byte("sender"))
+	sender := sdk.AccAddress(("sender"))
 	stakeDenom := "stake"
 
 	gomock.InOrder(

@@ -17,7 +17,7 @@ import (
 // Test for NonVotingDelegate msg server.
 // Covers success, invalid addresses, account not found, invalid denom, and delegation failure.
 func TestMsgServer_NonVotingDelegate(t *testing.T) {
-	owner := sdk.AccAddress([]byte("owner"))
+	owner := sdk.AccAddress(("owner"))
 	valAddr := sdk.ValAddress([]byte("validator"))
 	transferableDenom := "transferable"
 	valAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())

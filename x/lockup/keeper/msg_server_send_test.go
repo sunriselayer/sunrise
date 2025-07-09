@@ -21,15 +21,15 @@ func TestMsgServer_Send(t *testing.T) {
 	// Setup
 	f := initFixture(t)
 	msgServer := keeper.NewMsgServerImpl(f.keeper)
-	owner := sdk.AccAddress("owner_______________")
-	recipient := sdk.AccAddress("recipient___________")
+	owner := sdk.AccAddress("owner")
+	recipient := sdk.AccAddress("recipient")
 	transferableDenom := "stake"
 
 	// Create a lockup account
 	lockupAccount := types.LockupAccount{
 		Owner:           owner.String(),
 		Id:              0,
-		Address:         sdk.AccAddress("lockup_acct_________").String(),
+		Address:         sdk.AccAddress("lockup_acct").String(),
 		OriginalLocking: math.NewInt(1000),
 		UnbondEntries:   &types.UnbondingEntries{},
 	}
