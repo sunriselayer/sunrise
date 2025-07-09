@@ -164,7 +164,8 @@ func TestMsgServer_Send(t *testing.T) {
 			require.NoError(t, err)
 			pair := collections.Join(ownerAddr.Bytes(), lockupAccount.Id)
 			// Reset the account for each test, in case a previous test case removed it.
-			f.keeper.LockupAccounts.Set(f.ctx, pair, lockupAccount)
+			err = f.keeper.LockupAccounts.Set(f.ctx, pair, lockupAccount)
+			require.NoError(t, err)
 
 			sdkCtx := f.ctx.(sdk.Context).WithBlockTime(time.Now())
 
