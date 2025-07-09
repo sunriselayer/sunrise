@@ -62,6 +62,8 @@ func TestMsgServerVerifyData_SlashEpoch(t *testing.T) {
 	// Set up mocks
 	mocks.StakingKeeper.EXPECT().TotalBondedTokens(gomock.Any()).Return(math.NewInt(1000), nil).AnyTimes()
 	mocks.StakingKeeper.EXPECT().Validator(gomock.Any(), gomock.Any()).Return(nil, stakingtypes.ErrNoValidatorFound).AnyTimes()
+	mocks.StakingKeeper.EXPECT().PowerReduction(gomock.Any()).Return(sdk.DefaultPowerReduction).AnyTimes()
+	mocks.StakingKeeper.EXPECT().ValidatorsPowerStoreIterator(gomock.Any()).Return(new(mockIterator), nil).AnyTimes()
 
 	// Fast forward block height to trigger slash epoch
 	sdkCtx = sdkCtx.WithBlockHeight(initialBlockHeight + int64(params.SlashEpoch))
