@@ -21,17 +21,10 @@ import (
 
 	"github.com/sunriselayer/sunrise/x/lockup/keeper"
 	module "github.com/sunriselayer/sunrise/x/lockup/module"
-	"github.com/sunriselayer/sunrise/x/lockup/testutil/mocks"
+	lockuptestutil "github.com/sunriselayer/sunrise/x/lockup/testutil"
 	"github.com/sunriselayer/sunrise/x/lockup/types"
 )
 
-type LockupMocks struct {
-	AccountKeeper        *mocks.MockAccountKeeper
-	BankKeeper           *mocks.MockBankKeeper
-	StakingKeeper        *mocks.MockStakingKeeper
-	TokenConverterKeeper *mocks.MockTokenConverterKeeper
-	ShareclassKeeper     *mocks.MockShareclassKeeper
-}
 type fixture struct {
 	ctx          context.Context
 	keeper       keeper.Keeper
@@ -53,14 +46,7 @@ func initFixture(t *testing.T) *fixture {
 	ctx := testutil.DefaultContextWithDB(t, storeKey, storetypes.NewTransientStoreKey("transient_test")).Ctx
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
-	ctrl := gomock.NewController(t)
-	mockKeepers := LockupMocks{
-		AccountKeeper:        mocks.NewMockAccountKeeper(ctrl),
-		BankKeeper:           mocks.NewMockBankKeeper(ctrl),
-		StakingKeeper:        mocks.NewMockStakingKeeper(ctrl),
-		TokenConverterKeeper: mocks.NewMockTokenConverterKeeper(ctrl),
-		ShareclassKeeper:     mocks.NewMockShareclassKeeper(ctrl),
-	}
+	mocks := getMocks(t)
 
 	k := keeper.NewKeeper(
 		encCfg.Codec,
@@ -68,11 +54,11 @@ func initFixture(t *testing.T) *fixture {
 		log.NewNopLogger(),
 		authority.String(),
 		addressCodec,
-		mockKeepers.AccountKeeper,
-		mockKeepers.BankKeeper,
-		mockKeepers.StakingKeeper,
-		mockKeepers.TokenConverterKeeper,
-		mockKeepers.ShareclassKeeper,
+		mocks.AccountKeeper,
+		mocks.BankKeeper,
+		mocks.StakingKeeper,
+		mocks.TokenConverterKeeper,
+		mocks.ShareclassKeeper,
 	)
 
 	// Initialize params
@@ -84,6 +70,26 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
-		mocks:        mockKeepers,
+		mocks:        mocks,
+	}
+}
+
+type LockupMocks struct {
+	AccountKeeper        *lockuptestutil.MockAccountKeeper
+	BankKeeper           *lockuptestutil.MockBankKeeper
+	StakingKeeper        *lockuptestutil.MockStakingKeeper
+	TokenConverterKeeper *lockuptestutil.MockTokenConverterKeeper
+	ShareclassKeeper     *lockuptestutil.MockShareclassKeeper
+}
+
+func getMocks(t *testing.T) LockupMocks {
+	ctrl := gomock.NewController(t)
+
+	return LockupMocks{
+		AccountKeeper:        lockuptestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:           lockuptestutil.NewMockBankKeeper(ctrl),
+		StakingKeeper:        lockuptestutil.NewMockStakingKeeper(ctrl),
+		TokenConverterKeeper: lockuptestutil.NewMockTokenConverterKeeper(ctrl),
+		ShareclassKeeper:     lockuptestutil.NewMockShareclassKeeper(ctrl),
 	}
 }
