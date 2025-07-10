@@ -12,41 +12,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-type mockIterator struct {
-	values [][]byte
-	idx    int
-}
-
-func (m *mockIterator) Domain() (start, end []byte) {
-	return nil, nil
-}
-
-func (m *mockIterator) Valid() bool {
-	return m.idx < len(m.values)
-}
-
-func (m *mockIterator) Next() {
-	if m.Valid() {
-		m.idx++
-	}
-}
-
-func (m *mockIterator) Key() (key []byte) {
-	return m.values[m.idx]
-}
-
-func (m *mockIterator) Value() (value []byte) {
-	return m.values[m.idx]
-}
-
-func (m *mockIterator) Error() error {
-	return nil
-}
-
-func (m *mockIterator) Close() error {
-	return nil
-}
-
 func TestDeleteRejectedDataOvertime(t *testing.T) {
 	k, _, _, ctx := setupMsgServer(t)
 
@@ -254,3 +219,4 @@ func TestChangeToVerifiedFromProofPeriod(t *testing.T) {
 	require.True(t, found)
 	require.Equal(t, types.Status_STATUS_CHALLENGE_PERIOD, data.Status)
 }
+
