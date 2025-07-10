@@ -65,7 +65,10 @@ func (k Keeper) ChangeToChallengingFromChallengePeriod(ctx sdk.Context, threshol
 					}
 				}
 			}
-			thresholdDec := math.LegacyMustNewDecFromStr(threshold) // TODO: remove with Dec
+			thresholdDec, err := math.LegacyNewDecFromStr(threshold) // TODO: remove with Dec
+			if err != nil {
+				return err
+			}
 			invalidityThreshold := thresholdDec.MulInt64(int64(len(data.ShardDoubleHashes)))
 			if math.LegacyNewDec(int64(len(invalidIndices))).GTE(invalidityThreshold) {
 				// Get active validators
@@ -128,7 +131,10 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 		return err
 	}
 
-	replicationFactorDec := math.LegacyMustNewDecFromStr(replicationFactor) // TODO: remove with Dec
+	replicationFactorDec, err := math.LegacyNewDecFromStr(replicationFactor) // TODO: remove with Dec
+	if err != nil {
+		return err
+	}
 	faultValidators := make(map[string]sdk.ValAddress)
 
 	for _, data := range challengingData {
