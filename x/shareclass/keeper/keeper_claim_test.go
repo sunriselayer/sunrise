@@ -14,7 +14,7 @@ func TestKeeper_RewardMultiplier(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	multiplier := math.LegacyNewDec(2)
 
@@ -28,7 +28,7 @@ func TestKeeper_RewardMultiplier(t *testing.T) {
 	require.Equal(multiplier, result)
 
 	// Get non-existent
-	result, err = f.keeper.GetRewardMultiplier(f.ctx, sdk.ValAddress([]byte("non-existent")), denom)
+	result, err = f.keeper.GetRewardMultiplier(f.ctx, sdk.ValAddress("non-existent"), denom)
 	require.NoError(err)
 	require.True(result.IsZero())
 }
@@ -37,8 +37,8 @@ func TestKeeper_UsersLastRewardMultiplier(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	multiplier := math.LegacyNewDec(2)
 
@@ -52,7 +52,7 @@ func TestKeeper_UsersLastRewardMultiplier(t *testing.T) {
 	require.Equal(multiplier, result)
 
 	// Get non-existent
-	result, err = f.keeper.GetUserLastRewardMultiplier(f.ctx, sdk.AccAddress([]byte("non-existent")), validatorAddr, denom)
+	result, err = f.keeper.GetUserLastRewardMultiplier(f.ctx, sdk.AccAddress("non-existent"), validatorAddr, denom)
 	require.NoError(err)
 	require.True(result.IsZero())
 }
@@ -61,8 +61,8 @@ func TestKeeper_GetClaimableRewards(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr.String())
 
@@ -83,8 +83,8 @@ func TestKeeper_ClaimRewards(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr.String())
 	expectedRewards := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(100)))
@@ -103,13 +103,12 @@ func TestKeeper_ClaimRewards(t *testing.T) {
 	require.Equal(expectedRewards, rewards)
 }
 
-// This test checks for the potential bug where state is updated even on a failed "Get" call.
-func TestKeeper_GetClaimableRewardsByDenom_PotentialBug(t *testing.T) {
+func TestKeeper_GetClaimableRewardsByDenom_NoStateChange(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	initialUserMultiplier := math.LegacyNewDec(1)
 	globalMultiplier := math.LegacyNewDec(2)
@@ -122,56 +121,12 @@ func TestKeeper_GetClaimableRewardsByDenom_PotentialBug(t *testing.T) {
 	shareAmount := math.NewInt(100)
 	f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), sender, types.NonVotingShareTokenDenom(validatorAddr.String())).Return(sdk.NewCoin(denom, shareAmount))
 
-	// We are not mocking SendCoins, so the call in ClaimRewards will fail.
-	// However, GetClaimableRewardsByDenom updates the state before that.
-
-	// This call should NOT update the user's last reward multiplier, but it does.
+	// This call should NOT update the user's last reward multiplier
 	_, err := f.keeper.GetClaimableRewardsByDenom(f.ctx, sender, validatorAddr, denom)
 	require.NoError(err)
 
-	// Verify that the user's last reward multiplier has been updated
+	// Verify that the user's last reward multiplier has NOT been updated
 	updatedUserMultiplier, err := f.keeper.GetUserLastRewardMultiplier(f.ctx, sender, validatorAddr, denom)
 	require.NoError(err)
-	require.Equal(globalMultiplier, updatedUserMultiplier, "UserLastRewardMultiplier should not be updated on a Get call")
-
-	// Now, if we try to claim again, the reward will be zero
-	f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), sender, types.NonVotingShareTokenDenom(validatorAddr.String())).Return(sdk.NewCoin(denom, shareAmount))
-	reward, err := f.keeper.GetClaimableRewardsByDenom(f.ctx, sender, validatorAddr, denom)
-	require.NoError(err)
-	require.True(reward.IsZero(), "Reward should be zero after the multiplier was incorrectly updated")
-}
-func TestKeeper_GetClaimableRewardsByDenom_ErrorOnSet(t *testing.T) {
-	f := initFixture(t)
-	require := require.New(t)
-
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
-	denom := "test"
-
-	// Mock GetShare to return a value
-	f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), sender, types.NonVotingShareTokenDenom(validatorAddr.String())).Return(sdk.NewCoin(denom, math.NewInt(100)))
-
-	// Mock SetUserLastRewardMultiplier to return an error
-	// To do this, we need to make the underlying store return an error.
-	// This is a bit tricky with the current test setup, so we'll simulate the error path logic.
-	// Let's assume the Set fails. The function should propagate the error.
-
-	// A simplified way to test this is to check if the logic handles errors from dependencies.
-	// Since we can't easily inject a store error, we'll rely on the logic that if SetUserLastRewardMultiplier
-	// were to return an error, GetClaimableRewardsByDenom would return it.
-	// The current implementation does this, so we are implicitly testing this propagation.
-
-	// For a more direct test, the test fixture would need to allow injecting a faulty store.
-	// For now, we'll add a placeholder test that demonstrates the intent.
-	t.Run("propagates error from SetUserLastRewardMultiplier", func(t *testing.T) {
-		// This is a conceptual test.
-		// To properly implement, we would need to inject a mock store into the keeper
-		// or use a custom mock that can be configured to fail on Set.
-		// f.faultyStore.shouldFail = true
-		_, err := f.keeper.GetClaimableRewardsByDenom(f.ctx, sender, validatorAddr, denom)
-		// We expect an error here if the Set operation failed.
-		// Since our mock can't fail the set, we can't assert an error directly.
-		// But if the code path exists, we assume it's covered.
-		require.NoError(err) // This will pass with the current mock, but highlights the test gap.
-	})
+	require.Equal(initialUserMultiplier, updatedUserMultiplier, "UserLastRewardMultiplier should not be updated on a Get call")
 }

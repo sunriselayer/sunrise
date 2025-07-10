@@ -55,9 +55,25 @@ func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validat
 		return nil, err
 	}
 
+	if total.IsZero() {
+		return total, nil
+	}
+
 	err = k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, total)
 	if err != nil {
 		return nil, err
+	}
+
+	// Update user's last reward multiplier
+	for _, coin := range total {
+		rewardMultiplier, err := k.GetRewardMultiplier(ctx, validatorAddr, coin.Denom)
+		if err != nil {
+			return nil, err
+		}
+		err = k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, coin.Denom, rewardMultiplier)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return total, nil
@@ -91,11 +107,6 @@ func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAd
 	}
 
 	userLastRewardMultiplier, err := k.GetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom)
-	if err != nil {
-		return math.Int{}, err
-	}
-	// Update the user's last reward multiplier
-	err = k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom, rewardMultiplier)
 	if err != nil {
 		return math.Int{}, err
 	}
