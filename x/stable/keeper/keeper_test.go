@@ -20,18 +20,6 @@ import (
 	"github.com/sunriselayer/sunrise/x/stable/types"
 )
 
-type StableMocks struct {
-	BankKeeper *stabletestutil.MockBankKeeper
-}
-
-func getMocks(t *testing.T) StableMocks {
-	ctrl := gomock.NewController(t)
-
-	return StableMocks{
-		BankKeeper: stabletestutil.NewMockBankKeeper(ctrl),
-	}
-}
-
 func setupMsgServer(t *testing.T) (keeper.Keeper, StableMocks, types.MsgServer, context.Context) {
 	t.Helper()
 
@@ -99,5 +87,17 @@ func initFixture(t *testing.T) *fixture {
 		keeper:       k,
 		addressCodec: addressCodec,
 		mocks:        mocks,
+	}
+}
+
+type StableMocks struct {
+	BankKeeper *stabletestutil.MockBankKeeper
+}
+
+func getMocks(t *testing.T) StableMocks {
+	ctrl := gomock.NewController(t)
+
+	return StableMocks{
+		BankKeeper: stabletestutil.NewMockBankKeeper(ctrl),
 	}
 }
