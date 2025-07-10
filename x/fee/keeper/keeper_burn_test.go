@@ -127,6 +127,41 @@ func TestBurn(t *testing.T) {
 			},
 			expectError: false, // error is logged but not returned
 		},
+		{
+			name: "swap succeeds but interface fee exceeds swapped amount",
+			fees: fees,
+			params: types.Params{
+				FeeDenom:   feeDenom,
+				BurnDenom:  burnDenom,
+				BurnRatio:  "0.1",
+				BurnPoolId: 1,
+			},
+			setup: func(f *fixture) {
+				amountToSwap := sdk.NewInt64Coin(feeDenom, 100)
+				swappedAmount := sdk.NewInt64Coin(burnDenom, 95)
+				// Swapped amount (95) is less than the interface fee (100)
+				interfaceFee := math.NewInt(100)
+				route := swaptypes.Route{
+					DenomIn:  feeDenom,
+					DenomOut: burnDenom,
+					Strategy: &swaptypes.Route_Pool{Pool: &swaptypes.RoutePool{PoolId: 1}},
+				}
+
+				gomock.InOrder(
+					f.mocks.BankKeeper.EXPECT().SendCoinsFromModuleToModule(gomock.Any(), authtypes.FeeCollectorName, types.ModuleName, sdk.NewCoins(amountToSwap)).Return(nil),
+					f.mocks.SwapKeeper.EXPECT().SwapExactAmountIn(
+						gomock.Any(),
+						authtypes.NewModuleAddress(types.ModuleName),
+						authtypes.NewModuleAddress(authtypes.FeeCollectorName).String(),
+						route,
+						amountToSwap.Amount,
+						math.OneInt(),
+					).Return(swaptypes.RouteResult{TokenOut: swappedAmount}, interfaceFee, nil),
+					// BurnCoins should NOT be called because SafeSub fails
+				)
+			},
+			expectError: false, // The error is logged internally but not returned from Burn()
+		},
 	}
 
 	for _, tc := range testCases {
