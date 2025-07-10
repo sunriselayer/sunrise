@@ -18,7 +18,7 @@ import (
 )
 
 func TestKeeper_TrackDelegation(t *testing.T) {
-	owner := sdk.AccAddress(("owner"))
+	owner := sdk.AccAddress("owner")
 
 	testCases := []struct {
 		name               string
@@ -116,7 +116,7 @@ func TestKeeper_TrackDelegation(t *testing.T) {
 }
 
 func TestKeeper_TrackUndelegation(t *testing.T) {
-	owner := sdk.AccAddress(("owner"))
+	owner := sdk.AccAddress("owner")
 
 	testCases := []struct {
 		name               string
@@ -188,7 +188,7 @@ func TestKeeper_TrackUndelegation(t *testing.T) {
 }
 
 func TestKeeper_CheckUnbondingEntriesMature(t *testing.T) {
-	owner := sdk.AccAddress(("owner"))
+	owner := sdk.AccAddress("owner")
 	now := time.Now()
 
 	testCases := []struct {
@@ -282,7 +282,7 @@ func TestKeeper_CheckUnbondingEntriesMature(t *testing.T) {
 }
 
 func TestKeeper_AddRewardsToLockupAccount(t *testing.T) {
-	owner := sdk.AccAddress(("owner"))
+	owner := sdk.AccAddress("owner")
 	f := initFixture(t)
 
 	// Setup initial account

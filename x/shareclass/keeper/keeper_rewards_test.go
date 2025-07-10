@@ -18,7 +18,7 @@ func TestKeeper_ValidateLastRewardHandlingTime(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	validatorAddr := sdk.ValAddress("validator")
 	params := types.DefaultParams()
 	params.RewardPeriod = time.Hour
 	require.NoError(f.keeper.Params.Set(f.ctx, params))
@@ -45,9 +45,9 @@ func TestKeeper_HandleModuleAccountRewards(t *testing.T) {
 	require := require.New(t)
 	valAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 
-	moduleAddr := sdk.AccAddress([]byte("module"))
-	valAddr1 := sdk.ValAddress([]byte("validator1"))
-	valAddr2 := sdk.ValAddress([]byte("validator2"))
+	moduleAddr := sdk.AccAddress("shareclass")
+	valAddr1 := sdk.ValAddress("validator1")
+	valAddr2 := sdk.ValAddress("validator2")
 
 	delegations := []stakingtypes.Delegation{
 		{ValidatorAddress: valAddr1.String()},
@@ -79,10 +79,10 @@ func TestKeeper_HandleModuleAccountRewardsByValidator(t *testing.T) {
 	require := require.New(t)
 	valAddressCodec := addresscodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 
-	valAddr := sdk.ValAddress([]byte("validator"))
+	valAddr := sdk.ValAddress("validator")
 	valAddrStr := valAddr.String()
 
-	moduleAddr := sdk.AccAddress([]byte("module"))
+	moduleAddr := sdk.AccAddress("shareclass")
 	rewardSaverAddr := types.RewardSaverAddress(valAddrStr)
 	rewards := sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))
 	totalShare := math.NewInt(1000)

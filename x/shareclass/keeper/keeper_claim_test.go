@@ -14,7 +14,7 @@ func TestKeeper_RewardMultiplier(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	multiplier := math.LegacyNewDec(2)
 
@@ -28,7 +28,7 @@ func TestKeeper_RewardMultiplier(t *testing.T) {
 	require.Equal(multiplier, result)
 
 	// Get non-existent
-	result, err = f.keeper.GetRewardMultiplier(f.ctx, sdk.ValAddress([]byte("non-existent")), denom)
+	result, err = f.keeper.GetRewardMultiplier(f.ctx, sdk.ValAddress("non-existent"), denom)
 	require.NoError(err)
 	require.True(result.IsZero())
 }
@@ -37,8 +37,8 @@ func TestKeeper_UsersLastRewardMultiplier(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	multiplier := math.LegacyNewDec(2)
 
@@ -52,7 +52,7 @@ func TestKeeper_UsersLastRewardMultiplier(t *testing.T) {
 	require.Equal(multiplier, result)
 
 	// Get non-existent
-	result, err = f.keeper.GetUserLastRewardMultiplier(f.ctx, sdk.AccAddress([]byte("non-existent")), validatorAddr, denom)
+	result, err = f.keeper.GetUserLastRewardMultiplier(f.ctx, sdk.AccAddress("non-existent"), validatorAddr, denom)
 	require.NoError(err)
 	require.True(result.IsZero())
 }
@@ -61,8 +61,8 @@ func TestKeeper_GetClaimableRewards(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr.String())
 
@@ -83,8 +83,8 @@ func TestKeeper_ClaimRewards(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr.String())
 	expectedRewards := sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(100)))
@@ -107,8 +107,8 @@ func TestKeeper_GetClaimableRewardsByDenom_NoStateChange(t *testing.T) {
 	f := initFixture(t)
 	require := require.New(t)
 
-	sender := sdk.AccAddress([]byte("sender"))
-	validatorAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	initialUserMultiplier := math.LegacyNewDec(1)
 	globalMultiplier := math.LegacyNewDec(2)

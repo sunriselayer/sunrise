@@ -19,7 +19,7 @@ import (
 
 func TestKeeper_LockupAccountAddress(t *testing.T) {
 	f := initFixture(t)
-	owner := sdk.AccAddress(("owner"))
+	owner := sdk.AccAddress("owner")
 	id1 := uint64(1)
 	id2 := uint64(2)
 
@@ -35,7 +35,7 @@ func TestKeeper_LockupAccountAddress(t *testing.T) {
 
 func TestKeeper_GetAndIncrementNextLockupAccountID(t *testing.T) {
 	f := initFixture(t)
-	owner := sdk.AccAddress(("owner"))
+	owner := sdk.AccAddress("owner")
 
 	// First time for an owner
 	currentID, nextID, err := f.keeper.GetAndIncrementNextLockupAccountID(f.ctx, owner)
@@ -51,8 +51,8 @@ func TestKeeper_GetAndIncrementNextLockupAccountID(t *testing.T) {
 }
 
 func TestKeeper_InitLockupAccountFromMsg(t *testing.T) {
-	sender := sdk.AccAddress(("sender"))
-	owner := sdk.AccAddress(("owner"))
+	sender := sdk.AccAddress("sender")
+	owner := sdk.AccAddress("owner")
 	transferableDenom := "transferable"
 
 	testCases := []struct {

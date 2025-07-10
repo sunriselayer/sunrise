@@ -16,8 +16,8 @@ import (
 )
 
 func TestKeeper_Delegate(t *testing.T) {
-	sender := sdk.AccAddress([]byte("sender"))
-	valAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	valAddr := sdk.ValAddress("validator")
 	bondDenom := "bond"
 	transferableDenom := "transferable"
 
@@ -52,7 +52,7 @@ func TestKeeper_Delegate(t *testing.T) {
 					TransferableDenom:    transferableDenom,
 				}, nil)
 
-				moduleAddr := sdk.AccAddress([]byte("module_address"))
+				moduleAddr := sdk.AccAddress("shareclass")
 				f.mocks.AccountKeeper.EXPECT().GetModuleAddress(types.ModuleName).Return(moduleAddr).AnyTimes()
 				f.mocks.BankKeeper.EXPECT().SendCoinsFromAccountToModule(gomock.Any(), sender, types.ModuleName, sdk.NewCoins(amount)).Return(nil)
 				f.mocks.TokenConverterKeeper.EXPECT().ConvertReverse(gomock.Any(), amount.Amount, moduleAddr).Return(nil)
@@ -97,9 +97,9 @@ func TestKeeper_Delegate(t *testing.T) {
 }
 
 func TestKeeper_Undelegate(t *testing.T) {
-	sender := sdk.AccAddress([]byte("sender"))
-	recipient := sdk.AccAddress([]byte("recipient"))
-	valAddr := sdk.ValAddress([]byte("validator"))
+	sender := sdk.AccAddress("sender")
+	recipient := sdk.AccAddress("recipient")
+	valAddr := sdk.ValAddress("validator")
 	bondDenom := "bond"
 	transferableDenom := "transferable"
 	shareDenom := types.NonVotingShareTokenDenom(valAddr.String())
@@ -138,7 +138,7 @@ func TestKeeper_Undelegate(t *testing.T) {
 
 				// Mocks for bank send/burn
 				f.mocks.BankKeeper.EXPECT().SendCoinsFromAccountToModule(gomock.Any(), sender, types.ModuleName, gomock.Any()).Return(nil)
-				f.mocks.AccountKeeper.EXPECT().GetModuleAddress(types.ModuleName).Return(sdk.AccAddress([]byte("module"))).AnyTimes()
+				f.mocks.AccountKeeper.EXPECT().GetModuleAddress(types.ModuleName).Return(sdk.AccAddress("shareclass")).AnyTimes()
 				f.mocks.BankKeeper.EXPECT().BurnCoins(gomock.Any(), types.ModuleName, gomock.Any()).Return(nil)
 
 				// Mocks for staking undelegate
