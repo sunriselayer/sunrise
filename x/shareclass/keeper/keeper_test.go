@@ -22,10 +22,12 @@ import (
 )
 
 type fixture struct {
-	ctx          context.Context
-	keeper       keeper.Keeper
-	addressCodec address.Codec
-	mocks        ShareclassMocks
+	ctx                context.Context
+	keeper             keeper.Keeper
+	addressCodec       address.Codec
+	mocks              ShareclassMocks
+	stakingMsgServer   *shareclasstestutil.MockStakingMsgServer
+	stakingQueryServer *shareclasstestutil.MockStakingQueryServer
 }
 
 func initFixture(t *testing.T) *fixture {
@@ -53,8 +55,8 @@ func initFixture(t *testing.T) *fixture {
 		mocks.StakingKeeper,
 		mocks.DistributionKeeper,
 		mocks.TokenConverterKeeper,
-		nil,
-		nil,
+		mocks.StakingMsgServer,
+		mocks.StakingQueryServer,
 	)
 
 	// Initialize params
@@ -76,6 +78,8 @@ type ShareclassMocks struct {
 	DistributionKeeper   *shareclasstestutil.MockDistributionKeeper
 	StakingKeeper        *shareclasstestutil.MockStakingKeeper
 	TokenConverterKeeper *shareclasstestutil.MockTokenConverterKeeper
+	StakingMsgServer     *shareclasstestutil.MockStakingMsgServer
+	StakingQueryServer   *shareclasstestutil.MockStakingQueryServer
 }
 
 func getMocks(t *testing.T) ShareclassMocks {
@@ -87,5 +91,7 @@ func getMocks(t *testing.T) ShareclassMocks {
 		DistributionKeeper:   shareclasstestutil.NewMockDistributionKeeper(ctrl),
 		StakingKeeper:        shareclasstestutil.NewMockStakingKeeper(ctrl),
 		TokenConverterKeeper: shareclasstestutil.NewMockTokenConverterKeeper(ctrl),
+		StakingMsgServer:     shareclasstestutil.NewMockStakingMsgServer(ctrl),
+		StakingQueryServer:   shareclasstestutil.NewMockStakingQueryServer(ctrl),
 	}
 }
