@@ -50,71 +50,81 @@ func (k Keeper) SetUserLastRewardMultiplier(ctx context.Context, sender sdk.AccA
 }
 
 func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress) (sdk.Coins, error) {
-	total, err := k.GetClaimableRewards(ctx, sender, validatorAddr)
+	totalClaimable, rewardMultipliers, err := k.GetClaimableRewards(ctx, sender, validatorAddr)
 	if err != nil {
 		return nil, err
 	}
 
-	if total.IsZero() {
-		return total, nil
-	}
-
-	err = k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, total)
-	if err != nil {
-		return nil, err
-	}
-
-	// Update user's last reward multiplier
-	for _, coin := range total {
-		rewardMultiplier, err := k.GetRewardMultiplier(ctx, validatorAddr, coin.Denom)
-		if err != nil {
-			return nil, err
-		}
-		err = k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, coin.Denom, rewardMultiplier)
+	// Send the total claimable rewards if any.
+	if !totalClaimable.IsZero() {
+		err := k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, totalClaimable)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return total, nil
+	// Update the user's last reward multiplier for all denoms using the multipliers fetched during calculation.
+	for denom, multiplier := range rewardMultipliers {
+		err := k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom, multiplier)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return totalClaimable, nil
 }
 
-func (k Keeper) GetClaimableRewards(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress) (sdk.Coins, error) {
-	coins := k.bankKeeper.GetAllBalances(ctx, types.RewardSaverAddress(validatorAddr.String()))
-	total := sdk.NewCoins()
+// GetClaimableRewards calculates the total claimable rewards and returns them along with the reward multipliers used.
+func (k Keeper) GetClaimableRewards(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress) (sdk.Coins, map[string]math.LegacyDec, error) {
+	// Get all denoms from the reward saver address.
+	allRewardCoins := k.bankKeeper.GetAllBalances(ctx, types.RewardSaverAddress(validatorAddr.String()))
 
-	for _, coin := range coins {
-		amount, err := k.GetClaimableRewardsByDenom(ctx, sender, validatorAddr, coin.Denom)
-		if err != nil {
-			return nil, err
-		}
-		total = total.Add(sdk.NewCoin(coin.Denom, amount))
-	}
-
-	return total, nil
-}
-
-// GetClaimableRewardsByDenom claims rewards from a validator
-// reward = (rewardMultiplier - userLastRewardMultiplier) * share.Amount
-func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string) (math.Int, error) {
-	// Get the share
+	// Get the user's share.
 	share := k.GetShare(ctx, sender, validatorAddr.String())
 
-	// Get the reward multiplier
+	// Prepare to calculate the total claimable amount and store the latest reward multipliers.
+	totalClaimable := sdk.NewCoins()
+	rewardMultipliers := make(map[string]math.LegacyDec)
+
+	// Calculate claimable rewards for each denom and store the multiplier.
+	for _, coin := range allRewardCoins {
+		denom := coin.Denom
+
+		rewardAmount, rewardMultiplier, err := k.GetClaimableRewardsByDenom(ctx, sender, validatorAddr, denom, share)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		rewardMultipliers[denom] = rewardMultiplier
+
+		// Add to total if there's a positive amount to claim.
+		if rewardAmount.IsPositive() {
+			totalClaimable = totalClaimable.Add(sdk.NewCoin(denom, rewardAmount))
+		}
+	}
+
+	return totalClaimable, rewardMultipliers, nil
+}
+
+// GetClaimableRewardsByDenom calculates the reward for a single denomination.
+func (k Keeper) GetClaimableRewardsByDenom(ctx context.Context, sender sdk.AccAddress, validatorAddr sdk.ValAddress, denom string, share math.Int) (math.Int, math.LegacyDec, error) {
+	// Fetch reward multiplier once.
 	rewardMultiplier, err := k.GetRewardMultiplier(ctx, validatorAddr, denom)
 	if err != nil {
-		return math.Int{}, err
+		return math.Int{}, math.LegacyDec{}, err
 	}
 
+	// Get the user's last known multiplier.
 	userLastRewardMultiplier, err := k.GetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom)
 	if err != nil {
-		return math.Int{}, err
+		return math.Int{}, math.LegacyDec{}, err
 	}
 
+	// Calculate the reward amount.
 	rewardAmount, err := types.CalculateReward(rewardMultiplier, userLastRewardMultiplier, share)
 	if err != nil {
-		return math.Int{}, err
+		return math.Int{}, math.LegacyDec{}, err
 	}
 
-	return rewardAmount, nil
+	return rewardAmount, rewardMultiplier, nil
 }

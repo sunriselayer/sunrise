@@ -24,7 +24,7 @@ func (q queryServer) ClaimableRewards(ctx context.Context, req *types.QueryClaim
 		return nil, status.Error(codes.InvalidArgument, "invalid validator address")
 	}
 
-	rewards, err := q.k.GetClaimableRewards(ctx, address, validatorAddr)
+	rewards, _, err := q.k.GetClaimableRewards(ctx, address, validatorAddr)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
