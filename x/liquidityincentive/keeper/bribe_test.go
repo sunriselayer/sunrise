@@ -7,22 +7,13 @@ import (
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
 	liquiditypooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
 )
-
-// Helper to convert sdk.Coins to []interface{} for gomock variadic matching
-func toInterfaces(coins sdk.Coins) []interface{} {
-	res := make([]interface{}, len(coins))
-	for i, c := range coins {
-		res[i] = c
-	}
-	return res
-}
 
 func setupEpochs(ctx sdk.Context, k *keeper.Keeper) error {
 	// Set up initial epoch
