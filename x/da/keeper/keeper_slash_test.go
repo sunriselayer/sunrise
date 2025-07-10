@@ -292,13 +292,49 @@ func TestHandleSlashEpoch_JailError(t *testing.T) {
 	mocks.StakingKeeper.EXPECT().PowerReduction(gomock.Any()).Return(sdk.DefaultPowerReduction).AnyTimes()
 	mocks.StakingKeeper.EXPECT().Validator(gomock.Any(), valAddr1).Return(mockVal1, nil).AnyTimes()
 
+	slashFraction, err := math.LegacyNewDecFromStr(params.SlashFraction)
+	require.NoError(t, err)
 	jailErr := errors.New("jail error")
-	mocks.SlashingKeeper.EXPECT().Slash(gomock.Any(), pubKey.Address().Bytes(), math.LegacyMustNewDecFromStr(params.SlashFraction), gomock.Any(), gomock.Any()).Return(nil).Times(1)
+	mocks.SlashingKeeper.EXPECT().Slash(gomock.Any(), pubKey.Address().Bytes(), slashFraction, gomock.Any(), gomock.Any()).Return(nil).Times(1)
 	mocks.SlashingKeeper.EXPECT().Jail(gomock.Any(), pubKey.Address().Bytes()).Return(jailErr).Times(1)
 
 	// Execute
 	err = k.HandleSlashEpoch(sdkCtx)
 	require.Error(t, err)
 	require.Equal(t, jailErr, err)
+}
+
+func TestHandleSlashEpoch_InvalidParams(t *testing.T) {
+	testCases := []struct {
+		name        string
+		setupParams func(params *types.Params)
+	}{
+		{
+			name: "invalid slash fault threshold",
+			setupParams: func(params *types.Params) {
+				params.SlashFaultThreshold = "invalid"
+			},
+		},
+		{
+			name: "invalid slash fraction",
+			setupParams: func(params *types.Params) {
+				params.SlashFraction = "invalid"
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			k, _, _, ctx := setupMsgServer(t)
+			sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+			params := types.DefaultParams()
+			tc.setupParams(&params)
+			require.NoError(t, k.Params.Set(sdkCtx, params))
+
+			err := k.HandleSlashEpoch(sdkCtx)
+			require.Error(t, err)
+		})
+	}
 }
 
