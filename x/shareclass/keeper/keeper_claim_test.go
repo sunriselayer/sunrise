@@ -65,6 +65,7 @@ func TestKeeper_GetClaimableRewards(t *testing.T) {
 	validatorAddr := sdk.ValAddress("validator")
 	denom := "test"
 	rewardSaverAddr := types.RewardSaverAddress(validatorAddr.String())
+	initialUserMultiplier := math.LegacyNewDec(1)
 
 	// Setup mocks
 	f.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), rewardSaverAddr).Return(sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(100))))
@@ -72,11 +73,16 @@ func TestKeeper_GetClaimableRewards(t *testing.T) {
 
 	// Set multipliers
 	require.NoError(f.keeper.SetRewardMultiplier(f.ctx, validatorAddr, denom, math.LegacyNewDec(2)))
-	require.NoError(f.keeper.SetUserLastRewardMultiplier(f.ctx, sender, validatorAddr, denom, math.LegacyNewDec(1)))
+	require.NoError(f.keeper.SetUserLastRewardMultiplier(f.ctx, sender, validatorAddr, denom, initialUserMultiplier))
 
-	rewards, err := f.keeper.GetClaimableRewards(f.ctx, sender, validatorAddr)
+	rewards, _, err := f.keeper.GetClaimableRewards(f.ctx, sender, validatorAddr)
 	require.NoError(err)
 	require.Equal(sdk.NewCoins(sdk.NewCoin(denom, math.NewInt(100))), rewards)
+
+	// Verify that the user's last reward multiplier has NOT been updated
+	updatedUserMultiplier, err := f.keeper.GetUserLastRewardMultiplier(f.ctx, sender, validatorAddr, denom)
+	require.NoError(err)
+	require.Equal(initialUserMultiplier, updatedUserMultiplier, "UserLastRewardMultiplier should not be updated on a Get call")
 }
 
 func TestKeeper_ClaimRewards(t *testing.T) {
@@ -101,32 +107,4 @@ func TestKeeper_ClaimRewards(t *testing.T) {
 	rewards, err := f.keeper.ClaimRewards(f.ctx, sender, validatorAddr)
 	require.NoError(err)
 	require.Equal(expectedRewards, rewards)
-}
-
-func TestKeeper_GetClaimableRewardsByDenom_NoStateChange(t *testing.T) {
-	f := initFixture(t)
-	require := require.New(t)
-
-	sender := sdk.AccAddress("sender")
-	validatorAddr := sdk.ValAddress("validator")
-	denom := "test"
-	initialUserMultiplier := math.LegacyNewDec(1)
-	globalMultiplier := math.LegacyNewDec(2)
-
-	// Setup initial state
-	require.NoError(f.keeper.SetRewardMultiplier(f.ctx, validatorAddr, denom, globalMultiplier))
-	require.NoError(f.keeper.SetUserLastRewardMultiplier(f.ctx, sender, validatorAddr, denom, initialUserMultiplier))
-
-	// Mock GetShare to return a value
-	shareAmount := math.NewInt(100)
-	f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), sender, types.NonVotingShareTokenDenom(validatorAddr.String())).Return(sdk.NewCoin(denom, shareAmount))
-
-	// This call should NOT update the user's last reward multiplier
-	_, err := f.keeper.GetClaimableRewardsByDenom(f.ctx, sender, validatorAddr, denom)
-	require.NoError(err)
-
-	// Verify that the user's last reward multiplier has NOT been updated
-	updatedUserMultiplier, err := f.keeper.GetUserLastRewardMultiplier(f.ctx, sender, validatorAddr, denom)
-	require.NoError(err)
-	require.Equal(initialUserMultiplier, updatedUserMultiplier, "UserLastRewardMultiplier should not be updated on a Get call")
 }

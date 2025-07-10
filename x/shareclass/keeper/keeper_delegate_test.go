@@ -44,6 +44,7 @@ func TestKeeper_Delegate(t *testing.T) {
 					},
 				}, nil).AnyTimes()
 				f.mocks.BankKeeper.EXPECT().GetSupply(gomock.Any(), gomock.Any()).Return(sdk.NewCoin(types.NonVotingShareTokenDenom(valAddr.String()), math.NewInt(1000))).AnyTimes()
+				f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).Return(sdk.NewCoin(types.NonVotingShareTokenDenom(valAddr.String()), math.NewInt(1000))).AnyTimes()
 
 				// Mocks for ConvertAndDelegate
 				f.mocks.StakingKeeper.EXPECT().BondDenom(gomock.Any()).Return(bondDenom, nil)
@@ -120,6 +121,7 @@ func TestKeeper_Undelegate(t *testing.T) {
 				// Mock for ClaimRewards
 				rewardSaverAddress := types.RewardSaverAddress(valAddr.String())
 				f.mocks.BankKeeper.EXPECT().GetAllBalances(gomock.Any(), rewardSaverAddress).Return(sdk.NewCoins()).AnyTimes()
+				f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), gomock.Any()).Return(sdk.NewCoin(types.NonVotingShareTokenDenom(valAddr.String()), math.NewInt(1000))).AnyTimes()
 
 				// Mocks for Undelegate
 				f.mocks.TokenConverterKeeper.EXPECT().GetParams(gomock.Any()).Return(tokenconvertertypes.Params{
