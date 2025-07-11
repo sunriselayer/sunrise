@@ -94,6 +94,13 @@ func (k msgServer) SubmitValidityProof(ctx context.Context, msg *types.MsgSubmit
 			return nil, types.ErrProofIndicesOverflow
 		}
 
+		// In the zk-SNARK (groth16) verification process, the public witness,
+		// not the private witness, is used. The `ShardHash` is a private witness,
+		// while `ShardDoubleHash` is a public witness.
+		// The `frontend.NewWitness` function requires all circuit fields to be provided,
+		// but only the public fields are used in `witness.Public()`.
+		// Therefore, `ShardHash` is assigned a dummy value (e.g., 1) as a placeholder
+		// because its actual value is not needed for the on-chain verification.
 		assignment := zkp.ValidityProofCircuit{
 			ShardHash:       big.NewInt(1),
 			ShardDoubleHash: publishedData.ShardDoubleHashes[j],

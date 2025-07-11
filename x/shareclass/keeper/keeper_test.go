@@ -13,16 +13,21 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/keeper"
 	module "github.com/sunriselayer/sunrise/x/shareclass/module"
+	shareclasstestutil "github.com/sunriselayer/sunrise/x/shareclass/testutil"
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
 
 type fixture struct {
-	ctx          context.Context
-	keeper       keeper.Keeper
-	addressCodec address.Codec
+	ctx                context.Context
+	keeper             keeper.Keeper
+	addressCodec       address.Codec
+	mocks              ShareclassMocks
+	stakingMsgServer   *shareclasstestutil.MockStakingMsgServer
+	stakingQueryServer *shareclasstestutil.MockStakingQueryServer
 }
 
 func initFixture(t *testing.T) *fixture {
@@ -37,19 +42,21 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	mocks := getMocks(t)
+
 	k := keeper.NewKeeper(
 		encCfg.Codec,
 		storeService,
 		log.NewNopLogger(),
 		authority.String(),
 		addressCodec,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
-		nil,
+		mocks.AccountKeeper,
+		mocks.BankKeeper,
+		mocks.StakingKeeper,
+		mocks.DistributionKeeper,
+		mocks.TokenConverterKeeper,
+		mocks.StakingMsgServer,
+		mocks.StakingQueryServer,
 	)
 
 	// Initialize params
@@ -61,5 +68,30 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+		mocks:        mocks,
+	}
+}
+
+type ShareclassMocks struct {
+	AccountKeeper        *shareclasstestutil.MockAccountKeeper
+	BankKeeper           *shareclasstestutil.MockBankKeeper
+	DistributionKeeper   *shareclasstestutil.MockDistributionKeeper
+	StakingKeeper        *shareclasstestutil.MockStakingKeeper
+	TokenConverterKeeper *shareclasstestutil.MockTokenConverterKeeper
+	StakingMsgServer     *shareclasstestutil.MockStakingMsgServer
+	StakingQueryServer   *shareclasstestutil.MockStakingQueryServer
+}
+
+func getMocks(t *testing.T) ShareclassMocks {
+	ctrl := gomock.NewController(t)
+
+	return ShareclassMocks{
+		AccountKeeper:        shareclasstestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:           shareclasstestutil.NewMockBankKeeper(ctrl),
+		DistributionKeeper:   shareclasstestutil.NewMockDistributionKeeper(ctrl),
+		StakingKeeper:        shareclasstestutil.NewMockStakingKeeper(ctrl),
+		TokenConverterKeeper: shareclasstestutil.NewMockTokenConverterKeeper(ctrl),
+		StakingMsgServer:     shareclasstestutil.NewMockStakingMsgServer(ctrl),
+		StakingQueryServer:   shareclasstestutil.NewMockStakingQueryServer(ctrl),
 	}
 }

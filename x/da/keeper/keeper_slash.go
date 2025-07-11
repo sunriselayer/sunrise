@@ -80,8 +80,14 @@ func (k Keeper) HandleSlashEpoch(ctx sdk.Context) error {
 	if err != nil {
 		return err
 	}
-	slashFaultThreshold := math.LegacyMustNewDecFromStr(params.SlashFaultThreshold) // TODO: remove with Dec
-	slashFraction := math.LegacyMustNewDecFromStr(params.SlashFraction)             // TODO: remove with Dec
+	slashFaultThreshold, err := math.LegacyNewDecFromStr(params.SlashFaultThreshold) // TODO: remove with Dec
+	if err != nil {
+		return err
+	}
+	slashFraction, err := math.LegacyNewDecFromStr(params.SlashFraction) // TODO: remove with Dec
+	if err != nil {
+		return err
+	}
 	challengeCount := k.GetChallengeCounter(ctx)
 	// reset counter
 	err = k.SetChallengeCounter(ctx, 0)
