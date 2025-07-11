@@ -171,25 +171,26 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 				}
 			}
 
+			if len(data.ShardDoubleHashes) < int(data.ParityShardCount) {
+				return types.ErrInvalidShardCounts
+			}
+
+			// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
+			replicationFactorWithParity := replicationFactorDec.
+				MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
+				QuoInt64(int64(len(data.ShardDoubleHashes)))
+
+			// threshold_of_proofs_per_shard = ceil(replication_factor_with_parity * 2 / 3)
+			thresholdOfProofsPerShard := replicationFactorWithParity.
+				MulInt64(2).
+				QuoInt64(3).
+				Ceil().
+				TruncateInt64()
+
 			safeShardIndices := []int64{}
+
 			for index := 0; int64(index) < int64(len(data.ShardDoubleHashes)); index++ {
 				i := int64(index)
-				if len(data.ShardDoubleHashes) < int(data.ParityShardCount) {
-					return types.ErrInvalidShardCounts
-				}
-
-				// replication_factor_with_parity = replication_factor * data_shard_count / (data_shard_count + parity_shard_count)
-				replicationFactorWithParity := replicationFactorDec.
-					MulInt64(int64(len(data.ShardDoubleHashes) - int(data.ParityShardCount))).
-					QuoInt64(int64(len(data.ShardDoubleHashes)))
-
-				// threshold_of_proofs_per_shard = ceil(replication_factor_with_parity * 2 / 3)
-				thresholdOfProofsPerShard := replicationFactorWithParity.
-					MulInt64(2).
-					QuoInt64(3).
-					Ceil().
-					TruncateInt64()
-
 				numAssignedValidators := int64(len(indexedValidators[i]))
 				proofCount := shardProofCount[i]
 
