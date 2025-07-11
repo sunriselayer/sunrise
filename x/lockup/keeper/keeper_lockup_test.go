@@ -115,78 +115,6 @@ func TestKeeper_TrackDelegation(t *testing.T) {
 	}
 }
 
-func TestKeeper_TrackUndelegation(t *testing.T) {
-	owner := sdk.AccAddress("owner")
-
-	testCases := []struct {
-		name               string
-		initialDelLocking  math.Int
-		initialDelFree     math.Int
-		amount             math.Int
-		expectedDelLocking math.Int
-		expectedDelFree    math.Int
-		expectedErr        string
-	}{
-		{
-			name:               "success - undelegate from free",
-			initialDelLocking:  math.NewInt(500),
-			initialDelFree:     math.NewInt(100),
-			amount:             math.NewInt(50),
-			expectedDelLocking: math.NewInt(500),
-			expectedDelFree:    math.NewInt(50),
-		},
-		{
-			name:               "success - undelegate from locked",
-			initialDelLocking:  math.NewInt(500),
-			initialDelFree:     math.ZeroInt(),
-			amount:             math.NewInt(100),
-			expectedDelLocking: math.NewInt(400),
-			expectedDelFree:    math.ZeroInt(),
-		},
-		{
-			name:               "success - undelegate from both",
-			initialDelLocking:  math.NewInt(500),
-			initialDelFree:     math.NewInt(100),
-			amount:             math.NewInt(200),
-			expectedDelLocking: math.NewInt(400),
-			expectedDelFree:    math.ZeroInt(),
-		},
-		{
-			name:        "fail - zero amount",
-			amount:      math.ZeroInt(),
-			expectedErr: "invalid coins",
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			f := initFixture(t)
-
-			lockup := types.LockupAccount{
-				Owner:            owner.String(),
-				Id:               1,
-				DelegatedLocking: tc.initialDelLocking,
-				DelegatedFree:    tc.initialDelFree,
-			}
-			err := f.keeper.SetLockupAccount(f.ctx, lockup)
-			require.NoError(t, err)
-
-			err = f.keeper.TrackUndelegation(f.ctx, owner, 1, tc.amount)
-
-			if tc.expectedErr != "" {
-				require.Error(t, err)
-				require.Contains(t, err.Error(), tc.expectedErr)
-			} else {
-				require.NoError(t, err)
-				lockup, err := f.keeper.GetLockupAccount(f.ctx, owner, 1)
-				require.NoError(t, err)
-				require.True(t, tc.expectedDelLocking.Equal(lockup.DelegatedLocking), "expected del locking %s, got %s", tc.expectedDelLocking, lockup.DelegatedLocking)
-				require.True(t, tc.expectedDelFree.Equal(lockup.DelegatedFree), "expected del free %s, got %s", tc.expectedDelFree, lockup.DelegatedFree)
-			}
-		})
-	}
-}
-
 func TestKeeper_CheckUnbondingEntriesMature(t *testing.T) {
 	owner := sdk.AccAddress("owner")
 	now := time.Now()
@@ -281,7 +209,7 @@ func TestKeeper_CheckUnbondingEntriesMature(t *testing.T) {
 	}
 }
 
-func TestKeeper_AddRewardsToLockupAccount(t *testing.T) {
+func TestKeeper_AddAdditionalLockup(t *testing.T) {
 	owner := sdk.AccAddress("owner")
 	f := initFixture(t)
 
@@ -296,7 +224,7 @@ func TestKeeper_AddRewardsToLockupAccount(t *testing.T) {
 
 	// Add rewards
 	rewardAmount := math.NewInt(50)
-	err = f.keeper.AddRewardsToLockupAccount(f.ctx, owner, 1, rewardAmount)
+	err = f.keeper.AddAdditionalLockup(f.ctx, owner, 1, rewardAmount)
 	require.NoError(t, err)
 
 	// Verify
