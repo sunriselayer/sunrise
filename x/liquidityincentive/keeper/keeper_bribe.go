@@ -153,11 +153,16 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 	}
 	defer iter.Close()
 
+	var keysToRemove []collections.Triple[sdk.AccAddress, uint64, uint64]
 	for ; iter.Valid(); iter.Next() {
 		key, err := iter.PrimaryKey()
 		if err != nil {
 			return err
 		}
+		keysToRemove = append(keysToRemove, key)
+	}
+
+	for _, key := range keysToRemove {
 		if err := k.RemoveBribeAllocation(ctx, key); err != nil {
 			continue
 		}
