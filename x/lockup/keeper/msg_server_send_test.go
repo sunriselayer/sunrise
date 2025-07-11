@@ -71,6 +71,28 @@ func TestMsgServer_Send(t *testing.T) {
 			expectErr: false,
 		},
 		{
+			name: "successful send with multiple denoms",
+			msg: &types.MsgSend{
+				Owner:           owner.String(),
+				LockupAccountId: 0,
+				Recipient:       recipient.String(),
+				Amount:          sdk.NewCoins(sdk.NewInt64Coin(transferableDenom, 100), sdk.NewInt64Coin("otherdenom", 50)),
+			},
+			mockSetup: func(f *fixture) {
+				recipientAddr, err := sdk.AccAddressFromBech32(recipient.String())
+				require.NoError(t, err)
+				lockupAddr, err := sdk.AccAddressFromBech32(lockupAccount.Address)
+				require.NoError(t, err)
+
+				f.mocks.AccountKeeper.EXPECT().AddressCodec().Return(address.NewBech32Codec("sunrise")).AnyTimes()
+				f.mocks.TokenConverterKeeper.EXPECT().GetTransferableDenom(gomock.Any()).Return(transferableDenom, nil)
+				// Only transferableDenom's balance is checked
+				f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), lockupAddr, transferableDenom).Return(sdk.NewCoin(transferableDenom, math.NewInt(1000)))
+				f.mocks.BankKeeper.EXPECT().SendCoins(gomock.Any(), lockupAddr, recipientAddr, sdk.NewCoins(sdk.NewInt64Coin(transferableDenom, 100), sdk.NewInt64Coin("otherdenom", 50))).Return(nil)
+			},
+			expectErr: false,
+		},
+		{
 			name: "sendable balance is smaller",
 			msg: &types.MsgSend{
 				Owner:           owner.String(),
