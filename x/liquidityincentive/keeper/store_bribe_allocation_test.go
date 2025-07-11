@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/collections"
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -71,7 +72,8 @@ func TestBribeAllocationStore(t *testing.T) {
 					PoolId:  1,
 					Weight:  "1.0",
 				}
-				return fx.keeper.RemoveBribeAllocation(ctx, allocation)
+				key := collections.Join3(addr1, allocation.EpochId, allocation.PoolId)
+				return fx.keeper.RemoveBribeAllocation(ctx, key)
 			},
 			check: func(fx *fixture, ctx sdk.Context) {
 				_, err := fx.keeper.GetBribeAllocation(ctx, addr1, 1, 1)

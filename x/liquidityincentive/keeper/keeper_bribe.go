@@ -146,23 +146,24 @@ func (k Keeper) ProcessUnclaimedBribes(ctx context.Context, epochId uint64) erro
 		}
 	}
 
-	var keysToRemove []collections.Triple[sdk.AccAddress, uint64, uint64]
-	err = k.BribeAllocations.Walk(ctx,
-		nil,
-		func(key collections.Triple[sdk.AccAddress, uint64, uint64], value types.BribeAllocation) (bool, error) {
-			if key.K2() == epochId {
-				keysToRemove = append(keysToRemove, key)
-			}
-			return false, nil
-		},
-	)
+	// Use the new index to get keys to remove
+	iter, err := k.BribeAllocations.Indexes.EpochId.MatchExact(ctx, epochId)
 	if err != nil {
 		return err
 	}
+	defer iter.Close()
 
-	// Remove all bribe allocations for this epoch
+	var keysToRemove []collections.Triple[sdk.AccAddress, uint64, uint64]
+	for ; iter.Valid(); iter.Next() {
+		key, err := iter.PrimaryKey()
+		if err != nil {
+			return err
+		}
+		keysToRemove = append(keysToRemove, key)
+	}
+
 	for _, key := range keysToRemove {
-		if err := k.BribeAllocations.Remove(ctx, key); err != nil {
+		if err := k.RemoveBribeAllocation(ctx, key); err != nil {
 			continue
 		}
 	}

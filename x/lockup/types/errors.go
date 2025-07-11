@@ -13,4 +13,5 @@ var (
 	ErrLockupAccountAlreadyExists = errors.Register(ModuleName, 1102, "lockup account already exists")
 	ErrInsufficientUnlockedFunds  = errors.Register(ModuleName, 1103, "insufficient unlocked funds")
 	ErrNotEnoughSpendableBalance  = errors.Register(ModuleName, 1104, "not enough spendable balance")
+	ErrLockupAccountNotFound      = errors.Register(ModuleName, 1105, "lockup account not found")
 )

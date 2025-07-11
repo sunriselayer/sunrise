@@ -29,7 +29,10 @@ func (k Keeper) GetZkpThreshold(ctx context.Context, shardCount uint64) (uint64,
 	if err != nil {
 		return 0, err
 	}
-	replicationFactor := math.LegacyMustNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
+	replicationFactor, err := math.LegacyNewDecFromStr(params.ReplicationFactor) // TODO: remove with Dec
+	if err != nil {
+		return 0, err
+	}
 	if numActiveValidators == 0 {
 		return 0, nil
 	}

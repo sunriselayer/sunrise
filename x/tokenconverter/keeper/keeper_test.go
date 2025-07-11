@@ -13,9 +13,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"go.uber.org/mock/gomock"
 
 	"github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
 	module "github.com/sunriselayer/sunrise/x/tokenconverter/module"
+	tokenconvertertestutil "github.com/sunriselayer/sunrise/x/tokenconverter/testutil"
 	"github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
@@ -23,6 +25,7 @@ type fixture struct {
 	ctx          context.Context
 	keeper       keeper.Keeper
 	addressCodec address.Codec
+	mocks        TokenConverterMocks
 }
 
 func initFixture(t *testing.T) *fixture {
@@ -37,14 +40,16 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	mocks := getMocks(t)
+
 	k := keeper.NewKeeper(
 		encCfg.Codec,
 		storeService,
 		log.NewNopLogger(),
 		authority.String(),
 		addressCodec,
-		nil,
-		nil,
+		mocks.AccountKeeper,
+		mocks.BankKeeper,
 	)
 
 	// Initialize params
@@ -56,5 +61,19 @@ func initFixture(t *testing.T) *fixture {
 		ctx:          ctx,
 		keeper:       k,
 		addressCodec: addressCodec,
+		mocks:        mocks,
+	}
+}
+
+type TokenConverterMocks struct {
+	AccountKeeper *tokenconvertertestutil.MockAccountKeeper
+	BankKeeper    *tokenconvertertestutil.MockBankKeeper
+}
+
+func getMocks(t *testing.T) TokenConverterMocks {
+	ctrl := gomock.NewController(t)
+	return TokenConverterMocks{
+		AccountKeeper: tokenconvertertestutil.NewMockAccountKeeper(ctrl),
+		BankKeeper:    tokenconvertertestutil.NewMockBankKeeper(ctrl),
 	}
 }

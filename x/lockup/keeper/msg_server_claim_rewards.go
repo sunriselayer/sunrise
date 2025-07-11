@@ -38,7 +38,7 @@ func (k msgServer) ClaimRewards(ctx context.Context, msg *types.MsgClaimRewards)
 	found, coin := rewards.Find(transferableDenom)
 
 	if found {
-		err = k.AddRewardsToLockupAccount(ctx, owner, msg.LockupAccountId, coin.Amount)
+		err = k.AddAdditionalLockup(ctx, owner, msg.LockupAccountId, coin.Amount)
 		if err != nil {
 			return nil, err
 		}

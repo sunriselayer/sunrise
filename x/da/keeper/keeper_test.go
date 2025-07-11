@@ -82,3 +82,40 @@ func getMocks(t *testing.T) DaMocks {
 		SlashingKeeper: datestutil.NewMockSlashingKeeper(ctrl),
 	}
 }
+
+// mockIterator helps in mocking the staking keeper's iterator
+type mockIterator struct {
+	valAddrs []sdk.ValAddress
+	cursor   int
+}
+
+func (m *mockIterator) Domain() (start, end []byte) {
+	return nil, nil
+}
+
+func (m *mockIterator) Valid() bool {
+	return m.cursor < len(m.valAddrs)
+}
+
+func (m *mockIterator) Next() {
+	m.cursor++
+}
+
+func (m *mockIterator) Key() (key []byte) {
+	return []byte{}
+}
+
+func (m *mockIterator) Value() (value []byte) {
+	if m.cursor >= len(m.valAddrs) {
+		return nil
+	}
+	return m.valAddrs[m.cursor]
+}
+
+func (m *mockIterator) Error() error {
+	return nil
+}
+
+func (m *mockIterator) Close() error {
+	return nil
+}
