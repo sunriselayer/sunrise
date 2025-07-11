@@ -26,13 +26,7 @@ func (k Keeper) SetBribeAllocation(ctx context.Context, unclaimedBribe types.Bri
 }
 
 // RemoveBribeAllocation removes the unclaimed bribe for a given voter, epoch and pool
-func (k Keeper) RemoveBribeAllocation(ctx context.Context, unclaimedBribe types.BribeAllocation) error {
-	address, err := k.addressCodec.StringToBytes(unclaimedBribe.Address)
-	if err != nil {
-		return err
-	}
-	acc := sdk.AccAddress(address)
-	key := collections.Join3(acc, unclaimedBribe.EpochId, unclaimedBribe.PoolId)
+func (k Keeper) RemoveBribeAllocation(ctx context.Context, key collections.Triple[sdk.AccAddress, uint64, uint64]) error {
 	return k.BribeAllocations.Remove(ctx, key)
 }
 
