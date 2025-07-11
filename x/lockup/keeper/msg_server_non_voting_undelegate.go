@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -21,6 +23,9 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 	lockup, err := k.GetLockupAccount(ctx, owner, msg.LockupAccountId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, errorsmod.Wrapf(types.ErrLockupAccountNotFound, "owner %s, id %d", msg.Owner, msg.LockupAccountId)
+		}
 		return nil, err
 	}
 	err = msg.Amount.Validate()
@@ -48,6 +53,9 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	isNewEntry := true
+	if lockup.UnbondEntries == nil {
+		lockup.UnbondEntries = &types.UnbondingEntries{}
+	}
 	entries := lockup.UnbondEntries.Entries
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
