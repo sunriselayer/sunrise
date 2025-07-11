@@ -31,7 +31,7 @@ type Keeper struct {
 	Votes               collections.Map[sdk.AccAddress, types.Vote]
 	Bribes              *collections.IndexedMap[uint64, types.Bribe, types.BribesIndexes]
 	BribeId             collections.Sequence
-	BribeAllocations    collections.Map[collections.Triple[sdk.AccAddress, uint64, uint64], types.BribeAllocation]
+	BribeAllocations    *collections.IndexedMap[collections.Triple[sdk.AccAddress, uint64, uint64], types.BribeAllocation, types.BribeAllocationsIndexes]
 	BribeExpiredEpochId collections.Item[uint64]
 
 	accountKeeper        types.AccountKeeper
@@ -79,12 +79,13 @@ func NewKeeper(
 			types.NewBribesIndexes(sb),
 		),
 		BribeId: collections.NewSequence(sb, types.BribeIdKey, "bribe_id"),
-		BribeAllocations: collections.NewMap(
+		BribeAllocations: collections.NewIndexedMap(
 			sb,
 			types.BribeAllocationsKeyPrefix,
 			"bribe_allocations",
 			types.BribeAllocationsKeyCodec,
 			codec.CollValue[types.BribeAllocation](cdc),
+			types.NewBribeAllocationsIndexes(sb),
 		),
 		BribeExpiredEpochId: collections.NewItem(sb, types.BribeExpiredEpochIdKey, "bribe_expired_epoch_id", collections.Uint64Value),
 
