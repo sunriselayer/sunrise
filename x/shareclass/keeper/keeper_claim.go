@@ -55,17 +55,18 @@ func (k Keeper) ClaimRewards(ctx context.Context, sender sdk.AccAddress, validat
 		return nil, err
 	}
 
-	// Send the total claimable rewards if any.
-	if !totalClaimable.IsZero() {
-		err := k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, totalClaimable)
+	// Update the user's last reward multiplier for all denoms BEFORE sending coins to ensure atomicity.
+	// This prevents the user from receiving rewards without updating their multipliers.
+	for denom, multiplier := range rewardMultipliers {
+		err := k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom, multiplier)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	// Update the user's last reward multiplier for all denoms using the multipliers fetched during calculation.
-	for denom, multiplier := range rewardMultipliers {
-		err := k.SetUserLastRewardMultiplier(ctx, sender, validatorAddr, denom, multiplier)
+	// Send the total claimable rewards if any.
+	if !totalClaimable.IsZero() {
+		err := k.bankKeeper.SendCoins(ctx, types.RewardSaverAddress(validatorAddr.String()), sender, totalClaimable)
 		if err != nil {
 			return nil, err
 		}
