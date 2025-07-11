@@ -206,11 +206,13 @@ func (k Keeper) TallyValidityProofs(ctx sdk.Context, duration time.Duration, rep
 				}
 
 				// A shard is safe if the number of proofs is greater than or equal to the required number.
-				if numAssignedValidators > 0 && proofCount >= requiredProofs {
+				if proofCount >= requiredProofs {
 					safeShardIndices = append(safeShardIndices, i)
-					for _, valAddr := range indexedValidators[i] {
-						if !shardProofSubmitted[i][sdk.AccAddress(valAddr).String()] {
-							faultValidators[valAddr.String()] = valAddr
+					if numAssignedValidators > 0 {
+						for _, valAddr := range indexedValidators[i] {
+							if !shardProofSubmitted[i][sdk.AccAddress(valAddr).String()] {
+								faultValidators[valAddr.String()] = valAddr
+							}
 						}
 					}
 				}
