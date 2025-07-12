@@ -1,107 +1,92 @@
-# liquidityincentive
+# Liquidity Incentive Module
 
-## Spec
+The `x/liquidityincentive` module distributes inflation-based rewards to liquidity providers through a gauge voting system. Users vote on which liquidity pools receive incentives, and can also be influenced by bribes.
 
-### BeginBlocker
+## Core Concepts
 
-- Transfer a portion of inflation rewards from `x/distribution` pool to `x/liquidityincentive` pool.
+### Epochs
 
-### EndBlocker
+The module operates in fixed-time intervals called **epochs**. At the start of each epoch, rewards are distributed based on the voting results from the previous epoch.
 
-- Create a new `Epoch` if the last `Epoch` has ended or the first `Epoch` has not been created.
+### Gauges and Voting
 
-### Lazy accounting
+Each liquidity pool is associated with a **gauge**. Users vote on these gauges to direct the flow of inflation rewards. A user's voting power is proportional to their staked assets.
 
-This module utilize Fee Accumulator in `x/liquiditypool` for each position in the liquidity pool to keep track of the rewards accumulated for each position.
-To minimize the load of reward distribution, the rewards are not distributed to the positions immediately. Instead, the rewards amount is calculated when users claim the rewards.
+### Bribes
 
-For pool $i$ position $j$,
+To influence voting, users can attach **bribes** (in the form of tokens) to a gauge for a specific epoch. These bribes are then distributed to the voters of that gauge, proportional to their voting power.
 
-- $\text{PositionUnclaimedAccumulation}_{ij}$ is the accumulated quote-valued fee rewards for the position.
-- $\text{Incentive} \leftarrow \Delta t \times \text{InflationRate} \times (1 - \text{StakingRewardRatio}) \times \text{IncentiveTotalSupply}$
-- $\text{PoolInflated}_i = \text{GaugeWeight}_i \times \text{Incentive}$
-- $\text{PoolUnclaimed}_i = \text{PoolInflated}_i - \text{PoolTotalClaimed}_i$
-- $\text{PoolUnclaimedAccumulation}_i = \sum_j \text{PositionUnclaimedAccumulation}_{ij}$
-- $\text{ClaimAmount}_{ij} = \frac{\text{PositionUnclaimedAccumulation}_{ij}}{\text{PoolUnclaimedAccumulation}_i} \times \text{PoolUnclaimed}_i$
-- $\text{PositionUnclaimedAccumulation}_{ij} \leftarrow 0$
-- $\text{PoolTotalClaimed}_i \leftarrow \text{PoolTotalClaimed}_i - \text{ClaimAmount}_{ij}$
+### Vote Tallying
 
-### Epoch
-
-Two epochs concurrently exist in the system.
-
-- Past Epoch: The epoch that has ended.
-- Current Epoch: The epoch that is ongoing.
-<!-- - Next Epoch: The epoch that will be started after the current epoch. -->
-
-Each epoch has these parameters
-
-- `start_block`
-- `end_block`
-- `gauges`
-
-### Gauge
-
-- `previous_epoch_id`
-- `pool_id`
-- `ratio`
-
-Gauges are created for each liquidity pool and included in the Epoch.
-`ratio` stores the Voting power calculated in the Epoch.
+At the end of each epoch, the votes for each gauge are tallied. The total inflation rewards for the epoch are then distributed to the liquidity pools according to the proportion of votes each gauge received.
 
 ## Messages
 
 ### MsgVoteGauge
 
-Users can vote for the gauge.
+Casts a vote for one or more liquidity pool gauges.
 
-- `weights`: The list of what Percentage of voting power to vote for the gauge.
+```protobuf
+message MsgVoteGauge {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated PoolWeight pool_weights = 2;
+}
+```
 
-The sum of the weights must be less than or equal to 1 (100%).
-Once a vote is made, the vote will continue to be reflected in all epochs until a new vote is made.
+### MsgRegisterBribe
 
-## Tally of votes
+Registers a bribe for a specific gauge in a future epoch.
 
-The votes will be tallied at the start of each epoch.
+```protobuf
+message MsgRegisterBribe {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 epoch_id = 2;
+  uint64 pool_id = 3;
+  repeated cosmos.base.v1beta1.Coin amount = 4;
+}
+```
 
-1. Tally the votes by validators. The validator votes include delegated voting power.
-1. Tally the non-validated ballots. If the address is delegated to a validator, its own voting power is deducted from the validator's votes.
+### MsgClaimBribes
 
-### Example
+Claims earned bribes.
 
-- Addresses
+```protobuf
+message MsgClaimBribes {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated uint64 bribe_ids = 2;
+}
+```
 
-Validator A 1000vRISE
-Delegator B 200vRISE (100vRISE delegated to Validator A)
+### MsgStartNewEpoch
 
-- Pools
+Manually triggers the start of a new epoch. This is a privileged message.
 
-Liquidity Pool #1
-Liquidity Pool #2
+```protobuf
+message MsgStartNewEpoch {
+  option (cosmos.msg.v1.signer) = "authority";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+```
 
-- Votes
+### MsgUpdateParams
 
-A votes Pool #1 & #2 (50% & 50%)
-B votes Pool #1 (100%)
+Updates the module parameters. This is a governance-gated action.
 
-#### Result
+```protobuf
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+```
 
-1. Only A voted
-Pool #1's voting power: 550vRISE
-Pool #2's voting power: 550vRISE
+## Parameters
 
-1. A & B voted
-Pool #1's voting power: 700vRISE (500 + 200)
-Pool #2's voting power: 650vRISE
+The `x/liquidityincentive` module has the following parameters:
 
-## Query
-
-See [openapi.yml](../../docs/static/openapi.yml) for details
-
-- Params
-- Epochs
-- Epoch
-- Gauges
-- Gauge
-- Votes
-- Vote
+- `epoch_blocks`: The duration of each epoch in blocks.
+- `staking_reward_ratio`: The proportion of inflation rewards allocated to stakers versus liquidity providers.
+- `bribe_claim_epochs`: The number of epochs after which unclaimed bribes expire.

@@ -1,130 +1,109 @@
-# liquiditypool
+# Liquidity Pool Module
 
-The module `x/liquiditypool` is for liquidity poll with concentrated liquidity AMM mechanism.
+The `x/liquiditypool` module implements a concentrated liquidity automated market maker (AMM), based on the concepts introduced by Uniswap V3.
 
-## Spec
+## Core Concepts
 
-### Pool
+### Concentrated Liquidity
 
-Each pool has these parameters
+Unlike traditional AMMs where liquidity is distributed uniformly along the entire price curve, concentrated liquidity allows liquidity providers (LPs) to allocate their capital to specific price ranges. This results in higher capital efficiency, as LPs can earn more fees on the same amount of capital.
 
-- `id`
-- `denom_base`
-- `denom_quote`
-- `fee_rate`
-- `tick_params`
-- `current_tick`
-- `current_tick_liquidity`
-- `current_sqrt_price`
+### Ticks
 
-### Tick
+Ticks are discrete price points that define the boundaries of a price range. The price of an asset is determined by the current tick of the pool. The relationship between ticks and prices is defined by the following formula:
 
-There are two parameters in each pool
+```
+price(tick) = price_ratio ^ (tick - base_offset)
+```
 
-- `price_ratio`: typically `1.0001`
-- `base_offset`: typically `0` otherwise in `(-1, 0]`
+- `price_ratio`: The price ratio between two consecutive ticks. Typically set to `1.0001`.
+- `base_offset`: An offset to the tick, allowing for more granular control over the price range. Typically set to `0`.
 
-The tick-price conversion formula is this:
+### Positions
 
-$$
-\text{price}(\text{tick}) = \text{price\\_ratio} ^ {\text{tick} - \text{base\\_offset}}
-$$
-
-In the typiical case,
-
-$$
-\text{price}(\text{tick}) = 1.0001 ^ {\text{tick}}
-$$
-
-and it is same to Uniswap V3.
-
-### Position
-
-Each position has these info
-
-- `id`: Unique ID
-- `address`: Sender's address
-- `pool_id`: Pool's ID
-- `lower_tick`: Uniquely determine the min price of the range of the position
-- `upper_tick`: Uniquely determine the max price of the range of the position
-- `liquidity`: The amount of liquidity determined based on the volume of deposits
-
-## Swap
-
-For sending the tx for swapping tokens, use msgs in `x/swap` module.
+LPs provide liquidity by creating positions, which are defined by a lower and upper tick. The liquidity provided by a position is only active when the current price of the pool is within the range defined by the position's ticks.
 
 ## Messages
 
 ### MsgCreatePool
 
-Users can create a Liquidity Pool.
+Creates a new liquidity pool.
 
-- `authority`: address with pool authority
-- `denom_base`: base denom
-- `denom_quote`: quote denom
-- `fee_rate`: fee rate charged on swaps
-- `price_ratio`: price-ratio parameter (default 1.0001)
-- `base_offset`: base-offset parameter (default 0.5)
+```protobuf
+message MsgCreatePool {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string denom_base = 2;
+  string denom_quote = 3;
+  string fee_rate = 4;
+  string price_ratio = 5;
+  string base_offset = 6;
+}
+```
 
 ### MsgCreatePosition
 
-Users can create a position for the pool.
+Creates a new position in a liquidity pool.
 
-- `sender`: sender address
-- `pool_id`: ID of the liquidity pool
-- `lower_tick`: tick of lower price
-- `upper_tick`: tick of upper price
-- `token_base`: base denom & amount (cosmos/base/v1bata1/coin type)
-- `token_quote`: quote denom & amount (cosmos/base/v1bata1/coin type)
-- `min_amount_base`: Minimum base amount
-- `min_amount_quote`: Minimum quote amount
-
-For example, if `lower_tick` is -4155 & `upper_tick` is 4054, the price range is -0.66 ~ 1.5.
-
-if the actual value falls below either `min_amount_base` or `min_amount_quote`, the position creation will be canceled. To avoid this check, set them to 0.
+```protobuf
+message MsgCreatePosition {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 pool_id = 2;
+  int64 lower_tick = 3;
+  int64 upper_tick = 4;
+  cosmos.base.v1beta1.Coin token_base = 5;
+  cosmos.base.v1beta1.Coin token_quote = 6;
+  cosmossdk.io.math.Int min_amount_base = 7;
+  cosmossdk.io.math.Int min_amount_quote = 8;
+}
+```
 
 ### MsgIncreaseLiquidity
 
-Users can increase liquidity of an existing position.
+Increases the liquidity of an existing position.
 
-- `sender`: sender address
-- `pool_id`: ID of the liquidity pool
-- `amount_base`: base amount to add
-- `amount_quote`: quote amount to add
-- `min_amount_base`: Minimum base amount
-- `min_amount_quote`: Minimum quote amount
-
-`lower_tick` and `upper_tick` are not changed from the existing position.
+```protobuf
+message MsgIncreaseLiquidity {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;
+  cosmossdk.io.math.Int amount_base = 3;
+  cosmossdk.io.math.Int amount_quote = 4;
+  cosmossdk.io.math.Int min_amount_base = 5;
+  cosmossdk.io.math.Int min_amount_quote = 6;
+}
+```
 
 ### MsgDecreaseLiquidity
 
-Users can decrease liquidity of an existing position.
+Decreases the liquidity of an existing position.
 
-- `sender`: sender address
-- `id`: ID of the liquidity pool
-- `liquidity`: Amount of liquidity to be decreased
-
-The `liquidity` value of the current position can be gotten by a query.
-If the value equal to or greater than the existing liquidity is set, the position will be deleted.
+```protobuf
+message MsgDecreaseLiquidity {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;
+  string liquidity = 3;
+}
+```
 
 ### MsgClaimRewards
 
-Users can claim fees & incentives for providing liquidity.
-Fees are `base_denom` or `quote_denom`, incentives are provided by vRISE.
+Claims the fees and incentives earned by a position.
 
-- `position_ids`: The list of position ids to claim rewards
+```protobuf
+message MsgClaimRewards {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated uint64 position_ids = 2;
+}
+```
 
-## Query
+## Parameters
 
-See [openapi.yml](../../docs/static/openapi.yml) for details
+The `x/liquiditypool` module has the following parameters:
 
-- Params
-- Pools
-- Pool
-- Positions
-- Position
-- PoolPositions
-- AddressPositions
-- PositionFees
-- CalculationCreatePosition
-- CalculationIncreaseLiquidity
+- `create_pool_gas`: The amount of gas consumed when creating a new pool.
+- `withdraw_fee_rate`: The fee rate charged when withdrawing liquidity. (Currently not used)
+- `allowed_quote_denoms`: A list of denoms that are allowed to be used as the quote asset in a pool.
