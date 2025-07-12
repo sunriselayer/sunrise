@@ -2,7 +2,9 @@
 
 The `x/fee` module is responsible for burning a portion of transaction fees. This mechanism helps to reduce the total supply of the native token, potentially increasing its value over time.
 
-## How it Works
+## Core Concepts
+
+### Fee Burning
 
 The fee burning process is handled by the `Burn` function in the keeper. Here's a step-by-step overview:
 
@@ -12,6 +14,20 @@ The fee burning process is handled by the `Burn` function in the keeper. Here's 
 4.  **Burning**: The designated amount of `burn_denom` is sent to the module's account and then burned, permanently removing it from circulation.
 
 The entire burn process is atomic. If any step fails (e.g., the swap fails), the entire operation is reverted, ensuring that no funds are lost or stuck.
+
+## Messages
+
+### MsgUpdateParams
+
+Updates the module parameters. This is a governance-gated action.
+
+```protobuf
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+```
 
 ## Parameters
 
