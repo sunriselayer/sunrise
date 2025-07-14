@@ -106,6 +106,7 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 		CurrentTick:          0,
 		CurrentTickLiquidity: math.LegacyZeroDec().String(),
 		CurrentSqrtPrice:     math.LegacyZeroDec().String(),
+		Creator:              sender.String(),
 	}
 	id, err := k.AppendPool(ctx, pool)
 	if err != nil {
