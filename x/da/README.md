@@ -1,38 +1,30 @@
-# DA
+# Data Availability (DA) Module
 
-## Specification for Zero-Knowledge Proof
+The `x/da` module is responsible for ensuring data availability on the Sunrise blockchain. It uses a combination of erasure coding, zero-knowledge proofs (ZKPs), and a challenge mechanism to verify that data is being stored correctly by validators.
 
-### Terms and Notation
+## Core Concepts
 
-- $n$: Total number of erasure coded shards
-- $t$: Threshold (minimum number of shards required to prove the possession)
-- $s_i$: The $i$-th erasure coded data shard
-- $H$: The hash function
+### Data Publication
 
-### Overview
+L2 chains can publish data to the DA layer by sending a `MsgPublishData` transaction. This data is split into shards, which are then erasure coded to provide redundancy. The double hashes of the shards are stored on-chain.
 
-This system verifies the possession of data shard hash `H(s_i)` without exposing `H(s_i)`.
+### Zero-Knowledge Proofs
 
-### Zero-Knowledge Proof System
+ZKPs are used to verify that a validator is in possession of the data shards they are responsible for, without revealing the data itself. This is done by verifying a proof against the double hashes of the shards.
 
-#### Public Inputs
+### Challenge Mechanism
 
-- $\{H^2(s_i)\}_{i=1}^n$
-- $t$: Threshold
+After data is published, there is a challenge period during which anyone can challenge the validity of the data by submitting a `MsgSubmitInvalidity` transaction. If a challenge is successful, the data is marked as invalid. If the challenge period expires without any successful challenges, the data is marked as verified.
 
-#### Private Inputs
+### Slashing
 
-- $I$: Index set of shards
-- $\{H(s_i)\}_{i \in I}$
+Validators are responsible for voting on the validity of published data. Validators who fail to vote or who vote fraudulently are slashed.
 
-#### ZKP Circuit Constraints
-
-- For each $i$, verify $H^2(s_i) = H^2(s_i)_{public}$
-- $t \le |I|$
-
-## Msgs
+## Messages
 
 ### MsgPublishData
+
+Publishes data to the DA layer.
 
 ```protobuf
 message MsgPublishData {
@@ -45,63 +37,86 @@ message MsgPublishData {
 }
 ```
 
-## Metadata
+### MsgSubmitInvalidity
 
-The metadata that is preserved as a JSON in the `metadata_uri` has a schema below
+Submits a challenge to the validity of published data.
 
 ```protobuf
-message Metadata {
-  bytes recovered_data_hash = 1;
-  uint64 recovered_data_size = 2;
-  uint64 shard_size = 3;
-  uint64 parity_shard_count = 4;
-  repeated string shard_uris = 5;
+message MsgSubmitInvalidity {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string metadata_uri = 2;
+  repeated int64 indices = 3;
 }
 ```
 
-## URI
+### MsgSubmitValidityProof
 
-Supported URIs are below
-
-- `ipfs://`: IPFS
-- `ar://`: Arweave
-
-## Status
-
-PublishedData sent from the L2 chain to the DA layer changes status depending on the transmission of Tx and the passage of time.
+Submits a proof of validity for challenged data.
 
 ```protobuf
-enum Status {
-  // Default value
-  STATUS_UNSPECIFIED = 0;
-  // Verified
-  STATUS_VERIFIED = 1;
-  // Rejected
-  STATUS_REJECTED = 2;
-  // Verified the votes from the validators. Challenge can be received (after preBlocker)
-  STATUS_CHALLENGE_PERIOD = 3;
-  // A certain number of SubmitInvalidity received. Validators can send SubmitValidityProof tx.
-  STATUS_CHALLENGING = 4;
+message MsgSubmitValidityProof {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  string metadata_uri = 3;
+  repeated int64 indices = 4;
+  repeated bytes proofs = 5;
 }
 ```
 
-1. A L2 chain sends the MsgPublishData transaction via sunrise-data, etc. If Tx is successful, it is registered with `CHALLENGE_PERIOD` status.
-1. During `CHALLENGE_PERIOD`, the status can be changed to `CHALLENGING` status through MsgChallengeForFraud Tx by anyone.
-1. In EndBlocker, `CHALLENGE_PERIOD` that has passed ChallengePeriod become `VERIFIED`. `CHALLENGING` will become `REJECTED` if `valid_shards < data_shard_count`. Otherwise, it will become `VERIFIED`.
+### MsgRegisterProofDeputy
 
-## Slash
+Registers a deputy account to submit validity proofs on behalf of a validator.
 
-Validators should run [sunrise-data](https://github.com/sunriselayer/sunrise-data) with `sunrised` and vote on PublishedData in the Data Availability layer.
+```protobuf
+message MsgRegisterProofDeputy {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string deputy_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+```
 
-If the Voting Power of the voted validator exceeds the `VoteThreshold` in the params, it become a valid data and the status changes to `CHALLENGE_PERIOD`.
+### MsgUnregisterProofDeputy
 
-Validators that did not vote or voted fraudulently will be slashed.
-Slashing is done every `SlashEpoch` and validators whose count is greater than `EpochMaxFault` are targeted.
+Unregisters a deputy account.
 
-The count is increased by 1 if either of the following conditions applies.
-The count may increase for each block, but will not be duplicated.
+```protobuf
+message MsgUnregisterProofDeputy {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+```
 
-1. When the vote made on the PublishedData exceeds the `VoteThreshold` and becomes `CHALLENGE_PERIOD`, a validators voted differently.
-1. When there is some data in the block for which voting is valid, a validator did not voted for any of them.
+### MsgVerifyData
 
-The slash fraction (percentage of staking to be reduced) is determined by the `SlashFraction` in the params, which is executed by the slashing module of the Cosmos SDK. See [Cosmos SDK slashing documentation](https://docs.cosmos.network/v0.52/build/modules/slashing) for more details.
+Triggers the verification of data.
+
+```protobuf
+message MsgVerifyData {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+```
+
+## Parameters
+
+The `x/da` module has the following parameters:
+
+- `publish_data_gas`: The amount of gas consumed when publishing data.
+- `challenge_threshold`: The threshold of invalid shards required to challenge data.
+- `replication_factor`: The number of validators that should store a copy of the data.
+- `slash_epoch`: The number of blocks in a slash epoch.
+- `slash_fault_threshold`: The threshold of faults a validator can have in an epoch before being slashed.
+- `slash_fraction`: The fraction of a validator's stake that is slashed.
+- `challenge_period`: The duration of the challenge period.
+- `proof_period`: The duration of the proof period.
+- `rejected_removal_period`: The duration after which rejected data is removed.
+- `verified_removal_period`: The duration after which verified data is removed.
+- `publish_data_collateral`: The collateral required to publish data.
+- `submit_invalidity_collateral`: The collateral required to submit an invalidity challenge.
+- `zkp_verifying_key`: The ZKP verifying key.
+- `zkp_proving_key`: The ZKP proving key.
+- `min_shard_count`: The minimum number of shards.
+- `max_shard_count`: The maximum number of shards.
+- `max_shard_size`: The maximum size of a shard.

@@ -1,208 +1,83 @@
-# x/shareclass Module Documentation
+# Share Class Module
 
 The `x/shareclass` module provides a non-voting delegation mechanism for the Sunrise blockchain. It allows users to delegate tokens to validators without receiving voting power, while still earning rewards through a share token system.
 
-## Overview
+## Core Concepts
 
-The `x/shareclass` module implements a system where:
+### Non-Voting Delegation
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant MsgServer
-    participant Keeper
-    participant BankKeeper
-    participant StakingKeeper
-    
-    %% ClaimRewards flow - simplified
-    User->>MsgServer: MsgClaimRewards
-    MsgServer->>Keeper: ClaimRewards(sender, validatorAddr)
-    Keeper-->>User: rewards
-    
-    %% CreateValidator flow - core steps only
-    User->>MsgServer: MsgCreateValidator
-    MsgServer->>BankKeeper: Burn fee - 1 urise
-    MsgServer->>StakingKeeper: MsgCreateValidator
-    MsgServer-->>User: Success
-    
-    %% NonVotingDelegate flow - key operations
-    User->>MsgServer: MsgNonVotingDelegate
-    MsgServer->>Keeper: ConvertAndDelegate(amount)
-    MsgServer->>BankKeeper: Mint & send share tokens
-    MsgServer-->>User: Success
-    
-    %% NonVotingUndelegate flow - key operations
-    User->>MsgServer: MsgNonVotingUndelegate
-    MsgServer->>BankKeeper: Burn share tokens
-    MsgServer->>Keeper: Calculate token amount
-    MsgServer->>StakingKeeper: Undelegate tokens
-    MsgServer-->>User: Completion time
-```
-1. Users can create validators with a required fee
-2. Users can delegate tokens without receiving voting rights
-3. Non-transferable share tokens represent delegation positions
-4. Delegators can claim rewards proportional to their share
+Users can delegate their tokens to validators without receiving voting power. This is useful for users who want to earn staking rewards without participating in governance.
 
+### Share Tokens
+
+When a user delegates tokens, they receive non-transferable share tokens in return. These tokens represent the user's share of the validator's total delegation. The number of share tokens received is proportional to the amount of tokens delegated.
+
+When a user undelegates, their share tokens are burned, and they receive their original tokens back, plus any accumulated rewards.
+
+### Rewards Distribution
+
+Rewards are distributed to delegators based on their share of the validator's total delegation. The rewards are calculated and distributed periodically, as defined by the `reward_period` parameter.
 
 ## Messages
-The module supports the following messages:
 
-### `MsgClaimRewards`
+### MsgCreateValidator
 
-Allows users to claim accumulated staking rewards from a validator.
+Creates a new validator.
 
-```go
-type MsgClaimRewards struct {
-    Sender           string // address claiming rewards
-    ValidatorAddress string // validator address to claim from
+```protobuf
+message MsgCreateValidator {
+  option (cosmos.msg.v1.signer) = "sender";
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.staking.v1beta1.Description description = 2;
+  cosmos.staking.v1beta1.CommissionRates commission = 3;
+  cosmossdk.io.math.Int min_self_delegation = 4;
+  google.protobuf.Any pubkey = 5;
+  cosmos.base.v1beta1.Coin amount = 6;
 }
 ```
 
-### `MsgCreateValidator`
-Creates a new validator in the Sunrise network with a required fee.
-
-```go
-type MsgCreateValidator struct {
-    ValidatorAddress  string                  // address of the validator
-    Description       stakingtypes.Description // validator description
-    Commission        stakingtypes.CommissionRates // commission rates
-    MinSelfDelegation sdk.Int                // minimum self delegation amount
-    Pubkey            *codectypes.Any        // consensus pubkey
-    Fee               sdk.Coin               // fee required to create validator
-}
-```
-
-During validator creation:
-
-- Most of the fee is burned (fee - 1 urise)
-- 1 urise is converted to 1 uvrise
-- The converted amount is staked to the new validator
-
-### `MsgNonVotingDelegate`
+### MsgNonVotingDelegate
 
 Delegates tokens to a validator without receiving voting power.
 
-```go
-type MsgNonVotingDelegate struct {
-    Sender           string   // delegator address
-    ValidatorAddress string   // validator to delegate to
-    Amount           sdk.Int  // amount to delegate
+```protobuf
+message MsgNonVotingDelegate {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 3;
 }
 ```
 
-When delegating:
+### MsgNonVotingUndelegate
 
-- Any pending rewards are claimed
-- Tokens are converted and delegated
-- Non-transferable share tokens are minted and sent to the delegator
+Undelegates tokens from a validator.
 
-### `MsgNonVotingUndelegate`
-
-Undelegates tokens previously delegated with non-voting delegation.
-
-```go
-type MsgNonVotingUndelegate struct {
-    Sender           string   // delegator address
-    ValidatorAddress string   // validator to undelegate from
-    Share            sdk.Int  // amount of share tokens to burn
-    Recipient        string   // optional recipient for undelegated tokens
+```protobuf
+message MsgNonVotingUndelegate {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  cosmos.base.v1beta1.Coin amount = 3;
+  string recipient = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 ```
 
-During undelegation:
+### MsgClaimRewards
 
-- Any pending rewards are claimed
-- Share tokens are sent to the module and burned
-- The corresponding stake amount is calculated based on the validator's total stake
-- Tokens are undelegated from the validator
-- An unbonding record is created
+Claims the rewards earned from a validator.
 
-### `MsgUpdateParams`
-Updates the module parameters (governance-only).
-
-```go
-type MsgUpdateParams struct {
-    Authority string         // governance authority
-    Params    types.Params   // new parameters
+```protobuf
+message MsgClaimRewards {
+  option (cosmos.msg.v1.signer) = "sender";
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
 }
 ```
 
-## Diagram
+## Parameters
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant MsgServer
-    participant Keeper
-    participant BankKeeper
-    participant StakingKeeper
-    participant TokenConverterKeeper
-    
-    %% ClaimRewards flow
-    User->>MsgServer: MsgClaimRewards
-    MsgServer->>MsgServer: Validate addresses
-    MsgServer->>Keeper: ClaimRewards(sender, validatorAddr)
-    Keeper-->>MsgServer: rewards
-    MsgServer-->>User: MsgClaimRewardsResponse
+The `x/shareclass` module has the following parameters:
 
-    %% CreateValidator flow
-    User->>MsgServer: MsgCreateValidator
-    MsgServer->>MsgServer: Validate addresses
-    MsgServer->>Keeper: Get params
-    Keeper-->>MsgServer: params
-    MsgServer->>MsgServer: Validate fee
-    MsgServer->>BankKeeper: MsgBurn (fee - 1)
-    MsgServer->>TokenConverterKeeper: ConvertReverse(1 urise → 1 uvrise)
-    MsgServer->>StakingKeeper: MsgCreateValidator
-    MsgServer-->>User: MsgCreateValidatorResponse
-
-    %% NonVotingDelegate flow
-    User->>MsgServer: MsgNonVotingDelegate
-    MsgServer->>MsgServer: Validate addresses
-    MsgServer->>Keeper: ClaimRewards(sender, validatorAddr)
-    MsgServer->>Keeper: ConvertAndDelegate(sender, validatorAddr, amount)
-    MsgServer->>BankKeeper: SetSendEnabled(shareDenom, false)
-    MsgServer->>BankKeeper: MintCoins(shareDenom)
-    MsgServer->>BankKeeper: SendCoinsFromModuleToAccount
-    MsgServer-->>User: MsgNonVotingDelegateResponse
-
-    %% NonVotingUndelegate flow
-    User->>MsgServer: MsgNonVotingUndelegate
-    MsgServer->>MsgServer: Validate addresses
-    MsgServer->>Keeper: ClaimRewards(sender, validatorAddr)
-    MsgServer->>BankKeeper: SendCoinsFromAccountToModule
-    MsgServer->>BankKeeper: BurnCoins(shareTokens)
-    MsgServer->>Keeper: GetTotalShare
-    Keeper-->>MsgServer: totalShare
-    MsgServer->>Keeper: GetTotalStakedAmount
-    Keeper-->>MsgServer: totalStaked
-    MsgServer->>MsgServer: CalculateUndelegationOutputAmount
-    MsgServer->>StakingKeeper: MsgUndelegate
-    StakingKeeper-->>MsgServer: MsgUndelegateResponse
-    MsgServer->>Keeper: AppendUnbonding
-    MsgServer-->>User: MsgNonVotingUndelegateResponse
-
-    %% UpdateParams flow
-    User->>MsgServer: MsgUpdateParams
-    MsgServer->>MsgServer: Validate authority
-    MsgServer->>MsgServer: Validate params
-    MsgServer->>Keeper: Set params
-    MsgServer-->>User: MsgUpdateParamsResponse
-```
-
-## Share Token System
-The module uses non-transferable share tokens to track delegations:
-
-- Each validator has a unique share token denomination
-- Share tokens are minted during delegation
-- Share tokens cannot be transferred between accounts
-- During undelegation, the share tokens are burned
-- The actual token amount received during undelegation is proportional to the validator's current stake
-
-
-## Rewards Distribution
-Rewards are distributed based on the share of the validator's total delegation:
-
-- Rewards accumulate over time based on the validator's performance
-- Users can claim rewards at any time
-- Rewards are automatically claimed during delegation and undelegation operations
+- `reward_period`: The period of time after which rewards are distributed.
+- `create_validator_gas`: The amount of gas consumed when creating a new validator.
