@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"slices"
 
 	"github.com/sunriselayer/sunrise/x/liquiditypool/types"
 
@@ -12,21 +13,29 @@ import (
 )
 
 func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosition) (*types.MsgCreatePositionResponse, error) {
-	if _, err := k.addressCodec.StringToBytes(msg.Sender); err != nil {
-		return nil, errorsmod.Wrap(err, "invalid sender address")
-	}
-	// end static validation
-
-	// Validate denom base and denom quote are sendable tokens
-	if err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.TokenBase, msg.TokenQuote); err != nil {
-		return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
-	}
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	senderBytes, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
+	sender := sdk.AccAddress(senderBytes)
+	// end static validation
+
+	// If the sender is one of the authority addresses, skip the sendable token check.
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get params")
+	}
+
+	isAuthoritySender := slices.Contains(params.AuthorityAddresses, sender.String())
+
+	if !isAuthoritySender {
+		// Validate denom base and denom quote are sendable tokens
+		if err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.TokenBase, msg.TokenQuote); err != nil {
+			return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")
+		}
+	}
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
 	pool, found, err := k.GetPool(ctx, msg.PoolId)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to get pool")

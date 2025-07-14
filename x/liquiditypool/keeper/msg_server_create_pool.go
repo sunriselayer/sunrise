@@ -14,10 +14,11 @@ import (
 )
 
 func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
-	sender, err := k.addressCodec.StringToBytes(msg.Sender)
+	senderBytes, err := k.addressCodec.StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid sender address")
 	}
+	sender := sdk.AccAddress(senderBytes)
 
 	err = sdk.ValidateDenom(msg.DenomBase)
 	if err != nil {
@@ -70,16 +71,19 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 	// end static validation
 
 	// Validate quote denom and consume gas if authority is not gov
-	if !sdk.AccAddress(sender).Equals(sdk.AccAddress(k.authority)) {
+	// If the sender is one of the authority addresses, skip the sendable token check.
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "failed to get params")
+	}
+
+	isAuthoritySender := slices.Contains(params.AuthorityAddresses, sender.String())
+
+	if !isAuthoritySender {
 		// Validate denom base and denom quote are sendable tokens
 		err = k.bankKeeper.IsSendEnabledCoins(ctx, sdk.NewCoin(msg.DenomBase, math.ZeroInt()), sdk.NewCoin(msg.DenomQuote, math.ZeroInt()))
 		if err != nil {
 			return nil, errorsmod.Wrap(err, "denom base and denom quote must be sendable tokens")
-		}
-
-		params, err := k.Params.Get(ctx)
-		if err != nil {
-			return nil, errorsmod.Wrap(err, "failed to get params")
 		}
 
 		if !slices.Contains(params.AllowedQuoteDenoms, msg.DenomQuote) {
@@ -102,6 +106,7 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 		CurrentTick:          0,
 		CurrentTickLiquidity: math.LegacyZeroDec().String(),
 		CurrentSqrtPrice:     math.LegacyZeroDec().String(),
+		Creator:              sender.String(),
 	}
 	id, err := k.AppendPool(ctx, pool)
 	if err != nil {

@@ -16,6 +16,7 @@ message Pool {
   int64 current_tick = 6;
   string current_tick_liquidity = 7 [(cosmos_proto.scalar) = "cosmos.Dec"];
   string current_sqrt_price = 8 [(cosmos_proto.scalar) = "cosmos.Dec"];
+  string creator = 9;
 }
 
 // TickParams
