@@ -34,6 +34,9 @@ message PublishedData {
   ];
   string data_source_info = 11;
   int64 verified_height = 12;
+
+  // challenger_validators is the list of validators that were active when the data was challenging.
+  repeated string challenging_validators = 13;
 }
 
 // PublishedDataStatus

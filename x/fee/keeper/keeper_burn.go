@@ -104,10 +104,10 @@ func (k Keeper) burnCoin(ctx sdk.Context, coin sdk.Coin, params types.Params) er
 
 		// The amount to burn is the net amount after the interface fee has been sent to the FeeCollector.
 		// result.TokenOut.Amount is the amount before the interface fee is subtracted.
-		amountToBurn, err := result.TokenOut.Amount.SafeSub(interfaceFee)
-		if err != nil {
-			return errorsmod.Wrap(err, "failed to calculate amount to burn")
+		if result.TokenOut.Amount.LT(interfaceFee) {
+			return errorsmod.Wrapf(sdkerrors.ErrInsufficientFunds, "swapped amount (%s) is less than interface fee (%s)", result.TokenOut.Amount, interfaceFee)
 		}
+		amountToBurn := result.TokenOut.Amount.Sub(interfaceFee)
 		coinToBurn := sdk.NewCoin(result.TokenOut.Denom, amountToBurn)
 
 		// burn swapped coins from the fee module account

@@ -32,15 +32,16 @@ var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey = collections.NewPrefix("params/")
 
-	EpochsKeyPrefix           = collections.NewPrefix("epochs/")
-	EpochIdKey                = collections.NewPrefix("epoch_id/")
-	VotesKeyPrefix            = collections.NewPrefix("votes/")
-	BribesKeyPrefix           = collections.NewPrefix("bribes/")
-	BribeIdKey                = collections.NewPrefix("bribe_id/")
-	BribesEpochIdIndexPrefix  = collections.NewPrefix("bribes_by_epoch_id/")
-	BribesPoolIdIndexPrefix   = collections.NewPrefix("bribes_by_pool_id/")
-	BribeAllocationsKeyPrefix = collections.NewPrefix("bribe_allocations/")
-	BribeExpiredEpochIdKey    = collections.NewPrefix("bribe_expired_epoch_id/")
+	EpochsKeyPrefix                 = collections.NewPrefix("epochs/")
+	EpochIdKey                      = collections.NewPrefix("epoch_id/")
+	VotesKeyPrefix                  = collections.NewPrefix("votes/")
+	BribesKeyPrefix                 = collections.NewPrefix("bribes/")
+	BribeIdKey                      = collections.NewPrefix("bribe_id/")
+	BribesEpochIdIndexPrefix        = collections.NewPrefix("bribes_by_epoch_id/")
+	BribesPoolIdIndexPrefix         = collections.NewPrefix("bribes_by_pool_id/")
+	BribeAllocationsKeyPrefix       = collections.NewPrefix("bribe_allocations/")
+	BribeAllocationsByEpochIdPrefix = collections.NewPrefix("bribe_allocations_by_epoch_id/")
+	BribeExpiredEpochIdKey          = collections.NewPrefix("bribe_expired_epoch_id/")
 )
 
 type BribesIndexes struct {
@@ -73,6 +74,28 @@ func NewBribesIndexes(sb *collections.SchemaBuilder) BribesIndexes {
 			collections.Uint64Key,
 			func(_ uint64, v Bribe) (uint64, error) {
 				return v.PoolId, nil
+			},
+		),
+	}
+}
+
+type BribeAllocationsIndexes struct {
+	EpochId *indexes.Multi[uint64, collections.Triple[sdk.AccAddress, uint64, uint64], BribeAllocation]
+}
+
+func (i BribeAllocationsIndexes) IndexesList() []collections.Index[collections.Triple[sdk.AccAddress, uint64, uint64], BribeAllocation] {
+	return []collections.Index[collections.Triple[sdk.AccAddress, uint64, uint64], BribeAllocation]{i.EpochId}
+}
+
+func NewBribeAllocationsIndexes(sb *collections.SchemaBuilder) BribeAllocationsIndexes {
+	return BribeAllocationsIndexes{
+		EpochId: indexes.NewMulti(sb,
+			BribeAllocationsByEpochIdPrefix,
+			"bribe_allocations_by_epoch_id",
+			collections.Uint64Key,
+			BribeAllocationsKeyCodec,
+			func(pk collections.Triple[sdk.AccAddress, uint64, uint64], v BribeAllocation) (uint64, error) {
+				return v.EpochId, nil
 			},
 		),
 	}

@@ -163,6 +163,25 @@ func TestTally_Standard(t *testing.T) {
 			},
 			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(3000000)}},
 		},
+		{
+			name: "delegator votes, validator does not",
+			setup: func(s tallyFixture) {
+				setTotalBonded(s, 10000000)
+				del0Addr, err := s.mocks.AcctKeeper.AddressCodec().BytesToString(s.delAddrs[0])
+				require.NoError(t, err)
+				val0Addr, err := s.mocks.StakingKeeper.ValidatorAddressCodec().BytesToString(s.valAddrs[0])
+				require.NoError(t, err)
+				delegations := []stakingtypes.Delegation{{
+					DelegatorAddress: del0Addr,
+					ValidatorAddress: val0Addr,
+					Shares:           math.LegacyNewDec(42),
+				}}
+				// Delegator votes for pool 1
+				delegatorVote(s, s.delAddrs[0], delegations, []types.PoolWeight{{PoolId: 1, Weight: "1"}})
+				// Validator does not vote, so its remaining power (1000000 - 42) is not counted
+			},
+			expectedTally: []types.Gauge{{PoolId: 1, VotingPower: math.NewIntFromUint64(42)}},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

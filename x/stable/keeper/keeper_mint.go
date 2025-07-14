@@ -29,7 +29,7 @@ func (k Keeper) Mint(ctx context.Context, sender sdk.AccAddress, amountToMint sd
 
 	// 1. Validates that the sender is an authority address.
 	if !k.isAuthority(sender, params) {
-		return nil, errors.Wrapf(types.ErrInvalidSigner, "sender %s is not an authority address", sender.String())
+		return nil, errors.Wrapf(types.ErrInvalidAuthority, "sender %s is not an authority address", sender.String())
 	}
 
 	if !amountToMint.IsPositive() {

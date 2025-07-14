@@ -26,6 +26,9 @@ service Msg {
   rpc RegisterProofDeputy(MsgRegisterProofDeputy) returns (MsgRegisterProofDeputyResponse);
   // UnregisterProofDeputy
   rpc UnregisterProofDeputy(MsgUnregisterProofDeputy) returns (MsgUnregisterProofDeputyResponse);
+  // VerifyData triggers the verification and lifecycle management of DA data,
+  // which was previously handled in the EndBlocker. This can be called by anyone.
+  rpc VerifyData(MsgVerifyData) returns (MsgVerifyDataResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -107,3 +110,14 @@ message MsgUnregisterProofDeputy {
 
 // MsgUnregisterProofDeputyResponse
 message MsgUnregisterProofDeputyResponse {}
+
+// MsgVerifyData defines the message to trigger the data verification process.
+message MsgVerifyData {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  // sender is the address of the account that triggers the process.
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgVerifyDataResponse defines the response for MsgVerifyData.
+message MsgVerifyDataResponse {}
