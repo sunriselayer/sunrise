@@ -12,9 +12,11 @@ Unlike traditional AMMs where liquidity is distributed uniformly along the entir
 
 Ticks are discrete price points that define the boundaries of a price range. The price of an asset is determined by the current tick of the pool. The relationship between ticks and prices is defined by the following formula:
 
-```
-price(tick) = price_ratio ^ (tick - base_offset)
-```
+$$
+\begin{aligned}
+  \text{price} = \text{price ratio}^{\text{tick} - \text{base offset}}
+\end{aligned}
+$$
 
 - `price_ratio`: The price ratio between two consecutive ticks. Typically set to `1.0001`.
 - `base_offset`: An offset to the tick, allowing for more granular control over the price range. Typically set to `0`.
