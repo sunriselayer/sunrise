@@ -144,9 +144,9 @@ func KeyFeePoolAccumulator(poolId uint64) string {
 }
 
 func FormatKeyAccumPrefix(accumName string) []byte {
-	return []byte(fmt.Sprintf(KeyAccumPrefix+"%s", accumName))
+	return fmt.Appendf(nil, KeyAccumPrefix+"%s", accumName)
 }
 
 func FormatKeyAccumulatorPositionPrefix(accumName, name string) []byte {
-	return []byte(fmt.Sprintf(KeyAccumulatorPositionPrefix+"%s"+KeySeparator+"%s", accumName, name))
+	return fmt.Appendf(nil, KeyAccumulatorPositionPrefix+"%s"+KeySeparator+"%s", accumName, name)
 }
