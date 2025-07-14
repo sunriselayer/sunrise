@@ -36,7 +36,6 @@ type Keeper struct {
 	accountKeeper        types.AccountKeeper
 	bankKeeper           types.BankKeeper
 	stakingKeeper        types.StakingKeeper
-	feeKeeper            types.FeeKeeper
 	tokenConverterKeeper types.TokenConverterKeeper
 	distributionKeeper   types.DistributionKeeper
 
@@ -54,7 +53,6 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	distributionKeeper types.DistributionKeeper,
-	feeKeeper types.FeeKeeper,
 	tokenConverterKeeper types.TokenConverterKeeper,
 	stakingMsgServer stakingtypes.MsgServer,
 	stakingQueryServer stakingtypes.QueryServer,
@@ -83,7 +81,6 @@ func NewKeeper(
 		bankKeeper:           bankKeeper,
 		stakingKeeper:        stakingKeeper,
 		distributionKeeper:   distributionKeeper,
-		feeKeeper:            feeKeeper,
 		tokenConverterKeeper: tokenConverterKeeper,
 
 		StakingMsgServer:   stakingMsgServer,

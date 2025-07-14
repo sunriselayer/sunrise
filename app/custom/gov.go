@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sunriselayer/sunrise/app/consts"
 
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -23,12 +24,12 @@ func (cm CustomGovModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	oneWeek := day * 7
 
 	genesis.Params.MinDeposit = sdk.NewCoins(
-		sdk.NewCoin("uvrise", math.NewInt(1_000_000_000)),
-		sdk.NewCoin("urise", math.NewInt(1_000_000_000*2)),
+		sdk.NewCoin(consts.BondDenom, math.NewInt(1_000_000_000)),
+		sdk.NewCoin(consts.MintDenom, math.NewInt(1_000_000_000*2)),
 	)
 	genesis.Params.ExpeditedMinDeposit = sdk.NewCoins(
-		sdk.NewCoin("uvrise", math.NewInt(1_000_000_000*5)),
-		sdk.NewCoin("urise", math.NewInt(1_000_000_000*5*2)),
+		sdk.NewCoin(consts.BondDenom, math.NewInt(1_000_000_000*5)),
+		sdk.NewCoin(consts.MintDenom, math.NewInt(1_000_000_000*5*2)),
 	)
 	genesis.Params.MaxDepositPeriod = &oneWeek
 	genesis.Params.VotingPeriod = &oneWeek

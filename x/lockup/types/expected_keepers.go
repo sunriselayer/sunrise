@@ -24,8 +24,8 @@ type StakingKeeper interface {
 	ValidatorAddressCodec() addresscodec.Codec
 }
 
-type FeeKeeper interface {
-	FeeDenom(ctx context.Context) (string, error)
+type TokenConverterKeeper interface {
+	GetTransferableDenom(ctx context.Context) (string, error)
 }
 
 type ShareclassKeeper interface {

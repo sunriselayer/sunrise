@@ -16,8 +16,8 @@ type CustomBankModule struct {
 func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	genesis := banktypes.DefaultGenesisState()
 
-	metadataFee := banktypes.Metadata{
-		Description: "The native token of the Sunrise network for fees.",
+	metadataMint := banktypes.Metadata{
+		Description: "The native token of the Sunrise network.",
 		DenomUnits: []*banktypes.DenomUnit{
 			{
 				Denom:    "urise",
@@ -52,15 +52,39 @@ func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 		Name:    "Sunrise vRISE",
 		Symbol:  "vRISE",
 	}
+	metadataStable := banktypes.Metadata{
+		Description: "The USD stable coin of the Sunrise network for fees.",
+		DenomUnits: []*banktypes.DenomUnit{
+			{
+				Denom:    "uusdrise",
+				Exponent: 0,
+				Aliases:  []string{"microusdrise"},
+			},
+			{
+				Denom:    "usdrise",
+				Exponent: 6,
+			},
+		},
+		Base:    "uusdrise",
+		Display: "usdrise",
+		Name:    "Sunrise USDrise",
+		Symbol:  "USDRISE",
+	}
 
+	sendEnabledMint := banktypes.SendEnabled{
+		Denom:   "urise",
+		Enabled: false,
+	}
 	sendEnabledVrise := banktypes.SendEnabled{
 		Denom:   "uvrise",
 		Enabled: false,
 	}
 
-	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataFee)
+	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataMint)
 	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataBond)
+	genesis.DenomMetadata = append(genesis.DenomMetadata, metadataStable)
 
+	genesis.SendEnabled = append(genesis.SendEnabled, sendEnabledMint)
 	genesis.SendEnabled = append(genesis.SendEnabled, sendEnabledVrise)
 
 	return cdc.MustMarshalJSON(genesis)

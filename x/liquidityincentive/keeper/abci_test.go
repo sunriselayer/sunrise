@@ -12,6 +12,7 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/consts"
 	"github.com/sunriselayer/sunrise/x/liquidityincentive/types"
+	tokenconvertertypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
 )
 
 func TestBeginBlocker(t *testing.T) {
@@ -111,8 +112,11 @@ func TestBeginBlocker(t *testing.T) {
 			)
 			mocks.StakingKeeper.EXPECT().BondDenom(gomock.Any()).
 				Return(consts.BondDenom, nil).AnyTimes()
-			mocks.FeeKeeper.EXPECT().FeeDenom(gomock.Any()).
-				Return(consts.FeeDenom, nil).AnyTimes()
+			mocks.TokenConverterKeeper.EXPECT().GetParams(gomock.Any()).
+				Return(tokenconvertertypes.Params{
+					TransferableDenom:    consts.MintDenom,
+					NonTransferableDenom: consts.BondDenom,
+				}, nil).AnyTimes()
 			mocks.TokenConverterKeeper.EXPECT().ConvertReverse(gomock.Any(), gomock.Any(), gomock.Any()).
 				Return(nil).AnyTimes()
 			mocks.BankKeeper.EXPECT().SendCoinsFromModuleToModule(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).

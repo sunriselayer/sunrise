@@ -26,11 +26,11 @@ func (q queryServer) CalculateBondingAmount(ctx context.Context, req *types.Quer
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	feeDenom, err := q.k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := q.k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	coin := sdk.NewCoin(feeDenom, amount)
+	coin := sdk.NewCoin(transferableDenom, amount)
 
 	return &types.QueryCalculateBondingAmountResponse{Amount: coin}, nil
 }

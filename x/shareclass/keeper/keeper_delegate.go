@@ -15,12 +15,12 @@ import (
 
 func (k Keeper) Delegate(ctx context.Context, sender sdk.AccAddress, valAddr sdk.ValAddress, amount sdk.Coin) (share, rewards sdk.Coins, err error) {
 	// Validate amount
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-	if amount.Denom != feeDenom {
-		return nil, nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "delegate amount denom must be equal to fee denom")
+	if amount.Denom != transferableDenom {
+		return nil, nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", transferableDenom, amount.Denom)
 	}
 
 	// Claim rewards
@@ -61,13 +61,20 @@ func (k Keeper) Delegate(ctx context.Context, sender sdk.AccAddress, valAddr sdk
 }
 
 func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient sdk.AccAddress, valAddr sdk.ValAddress, amount sdk.Coin) (output sdk.Coin, rewards sdk.Coins, CompletionTime time.Time, err error) {
-	// Validate amount
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	// Validate params and amount
+	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return sdk.Coin{}, nil, time.Time{}, err
 	}
-	if amount.Denom != feeDenom {
-		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount denom must be equal to fee denom")
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return sdk.Coin{}, nil, time.Time{}, err
+	}
+	if tokenconverterParams.NonTransferableDenom != bondDenom {
+		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, tokenconverterParams.NonTransferableDenom)
+	}
+	if amount.Denom != tokenconverterParams.TransferableDenom {
+		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", tokenconverterParams.TransferableDenom, amount.Denom)
 	}
 	if !amount.IsPositive() {
 		return sdk.Coin{}, nil, time.Time{}, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount must be positive")
@@ -101,10 +108,6 @@ func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient
 	}
 
 	// Undelegate
-	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
-	if err != nil {
-		return sdk.Coin{}, nil, time.Time{}, err
-	}
 	amount = sdk.NewCoin(bondDenom, amount.Amount)
 
 	res, err := k.StakingMsgServer.Undelegate(ctx, &stakingtypes.MsgUndelegate{
@@ -139,15 +142,18 @@ func (k Keeper) ConvertAndDelegate(ctx context.Context, sender sdk.AccAddress, v
 	if err != nil {
 		return err
 	}
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return err
 	}
+	if tokenconverterParams.NonTransferableDenom != bondDenom {
+		return errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, tokenconverterParams.NonTransferableDenom)
+	}
 	bondCoin := sdk.NewCoin(bondDenom, amount)
-	feeCoin := sdk.NewCoin(feeDenom, amount)
+	transferableCoin := sdk.NewCoin(tokenconverterParams.TransferableDenom, amount)
 
 	// Send fee coin to module
-	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(feeCoin))
+	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(transferableCoin))
 	if err != nil {
 		return err
 	}

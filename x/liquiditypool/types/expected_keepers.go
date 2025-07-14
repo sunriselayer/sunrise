@@ -20,7 +20,3 @@ type BankKeeper interface {
 	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
 	// Methods imported from bank should be defined here
 }
-
-type FeeKeeper interface {
-	FeeDenom(ctx context.Context) (string, error)
-}

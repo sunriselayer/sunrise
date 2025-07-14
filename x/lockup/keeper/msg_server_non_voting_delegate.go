@@ -33,16 +33,16 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 		return nil, errorsmod.Wrap(err, "invalid lockup address")
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	if msg.Amount.Denom != feeDenom {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "delegate amount denom must be equal to fee denom")
+	if msg.Amount.Denom != transferableDenom {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", transferableDenom, msg.Amount.Denom)
 	}
 
-	balance := k.bankKeeper.GetBalance(ctx, lockupAddr, feeDenom)
+	balance := k.bankKeeper.GetBalance(ctx, lockupAddr, transferableDenom)
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	currentTime := sdkCtx.BlockTime().Unix()
@@ -68,7 +68,7 @@ func (k msgServer) NonVotingDelegate(ctx context.Context, msg *types.MsgNonVotin
 	}
 
 	// Add rewards to lockup account
-	found, coin := rewards.Find(feeDenom)
+	found, coin := rewards.Find(transferableDenom)
 
 	if found {
 		err = k.AddRewardsToLockupAccount(ctx, owner, msg.LockupAccountId, coin.Amount)

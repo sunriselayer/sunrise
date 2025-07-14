@@ -23,16 +23,22 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 	powerReduction := k.stakingKeeper.PowerReduction(ctx)
 
 	if !msg.Amount.Amount.Equal(powerReduction) {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount must be equal to power reduction in staking module, please refer the source code of PowerReduction() function of staking module for more details")
+		return nil, errorsmod.Wrapf(types.ErrInvalidCreateValidatorAmount, "invalid create validator amount: expected %s (power reduction in staking module), got %s", powerReduction, msg.Amount.Amount)
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	tokenconverterParams, err := k.tokenConverterKeeper.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}
-
-	if msg.Amount.Denom != feeDenom {
-		return nil, errorsmod.Wrap(types.ErrInvalidCreateValidatorAmount, "create validator amount denom must be equal to fee denom, please refer the source code of FeeDenom() function of fee module for more details")
+	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if tokenconverterParams.NonTransferableDenom != bondDenom {
+		return nil, errorsmod.Wrapf(types.ErrInvalidTokenConverterParams, "invalid token converter non transferable denom: expected %s, got %s", bondDenom, tokenconverterParams.NonTransferableDenom)
+	}
+	if msg.Amount.Denom != tokenconverterParams.TransferableDenom {
+		return nil, errorsmod.Wrapf(types.ErrInvalidCreateValidatorAmount, "invalid denom: expected %s, got %s", tokenconverterParams.TransferableDenom, msg.Amount.Denom)
 	}
 
 	// Consume gas
@@ -44,12 +50,6 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 
 	// Convert amount from fee denom to bond denom
 	err = k.tokenConverterKeeper.ConvertReverse(ctx, msg.Amount.Amount, sdk.AccAddress(address))
-	if err != nil {
-		return nil, err
-	}
-
-	// Stake
-	bondDenom, err := k.stakingKeeper.BondDenom(ctx)
 	if err != nil {
 		return nil, err
 	}

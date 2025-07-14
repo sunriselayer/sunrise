@@ -33,13 +33,13 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 		return nil, errorsmod.Wrap(err, "invalid lockup address")
 	}
 
-	feeDenom, err := k.feeKeeper.FeeDenom(ctx)
+	transferableDenom, err := k.tokenConverterKeeper.GetTransferableDenom(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	if msg.Amount.Denom != feeDenom {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "undelegate amount denom must be equal to fee denom")
+	if msg.Amount.Denom != transferableDenom {
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid denom: expected %s, got %s", transferableDenom, msg.Amount.Denom)
 	}
 
 	output, rewards, completionTime, err := k.shareclassKeeper.Undelegate(ctx, lockupAddr, lockupAddr, valAddr, msg.Amount)
@@ -78,7 +78,7 @@ func (k msgServer) NonVotingUndelegate(ctx context.Context, msg *types.MsgNonVot
 	}
 
 	// Add rewards to lockup account
-	found, coin := rewards.Find(feeDenom)
+	found, coin := rewards.Find(transferableDenom)
 	if found {
 		err = k.AddRewardsToLockupAccount(ctx, owner, msg.LockupAccountId, coin.Amount)
 		if err != nil {
