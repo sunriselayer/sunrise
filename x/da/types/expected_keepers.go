@@ -26,7 +26,7 @@ type BankKeeper interface {
 	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 }
 
-// StakingKeeper is expected keeper for slashing module
+// SlashingKeeper is expected keeper for slashing module
 type SlashingKeeper interface {
 	Slash(context.Context, sdk.ConsAddress, math.LegacyDec, int64, int64) error
 	Jail(context.Context, sdk.ConsAddress) error
