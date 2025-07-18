@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sunrise.tokenconverter.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
@@ -19,6 +20,9 @@ service Msg {
 
   // Convert
   rpc Convert(MsgConvert) returns (MsgConvertResponse);
+
+  // Send
+  rpc Send(MsgSend) returns (MsgSendResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -52,3 +56,17 @@ message MsgConvert {
 
 // MsgConvertResponse
 message MsgConvertResponse {}
+
+// MsgSend
+message MsgSend {
+  option (cosmos.msg.v1.signer) = "from_address";
+  string from_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string to_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// MsgSendResponse
+message MsgSendResponse {}

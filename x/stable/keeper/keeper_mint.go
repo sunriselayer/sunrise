@@ -51,5 +51,5 @@ func (k Keeper) Mint(ctx context.Context, sender sdk.AccAddress, amountToMint sd
 }
 
 func (k Keeper) isAuthority(sender sdk.AccAddress, params types.Params) bool {
-	return slices.Contains(params.AuthorityAddresses, sender.String())
+	return slices.Contains(params.AllowedAddresses, sender.String())
 }

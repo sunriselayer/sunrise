@@ -40,4 +40,4 @@ message MsgBurn {
 The `x/stable` module has the following parameters:
 
 - `stable_denom`: The denomination of the stablecoin.
-- `authority_addresses`: A list of addresses that are authorized to mint and burn stablecoins.
+- `allowed_addresses`: A list of addresses that are authorized to mint and burn stablecoins.

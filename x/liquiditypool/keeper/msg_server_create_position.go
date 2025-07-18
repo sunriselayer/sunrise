@@ -26,9 +26,9 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 		return nil, errorsmod.Wrap(err, "failed to get params")
 	}
 
-	isAuthoritySender := slices.Contains(params.AuthorityAddresses, sender.String())
+	isAllowedSender := slices.Contains(params.AllowedAddresses, sender.String())
 
-	if !isAuthoritySender {
+	if !isAllowedSender {
 		// Validate denom base and denom quote are sendable tokens
 		if err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.TokenBase, msg.TokenQuote); err != nil {
 			return nil, errorsmod.Wrap(err, "failed to check if send enabled coins")

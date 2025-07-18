@@ -29,7 +29,7 @@ func TestKeeper_Convert(t *testing.T) {
 			name:   "success",
 			amount: math.NewInt(100),
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -49,7 +49,7 @@ func TestKeeper_Convert(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "send coins failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -62,7 +62,7 @@ func TestKeeper_Convert(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "burn coins failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -78,7 +78,7 @@ func TestKeeper_Convert(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "mint coins failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -95,7 +95,7 @@ func TestKeeper_Convert(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "send coins from module failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -143,7 +143,7 @@ func TestKeeper_ConvertReverse(t *testing.T) {
 			name:   "success",
 			amount: math.NewInt(100),
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -163,7 +163,7 @@ func TestKeeper_ConvertReverse(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "send coins failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -176,7 +176,7 @@ func TestKeeper_ConvertReverse(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "burn coins failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -192,7 +192,7 @@ func TestKeeper_ConvertReverse(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "mint coins failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -209,7 +209,7 @@ func TestKeeper_ConvertReverse(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "send coins from module failed",
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 

@@ -10,5 +10,5 @@ message Params {
   option (gogoproto.equal) = true;
 
   string stable_denom = 1;
-  repeated string authority_addresses = 2;
+  repeated string allowed_addresses = 2;
 }

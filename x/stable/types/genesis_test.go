@@ -22,8 +22,8 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "invalid genesis state - invalid authority address",
 			genState: &types.GenesisState{
 				Params: types.Params{
-					AuthorityAddresses: []string{"invalid-address"},
-					StableDenom:        "uusdrise",
+					AllowedAddresses: []string{"invalid-address"},
+					StableDenom:      "uusdrise",
 				},
 			},
 			valid: false,
@@ -32,8 +32,8 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "invalid genesis state - empty stable denom",
 			genState: &types.GenesisState{
 				Params: types.Params{
-					AuthorityAddresses: []string{"cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn0kn67"},
-					StableDenom:        "",
+					AllowedAddresses: []string{"cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn0kn67"},
+					StableDenom:      "",
 				},
 			},
 			valid: false,

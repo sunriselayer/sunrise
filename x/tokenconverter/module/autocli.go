@@ -34,6 +34,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a convert tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "amount"}},
 				},
+				{
+					RpcMethod: "Send",
+					Use:       "send [to_address] [amount]",
+					Short:     "Send a send tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "to_address"},
+						{ProtoField: "amount", Varargs: true},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

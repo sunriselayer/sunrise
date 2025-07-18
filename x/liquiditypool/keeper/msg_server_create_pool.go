@@ -77,9 +77,9 @@ func (k msgServer) CreatePool(ctx context.Context, msg *types.MsgCreatePool) (*t
 		return nil, errorsmod.Wrap(err, "failed to get params")
 	}
 
-	isAuthoritySender := slices.Contains(params.AuthorityAddresses, sender.String())
+	isAllowedSender := slices.Contains(params.AllowedAddresses, sender.String())
 
-	if !isAuthoritySender {
+	if !isAllowedSender {
 		// Validate denom base and denom quote are sendable tokens
 		err = k.bankKeeper.IsSendEnabledCoins(ctx, sdk.NewCoin(msg.DenomBase, math.ZeroInt()), sdk.NewCoin(msg.DenomQuote, math.ZeroInt()))
 		if err != nil {
