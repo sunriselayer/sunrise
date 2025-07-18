@@ -11,4 +11,5 @@ message Params {
 
   string non_transferable_denom = 1;
   string transferable_denom = 2;
+  repeated string allowed_addresses = 3;
 }

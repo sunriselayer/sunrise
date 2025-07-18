@@ -14,5 +14,5 @@ message Params {
   // For reservation, not used yet
   string withdraw_fee_rate = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];
   repeated string allowed_quote_denoms = 3;
-  repeated string authority_addresses = 4;
+  repeated string allowed_addresses = 4;
 }
