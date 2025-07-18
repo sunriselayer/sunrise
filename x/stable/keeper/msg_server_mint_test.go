@@ -34,7 +34,7 @@ func TestMsgServerMint(t *testing.T) {
 				params, err := k.Params.Get(ctx)
 				require.NoError(t, err)
 
-				params.AuthorityAddresses = []string{authority.String()}
+				params.AllowedAddresses = []string{authority.String()}
 				err = k.Params.Set(ctx, params)
 				require.NoError(t, err)
 
@@ -52,7 +52,7 @@ func TestMsgServerMint(t *testing.T) {
 				params, err := k.Params.Get(ctx)
 				require.NoError(t, err)
 
-				params.AuthorityAddresses = []string{authority.String()}
+				params.AllowedAddresses = []string{authority.String()}
 				err = k.Params.Set(ctx, params)
 				require.NoError(t, err)
 			},
@@ -76,7 +76,7 @@ func TestMsgServerMint(t *testing.T) {
 				params, err := k.Params.Get(ctx)
 				require.NoError(t, err)
 
-				params.AuthorityAddresses = []string{authority.String()}
+				params.AllowedAddresses = []string{authority.String()}
 				err = k.Params.Set(ctx, params)
 				require.NoError(t, err)
 			},

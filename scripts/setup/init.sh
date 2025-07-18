@@ -31,7 +31,7 @@ echo $USER_MNEMONIC_3 | $BINARY keys add $USER3 --home $NODE_HOME --recover --ke
 echo $USER_MNEMONIC_4 | $BINARY keys add $USER4 --home $NODE_HOME --recover --keyring-backend=test
 
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $VAL1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uglu,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
@@ -66,7 +66,7 @@ jq ".app_state.da.params.verified_removal_period  = \"360s\"" $NODE_HOME/config/
 jq ".app_state.da.params.proof_period  = \"120s\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 
 # Enable stable authority for user1
-jq ".app_state.stable.params.authority_addresses = [\"$($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a)\"]" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+jq ".app_state.stable.params.allowed_addresses = [\"$($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a)\"]" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 
 # Enable fee burn
 jq ".app_state.fee.params.burn_pool_id = \"1\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
@@ -74,3 +74,13 @@ jq ".app_state.fee.params.burn_enabled = true" $NODE_HOME/config/genesis.json > 
 
 # Enable urise send
 jq '(.app_state.bank.send_enabled[] | select(.denom=="urise").enabled) = true' $NODE_HOME/config/genesis.json > $NODE_HOME/config/tmp_genesis.json && mv $NODE_HOME/config/tmp_genesis.json $NODE_HOME/config/genesis.json
+
+# # Add init lockup messages from json file
+# jq --slurpfile lockupMsgs "$SCRIPT_DIR/init_lockup_msgs_airdrop.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+
+# # Add airdrop accounts
+# jq --slurpfile airdropAccounts "$SCRIPT_DIR/genesis_accounts_airdrop.json" '.app_state.auth.accounts += $airdropAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+# jq --slurpfile airdropBalance "$SCRIPT_DIR/genesis_balances_airdrop.json" '.app_state.bank.balances += $airdropBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+
+# # Update urise balance for a specific address
+# jq '(.app_state.bank.balances[] | select(.address == "sunrise1d6zd6awgjxuwrf4y863c9stz9m0eec4gnxuf79").coins[] | select(.denom == "urise")).amount = "99995635386493883"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
