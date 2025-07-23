@@ -39,7 +39,7 @@ $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 
 echo "Creating and collecting gentx..."
-$BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test --fees 100000$BINARY_STABLE_TOKEN
+$BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test
 $BINARY genesis collect-gentxs --home $NODE_HOME
 
 echo "Changing defaults config files..."
