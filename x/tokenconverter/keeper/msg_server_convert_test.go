@@ -31,7 +31,7 @@ func TestMsgServer_Convert(t *testing.T) {
 				Amount: math.NewInt(100),
 			},
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 
@@ -71,7 +71,7 @@ func TestMsgServer_Convert(t *testing.T) {
 				Amount: math.NewInt(100),
 			},
 			mockSetup: func(f *fixture) {
-				params := types.NewParams(nonTransferableDenom, transferableDenom)
+				params := types.NewParams(nonTransferableDenom, transferableDenom, []string{})
 				err := f.keeper.SetParams(f.ctx, params)
 				require.NoError(t, err)
 

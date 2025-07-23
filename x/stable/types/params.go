@@ -10,14 +10,14 @@ import (
 // NewParams creates a new Params instance.
 func NewParams(
 	stableDenom string,
-	authorityAddresses []string,
+	AllowedAddresses []string,
 ) Params {
-	if len(authorityAddresses) == 0 {
-		authorityAddresses = nil
+	if len(AllowedAddresses) == 0 {
+		AllowedAddresses = nil
 	}
 	return Params{
-		StableDenom:        stableDenom,
-		AuthorityAddresses: authorityAddresses,
+		StableDenom:      stableDenom,
+		AllowedAddresses: AllowedAddresses,
 	}
 }
 
@@ -35,9 +35,9 @@ func (p Params) Validate() error {
 		return fmt.Errorf("invalid stable denom: %w", err)
 	}
 
-	for _, addr := range p.AuthorityAddresses {
+	for _, addr := range p.AllowedAddresses {
 		if _, err := sdk.AccAddressFromBech32(addr); err != nil {
-			return fmt.Errorf("invalid authority address: %w", err)
+			return fmt.Errorf("invalid address: %w", err)
 		}
 	}
 

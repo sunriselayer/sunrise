@@ -10,15 +10,15 @@ import (
 )
 
 // NewParams creates a new Params instance.
-func NewParams(createPoolGas uint64, withdrawFeeRate math.LegacyDec, allowedQuoteDenoms []string, authorityAddresses []string) Params {
-	if len(authorityAddresses) == 0 {
-		authorityAddresses = nil
+func NewParams(createPoolGas uint64, withdrawFeeRate math.LegacyDec, allowedQuoteDenoms []string, AllowedAddresses []string) Params {
+	if len(AllowedAddresses) == 0 {
+		AllowedAddresses = nil
 	}
 	return Params{
 		CreatePoolGas:      createPoolGas,
 		WithdrawFeeRate:    withdrawFeeRate.String(),
 		AllowedQuoteDenoms: allowedQuoteDenoms,
-		AuthorityAddresses: authorityAddresses,
+		AllowedAddresses:   AllowedAddresses,
 	}
 }
 
@@ -51,9 +51,9 @@ func (p Params) Validate() error {
 		}
 	}
 
-	for _, addr := range p.AuthorityAddresses {
+	for _, addr := range p.AllowedAddresses {
 		if _, err := sdk.AccAddressFromBech32(addr); err != nil {
-			return errorsmod.Wrapf(err, "invalid authority address: %s", addr)
+			return errorsmod.Wrapf(err, "invalid address: %s", addr)
 		}
 	}
 
