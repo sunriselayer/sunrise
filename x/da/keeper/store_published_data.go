@@ -27,7 +27,7 @@ func (k Keeper) GetPublishedData(ctx context.Context, metadataUri string) (data 
 	return val, true, nil
 }
 
-// SetParams set the params
+// SetPublishedData sets the published data in the store
 func (k Keeper) SetPublishedData(ctx context.Context, data types.PublishedData) error {
 	err := k.PublishedData.Set(ctx, data.MetadataUri, data)
 	if err != nil {
