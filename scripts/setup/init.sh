@@ -32,11 +32,6 @@ echo $USER_MNEMONIC_3 | $BINARY keys add $USER3 --home $NODE_HOME --recover --ke
 echo $USER_MNEMONIC_4 | $BINARY keys add $USER4 --home $NODE_HOME --recover --keyring-backend=test
 
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $VAL1 --keyring-backend test -a) 100000000000000$BINARY_GOV_TOKEN,400000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN --home $NODE_HOME
-# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 
 echo "Creating and collecting gentx..."
 $BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test
@@ -68,8 +63,8 @@ jq ".app_state.da.params.proof_period  = \"120s\"" $NODE_HOME/config/genesis.jso
 echo "Enable stable allowed addresses for user1"
 jq ".app_state.stable.params.allowed_addresses = [\"$($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a)\"]" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 
-echo "Enable tokenconverter allowed addresses for user1"
-jq ".app_state.tokenconverter.params.allowed_addresses = [\"$($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a)\"]" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
+echo "Enable tokenconverter allowed addresses"
+jq ".app_state.tokenconverter.params.allowed_addresses = [\"$($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a)\",\"$($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a)\"]" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
 
 # echo "Enable fee burn"
 # jq ".app_state.fee.params.burn_pool_id = \"1\"" $NODE_HOME/config/genesis.json > temp.json ; mv temp.json $NODE_HOME/config/genesis.json;
@@ -95,7 +90,14 @@ jq --slurpfile partnerBalance "$PROJECT_ROOT/build/genesis/partners/balances_par
 jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/partners/init_lockup_msgs_partner.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 echo "Update balances for a specific address"
-# 396,153,702,601 (validator) + 4363967803516 (airdrop) + 4357317000000 (partner) = 9117438506117
+# 396153702601 (validator) + 4363967803516 (airdrop) + 4357317000000 (partner) = 9117438506117
 jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "urise")).amount = "390882561493883"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uusdrise")).amount = "99996600000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uvrise")).amount = "99999966000000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+
+# Register accounts after genesis
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_NATIVE_TOKEN --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
