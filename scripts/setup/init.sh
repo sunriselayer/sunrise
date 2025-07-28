@@ -73,31 +73,46 @@ jq ".app_state.tokenconverter.params.allowed_addresses = [\"$($BINARY --home $NO
 # echo "Enable urise send"
 # jq '(.app_state.bank.send_enabled[] | select(.denom=="urise").enabled) = true' $NODE_HOME/config/genesis.json > $NODE_HOME/config/tmp_genesis.json && mv $NODE_HOME/config/tmp_genesis.json $NODE_HOME/config/genesis.json
 
+echo "Add validator accounts"
+jq --slurpfile validatorAccounts "$PROJECT_ROOT/build/genesis0728/validators/accounts_validator.json" '.app_state.auth.accounts += $validatorAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile validatorBalance "$PROJECT_ROOT/build/genesis0728/validators/balances_validator.json" '.app_state.bank.balances += $validatorBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/validators/init_lockup_msgs_validator.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 echo "Add airdrop accounts"
-jq --slurpfile airdropAccounts "$PROJECT_ROOT/build/genesis/airdrop/accounts_airdrop_exclude_4vals.json" '.app_state.auth.accounts += $airdropAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile airdropBalance "$PROJECT_ROOT/build/genesis/airdrop/balances_airdrop_exclude_4vals.json" '.app_state.bank.balances += $airdropBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/airdrop/init_lockup_msgs_airdrop_include_4vals.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-
-echo "Add validator accounts"
-jq --slurpfile validatorAccounts "$PROJECT_ROOT/build/genesis/validators/accounts_validator.json" '.app_state.auth.accounts += $validatorAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile validatorBalance "$PROJECT_ROOT/build/genesis/validators/balances_validator.json" '.app_state.bank.balances += $validatorBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/validators/init_lockup_msgs_validator.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile airdropAccounts "$PROJECT_ROOT/build/genesis0728/airdrop/accounts_airdrop_exclude_4vals.json" '.app_state.auth.accounts += $airdropAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile airdropBalance "$PROJECT_ROOT/build/genesis0728/airdrop/balances_airdrop_exclude_4vals_add_public_sale.json" '.app_state.bank.balances += $airdropBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/airdrop/init_lockup_msgs_airdrop_include_4vals.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 echo "Add partner accounts"
-jq --slurpfile partnerAccounts "$PROJECT_ROOT/build/genesis/partners/accounts_partner.json" '.app_state.auth.accounts += $partnerAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile partnerBalance "$PROJECT_ROOT/build/genesis/partners/balances_partner.json" '.app_state.bank.balances += $partnerBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/partners/init_lockup_msgs_partner.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile partnerAccounts "$PROJECT_ROOT/build/genesis0728/partners/accounts_partner.json" '.app_state.auth.accounts += $partnerAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile partnerBalance "$PROJECT_ROOT/build/genesis0728/partners/balances_partner.json" '.app_state.bank.balances += $partnerBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/partners/init_lockup_msgs_partner.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+
+echo "Add faucet accounts"
+jq --slurpfile faucetAccounts "$PROJECT_ROOT/build/genesis0728/faucets/accounts_faucet.json" '.app_state.auth.accounts += $faucetAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile faucetBalance "$PROJECT_ROOT/build/genesis0728/faucets/balances_faucet.json" '.app_state.bank.balances += $faucetBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+
+echo "Add public sale accounts"
+jq --slurpfile publicSaleAccounts "$PROJECT_ROOT/build/genesis0728/public-sale/no-airdrop/accounts_public_sale.json" '.app_state.auth.accounts += $publicSaleAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile publicSaleBalance "$PROJECT_ROOT/build/genesis0728/public-sale/no-airdrop/balances_public_sale.json" '.app_state.bank.balances += $publicSaleBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/public-sale/no-airdrop/init_lockup_msgs_public_sale_no_airdrop.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/public-sale/no-airdrop/init_lockup_msgs_public_sale_no_airdrop_bonus.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/public-sale/airdrop/init_lockup_msgs_public_sale_airdrop.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/public-sale/airdrop/init_lockup_msgs_public_sale_airdrop_bonus.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+
+echo "Add ununifi validator accounts"
+jq --slurpfile ununifiValidatorAccounts "$PROJECT_ROOT/build/genesis0728/ununifi-validators/accounts_ununifi_validator.json" '.app_state.auth.accounts += $ununifiValidatorAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile ununifiValidatorBalance "$PROJECT_ROOT/build/genesis0728/ununifi-validators/balances_ununifi_validator.json" '.app_state.bank.balances += $ununifiValidatorBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis0728/ununifi-validators/init_lockup_msgs_ununifi_validator.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 echo "Update balances for a specific address"
-# 396153702601 (validator) + 4363967803516 (airdrop) + 4357317000000 (partner) = 9117438506117
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "urise")).amount = "390882561493883"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uusdrise")).amount = "99996600000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "urise")).amount = "388500221618883"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uusdrise")).amount = "79996600000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uvrise")).amount = "99999966000000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 # Register accounts after genesis
 $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_NATIVE_TOKEN --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
-$BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_NATIVE_TOKEN --home $NODE_HOME
+# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER2 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER3 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
+# $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER4 --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
