@@ -8,4 +8,4 @@ set -o nounset
 SCRIPT_DIR=$(cd $(dirname $0); pwd)
 . $SCRIPT_DIR/init.sh
 
-go run ./cmd/sunrised/main.go start --home ./data/test
+go run ./cmd/sunrised/main.go start --home ./data/sunrise-1

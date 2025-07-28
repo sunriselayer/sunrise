@@ -10,13 +10,9 @@
       "request": "launch",
       "mode": "auto",
       "program": "./cmd/sunrised/main.go",
-      "args": [
-        "start",
-        "--home",
-        "./data/test"
-      ],
+      "args": ["start", "--home", "./data/sunrise-1"],
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "init config",
-    },
+      "preLaunchTask": "init config"
+    }
   ]
 }
