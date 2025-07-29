@@ -37,8 +37,8 @@ echo "Creating and collecting gentx..."
 $BINARY genesis gentx $VAL1 7000000000$BINARY_GOV_TOKEN --home $NODE_HOME --chain-id $CHAINID_1 --keyring-backend test
 $BINARY genesis collect-gentxs --home $NODE_HOME
 
-echo "Adding custom gentx files... from $PROJECT_ROOT/build/genesis/gentx"
-GENTX_DIR="$PROJECT_ROOT/build/genesis/gentx"
+echo "Adding custom gentx files... from $PROJECT_ROOT/build/genesis0728/gentx"
+GENTX_DIR="$PROJECT_ROOT/build/genesis0728/gentx"
 JSON_FILES=("$GENTX_DIR"/*.json)
 if [ -f "${JSON_FILES[0]}" ]; then
     echo "Found gentx files in $GENTX_DIR, adding to genesis.json..."
@@ -88,8 +88,8 @@ jq ".app_state.tokenconverter.params.allowed_addresses = [\"$($BINARY --home $NO
 # jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/airdrop/init_lockup_msgs_airdrop_include_4vals.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 echo "Add validator accounts"
-jq --slurpfile validatorAccounts "$PROJECT_ROOT/build/genesis/validators/accounts_validator.json" '.app_state.auth.accounts += $validatorAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq --slurpfile validatorBalance "$PROJECT_ROOT/build/genesis/validators/balances_validator.json" '.app_state.bank.balances += $validatorBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile validatorAccounts "$PROJECT_ROOT/build/genesis0728/validators/accounts_validator.json" '.app_state.auth.accounts += $validatorAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq --slurpfile validatorBalance "$PROJECT_ROOT/build/genesis0728/validators/balances_validator.json" '.app_state.bank.balances += $validatorBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 # jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/validators/init_lockup_msgs_validator.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 # echo "Add partner accounts"
@@ -98,10 +98,10 @@ jq --slurpfile validatorBalance "$PROJECT_ROOT/build/genesis/validators/balances
 # jq --slurpfile lockupMsgs "$PROJECT_ROOT/build/genesis/partners/init_lockup_msgs_partner.json" '.app_state.lockup.init_lockup_msgs += $lockupMsgs[0].init_lockup_msgs' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 echo "Update balances for a specific address"
-# 396,120,702,601 (validator)
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "urise")).amount = "399603879297399"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uusdrise")).amount = "99996600000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uvrise")).amount = "99999966000000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+# 417,111,702,585 (validator)
+jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "urise")).amount = "399582888297415"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uusdrise")).amount = "99996500000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
+jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uvrise")).amount = "99999965000000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
 # # Register accounts after genesis
 # $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
