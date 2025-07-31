@@ -13,7 +13,7 @@ fi
 
 echo "Removing previous data..."
 # rm -rf $NODE_HOME &> /dev/null
-$BINARY comet unsafe-reset-all --home $NODE_HOME
+$BINARY comet unsafe-reset-all --home $NODE_HOME --keep-addr-book
 
 # Add directories for both chains, exit if an error occurs
 if ! mkdir -p $NODE_HOME 2>/dev/null; then
@@ -135,11 +135,9 @@ echo "Add foundation accounts"
 jq --slurpfile foundationAccounts "$PROJECT_ROOT/build/genesis0731/foundation/accounts_foundation.json" '.app_state.auth.accounts += $foundationAccounts[0].accounts' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 jq --slurpfile foundationBalance "$PROJECT_ROOT/build/genesis0731/foundation/balances_foundation.json" '.app_state.bank.balances += $foundationBalance[0].balances' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
-echo "Update balances for a specific address"
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "urise")).amount = "388500221618883"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uusdrise")).amount = "79996600000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
-jq '(.app_state.bank.balances[] | select(.address == "sunrise1a8jcsmla6heu99ldtazc27dna4qcd4jyvln5d8").coins[] | select(.denom == "uvrise")).amount = "99999966000000"' "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 
+echo "Update supply"
+jq ".app_state.bank.supply = [{\"denom\": \"urise\", \"amount\": \"449999965000000\"}, {\"denom\": \"uusdrise\", \"amount\": \"10003500000\"}, {\"denom\": \"uvrise\", \"amount\": \"50000035000000\"}]" "$NODE_HOME/config/genesis.json" > temp.json && mv temp.json "$NODE_HOME/config/genesis.json"
 # Register accounts after genesis
 # $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $FAUCET --keyring-backend test -a) 100000000000$BINARY_GOV_TOKEN,100000000000000000$BINARY_NATIVE_TOKEN,100000000000$BINARY_STABLE_TOKEN,100000000000000uusdt,100000000000000uusdc --home $NODE_HOME
 # $BINARY genesis add-genesis-account $($BINARY --home $NODE_HOME keys show $USER1 --keyring-backend test -a) 100000000000$BINARY_NATIVE_TOKEN --home $NODE_HOME
