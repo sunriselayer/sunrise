@@ -205,9 +205,13 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	var transferStack porttypes.IBCModule
 	transferStack = ibctransfer.NewIBCModule(app.TransferKeeper)
 
-	// Add wasm callbacks to transfer stack
+	// initialise the gas limit for callbacks, recommended to be 10M for use with cosmwasm contracts
 	maxCallbackGas := uint64(10_000_000)
-	cbStack := ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, maxCallbackGas)
+	// callbacks wraps the transfer stack as its base app, and uses PacketForwardKeeper as the ICS4Wrapper
+	// i.e. packet-forward-middleware is higher on the stack and sits between callbacks and the ibc channel keeper
+	// Since this is the lowest level middleware of the transfer stack, it should be the first entrypoint for transfer keeper's
+	// WriteAcknowledgement.
+	cbStack := ibccallbacks.NewIBCMiddleware(transferStack, app.PacketForwardKeeper, wasmStackIBCHandler, maxCallbackGas)
 	transferStack = packetforward.NewIBCMiddleware(
 		cbStack,
 		app.PacketForwardKeeper,
