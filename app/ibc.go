@@ -28,9 +28,11 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
 	icahosttypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
+	ibccallbacksv2 "github.com/cosmos/ibc-go/v10/modules/apps/callbacks/v2"
 	ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
+	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibc "github.com/cosmos/ibc-go/v10/modules/core"
 	ibcclienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types" // nolint:staticcheck // Deprecated: params key table is needed for params migration
 	ibcconnectiontypes "github.com/cosmos/ibc-go/v10/modules/core/03-connection/types"
@@ -42,7 +44,6 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
-	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
@@ -178,14 +179,14 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	)
 
 	// Create fee enabled wasm ibc Stack
-	wasmStack := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
+	wasmStackIBCHandler := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
 	// </wasmd>
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
 		AddRoute(ibctransfertypes.ModuleName, transferStack).
 		// <wasmd>
-		AddRoute(wasmtypes.ModuleName, wasmStack).
+		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
 		AddRoute(icahosttypes.SubModuleName, icaHostStack)
@@ -196,8 +197,15 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	// <sunrise>
+	// Create IBC v2 transfer middleware stack
+	// the callbacks gas limit is recommended to be 10M for use with wasm contracts
+	maxCallbackGas := uint64(10_000_000)
+	var ibcv2TransferStack ibcapi.IBCModule
+	ibcv2TransferStack = transferv2.NewIBCModule(app.TransferKeeper)
+	ibcv2TransferStack = ibccallbacksv2.NewIBCMiddleware(transferv2.NewIBCModule(app.TransferKeeper), app.IBCKeeper.ChannelKeeperV2, wasmStackIBCHandler, app.IBCKeeper.ChannelKeeperV2, maxCallbackGas)
+
 	ibcRouterV2 := ibcapi.NewRouter().
-		AddRoute(ibctransfertypes.PortID, transferv2.NewIBCModule(app.TransferKeeper))
+		AddRoute(ibctransfertypes.PortID, ibcv2TransferStack)
 	app.IBCKeeper.SetRouterV2(ibcRouterV2)
 	// </sunrise>
 
