@@ -6,7 +6,7 @@
 
 **Latest Release: [v1.0.0](https://github.com/sunrise-zone/sunrise/releases/tag/v1.0.0)**
 
-✨ [sunriselayer.io](https://sunriselayer.io) ✨ [docs.sunriselayer.io](https://docs.sunriselayer.io) ✨ [Discord](https://discord.com/invite/sunrise) ✨ [X (Twitter)](https://x.com/SunriseLayer) ✨
+🌅 [sunriselayer.io](https://sunriselayer.io) 🌅 [docs.sunriselayer.io](https://docs.sunriselayer.io) 🌅 [Discord](https://discord.com/invite/sunrise) 🌅 [X (Twitter)](https://x.com/SunriseLayer) 🌅
 
 </div>
 
