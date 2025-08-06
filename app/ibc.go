@@ -124,7 +124,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// create IBC module from bottom to top of stack
 	var (
-		transferStack      porttypes.IBCModule = ibctransfer.NewIBCModule(app.TransferKeeper)
+		// transferStack      porttypes.IBCModule = ibctransfer.NewIBCModule(app.TransferKeeper)
 		icaControllerStack porttypes.IBCModule = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper)
 		icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
 	)
@@ -182,7 +182,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
-		AddRoute(ibctransfertypes.ModuleName, transferStack).
+		// AddRoute(ibctransfertypes.ModuleName, transferStack).
 		// <wasmd>
 		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>
