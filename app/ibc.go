@@ -28,11 +28,10 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
 	icahosttypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
-	ibccallbacksv2 "github.com/cosmos/ibc-go/v10/modules/apps/callbacks/v2"
+	ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
 	ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
-	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibc "github.com/cosmos/ibc-go/v10/modules/core"
 	ibcclienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types" // nolint:staticcheck // Deprecated: params key table is needed for params migration
 	ibcconnectiontypes "github.com/cosmos/ibc-go/v10/modules/core/03-connection/types"
@@ -43,8 +42,6 @@ import (
 	ibctm "github.com/cosmos/ibc-go/v10/modules/light-clients/07-tendermint"
 
 	"github.com/sunriselayer/sunrise/app/wasmclient"
-
-	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -122,16 +119,16 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		govModuleAddr,
 	)
 
-	// create IBC module from bottom to top of stack
-	var (
-		// transferStack      porttypes.IBCModule = ibctransfer.NewIBCModule(app.TransferKeeper)
-		icaControllerStack porttypes.IBCModule = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper)
-		icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
-	)
+	// // create IBC module from bottom to top of stack
+	// var (
+	// 	transferStack      porttypes.IBCModule = ibctransfer.NewIBCModule(app.TransferKeeper)
+	// 	icaControllerStack porttypes.IBCModule = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper)
+	// 	icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
+	// )
 
-	// <sunrise>
+	// // <sunrise>
 	// transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
-	// </sunrise>
+	// // </sunrise>
 
 	// <wasmd>
 	// https://github.com/CosmWasm/wasmd/blob/v0.60.0/app/app.go
@@ -180,9 +177,23 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	wasmStackIBCHandler := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
 	// </wasmd>
 
+	// create IBC module from bottom to top of stack
+	var (
+		icaControllerStack porttypes.IBCModule = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper)
+		icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
+	)
+
+	// Create Transfer Stack for IBC Classic
+	var transferStack porttypes.IBCModule
+	transferStack = ibctransfer.NewIBCModule(app.TransferKeeper)
+
+	// Add wasm callbacks to transfer stack
+	maxCallbackGas := uint64(10_000_000)
+	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, maxCallbackGas)
+
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
-		AddRoute(ibctransfertypes.ModuleName, wasmStackIBCHandler).
+		AddRoute(ibctransfertypes.ModuleName, transferStack).
 		// <wasmd>
 		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>
@@ -193,19 +204,6 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// Seal the IBC Router
 	app.IBCKeeper.SetRouter(ibcRouter)
-
-	// <sunrise>
-	// Create IBC v2 transfer middleware stack
-	// the callbacks gas limit is recommended to be 10M for use with wasm contracts
-	maxCallbackGas := uint64(10_000_000)
-	var ibcv2TransferStack ibcapi.IBCModule
-	ibcv2TransferStack = transferv2.NewIBCModule(app.TransferKeeper)
-	ibcv2TransferStack = ibccallbacksv2.NewIBCMiddleware(ibcv2TransferStack, app.IBCKeeper.ChannelKeeperV2, wasmStackIBCHandler, app.IBCKeeper.ChannelKeeperV2, maxCallbackGas)
-
-	ibcRouterV2 := ibcapi.NewRouter().
-		AddRoute(ibctransfertypes.PortID, ibcv2TransferStack)
-	app.IBCKeeper.SetRouterV2(ibcRouterV2)
-	// </sunrise>
 
 	storeProvider := app.IBCKeeper.ClientKeeper.GetStoreProvider()
 	tmLightClientModule := ibctm.NewLightClientModule(app.appCodec, storeProvider)
