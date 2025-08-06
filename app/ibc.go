@@ -182,7 +182,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
-		// AddRoute(ibctransfertypes.ModuleName, transferStack).
+		AddRoute(ibctransfertypes.ModuleName, wasmStackIBCHandler).
 		// <wasmd>
 		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>
