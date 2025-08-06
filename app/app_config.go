@@ -66,6 +66,11 @@ import (
 	_ "github.com/CosmWasm/wasmd/x/wasm" // import for side-effects
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
+	erc20types "github.com/cosmos/evm/x/erc20/types"
+	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
+	precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
+	evmtypes "github.com/cosmos/evm/x/vm/types"
+
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module"
@@ -102,6 +107,12 @@ var (
 		{Account: icatypes.ModuleName},
 		// CosmWasm module account
 		{Account: wasmtypes.ModuleName, Permissions: []string{authtypes.Burner}},
+		// EVM module accounts
+		{Account: evmtypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: feemarkettypes.ModuleName},
+		{Account: erc20types.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: precisebanktypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 
 		{Account: damoduletypes.ModuleName},
@@ -162,6 +173,11 @@ var (
 						ibcwasmtypes.ModuleName,
 						// CosmWasm module
 						wasmtypes.ModuleName,
+						// EVM modules
+						feemarkettypes.ModuleName,
+						erc20types.ModuleName,
+						precisebanktypes.ModuleName,
+						evmtypes.ModuleName, // NOTE: EVM BeginBlocker must come after FeeMarket BeginBlocker
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -186,6 +202,10 @@ var (
 						ibcwasmtypes.ModuleName,
 						// CosmWasm module
 						wasmtypes.ModuleName,
+						// EVM modules
+						evmtypes.ModuleName,
+						erc20types.ModuleName,
+
 						// chain modules
 						damoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
@@ -197,6 +217,10 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
+
+						// NOTE: the feemarket module should go last in order of end blockers that are actually doing something,
+						// to get the full block gas used.
+						feemarkettypes.ModuleName,
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{

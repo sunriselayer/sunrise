@@ -28,8 +28,8 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
 	icahosttypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
-	ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
-	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
+	// ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
+	// ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/v10/modules/core"
 	ibcclienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types" // nolint:staticcheck // Deprecated: params key table is needed for params migration
@@ -42,13 +42,34 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
-	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
+	// transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	wasmvm "github.com/CosmWasm/wasmvm/v2"
+
+	// EVM imports
+	srvflags "github.com/cosmos/evm/server/flags"
+
+	ibctransfer "github.com/cosmos/evm/x/ibc/transfer" // NOTE: override ICS20 keeper to support IBC transfers of ERC20 tokens
+	ibctransferkeeper "github.com/cosmos/evm/x/ibc/transfer/keeper"
+	transferv2 "github.com/cosmos/evm/x/ibc/transfer/v2"
+
+	"github.com/cosmos/evm/x/erc20"
+	erc20keeper "github.com/cosmos/evm/x/erc20/keeper"
+	erc20types "github.com/cosmos/evm/x/erc20/types"
+	erc20v2 "github.com/cosmos/evm/x/erc20/v2"
+	feemarket "github.com/cosmos/evm/x/feemarket"
+	feemarketkeeper "github.com/cosmos/evm/x/feemarket/keeper"
+	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
+	"github.com/cosmos/evm/x/precisebank"
+	precisebankkeeper "github.com/cosmos/evm/x/precisebank/keeper"
+	precisebanktypes "github.com/cosmos/evm/x/precisebank/types"
+	evm "github.com/cosmos/evm/x/vm"
+	evmkeeper "github.com/cosmos/evm/x/vm/keeper"
+	evmtypes "github.com/cosmos/evm/x/vm/types"
 
 	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 	// this line is used by starport scaffolding # ibc/app/import
@@ -64,6 +85,10 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
 		storetypes.NewKVStoreKey(ibcwasmtypes.StoreKey),
 		storetypes.NewKVStoreKey(wasmtypes.StoreKey),
+		storetypes.NewKVStoreKey(evmtypes.StoreKey),
+		storetypes.NewKVStoreKey(feemarkettypes.StoreKey),
+		storetypes.NewKVStoreKey(erc20types.StoreKey),
+		storetypes.NewKVStoreKey(precisebanktypes.StoreKey),
 	); err != nil {
 		return err
 	}
@@ -126,6 +151,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	// create IBC module from bottom to top of stack
 	var (
 		transferStack      porttypes.IBCModule = ibctransfer.NewIBCModule(app.TransferKeeper)
+		transferStackV2    ibcapi.IBCModule    = transferv2.NewIBCModule(app.TransferKeeper)
 		icaControllerStack porttypes.IBCModule = icacontroller.NewIBCMiddleware(app.ICAControllerKeeper)
 		icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
 	)
@@ -181,6 +207,52 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	wasmStack := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
 	// </wasmd>
 
+	// <evmd>
+	app.FeeMarketKeeper = feemarketkeeper.NewKeeper(
+		app.appCodec,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+		storetypes.NewTransientStoreKey(feemarkettypes.TransientKey),
+	)
+
+	app.PreciseBankKeeper = precisebankkeeper.NewKeeper(
+		appCodec,
+		keys[precisebanktypes.StoreKey],
+		app.BankKeeper,
+		app.AccountKeeper,
+	)
+
+	tracer := cast.ToString(appOpts.Get(srvflags.EVMTracer))
+	app.EvmKeeper = evmkeeper.NewKeeper(
+		app.appCodec,
+		keys,
+		tkeys,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.StakingKeeper, // StakingKeeper can be required for certain precompiles
+		app.FeeMarketKeeper,
+		tracer,
+	)
+
+	app.Erc20Keeper = erc20keeper.NewKeeper(
+		keys[erc20types.StoreKey],
+		appCodec,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+		app.AccountKeeper,
+		app.PreciseBankKeeper,
+		app.EVMKeeper,
+		app.StakingKeeper,
+		&app.TransferKeeper,
+	)
+
+	// NOTE: we are adding all available Cosmos EVM EVM extensions.
+	// Not all of them need to be enabled, which can be configured on a per-chain basis.
+	app.EvmKeeper.WithStaticPrecompiles()
+
+	transferStack = erc20.NewIBCMiddleware(app.Erc20Keeper, transferStack)
+	transferStackV2 = erc20v2.NewIBCMiddleware(transferStackV2, app.Erc20Keeper)
+	// </evmd>
+
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
 		AddRoute(ibctransfertypes.ModuleName, transferStack).
@@ -197,7 +269,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// <sunrise>
 	ibcRouterV2 := ibcapi.NewRouter().
-		AddRoute(ibctransfertypes.PortID, transferv2.NewIBCModule(app.TransferKeeper))
+		AddRoute(ibctransfertypes.PortID, transferStackV2)
 	app.IBCKeeper.SetRouterV2(ibcRouterV2)
 	// </sunrise>
 
@@ -240,6 +312,10 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		solomachine.NewAppModule(soloLightClientModule),
 		ibcwasm.NewAppModule(app.WasmClientKeeper),
 		wasm.NewAppModule(app.appCodec, &app.WasmKeeper, app.StakingKeeper, app.AuthKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
+		evm.NewAppModule(app.EvmKeeper, app.AuthKeeper, app.BankKeeper),
+		feemarket.NewAppModule(app.FeeMarketKeeper),
+		erc20.NewAppModule(app.Erc20Keeper, app.EvmKeeper, app.PreciseBankKeeper, app.TransferKeeper),
+		precisebank.NewAppModule(app.PreciseBankKeeper, app.EvmKeeper, app.BankKeeper),
 	); err != nil {
 		return err
 	}
@@ -259,6 +335,10 @@ func RegisterWasmAndIBC(cdc codec.Codec, registry cdctypes.InterfaceRegistry) ma
 		solomachine.ModuleName:      solomachine.NewAppModule(solomachine.NewLightClientModule(cdc, ibcclienttypes.StoreProvider{})),
 		ibcwasmtypes.ModuleName:     ibcwasm.NewAppModule(ibcwasmkeeper.Keeper{}),
 		wasmtypes.ModuleName:        wasm.NewAppModule(cdc, &wasmkeeper.Keeper{}, nil, nil, nil, nil, nil),
+		evmtypes.ModuleName:         evm.NewAppModule(&evmkeeper.Keeper{}, nil, nil),
+		feemarkettypes.ModuleName:   feemarket.NewAppModule(feemarketkeeper.Keeper{}),
+		erc20types.ModuleName:       erc20.NewAppModule(erc20keeper.Keeper{}, &evmkeeper.Keeper{}, precisebankkeeper.Keeper{}, ibctransferkeeper.Keeper{}),
+		precisebanktypes.ModuleName: precisebank.NewAppModule(precisebankkeeper.Keeper{}, &evmkeeper.Keeper{}, nil),
 	}
 
 	for _, m := range modules {
