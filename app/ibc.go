@@ -50,8 +50,6 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	wasmvm "github.com/CosmWasm/wasmvm/v2"
-
-	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
@@ -132,7 +130,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	)
 
 	// <sunrise>
-	transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
+	// transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
 	// </sunrise>
 
 	// <wasmd>
