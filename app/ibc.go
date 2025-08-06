@@ -41,6 +41,10 @@ import (
 	solomachine "github.com/cosmos/ibc-go/v10/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v10/modules/light-clients/07-tendermint"
 
+	"github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v10/packetforward"
+	packetforwardkeeper "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v10/packetforward/keeper"
+	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v10/packetforward/types"
+
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
@@ -83,6 +87,18 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		govModuleAddr,
 	)
 
+	// Initialize the packet forward middleware Keeper
+	// It's important to note that the PFM Keeper must be initialized before the Transfer Keeper
+	app.PacketForwardKeeper = packetforwardkeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(app.GetKey(packetforwardtypes.StoreKey)),
+		nil, // will be zero-value here, reference is set later on with SetTransferKeeper.
+		app.IBCKeeper.ChannelKeeper,
+		app.BankKeeper,
+		app.IBCKeeper.ChannelKeeper,
+		govModuleAddr,
+	)
+
 	// Create IBC transfer keeper
 	app.TransferKeeper = ibctransferkeeper.NewKeeper(
 		app.appCodec,
@@ -95,6 +111,8 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		app.BankKeeper,
 		govModuleAddr,
 	)
+
+	app.PacketForwardKeeper.SetTransferKeeper(app.TransferKeeper)
 
 	// Create interchain account keepers
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
@@ -189,7 +207,14 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// Add wasm callbacks to transfer stack
 	maxCallbackGas := uint64(10_000_000)
-	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, maxCallbackGas)
+	cbStack := ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, maxCallbackGas)
+	transferStack = packetforward.NewIBCMiddleware(
+		cbStack,
+		app.PacketForwardKeeper,
+		0, // retries on timeout
+		packetforwardkeeper.DefaultForwardTransferPacketTimeoutTimestamp,
+	)
+	app.TransferKeeper.WithICS4Wrapper(cbStack)
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
