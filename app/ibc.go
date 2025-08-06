@@ -202,7 +202,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	maxCallbackGas := uint64(10_000_000)
 	var ibcv2TransferStack ibcapi.IBCModule
 	ibcv2TransferStack = transferv2.NewIBCModule(app.TransferKeeper)
-	ibcv2TransferStack = ibccallbacksv2.NewIBCMiddleware(transferv2.NewIBCModule(app.TransferKeeper), app.IBCKeeper.ChannelKeeperV2, wasmStackIBCHandler, app.IBCKeeper.ChannelKeeperV2, maxCallbackGas)
+	ibcv2TransferStack = ibccallbacksv2.NewIBCMiddleware(ibcv2TransferStack, app.IBCKeeper.ChannelKeeperV2, wasmStackIBCHandler, app.IBCKeeper.ChannelKeeperV2, maxCallbackGas)
 
 	ibcRouterV2 := ibcapi.NewRouter().
 		AddRoute(ibctransfertypes.PortID, ibcv2TransferStack)
