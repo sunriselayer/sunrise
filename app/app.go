@@ -250,9 +250,9 @@ func New(
 		}
 	}
 
-	// <sunrise>
-	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
-	// </sunrise>
+	// // <sunrise>
+	// app.SwapKeeper.TransferKeeper = &app.TransferKeeper
+	// // </sunrise>
 
 	// register streaming services
 	// if err := app.RegisterStreamingServices(appOpts, app.kvStoreKeys()); err != nil {
