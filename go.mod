@@ -40,6 +40,7 @@ require (
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.53.2
 	github.com/cosmos/gogoproto v1.7.0
+	github.com/cosmos/ibc-go/modules/capability v1.0.1
 	github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10 v10.3.0
 	github.com/cosmos/ibc-go/v10 v10.3.0
 	github.com/gogo/protobuf v1.3.2
@@ -75,6 +76,7 @@ require (
 	connectrpc.com/connect v1.16.1 // indirect
 	connectrpc.com/otelconnect v0.7.0 // indirect
 	cosmossdk.io/schema v1.1.0 // indirect
+	cosmossdk.io/x/nft v0.1.1 // indirect
 	cosmossdk.io/x/tx v1.1.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect

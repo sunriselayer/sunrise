@@ -6,19 +6,18 @@ import (
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
-	"github.com/cosmos/ibc-apps/modules/ibc-hooks/v8/keeper"
-	"github.com/cosmos/ibc-apps/modules/ibc-hooks/v8/types"
+	"github.com/sunriselayer/sunrise/x/ibc-hooks/keeper"
+	"github.com/sunriselayer/sunrise/x/ibc-hooks/types"
 
 	errors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
-	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
-	ibcclienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
-	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
+	ibcclienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v10/modules/core/04-channel/types"
+	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 )
 
 type ContractAck struct {
@@ -47,17 +46,17 @@ func (h WasmHooks) ProperlyConfigured() bool {
 func (h WasmHooks) OnRecvPacketOverride(im IBCMiddleware, ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) ibcexported.Acknowledgement {
 	if !h.ProperlyConfigured() {
 		// Not configured
-		return im.App.OnRecvPacket(ctx, packet, relayer)
+		return im.App.OnRecvPacket(ctx, "", packet, relayer)
 	}
 	isIcs20, data := isIcs20Packet(packet.GetData())
 	if !isIcs20 {
-		return im.App.OnRecvPacket(ctx, packet, relayer)
+		return im.App.OnRecvPacket(ctx, "", packet, relayer)
 	}
 
 	// Validate the memo
 	isWasmRouted, contractAddr, msgBytes, err := ValidateAndParseMemo(data.GetMemo(), data.Receiver)
 	if !isWasmRouted {
-		return im.App.OnRecvPacket(ctx, packet, relayer)
+		return im.App.OnRecvPacket(ctx, "", packet, relayer)
 	}
 	if err != nil {
 		return NewEmitErrorAcknowledgement(ctx, types.ErrMsgValidation, err.Error())
@@ -88,7 +87,7 @@ func (h WasmHooks) OnRecvPacketOverride(im IBCMiddleware, ctx sdk.Context, packe
 	packet.Data = bz
 
 	// Execute the receive
-	ack := im.App.OnRecvPacket(ctx, packet, relayer)
+	ack := im.App.OnRecvPacket(ctx, "", packet, relayer)
 	if !ack.Success() {
 		return ack
 	}
@@ -218,15 +217,15 @@ func ValidateAndParseMemo(memo string, receiver string) (isWasmRouted bool, cont
 	return isWasmRouted, contractAddr, msgBytes, nil
 }
 
-func (h WasmHooks) SendPacketOverride(i ICS4Middleware, ctx sdk.Context, chanCap *capabilitytypes.Capability, sourcePort string, sourceChannel string, timeoutHeight ibcclienttypes.Height, timeoutTimestamp uint64, data []byte) (sequence uint64, err error) {
+func (h WasmHooks) SendPacketOverride(i ICS4Middleware, ctx sdk.Context, sourcePort string, sourceChannel string, timeoutHeight ibcclienttypes.Height, timeoutTimestamp uint64, data []byte) (sequence uint64, err error) {
 	isIcs20, ics20data := isIcs20Packet(data)
 	if !isIcs20 {
-		return i.channel.SendPacket(ctx, chanCap, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, data) // continue
+		return i.channel.SendPacket(ctx, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, data) // continue
 	}
 
 	isCallbackRouted, metadata := jsonStringHasKey(ics20data.GetMemo(), types.IBCCallbackKey)
 	if !isCallbackRouted {
-		return i.channel.SendPacket(ctx, chanCap, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, data) // continue
+		return i.channel.SendPacket(ctx, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, data) // continue
 	}
 
 	// We remove the meta.callback provides instructions for post-send processing. This instruction are saved
@@ -252,7 +251,7 @@ func (h WasmHooks) SendPacketOverride(i ICS4Middleware, ctx sdk.Context, chanCap
 		return 0, errors.Wrap(err, "ics20data marshall error")
 	}
 
-	seq, err := i.channel.SendPacket(ctx, chanCap, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, dataBytes)
+	seq, err := i.channel.SendPacket(ctx, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, dataBytes)
 	if err != nil {
 		return 0, err
 	}
@@ -272,7 +271,7 @@ func (h WasmHooks) SendPacketOverride(i ICS4Middleware, ctx sdk.Context, chanCap
 }
 
 func (h WasmHooks) OnAcknowledgementPacketOverride(im IBCMiddleware, ctx sdk.Context, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) error {
-	err := im.App.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+	err := im.App.OnAcknowledgementPacket(ctx, "", packet, acknowledgement, relayer)
 	if err != nil {
 		return err
 	}
@@ -319,7 +318,7 @@ func (h WasmHooks) OnAcknowledgementPacketOverride(im IBCMiddleware, ctx sdk.Con
 }
 
 func (h WasmHooks) OnTimeoutPacketOverride(im IBCMiddleware, ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) error {
-	err := im.App.OnTimeoutPacket(ctx, packet, relayer)
+	err := im.App.OnTimeoutPacket(ctx, "", packet, relayer)
 	if err != nil {
 		return err
 	}
@@ -416,7 +415,7 @@ func MustExtractDenomFromPacketOnRecv(packet ibcexported.PacketI) string {
 		// The denomination used to send the coins is either the native denom or the hash of the path
 		// if the denomination is not native.
 		denomTrace := transfertypes.ParseDenomTrace(unprefixedDenom)
-		if !denomTrace.IsNativeDenom() {
+		if denomTrace.Path() == "" {
 			denom = denomTrace.IBCDenom()
 		}
 	} else {

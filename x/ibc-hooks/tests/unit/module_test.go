@@ -5,23 +5,23 @@ import (
 	"fmt"
 	"testing"
 
-	ibc_hooks "github.com/cosmos/ibc-apps/modules/ibc-hooks/v8"
-	ibchookskeeper "github.com/cosmos/ibc-apps/modules/ibc-hooks/v8/keeper"
-	"github.com/cosmos/ibc-apps/modules/ibc-hooks/v8/simapp"
-	"github.com/cosmos/ibc-apps/modules/ibc-hooks/v8/tests/unit/mocks"
 	"github.com/stretchr/testify/suite"
+	ibc_hooks "github.com/sunriselayer/sunrise/x/ibc-hooks"
+	ibchookskeeper "github.com/sunriselayer/sunrise/x/ibc-hooks/keeper"
+	"github.com/sunriselayer/sunrise/x/ibc-hooks/tests/unit/mocks"
 
 	_ "embed"
 
+	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
-	ibctransfer "github.com/cosmos/ibc-go/v8/modules/apps/transfer"
-	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
-	ibcclienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
-	ibcmock "github.com/cosmos/ibc-go/v8/testing/mock"
+	ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
+	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
+	ibcclienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v10/modules/core/04-channel/types"
+	ibcmock "github.com/cosmos/ibc-go/v10/testing/mock"
 )
 
 //go:embed testdata/counter/artifacts/counter.wasm
