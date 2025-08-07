@@ -43,8 +43,6 @@ import (
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
 	ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
-	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
-	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -197,11 +195,11 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	// Seal the IBC Router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
-	// <sunrise>
-	ibcRouterV2 := ibcapi.NewRouter().
-		AddRoute(ibctransfertypes.PortID, transferv2.NewIBCModule(app.TransferKeeper))
-	app.IBCKeeper.SetRouterV2(ibcRouterV2)
-	// </sunrise>
+	// // <sunrise>
+	// ibcRouterV2 := ibcapi.NewRouter().
+	// 	AddRoute(ibctransfertypes.PortID, transferv2.NewIBCModule(app.TransferKeeper))
+	// app.IBCKeeper.SetRouterV2(ibcRouterV2)
+	// // </sunrise>
 
 	storeProvider := app.IBCKeeper.ClientKeeper.GetStoreProvider()
 	tmLightClientModule := ibctm.NewLightClientModule(app.appCodec, storeProvider)
