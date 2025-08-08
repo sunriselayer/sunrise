@@ -42,7 +42,6 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
-	ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
 	ibchooks "github.com/sunriselayer/sunrise/x/ibc-hooks"
 	ibchookskeeper "github.com/sunriselayer/sunrise/x/ibc-hooks/keeper"
 	ibchookstypes "github.com/sunriselayer/sunrise/x/ibc-hooks/types"
@@ -190,8 +189,6 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		ics20WasmHooks,
 	)
 	transferStack = ibchooks.NewIBCMiddleware(transferStack, &hooksICS4Wrapper)
-
-	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 
 	// </wasmd>
 
