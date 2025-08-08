@@ -43,6 +43,9 @@ import (
 	"github.com/sunriselayer/sunrise/app/wasmclient"
 
 	ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
+	ibchooks "github.com/sunriselayer/sunrise/x/ibc-hooks"
+	ibchookskeeper "github.com/sunriselayer/sunrise/x/ibc-hooks/keeper"
+	ibchookstypes "github.com/sunriselayer/sunrise/x/ibc-hooks/types"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -61,6 +64,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
 		storetypes.NewKVStoreKey(ibcwasmtypes.StoreKey),
 		storetypes.NewKVStoreKey(wasmtypes.StoreKey),
+		storetypes.NewKVStoreKey(ibchookstypes.StoreKey),
 	); err != nil {
 		return err
 	}
@@ -179,11 +183,22 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
+
+	app.IBCHooksKeeper = ibchookskeeper.NewKeeper(
+		app.GetKey(ibchookstypes.StoreKey),
+	)
+	app.Ics20WasmHooks = ibchooks.NewWasmHooks(&app.IBCHooksKeeper, &app.WasmKeeper, AccountAddressPrefix)
+	app.HooksICS4Wrapper = ibchooks.NewICS4Middleware(
+		app.IBCKeeper.ChannelKeeper,
+		app.Ics20WasmHooks,
+	)
+	app.TransferStack = ibchooks.NewIBCMiddleware(transferStack, &app.HooksICS4Wrapper)
+
 	// </wasmd>
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
-		AddRoute(ibctransfertypes.ModuleName, transferStack).
+		AddRoute(ibctransfertypes.ModuleName, app.TransferStack).
 		// <wasmd>
 		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>

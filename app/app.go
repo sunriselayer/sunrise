@@ -53,6 +53,8 @@ import (
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	ibchooks "github.com/sunriselayer/sunrise/x/ibc-hooks"
+	ibchookskeeper "github.com/sunriselayer/sunrise/x/ibc-hooks/keeper"
 
 	"github.com/sunriselayer/sunrise/docs"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
@@ -118,6 +120,12 @@ type App struct {
 	ICAHostKeeper       icahostkeeper.Keeper
 	TransferKeeper      ibctransferkeeper.Keeper
 	WasmClientKeeper    ibcwasmkeeper.Keeper
+
+	// ibc Hooks
+	IBCHooksKeeper   ibchookskeeper.Keeper
+	Ics20WasmHooks   ibchooks.WasmHooks
+	HooksICS4Wrapper ibchooks.ICS4Middleware
+	TransferStack    ibchooks.IBCMiddleware
 
 	// cosmwasm keeper
 	WasmKeeper wasmkeeper.Keeper
