@@ -28,6 +28,7 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/keeper"
 	icahosttypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
+	ibccallbacks "github.com/cosmos/ibc-go/v10/modules/apps/callbacks"
 	ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
@@ -45,13 +46,17 @@ import (
 	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
+	ibchooks "github.com/sunriselayer/ibc-hooks/v10"
+	ibchookskeeper "github.com/sunriselayer/ibc-hooks/v10/keeper"
+	ibchookstypes "github.com/sunriselayer/ibc-hooks/v10/types"
+
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	wasmvm "github.com/CosmWasm/wasmvm/v2"
 
-	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 	// this line is used by starport scaffolding # ibc/app/import
+	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 )
 
 // registerWasmAndIBCModules register CosmWasm and IBC keepers and non dependency inject modules.
@@ -64,6 +69,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		storetypes.NewKVStoreKey(icacontrollertypes.StoreKey),
 		storetypes.NewKVStoreKey(ibcwasmtypes.StoreKey),
 		storetypes.NewKVStoreKey(wasmtypes.StoreKey),
+		storetypes.NewKVStoreKey(ibchookstypes.StoreKey),
 	); err != nil {
 		return err
 	}
@@ -130,10 +136,6 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
 	)
 
-	// <sunrise>
-	transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
-	// </sunrise>
-
 	// <wasmd>
 	// https://github.com/CosmWasm/wasmd/blob/v0.60.0/app/app.go
 	// https://github.com/yerasyla/IgniteCLI-cosmwasm/blob/master/readme.md
@@ -177,15 +179,36 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		wasmOpts...,
 	)
 
+	// <sunrise>
+	transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
+	// </sunrise>
+
 	// Create fee enabled wasm ibc Stack
-	wasmStack := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
+	wasmStackIBCHandler := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
+
+	// The `ibc-hooks` middleware includes the functionality of `ibccallbacks` and provides advanced features
+	// specialized for Wasm. Applying both middlewares to the transfer stack is redundant and could cause
+	// future confusion or conflicts.
+	// transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
+	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
+
+	app.IBCHooksKeeper = ibchookskeeper.NewKeeper(
+		app.GetKey(ibchookstypes.StoreKey),
+	)
+	ics20WasmHooks := ibchooks.NewWasmHooks(&app.IBCHooksKeeper, &app.WasmKeeper, AccountAddressPrefix)
+	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
+		app.IBCKeeper.ChannelKeeper,
+		ics20WasmHooks,
+	)
+	transferStack = ibchooks.NewIBCMiddleware(transferStack, &hooksICS4Wrapper)
+
 	// </wasmd>
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
 		AddRoute(ibctransfertypes.ModuleName, transferStack).
 		// <wasmd>
-		AddRoute(wasmtypes.ModuleName, wasmStack).
+		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
 		AddRoute(icahosttypes.SubModuleName, icaHostStack)

@@ -24,12 +24,10 @@ func (cm CustomGovModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	oneWeek := day * 7
 
 	genesis.Params.MinDeposit = sdk.NewCoins(
-		sdk.NewCoin(consts.BondDenom, math.NewInt(1_000_000_000)),
-		sdk.NewCoin(consts.MintDenom, math.NewInt(1_000_000_000*2)),
+		sdk.NewCoin(consts.BondDenom, math.NewInt(10_000_000)),
 	)
 	genesis.Params.ExpeditedMinDeposit = sdk.NewCoins(
-		sdk.NewCoin(consts.BondDenom, math.NewInt(1_000_000_000*5)),
-		sdk.NewCoin(consts.MintDenom, math.NewInt(1_000_000_000*5*2)),
+		sdk.NewCoin(consts.BondDenom, math.NewInt(10_000_000*5)),
 	)
 	genesis.Params.MaxDepositPeriod = &oneWeek
 	genesis.Params.VotingPeriod = &oneWeek

@@ -1,6 +1,7 @@
 package swap
 
 import (
+	"encoding/json"
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -92,8 +93,21 @@ func (im IBCMiddleware) OnRecvPacket(
 		return im.IBCModule.OnRecvPacket(ctx, channelVersion, packet, relayer)
 	}
 
+	// Check for wasm and swap coexistence
+	var memoMap map[string]interface{}
+	if err := json.Unmarshal([]byte(data.Memo), &memoMap); err == nil {
+		_, hasWasm := memoMap["wasm"]
+		_, hasSwap := memoMap["swap"]
+		if hasWasm && hasSwap {
+			return channeltypes.NewErrorAcknowledgement(fmt.Errorf("wasm hook and swap can't be executed in the same tx"))
+		}
+	}
+
 	m, err := types.DecodeSwapMetadata(data.Memo)
 	if err != nil {
+		return im.IBCModule.OnRecvPacket(ctx, channelVersion, packet, relayer)
+	}
+	if m.Swap == nil {
 		return im.IBCModule.OnRecvPacket(ctx, channelVersion, packet, relayer)
 	}
 	metadata := *m.Swap

@@ -46,7 +46,7 @@ func (k msgServer) CreatePosition(ctx context.Context, msg *types.MsgCreatePosit
 
 	err = types.CheckTicks(msg.LowerTick, msg.UpperTick)
 	if err != nil {
-		return nil, errorsmod.Wrapf(types.ErrInvalidTickers, err.Error())
+		return nil, errorsmod.Wrap(types.ErrInvalidTickers, err.Error())
 	}
 
 	if pool.DenomBase != msg.TokenBase.Denom {
