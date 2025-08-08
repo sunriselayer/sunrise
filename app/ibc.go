@@ -191,7 +191,6 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	)
 	transferStack = ibchooks.NewIBCMiddleware(transferStack, &hooksICS4Wrapper)
 
-	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 
 	// </wasmd>
