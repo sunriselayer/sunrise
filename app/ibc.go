@@ -186,6 +186,9 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	// Create fee enabled wasm ibc Stack
 	wasmStackIBCHandler := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
 
+	// The `ibc-hooks` middleware includes the functionality of `ibccallbacks` and provides advanced features
+	// specialized for Wasm. Applying both middlewares to the transfer stack is redundant and could cause
+	// future confusion or conflicts.
 	// transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 
