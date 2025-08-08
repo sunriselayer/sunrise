@@ -63,7 +63,7 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 
-	ibchookstypes "github.com/sunriselayer/sunrise/x/ibc-hooks/types"
+	ibchookstypes "github.com/sunriselayer/ibc-hooks/v10/types"
 
 	_ "github.com/CosmWasm/wasmd/x/wasm" // import for side-effects
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"

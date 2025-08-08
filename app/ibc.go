@@ -46,9 +46,9 @@ import (
 	transferv2 "github.com/cosmos/ibc-go/v10/modules/apps/transfer/v2"
 	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 
-	ibchooks "github.com/sunriselayer/sunrise/x/ibc-hooks"
-	ibchookskeeper "github.com/sunriselayer/sunrise/x/ibc-hooks/keeper"
-	ibchookstypes "github.com/sunriselayer/sunrise/x/ibc-hooks/types"
+	ibchooks "github.com/sunriselayer/ibc-hooks/v10"
+	ibchookskeeper "github.com/sunriselayer/ibc-hooks/v10/keeper"
+	ibchookstypes "github.com/sunriselayer/ibc-hooks/v10/types"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
