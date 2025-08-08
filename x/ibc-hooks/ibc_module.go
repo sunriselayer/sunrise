@@ -167,22 +167,22 @@ func (im IBCMiddleware) OnChanCloseConfirm(
 // OnRecvPacket implements the IBCMiddleware interface
 func (im IBCMiddleware) OnRecvPacket(
 	ctx sdk.Context,
-	channelID string,
+	channelVersion string,
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) ibcexported.Acknowledgement {
 	if hook, ok := im.ICS4Middleware.Hooks.(OnRecvPacketOverrideHooks); ok {
-		return hook.OnRecvPacketOverride(im, ctx, packet.DestinationChannel, packet, relayer)
+		return hook.OnRecvPacketOverride(im, ctx, channelVersion, packet, relayer)
 	}
 
 	if hook, ok := im.ICS4Middleware.Hooks.(OnRecvPacketBeforeHooks); ok {
-		hook.OnRecvPacketBeforeHook(ctx, packet.DestinationChannel, packet, relayer)
+		hook.OnRecvPacketBeforeHook(ctx, channelVersion, packet, relayer)
 	}
 
-	ack := im.App.OnRecvPacket(ctx, packet.DestinationChannel, packet, relayer)
+	ack := im.App.OnRecvPacket(ctx, channelVersion, packet, relayer)
 
 	if hook, ok := im.ICS4Middleware.Hooks.(OnRecvPacketAfterHooks); ok {
-		hook.OnRecvPacketAfterHook(ctx, packet.DestinationChannel, packet, relayer, ack)
+		hook.OnRecvPacketAfterHook(ctx, channelVersion, packet, relayer, ack)
 	}
 
 	return ack
@@ -191,22 +191,22 @@ func (im IBCMiddleware) OnRecvPacket(
 // OnAcknowledgementPacket implements the IBCMiddleware interface
 func (im IBCMiddleware) OnAcknowledgementPacket(
 	ctx sdk.Context,
-	channelID string,
+	channelVersion string,
 	packet channeltypes.Packet,
 	acknowledgement []byte,
 	relayer sdk.AccAddress,
 ) error {
 	if hook, ok := im.ICS4Middleware.Hooks.(OnAcknowledgementPacketOverrideHooks); ok {
-		return hook.OnAcknowledgementPacketOverride(im, ctx, packet.DestinationChannel, packet, acknowledgement, relayer)
+		return hook.OnAcknowledgementPacketOverride(im, ctx, channelVersion, packet, acknowledgement, relayer)
 	}
 	if hook, ok := im.ICS4Middleware.Hooks.(OnAcknowledgementPacketBeforeHooks); ok {
-		hook.OnAcknowledgementPacketBeforeHook(ctx, packet.DestinationChannel, packet, acknowledgement, relayer)
+		hook.OnAcknowledgementPacketBeforeHook(ctx, channelVersion, packet, acknowledgement, relayer)
 	}
 
-	err := im.App.OnAcknowledgementPacket(ctx, packet.DestinationChannel, packet, acknowledgement, relayer)
+	err := im.App.OnAcknowledgementPacket(ctx, channelVersion, packet, acknowledgement, relayer)
 
 	if hook, ok := im.ICS4Middleware.Hooks.(OnAcknowledgementPacketAfterHooks); ok {
-		hook.OnAcknowledgementPacketAfterHook(ctx, packet.DestinationChannel, packet, acknowledgement, relayer, err)
+		hook.OnAcknowledgementPacketAfterHook(ctx, channelVersion, packet, acknowledgement, relayer, err)
 	}
 
 	return err
@@ -215,20 +215,20 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 // OnTimeoutPacket implements the IBCMiddleware interface
 func (im IBCMiddleware) OnTimeoutPacket(
 	ctx sdk.Context,
-	channelID string,
+	channelVersion string,
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) error {
 	if hook, ok := im.ICS4Middleware.Hooks.(OnTimeoutPacketOverrideHooks); ok {
-		return hook.OnTimeoutPacketOverride(im, ctx, packet.DestinationChannel, packet, relayer)
+		return hook.OnTimeoutPacketOverride(im, ctx, channelVersion, packet, relayer)
 	}
 
 	if hook, ok := im.ICS4Middleware.Hooks.(OnTimeoutPacketBeforeHooks); ok {
-		hook.OnTimeoutPacketBeforeHook(ctx, packet.DestinationChannel, packet, relayer)
+		hook.OnTimeoutPacketBeforeHook(ctx, channelVersion, packet, relayer)
 	}
-	err := im.App.OnTimeoutPacket(ctx, packet.DestinationChannel, packet, relayer)
+	err := im.App.OnTimeoutPacket(ctx, channelVersion, packet, relayer)
 	if hook, ok := im.ICS4Middleware.Hooks.(OnTimeoutPacketAfterHooks); ok {
-		hook.OnTimeoutPacketAfterHook(ctx, packet.DestinationChannel, packet, relayer, err)
+		hook.OnTimeoutPacketAfterHook(ctx, channelVersion, packet, relayer, err)
 	}
 
 	return err

@@ -46,23 +46,23 @@ func (h WasmHooks) ProperlyConfigured() bool {
 func (h WasmHooks) OnRecvPacketOverride(
 	im IBCMiddleware,
 	ctx sdk.Context,
-	channelID string,
+	channelVersion string,
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) ibcexported.Acknowledgement {
 	if !h.ProperlyConfigured() {
 		// Not configured
-		return im.App.OnRecvPacket(ctx, channelID, packet, relayer)
+		return im.App.OnRecvPacket(ctx, channelVersion, packet, relayer)
 	}
 	isIcs20, data := isIcs20Packet(packet.GetData())
 	if !isIcs20 {
-		return im.App.OnRecvPacket(ctx, channelID, packet, relayer)
+		return im.App.OnRecvPacket(ctx, channelVersion, packet, relayer)
 	}
 
 	// Validate the memo
 	isWasmRouted, contractAddr, msgBytes, err := ValidateAndParseMemo(data.GetMemo(), data.Receiver)
 	if !isWasmRouted {
-		return im.App.OnRecvPacket(ctx, channelID, packet, relayer)
+		return im.App.OnRecvPacket(ctx, channelVersion, packet, relayer)
 	}
 	if err != nil {
 		return NewEmitErrorAcknowledgement(ctx, types.ErrMsgValidation, err.Error())
@@ -93,7 +93,7 @@ func (h WasmHooks) OnRecvPacketOverride(
 	packet.Data = bz
 
 	// Execute the receive
-	ack := im.App.OnRecvPacket(ctx, channelID, packet, relayer)
+	ack := im.App.OnRecvPacket(ctx, channelVersion, packet, relayer)
 	if !ack.Success() {
 		return ack
 	}
@@ -279,12 +279,12 @@ func (h WasmHooks) SendPacketOverride(i ICS4Middleware, ctx sdk.Context, sourceP
 func (h WasmHooks) OnAcknowledgementPacketOverride(
 	im IBCMiddleware,
 	ctx sdk.Context,
-	channelID string,
+	channelVersion string,
 	packet channeltypes.Packet,
 	acknowledgement []byte,
 	relayer sdk.AccAddress,
 ) error {
-	err := im.App.OnAcknowledgementPacket(ctx, channelID, packet, acknowledgement, relayer)
+	err := im.App.OnAcknowledgementPacket(ctx, channelVersion, packet, acknowledgement, relayer)
 	if err != nil {
 		return err
 	}
@@ -333,11 +333,11 @@ func (h WasmHooks) OnAcknowledgementPacketOverride(
 func (h WasmHooks) OnTimeoutPacketOverride(
 	im IBCMiddleware,
 	ctx sdk.Context,
-	channelID string,
+	channelVersion string,
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) error {
-	err := im.App.OnTimeoutPacket(ctx, channelID, packet, relayer)
+	err := im.App.OnTimeoutPacket(ctx, channelVersion, packet, relayer)
 	if err != nil {
 		return err
 	}

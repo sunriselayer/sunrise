@@ -79,35 +79,35 @@ type OnChanCloseConfirmAfterHooks interface {
 
 // OnRecvPacket Hooks
 type OnRecvPacketOverrideHooks interface {
-	OnRecvPacketOverride(im IBCMiddleware, ctx sdk.Context, channelID string, packet channeltypes.Packet, relayer sdk.AccAddress) ibcexported.Acknowledgement
+	OnRecvPacketOverride(im IBCMiddleware, ctx sdk.Context, channelVersion string, packet channeltypes.Packet, relayer sdk.AccAddress) ibcexported.Acknowledgement
 }
 type OnRecvPacketBeforeHooks interface {
-	OnRecvPacketBeforeHook(ctx sdk.Context, channelID string, packet channeltypes.Packet, relayer sdk.AccAddress)
+	OnRecvPacketBeforeHook(ctx sdk.Context, channelVersion string, packet channeltypes.Packet, relayer sdk.AccAddress)
 }
 type OnRecvPacketAfterHooks interface {
-	OnRecvPacketAfterHook(ctx sdk.Context, channelID string, packet channeltypes.Packet, relayer sdk.AccAddress, ack ibcexported.Acknowledgement)
+	OnRecvPacketAfterHook(ctx sdk.Context, channelVersion string, packet channeltypes.Packet, relayer sdk.AccAddress, ack ibcexported.Acknowledgement)
 }
 
 // OnAcknowledgementPacket Hooks
 type OnAcknowledgementPacketOverrideHooks interface {
-	OnAcknowledgementPacketOverride(im IBCMiddleware, ctx sdk.Context, channelID string, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) error
+	OnAcknowledgementPacketOverride(im IBCMiddleware, ctx sdk.Context, channelVersion string, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) error
 }
 type OnAcknowledgementPacketBeforeHooks interface {
-	OnAcknowledgementPacketBeforeHook(ctx sdk.Context, channelID string, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress)
+	OnAcknowledgementPacketBeforeHook(ctx sdk.Context, channelVersion string, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress)
 }
 type OnAcknowledgementPacketAfterHooks interface {
-	OnAcknowledgementPacketAfterHook(ctx sdk.Context, channelID string, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress, err error)
+	OnAcknowledgementPacketAfterHook(ctx sdk.Context, channelVersion string, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress, err error)
 }
 
 // OnTimeoutPacket Hooks
 type OnTimeoutPacketOverrideHooks interface {
-	OnTimeoutPacketOverride(im IBCMiddleware, ctx sdk.Context, channelID string, packet channeltypes.Packet, relayer sdk.AccAddress) error
+	OnTimeoutPacketOverride(im IBCMiddleware, ctx sdk.Context, channelVersion string, packet channeltypes.Packet, relayer sdk.AccAddress) error
 }
 type OnTimeoutPacketBeforeHooks interface {
-	OnTimeoutPacketBeforeHook(ctx sdk.Context, channelID string, packet channeltypes.Packet, relayer sdk.AccAddress)
+	OnTimeoutPacketBeforeHook(ctx sdk.Context, channelVersion string, packet channeltypes.Packet, relayer sdk.AccAddress)
 }
 type OnTimeoutPacketAfterHooks interface {
-	OnTimeoutPacketAfterHook(ctx sdk.Context, channelID string, packet channeltypes.Packet, relayer sdk.AccAddress, err error)
+	OnTimeoutPacketAfterHook(ctx sdk.Context, channelVersion string, packet channeltypes.Packet, relayer sdk.AccAddress, err error)
 }
 
 // SendPacket Hooks
