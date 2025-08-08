@@ -181,24 +181,24 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	// Create fee enabled wasm ibc Stack
 	wasmStackIBCHandler := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
 
-	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
-	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
-
 	app.IBCHooksKeeper = ibchookskeeper.NewKeeper(
 		app.GetKey(ibchookstypes.StoreKey),
 	)
-	app.Ics20WasmHooks = ibchooks.NewWasmHooks(&app.IBCHooksKeeper, &app.WasmKeeper, AccountAddressPrefix)
-	app.HooksICS4Wrapper = ibchooks.NewICS4Middleware(
+	ics20WasmHooks := ibchooks.NewWasmHooks(&app.IBCHooksKeeper, &app.WasmKeeper, AccountAddressPrefix)
+	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
 		app.IBCKeeper.ChannelKeeper,
-		app.Ics20WasmHooks,
+		ics20WasmHooks,
 	)
-	app.TransferStack = ibchooks.NewIBCMiddleware(transferStack, &app.HooksICS4Wrapper)
+	transferStack = ibchooks.NewIBCMiddleware(transferStack, &hooksICS4Wrapper)
+
+	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
+	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 
 	// </wasmd>
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
-		AddRoute(ibctransfertypes.ModuleName, app.TransferStack).
+		AddRoute(ibctransfertypes.ModuleName, transferStack).
 		// <wasmd>
 		AddRoute(wasmtypes.ModuleName, wasmStackIBCHandler).
 		// </wasmd>
