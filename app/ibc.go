@@ -51,7 +51,9 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	wasmvm "github.com/CosmWasm/wasmvm/v2"
+
 	// this line is used by starport scaffolding # ibc/app/import
+	swapmodule "github.com/sunriselayer/sunrise/x/swap/module"
 )
 
 // registerWasmAndIBCModules register CosmWasm and IBC keepers and non dependency inject modules.
@@ -131,10 +133,6 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		icaHostStack       porttypes.IBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
 	)
 
-	// // <sunrise>
-	// transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
-	// // </sunrise>
-
 	// <wasmd>
 	// https://github.com/CosmWasm/wasmd/blob/v0.60.0/app/app.go
 	// https://github.com/yerasyla/IgniteCLI-cosmwasm/blob/master/readme.md
@@ -178,10 +176,14 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		wasmOpts...,
 	)
 
+	// <sunrise>
+	transferStack = swapmodule.NewIBCMiddleware(transferStack, &app.SwapKeeper)
+	// </sunrise>
+
 	// Create fee enabled wasm ibc Stack
 	wasmStackIBCHandler := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
 
-	transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
+	// transferStack = ibccallbacks.NewIBCMiddleware(transferStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 	icaControllerStack = ibccallbacks.NewIBCMiddleware(icaControllerStack, app.IBCKeeper.ChannelKeeper, wasmStackIBCHandler, wasm.DefaultMaxIBCCallbackGas)
 
 	app.IBCHooksKeeper = ibchookskeeper.NewKeeper(
