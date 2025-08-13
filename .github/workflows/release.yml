@@ -27,7 +27,7 @@ jobs:
           - os: ubuntu-latest
             arch: amd64
             name: sunrised-linux-amd64
-          - os: ubuntu-latest
+          - os: ubuntu-latest-arm64
             arch: arm64
             name: sunrised-linux-arm64
           - os: macos-latest
