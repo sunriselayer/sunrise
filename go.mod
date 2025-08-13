@@ -1,8 +1,6 @@
 module github.com/sunriselayer/sunrise
 
-go 1.23.8
-
-toolchain go1.24.2
+go 1.24.2
 
 replace (
 	// fix upstream GHSA-h395-qcrw-5vmq vulnerability.
@@ -52,6 +50,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
+	github.com/sunriselayer/ibc-hooks/v10 v10.0.0
 	go.uber.org/mock v0.5.2
 	golang.org/x/tools v0.31.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250528174236-200df99c418a
@@ -222,7 +221,6 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20230904125328-1f23a7beb09a // indirect
 	github.com/oklog/run v1.1.0 // indirect
-	github.com/onsi/gomega v1.36.2 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
