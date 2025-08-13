@@ -162,28 +162,6 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 			totalVotingPower = totalVotingPower.Add(votingPower)
 		}
 
-		// <sunrise>
-		// To cancel the effect to quorum, we need to adjust the total voting power.
-		// It should not be totalVoterPower / totalBonded < quorum.
-		// totalVoterPowerCustom / (totalBonded - shareclassBonded) = totalVoterPower / totalBonded
-		// totalVoterPowerCustom = totalVoterPower  * (totalBonded - shareclassBonded) / totalBonded
-		totalBonded, err := stakingKeeper.TotalBondedTokens(ctx)
-		if err != nil {
-			return math.LegacyDec{}, nil, err
-		}
-		shareclassBonded, err := stakingKeeper.GetDelegatorBonded(ctx, shareclassAddr)
-		if err != nil {
-			return math.LegacyDec{}, nil, err
-		}
-		// If totalBonded is zero, set totalVotingPower to zero.
-		if totalBonded.IsZero() {
-			totalVotingPower = math.LegacyZeroDec()
-			return totalVotingPower, results, nil
-		}
-
-		totalVotingPower = totalVotingPower.MulInt(totalBonded.Sub(shareclassBonded)).QuoInt(totalBonded)
-		// <sunrise />
-
 		return totalVotingPower, results, nil
 	}
 }
