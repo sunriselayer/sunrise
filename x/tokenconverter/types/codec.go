@@ -20,6 +20,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgConvert{},
+		&MsgSend{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),

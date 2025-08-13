@@ -25,6 +25,7 @@ func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
 		&MsgVoteGauge{},
 		&MsgRegisterBribe{},
 		&MsgClaimBribes{},
+		&MsgStartNewEpoch{},
 	)
 
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
