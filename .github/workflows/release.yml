@@ -70,11 +70,11 @@ jobs:
           APPNAME=sunrise
           VERSION=$(git describe --tags --abbrev=0)
           COMMIT=$(git rev-parse HEAD)
-          BUILD_TAGS="netgo,ledger"
+          BUILD_TAGS="netgo,ledger,libwasmvm_static"
           LDFLAGS="-X github.com/cosmos/cosmos-sdk/version.Name=$APPNAME -X github.com/cosmos/cosmos-sdk/version.AppName=${APPNAME}d -X github.com/cosmos/cosmos-sdk/version.Version=$VERSION -X github.com/cosmos/cosmos-sdk/version.Commit=$COMMIT -X 'github.com/cosmos/cosmos-sdk/version.BuildTags=${BUILD_TAGS}' -w -s"
 
           mkdir -p build
-          GOOS=darwin GOARCH=${{ matrix.arch }} go build -tags "${BUILD_TAGS}" -ldflags "$LDFLAGS" -o "build/${{ matrix.name }}" ./cmd/sunrised
+          CGO_ENABLED=1 GOOS=darwin GOARCH=${{ matrix.arch }} go build -tags "${BUILD_TAGS}" -ldflags "$LDFLAGS" -o "build/${{ matrix.name }}" ./cmd/sunrised
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
