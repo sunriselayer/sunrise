@@ -10,6 +10,8 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/fee/MsgUpdateParams")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/fee/Params", nil)
 }
 
 // RegisterInterfaces registers the module's interface types

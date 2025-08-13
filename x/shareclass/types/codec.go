@@ -14,6 +14,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgNonVotingUndelegate{}, "sunrise/MsgNonVotingUndelegate")
 	legacy.RegisterAminoMsg(cdc, &MsgClaimRewards{}, "sunrise/MsgClaimRewards")
 	legacy.RegisterAminoMsg(cdc, &MsgCreateValidator{}, "sunrise/MsgCreateValidator")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/shareclass/Params", nil)
 }
 
 // RegisterInterfaces registers the module's interface types

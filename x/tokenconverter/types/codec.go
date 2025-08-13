@@ -12,6 +12,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/tokenconverter/MsgUpdateParams")
 	legacy.RegisterAminoMsg(cdc, &MsgConvert{}, "sunrise/MsgConvert")
 	legacy.RegisterAminoMsg(cdc, &MsgSend{}, "sunrise/tokenconverter/MsgSend")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/tokenconverter/Params", nil)
 }
 
 // RegisterInterfaces registers the module's interface types

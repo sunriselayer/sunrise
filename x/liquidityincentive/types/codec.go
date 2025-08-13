@@ -15,7 +15,9 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgRegisterBribe{}, "sunrise/MsgRegisterBribe")
 	legacy.RegisterAminoMsg(cdc, &MsgClaimBribes{}, "sunrise/MsgClaimBribes")
 
-	cdc.RegisterConcrete(&Params{}, "sunrise/liquidityincentive/Params", nil)
+	cdc.RegisterConcrete(&Params{}, "sunrise/incentive/Params", nil)
+	cdc.RegisterConcrete(&Gauge{}, "sunrise/incentive/Gauge", nil)
+	cdc.RegisterConcrete(&Bribe{}, "sunrise/incentive/Bribe", nil)
 }
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {

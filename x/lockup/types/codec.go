@@ -15,6 +15,9 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgNonVotingUndelegate{}, "sunrise/lockup/MsgNonVotingUndelegate")
 	legacy.RegisterAminoMsg(cdc, &MsgClaimRewards{}, "sunrise/MsgClaimRewards")
 	legacy.RegisterAminoMsg(cdc, &MsgSend{}, "sunrise/lockup/MsgSend")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/lockup/Params", nil)
+	cdc.RegisterConcrete(&LockupAccount{}, "sunrise/lockup/LockupAccount", nil)
 }
 
 // RegisterInterfaces registers the module's interface types

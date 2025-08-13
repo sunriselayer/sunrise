@@ -13,6 +13,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgSubmitInvalidity{}, "sunrise/MsgSubmitInvalidity")
 	legacy.RegisterAminoMsg(cdc, &MsgSubmitValidityProof{}, "sunrise/MsgSubmitValidityProof")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/da/MsgUpdateParams")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/da/Params", nil)
 }
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
