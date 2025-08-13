@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -42,18 +41,6 @@ func (k Keeper) TrackDelegation(
 	// Y := D - X
 	x := math.MinInt(math.MaxInt(locked.Sub(delLocking), math.ZeroInt()), amount)
 	y := amount.Sub(x)
-
-	// y is the amount to delegate from free funds. It cannot exceed the available free funds.
-	// Available free funds = balance - (locked - delLocking) - delFree
-	availableFree := balance.Sub(locked).Add(delLocking).Sub(delFree)
-	if y.GT(availableFree) {
-		return errorsmod.Wrapf(
-			types.ErrInsufficientUnlockedFunds,
-			"cannot delegate from free funds; required: %s, available: %s",
-			y,
-			availableFree,
-		)
-	}
 
 	if !x.IsZero() {
 		newDelLocking := delLocking.Add(x)

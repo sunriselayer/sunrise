@@ -2,7 +2,6 @@ package keeper_test
 
 import (
 	"testing"
-	"time"
 
 	"cosmossdk.io/math"
 	addresscodec "github.com/cosmos/cosmos-sdk/codec/address"
@@ -136,43 +135,6 @@ func TestMsgServer_NonVotingDelegate(t *testing.T) {
 				)
 			},
 			expectedErr: "total balance is less than delegation amount",
-		},
-		{
-			name: "fail - insufficient unlocked funds for delegation",
-			msg: &types.MsgNonVotingDelegate{
-				Owner:            owner.String(),
-				LockupAccountId:  1,
-				ValidatorAddress: valAddr.String(),
-				Amount:           sdk.NewCoin(transferableDenom, math.NewInt(100)),
-			},
-			mockSetup: func(f *fixture) {
-				// Set a specific time for the context
-				now := time.Now()
-				sdkCtx := sdk.UnwrapSDKContext(f.ctx)
-				f.ctx = sdkCtx.WithBlockTime(now)
-
-				f.mocks.StakingKeeper.EXPECT().ValidatorAddressCodec().Return(valAddressCodec)
-				lockupAddr := f.keeper.LockupAccountAddress(owner, 1)
-				// Setup a lockup account with less unlocked funds than delegation amount
-				lockup := types.LockupAccount{
-					Owner:            owner.String(),
-					Id:               1,
-					Address:          lockupAddr.String(),
-					OriginalLocking:  math.NewInt(500), // Total locked
-					DelegatedLocking: math.NewInt(450), // Already delegated
-					StartTime:        now.Unix(),
-					EndTime:          now.Add(time.Hour).Unix(),
-				}
-				// Available for delegation = 50, but trying to delegate 100
-				err := f.keeper.SetLockupAccount(f.ctx, lockup)
-				require.NoError(t, err)
-
-				gomock.InOrder(
-					f.mocks.TokenConverterKeeper.EXPECT().GetTransferableDenom(gomock.Any()).Return(transferableDenom, nil),
-					f.mocks.BankKeeper.EXPECT().GetBalance(gomock.Any(), gomock.Any(), transferableDenom).Return(sdk.NewCoin(transferableDenom, math.NewInt(500))),
-				)
-			},
-			expectedErr: types.ErrInsufficientUnlockedFunds.Error(),
 		},
 	}
 
