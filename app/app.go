@@ -69,6 +69,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
+
+	v1_0_1 "github.com/sunriselayer/sunrise/app/upgrades/v1_0_1"
 )
 
 const (
@@ -324,6 +326,8 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	app.setupUpgradeHandlers()
+
 	// <wasmd>
 	// must be before Loading version
 	// requires the snapshot store to be created and registered as a BaseAppOption
@@ -444,4 +448,15 @@ func BlockedAddresses() map[string]bool {
 	}
 
 	return result
+}
+
+func (app *App) setupUpgradeHandlers() {
+	// Example upgrade handler.
+	// When a planned upgrade height is reached, the old binary will panic and shut down, and the new binary
+	// (which requires a PR) will take over with the new upgrade name defined below.
+	// For more information, see: https://docs.cosmos.network/main/tooling/cosmovisor
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v1_0_1.UpgradeName,
+		v1_0_1.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
+	)
 }
