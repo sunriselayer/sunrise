@@ -8,6 +8,7 @@ release/
 *.log
 *.ign
 build/
+docker-build/
 data/
 ts-client/
 cmd/sunrised/__debug_*
