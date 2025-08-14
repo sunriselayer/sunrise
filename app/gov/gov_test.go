@@ -11,8 +11,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-// This function is a direct copy of the logic from `gov.go`, modified to be
-// a standalone, testable function.
+// This function is a direct copy of the logic from `gov.go`, modified to be a standalone, testable function.
 func calculate(
 	t *testing.T,
 	totalBonded math.Int,
@@ -30,7 +29,7 @@ func calculate(
 	results[v1.OptionNo] = math.LegacyZeroDec()
 	results[v1.OptionNoWithVeto] = math.LegacyZeroDec()
 
-	// Deduct shareclass module's delegations
+	// 1. Deduct shareclass module's delegations
 	for _, delegation := range delegations[shareclassAddr.String()] {
 		valAddrStr := delegation.GetValidatorAddr()
 		if val, ok := validators[valAddrStr]; ok {
@@ -39,7 +38,7 @@ func calculate(
 		}
 	}
 
-	// Tally delegator votes
+	// 2. Tally delegator votes
 	for _, vote := range votes {
 		voter, err := sdk.AccAddressFromBech32(vote.Voter)
 		require.NoError(t, err)
@@ -77,7 +76,7 @@ func calculate(
 		}
 	}
 
-	// Tally validator votes
+	// 3. Tally validator votes
 	for _, val := range validators {
 		if len(val.Vote) == 0 {
 			continue
@@ -102,7 +101,7 @@ func calculate(
 		totalVotingPower = totalVotingPower.Add(votingPower)
 	}
 
-	// Scale the results
+	// 4. Scale the results
 	effectiveTotalBonded := totalBonded.Sub(shareclassBonded)
 	if !effectiveTotalBonded.IsPositive() || totalBonded.IsZero() {
 		return totalVotingPower, results
@@ -133,15 +132,15 @@ func TestTallyLogic(t *testing.T) {
 		expectedResults    map[v1.VoteOption]math.LegacyDec
 	}{
 		{
-			name:             "Scenario: Basic shareclass exclusion and delegator vote",
-			totalBonded:      math.NewInt(2000),
-			shareclassBonded: math.NewInt(500),
+			name:             "Scenario: Validator and Delegator vote, with shareclass",
+			totalBonded:      math.NewInt(1000),
+			shareclassBonded: math.NewInt(100),
 			delegations: map[string][]stakingtypes.Delegation{
 				shareclassAddr.String(): {
-					stakingtypes.NewDelegation(shareclassAddr.String(), valAddr1.String(), math.LegacyNewDec(500)),
+					stakingtypes.NewDelegation(shareclassAddr.String(), valAddr1.String(), math.LegacyNewDec(100)),
 				},
 				delegatorAddr.String(): {
-					stakingtypes.NewDelegation(delegatorAddr.String(), valAddr1.String(), math.LegacyNewDec(100)),
+					stakingtypes.NewDelegation(delegatorAddr.String(), valAddr1.String(), math.LegacyNewDec(200)),
 				},
 			},
 			votes: []v1.Vote{
@@ -154,20 +153,15 @@ func TestTallyLogic(t *testing.T) {
 					DelegatorShares: math.LegacyNewDec(1000),
 				},
 			},
-			// Delegator(No): power = 100
-			// Validator(Yes): power = (1000(total) - 500(shareclass) - 100(delegator)) = 400
-			// Total Power = 100 + 400 = 500
-			// Scale Factor: 2000 / (2000 - 500) = 1.333...
-			// Expected Power = 500 * 1.333 = 666.66...
-			// Expected Yes = 400 * 1.333 = 533.33...
-			// Expected No = 100 * 1.333 = 133.33...
-			// Let's use fractions for precision: 2000/1500 = 4/3
-			// Expected Power = 500 * 4/3 = 666.666...
-			expectedTotalPower: math.LegacyNewDec(500).MulInt(math.NewInt(2000)).QuoInt(math.NewInt(1500)),
+			// Delegator (No): power = 200
+			// Validator (Yes): power = 1000(total) - 100(shareclass) - 200(delegator) = 700
+			// Total Power = 200 + 700 = 900
+			// Scale Factor: 1000 / (1000 - 100) = 1000 / 900
+			expectedTotalPower: math.LegacyNewDec(900).MulInt(math.NewInt(1000)).QuoInt(math.NewInt(900)), // Should be 900
 			expectedResults: map[v1.VoteOption]math.LegacyDec{
-				v1.OptionYes:        math.LegacyNewDec(400).MulInt(math.NewInt(2000)).QuoInt(math.NewInt(1500)),
+				v1.OptionYes:        math.LegacyNewDec(700).MulInt(math.NewInt(1000)).QuoInt(math.NewInt(900)),
 				v1.OptionAbstain:    math.LegacyZeroDec(),
-				v1.OptionNo:         math.LegacyNewDec(100).MulInt(math.NewInt(2000)).QuoInt(math.NewInt(1500)),
+				v1.OptionNo:         math.LegacyNewDec(200).MulInt(math.NewInt(1000)).QuoInt(math.NewInt(900)),
 				v1.OptionNoWithVeto: math.LegacyZeroDec(),
 			},
 		},
@@ -182,7 +176,7 @@ func TestTallyLogic(t *testing.T) {
 			validators: map[string]v1.ValidatorGovInfo{
 				valAddrStr1: {BondedTokens: math.NewInt(1000), DelegatorShares: math.LegacyNewDec(1000)},
 			},
-			expectedTotalPower: math.LegacyZeroDec(), // No one voted
+			expectedTotalPower: math.LegacyZeroDec(), // No one with power voted
 			expectedResults: map[v1.VoteOption]math.LegacyDec{
 				v1.OptionYes:        math.LegacyZeroDec(),
 				v1.OptionAbstain:    math.LegacyZeroDec(),
@@ -199,6 +193,7 @@ func TestTallyLogic(t *testing.T) {
 					stakingtypes.NewDelegation(shareclassAddr.String(), valAddr1.String(), math.LegacyNewDec(1000)),
 				},
 			},
+			votes: []v1.Vote{},
 			validators: map[string]v1.ValidatorGovInfo{
 				valAddrStr1: {
 					Vote:            v1.NewNonSplitVoteOption(v1.OptionYes),
@@ -206,7 +201,7 @@ func TestTallyLogic(t *testing.T) {
 					DelegatorShares: math.LegacyNewDec(1000),
 				},
 			},
-			expectedTotalPower: math.LegacyZeroDec(), // Power is 0, no scaling
+			expectedTotalPower: math.LegacyZeroDec(), // Power becomes 0, no scaling
 			expectedResults: map[v1.VoteOption]math.LegacyDec{
 				v1.OptionYes:        math.LegacyZeroDec(),
 				v1.OptionAbstain:    math.LegacyZeroDec(),
@@ -218,10 +213,8 @@ func TestTallyLogic(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			// Make a deep copy of validators map to avoid modifying the original
 			validatorsCopy := make(map[string]v1.ValidatorGovInfo)
 			for k, v := range tc.validators {
-				// Initialize deductions for the copy
 				v.DelegatorDeductions = math.LegacyZeroDec()
 				validatorsCopy[k] = v
 			}
