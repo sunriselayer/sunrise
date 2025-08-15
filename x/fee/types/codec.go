@@ -1,14 +1,24 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
 )
 
-func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/fee/MsgUpdateParams")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/fee/Params", nil)
+}
+
+// RegisterInterfaces registers the module's interface types
+func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
 	)
-	msgservice.RegisterMsgServiceDesc(registrar, &_Msg_serviceDesc)
+
+	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

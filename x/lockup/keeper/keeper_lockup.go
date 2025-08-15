@@ -42,14 +42,6 @@ func (k Keeper) TrackDelegation(
 	x := math.MinInt(math.MaxInt(locked.Sub(delLocking), math.ZeroInt()), amount)
 	y := amount.Sub(x)
 
-	// available for delegation is `balance - locked - delFree`
-	// y is the amount to delegate from free funds
-	// if y > balance - locked - delFree, then it should fail
-	availableFree := balance.Sub(locked).Sub(delFree)
-	if y.GT(availableFree) {
-		return types.ErrInsufficientUnlockedFunds
-	}
-
 	if !x.IsZero() {
 		newDelLocking := delLocking.Add(x)
 		lockup.DelegatedLocking = newDelLocking

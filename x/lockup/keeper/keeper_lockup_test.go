@@ -75,15 +75,6 @@ func TestKeeper_TrackDelegation(t *testing.T) {
 			amount:      math.NewInt(100),
 			expectedErr: "total balance is less than delegation amount",
 		},
-		{
-			name:              "fail - insufficient free funds",
-			initialDelLocking: math.NewInt(950),
-			initialDelFree:    math.ZeroInt(),
-			balance:           math.NewInt(1000),
-			locked:            math.NewInt(950),
-			amount:            math.NewInt(100),
-			expectedErr:       types.ErrInsufficientUnlockedFunds.Error(),
-		},
 	}
 
 	for _, tc := range testCases {
