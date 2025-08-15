@@ -7,6 +7,7 @@ import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/stable/v1/params.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/stable/types";
 
@@ -28,6 +29,7 @@ service Msg {
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "sunrise/stable/MsgUpdateParams";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -45,6 +47,7 @@ message MsgUpdateParamsResponse {}
 // MsgMint defines the MsgMint message.
 message MsgMint {
   option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "sunrise/MsgMint";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -64,6 +67,7 @@ message MsgMintResponse {
 // MsgBurn defines the MsgBurn message.
 message MsgBurn {
   option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "sunrise/MsgBurn";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated cosmos.base.v1beta1.Coin amount = 2 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",

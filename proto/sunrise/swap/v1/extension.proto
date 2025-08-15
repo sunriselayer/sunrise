@@ -4,11 +4,13 @@ package sunrise.swap.v1;
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/swap/v1/route.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 
 // SwapBeforeFeeExtension
 message SwapBeforeFeeExtension {
+  option (amino.name) = "sunrise/swap/SwapBeforeFeeExtension";
   Route route = 1 [(gogoproto.nullable) = false];
   string max_amount_in = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
