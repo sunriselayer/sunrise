@@ -10,10 +10,10 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/incentive/MsgUpdateParams")
-	legacy.RegisterAminoMsg(cdc, &MsgStartNewEpoch{}, "sunrise/MsgStartNewEpoch")
-	legacy.RegisterAminoMsg(cdc, &MsgVoteGauge{}, "sunrise/MsgVoteGauge")
-	legacy.RegisterAminoMsg(cdc, &MsgRegisterBribe{}, "sunrise/MsgRegisterBribe")
-	legacy.RegisterAminoMsg(cdc, &MsgClaimBribes{}, "sunrise/MsgClaimBribes")
+	legacy.RegisterAminoMsg(cdc, &MsgStartNewEpoch{}, "sunrise/incentive/MsgStartNewEpoch")
+	legacy.RegisterAminoMsg(cdc, &MsgVoteGauge{}, "sunrise/incentive/MsgVoteGauge")
+	legacy.RegisterAminoMsg(cdc, &MsgRegisterBribe{}, "sunrise/incentive/MsgRegisterBribe")
+	legacy.RegisterAminoMsg(cdc, &MsgClaimBribes{}, "sunrise/incentive/MsgClaimBribes")
 
 	cdc.RegisterConcrete(&Params{}, "sunrise/incentive/Params", nil)
 	cdc.RegisterConcrete(&Gauge{}, "sunrise/incentive/Gauge", nil)

@@ -3,12 +3,14 @@ package sunrise.liquiditypool.v1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+  option (amino.name) = "sunrise/pool/Params";
 
   uint64 create_pool_gas = 1;
   // For reservation, not used yet

@@ -10,8 +10,8 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/stable/MsgUpdateParams")
-	legacy.RegisterAminoMsg(cdc, &MsgMint{}, "sunrise/MsgMint")
-	legacy.RegisterAminoMsg(cdc, &MsgBurn{}, "sunrise/MsgBurn")
+	legacy.RegisterAminoMsg(cdc, &MsgMint{}, "sunrise/stable/MsgMint")
+	legacy.RegisterAminoMsg(cdc, &MsgBurn{}, "sunrise/stable/MsgBurn")
 
 	cdc.RegisterConcrete(&Params{}, "sunrise/stable/Params", nil)
 }

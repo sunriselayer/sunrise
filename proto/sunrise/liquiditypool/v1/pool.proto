@@ -3,11 +3,13 @@ package sunrise.liquiditypool.v1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquiditypool/types";
 
 // Pool
 message Pool {
+  option (amino.name) = "sunrise/pool/Pool";
   uint64 id = 1;
   string denom_base = 2;
   string denom_quote = 3;

@@ -11,8 +11,8 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/swap/MsgUpdateParams")
-	legacy.RegisterAminoMsg(cdc, &MsgSwapExactAmountIn{}, "sunrise/MsgSwapExactAmountIn")
-	legacy.RegisterAminoMsg(cdc, &MsgSwapExactAmountOut{}, "sunrise/MsgSwapExactAmountOut")
+	legacy.RegisterAminoMsg(cdc, &MsgSwapExactAmountIn{}, "sunrise/swap/MsgSwapExactAmountIn")
+	legacy.RegisterAminoMsg(cdc, &MsgSwapExactAmountOut{}, "sunrise/swap/MsgSwapExactAmountOut")
 
 	cdc.RegisterConcrete(&Params{}, "sunrise/swap/Params", nil)
 	cdc.RegisterConcrete(&SwapBeforeFeeExtension{}, "sunrise/swap/SwapBeforeFeeExtension", nil)

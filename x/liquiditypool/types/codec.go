@@ -10,10 +10,10 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/pool/MsgUpdateParams")
-	legacy.RegisterAminoMsg(cdc, &MsgCreatePool{}, "sunrise/MsgCreatePool")
-	legacy.RegisterAminoMsg(cdc, &MsgCreatePosition{}, "sunrise/MsgCreatePosition")
-	legacy.RegisterAminoMsg(cdc, &MsgIncreaseLiquidity{}, "sunrise/MsgIncreaseLiquidity")
-	legacy.RegisterAminoMsg(cdc, &MsgDecreaseLiquidity{}, "sunrise/MsgDecreaseLiquidity")
+	legacy.RegisterAminoMsg(cdc, &MsgCreatePool{}, "sunrise/pool/MsgCreatePool")
+	legacy.RegisterAminoMsg(cdc, &MsgCreatePosition{}, "sunrise/pool/MsgCreatePosition")
+	legacy.RegisterAminoMsg(cdc, &MsgIncreaseLiquidity{}, "sunrise/pool/MsgIncreaseLiquidity")
+	legacy.RegisterAminoMsg(cdc, &MsgDecreaseLiquidity{}, "sunrise/pool/MsgDecreaseLiquidity")
 	legacy.RegisterAminoMsg(cdc, &MsgClaimRewards{}, "sunrise/pool/MsgClaimRewards")
 
 	cdc.RegisterConcrete(&Params{}, "sunrise/pool/Params", nil)
