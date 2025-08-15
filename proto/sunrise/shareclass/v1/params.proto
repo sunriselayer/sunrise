@@ -10,7 +10,7 @@ option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
-  option (amino.name) = "sunrise/shareclass/Params";
+  option (amino.name) = "sunrise/sc/Params";
 
   google.protobuf.Duration reward_period = 1 [
     (gogoproto.nullable) = false,
