@@ -17,7 +17,21 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=$(APPNAME) \
 	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT)
 
-BUILD_FLAGS := -tags "ledger" -ldflags '$(ldflags)'
+BUILD_TAGS := "netgo,ledger"
+ifeq ($(OS),Windows_NT)
+	BUILD_TAGS +=,hid
+else
+	UNAME_S := $(shell uname -s)
+	ifneq ($(UNAME_S),Darwin)
+		BUILD_TAGS +=,libusb
+	endif
+endif
+
+ldflags += -X github.com/cosmos/cosmos-sdk/version.BuildTags='$(BUILD_TAGS)'
+BUILD_FLAGS := -tags "$(BUILD_TAGS)" -ldflags "-w -s $(ldflags)"
+
+# For static builds
+STATIC_BUILD_FLAGS := -tags "$(BUILD_TAGS) muslc" -ldflags "-w -s $(ldflags) -linkmode=external -extldflags '-Wl,-z,muldefs -static'"
 
 ##############
 ###  Test  ###
