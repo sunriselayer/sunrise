@@ -51,7 +51,7 @@ message MsgUpdateParamsResponse {}
 // MsgCreatePool
 message MsgCreatePool {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgCreatePool";
+  option (amino.name) = "sunrise/pool/MsgCreatePool";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string denom_base = 2;
   string denom_quote = 3;
@@ -70,7 +70,7 @@ message MsgCreatePoolResponse {
 // MsgCreatePosition
 message MsgCreatePosition {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgCreatePosition";
+  option (amino.name) = "sunrise/pool/MsgCreatePosition";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 pool_id = 2;
   int64 lower_tick = 3;
@@ -108,7 +108,7 @@ message MsgCreatePositionResponse {
 // MsgIncreaseLiquidity
 message MsgIncreaseLiquidity {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgIncreaseLiquidity";
+  option (amino.name) = "sunrise/pool/MsgIncreaseLiquidity";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 id = 2;
   string amount_base = 3 [
@@ -151,7 +151,7 @@ message MsgIncreaseLiquidityResponse {
 // MsgDecreaseLiquidity
 message MsgDecreaseLiquidity {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgDecreaseLiquidity";
+  option (amino.name) = "sunrise/pool/MsgDecreaseLiquidity";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 id = 2;
   string liquidity = 3;

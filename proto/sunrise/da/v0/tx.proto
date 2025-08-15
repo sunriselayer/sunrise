@@ -56,7 +56,7 @@ message MsgUpdateParamsResponse {}
 // MsgPublishData
 message MsgPublishData {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgPublishData";
+  option (amino.name) = "sunrise/da/MsgPublishData";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string metadata_uri = 2;
   uint64 parity_shard_count = 3;
@@ -70,7 +70,7 @@ message MsgPublishDataResponse {}
 // MsgSubmitInvalidity
 message MsgSubmitInvalidity {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgSubmitInvalidity";
+  option (amino.name) = "sunrise/da/MsgSubmitInvalidity";
 
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string metadata_uri = 2;
@@ -83,7 +83,7 @@ message MsgSubmitInvalidityResponse {}
 // MsgSubmitValidityProof
 message MsgSubmitValidityProof {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgSubmitValidityProof";
+  option (amino.name) = "sunrise/da/MsgSubmitValidityProof";
 
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
@@ -98,7 +98,7 @@ message MsgSubmitValidityProofResponse {}
 // MsgRegisterProofDeputy
 message MsgRegisterProofDeputy {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgRegisterProofDeputy";
+  option (amino.name) = "sunrise/da/MsgRegisterProofDeputy";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string deputy_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
@@ -109,7 +109,7 @@ message MsgRegisterProofDeputyResponse {}
 // MsgUnregisterProofDeputy
 message MsgUnregisterProofDeputy {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgUnregisterProofDeputy";
+  option (amino.name) = "sunrise/da/MsgUnregisterProofDeputy";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
@@ -119,7 +119,7 @@ message MsgUnregisterProofDeputyResponse {}
 // MsgVerifyData defines the message to trigger the data verification process.
 message MsgVerifyData {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgVerifyData";
+  option (amino.name) = "sunrise/da/MsgVerifyData";
 
   // sender is the address of the account that triggers the process.
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];

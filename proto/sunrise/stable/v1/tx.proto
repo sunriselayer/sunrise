@@ -47,7 +47,7 @@ message MsgUpdateParamsResponse {}
 // MsgMint defines the MsgMint message.
 message MsgMint {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgMint";
+  option (amino.name) = "sunrise/stable/MsgMint";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string amount = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",
@@ -67,7 +67,7 @@ message MsgMintResponse {
 // MsgBurn defines the MsgBurn message.
 message MsgBurn {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgBurn";
+  option (amino.name) = "sunrise/stable/MsgBurn";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated cosmos.base.v1beta1.Coin amount = 2 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",

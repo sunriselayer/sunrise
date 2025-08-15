@@ -50,7 +50,7 @@ message MsgUpdateParamsResponse {}
 // MsgStartNewEpoch
 message MsgStartNewEpoch {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgStartNewEpoch";
+  option (amino.name) = "sunrise/incentive/MsgStartNewEpoch";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
@@ -60,7 +60,7 @@ message MsgStartNewEpochResponse {}
 // MsgVoteGauge
 message MsgVoteGauge {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgVoteGauge";
+  option (amino.name) = "sunrise/incentive/MsgVoteGauge";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated PoolWeight pool_weights = 2 [(gogoproto.nullable) = false];
 }
@@ -71,7 +71,7 @@ message MsgVoteGaugeResponse {}
 // MsgRegisterBribe
 message MsgRegisterBribe {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgRegisterBribe";
+  option (amino.name) = "sunrise/incentive/MsgRegisterBribe";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 epoch_id = 2;
   uint64 pool_id = 3;
@@ -87,7 +87,7 @@ message MsgRegisterBribeResponse {}
 // MsgClaimBribes
 message MsgClaimBribes {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "sunrise/MsgClaimBribes";
+  option (amino.name) = "sunrise/incentive/MsgClaimBribes";
   string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   repeated uint64 bribe_ids = 2;
 }
