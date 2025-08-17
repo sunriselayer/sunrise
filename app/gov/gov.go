@@ -163,10 +163,23 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		}
 
 		// <sunrise>
-		// To cancel the effect to quorum, we need to adjust the total voting power.
-		// It should not be totalVoterPower / totalBonded < quorum.
-		// totalVoterPowerCustom / totalBonded = totalVoterPower / (totalBonded - shareclassBonded)
-		// totalVoterPowerCustom = totalVoterPower * totalBonded / (totalBonded - shareclassBonded)
+		// This section adjusts the voting power and tally results to correctly
+		// account for the exclusion of the shareclass module's voting power from
+		// governance, solving issues in both Quorum and Threshold checks.
+		//
+		// The x/gov module performs two key checks:
+		// 1. Quorum: totalVotingPower / totalBonded >= Quorum
+		// 2. Threshold: results[Yes] / (totalVotingPower - results[Abstain]) >= Threshold
+		//
+		// Our goal is to make these checks behave as if they were:
+		// 1. Quorum: totalVoterPower / (totalBonded - shareclassBonded) >= Quorum
+		// 2. Threshold: results[Yes] / (totalVoterPower - results[Abstain]) >= Threshold (unmodified)
+		//
+		// To achieve this, we introduce a scaling factor 'F'. We set the returned
+		// totalVotingPower to `totalVoterPower * F` and also scale all `results` by `F`.
+		// This fixes the Quorum check, and the 'F' factor cancels out in the Threshold
+		// calculation, preserving its original logic.
+		// The scaling factor F = totalBonded / (totalBonded - shareclassBonded)
 		totalBonded, err := stakingKeeper.TotalBondedTokens(ctx)
 		if err != nil {
 			return math.LegacyDec{}, nil, err
@@ -175,16 +188,24 @@ func ProvideCalculateVoteResultsAndVotingPowerFn(authKeeper AccountKeeper, staki
 		if err != nil {
 			return math.LegacyDec{}, nil, err
 		}
-		denominator := totalBonded.Sub(shareclassBonded)
-		// If denominator is zero, set totalVotingPower to zero.
-		if denominator.IsZero() {
-			totalVotingPower = math.LegacyZeroDec()
+
+		effectiveTotalBonded := totalBonded.Sub(shareclassBonded)
+
+		// In an abnormal state where shareclassBonded >= totalBonded, the effective
+		// power is zero or negative. To prevent division by zero, we return the original,
+		// unscaled values. This will likely cause the proposal to fail quorum, which is a safe
+		// failure mode. We also check if totalBonded is zero.
+		if !effectiveTotalBonded.IsPositive() || totalBonded.IsZero() {
 			return totalVotingPower, results, nil
 		}
 
-		numerator := totalVotingPower.MulInt(totalBonded)
-		totalVotingPower = numerator.Quo(math.LegacyNewDecFromInt(denominator))
-		// <sunrise />
+		// To maintain precision, we don't calculate F directly.
+		// Instead we multiply by totalBonded and divide by effectiveTotalBonded.
+		for i, r := range results {
+			results[i] = r.MulInt(totalBonded).QuoInt(effectiveTotalBonded)
+		}
+		totalVotingPower = totalVotingPower.MulInt(totalBonded).QuoInt(effectiveTotalBonded)
+		// </sunrise>
 
 		return totalVotingPower, results, nil
 	}
