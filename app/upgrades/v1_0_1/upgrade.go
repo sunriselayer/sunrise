@@ -26,9 +26,9 @@ func CreateUpgradeHandler(
 		ctx := sdk.UnwrapSDKContext(goCtx)
 		ctx.Logger().Info(fmt.Sprintf("update start:%s", UpgradeName))
 
+		// Transfer the balance and lockup mistakenly allocated to sunrise1yfsg0ahx7dg99ytq4aqxvashmwq9tx3upp422w to the core team's address.
 		senderAddressString := "sunrise1yfsg0ahx7dg99ytq4aqxvashmwq9tx3upp422w"
-		recipientAddressString := "sunrise1pp2ruuhs0k7ayaxjupwj4k5qmgh0d72w8zu30p" // placeholder
-
+		recipientAddressString := "sunrise1xxgjt7yqkmn63m2d0nrf0vt5uuc2hr6l45xaa9" // sunrise-team
 		senderAddress, err := sdk.AccAddressFromBech32(senderAddressString)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing sender address: %w", err)
@@ -63,19 +63,10 @@ func CreateUpgradeHandler(
 		// Get all funds from the old lockup module account
 		balances := bankKeeper.GetAllBalances(ctx, oldLockupModuleAddress)
 
-		// Get a new lockup ID for the new owner
-		newLockupId, _, err := lockupKeeper.GetAndIncrementNextLockupAccountID(ctx, recipientAddress)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get next lockup account ID for new owner: %w", err)
-		}
-
-		// Generate the address for the new lockup module account
-		newLockupModuleAddress := lockupKeeper.LockupAccountAddress(recipientAddress, newLockupId)
-
 		// Transfer the funds from the old module account to the new module account
 		if !balances.IsZero() {
-			if err := bankKeeper.SendCoins(ctx, oldLockupModuleAddress, newLockupModuleAddress, balances); err != nil {
-				return nil, fmt.Errorf("failed to send coins from old to new lockup account: %w", err)
+			if err := bankKeeper.SendCoins(ctx, oldLockupModuleAddress, recipientAddress, balances); err != nil {
+				return nil, fmt.Errorf("failed to send coins from old to core team: %w", err)
 			}
 		}
 
@@ -83,18 +74,6 @@ func CreateUpgradeHandler(
 		if err := lockupKeeper.LockupAccounts.Remove(ctx, collections.Join(senderAddress.Bytes(), oldLockupAccount.Id)); err != nil {
 			return nil, fmt.Errorf("failed to remove old lockup account: %w", err)
 		}
-
-		// Create and set the new lockup account
-		newLockupAccount := oldLockupAccount
-		newLockupAccount.Owner = recipientAddress.String()
-		newLockupAccount.Id = newLockupId
-		newLockupAccount.Address = newLockupModuleAddress.String()
-
-		if err := lockupKeeper.SetLockupAccount(ctx, newLockupAccount); err != nil {
-			return nil, fmt.Errorf("failed to set new lockup account: %w", err)
-		}
-
-		ctx.Logger().Info(fmt.Sprintf("successfully transferred lockup account %d from %s to %s (new id: %d)", oldLockupId, senderAddress.String(), recipientAddress.String(), newLockupId))
 
 		return mm.RunMigrations(goCtx, configurator, fromVM)
 	}
