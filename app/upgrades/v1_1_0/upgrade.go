@@ -1,5 +1,5 @@
-// This file contains the upgrade handler for the v1.0.1 upgrade.
-package v1_0_1
+// This file contains the upgrade handler for the v1.1.0 upgrade.
+package v1_1_0
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	"cosmossdk.io/collections"
 )
 
-// CreateUpgradeHandler creates an upgrade handler for the v1.0.1 upgrade.
+// CreateUpgradeHandler creates an upgrade handler for the v1.1.0 upgrade.
 func CreateUpgradeHandler(
 	mm *module.Manager,
 	configurator module.Configurator,

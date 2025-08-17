@@ -1,5 +1,5 @@
-// This file defines the upgrade name for the v1.0.1 upgrade.
-package v1_0_1
+// This file defines the upgrade name for the v1.1.0 upgrade.
+package v1_1_0
 
 import (
 	storetypes "cosmossdk.io/store/types"
@@ -7,9 +7,9 @@ import (
 )
 
 // UpgradeName is the name of the upgrade.
-const UpgradeName = "v1.0.1"
+const UpgradeName = "v1.1.0"
 
-// StoreUpgrades defines the store upgrades for the v1.0.1 upgrade.
+// StoreUpgrades defines the store upgrades for the v1.1.0 upgrade.
 var StoreUpgrades = storetypes.StoreUpgrades{
 	Added: []string{
 		ibchookstypes.StoreKey,
