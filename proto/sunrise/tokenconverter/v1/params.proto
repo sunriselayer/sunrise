@@ -2,12 +2,14 @@ syntax = "proto3";
 package sunrise.tokenconverter.v1;
 
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/tokenconverter/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+  option (amino.name) = "sunrise/tokenconverter/Params";
 
   string non_transferable_denom = 1;
   string transferable_denom = 2;

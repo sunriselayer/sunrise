@@ -4,11 +4,13 @@ package sunrise.liquidityincentive.v1;
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
 // Bribe
 message Bribe {
+  option (amino.name) = "sunrise/incentive/Bribe";
   uint64 id = 1;
   uint64 epoch_id = 2;
   uint64 pool_id = 3;

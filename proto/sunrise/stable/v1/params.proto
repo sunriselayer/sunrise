@@ -2,12 +2,14 @@ syntax = "proto3";
 package sunrise.stable.v1;
 
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/stable/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+  option (amino.name) = "sunrise/stable/Params";
 
   string stable_denom = 1;
   repeated string allowed_addresses = 2;
