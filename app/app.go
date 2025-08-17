@@ -12,6 +12,7 @@ import (
 	circuitkeeper "cosmossdk.io/x/circuit/keeper"
 	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
+	upgradetypes "cosmossdk.io/x/upgrade/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtos "github.com/cometbft/cometbft/libs/os"
@@ -70,6 +71,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
+
+	"github.com/sunriselayer/sunrise/app/upgrades/v1_1_0"
 )
 
 const (
@@ -328,6 +331,8 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	app.setupUpgradeHandlers()
+
 	// <wasmd>
 	// must be before Loading version
 	// requires the snapshot store to be created and registered as a BaseAppOption
@@ -448,4 +453,29 @@ func BlockedAddresses() map[string]bool {
 	}
 
 	return result
+}
+
+func (app *App) setupUpgradeHandlers() {
+	// Example upgrade handler.
+	// When a planned upgrade height is reached, the old binary will panic and shut down, and the new binary
+	// (which requires a PR) will take over with the new upgrade name defined below.
+	// For more information, see: https://docs.cosmos.network/main/tooling/cosmovisor
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v1_1_0.UpgradeName,
+		v1_1_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator(), app.BankKeeper, app.LockupKeeper),
+	)
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	if upgradeInfo.Name == v1_1_0.UpgradeName {
+		// configure store loader that checks if version == upgradeHeight and applies store upgrades
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v1_1_0.StoreUpgrades))
+	}
 }
