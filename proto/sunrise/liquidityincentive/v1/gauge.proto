@@ -3,11 +3,13 @@ package sunrise.liquidityincentive.v1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
 // Gauge
 message Gauge {
+  option (amino.name) = "sunrise/incentive/Gauge";
   uint64 pool_id = 1;
   string voting_power = 2 [
     (cosmos_proto.scalar) = "cosmos.Int",

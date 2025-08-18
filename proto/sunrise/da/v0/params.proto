@@ -5,12 +5,14 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
+import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/da/types";
 
 // Params defines the parameters for the module.
 message Params {
   option (gogoproto.equal) = true;
+  option (amino.name) = "sunrise/da/Params";
   uint64 publish_data_gas = 1;
   // Invalid shard threshold required to go to STATUS_CHALLENGING.
   string challenge_threshold = 2 [(cosmos_proto.scalar) = "cosmos.Dec"];

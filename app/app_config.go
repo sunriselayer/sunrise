@@ -63,6 +63,8 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 
+	ibchookstypes "github.com/sunriselayer/ibc-hooks/v10/types"
+
 	_ "github.com/CosmWasm/wasmd/x/wasm" // import for side-effects
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
@@ -117,12 +119,12 @@ var (
 
 	// blocked account addresses
 	blockAccAddrs = []string{
-		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
 		minttypes.ModuleName,
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
 		// We allow the following module accounts to receive funds:
+		// authtypes.FeeCollectorName,
 		// govtypes.ModuleName
 	}
 
@@ -160,6 +162,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						ibcwasmtypes.ModuleName,
+						// ibc hooks
+						ibchookstypes.ModuleName,
 						// CosmWasm module
 						wasmtypes.ModuleName,
 						// chain modules
@@ -184,6 +188,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						ibcwasmtypes.ModuleName,
+						// ibc hooks
+						ibchookstypes.ModuleName,
 						// CosmWasm module
 						wasmtypes.ModuleName,
 						// chain modules
@@ -235,6 +241,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						ibcwasmtypes.ModuleName,
+						// ibc hooks
+						ibchookstypes.ModuleName,
 						// CosmWasm module
 						wasmtypes.ModuleName,
 						// chain modules
