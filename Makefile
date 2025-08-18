@@ -11,28 +11,6 @@ ifeq (,$(VERSION))
   endif
 endif
 
-# Update the ldflags with the app, client & server names
-ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=$(APPNAME) \
-	-X github.com/cosmos/cosmos-sdk/version.AppName=$(APPNAME)d \
-	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
-	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT)
-
-BUILD_TAGS := "netgo,ledger"
-ifeq ($(OS),Windows_NT)
-	BUILD_TAGS +=,hid
-else
-	UNAME_S := $(shell uname -s)
-	ifneq ($(UNAME_S),Darwin)
-		BUILD_TAGS +=,libusb
-	endif
-endif
-
-ldflags += -X github.com/cosmos/cosmos-sdk/version.BuildTags='$(BUILD_TAGS)'
-BUILD_FLAGS := -tags "$(BUILD_TAGS)" -ldflags "-w -s $(ldflags)"
-
-# For static builds
-STATIC_BUILD_FLAGS := -tags "$(BUILD_TAGS) muslc" -ldflags "-w -s $(ldflags) -linkmode=external -extldflags '-Wl,-z,muldefs -static'"
-
 ##############
 ###  Test  ###
 ##############
@@ -69,7 +47,12 @@ install:
 	@echo "--> ensure dependencies have not been modified"
 	@go mod verify
 	@echo "--> installing $(APPNAME)d"
-	@go install $(BUILD_FLAGS) -mod=readonly ./cmd/$(APPNAME)d
+	@go install -tags "netgo ledger libusb" -ldflags "-w -s \
+-X github.com/cosmos/cosmos-sdk/version.Name=sunrise \
+-X github.com/cosmos/cosmos-sdk/version.AppName=sunrised \
+-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
+-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
+-X 'github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger,libusb'" -mod=readonly ./cmd/$(APPNAME)d
 
 .PHONY: all install
 
