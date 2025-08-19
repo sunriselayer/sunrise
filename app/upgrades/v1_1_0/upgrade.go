@@ -3,6 +3,7 @@ package v1_1_0
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"cosmossdk.io/math"
@@ -41,16 +42,27 @@ func CreateUpgradeHandler(
 
 		coinsToSend := sdk.NewCoins(sdk.NewCoin("urise", math.NewInt(48_000_000_000)))
 
-		if err := bankKeeper.SendCoins(ctx, senderAddress, recipientAddress, coinsToSend); err != nil {
-			return nil, fmt.Errorf("failed to send coins: %w", err)
+		// Check if the sender has the required balance before attempting to send.
+		// This is to prevent panic on testnet where the account does not exist.
+		if bankKeeper.HasBalance(ctx, senderAddress, coinsToSend[0]) {
+			if err := bankKeeper.SendCoins(ctx, senderAddress, recipientAddress, coinsToSend); err != nil {
+				return nil, fmt.Errorf("failed to send coins: %w", err)
+			}
+			ctx.Logger().Info(fmt.Sprintf("successfully transferred %s from %s to %s", coinsToSend.String(), senderAddress.String(), recipientAddress.String()))
+		} else {
+			ctx.Logger().Info(fmt.Sprintf("sender %s does not have enough balance to transfer, skipping coin transfer", senderAddress.String()))
 		}
-
-		ctx.Logger().Info(fmt.Sprintf("successfully transferred %s from %s to %s", coinsToSend.String(), senderAddress.String(), recipientAddress.String()))
 
 		// Transfer lockup account ownership
 		oldLockupId := uint64(2)
 		oldLockupAccount, err := lockupKeeper.GetLockupAccount(ctx, senderAddress, oldLockupId)
 		if err != nil {
+			// If lockup account does not exist, we can skip the logic.
+			// This is expected on testnet.
+			if errors.Is(err, collections.ErrNotFound) {
+				ctx.Logger().Info(fmt.Sprintf("lockup account with id %d for owner %s not found, skipping lockup transfer", oldLockupId, senderAddress.String()))
+				return mm.RunMigrations(goCtx, configurator, fromVM)
+			}
 			return nil, fmt.Errorf("failed to get lockup account: %w", err)
 		}
 
