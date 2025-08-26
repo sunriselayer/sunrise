@@ -261,19 +261,23 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	}
 
 	// The pattern of waitingPacket.Return == nil is not handled here
-	switch incomingPacket.Change.(type) {
+	switch t := incomingPacket.Change.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexChange:
-		incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
-			AckChange: acknowledgement,
+		if t.OutgoingIndexChange.Equal(outgoingPacket.Index) {
+			incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
+				AckChange: acknowledgement,
+			}
 		}
 		// case *types.IncomingInFlightPacket_AckChange:
 	}
 
 	// The pattern of waitingPacket.Forward == nil is not handled here
-	switch incomingPacket.Forward.(type) {
+	switch t := incomingPacket.Forward.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexForward:
-		incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
-			AckForward: acknowledgement,
+		if t.OutgoingIndexForward.Equal(outgoingPacket.Index) {
+			incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
+				AckForward: acknowledgement,
+			}
 		}
 		// case *types.IncomingInFlightPacket_AckForward:
 	}
