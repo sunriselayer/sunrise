@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.tokenfactory.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/tokenfactory/v1/params.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/tokenfactory/types";
+
+// GenesisState defines the tokenfactory module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
