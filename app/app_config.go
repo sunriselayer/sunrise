@@ -86,6 +86,8 @@ import (
 	swapmoduletypes "github.com/sunriselayer/sunrise/x/swap/types"
 	_ "github.com/sunriselayer/sunrise/x/tokenconverter/module"
 	tokenconvertermoduletypes "github.com/sunriselayer/sunrise/x/tokenconverter/types"
+	_ "github.com/sunriselayer/sunrise/x/tokenfactory/module"
+	tokenfactorymoduletypes "github.com/sunriselayer/sunrise/x/tokenfactory/types"
 )
 
 var (
@@ -175,6 +177,7 @@ var (
 						liquiditypoolmoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
+						tokenfactorymoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -202,6 +205,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
+						tokenfactorymoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -254,6 +258,7 @@ var (
 						liquidityincentivemoduletypes.ModuleName,
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
+						tokenfactorymoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -373,6 +378,10 @@ var (
 			{
 				Name:   stablemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&stablemoduletypes.Module{}),
+			},
+			{
+				Name:   tokenfactorymoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&tokenfactorymoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
