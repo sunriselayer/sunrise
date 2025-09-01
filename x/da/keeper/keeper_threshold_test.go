@@ -40,10 +40,10 @@ func TestGetZkpThreshold(t *testing.T) {
 		numActiveValidators int
 	}{
 		{
-			name:              "normal case",
-			shardCount:        100,
-			expectedThreshold: 20,
-			replicationFactor: "2.0",
+			name:                "normal case",
+			shardCount:          100,
+			expectedThreshold:   20,
+			replicationFactor:   "2.0",
 			numActiveValidators: 10,
 			setupMocks: func(mocks DaMocks, k keeper.Keeper, sdkCtx sdk.Context) {
 				params := types.DefaultParams()
@@ -132,9 +132,9 @@ func TestGetZkpThreshold(t *testing.T) {
 			},
 		},
 		{
-			name:        "validator error",
-			shardCount:  100,
-			expectedErr: nil, // error is logged and skipped
+			name:              "validator error",
+			shardCount:        100,
+			expectedErr:       nil, // error is logged and skipped
 			expectedThreshold: 0,
 			setupMocks: func(mocks DaMocks, k keeper.Keeper, sdkCtx sdk.Context) {
 				params := types.DefaultParams()

@@ -113,12 +113,12 @@ func TestProcessUnclaimedBribes(t *testing.T) {
 	feeCollectorAddr := sdk.AccAddress("fee_collector")
 
 	tests := []struct {
-		name                  string
-		epochToProcess        uint64
-		initialBribes         []types.Bribe
-		initialAllocations    []types.BribeAllocation
-		setupMocks            func(fx *fixture, expectedUnclaimed sdk.Coins)
-		expectErr             bool
+		name               string
+		epochToProcess     uint64
+		initialBribes      []types.Bribe
+		initialAllocations []types.BribeAllocation
+		setupMocks         func(fx *fixture, expectedUnclaimed sdk.Coins)
+		expectErr          bool
 	}{
 		{
 			name:           "fully unclaimed bribe",
@@ -244,10 +244,10 @@ func TestFinalizeBribeForEpoch(t *testing.T) {
 		expectErr            bool
 	}{
 		{
-			name:                 "process two expired epochs",
-			currentEpochId:       10,
-			bribeClaimEpochs:     5, // Epochs 10-5=5. So, epochs up to 4 should be processed.
-			lastExpiredEpochId:   2, // Last processed was 2. So, 3 and 4 should be processed now.
+			name:               "process two expired epochs",
+			currentEpochId:     10,
+			bribeClaimEpochs:   5, // Epochs 10-5=5. So, epochs up to 4 should be processed.
+			lastExpiredEpochId: 2, // Last processed was 2. So, 3 and 4 should be processed now.
 			setup: func(fx *fixture) {
 				// Bribes and allocations for epoch 3
 				bribe3 := types.Bribe{Id: 1, EpochId: 3, Amount: sdk.NewCoins(sdk.NewCoin("stake", math.NewInt(100)))}
@@ -264,7 +264,7 @@ func TestFinalizeBribeForEpoch(t *testing.T) {
 				// Mocks for processing epoch 3
 				fx.mocks.AcctKeeper.EXPECT().GetModuleAddress("fee_collector").Return(feeCollectorAddr)
 				fx.mocks.BankKeeper.EXPECT().SendCoinsFromModuleToAccount(gomock.Any(), types.BribeAccount, feeCollectorAddr, bribe3.Amount).Return(nil)
-				
+
 				// Mocks for processing epoch 4
 				fx.mocks.AcctKeeper.EXPECT().GetModuleAddress("fee_collector").Return(feeCollectorAddr)
 				fx.mocks.BankKeeper.EXPECT().SendCoinsFromModuleToAccount(gomock.Any(), types.BribeAccount, feeCollectorAddr, bribe4.Amount).Return(nil)

@@ -15,4 +15,4 @@ message GenesisState {
 
   repeated LockupAccount lockup_accounts = 2 [(gogoproto.nullable) = false];
   repeated MsgInitLockupAccount init_lockup_msgs = 3;
-} 
+}

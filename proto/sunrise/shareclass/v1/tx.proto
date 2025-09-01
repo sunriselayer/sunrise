@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sunrise.shareclass.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos/staking/v1beta1/staking.proto";
@@ -10,7 +11,6 @@ import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "sunrise/shareclass/v1/params.proto";
-import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/shareclass/types";
 
