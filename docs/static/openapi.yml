@@ -19,7 +19,7 @@ paths:
         module
 
         parameters. The authority defaults to the x/gov module account.'
-      operationId: CircuitMsg_UpdateParams
+      operationId: AuthMsg_UpdateParams
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -45,7 +45,7 @@ paths:
         authorizations granted to the grantee. Each message should have only
 
         one signer corresponding to the granter of the authorization.'
-      operationId: CircuitMsg_Exec
+      operationId: AuthMsg_Exec
       parameters:
       - description: 'MsgExec attempts to execute the provided messages using
 
@@ -77,7 +77,7 @@ paths:
         for the given (granter, grantee, Authorization) triple, then the grant
 
         will be overwritten.'
-      operationId: CircuitMsg_Grant
+      operationId: AuthMsg_Grant
       parameters:
       - description: 'MsgGrant is a request type for Grant method. It declares authorization
           to the grantee
@@ -105,7 +105,7 @@ paths:
         name on the
 
         granter''s account that has been granted to the grantee.'
-      operationId: CircuitMsg_Revoke
+      operationId: AuthMsg_Revoke
       parameters:
       - description: 'MsgRevoke revokes any authorization with the provided sdk.Msg
           type on the
@@ -131,7 +131,7 @@ paths:
       - Query
       summary: AppOptions returns the autocli options for all of the modules in an
         app.
-      operationId: CircuitQuery_AppOptions
+      operationId: AuthQuery_AppOptions
       parameters:
       - description: AppOptionsRequest is the RemoteInfoService/AppOptions request
           type.
@@ -155,7 +155,7 @@ paths:
       - Msg
       summary: MultiSend defines a method for sending coins from some accounts to
         other accounts.
-      operationId: CircuitMsg_MultiSend
+      operationId: AuthMsg_MultiSend
       parameters:
       - description: MsgMultiSend represents an arbitrary multi-in, multi-out send
           message.
@@ -179,7 +179,7 @@ paths:
       - Msg
       summary: Send defines a method for sending coins from one account to another
         account.
-      operationId: CircuitMsg_Send
+      operationId: AuthMsg_Send
       parameters:
       - description: MsgSend represents a message to send coins from one account to
           another.
@@ -209,7 +209,7 @@ paths:
         included. Entries that already exist in the store, but that aren''t
 
         included in this message, will be left unchanged.'
-      operationId: CircuitMsg_SetSendEnabled
+      operationId: AuthMsg_SetSendEnabled
       parameters:
       - description: 'MsgSetSendEnabled is the Msg/SetSendEnabled request type.
 
@@ -241,7 +241,7 @@ paths:
         module parameters.
 
         The authority is defined in the keeper.'
-      operationId: CircuitMsg_UpdateParamsMixin77
+      operationId: AuthMsg_UpdateParamsMixin77
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -263,7 +263,7 @@ paths:
       tags:
       - Msg
       summary: LoadTest defines a method for executing a sequence of load test operations.
-      operationId: CircuitMsg_LoadTest
+      operationId: AuthMsg_LoadTest
       parameters:
       - description: MsgLoadTestOps defines a message containing a sequence of load
           test operations.
@@ -289,7 +289,7 @@ paths:
         another
 
         account''s circuit breaker permissions.'
-      operationId: CircuitMsg_AuthorizeCircuitBreaker
+      operationId: AuthMsg_AuthorizeCircuitBreaker
       parameters:
       - description: MsgAuthorizeCircuitBreaker defines the Msg/AuthorizeCircuitBreaker
           request type.
@@ -315,7 +315,7 @@ paths:
         that
 
         have been been paused using TripCircuitBreaker.'
-      operationId: CircuitMsg_ResetCircuitBreaker
+      operationId: AuthMsg_ResetCircuitBreaker
       parameters:
       - description: MsgResetCircuitBreaker defines the Msg/ResetCircuitBreaker request
           type.
@@ -338,7 +338,7 @@ paths:
       tags:
       - Msg
       summary: TripCircuitBreaker pauses processing of Msg's in the state machine.
-      operationId: CircuitMsg_TripCircuitBreaker
+      operationId: AuthMsg_TripCircuitBreaker
       parameters:
       - description: MsgTripCircuitBreaker defines the Msg/TripCircuitBreaker request
           type.
@@ -364,7 +364,7 @@ paths:
         module parameters.
 
         The authority is defined in the keeper.'
-      operationId: CircuitMsg_UpdateParamsMixin92
+      operationId: AuthMsg_UpdateParamsMixin92
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -386,7 +386,7 @@ paths:
       tags:
       - Msg
       summary: IncreaseCount increments the counter by the specified amount.
-      operationId: CircuitMsg_IncreaseCount
+      operationId: AuthMsg_IncreaseCount
       parameters:
       - description: MsgIncreaseCounter defines a count Msg service counter.
         name: body
@@ -408,7 +408,7 @@ paths:
       tags:
       - Query
       summary: GetCount queries the parameters of x/Counter module.
-      operationId: CircuitQuery_GetCount
+      operationId: AuthQuery_GetCount
       parameters:
       - description: QueryGetCountRequest defines the request type for querying x/mock
           count.
@@ -434,7 +434,7 @@ paths:
         module
 
         parameters. The authority is defined in the keeper.'
-      operationId: CircuitMsg_UpdateParamsMixin96
+      operationId: AuthMsg_UpdateParamsMixin96
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -456,7 +456,7 @@ paths:
       tags:
       - Msg
       summary: VerifyInvariant defines a method to verify a particular invariant.
-      operationId: CircuitMsg_VerifyInvariant
+      operationId: AuthMsg_VerifyInvariant
       parameters:
       - description: MsgVerifyInvariant represents a message to verify a particular
           invariance.
@@ -488,7 +488,7 @@ paths:
         could be the governance module itself. The authority is defined in the
 
         keeper.'
-      operationId: CircuitMsg_CommunityPoolSpend
+      operationId: AuthMsg_CommunityPoolSpend
       parameters:
       - description: 'MsgCommunityPoolSpend defines a message for sending tokens from
           the community
@@ -518,7 +518,7 @@ paths:
         rewards
 
         to delegators to a specific validator.'
-      operationId: CircuitMsg_DepositValidatorRewardsPool
+      operationId: AuthMsg_DepositValidatorRewardsPool
       parameters:
       - description: 'DepositValidatorRewardsPool defines the request structure to
           provide
@@ -547,7 +547,7 @@ paths:
       summary: 'FundCommunityPool defines a method to allow an account to directly
 
         fund the community pool.'
-      operationId: CircuitMsg_FundCommunityPool
+      operationId: AuthMsg_FundCommunityPool
       parameters:
       - description: 'MsgFundCommunityPool allows an account to directly
 
@@ -573,7 +573,7 @@ paths:
       summary: 'SetWithdrawAddress defines a method to change the withdraw address
 
         for a delegator (or validator self-delegation).'
-      operationId: CircuitMsg_SetWithdrawAddress
+      operationId: AuthMsg_SetWithdrawAddress
       parameters:
       - description: 'MsgSetWithdrawAddress sets the withdraw address for
 
@@ -599,7 +599,7 @@ paths:
       summary: 'UpdateParams defines a governance operation for updating the x/distribution
 
         module parameters. The authority is defined in the keeper.'
-      operationId: CircuitMsg_UpdateParamsMixin107
+      operationId: AuthMsg_UpdateParamsMixin107
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -623,7 +623,7 @@ paths:
       summary: 'WithdrawDelegatorReward defines a method to withdraw rewards of delegator
 
         from a single validator.'
-      operationId: CircuitMsg_WithdrawDelegatorReward
+      operationId: AuthMsg_WithdrawDelegatorReward
       parameters:
       - description: 'MsgWithdrawDelegatorReward represents delegation withdrawal
           to a delegator
@@ -650,7 +650,7 @@ paths:
       summary: 'WithdrawValidatorCommission defines a method to withdraw the
 
         full commission to the validator address.'
-      operationId: CircuitMsg_WithdrawValidatorCommission
+      operationId: AuthMsg_WithdrawValidatorCommission
       parameters:
       - description: 'MsgWithdrawValidatorCommission withdraws the full commission
           to the validator
@@ -678,7 +678,7 @@ paths:
         equivocation or
 
         counterfactual signing.'
-      operationId: CircuitMsg_SubmitEvidence
+      operationId: AuthMsg_SubmitEvidence
       parameters:
       - description: 'MsgSubmitEvidence represents a message that supports submitting
           arbitrary
@@ -705,7 +705,7 @@ paths:
       summary: 'GrantAllowance grants fee allowance to the grantee on the granter''s
 
         account with the provided expiration time.'
-      operationId: CircuitMsg_GrantAllowance
+      operationId: AuthMsg_GrantAllowance
       parameters:
       - description: 'MsgGrantAllowance adds permission for Grantee to spend up to
           Allowance
@@ -731,7 +731,7 @@ paths:
       - Msg
       summary: PruneAllowances prunes expired fee allowances, currently up to 75 at
         a time.
-      operationId: CircuitMsg_PruneAllowances
+      operationId: AuthMsg_PruneAllowances
       parameters:
       - description: MsgPruneAllowances prunes expired fee allowances.
         name: body
@@ -755,7 +755,7 @@ paths:
       summary: 'RevokeAllowance revokes any fee allowance of granter''s account that
 
         has been granted to the grantee.'
-      operationId: CircuitMsg_RevokeAllowance
+      operationId: AuthMsg_RevokeAllowance
       parameters:
       - description: MsgRevokeAllowance removes any existing Allowance from Granter
           to Grantee.
@@ -778,7 +778,7 @@ paths:
       tags:
       - Msg
       summary: CancelProposal defines a method to cancel governance proposal
-      operationId: CircuitMsg_CancelProposal
+      operationId: AuthMsg_CancelProposal
       parameters:
       - description: MsgCancelProposal is the Msg/CancelProposal request type.
         name: body
@@ -800,7 +800,7 @@ paths:
       tags:
       - Msg
       summary: Deposit defines a method to add deposit on a specific proposal.
-      operationId: CircuitMsg_Deposit
+      operationId: AuthMsg_Deposit
       parameters:
       - description: MsgDeposit defines a message to submit a deposit to an existing
           proposal.
@@ -825,7 +825,7 @@ paths:
       summary: 'ExecLegacyContent defines a Msg to be in included in a MsgSubmitProposal
 
         to execute a legacy content-based proposal.'
-      operationId: CircuitMsg_ExecLegacyContent
+      operationId: AuthMsg_ExecLegacyContent
       parameters:
       - description: 'MsgExecLegacyContent is used to wrap the legacy content field
           into a message.
@@ -850,7 +850,7 @@ paths:
       tags:
       - Msg
       summary: SubmitProposal defines a method to create new proposal given the messages.
-      operationId: CircuitMsg_SubmitProposal
+      operationId: AuthMsg_SubmitProposal
       parameters:
       - description: 'MsgSubmitProposal defines an sdk.Msg type that supports submitting
           arbitrary
@@ -878,7 +878,7 @@ paths:
         module
 
         parameters. The authority is defined in the keeper.'
-      operationId: CircuitMsg_UpdateParamsMixin123
+      operationId: AuthMsg_UpdateParamsMixin123
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -900,7 +900,7 @@ paths:
       tags:
       - Msg
       summary: Vote defines a method to add a vote on a specific proposal.
-      operationId: CircuitMsg_Vote
+      operationId: AuthMsg_Vote
       parameters:
       - description: MsgVote defines a message to cast a vote.
         name: body
@@ -923,7 +923,7 @@ paths:
       - Msg
       summary: VoteWeighted defines a method to add a weighted vote on a specific
         proposal.
-      operationId: CircuitMsg_VoteWeighted
+      operationId: AuthMsg_VoteWeighted
       parameters:
       - description: MsgVoteWeighted defines a message to cast a vote.
         name: body
@@ -945,7 +945,7 @@ paths:
       tags:
       - Msg
       summary: Deposit defines a method to add deposit on a specific proposal.
-      operationId: CircuitMsg_DepositMixin127
+      operationId: AuthMsg_DepositMixin127
       parameters:
       - description: MsgDeposit defines a message to submit a deposit to an existing
           proposal.
@@ -968,7 +968,7 @@ paths:
       tags:
       - Msg
       summary: SubmitProposal defines a method to create new proposal given a content.
-      operationId: CircuitMsg_SubmitProposalMixin127
+      operationId: AuthMsg_SubmitProposalMixin127
       parameters:
       - description: 'MsgSubmitProposal defines an sdk.Msg type that supports submitting
           arbitrary
@@ -993,7 +993,7 @@ paths:
       tags:
       - Msg
       summary: Vote defines a method to add a vote on a specific proposal.
-      operationId: CircuitMsg_VoteMixin127
+      operationId: AuthMsg_VoteMixin127
       parameters:
       - description: MsgVote defines a message to cast a vote.
         name: body
@@ -1016,7 +1016,7 @@ paths:
       - Msg
       summary: VoteWeighted defines a method to add a weighted vote on a specific
         proposal.
-      operationId: CircuitMsg_VoteWeightedMixin127
+      operationId: AuthMsg_VoteWeightedMixin127
       parameters:
       - description: MsgVoteWeighted defines a message to cast a vote.
         name: body
@@ -1039,7 +1039,7 @@ paths:
       - Msg
       summary: CreateGroup creates a new group with an admin account address, a list
         of members and some optional metadata.
-      operationId: CircuitMsg_CreateGroup
+      operationId: AuthMsg_CreateGroup
       parameters:
       - description: MsgCreateGroup is the Msg/CreateGroup request type.
         name: body
@@ -1061,7 +1061,7 @@ paths:
       tags:
       - Msg
       summary: CreateGroupPolicy creates a new group policy using given DecisionPolicy.
-      operationId: CircuitMsg_CreateGroupPolicy
+      operationId: AuthMsg_CreateGroupPolicy
       parameters:
       - description: MsgCreateGroupPolicy is the Msg/CreateGroupPolicy request type.
         name: body
@@ -1083,7 +1083,7 @@ paths:
       tags:
       - Msg
       summary: CreateGroupWithPolicy creates a new group with policy.
-      operationId: CircuitMsg_CreateGroupWithPolicy
+      operationId: AuthMsg_CreateGroupWithPolicy
       parameters:
       - description: MsgCreateGroupWithPolicy is the Msg/CreateGroupWithPolicy request
           type.
@@ -1106,7 +1106,7 @@ paths:
       tags:
       - Msg
       summary: Exec executes a proposal.
-      operationId: CircuitMsg_ExecMixin131
+      operationId: AuthMsg_ExecMixin131
       parameters:
       - description: MsgExec is the Msg/Exec request type.
         name: body
@@ -1128,7 +1128,7 @@ paths:
       tags:
       - Msg
       summary: LeaveGroup allows a group member to leave the group.
-      operationId: CircuitMsg_LeaveGroup
+      operationId: AuthMsg_LeaveGroup
       parameters:
       - description: MsgLeaveGroup is the Msg/LeaveGroup request type.
         name: body
@@ -1150,7 +1150,7 @@ paths:
       tags:
       - Msg
       summary: SubmitProposal submits a new proposal.
-      operationId: CircuitMsg_SubmitProposalMixin131
+      operationId: AuthMsg_SubmitProposalMixin131
       parameters:
       - description: MsgSubmitProposal is the Msg/SubmitProposal request type.
         name: body
@@ -1173,7 +1173,7 @@ paths:
       - Msg
       summary: UpdateGroupAdmin updates the group admin with given group id and previous
         admin address.
-      operationId: CircuitMsg_UpdateGroupAdmin
+      operationId: AuthMsg_UpdateGroupAdmin
       parameters:
       - description: MsgUpdateGroupAdmin is the Msg/UpdateGroupAdmin request type.
         name: body
@@ -1196,7 +1196,7 @@ paths:
       - Msg
       summary: UpdateGroupMembers updates the group members with given group id and
         admin address.
-      operationId: CircuitMsg_UpdateGroupMembers
+      operationId: AuthMsg_UpdateGroupMembers
       parameters:
       - description: MsgUpdateGroupMembers is the Msg/UpdateGroupMembers request type.
         name: body
@@ -1219,7 +1219,7 @@ paths:
       - Msg
       summary: UpdateGroupMetadata updates the group metadata with given group id
         and admin address.
-      operationId: CircuitMsg_UpdateGroupMetadata
+      operationId: AuthMsg_UpdateGroupMetadata
       parameters:
       - description: MsgUpdateGroupMetadata is the Msg/UpdateGroupMetadata request
           type.
@@ -1242,7 +1242,7 @@ paths:
       tags:
       - Msg
       summary: UpdateGroupPolicyAdmin updates a group policy admin.
-      operationId: CircuitMsg_UpdateGroupPolicyAdmin
+      operationId: AuthMsg_UpdateGroupPolicyAdmin
       parameters:
       - description: MsgUpdateGroupPolicyAdmin is the Msg/UpdateGroupPolicyAdmin request
           type.
@@ -1266,7 +1266,7 @@ paths:
       - Msg
       summary: UpdateGroupPolicyDecisionPolicy allows a group policy's decision policy
         to be updated.
-      operationId: CircuitMsg_UpdateGroupPolicyDecisionPolicy
+      operationId: AuthMsg_UpdateGroupPolicyDecisionPolicy
       parameters:
       - description: MsgUpdateGroupPolicyDecisionPolicy is the Msg/UpdateGroupPolicyDecisionPolicy
           request type.
@@ -1289,7 +1289,7 @@ paths:
       tags:
       - Msg
       summary: UpdateGroupPolicyMetadata updates a group policy metadata.
-      operationId: CircuitMsg_UpdateGroupPolicyMetadata
+      operationId: AuthMsg_UpdateGroupPolicyMetadata
       parameters:
       - description: MsgUpdateGroupPolicyMetadata is the Msg/UpdateGroupPolicyMetadata
           request type.
@@ -1312,7 +1312,7 @@ paths:
       tags:
       - Msg
       summary: Vote allows a voter to vote on a proposal.
-      operationId: CircuitMsg_VoteMixin131
+      operationId: AuthMsg_VoteMixin131
       parameters:
       - description: MsgVote is the Msg/Vote request type.
         name: body
@@ -1334,7 +1334,7 @@ paths:
       tags:
       - Msg
       summary: WithdrawProposal withdraws a proposal.
-      operationId: CircuitMsg_WithdrawProposal
+      operationId: AuthMsg_WithdrawProposal
       parameters:
       - description: MsgWithdrawProposal is the Msg/WithdrawProposal request type.
         name: body
@@ -1359,7 +1359,7 @@ paths:
         module
 
         parameters. The authority is defaults to the x/gov module account.'
-      operationId: CircuitMsg_UpdateParamsMixin136
+      operationId: AuthMsg_UpdateParamsMixin136
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -1381,7 +1381,7 @@ paths:
       tags:
       - Msg
       summary: Send defines a method to send a nft from one account to another account.
-      operationId: CircuitMsg_SendMixin142
+      operationId: AuthMsg_SendMixin142
       parameters:
       - description: MsgSend represents a message to send a nft from one account to
           another account.
@@ -1404,7 +1404,7 @@ paths:
       tags:
       - Msg
       summary: CancelContinuousFund defines a method for cancelling continuous fund.
-      operationId: CircuitMsg_CancelContinuousFund
+      operationId: AuthMsg_CancelContinuousFund
       parameters:
       - description: MsgCancelContinuousFund defines a message to cancel continuous
           funds for a specific recipient.
@@ -1434,7 +1434,7 @@ paths:
         could be the governance module itself. The authority is defined in the
 
         keeper.'
-      operationId: CircuitMsg_CommunityPoolSpendMixin147
+      operationId: AuthMsg_CommunityPoolSpendMixin147
       parameters:
       - description: 'MsgCommunityPoolSpend defines a message for sending tokens from
           the community
@@ -1470,7 +1470,7 @@ paths:
 
         any user who funds the ProtocolPoolEscrow module account directly through
         x/bank.'
-      operationId: CircuitMsg_CreateContinuousFund
+      operationId: AuthMsg_CreateContinuousFund
       parameters:
       - description: MsgCreateContinuousFund defines a message for adding continuous
           funds.
@@ -1495,7 +1495,7 @@ paths:
       summary: 'FundCommunityPool defines a method to allow an account to directly
 
         fund the community pool.'
-      operationId: CircuitMsg_FundCommunityPoolMixin147
+      operationId: AuthMsg_FundCommunityPoolMixin147
       parameters:
       - description: 'MsgFundCommunityPool allows an account to directly
 
@@ -1522,7 +1522,7 @@ paths:
         module parameters.
 
         The authority is defined in the keeper.'
-      operationId: CircuitMsg_UpdateParamsMixin147
+      operationId: AuthMsg_UpdateParamsMixin147
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -1548,7 +1548,7 @@ paths:
         them into the bonded validator set, so they can begin receiving provisions
 
         and rewards again.'
-      operationId: CircuitMsg_Unjail
+      operationId: AuthMsg_Unjail
       parameters:
       - name: body
         in: body
@@ -1572,7 +1572,7 @@ paths:
         module
 
         parameters. The authority defaults to the x/gov module account.'
-      operationId: CircuitMsg_UpdateParamsMixin153
+      operationId: AuthMsg_UpdateParamsMixin153
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -1596,7 +1596,7 @@ paths:
       summary: 'BeginRedelegate defines a method for performing a redelegation
 
         of coins from a delegator and source validator to a destination validator.'
-      operationId: CircuitMsg_BeginRedelegate
+      operationId: AuthMsg_BeginRedelegate
       parameters:
       - description: 'MsgBeginRedelegate defines a SDK message for performing a redelegation
 
@@ -1623,7 +1623,7 @@ paths:
         the unbonding delegation
 
         and delegate back to previous validator.'
-      operationId: CircuitMsg_CancelUnbondingDelegation
+      operationId: AuthMsg_CancelUnbondingDelegation
       parameters:
       - name: body
         in: body
@@ -1644,7 +1644,7 @@ paths:
       tags:
       - Msg
       summary: CreateValidator defines a method for creating a new validator.
-      operationId: CircuitMsg_CreateValidator
+      operationId: AuthMsg_CreateValidator
       parameters:
       - description: MsgCreateValidator defines a SDK message for creating a new validator.
         name: body
@@ -1668,7 +1668,7 @@ paths:
       summary: 'Delegate defines a method for performing a delegation of coins
 
         from a delegator to a validator.'
-      operationId: CircuitMsg_Delegate
+      operationId: AuthMsg_Delegate
       parameters:
       - description: 'MsgDelegate defines a SDK message for performing a delegation
           of coins
@@ -1693,7 +1693,7 @@ paths:
       tags:
       - Msg
       summary: EditValidator defines a method for editing an existing validator.
-      operationId: CircuitMsg_EditValidator
+      operationId: AuthMsg_EditValidator
       parameters:
       - description: MsgEditValidator defines a SDK message for editing an existing
           validator.
@@ -1718,7 +1718,7 @@ paths:
       summary: 'Undelegate defines a method for performing an undelegation from a
 
         delegate and a validator.'
-      operationId: CircuitMsg_Undelegate
+      operationId: AuthMsg_Undelegate
       parameters:
       - description: 'MsgUndelegate defines a SDK message for performing an undelegation
           from a
@@ -1745,7 +1745,7 @@ paths:
       summary: 'UpdateParams defines an operation for updating the x/staking module
 
         parameters.'
-      operationId: CircuitMsg_UpdateParamsMixin158
+      operationId: AuthMsg_UpdateParamsMixin158
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -1767,7 +1767,7 @@ paths:
       tags:
       - ABCIListenerService
       summary: ListenCommit is the corresponding endpoint for ABCIListener.ListenCommit
-      operationId: CircuitABCIListenerService_ListenCommit
+      operationId: AuthABCIListenerService_ListenCommit
       parameters:
       - name: body
         in: body
@@ -1788,7 +1788,7 @@ paths:
       tags:
       - ABCIListenerService
       summary: ListenFinalizeBlock is the corresponding endpoint for ABCIListener.ListenEndBlock
-      operationId: CircuitABCIListenerService_ListenFinalizeBlock
+      operationId: AuthABCIListenerService_ListenFinalizeBlock
       parameters:
       - name: body
         in: body
@@ -1811,7 +1811,7 @@ paths:
       summary: 'CancelUpgrade is a governance operation for cancelling a previously
 
         approved software upgrade.'
-      operationId: CircuitMsg_CancelUpgrade
+      operationId: AuthMsg_CancelUpgrade
       parameters:
       - description: MsgCancelUpgrade is the Msg/CancelUpgrade request type.
         name: body
@@ -1834,7 +1834,7 @@ paths:
       - Msg
       summary: SoftwareUpgrade is a governance operation for initiating a software
         upgrade.
-      operationId: CircuitMsg_SoftwareUpgrade
+      operationId: AuthMsg_SoftwareUpgrade
       parameters:
       - description: MsgSoftwareUpgrade is the Msg/SoftwareUpgrade request type.
         name: body
@@ -1859,7 +1859,7 @@ paths:
         a
 
         periodic vesting account.'
-      operationId: CircuitMsg_CreatePeriodicVestingAccount
+      operationId: AuthMsg_CreatePeriodicVestingAccount
       parameters:
       - description: 'MsgCreateVestingAccount defines a message that enables creating
           a vesting
@@ -1887,7 +1887,7 @@ paths:
         a permanent
 
         locked account.'
-      operationId: CircuitMsg_CreatePermanentLockedAccount
+      operationId: AuthMsg_CreatePermanentLockedAccount
       parameters:
       - description: 'MsgCreatePermanentLockedAccount defines a message that enables
           creating a permanent
@@ -1914,7 +1914,7 @@ paths:
       summary: 'CreateVestingAccount defines a method that enables creating a vesting
 
         account.'
-      operationId: CircuitMsg_CreateVestingAccount
+      operationId: AuthMsg_CreateVestingAccount
       parameters:
       - description: 'MsgCreateVestingAccount defines a message that enables creating
           a vesting
@@ -1939,7 +1939,7 @@ paths:
       tags:
       - Query
       summary: AccountInfo queries account info which is common to all account types.
-      operationId: CircuitQuery_AccountInfo
+      operationId: AuthQuery_AccountInfo
       parameters:
       - type: string
         description: address is the account address string.
@@ -1964,7 +1964,7 @@ paths:
       tags:
       - Query
       summary: Accounts returns all the existing accounts.
-      operationId: CircuitQuery_Accounts
+      operationId: AuthQuery_Accounts
       parameters:
       - type: string
         format: byte
@@ -2022,7 +2022,7 @@ paths:
       tags:
       - Query
       summary: Account returns account details based on address.
-      operationId: CircuitQuery_Account
+      operationId: AuthQuery_Account
       parameters:
       - type: string
         description: address defines the address to query for.
@@ -2043,7 +2043,7 @@ paths:
       tags:
       - Query
       summary: AccountAddressByID returns account address based on account number.
-      operationId: CircuitQuery_AccountAddressByID
+      operationId: AuthQuery_AccountAddressByID
       parameters:
       - type: string
         format: int64
@@ -2077,7 +2077,7 @@ paths:
       tags:
       - Query
       summary: Bech32Prefix queries bech32Prefix
-      operationId: CircuitQuery_Bech32Prefix
+      operationId: AuthQuery_Bech32Prefix
       responses:
         '200':
           description: A successful response.
@@ -2092,7 +2092,7 @@ paths:
       tags:
       - Query
       summary: AddressBytesToString converts Account Address bytes to string
-      operationId: CircuitQuery_AddressBytesToString
+      operationId: AuthQuery_AddressBytesToString
       parameters:
       - type: string
         format: byte
@@ -2113,7 +2113,7 @@ paths:
       tags:
       - Query
       summary: AddressStringToBytes converts Address string to bytes
-      operationId: CircuitQuery_AddressStringToBytes
+      operationId: AuthQuery_AddressStringToBytes
       parameters:
       - type: string
         name: address_string
@@ -2133,7 +2133,7 @@ paths:
       tags:
       - Query
       summary: ModuleAccounts returns all the existing module accounts.
-      operationId: CircuitQuery_ModuleAccounts
+      operationId: AuthQuery_ModuleAccounts
       responses:
         '200':
           description: A successful response.
@@ -2148,7 +2148,7 @@ paths:
       tags:
       - Query
       summary: ModuleAccountByName returns the module account info by module name
-      operationId: CircuitQuery_ModuleAccountByName
+      operationId: AuthQuery_ModuleAccountByName
       parameters:
       - type: string
         name: name
@@ -2168,7 +2168,7 @@ paths:
       tags:
       - Query
       summary: Params queries all parameters.
-      operationId: CircuitQuery_Params
+      operationId: AuthQuery_Params
       responses:
         '200':
           description: A successful response.
@@ -2183,7 +2183,7 @@ paths:
       tags:
       - Query
       summary: Returns list of `Authorization`, granted to the grantee by the granter.
-      operationId: CircuitQuery_Grants
+      operationId: AuthQuery_Grants
       parameters:
       - type: string
         name: granter
@@ -2252,7 +2252,7 @@ paths:
       tags:
       - Query
       summary: GranteeGrants returns a list of `GrantAuthorization` by grantee.
-      operationId: CircuitQuery_GranteeGrants
+      operationId: AuthQuery_GranteeGrants
       parameters:
       - type: string
         name: grantee
@@ -2314,7 +2314,7 @@ paths:
       tags:
       - Query
       summary: GranterGrants returns list of `GrantAuthorization`, granted by granter.
-      operationId: CircuitQuery_GranterGrants
+      operationId: AuthQuery_GranterGrants
       parameters:
       - type: string
         name: granter
@@ -2380,7 +2380,7 @@ paths:
       tags:
       - Query
       summary: AllBalances queries the balance of all coins for a single account.
-      operationId: CircuitQuery_AllBalances
+      operationId: AuthQuery_AllBalances
       parameters:
       - type: string
         description: address is the address to query balances for.
@@ -2448,7 +2448,7 @@ paths:
       tags:
       - Query
       summary: Balance queries the balance of a single coin for a single account.
-      operationId: CircuitQuery_Balance
+      operationId: AuthQuery_Balance
       parameters:
       - type: string
         description: address is the address to query balances for.
@@ -2480,7 +2480,7 @@ paths:
         token
 
         denomination.'
-      operationId: CircuitQuery_DenomOwners
+      operationId: AuthQuery_DenomOwners
       parameters:
       - pattern: .+
         type: string
@@ -2548,7 +2548,7 @@ paths:
         token
 
         denomination.'
-      operationId: CircuitQuery_DenomOwnersByQuery
+      operationId: AuthQuery_DenomOwnersByQuery
       parameters:
       - type: string
         description: denom defines the coin denomination to query all account holders
@@ -2613,7 +2613,7 @@ paths:
       summary: 'DenomsMetadata queries the client metadata for all registered coin
 
         denominations.'
-      operationId: CircuitQuery_DenomsMetadata
+      operationId: AuthQuery_DenomsMetadata
       parameters:
       - type: string
         format: byte
@@ -2671,7 +2671,7 @@ paths:
       tags:
       - Query
       summary: DenomMetadata queries the client metadata of a given coin denomination.
-      operationId: CircuitQuery_DenomMetadata
+      operationId: AuthQuery_DenomMetadata
       parameters:
       - pattern: .+
         type: string
@@ -2694,7 +2694,7 @@ paths:
       - Query
       summary: DenomMetadataByQueryString queries the client metadata of a given coin
         denomination.
-      operationId: CircuitQuery_DenomMetadataByQueryString
+      operationId: AuthQuery_DenomMetadataByQueryString
       parameters:
       - type: string
         description: denom is the coin denom to query the metadata for.
@@ -2714,7 +2714,7 @@ paths:
       tags:
       - Query
       summary: Params queries the parameters of x/bank module.
-      operationId: CircuitQuery_ParamsMixin76
+      operationId: AuthQuery_ParamsMixin76
       responses:
         '200':
           description: A successful response.
@@ -2735,7 +2735,7 @@ paths:
       tags:
       - Query
       summary: SendEnabled queries for SendEnabled entries.
-      operationId: CircuitQuery_SendEnabled
+      operationId: AuthQuery_SendEnabled
       parameters:
       - type: array
         items:
@@ -2808,7 +2808,7 @@ paths:
         single
 
         account.'
-      operationId: CircuitQuery_SpendableBalances
+      operationId: AuthQuery_SpendableBalances
       parameters:
       - type: string
         description: address is the address to query spendable balances for.
@@ -2878,7 +2878,7 @@ paths:
         denom for
 
         a single account.'
-      operationId: CircuitQuery_SpendableBalanceByDenom
+      operationId: AuthQuery_SpendableBalanceByDenom
       parameters:
       - type: string
         description: address is the address to query balances for.
@@ -2907,7 +2907,7 @@ paths:
       tags:
       - Query
       summary: TotalSupply queries the total supply of all coins.
-      operationId: CircuitQuery_TotalSupply
+      operationId: AuthQuery_TotalSupply
       parameters:
       - type: string
         format: byte
@@ -2969,7 +2969,7 @@ paths:
       tags:
       - Query
       summary: SupplyOf queries the supply of a single coin.
-      operationId: CircuitQuery_SupplyOf
+      operationId: AuthQuery_SupplyOf
       parameters:
       - type: string
         description: denom is the coin denom to query balances for.
@@ -2989,7 +2989,7 @@ paths:
       tags:
       - Service
       summary: Config queries for the operator configuration.
-      operationId: CircuitService_Config
+      operationId: AuthService_Config
       responses:
         '200':
           description: A successful response.
@@ -3004,7 +3004,7 @@ paths:
       tags:
       - Service
       summary: Status queries for the node status.
-      operationId: CircuitService_Status
+      operationId: AuthService_Status
       responses:
         '200':
           description: A successful response.
@@ -3025,7 +3025,7 @@ paths:
         or removal in
 
         future releases of the cosmos-sdk.'
-      operationId: CircuitReflectionService_GetAuthnDescriptor
+      operationId: AuthReflectionService_GetAuthnDescriptor
       responses:
         '200':
           description: A successful response.
@@ -3040,7 +3040,7 @@ paths:
       tags:
       - ReflectionService
       summary: GetChainDescriptor returns the description of the chain
-      operationId: CircuitReflectionService_GetChainDescriptor
+      operationId: AuthReflectionService_GetChainDescriptor
       responses:
         '200':
           description: A successful response.
@@ -3055,7 +3055,7 @@ paths:
       tags:
       - ReflectionService
       summary: GetCodecDescriptor returns the descriptor of the codec of the application
-      operationId: CircuitReflectionService_GetCodecDescriptor
+      operationId: AuthReflectionService_GetCodecDescriptor
       responses:
         '200':
           description: A successful response.
@@ -3071,7 +3071,7 @@ paths:
       - ReflectionService
       summary: GetConfigurationDescriptor returns the descriptor for the sdk.Config
         of the application
-      operationId: CircuitReflectionService_GetConfigurationDescriptor
+      operationId: AuthReflectionService_GetConfigurationDescriptor
       responses:
         '200':
           description: A successful response.
@@ -3087,7 +3087,7 @@ paths:
       - ReflectionService
       summary: GetQueryServicesDescriptor returns the available gRPC queryable services
         of the application
-      operationId: CircuitReflectionService_GetQueryServicesDescriptor
+      operationId: AuthReflectionService_GetQueryServicesDescriptor
       responses:
         '200':
           description: A successful response.
@@ -3103,7 +3103,7 @@ paths:
       - ReflectionService
       summary: GetTxDescriptor returns information on the used transaction object
         and available msgs that can be used
-      operationId: CircuitReflectionService_GetTxDescriptor
+      operationId: AuthReflectionService_GetTxDescriptor
       responses:
         '200':
           description: A successful response.
@@ -3120,7 +3120,7 @@ paths:
       summary: 'ListAllInterfaces lists all the interfaces registered in the interface
 
         registry.'
-      operationId: CircuitReflectionService_ListAllInterfaces
+      operationId: AuthReflectionService_ListAllInterfaces
       responses:
         '200':
           description: A successful response.
@@ -3137,7 +3137,7 @@ paths:
       summary: 'ListImplementations list all the concrete types that implement a given
 
         interface.'
-      operationId: CircuitReflectionService_ListImplementations
+      operationId: AuthReflectionService_ListImplementations
       parameters:
       - type: string
         description: interface_name defines the interface to query the implementations
@@ -3164,7 +3164,7 @@ paths:
         application, bypassing Tendermint completely. The ABCI query must contain
 
         a valid and supported path, including app, custom, p2p, and store.'
-      operationId: CircuitService_ABCIQuery
+      operationId: AuthService_ABCIQuery
       parameters:
       - type: string
         format: byte
@@ -3194,7 +3194,7 @@ paths:
       tags:
       - Service
       summary: GetLatestBlock returns the latest block.
-      operationId: CircuitService_GetLatestBlock
+      operationId: AuthService_GetLatestBlock
       responses:
         '200':
           description: A successful response.
@@ -3209,7 +3209,7 @@ paths:
       tags:
       - Service
       summary: GetBlockByHeight queries block for given height.
-      operationId: CircuitService_GetBlockByHeight
+      operationId: AuthService_GetBlockByHeight
       parameters:
       - type: string
         format: int64
@@ -3230,7 +3230,7 @@ paths:
       tags:
       - Service
       summary: GetNodeInfo queries the current node info.
-      operationId: CircuitService_GetNodeInfo
+      operationId: AuthService_GetNodeInfo
       responses:
         '200':
           description: A successful response.
@@ -3245,7 +3245,7 @@ paths:
       tags:
       - Service
       summary: GetSyncing queries node syncing.
-      operationId: CircuitService_GetSyncing
+      operationId: AuthService_GetSyncing
       responses:
         '200':
           description: A successful response.
@@ -3260,7 +3260,7 @@ paths:
       tags:
       - Service
       summary: GetLatestValidatorSet queries latest validator-set.
-      operationId: CircuitService_GetLatestValidatorSet
+      operationId: AuthService_GetLatestValidatorSet
       parameters:
       - type: string
         format: byte
@@ -3318,7 +3318,7 @@ paths:
       tags:
       - Service
       summary: GetValidatorSetByHeight queries validator-set at a given height.
-      operationId: CircuitService_GetValidatorSetByHeight
+      operationId: AuthService_GetValidatorSetByHeight
       parameters:
       - type: string
         format: int64
@@ -3381,7 +3381,7 @@ paths:
       tags:
       - Query
       summary: Account returns account permissions.
-      operationId: CircuitQuery_AccountsMixin88
+      operationId: AuthQuery_AccountsMixin88
       parameters:
       - type: string
         format: byte
@@ -3439,7 +3439,7 @@ paths:
       tags:
       - Query
       summary: Account returns account permissions.
-      operationId: CircuitQuery_AccountMixin88
+      operationId: AuthQuery_AccountMixin88
       parameters:
       - type: string
         name: address
@@ -3459,7 +3459,7 @@ paths:
       tags:
       - Query
       summary: DisabledList returns a list of disabled message urls
-      operationId: CircuitQuery_DisabledList
+      operationId: AuthQuery_DisabledList
       responses:
         '200':
           description: A successful response.
@@ -3474,7 +3474,7 @@ paths:
       tags:
       - Query
       summary: Params queries the parameters of x/consensus module.
-      operationId: CircuitQuery_ParamsMixin91
+      operationId: AuthQuery_ParamsMixin91
       responses:
         '200':
           description: A successful response.
@@ -3491,7 +3491,7 @@ paths:
       tags:
       - Query
       summary: CommunityPool queries the community pool coins.
-      operationId: CircuitQuery_CommunityPool
+      operationId: AuthQuery_CommunityPool
       responses:
         '200':
           description: A successful response.
@@ -3508,7 +3508,7 @@ paths:
       summary: 'DelegationTotalRewards queries the total rewards accrued by each
 
         validator.'
-      operationId: CircuitQuery_DelegationTotalRewards
+      operationId: AuthQuery_DelegationTotalRewards
       parameters:
       - type: string
         description: delegator_address defines the delegator address to query for.
@@ -3529,7 +3529,7 @@ paths:
       tags:
       - Query
       summary: DelegationRewards queries the total rewards accrued by a delegation.
-      operationId: CircuitQuery_DelegationRewards
+      operationId: AuthQuery_DelegationRewards
       parameters:
       - type: string
         description: delegator_address defines the delegator address to query for.
@@ -3555,7 +3555,7 @@ paths:
       tags:
       - Query
       summary: DelegatorValidators queries the validators of a delegator.
-      operationId: CircuitQuery_DelegatorValidators
+      operationId: AuthQuery_DelegatorValidators
       parameters:
       - type: string
         description: delegator_address defines the delegator address to query for.
@@ -3576,7 +3576,7 @@ paths:
       tags:
       - Query
       summary: DelegatorWithdrawAddress queries withdraw address of a delegator.
-      operationId: CircuitQuery_DelegatorWithdrawAddress
+      operationId: AuthQuery_DelegatorWithdrawAddress
       parameters:
       - type: string
         description: delegator_address defines the delegator address to query for.
@@ -3597,7 +3597,7 @@ paths:
       tags:
       - Query
       summary: Params queries params of the distribution module.
-      operationId: CircuitQuery_ParamsMixin106
+      operationId: AuthQuery_ParamsMixin106
       responses:
         '200':
           description: A successful response.
@@ -3613,7 +3613,7 @@ paths:
       - Query
       summary: ValidatorDistributionInfo queries validator commission and self-delegation
         rewards for validator
-      operationId: CircuitQuery_ValidatorDistributionInfo
+      operationId: AuthQuery_ValidatorDistributionInfo
       parameters:
       - type: string
         description: validator_address defines the validator address to query for.
@@ -3634,7 +3634,7 @@ paths:
       tags:
       - Query
       summary: ValidatorCommission queries accumulated commission for a validator.
-      operationId: CircuitQuery_ValidatorCommission
+      operationId: AuthQuery_ValidatorCommission
       parameters:
       - type: string
         description: validator_address defines the validator address to query for.
@@ -3655,7 +3655,7 @@ paths:
       tags:
       - Query
       summary: ValidatorOutstandingRewards queries rewards of a validator address.
-      operationId: CircuitQuery_ValidatorOutstandingRewards
+      operationId: AuthQuery_ValidatorOutstandingRewards
       parameters:
       - type: string
         description: validator_address defines the validator address to query for.
@@ -3676,7 +3676,7 @@ paths:
       tags:
       - Query
       summary: ValidatorSlashes queries slash events of a validator.
-      operationId: CircuitQuery_ValidatorSlashes
+      operationId: AuthQuery_ValidatorSlashes
       parameters:
       - type: string
         description: validator_address defines the validator address to query for.
@@ -3751,7 +3751,7 @@ paths:
       tags:
       - Query
       summary: CurrentEpoch provide current epoch of specified identifier
-      operationId: CircuitQuery_CurrentEpoch
+      operationId: AuthQuery_CurrentEpoch
       parameters:
       - type: string
         name: identifier
@@ -3770,7 +3770,7 @@ paths:
       tags:
       - Query
       summary: EpochInfos provide running epochInfos
-      operationId: CircuitQuery_EpochInfos
+      operationId: AuthQuery_EpochInfos
       responses:
         '200':
           description: A successful response.
@@ -3785,7 +3785,7 @@ paths:
       tags:
       - Query
       summary: AllEvidence queries all evidence.
-      operationId: CircuitQuery_AllEvidence
+      operationId: AuthQuery_AllEvidence
       parameters:
       - type: string
         format: byte
@@ -3843,7 +3843,7 @@ paths:
       tags:
       - Query
       summary: Evidence queries evidence based on evidence hash.
-      operationId: CircuitQuery_Evidence
+      operationId: AuthQuery_Evidence
       parameters:
       - type: string
         description: hash defines the evidence hash of the requested evidence.
@@ -3871,7 +3871,7 @@ paths:
       tags:
       - Query
       summary: Allowance returns granted allwance to the grantee by the granter.
-      operationId: CircuitQuery_Allowance
+      operationId: AuthQuery_Allowance
       parameters:
       - type: string
         description: granter is the address of the user granting an allowance of their
@@ -3899,7 +3899,7 @@ paths:
       tags:
       - Query
       summary: Allowances returns all the grants for the given grantee address.
-      operationId: CircuitQuery_Allowances
+      operationId: AuthQuery_Allowances
       parameters:
       - type: string
         name: grantee
@@ -3961,7 +3961,7 @@ paths:
       tags:
       - Query
       summary: AllowancesByGranter returns all the grants given by an address
-      operationId: CircuitQuery_AllowancesByGranter
+      operationId: AuthQuery_AllowancesByGranter
       parameters:
       - type: string
         name: granter
@@ -4023,7 +4023,7 @@ paths:
       tags:
       - Query
       summary: Constitution queries the chain's constitution.
-      operationId: CircuitQuery_Constitution
+      operationId: AuthQuery_Constitution
       responses:
         '200':
           description: A successful response.
@@ -4038,7 +4038,7 @@ paths:
       tags:
       - Query
       summary: Params queries all parameters of the gov module.
-      operationId: CircuitQuery_ParamsMixin122
+      operationId: AuthQuery_ParamsMixin122
       parameters:
       - type: string
         description: 'params_type defines which parameters to query for, can be one
@@ -4062,7 +4062,7 @@ paths:
       tags:
       - Query
       summary: Proposals queries all proposals based on given status.
-      operationId: CircuitQuery_Proposals
+      operationId: AuthQuery_Proposals
       parameters:
       - enum:
         - PROPOSAL_STATUS_UNSPECIFIED
@@ -4149,7 +4149,7 @@ paths:
       tags:
       - Query
       summary: Proposal queries proposal details based on ProposalID.
-      operationId: CircuitQuery_Proposal
+      operationId: AuthQuery_Proposal
       parameters:
       - type: string
         format: uint64
@@ -4171,7 +4171,7 @@ paths:
       tags:
       - Query
       summary: Deposits queries all deposits of a single proposal.
-      operationId: CircuitQuery_Deposits
+      operationId: AuthQuery_Deposits
       parameters:
       - type: string
         format: uint64
@@ -4235,7 +4235,7 @@ paths:
       tags:
       - Query
       summary: Deposit queries single deposit information based on proposalID, depositAddr.
-      operationId: CircuitQuery_Deposit
+      operationId: AuthQuery_Deposit
       parameters:
       - type: string
         format: uint64
@@ -4262,7 +4262,7 @@ paths:
       tags:
       - Query
       summary: TallyResult queries the tally of a proposal vote.
-      operationId: CircuitQuery_TallyResult
+      operationId: AuthQuery_TallyResult
       parameters:
       - type: string
         format: uint64
@@ -4284,7 +4284,7 @@ paths:
       tags:
       - Query
       summary: Votes queries votes of a given proposal.
-      operationId: CircuitQuery_Votes
+      operationId: AuthQuery_Votes
       parameters:
       - type: string
         format: uint64
@@ -4348,7 +4348,7 @@ paths:
       tags:
       - Query
       summary: Vote queries voted information based on proposalID, voterAddr.
-      operationId: CircuitQuery_Vote
+      operationId: AuthQuery_Vote
       parameters:
       - type: string
         format: uint64
@@ -4375,7 +4375,7 @@ paths:
       tags:
       - Query
       summary: Params queries all parameters of the gov module.
-      operationId: CircuitQuery_ParamsMixin126
+      operationId: AuthQuery_ParamsMixin126
       parameters:
       - type: string
         description: 'params_type defines which parameters to query for, can be one
@@ -4399,7 +4399,7 @@ paths:
       tags:
       - Query
       summary: Proposals queries all proposals based on given status.
-      operationId: CircuitQuery_ProposalsMixin126
+      operationId: AuthQuery_ProposalsMixin126
       parameters:
       - enum:
         - PROPOSAL_STATUS_UNSPECIFIED
@@ -4486,7 +4486,7 @@ paths:
       tags:
       - Query
       summary: Proposal queries proposal details based on ProposalID.
-      operationId: CircuitQuery_ProposalMixin126
+      operationId: AuthQuery_ProposalMixin126
       parameters:
       - type: string
         format: uint64
@@ -4508,7 +4508,7 @@ paths:
       tags:
       - Query
       summary: Deposits queries all deposits of a single proposal.
-      operationId: CircuitQuery_DepositsMixin126
+      operationId: AuthQuery_DepositsMixin126
       parameters:
       - type: string
         format: uint64
@@ -4573,7 +4573,7 @@ paths:
       - Query
       summary: Deposit queries single deposit information based on proposalID, depositor
         address.
-      operationId: CircuitQuery_DepositMixin126
+      operationId: AuthQuery_DepositMixin126
       parameters:
       - type: string
         format: uint64
@@ -4600,7 +4600,7 @@ paths:
       tags:
       - Query
       summary: TallyResult queries the tally of a proposal vote.
-      operationId: CircuitQuery_TallyResultMixin126
+      operationId: AuthQuery_TallyResultMixin126
       parameters:
       - type: string
         format: uint64
@@ -4622,7 +4622,7 @@ paths:
       tags:
       - Query
       summary: Votes queries votes of a given proposal.
-      operationId: CircuitQuery_VotesMixin126
+      operationId: AuthQuery_VotesMixin126
       parameters:
       - type: string
         format: uint64
@@ -4686,7 +4686,7 @@ paths:
       tags:
       - Query
       summary: Vote queries voted information based on proposalID, voterAddr.
-      operationId: CircuitQuery_VoteMixin126
+      operationId: AuthQuery_VoteMixin126
       parameters:
       - type: string
         format: uint64
@@ -4713,7 +4713,7 @@ paths:
       tags:
       - Query
       summary: GroupInfo queries group info based on group id.
-      operationId: CircuitQuery_GroupInfo
+      operationId: AuthQuery_GroupInfo
       parameters:
       - type: string
         format: uint64
@@ -4735,7 +4735,7 @@ paths:
       tags:
       - Query
       summary: GroupMembers queries members of a group by group id.
-      operationId: CircuitQuery_GroupMembers
+      operationId: AuthQuery_GroupMembers
       parameters:
       - type: string
         format: uint64
@@ -4799,7 +4799,7 @@ paths:
       tags:
       - Query
       summary: GroupPoliciesByAdmin queries group policies by admin address.
-      operationId: CircuitQuery_GroupPoliciesByAdmin
+      operationId: AuthQuery_GroupPoliciesByAdmin
       parameters:
       - type: string
         description: admin is the admin address of the group policy.
@@ -4862,7 +4862,7 @@ paths:
       tags:
       - Query
       summary: GroupPoliciesByGroup queries group policies by group id.
-      operationId: CircuitQuery_GroupPoliciesByGroup
+      operationId: AuthQuery_GroupPoliciesByGroup
       parameters:
       - type: string
         format: uint64
@@ -4927,7 +4927,7 @@ paths:
       - Query
       summary: GroupPolicyInfo queries group policy info based on account address
         of group policy.
-      operationId: CircuitQuery_GroupPolicyInfo
+      operationId: AuthQuery_GroupPolicyInfo
       parameters:
       - type: string
         description: address is the account address of the group policy.
@@ -4948,7 +4948,7 @@ paths:
       tags:
       - Query
       summary: Groups queries all groups in state.
-      operationId: CircuitQuery_Groups
+      operationId: AuthQuery_Groups
       parameters:
       - type: string
         format: byte
@@ -5006,7 +5006,7 @@ paths:
       tags:
       - Query
       summary: GroupsByAdmin queries groups by admin address.
-      operationId: CircuitQuery_GroupsByAdmin
+      operationId: AuthQuery_GroupsByAdmin
       parameters:
       - type: string
         description: admin is the account address of a group's admin.
@@ -5069,7 +5069,7 @@ paths:
       tags:
       - Query
       summary: GroupsByMember queries groups by member address.
-      operationId: CircuitQuery_GroupsByMember
+      operationId: AuthQuery_GroupsByMember
       parameters:
       - type: string
         description: address is the group member address.
@@ -5132,7 +5132,7 @@ paths:
       tags:
       - Query
       summary: Proposal queries a proposal based on proposal id.
-      operationId: CircuitQuery_ProposalMixin130
+      operationId: AuthQuery_ProposalMixin130
       parameters:
       - type: string
         format: uint64
@@ -5163,7 +5163,7 @@ paths:
         then it simply returns the `final_tally_result` state stored in the
 
         proposal itself.'
-      operationId: CircuitQuery_TallyResultMixin130
+      operationId: AuthQuery_TallyResultMixin130
       parameters:
       - type: string
         format: uint64
@@ -5186,7 +5186,7 @@ paths:
       - Query
       summary: ProposalsByGroupPolicy queries proposals based on account address of
         group policy.
-      operationId: CircuitQuery_ProposalsByGroupPolicy
+      operationId: AuthQuery_ProposalsByGroupPolicy
       parameters:
       - type: string
         description: address is the account address of the group policy related to
@@ -5250,7 +5250,7 @@ paths:
       tags:
       - Query
       summary: VoteByProposalVoter queries a vote by proposal id and voter.
-      operationId: CircuitQuery_VoteByProposalVoter
+      operationId: AuthQuery_VoteByProposalVoter
       parameters:
       - type: string
         format: uint64
@@ -5277,7 +5277,7 @@ paths:
       tags:
       - Query
       summary: VotesByProposal queries a vote by proposal id.
-      operationId: CircuitQuery_VotesByProposal
+      operationId: AuthQuery_VotesByProposal
       parameters:
       - type: string
         format: uint64
@@ -5341,7 +5341,7 @@ paths:
       tags:
       - Query
       summary: VotesByVoter queries a vote by voter.
-      operationId: CircuitQuery_VotesByVoter
+      operationId: AuthQuery_VotesByVoter
       parameters:
       - type: string
         description: voter is a proposal voter account address.
@@ -5404,7 +5404,7 @@ paths:
       tags:
       - Query
       summary: AnnualProvisions current minting annual provisions value.
-      operationId: CircuitQuery_AnnualProvisions
+      operationId: AuthQuery_AnnualProvisions
       responses:
         '200':
           description: A successful response.
@@ -5419,7 +5419,7 @@ paths:
       tags:
       - Query
       summary: Inflation returns the current minting inflation value.
-      operationId: CircuitQuery_Inflation
+      operationId: AuthQuery_Inflation
       responses:
         '200':
           description: A successful response.
@@ -5434,7 +5434,7 @@ paths:
       tags:
       - Query
       summary: Params returns the total set of minting parameters.
-      operationId: CircuitQuery_ParamsMixin135
+      operationId: AuthQuery_ParamsMixin135
       responses:
         '200':
           description: A successful response.
@@ -5450,7 +5450,7 @@ paths:
       - Query
       summary: Balance queries the number of NFTs of a given class owned by the owner,
         same as balanceOf in ERC721
-      operationId: CircuitQuery_BalanceMixin141
+      operationId: AuthQuery_BalanceMixin141
       parameters:
       - type: string
         description: owner is the owner address of the nft
@@ -5476,7 +5476,7 @@ paths:
       tags:
       - Query
       summary: Classes queries all NFT classes
-      operationId: CircuitQuery_Classes
+      operationId: AuthQuery_Classes
       parameters:
       - type: string
         format: byte
@@ -5534,7 +5534,7 @@ paths:
       tags:
       - Query
       summary: Class queries an NFT class based on its id
-      operationId: CircuitQuery_Class
+      operationId: AuthQuery_Class
       parameters:
       - type: string
         description: class_id associated with the nft
@@ -5558,7 +5558,7 @@ paths:
         of the two, similar to tokenByIndex in
 
         ERC721Enumerable'
-      operationId: CircuitQuery_NFTs
+      operationId: AuthQuery_NFTs
       parameters:
       - type: string
         description: class_id associated with the nft
@@ -5624,7 +5624,7 @@ paths:
       tags:
       - Query
       summary: NFT queries an NFT based on its class and id.
-      operationId: CircuitQuery_NFT
+      operationId: AuthQuery_NFT
       parameters:
       - type: string
         description: class_id associated with the nft
@@ -5651,7 +5651,7 @@ paths:
       - Query
       summary: Owner queries the owner of the NFT based on its class and id, same
         as ownerOf in ERC721
-      operationId: CircuitQuery_Owner
+      operationId: AuthQuery_Owner
       parameters:
       - type: string
         description: class_id associated with the nft
@@ -5678,7 +5678,7 @@ paths:
       - Query
       summary: Supply queries the number of NFTs from the given class, same as totalSupply
         of ERC721.
-      operationId: CircuitQuery_Supply
+      operationId: AuthQuery_Supply
       parameters:
       - type: string
         description: class_id associated with the nft
@@ -5702,7 +5702,7 @@ paths:
         and
 
         key.'
-      operationId: CircuitQuery_ParamsMixin144
+      operationId: AuthQuery_ParamsMixin144
       parameters:
       - type: string
         description: subspace defines the module to query the parameter for.
@@ -5726,7 +5726,7 @@ paths:
       tags:
       - Query
       summary: Subspaces queries for all registered subspaces and all keys for a subspace.
-      operationId: CircuitQuery_Subspaces
+      operationId: AuthQuery_Subspaces
       responses:
         '200':
           description: A successful response.
@@ -5741,7 +5741,7 @@ paths:
       tags:
       - Query
       summary: CommunityPool queries the community pool coins.
-      operationId: CircuitQuery_CommunityPoolMixin146
+      operationId: AuthQuery_CommunityPoolMixin146
       responses:
         '200':
           description: A successful response.
@@ -5756,7 +5756,7 @@ paths:
       tags:
       - Query
       summary: ContinuousFunds queries all continuous funds in the store.
-      operationId: CircuitQuery_ContinuousFunds
+      operationId: AuthQuery_ContinuousFunds
       responses:
         '200':
           description: A successful response.
@@ -5772,7 +5772,7 @@ paths:
       - Query
       summary: ContinuousFund queries a continuous fund by the recipient is is associated
         with.
-      operationId: CircuitQuery_ContinuousFund
+      operationId: AuthQuery_ContinuousFund
       parameters:
       - type: string
         description: recipient is the recipient address to query unclaimed budget
@@ -5794,7 +5794,7 @@ paths:
       tags:
       - Query
       summary: Params returns the total set of x/protocolpool parameters.
-      operationId: CircuitQuery_ParamsMixin146
+      operationId: AuthQuery_ParamsMixin146
       responses:
         '200':
           description: A successful response.
@@ -5809,7 +5809,7 @@ paths:
       tags:
       - Query
       summary: Params queries the parameters of slashing module
-      operationId: CircuitQuery_ParamsMixin151
+      operationId: AuthQuery_ParamsMixin151
       responses:
         '200':
           description: A successful response.
@@ -5824,7 +5824,7 @@ paths:
       tags:
       - Query
       summary: SigningInfos queries signing info of all validators
-      operationId: CircuitQuery_SigningInfos
+      operationId: AuthQuery_SigningInfos
       parameters:
       - type: string
         format: byte
@@ -5882,7 +5882,7 @@ paths:
       tags:
       - Query
       summary: SigningInfo queries the signing info of given cons address
-      operationId: CircuitQuery_SigningInfo
+      operationId: AuthQuery_SigningInfo
       parameters:
       - type: string
         description: cons_address is the address to query signing info of
@@ -5907,7 +5907,7 @@ paths:
       tags:
       - Query
       summary: DelegatorDelegations queries all delegations of a given delegator address.
-      operationId: CircuitQuery_DelegatorDelegations
+      operationId: AuthQuery_DelegatorDelegations
       parameters:
       - type: string
         description: delegator_addr defines the delegator address to query for.
@@ -5974,7 +5974,7 @@ paths:
       tags:
       - Query
       summary: Redelegations queries redelegations of given address.
-      operationId: CircuitQuery_Redelegations
+      operationId: AuthQuery_Redelegations
       parameters:
       - type: string
         description: delegator_addr defines the delegator address to query for.
@@ -6054,7 +6054,7 @@ paths:
         a given
 
         delegator address.'
-      operationId: CircuitQuery_DelegatorUnbondingDelegations
+      operationId: AuthQuery_DelegatorUnbondingDelegations
       parameters:
       - type: string
         description: delegator_addr defines the delegator address to query for.
@@ -6123,7 +6123,7 @@ paths:
       summary: 'DelegatorValidators queries all validators info for given delegator
 
         address.'
-      operationId: CircuitQuery_DelegatorValidatorsMixin156
+      operationId: AuthQuery_DelegatorValidatorsMixin156
       parameters:
       - type: string
         description: delegator_addr defines the delegator address to query for.
@@ -6188,7 +6188,7 @@ paths:
       summary: 'DelegatorValidator queries validator info for given delegator validator
 
         pair.'
-      operationId: CircuitQuery_DelegatorValidator
+      operationId: AuthQuery_DelegatorValidator
       parameters:
       - type: string
         description: delegator_addr defines the delegator address to query for.
@@ -6214,7 +6214,7 @@ paths:
       tags:
       - Query
       summary: HistoricalInfo queries the historical info for given height.
-      operationId: CircuitQuery_HistoricalInfo
+      operationId: AuthQuery_HistoricalInfo
       parameters:
       - type: string
         format: int64
@@ -6236,7 +6236,7 @@ paths:
       tags:
       - Query
       summary: Parameters queries the staking parameters.
-      operationId: CircuitQuery_ParamsMixin156
+      operationId: AuthQuery_ParamsMixin156
       responses:
         '200':
           description: A successful response.
@@ -6251,7 +6251,7 @@ paths:
       tags:
       - Query
       summary: Pool queries the pool info.
-      operationId: CircuitQuery_Pool
+      operationId: AuthQuery_Pool
       responses:
         '200':
           description: A successful response.
@@ -6270,7 +6270,7 @@ paths:
       tags:
       - Query
       summary: Validators queries all validators that match the given status.
-      operationId: CircuitQuery_Validators
+      operationId: AuthQuery_Validators
       parameters:
       - type: string
         description: status enables to query for validators matching a given status.
@@ -6332,7 +6332,7 @@ paths:
       tags:
       - Query
       summary: Validator queries validator info for given validator address.
-      operationId: CircuitQuery_Validator
+      operationId: AuthQuery_Validator
       parameters:
       - type: string
         description: validator_addr defines the validator address to query for.
@@ -6357,7 +6357,7 @@ paths:
       tags:
       - Query
       summary: ValidatorDelegations queries delegate info for given validator.
-      operationId: CircuitQuery_ValidatorDelegations
+      operationId: AuthQuery_ValidatorDelegations
       parameters:
       - type: string
         description: validator_addr defines the validator address to query for.
@@ -6420,7 +6420,7 @@ paths:
       tags:
       - Query
       summary: Delegation queries delegate info for given validator delegator pair.
-      operationId: CircuitQuery_Delegation
+      operationId: AuthQuery_Delegation
       parameters:
       - type: string
         description: validator_addr defines the validator address to query for.
@@ -6448,7 +6448,7 @@ paths:
       summary: 'UnbondingDelegation queries unbonding info for given validator delegator
 
         pair.'
-      operationId: CircuitQuery_UnbondingDelegation
+      operationId: AuthQuery_UnbondingDelegation
       parameters:
       - type: string
         description: validator_addr defines the validator address to query for.
@@ -6478,7 +6478,7 @@ paths:
       tags:
       - Query
       summary: ValidatorUnbondingDelegations queries unbonding delegations of a validator.
-      operationId: CircuitQuery_ValidatorUnbondingDelegations
+      operationId: AuthQuery_ValidatorUnbondingDelegations
       parameters:
       - type: string
         description: validator_addr defines the validator address to query for.
@@ -6541,7 +6541,7 @@ paths:
       tags:
       - Service
       summary: TxDecode decodes the transaction.
-      operationId: CircuitService_TxDecode
+      operationId: AuthService_TxDecode
       parameters:
       - description: 'TxDecodeRequest is the request type for the Service.TxDecode
 
@@ -6565,7 +6565,7 @@ paths:
       tags:
       - Service
       summary: TxDecodeAmino decodes an Amino transaction from encoded bytes to JSON.
-      operationId: CircuitService_TxDecodeAmino
+      operationId: AuthService_TxDecodeAmino
       parameters:
       - description: 'TxDecodeAminoRequest is the request type for the Service.TxDecodeAmino
 
@@ -6589,7 +6589,7 @@ paths:
       tags:
       - Service
       summary: TxEncode encodes the transaction.
-      operationId: CircuitService_TxEncode
+      operationId: AuthService_TxEncode
       parameters:
       - description: 'TxEncodeRequest is the request type for the Service.TxEncode
 
@@ -6613,7 +6613,7 @@ paths:
       tags:
       - Service
       summary: TxEncodeAmino encodes an Amino transaction from JSON to encoded bytes.
-      operationId: CircuitService_TxEncodeAmino
+      operationId: AuthService_TxEncodeAmino
       parameters:
       - description: 'TxEncodeAminoRequest is the request type for the Service.TxEncodeAmino
 
@@ -6637,7 +6637,7 @@ paths:
       tags:
       - Service
       summary: Simulate simulates executing a transaction for estimating gas usage.
-      operationId: CircuitService_Simulate
+      operationId: AuthService_Simulate
       parameters:
       - description: 'SimulateRequest is the request type for the Service.Simulate
 
@@ -6661,7 +6661,7 @@ paths:
       tags:
       - Service
       summary: GetTxsEvent fetches txs by event.
-      operationId: CircuitService_GetTxsEvent
+      operationId: AuthService_GetTxsEvent
       parameters:
       - type: array
         items:
@@ -6764,7 +6764,7 @@ paths:
       tags:
       - Service
       summary: BroadcastTx broadcast transaction.
-      operationId: CircuitService_BroadcastTx
+      operationId: AuthService_BroadcastTx
       parameters:
       - description: 'BroadcastTxRequest is the request type for the Service.BroadcastTxRequest
 
@@ -6788,7 +6788,7 @@ paths:
       tags:
       - Service
       summary: GetBlockWithTxs fetches a block with decoded txs.
-      operationId: CircuitService_GetBlockWithTxs
+      operationId: AuthService_GetBlockWithTxs
       parameters:
       - type: string
         format: int64
@@ -6852,7 +6852,7 @@ paths:
       tags:
       - Service
       summary: GetTx fetches a tx by hash.
-      operationId: CircuitService_GetTx
+      operationId: AuthService_GetTx
       parameters:
       - type: string
         description: hash is the tx hash to query, encoded as a hex string.
@@ -6873,7 +6873,7 @@ paths:
       tags:
       - Query
       summary: AppliedPlan queries a previously applied upgrade plan by its name.
-      operationId: CircuitQuery_AppliedPlan
+      operationId: AuthQuery_AppliedPlan
       parameters:
       - type: string
         description: name is the name of the applied plan to query for.
@@ -6894,7 +6894,7 @@ paths:
       tags:
       - Query
       summary: Returns the account with authority to conduct upgrades
-      operationId: CircuitQuery_Authority
+      operationId: AuthQuery_Authority
       responses:
         '200':
           description: A successful response.
@@ -6909,7 +6909,7 @@ paths:
       tags:
       - Query
       summary: CurrentPlan queries the current upgrade plan.
-      operationId: CircuitQuery_CurrentPlan
+      operationId: AuthQuery_CurrentPlan
       responses:
         '200':
           description: A successful response.
@@ -6924,7 +6924,7 @@ paths:
       tags:
       - Query
       summary: ModuleVersions queries the list of module versions from state.
-      operationId: CircuitQuery_ModuleVersions
+      operationId: AuthQuery_ModuleVersions
       parameters:
       - type: string
         description: 'module_name is a field to query a specific module
@@ -6958,7 +6958,7 @@ paths:
         This rpc is deprecated now that IBC has its own replacement
 
         (https://github.com/cosmos/ibc-go/blob/2c880a22e9f9cc75f62b527ca94aa75ce1106001/proto/ibc/core/client/v1/query.proto#L54)'
-      operationId: CircuitQuery_UpgradedConsensusState
+      operationId: AuthQuery_UpgradedConsensusState
       parameters:
       - type: string
         format: int64
@@ -8068,7 +8068,7 @@ paths:
       tags:
       - Msg
       summary: UpdateParams defines a rpc handler for MsgUpdateParams.
-      operationId: ControllerMsg_UpdateParamsMixin195
+      operationId: ControllerMsg_UpdateParamsMixin188
       parameters:
       - name: body
         in: body
@@ -8110,7 +8110,7 @@ paths:
       tags:
       - Msg
       summary: UpdateParams defines a rpc handler for MsgUpdateParams.
-      operationId: ControllerMsg_UpdateParamsMixin206
+      operationId: ControllerMsg_UpdateParamsMixin199
       parameters:
       - description: MsgUpdateParams is the Msg/UpdateParams request type.
         name: body
@@ -8373,7 +8373,7 @@ paths:
       tags:
       - Msg
       summary: Acknowledgement defines a rpc handler method for MsgAcknowledgement.
-      operationId: ControllerMsg_AcknowledgementMixin214
+      operationId: ControllerMsg_AcknowledgementMixin207
       parameters:
       - description: MsgAcknowledgement receives incoming IBC acknowledgement.
         name: body
@@ -8395,7 +8395,7 @@ paths:
       tags:
       - Msg
       summary: RecvPacket defines a rpc handler method for MsgRecvPacket.
-      operationId: ControllerMsg_RecvPacketMixin214
+      operationId: ControllerMsg_RecvPacketMixin207
       parameters:
       - description: MsgRecvPacket receives an incoming IBC packet.
         name: body
@@ -8439,7 +8439,7 @@ paths:
       tags:
       - Msg
       summary: Timeout defines a rpc handler method for MsgTimeout.
-      operationId: ControllerMsg_TimeoutMixin214
+      operationId: ControllerMsg_TimeoutMixin207
       parameters:
       - name: body
         in: body
@@ -8919,7 +8919,7 @@ paths:
       tags:
       - Query
       summary: Params queries all parameters of the ICA host submodule.
-      operationId: ControllerQuery_ParamsMixin194
+      operationId: ControllerQuery_ParamsMixin187
       responses:
         '200':
           description: A successful response.
@@ -9067,7 +9067,7 @@ paths:
       tags:
       - Query
       summary: Params queries all parameters of the ibc-transfer module.
-      operationId: ControllerQuery_ParamsMixin203
+      operationId: ControllerQuery_ParamsMixin196
       responses:
         '200':
           description: A successful response.
@@ -9709,7 +9709,7 @@ paths:
       tags:
       - Query
       summary: NextSequenceSend returns the next send sequence for a given channel.
-      operationId: ControllerQuery_NextSequenceSendMixin213
+      operationId: ControllerQuery_NextSequenceSendMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9731,7 +9731,7 @@ paths:
       - Query
       summary: PacketAcknowledgements returns all packet acknowledgements associated
         with a channel.
-      operationId: ControllerQuery_PacketAcknowledgementsMixin213
+      operationId: ControllerQuery_PacketAcknowledgementsMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9805,7 +9805,7 @@ paths:
       tags:
       - Query
       summary: PacketAcknowledgement queries a stored acknowledgement commitment hash.
-      operationId: ControllerQuery_PacketAcknowledgementMixin213
+      operationId: ControllerQuery_PacketAcknowledgementMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9832,7 +9832,7 @@ paths:
       tags:
       - Query
       summary: PacketCommitments queries a stored packet commitment hash.
-      operationId: ControllerQuery_PacketCommitmentsMixin213
+      operationId: ControllerQuery_PacketCommitmentsMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9899,7 +9899,7 @@ paths:
       - Query
       summary: UnreceivedAcks returns all the unreceived IBC acknowledgements associated
         with a channel and sequences.
-      operationId: ControllerQuery_UnreceivedAcksMixin213
+      operationId: ControllerQuery_UnreceivedAcksMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9931,7 +9931,7 @@ paths:
       - Query
       summary: UnreceivedPackets returns all the unreceived IBC packets associated
         with a channel and sequences.
-      operationId: ControllerQuery_UnreceivedPacketsMixin213
+      operationId: ControllerQuery_UnreceivedPacketsMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9962,7 +9962,7 @@ paths:
       tags:
       - Query
       summary: PacketCommitment queries a stored packet commitment hash.
-      operationId: ControllerQuery_PacketCommitmentMixin213
+      operationId: ControllerQuery_PacketCommitmentMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -9989,7 +9989,7 @@ paths:
       tags:
       - Query
       summary: PacketReceipt queries a stored packet receipt.
-      operationId: ControllerQuery_PacketReceiptMixin213
+      operationId: ControllerQuery_PacketReceiptMixin206
       parameters:
       - type: string
         description: client unique identifier
@@ -13048,7 +13048,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_ApplySnapshotChunk
+      operationId: AuthABCI_ApplySnapshotChunk
       parameters:
       - name: body
         in: body
@@ -13068,7 +13068,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_CheckTx
+      operationId: AuthABCI_CheckTx
       parameters:
       - name: body
         in: body
@@ -13088,7 +13088,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_Commit
+      operationId: AuthABCI_Commit
       parameters:
       - name: body
         in: body
@@ -13108,7 +13108,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_Echo
+      operationId: AuthABCI_Echo
       parameters:
       - name: body
         in: body
@@ -13128,7 +13128,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_ExtendVote
+      operationId: AuthABCI_ExtendVote
       parameters:
       - name: body
         in: body
@@ -13148,7 +13148,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_FinalizeBlock
+      operationId: AuthABCI_FinalizeBlock
       parameters:
       - name: body
         in: body
@@ -13168,7 +13168,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_Flush
+      operationId: AuthABCI_Flush
       parameters:
       - name: body
         in: body
@@ -13188,7 +13188,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_Info
+      operationId: AuthABCI_Info
       parameters:
       - name: body
         in: body
@@ -13208,7 +13208,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_InitChain
+      operationId: AuthABCI_InitChain
       parameters:
       - name: body
         in: body
@@ -13228,7 +13228,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_ListSnapshots
+      operationId: AuthABCI_ListSnapshots
       parameters:
       - name: body
         in: body
@@ -13248,7 +13248,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_LoadSnapshotChunk
+      operationId: AuthABCI_LoadSnapshotChunk
       parameters:
       - name: body
         in: body
@@ -13268,7 +13268,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_OfferSnapshot
+      operationId: AuthABCI_OfferSnapshot
       parameters:
       - name: body
         in: body
@@ -13288,7 +13288,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_PrepareProposal
+      operationId: AuthABCI_PrepareProposal
       parameters:
       - name: body
         in: body
@@ -13308,7 +13308,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_ProcessProposal
+      operationId: AuthABCI_ProcessProposal
       parameters:
       - name: body
         in: body
@@ -13328,7 +13328,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_Query
+      operationId: AuthABCI_Query
       parameters:
       - name: body
         in: body
@@ -13348,7 +13348,7 @@ paths:
     post:
       tags:
       - ABCI
-      operationId: CircuitABCI_VerifyVoteExtension
+      operationId: AuthABCI_VerifyVoteExtension
       parameters:
       - name: body
         in: body
