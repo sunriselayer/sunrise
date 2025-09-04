@@ -95,12 +95,14 @@ message MsgMint {
     (gogoproto.moretags) = "yaml:\"amount\"",
     (gogoproto.nullable) = false
   ];
-  string mintToAddress = 3 [
+  string mint_to_address = 3 [
     (gogoproto.moretags) = "yaml:\"mint_to_address\"",
     (amino.dont_omitempty) = true
   ];
-}
+} 
 
+// MsgMintResponse defines the response structure for an executed
+// MsgMint message.
 message MsgMintResponse {}
 
 // MsgBurn is the sdk.Msg type for allowing an admin account to burn
@@ -116,12 +118,14 @@ message MsgBurn {
     (gogoproto.moretags) = "yaml:\"amount\"",
     (gogoproto.nullable) = false
   ];
-  string burnFromAddress = 3 [
+  string burn_from_address = 3 [
     (gogoproto.moretags) = "yaml:\"burn_from_address\"",
     (amino.dont_omitempty) = true
   ];
 }
 
+// MsgBurnResponse defines the response structure for an executed
+// MsgBurn message.
 message MsgBurnResponse {}
 
 // MsgChangeAdmin is the sdk.Msg type for allowing an admin account to reassign
@@ -184,11 +188,12 @@ message MsgForceTransfer {
     (gogoproto.moretags) = "yaml:\"amount\"",
     (gogoproto.nullable) = false
   ];
-  string transferFromAddress = 3
+  string transfer_from_address = 3
       [ (gogoproto.moretags) = "yaml:\"transfer_from_address\"" ];
-  string transferToAddress = 4
+  string transfer_to_address = 4
       [ (gogoproto.moretags) = "yaml:\"transfer_to_address\"" ];
 }
 
-// MsgForceTransferResponse
+// MsgForceTransferResponse defines the response structure for an executed
+// MsgForceTransfer message.
 message MsgForceTransferResponse {}
