@@ -1,8 +1,6 @@
 package types
 
 import (
-	"strings"
-
 	"cosmossdk.io/collections"
 )
 
@@ -28,33 +26,15 @@ const (
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_tokenfactory")
-
-// KeySeparator is used to combine parts of the keys in the store
-const KeySeparator = "|"
-
 var (
-	DenomAuthorityMetadataKey      = "authoritymetadata"
-	DenomsPrefixKey                = "denoms"
-	CreatorPrefixKey               = "creator"
-	AdminPrefixKey                 = "admin"
-	BeforeSendHookAddressPrefixKey = "beforesendhook"
+	// ParamsKey is the prefix for tokenfactory params
+	ParamsKey = collections.NewPrefix("params")
+	// DenomAuthorityMetadataKey is the prefix for the DenomAuthorityMetadata map.
+	DenomAuthorityMetadataKey = collections.NewPrefix("authority_metadata")
+	// CreatorsKeyPrefix is the prefix for the CreatorAddresses map.
+	CreatorsKeyPrefix = collections.NewPrefix("creator_addresses")
+	// BeforeSendHookAddressPrefixKey is the prefix for the BeforeSendHook map.
+	BeforeSendHookAddressPrefixKey = collections.NewPrefix("before_send_hook")
+	// DenomFromCreatorKey is the prefix for the DenomFromCreator map.
+	DenomFromCreatorKey = collections.NewPrefix("denom_from_creator")
 )
-
-// GetDenomPrefixStore returns the store prefix where all the data associated with a specific denom
-// is stored
-func GetDenomPrefixStore(denom string) []byte {
-	return []byte(strings.Join([]string{DenomsPrefixKey, denom, ""}, KeySeparator))
-}
-
-// GetCreatorsPrefix returns the store prefix where the list of the denoms created by a specific
-// creator are stored
-func GetCreatorPrefix(creator string) []byte {
-	return []byte(strings.Join([]string{CreatorPrefixKey, creator, ""}, KeySeparator))
-}
-
-// GetCreatorsPrefix returns the store prefix where a list of all creator addresses are stored
-func GetCreatorsPrefix() []byte {
-	return []byte(strings.Join([]string{CreatorPrefixKey, ""}, KeySeparator))
-}
