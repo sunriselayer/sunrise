@@ -120,6 +120,7 @@ var (
 		{Account: swapmoduletypes.ModuleName},
 		{Account: stablemoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: tokenfactorymoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: cronmoduletypes.ModuleName},
 	}
 
 	// blocked account addresses
@@ -182,7 +183,7 @@ var (
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
 						cronmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/beginBlockers
+						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
 						govtypes.ModuleName,
@@ -211,7 +212,7 @@ var (
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
 						cronmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/endBlockers
+						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
@@ -265,7 +266,7 @@ var (
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
 						cronmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/initGenesis
+						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
 			},
@@ -393,7 +394,7 @@ var (
 				Name:   cronmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&cronmoduletypes.Module{}),
 			},
-// this line is used by starport scaffolding # stargate/app/moduleConfig
+			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
