@@ -95,7 +95,12 @@ func (server msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.
 		msg.BurnFromAddress = msg.Sender
 	}
 
-	accountI := server.Keeper.accountKeeper.GetAccount(ctx, sdk.AccAddress(msg.BurnFromAddress))
+	burnFromAddr, err := sdk.AccAddressFromBech32(msg.BurnFromAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	accountI := server.Keeper.accountKeeper.GetAccount(ctx, burnFromAddr)
 	_, ok := accountI.(sdk.ModuleAccountI)
 	if ok {
 		return nil, types.ErrBurnFromModuleAccount
