@@ -9,13 +9,13 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgCreateDenom{}, "sunrise/tokenfactory/MsgCreateDenom")
-	legacy.RegisterAminoMsg(cdc, &MsgMint{}, "sunrise/tokenfactory/MsgMint")
-	legacy.RegisterAminoMsg(cdc, &MsgBurn{}, "sunrise/tokenfactory/MsgBurn")
-	legacy.RegisterAminoMsg(cdc, &MsgChangeAdmin{}, "sunrise/tokenfactory/MsgChangeAdmin")
-	legacy.RegisterAminoMsg(cdc, &MsgSetDenomMetadata{}, "sunrise/tokenfactory/MsgSetDenomMetadata")
-	legacy.RegisterAminoMsg(cdc, &MsgSetBeforeSendHook{}, "sunrise/tokenfactory/MsgSetBeforeSendHook")
-	legacy.RegisterAminoMsg(cdc, &MsgForceTransfer{}, "sunrise/tokenfactory/MsgForceTransfer")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateDenom{}, "sunrise/factory/MsgCreateDenom")
+	legacy.RegisterAminoMsg(cdc, &MsgMint{}, "sunrise/factory/MsgMint")
+	legacy.RegisterAminoMsg(cdc, &MsgBurn{}, "sunrise/factory/MsgBurn")
+	legacy.RegisterAminoMsg(cdc, &MsgChangeAdmin{}, "sunrise/factory/MsgChangeAdmin")
+	legacy.RegisterAminoMsg(cdc, &MsgSetDenomMetadata{}, "sunrise/factory/MsgSetDenomMetadata")
+	legacy.RegisterAminoMsg(cdc, &MsgSetBeforeSendHook{}, "sunrise/factory/MsgSetBeforeSendHook")
+	legacy.RegisterAminoMsg(cdc, &MsgForceTransfer{}, "sunrise/factory/MsgForceTransfer")
 }
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
