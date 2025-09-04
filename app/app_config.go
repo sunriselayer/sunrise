@@ -117,6 +117,7 @@ var (
 		{Account: liquidityincentivemoduletypes.BribeAccount},
 		{Account: swapmoduletypes.ModuleName},
 		{Account: stablemoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: tokenfactorymoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 	}
 
 	// blocked account addresses
