@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/core/address"
 	corestore "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/tokenfactory/types"
 )
@@ -19,8 +20,12 @@ type Keeper struct {
 	// Typically, this should be the x/gov module account.
 	authority []byte
 
-	Schema collections.Schema
-	Params collections.Item[types.Params]
+	Schema            collections.Schema
+	Params            collections.Item[types.Params]
+	AuthorityMetadata collections.Map[string, types.DenomAuthorityMetadata]
+	CreatorAddresses  collections.Map[string, []byte]
+	BeforeSendHook    collections.Map[string, []byte]
+	DenomFromCreator  collections.Map[collections.Pair[sdk.AccAddress, string], []byte]
 
 	accountKeeper      types.AccountKeeper
 	bankKeeper         types.BankKeeper
@@ -49,7 +54,11 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params:            collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		AuthorityMetadata: collections.NewMap(sb, types.DenomAuthorityMetadataKey, "authority_metadata", collections.StringKey, codec.CollValue[types.DenomAuthorityMetadata](cdc)),
+		CreatorAddresses:  collections.NewMap(sb, types.CreatorsKeyPrefix, "creator_addresses", collections.StringKey, collections.BytesValue),
+		BeforeSendHook:    collections.NewMap(sb, types.BeforeSendHookAddressPrefixKey, "before_send_hook", collections.StringKey, collections.BytesValue),
+		DenomFromCreator:  collections.NewMap(sb, types.DenomFromCreatorKey, "denom_from_creator", collections.PairKeyCodec(sdk.AccAddressKey, collections.StringKey), collections.BytesValue),
 
 		accountKeeper:      accountKeeper,
 		bankKeeper:         bankKeeper,
