@@ -29,9 +29,9 @@ service Msg {
   // SetDenomMetadata
   rpc SetDenomMetadata(MsgSetDenomMetadata)
       returns (MsgSetDenomMetadataResponse);
-  // SetBeforeSendHook
-  rpc SetBeforeSendHook(MsgSetBeforeSendHook)
-      returns (MsgSetBeforeSendHookResponse);
+  // // SetBeforeSendHook
+  // rpc SetBeforeSendHook(MsgSetBeforeSendHook)
+  //     returns (MsgSetBeforeSendHookResponse);
   // ForceTransfer
   rpc ForceTransfer(MsgForceTransfer) returns (MsgForceTransferResponse);
 }
