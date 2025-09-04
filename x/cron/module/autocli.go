@@ -17,16 +17,35 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod:      "Schedule",
+					Use:            "schedule [name]",
+					Short:          "Shows the schedule",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "name"}},
+				},
+				{
+					RpcMethod: "Schedules",
+					Use:       "schedules",
+					Short:     "Shows all schedules",
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
-			Service: types.Msg_serviceDesc.ServiceName,
+			Service:              types.Msg_serviceDesc.ServiceName,
 			EnhanceCustomCommand: true, // only required if you want to use the custom command
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "UpdateParams",
-					Skip:       true, // skipped because authority gated
+					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod: "AddSchedule",
+					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod: "RemoveSchedule",
+					Skip:      true, // skipped because authority gated
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
