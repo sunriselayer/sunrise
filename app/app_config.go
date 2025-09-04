@@ -68,6 +68,8 @@ import (
 	_ "github.com/CosmWasm/wasmd/x/wasm" // import for side-effects
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
+	_ "github.com/sunriselayer/sunrise/x/cron/module"
+	cronmoduletypes "github.com/sunriselayer/sunrise/x/cron/types"
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module"
@@ -179,7 +181,8 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
-						// this line is used by starport scaffolding # stargate/app/beginBlockers
+						cronmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
 						govtypes.ModuleName,
@@ -207,7 +210,8 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
-						// this line is used by starport scaffolding # stargate/app/endBlockers
+						cronmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
@@ -260,7 +264,8 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
-						// this line is used by starport scaffolding # stargate/app/initGenesis
+						cronmoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
 			},
@@ -384,7 +389,11 @@ var (
 				Name:   tokenfactorymoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&tokenfactorymoduletypes.Module{}),
 			},
-			// this line is used by starport scaffolding # stargate/app/moduleConfig
+			{
+				Name:   cronmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&cronmoduletypes.Module{}),
+			},
+// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})
 )
