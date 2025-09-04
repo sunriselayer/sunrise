@@ -16,6 +16,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgSetDenomMetadata{}, "sunrise/factory/MsgSetDenomMetadata")
 	legacy.RegisterAminoMsg(cdc, &MsgSetBeforeSendHook{}, "sunrise/factory/MsgSetBeforeSendHook")
 	legacy.RegisterAminoMsg(cdc, &MsgForceTransfer{}, "sunrise/factory/MsgForceTransfer")
+
+	cdc.RegisterConcrete(&Params{}, "sunrise/factory/Params", nil)
 }
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
