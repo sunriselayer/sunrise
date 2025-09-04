@@ -89,6 +89,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a set-denom-metadata tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "metadata"}},
 				},
+				{
+					RpcMethod:      "ForceTransfer",
+					Use:            "force-transfer [amount] [transfer_from_address] [transfer_to_address]",
+					Short:          "Send a force-transfer tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "amount"}, {ProtoField: "transfer_from_address"}, {ProtoField: "transfer_to_address"}},
+				},
 			},
 		},
 	}
