@@ -28,13 +28,11 @@ const (
 
 var (
 	// ParamsKey is the prefix for tokenfactory params
-	ParamsKey = collections.NewPrefix("params")
+	ParamsKey = collections.NewPrefix("p_tokenfactory")
 	// DenomAuthorityMetadataKey is the prefix for the DenomAuthorityMetadata map.
-	DenomAuthorityMetadataKey = collections.NewPrefix("authority_metadata")
+	DenomAuthorityMetadataKey = collections.NewPrefix("authority_metadata/")
 	// CreatorsKeyPrefix is the prefix for the CreatorAddresses map.
-	CreatorsKeyPrefix = collections.NewPrefix("creator_addresses")
-	// BeforeSendHookAddressPrefixKey is the prefix for the BeforeSendHook map.
-	BeforeSendHookAddressPrefixKey = collections.NewPrefix("before_send_hook")
+	CreatorsKeyPrefix = collections.NewPrefix("creator_addresses/")
 	// DenomFromCreatorKey is the prefix for the DenomFromCreator map.
-	DenomFromCreatorKey = collections.NewPrefix("denom_from_creator")
+	DenomFromCreatorKey = collections.NewPrefix("denom_from_creator/")
 )
