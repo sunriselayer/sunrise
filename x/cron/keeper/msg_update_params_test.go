@@ -3,11 +3,10 @@ package keeper_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-    "github.com/sunriselayer/sunrise/x/cron/keeper"
-    "github.com/sunriselayer/sunrise/x/cron/types"
+	"github.com/sunriselayer/sunrise/x/cron/keeper"
+	"github.com/sunriselayer/sunrise/x/cron/types"
 )
 
 func TestMsgUpdateParams(t *testing.T) {
@@ -37,12 +36,13 @@ func TestMsgUpdateParams(t *testing.T) {
 			expErrMsg: "invalid authority",
 		},
 		{
-			name: "send enabled param",
+			name: "invalid params",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
-				Params:    types.Params{},
+				Params:    types.Params{Limit: 0},
 			},
-			expErr: false,
+			expErr:    true,
+			expErrMsg: "limit cannot be zero",
 		},
 		{
 			name: "all good",
