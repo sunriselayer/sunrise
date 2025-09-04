@@ -33,7 +33,6 @@ type AppModule struct {
 	cdc           codec.Codec
 	keeper        keeper.Keeper
 	accountKeeper types.AccountKeeper
-	bankKeeper    types.BankKeeper
 }
 
 func NewAppModule(
