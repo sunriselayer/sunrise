@@ -45,7 +45,10 @@ func (q queryServer) DenomsFromCreator(ctx context.Context, req *types.QueryDeno
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	denoms := q.k.getDenomsFromCreator(sdkCtx, req.GetCreator())
+	denoms, err := q.k.getDenomsFromCreator(sdkCtx, req.GetCreator())
+	if err != nil {
+		return nil, err
+	}
 	return &types.QueryDenomsFromCreatorResponse{Denoms: denoms}, nil
 }
 
@@ -70,7 +73,10 @@ func (q queryServer) AllBeforeSendHooksAddresses(ctx context.Context, req *types
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	denoms, beforesendHookAddresses := q.k.GetAllBeforeSendHooks(sdkCtx)
+	denoms, beforesendHookAddresses, err := q.k.GetAllBeforeSendHooks(sdkCtx)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.QueryAllBeforeSendHooksAddressesResponse{Denoms: denoms, BeforeSendHookAddresses: beforesendHookAddresses}, nil
 }

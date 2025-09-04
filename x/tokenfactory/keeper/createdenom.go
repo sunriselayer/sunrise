@@ -52,7 +52,10 @@ func (k Keeper) createDenomAfterValidation(ctx sdk.Context, creatorAddr string, 
 		return err
 	}
 
-	k.addDenomFromCreator(ctx, creatorAddr, denom)
+	err = k.addDenomFromCreator(ctx, creatorAddr, denom)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -77,7 +80,10 @@ func (k Keeper) validateCreateDenom(ctx sdk.Context, creatorAddr string, subdeno
 }
 
 func (k Keeper) chargeForCreateDenom(ctx sdk.Context, creatorAddr string) (err error) {
-	params := k.GetParams(ctx)
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return err
+	}
 
 	// if DenomCreationFee is non-zero, transfer the tokens from the creator
 	// account to community pool

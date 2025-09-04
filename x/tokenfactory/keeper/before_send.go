@@ -68,11 +68,11 @@ func (k Keeper) GetBeforeSendHook(ctx sdk.Context, denom string) string {
 	return sdk.AccAddress(val).String()
 }
 
-func (k Keeper) GetAllBeforeSendHooks(ctx sdk.Context) ([]string, []string) {
+func (k Keeper) GetAllBeforeSendHooks(ctx sdk.Context) ([]string, []string, error) {
 	denomsList := []string{}
 	beforeSendHooksList := []string{}
 
-	rangeErr := k.DenomFromCreator.Walk(ctx, nil, func(key collections.Pair[sdk.AccAddress, string], value []byte) (bool, error) {
+	err := k.DenomFromCreator.Walk(ctx, nil, func(key collections.Pair[sdk.AccAddress, string], value []byte) (bool, error) {
 		denom := key.K2()
 		beforeSendHook := k.GetBeforeSendHook(ctx, denom)
 		if beforeSendHook != "" {
@@ -81,10 +81,10 @@ func (k Keeper) GetAllBeforeSendHooks(ctx sdk.Context) ([]string, []string) {
 		}
 		return false, nil
 	})
-	if rangeErr != nil {
-		// handle error, maybe log it
+	if err != nil {
+		return nil, nil, err
 	}
-	return denomsList, beforeSendHooksList
+	return denomsList, beforeSendHooksList, nil
 }
 
 // Hooks wrapper struct for bank keeper

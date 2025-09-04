@@ -7,20 +7,27 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k Keeper) addDenomFromCreator(ctx sdk.Context, creator, denom string) {
+func (k Keeper) addDenomFromCreator(ctx sdk.Context, creator, denom string) error {
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	key := collections.Join(creatorAddr, denom)
-	_ = k.DenomFromCreator.Set(ctx, key, []byte{})
-	_ = k.CreatorAddresses.Set(ctx, denom, creatorAddr)
+	err = k.DenomFromCreator.Set(ctx, key, []byte{})
+	if err != nil {
+		return err
+	}
+	err = k.CreatorAddresses.Set(ctx, denom, creatorAddr)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (k Keeper) getDenomsFromCreator(ctx sdk.Context, creator string) []string {
+func (k Keeper) getDenomsFromCreator(ctx sdk.Context, creator string) ([]string, error) {
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var denoms []string
@@ -30,10 +37,10 @@ func (k Keeper) getDenomsFromCreator(ctx sdk.Context, creator string) []string {
 	})
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return denoms
+	return denoms, nil
 }
 
 func (k Keeper) GetAllDenomsIterator(ctx context.Context) (collections.Iterator[collections.Pair[sdk.AccAddress, string], []byte], error) {
