@@ -134,9 +134,10 @@ func (k Keeper) AddSchedule(
 	}
 
 	schedule := types.Schedule{
-		Name:              name,
-		Period:            period,
-		Msgs:              msgs,
+		Name:   name,
+		Period: period,
+		Msgs:   msgs,
+		// let's execute newly added schedule on `now + period` block
 		LastExecuteHeight: uint64(ctx.BlockHeight()),
 		ExecutionStage:    executionStage,
 	}
@@ -225,6 +226,8 @@ func (k Keeper) getSchedulesReadyForExecution(ctx sdk.Context, executionStage ty
 // executeSchedule executes all msgs in a given schedule and changes LastExecuteHeight
 // if at least one msg execution fails, rollback all messages
 func (k Keeper) executeSchedule(ctx sdk.Context, schedule types.Schedule) error {
+	// Even if contract execution returned an error, we still increase the height
+	// and execute it after this interval
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), LabelExecuteCronSchedule, schedule.Name)
 	schedule.LastExecuteHeight = uint64(ctx.BlockHeight())
 	if err := k.Schedules.Set(ctx, schedule.Name, schedule); err != nil {
@@ -255,6 +258,7 @@ func (k Keeper) executeSchedule(ctx sdk.Context, schedule types.Schedule) error 
 		}
 	}
 
+	// only save state if all the messages in a schedule were executed successfully
 	writeFn()
 	return nil
 }
