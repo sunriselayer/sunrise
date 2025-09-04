@@ -24,8 +24,8 @@ type Keeper struct {
 	Params            collections.Item[types.Params]
 	AuthorityMetadata collections.Map[string, types.DenomAuthorityMetadata]
 	CreatorAddresses  collections.Map[string, []byte]
-	BeforeSendHook    collections.Map[string, []byte]
-	DenomFromCreator  collections.Map[collections.Pair[sdk.AccAddress, string], []byte]
+	// BeforeSendHook    collections.Map[string, []byte]
+	DenomFromCreator collections.Map[collections.Pair[sdk.AccAddress, string], []byte]
 
 	accountKeeper      types.AccountKeeper
 	bankKeeper         types.BankKeeper
@@ -57,8 +57,8 @@ func NewKeeper(
 		Params:            collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		AuthorityMetadata: collections.NewMap(sb, types.DenomAuthorityMetadataKey, "authority_metadata", collections.StringKey, codec.CollValue[types.DenomAuthorityMetadata](cdc)),
 		CreatorAddresses:  collections.NewMap(sb, types.CreatorsKeyPrefix, "creator_addresses", collections.StringKey, collections.BytesValue),
-		BeforeSendHook:    collections.NewMap(sb, types.BeforeSendHookAddressPrefixKey, "before_send_hook", collections.StringKey, collections.BytesValue),
-		DenomFromCreator:  collections.NewMap(sb, types.DenomFromCreatorKey, "denom_from_creator", collections.PairKeyCodec(sdk.AccAddressKey, collections.StringKey), collections.BytesValue),
+		// BeforeSendHook:    collections.NewMap(sb, types.BeforeSendHookAddressPrefixKey, "before_send_hook", collections.StringKey, collections.BytesValue),
+		DenomFromCreator: collections.NewMap(sb, types.DenomFromCreatorKey, "denom_from_creator", collections.PairKeyCodec(sdk.AccAddressKey, collections.StringKey), collections.BytesValue),
 
 		accountKeeper:      accountKeeper,
 		bankKeeper:         bankKeeper,

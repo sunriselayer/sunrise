@@ -30,18 +30,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Shows all tokens created by a specific creator address",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "creator"}},
 				},
-				{
-					RpcMethod:      "BeforeSendHookAddress",
-					Use:            "before-send-hook-address [denom]",
-					Short:          "Shows the address registered for the before send hook",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}},
-				},
-				{
-					RpcMethod:      "AllBeforeSendHooksAddresses",
-					Use:            "all-before-send-hooks",
-					Short:          "Shows all before send hooks registered",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
-				},
+				// {
+				// 	RpcMethod:      "BeforeSendHookAddress",
+				// 	Use:            "before-send-hook-address [denom]",
+				// 	Short:          "Shows the address registered for the before send hook",
+				// 	PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}},
+				// },
+				// {
+				// 	RpcMethod:      "AllBeforeSendHooksAddresses",
+				// 	Use:            "all-before-send-hooks",
+				// 	Short:          "Shows all before send hooks registered",
+				// 	PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+				// },
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{
@@ -57,7 +57,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod:      "CreateDenom",
 					Use:            "create-denom [sub_denom]",
 					Short:          "Send a create-denom tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "sub_denom"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "subdenom"}},
 				},
 				{
 					RpcMethod:      "Mint",
@@ -77,12 +77,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a change-admin tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}, {ProtoField: "new_admin"}},
 				},
-				{
-					RpcMethod:      "SetBeforeSendHook",
-					Use:            "set-before-send-hook [denom] [cosmwasm_address]",
-					Short:          "Send a set-before-send-hook tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}, {ProtoField: "cosmwasm_address"}},
-				},
+				// {
+				// 	RpcMethod:      "SetBeforeSendHook",
+				// 	Use:            "set-before-send-hook [denom] [cosmwasm_address]",
+				// 	Short:          "Send a set-before-send-hook tx",
+				// 	PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}, {ProtoField: "cosmwasm_address"}},
+				// },
 				{
 					RpcMethod:      "SetDenomMetadata",
 					Use:            "set-denom-metadata [metadata]",
