@@ -18,7 +18,7 @@ const (
 var (
 	// ParamsKey is the prefix to retrieve all Params
 	ParamsKey        = collections.NewPrefix("p_cron")
-	ScheduleKey      = collections.NewPrefix("schedule/")
+	SchedulesKey     = collections.NewPrefix("schedules/")
 	ScheduleCountKey = collections.NewPrefix("schedule_count/")
 )
 
