@@ -33,20 +33,20 @@ type BankKeeper interface {
 	HasBalance(ctx context.Context, addr sdk.AccAddress, amt sdk.Coin) bool
 }
 
-// BankHooks event hooks
-type BankHooks interface {
-	TrackBeforeSend(ctx context.Context, from, to sdk.AccAddress, amount sdk.Coins)       // Must be before any send is executed
-	BlockBeforeSend(ctx context.Context, from, to sdk.AccAddress, amount sdk.Coins) error // Must be before any send is executed
-}
+// // BankHooks event hooks
+// type BankHooks interface {
+// 	TrackBeforeSend(ctx context.Context, from, to sdk.AccAddress, amount sdk.Coins)       // Must be before any send is executed
+// 	BlockBeforeSend(ctx context.Context, from, to sdk.AccAddress, amount sdk.Coins) error // Must be before any send is executed
+// }
 
 // DistributionKeeper defines the contract needed to be fulfilled for distribution interactions.
 type DistributionKeeper interface {
 	FundCommunityPool(ctx context.Context, amount sdk.Coins, sender sdk.AccAddress) error
 }
 
-type ContractKeeper interface {
-	Sudo(ctx sdk.Context, contractAddress sdk.AccAddress, msg []byte) ([]byte, error)
-}
+// type ContractKeeper interface {
+// 	Sudo(ctx sdk.Context, contractAddress sdk.AccAddress, msg []byte) ([]byte, error)
+// }
 
 // ParamSubspace defines the expected Subspace interface for parameters.
 type ParamSubspace interface {

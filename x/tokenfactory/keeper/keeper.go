@@ -30,7 +30,7 @@ type Keeper struct {
 	accountKeeper      types.AccountKeeper
 	bankKeeper         types.BankKeeper
 	distributionKeeper types.DistributionKeeper
-	contractKeeper     types.ContractKeeper
+	// contractKeeper     types.ContractKeeper
 }
 
 func NewKeeper(
@@ -78,3 +78,8 @@ func NewKeeper(
 func (k Keeper) GetAuthority() []byte {
 	return k.authority
 }
+
+// // Set the wasm keeper.
+// func (k *Keeper) SetContractKeeper(contractKeeper types.ContractKeeper) {
+// 	k.contractKeeper = contractKeeper
+// }
