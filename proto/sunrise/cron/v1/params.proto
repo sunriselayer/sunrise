@@ -8,7 +8,10 @@ option go_package = "github.com/sunriselayer/sunrise/x/cron/types";
 
 // Params defines the parameters for the module.
 message Params {
-  option (amino.name) = "sunrise/x/cron/Params";
+  option (amino.name) = "sunrise/cron/Params";
   option (gogoproto.equal) = true;
-  
+  // Security address that can remove schedules
+  string security_address = 1;
+  // Limit of schedules executed in one block
+  uint64 limit = 2;
 }
