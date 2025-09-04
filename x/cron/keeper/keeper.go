@@ -189,21 +189,16 @@ func (k Keeper) GetScheduleCount(ctx sdk.Context) int32 {
 	return count.Count
 }
 
-func (k Keeper) GetParams(ctx sdk.Context) types.Params {
+func (k Keeper) getSchedulesReadyForExecution(ctx sdk.Context, executionStage types.ExecutionStage) ([]types.Schedule, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return params
-}
-
-func (k Keeper) getSchedulesReadyForExecution(ctx sdk.Context, executionStage types.ExecutionStage) ([]types.Schedule, error) {
-	params := k.GetParams(ctx)
 	count := uint64(0)
 
 	res := make([]types.Schedule, 0)
 
-	err := k.Schedules.Walk(ctx, nil, func(key string, schedule types.Schedule) (stop bool, err error) {
+	err = k.Schedules.Walk(ctx, nil, func(key string, schedule types.Schedule) (stop bool, err error) {
 		if k.intervalPassed(ctx, schedule) && schedule.ExecutionStage == executionStage {
 			res = append(res, schedule)
 			count++

@@ -76,7 +76,10 @@ func (k msgServer) RemoveSchedule(goCtx context.Context, req *types.MsgRemoveSch
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	k.Keeper.RemoveSchedule(ctx, req.Name)
+	err = k.Keeper.RemoveSchedule(ctx, req.Name)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to remove schedule")
+	}
 
 	return &types.MsgRemoveScheduleResponse{}, nil
 }
