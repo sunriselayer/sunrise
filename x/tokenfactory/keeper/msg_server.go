@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/tokenfactory/types"
@@ -21,6 +22,10 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 var _ types.MsgServer = msgServer{}
 
 func (server msgServer) CreateDenom(goCtx context.Context, msg *types.MsgCreateDenom) (*types.MsgCreateDenomResponse, error) {
+	if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// end static validation
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	denom, err := server.Keeper.CreateDenom(ctx, msg.Sender, msg.Subdenom)
@@ -42,6 +47,10 @@ func (server msgServer) CreateDenom(goCtx context.Context, msg *types.MsgCreateD
 }
 
 func (server msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMintResponse, error) {
+	if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// end static validation
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// pay some extra gas cost to give a better error here.
@@ -80,6 +89,10 @@ func (server msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.
 }
 
 func (server msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.MsgBurnResponse, error) {
+	if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// end static validation
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	authorityMetadata, err := server.Keeper.GetAuthorityMetadata(ctx, msg.Amount.GetDenom())
@@ -123,6 +136,10 @@ func (server msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.
 }
 
 func (server msgServer) ForceTransfer(goCtx context.Context, msg *types.MsgForceTransfer) (*types.MsgForceTransferResponse, error) {
+	if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// end static validation
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	authorityMetadata, err := server.Keeper.GetAuthorityMetadata(ctx, msg.Amount.GetDenom())
@@ -152,6 +169,10 @@ func (server msgServer) ForceTransfer(goCtx context.Context, msg *types.MsgForce
 }
 
 func (server msgServer) ChangeAdmin(goCtx context.Context, msg *types.MsgChangeAdmin) (*types.MsgChangeAdminResponse, error) {
+	if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// end static validation
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	authorityMetadata, err := server.Keeper.GetAuthorityMetadata(ctx, msg.Denom)
@@ -179,6 +200,10 @@ func (server msgServer) ChangeAdmin(goCtx context.Context, msg *types.MsgChangeA
 }
 
 func (server msgServer) SetDenomMetadata(goCtx context.Context, msg *types.MsgSetDenomMetadata) (*types.MsgSetDenomMetadataResponse, error) {
+	if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+		return nil, errorsmod.Wrap(err, "invalid sender address")
+	}
+	// end static validation
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Defense in depth validation of metadata
@@ -210,6 +235,10 @@ func (server msgServer) SetDenomMetadata(goCtx context.Context, msg *types.MsgSe
 }
 
 // func (server msgServer) SetBeforeSendHook(goCtx context.Context, msg *types.MsgSetBeforeSendHook) (*types.MsgSetBeforeSendHookResponse, error) {
+//  if _, err := server.addressCodec.StringToBytes(msg.Sender); err != nil {
+// 	 return nil, errorsmod.Wrap(err, "invalid sender address")
+//  }
+//  // end static validation
 // 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 // 	authorityMetadata, err := server.Keeper.GetAuthorityMetadata(ctx, msg.Denom)
