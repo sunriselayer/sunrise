@@ -39,7 +39,7 @@ service Msg {
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "sunrise/tokenfactory/MsgUpdateParams";
+  option (amino.name) = "sunrise/factory/MsgUpdateParams";
 
   // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -67,7 +67,7 @@ message MsgUpdateParamsResponse {}
 // originally set to be the creator, but this can be changed later. The token
 // denom does not indicate the current admin.
 message MsgCreateDenom {
-  option (amino.name) = "sunrise/tokenfactory/MsgCreateDenom";
+  option (amino.name) = "sunrise/factory/MsgCreateDenom";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];
@@ -87,7 +87,7 @@ message MsgCreateDenomResponse {
 // Only the admin of the token factory denom has permission to mint unless
 // the denom does not have any admin.
 message MsgMint {
-  option (amino.name) = "sunrise/tokenfactory/MsgMint";
+  option (amino.name) = "sunrise/factory/MsgMint";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];
@@ -110,7 +110,7 @@ message MsgMintResponse {}
 // Only the admin of the token factory denom has permission to burn unless
 // the denom does not have any admin.
 message MsgBurn {
-  option (amino.name) = "sunrise/tokenfactory/MsgBurn";
+  option (amino.name) = "sunrise/factory/MsgBurn";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];
@@ -131,7 +131,7 @@ message MsgBurnResponse {}
 // MsgChangeAdmin is the sdk.Msg type for allowing an admin account to reassign
 // adminship of a denom to a new account
 message MsgChangeAdmin {
-  option (amino.name) = "sunrise/tokenfactory/MsgChangeAdmin";
+  option (amino.name) = "sunrise/factory/MsgChangeAdmin";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];
@@ -146,7 +146,7 @@ message MsgChangeAdminResponse {}
 // MsgSetBeforeSendHook is the sdk.Msg type for allowing an admin account to
 // assign a CosmWasm contract to call with a BeforeSend hook
 message MsgSetBeforeSendHook {
-  option (amino.name) = "sunrise/tokenfactory/MsgSetBeforeSendHook";
+  option (amino.name) = "sunrise/factory/MsgSetBeforeSendHook";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];
@@ -164,7 +164,7 @@ message MsgSetBeforeSendHookResponse {}
 // MsgSetDenomMetadata is the sdk.Msg type for allowing an admin account to set
 // the denom's bank metadata
 message MsgSetDenomMetadata {
-  option (amino.name) = "sunrise/tokenfactory/MsgSetDenomMetadata";
+  option (amino.name) = "sunrise/factory/MsgSetDenomMetadata";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];
@@ -180,7 +180,7 @@ message MsgSetDenomMetadataResponse {}
 
 // MsgForceTransfer
 message MsgForceTransfer {
-  option (amino.name) = "sunrise/tokenfactory/MsgForceTransfer";
+  option (amino.name) = "sunrise/factory/MsgForceTransfer";
   option (cosmos.msg.v1.signer) = "sender";
 
   string sender = 1 [ (gogoproto.moretags) = "yaml:\"sender\"" ];

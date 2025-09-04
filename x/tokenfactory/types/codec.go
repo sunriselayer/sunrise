@@ -9,12 +9,12 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "sunrise/factory/MsgUpdateParams")
 	legacy.RegisterAminoMsg(cdc, &MsgCreateDenom{}, "sunrise/factory/MsgCreateDenom")
 	legacy.RegisterAminoMsg(cdc, &MsgMint{}, "sunrise/factory/MsgMint")
 	legacy.RegisterAminoMsg(cdc, &MsgBurn{}, "sunrise/factory/MsgBurn")
 	legacy.RegisterAminoMsg(cdc, &MsgChangeAdmin{}, "sunrise/factory/MsgChangeAdmin")
 	legacy.RegisterAminoMsg(cdc, &MsgSetDenomMetadata{}, "sunrise/factory/MsgSetDenomMetadata")
-	legacy.RegisterAminoMsg(cdc, &MsgSetBeforeSendHook{}, "sunrise/factory/MsgSetBeforeSendHook")
 	legacy.RegisterAminoMsg(cdc, &MsgForceTransfer{}, "sunrise/factory/MsgForceTransfer")
 
 	cdc.RegisterConcrete(&Params{}, "sunrise/factory/Params", nil)
