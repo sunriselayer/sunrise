@@ -96,10 +96,6 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k *Keeper) SetWasmMsgServer(server types.WasmMsgServer) {
-	k.WasmMsgServer = server
-}
-
 // ExecuteReadySchedules gets all schedules that are due for execution (with limit that is equal to Params.Limit)
 // and executes messages in each one
 func (k Keeper) ExecuteReadySchedules(ctx sdk.Context, executionStage types.ExecutionStage) {
