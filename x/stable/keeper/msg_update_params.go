@@ -6,11 +6,11 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-    "github.com/sunriselayer/sunrise/x/stable/types"
+	"github.com/sunriselayer/sunrise/x/stable/types"
 )
 
 func (k msgServer) UpdateParams(ctx context.Context, req *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
-	authority, err := k.addressCodec.StringToBytes(req.Authority);
+	authority, err := k.addressCodec.StringToBytes(req.Authority)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid authority address")
 	}

@@ -7,12 +7,8 @@ option go_package = "sunrise/x/liquidityincentive/types";
 
 // Module is the config object for the module.
 message Module {
-  option (cosmos.app.v1alpha1.module) = {
-    go_import: "sunrise/x/liquidityincentive"
-  };
+  option (cosmos.app.v1alpha1.module) = {go_import: "sunrise/x/liquidityincentive"};
 
   // authority defines the custom module authority. If not set, defaults to the governance module.
   string authority = 1;
-
-  
 }
