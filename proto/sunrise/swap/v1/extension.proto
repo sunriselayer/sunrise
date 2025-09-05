@@ -1,10 +1,10 @@
 syntax = "proto3";
 package sunrise.swap.v1;
 
+import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "sunrise/swap/v1/route.proto";
-import "amino/amino.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/swap/types";
 

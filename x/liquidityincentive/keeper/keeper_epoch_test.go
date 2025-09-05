@@ -104,10 +104,9 @@ func TestCreateEpoch(t *testing.T) {
 				fx.mocks.AcctKeeper.EXPECT().
 					AddressCodec().
 					Return(bech32Codec).AnyTimes()
-				
+
 				// Expect FinalizeBribeForEpoch to be called
 				fx.mocks.AcctKeeper.EXPECT().GetModuleAddress("fee_collector").Return(sdk.AccAddress("fee_collector")).AnyTimes()
-
 
 				// Set up a vote with a valid address
 				vote := types.Vote{

@@ -4,10 +4,10 @@ package sunrise.liquidityincentive.v1;
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "sunrise/liquidityincentive/v1/bribe.proto";
 import "sunrise/liquidityincentive/v1/epoch.proto";
 import "sunrise/liquidityincentive/v1/gauge.proto";
 import "sunrise/liquidityincentive/v1/params.proto";
-import "sunrise/liquidityincentive/v1/bribe.proto";
 
 option go_package = "github.com/sunriselayer/sunrise/x/liquidityincentive/types";
 
@@ -114,7 +114,7 @@ message QueryVotesResponse {
 // QueryBribesRequest
 message QueryBribesRequest {
   string epoch_id = 1; // Optional filter by epoch_id. If empty, not applied.
-  string pool_id = 2;  // Optional filter by pool_id. If empty, not applied.
+  string pool_id = 2; // Optional filter by pool_id. If empty, not applied.
 }
 
 // QueryBribesResponse
@@ -137,7 +137,6 @@ message QueryBribeAllocationsRequest {
   string address = 1; // Optional filter by address. If empty, not applied.
   string epoch_id = 2; // Optional filter by epoch_id. If empty, not applied.
 }
-
 
 // QueryBribeAllocationsResponse
 message QueryBribeAllocationsResponse {

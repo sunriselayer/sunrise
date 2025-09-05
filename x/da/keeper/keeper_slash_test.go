@@ -337,4 +337,3 @@ func TestHandleSlashEpoch_InvalidParams(t *testing.T) {
 		})
 	}
 }
-
