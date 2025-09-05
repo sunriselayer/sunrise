@@ -41,7 +41,7 @@ type ModuleInputs struct {
 type ModuleOutputs struct {
 	depinject.Out
 
-	CronKeeper keeper.Keeper
+	CronKeeper *keeper.Keeper
 	Module     appmodule.AppModule
 }
 
@@ -59,7 +59,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.Logger,
 		in.AccountKeeper,
 	)
-	m := NewAppModule(in.Cdc, k, in.AccountKeeper)
+	m := NewAppModule(in.Cdc, &k, in.AccountKeeper)
 
-	return ModuleOutputs{CronKeeper: k, Module: m}
+	return ModuleOutputs{CronKeeper: &k, Module: m}
 }
