@@ -141,7 +141,7 @@ type App struct {
 	SwapKeeper               swapmodulekeeper.Keeper
 	StableKeeper             stablemodulekeeper.Keeper
 	TokenfactoryKeeper       tokenfactorymodulekeeper.Keeper
-	CronKeeper               cronmodulekeeper.Keeper
+	CronKeeper               *cronmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -265,6 +265,7 @@ func New(
 
 	// <sunrise>
 	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
+	app.CronKeeper.WasmMsgServer = wasmkeeper.NewMsgServerImpl(&app.WasmKeeper)
 	// </sunrise>
 
 	// register streaming services
@@ -468,7 +469,7 @@ func (app *App) setupUpgradeHandlers() {
 	// For more information, see: https://docs.cosmos.network/main/tooling/cosmovisor
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v1_2_0.UpgradeName,
-		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator(), &app.CronKeeper, &app.WasmKeeper),
+		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
