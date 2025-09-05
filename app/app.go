@@ -57,6 +57,7 @@ import (
 	ibchookskeeper "github.com/sunriselayer/ibc-hooks/v10/keeper"
 
 	"github.com/sunriselayer/sunrise/docs"
+	cronmodulekeeper "github.com/sunriselayer/sunrise/x/cron/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
@@ -140,6 +141,7 @@ type App struct {
 	SwapKeeper               swapmodulekeeper.Keeper
 	StableKeeper             stablemodulekeeper.Keeper
 	TokenfactoryKeeper       tokenfactorymodulekeeper.Keeper
+	CronKeeper               cronmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -230,6 +232,7 @@ func New(
 		&app.SwapKeeper,
 		&app.StableKeeper,
 		&app.TokenfactoryKeeper,
+		&app.CronKeeper,
 	); err != nil {
 		panic(err)
 	}

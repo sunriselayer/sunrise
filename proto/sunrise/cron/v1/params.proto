@@ -1,0 +1,17 @@
+syntax = "proto3";
+package sunrise.cron.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/cron/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "sunrise/cron/Params";
+  option (gogoproto.equal) = true;
+  // Security address that can remove schedules
+  string security_address = 1;
+  // Limit of schedules executed in one block
+  uint64 limit = 2;
+}
