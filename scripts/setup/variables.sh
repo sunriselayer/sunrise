@@ -1,4 +1,4 @@
-BINARY=./build/sunrised
+BINARY=~/go/bin/sunrised
 CHAIN_DIR=./data
 CHAINID_1=test
 NODE_HOME=$CHAIN_DIR/$CHAINID_1
