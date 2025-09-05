@@ -468,7 +468,7 @@ func (app *App) setupUpgradeHandlers() {
 	// For more information, see: https://docs.cosmos.network/main/tooling/cosmovisor
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v1_2_0.UpgradeName,
-		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
+		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator(), &app.CronKeeper, &app.WasmKeeper),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
