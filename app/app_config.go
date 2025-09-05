@@ -68,6 +68,8 @@ import (
 	_ "github.com/CosmWasm/wasmd/x/wasm" // import for side-effects
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
+	_ "github.com/sunriselayer/sunrise/x/cron/module"
+	cronmoduletypes "github.com/sunriselayer/sunrise/x/cron/types"
 	_ "github.com/sunriselayer/sunrise/x/da/module"
 	damoduletypes "github.com/sunriselayer/sunrise/x/da/types"
 	_ "github.com/sunriselayer/sunrise/x/fee/module"
@@ -118,6 +120,7 @@ var (
 		{Account: swapmoduletypes.ModuleName},
 		{Account: stablemoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: tokenfactorymoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: cronmoduletypes.ModuleName},
 	}
 
 	// blocked account addresses
@@ -179,6 +182,7 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
+						cronmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -207,6 +211,7 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
+						cronmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -260,6 +265,7 @@ var (
 						swapmoduletypes.ModuleName,
 						stablemoduletypes.ModuleName,
 						tokenfactorymoduletypes.ModuleName,
+						cronmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -383,6 +389,10 @@ var (
 			{
 				Name:   tokenfactorymoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&tokenfactorymoduletypes.Module{}),
+			},
+			{
+				Name:   cronmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&cronmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

@@ -1,0 +1,19 @@
+syntax = "proto3";
+package sunrise.cron.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "sunrise/cron/v1/params.proto";
+import "sunrise/cron/v1/schedule.proto";
+
+option go_package = "github.com/sunriselayer/sunrise/x/cron/types";
+
+// GenesisState defines the cron module's genesis state.
+message GenesisState {
+  repeated Schedule schedule_list = 2 [(gogoproto.nullable) = false];
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
