@@ -96,10 +96,6 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k *Keeper) SetWasmMsgServer(server types.WasmMsgServer) {
-	k.WasmMsgServer = server
-}
-
 // ExecuteReadySchedules gets all schedules that are due for execution (with limit that is equal to Params.Limit)
 // and executes messages in each one
 func (k Keeper) ExecuteReadySchedules(ctx sdk.Context, executionStage types.ExecutionStage) {
@@ -226,6 +222,10 @@ func (k Keeper) getSchedulesReadyForExecution(ctx sdk.Context, executionStage ty
 // executeSchedule executes all msgs in a given schedule and changes LastExecuteHeight
 // if at least one msg execution fails, rollback all messages
 func (k Keeper) executeSchedule(ctx sdk.Context, schedule types.Schedule) error {
+	if k.WasmMsgServer == nil {
+		k.Logger().Info("WasmMsgServer is not set, skipping schedule execution")
+		return nil
+	}
 	// Even if contract execution returned an error, we still increase the height
 	// and execute it after this interval
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), LabelExecuteCronSchedule, schedule.Name)

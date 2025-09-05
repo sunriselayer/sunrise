@@ -267,10 +267,6 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 		return err
 	}
 
-	// <sunrise>
-	app.CronKeeper.SetWasmMsgServer(wasmkeeper.NewMsgServerImpl(&app.WasmKeeper))
-	// </sunrise>
-
 	return nil
 }
 
