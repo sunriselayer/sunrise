@@ -13,15 +13,11 @@ import (
 )
 
 var (
-	InflationRateCapInitial = math.LegacyMustNewDecFromStr("0.1")
+	InflationRateCapInitial = math.LegacyMustNewDecFromStr("0.05")
 	InflationRateCapMinimum = math.LegacyMustNewDecFromStr("0.02")
 	DisinflationRate        = math.LegacyMustNewDecFromStr("0.08")
 	SupplyCap               = math.NewInt(1_000_000_000).Mul(math.NewInt(1_000_000))
-	Genesis                 = time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
-)
-
-const (
-	secondsPerYear = 31536000
+	Genesis                 = time.Date(2025, 8, 4, 0, 0, 0, 0, time.UTC)
 )
 
 type BankKeeper interface {
