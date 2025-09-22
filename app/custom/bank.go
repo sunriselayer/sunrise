@@ -35,7 +35,7 @@ func (cm CustomBankModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 		Symbol:  "RISE",
 	}
 	metadataBond := banktypes.Metadata{
-		Description: "The native token of the Sunrise network for staking. This token is non transferrable. This token can be retrieved by providing liquidity.",
+		Description: "The native token of the Sunrise network for staking. This token is non transferable. This token can be retrieved by providing liquidity.",
 		DenomUnits: []*banktypes.DenomUnit{
 			{
 				Denom:    "uvrise",

@@ -41,7 +41,7 @@ func (k Keeper) Delegate(ctx context.Context, sender sdk.AccAddress, valAddr sdk
 		return nil, nil, err
 	}
 
-	// Mint non transferrable share token
+	// Mint non transferable share token
 	shareDenom := types.NonVotingShareTokenDenom(valAddr.String())
 	k.bankKeeper.SetSendEnabled(ctx, shareDenom, false)
 	share = sdk.NewCoins(sdk.NewCoin(shareDenom, shareAmount))
@@ -51,7 +51,7 @@ func (k Keeper) Delegate(ctx context.Context, sender sdk.AccAddress, valAddr sdk
 		return nil, nil, err
 	}
 
-	// Send non transferrable share token to sender
+	// Send non transferable share token to sender
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, share)
 	if err != nil {
 		return nil, nil, err
@@ -93,14 +93,14 @@ func (k Keeper) Undelegate(ctx context.Context, sender sdk.AccAddress, recipient
 		return sdk.Coin{}, nil, time.Time{}, err
 	}
 
-	// Send non transferrable share token to module
+	// Send non transferable share token to module
 	coins := sdk.NewCoins(sdk.NewCoin(shareDenom, unbondingShare))
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, coins)
 	if err != nil {
 		return sdk.Coin{}, nil, time.Time{}, err
 	}
 
-	// Burn non transferrable share token
+	// Burn non transferable share token
 	moduleAddr := k.accountKeeper.GetModuleAddress(types.ModuleName)
 	err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, coins)
 	if err != nil {
