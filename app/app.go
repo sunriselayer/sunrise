@@ -57,6 +57,7 @@ import (
 	ibchookskeeper "github.com/sunriselayer/ibc-hooks/v10/keeper"
 
 	"github.com/sunriselayer/sunrise/docs"
+	cronmodulekeeper "github.com/sunriselayer/sunrise/x/cron/keeper"
 	damodulekeeper "github.com/sunriselayer/sunrise/x/da/keeper"
 	feemodulekeeper "github.com/sunriselayer/sunrise/x/fee/keeper"
 	liquidityincentivemodulekeeper "github.com/sunriselayer/sunrise/x/liquidityincentive/keeper"
@@ -67,12 +68,13 @@ import (
 	swapmodulekeeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	swaptypes "github.com/sunriselayer/sunrise/x/swap/types"
 	tokenconvertermodulekeeper "github.com/sunriselayer/sunrise/x/tokenconverter/keeper"
+	tokenfactorymodulekeeper "github.com/sunriselayer/sunrise/x/tokenfactory/keeper"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/sunriselayer/sunrise/app/gov"
 	"github.com/sunriselayer/sunrise/app/mint"
 
-	"github.com/sunriselayer/sunrise/app/upgrades/v1_1_0"
+	"github.com/sunriselayer/sunrise/app/upgrades/v1_2_0"
 )
 
 const (
@@ -138,6 +140,8 @@ type App struct {
 	LiquidityincentiveKeeper liquidityincentivemodulekeeper.Keeper
 	SwapKeeper               swapmodulekeeper.Keeper
 	StableKeeper             stablemodulekeeper.Keeper
+	TokenfactoryKeeper       tokenfactorymodulekeeper.Keeper
+	CronKeeper               *cronmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -227,6 +231,8 @@ func New(
 		&app.LiquidityincentiveKeeper,
 		&app.SwapKeeper,
 		&app.StableKeeper,
+		&app.TokenfactoryKeeper,
+		&app.CronKeeper,
 	); err != nil {
 		panic(err)
 	}
@@ -259,6 +265,7 @@ func New(
 
 	// <sunrise>
 	app.SwapKeeper.TransferKeeper = &app.TransferKeeper
+	app.CronKeeper.WasmMsgServer = wasmkeeper.NewMsgServerImpl(&app.WasmKeeper)
 	// </sunrise>
 
 	// register streaming services
@@ -461,8 +468,8 @@ func (app *App) setupUpgradeHandlers() {
 	// (which requires a PR) will take over with the new upgrade name defined below.
 	// For more information, see: https://docs.cosmos.network/main/tooling/cosmovisor
 	app.UpgradeKeeper.SetUpgradeHandler(
-		v1_1_0.UpgradeName,
-		v1_1_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator(), app.BankKeeper, app.LockupKeeper),
+		v1_2_0.UpgradeName,
+		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
@@ -474,8 +481,8 @@ func (app *App) setupUpgradeHandlers() {
 		return
 	}
 
-	if upgradeInfo.Name == v1_1_0.UpgradeName {
+	if upgradeInfo.Name == v1_2_0.UpgradeName {
 		// configure store loader that checks if version == upgradeHeight and applies store upgrades
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v1_1_0.StoreUpgrades))
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v1_2_0.StoreUpgrades))
 	}
 }
