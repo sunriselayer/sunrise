@@ -314,7 +314,7 @@ paths:
       summary: 'ResetCircuitBreaker resumes processing of Msg''s in the state machine
         that
 
-        have been been paused using TripCircuitBreaker.'
+        have been paused using TripCircuitBreaker.'
       operationId: AuthMsg_ResetCircuitBreaker
       parameters:
       - description: MsgResetCircuitBreaker defines the Msg/ResetCircuitBreaker request
