@@ -263,7 +263,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	// The pattern of waitingPacket.Return == nil is not handled here
 	switch t := incomingPacket.Change.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexChange:
-		if t.OutgoingIndexChange.Equal(outgoingPacket.Index) {
+		if t.OutgoingIndexChange != nil && t.OutgoingIndexChange.Equal(outgoingPacket.Index) {
 			incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
 				AckChange: acknowledgement,
 			}
@@ -274,7 +274,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	// The pattern of waitingPacket.Forward == nil is not handled here
 	switch t := incomingPacket.Forward.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexForward:
-		if t.OutgoingIndexForward.Equal(outgoingPacket.Index) {
+		if t.OutgoingIndexForward != nil && t.OutgoingIndexForward.Equal(outgoingPacket.Index) {
 			incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 				AckForward: acknowledgement,
 			}
@@ -348,7 +348,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		switch packetReturn := waitingPacket.Change.(type) {
 		case *types.IncomingInFlightPacket_OutgoingIndexChange:
-			if packetReturn.OutgoingIndexChange.Equal(outgoingPacket.Index) {
+			if packetReturn.OutgoingIndexChange != nil && packetReturn.OutgoingIndexChange.Equal(outgoingPacket.Index) {
 				waitingPacket.Change = &types.IncomingInFlightPacket_AckChange{
 					AckChange: ack.Acknowledgement(),
 				}
@@ -358,7 +358,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		switch packetForward := waitingPacket.Forward.(type) {
 		case *types.IncomingInFlightPacket_OutgoingIndexForward:
-			if packetForward.OutgoingIndexForward.Equal(outgoingPacket.Index) {
+			if packetForward.OutgoingIndexForward != nil && packetForward.OutgoingIndexForward.Equal(outgoingPacket.Index) {
 				waitingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 					AckForward: ack.Acknowledgement(),
 				}
@@ -388,26 +388,26 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 	switch packet.Change.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexChange:
 		return false, nil
-	case *types.IncomingInFlightPacket_AckChange:
+	case *types.IncomingInFlightPacket_AckChange, nil:
 		break
 	}
 
 	switch packet.Forward.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexForward:
 		return false, nil
-	case *types.IncomingInFlightPacket_AckForward:
+	case *types.IncomingInFlightPacket_AckForward, nil:
 		break
 	}
 
 	var changeAck []byte = nil
 	var forwardAck []byte = nil
 
-	if packet.Change != nil {
-		changeAck = packet.Change.(*types.IncomingInFlightPacket_AckChange).AckChange
+	if ack, ok := packet.Change.(*types.IncomingInFlightPacket_AckChange); ok && ack != nil {
+		changeAck = ack.AckChange
 	}
 
-	if packet.Forward != nil {
-		forwardAck = packet.Forward.(*types.IncomingInFlightPacket_AckForward).AckForward
+	if ack, ok := packet.Forward.(*types.IncomingInFlightPacket_AckForward); ok && ack != nil {
+		forwardAck = ack.AckForward
 	}
 
 	fullAck := types.SwapAcknowledgement{
