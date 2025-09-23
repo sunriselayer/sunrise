@@ -402,12 +402,12 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 	var changeAck []byte = nil
 	var forwardAck []byte = nil
 
-	if packet.Change != nil {
-		changeAck = packet.Change.(*types.IncomingInFlightPacket_AckChange).AckChange
+	if ack, ok := packet.Change.(*types.IncomingInFlightPacket_AckChange); ok && ack != nil {
+		changeAck = ack.AckChange
 	}
 
-	if packet.Forward != nil {
-		forwardAck = packet.Forward.(*types.IncomingInFlightPacket_AckForward).AckForward
+	if ack, ok := packet.Forward.(*types.IncomingInFlightPacket_AckForward); ok && ack != nil {
+		forwardAck = ack.AckForward
 	}
 
 	fullAck := types.SwapAcknowledgement{
