@@ -17,7 +17,7 @@ import (
 	"github.com/sunriselayer/sunrise/x/da/types"
 )
 
-var metadataUriSplitter = []byte{0x4D, 0x45, 0x54, 0x41, 0x44, 0x41, 0x54, 0x41} // ASCII for "METADATA"
+var metadataUriSplitter = []byte("METADATA")
 
 func getSplitterIndex(txs [][]byte) int {
 	for i, txBytes := range txs {
