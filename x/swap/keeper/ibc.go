@@ -87,12 +87,17 @@ func (k Keeper) resendTimedOutSwapPacket(ctx sdk.Context, packet channeltypes.Pa
 			data.Amount, packet.SourcePort, packet.SourceChannel, packet.Sequence,
 		)
 	}
-	coin := sdk.Coin{Denom: data.Denom, Amount: amount}
+	// The packet denom is the ICS-20 path (e.g. transfer/channel-0/uusdc), not
+	// a bank denom. The transfer module refunds the timed-out packet as
+	// ExtractDenomFromPath(path).IBCDenom(), which is ibc/{hash} for vouchers
+	// and the base denom for native tokens, so resend that same denom.
+	denom := transfertypes.ExtractDenomFromPath(data.Denom).IBCDenom()
+	coin := sdk.Coin{Denom: denom, Amount: amount}
 	if err := coin.Validate(); err != nil {
 		return 0, errors.Wrapf(
 			err,
-			"invalid token %s%s on timed-out swap packet %s/%s/%d",
-			data.Amount, data.Denom, packet.SourcePort, packet.SourceChannel, packet.Sequence,
+			"invalid token %s%s (packet denom %s) on timed-out swap packet %s/%s/%d",
+			data.Amount, denom, data.Denom, packet.SourcePort, packet.SourceChannel, packet.Sequence,
 		)
 	}
 
