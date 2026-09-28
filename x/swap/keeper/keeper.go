@@ -43,7 +43,7 @@ type Keeper struct {
 
 	// InFlightCompletionEnabled reports whether stuck swap packets may be
 	// acknowledged or retried. It stays false through the recovery upgrade so
-	// that work cannot disturb the sweep, then becomes true in the follow-up upgrade.
+	// that work cannot disturb the sweep, then becomes true in upgrade v1.3.1.
 	InFlightCompletionEnabled func(ctx context.Context) bool
 }
 

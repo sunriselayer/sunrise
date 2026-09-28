@@ -79,7 +79,7 @@ import (
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	"github.com/sunriselayer/sunrise/app/upgrades/v1_2_0"
-	"github.com/sunriselayer/sunrise/app/upgrades/v1_4_0"
+	"github.com/sunriselayer/sunrise/app/upgrades/v1_3_1"
 	"github.com/sunriselayer/sunrise/app/upgrades/v2_0_0"
 )
 
@@ -482,7 +482,7 @@ func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.
 		return height > 0
 	}
 	app.SwapKeeper.InFlightCompletionEnabled = func(ctx context.Context) bool {
-		height, err := app.UpgradeKeeper.GetDoneHeight(ctx, v1_4_0.UpgradeName)
+		height, err := app.UpgradeKeeper.GetDoneHeight(ctx, v1_3_1.UpgradeName)
 		if err != nil {
 			return false
 		}
@@ -512,8 +512,8 @@ func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.
 		),
 	)
 	app.UpgradeKeeper.SetUpgradeHandler(
-		v1_4_0.UpgradeName,
-		v1_4_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
+		v1_3_1.UpgradeName,
+		v1_3_1.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
