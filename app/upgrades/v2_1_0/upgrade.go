@@ -1,5 +1,5 @@
 // This file contains the upgrade handler that allows stuck swap packets to complete.
-package v1_3_1
+package v2_1_0
 
 import (
 	"context"
