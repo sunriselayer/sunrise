@@ -254,6 +254,14 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 	app.IBCKeeper.ClientKeeper.AddRoute(solomachine.ModuleName, &soloLightClientModule)
 	app.IBCKeeper.ClientKeeper.AddRoute(ibcwasmtypes.ModuleName, &wasmLightClientModule)
 
+	// Swap is constructed by depinject before this IBC keeper exists, and its
+	// IBCKeeperFn input is optional, so the callback is otherwise nil.
+	// Acknowledgement write-back and timeout retry then panic. Existing
+	// in-flight packets can be completed by the relayer once this is set.
+	app.SwapKeeper.IbcKeeperFn = func() *ibckeeper.Keeper {
+		return app.IBCKeeper
+	}
+
 	// register IBC modules
 	if err := app.RegisterModules(
 		ibc.NewAppModule(app.IBCKeeper),

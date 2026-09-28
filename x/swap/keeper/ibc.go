@@ -12,8 +12,34 @@ import (
 	clienttypes "github.com/cosmos/ibc-go/v10/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v10/modules/core/04-channel/types"
 	exported "github.com/cosmos/ibc-go/v10/modules/core/exported"
+	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 	"github.com/sunriselayer/sunrise/x/swap/types"
 )
+
+// forwardTimeoutDuration returns the relative timeout for a swap forward.
+// A zero duration is treated as unset, the same way retries of zero use
+// DefaultRetryCount. Adding a zero duration to the block time creates a
+// packet that is already expired, so it can never be received.
+func forwardTimeoutDuration(timeout time.Duration) time.Duration {
+	if timeout <= 0 {
+		return DefaultTransferPacketTimeoutTimestamp
+	}
+	return timeout
+}
+
+// getIBCKeeper returns the app IBC keeper. Depinject builds the swap keeper
+// before the IBC keeper exists, so the app must assign IbcKeeperFn afterwards.
+// Calling a nil callback panics inside acknowledgement and timeout handling.
+func (k Keeper) getIBCKeeper() (*ibckeeper.Keeper, error) {
+	if k.IbcKeeperFn == nil {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "swap IbcKeeperFn is nil; the app must set it after the IBC keeper is created")
+	}
+	ibcKeeper := k.IbcKeeperFn()
+	if ibcKeeper == nil {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "swap IbcKeeperFn returned a nil IBC keeper")
+	}
+	return ibcKeeper, nil
+}
 
 var (
 	// DefaultTransferPacketTimeoutHeight is the timeout height following IBC defaults
@@ -29,6 +55,64 @@ var (
 
 func timeoutTimestamp(ctx sdk.Context, duration time.Duration) uint64 {
 	return uint64(ctx.BlockTime().UnixNano()) + uint64(duration.Nanoseconds())
+}
+
+// resendTimedOutSwapPacket sends the refunded tokens again after a swap
+// forward times out. The caller must already have run the transfer module's
+// OnTimeoutPacket, which returns the escrowed coins to the original sender.
+func (k Keeper) resendTimedOutSwapPacket(ctx sdk.Context, packet channeltypes.Packet) (uint64, error) {
+	if k.TransferKeeper == nil {
+		return 0, errors.Wrapf(
+			sdkerrors.ErrInvalidRequest,
+			"transfer keeper is nil, cannot resend timed-out swap packet %s/%s/%d",
+			packet.SourcePort, packet.SourceChannel, packet.Sequence,
+		)
+	}
+
+	var data transfertypes.FungibleTokenPacketData
+	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
+		return 0, errors.Wrapf(
+			err,
+			"failed to unmarshal fungible token packet data for %s/%s/%d",
+			packet.SourcePort, packet.SourceChannel, packet.Sequence,
+		)
+	}
+
+	amount, ok := sdkmath.NewIntFromString(data.Amount)
+	if !ok {
+		return 0, errors.Wrapf(
+			sdkerrors.ErrInvalidCoins,
+			"invalid amount %q on timed-out swap packet %s/%s/%d",
+			data.Amount, packet.SourcePort, packet.SourceChannel, packet.Sequence,
+		)
+	}
+	coin := sdk.Coin{Denom: data.Denom, Amount: amount}
+	if err := coin.Validate(); err != nil {
+		return 0, errors.Wrapf(
+			err,
+			"invalid token %s%s on timed-out swap packet %s/%s/%d",
+			data.Amount, data.Denom, packet.SourcePort, packet.SourceChannel, packet.Sequence,
+		)
+	}
+
+	res, err := k.TransferKeeper.Transfer(ctx, &transfertypes.MsgTransfer{
+		SourcePort:       packet.SourcePort,
+		SourceChannel:    packet.SourceChannel,
+		Token:            coin,
+		Sender:           data.Sender,
+		Receiver:         data.Receiver,
+		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
+		TimeoutTimestamp: timeoutTimestamp(ctx, DefaultTransferPacketTimeoutTimestamp),
+		Memo:             data.Memo,
+	})
+	if err != nil {
+		return 0, errors.Wrapf(
+			err,
+			"failed to resend timed-out swap packet %s/%s/%d from sender %s to receiver %s",
+			packet.SourcePort, packet.SourceChannel, packet.Sequence, data.Sender, data.Receiver,
+		)
+	}
+	return res.Sequence, nil
 }
 
 func (k Keeper) SwapIncomingFund(
@@ -207,7 +291,7 @@ func (k Keeper) TransferAndCreateOutgoingInFlightPacket(
 		Sender:           sender,
 		Receiver:         metadata.Receiver,
 		TimeoutHeight:    DefaultTransferPacketTimeoutHeight,
-		TimeoutTimestamp: timeoutTimestamp(ctx, metadata.Timeout),
+		TimeoutTimestamp: timeoutTimestamp(ctx, forwardTimeoutDuration(metadata.Timeout)),
 		Memo:             metadata.Next,
 	}
 	// forward token to receiver
@@ -263,7 +347,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	// The pattern of waitingPacket.Return == nil is not handled here
 	switch t := incomingPacket.Change.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexChange:
-		if t.OutgoingIndexChange.Equal(outgoingPacket.Index) {
+		if t != nil && t.OutgoingIndexChange != nil && t.OutgoingIndexChange.Equal(outgoingPacket.Index) {
 			incomingPacket.Change = &types.IncomingInFlightPacket_AckChange{
 				AckChange: acknowledgement,
 			}
@@ -274,7 +358,7 @@ func (k Keeper) OnAcknowledgementOutgoingInFlightPacket(
 	// The pattern of waitingPacket.Forward == nil is not handled here
 	switch t := incomingPacket.Forward.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexForward:
-		if t.OutgoingIndexForward.Equal(outgoingPacket.Index) {
+		if t != nil && t.OutgoingIndexForward != nil && t.OutgoingIndexForward.Equal(outgoingPacket.Index) {
 			incomingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 				AckForward: acknowledgement,
 			}
@@ -308,25 +392,16 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 	outgoingPacket.RetriesRemaining--
 
 	if outgoingPacket.RetriesRemaining > 0 {
-		// Resend packet
-		// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.DestinationPort, packet.DestinationChannel)
-		// if err != nil {
-		// 	return errors.Wrap(err, "could not retrieve module from port-id")
-		// }
-		sequence, err := k.IbcKeeperFn().ChannelKeeper.SendPacket(
-			ctx,
-			// chanCap,
-			packet.SourcePort,
-			packet.SourceChannel,
-			DefaultTransferPacketTimeoutHeight,
-			timeoutTimestamp(ctx, DefaultTransferPacketTimeoutTimestamp),
-			packet.Data,
-		)
+		// The transfer module refunds the timed-out escrow before this function
+		// runs. Resend through MsgTransfer so the refunded coins are escrowed
+		// again. ChannelKeeper.SendPacket only writes a commitment and would
+		// leave that new packet unbacked. It also panics when IbcKeeperFn was
+		// never wired, which is what blocked sequence 9631 on sunrise-1.
+		sequence, err := k.resendTimedOutSwapPacket(ctx, packet)
 		if err != nil {
 			return err
 		}
 
-		// Set the new sequence number
 		outgoingPacket.Index.Sequence = sequence
 		err = k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
 		if err != nil {
@@ -348,7 +423,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		switch packetReturn := waitingPacket.Change.(type) {
 		case *types.IncomingInFlightPacket_OutgoingIndexChange:
-			if packetReturn.OutgoingIndexChange.Equal(outgoingPacket.Index) {
+			if packetReturn != nil && packetReturn.OutgoingIndexChange != nil && packetReturn.OutgoingIndexChange.Equal(outgoingPacket.Index) {
 				waitingPacket.Change = &types.IncomingInFlightPacket_AckChange{
 					AckChange: ack.Acknowledgement(),
 				}
@@ -358,7 +433,7 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 
 		switch packetForward := waitingPacket.Forward.(type) {
 		case *types.IncomingInFlightPacket_OutgoingIndexForward:
-			if packetForward.OutgoingIndexForward.Equal(outgoingPacket.Index) {
+			if packetForward != nil && packetForward.OutgoingIndexForward != nil && packetForward.OutgoingIndexForward.Equal(outgoingPacket.Index) {
 				waitingPacket.Forward = &types.IncomingInFlightPacket_AckForward{
 					AckForward: ack.Acknowledgement(),
 				}
@@ -388,26 +463,26 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 	switch packet.Change.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexChange:
 		return false, nil
-	case *types.IncomingInFlightPacket_AckChange:
+	case *types.IncomingInFlightPacket_AckChange, nil:
 		break
 	}
 
 	switch packet.Forward.(type) {
 	case *types.IncomingInFlightPacket_OutgoingIndexForward:
 		return false, nil
-	case *types.IncomingInFlightPacket_AckForward:
+	case *types.IncomingInFlightPacket_AckForward, nil:
 		break
 	}
 
 	var changeAck []byte = nil
 	var forwardAck []byte = nil
 
-	if packet.Change != nil {
-		changeAck = packet.Change.(*types.IncomingInFlightPacket_AckChange).AckChange
+	if ack, ok := packet.Change.(*types.IncomingInFlightPacket_AckChange); ok && ack != nil {
+		changeAck = ack.AckChange
 	}
 
-	if packet.Forward != nil {
-		forwardAck = packet.Forward.(*types.IncomingInFlightPacket_AckForward).AckForward
+	if ack, ok := packet.Forward.(*types.IncomingInFlightPacket_AckForward); ok && ack != nil {
+		forwardAck = ack.AckForward
 	}
 
 	fullAck := types.SwapAcknowledgement{
@@ -421,13 +496,12 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 		return false, err
 	}
 
-	// _, chanCap, err := k.IbcKeeperFn().ChannelKeeper.LookupModuleByChannel(ctx, packet.Index.PortId, packet.Index.ChannelId)
-	// if err != nil {
-	// 	return false, errors.Wrap(err, "could not retrieve module from port-id")
-	// }
-	if err := k.IbcKeeperFn().ChannelKeeper.WriteAcknowledgement(
+	ibcKeeper, err := k.getIBCKeeper()
+	if err != nil {
+		return false, errors.Wrapf(err, "cannot write acknowledgement for incoming packet %s/%s/%d", packet.Index.PortId, packet.Index.ChannelId, packet.Index.Sequence)
+	}
+	if err := ibcKeeper.ChannelKeeper.WriteAcknowledgement(
 		ctx,
-		// chanCap,
 		channeltypes.NewPacket(
 			packet.Data,
 			packet.Index.Sequence,
@@ -439,7 +513,7 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 			packet.TimeoutTimestamp,
 		),
 		channeltypes.NewResultAcknowledgement(bz),
-	); err != nil {
+	); err != nil && !errors.Is(err, channeltypes.ErrAcknowledgementExists) {
 		return false, err
 	}
 

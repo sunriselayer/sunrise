@@ -237,10 +237,13 @@ func (im IBCMiddleware) OnTimeoutPacket(
 		return im.IBCModule.OnTimeoutPacket(ctx, channelVersion, packet, relayer)
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	if err := im.keeper.OnTimeoutOutgoingInFlightPacket(sdkCtx, packet, inflightPacket); err != nil {
+	// Refund the timed-out escrow before the keeper resends the funds.
+	// ChannelKeeper.SendPacket does not move coins, so retrying first and
+	// refunding afterwards creates an unbacked packet.
+	if err := im.IBCModule.OnTimeoutPacket(ctx, channelVersion, packet, relayer); err != nil {
 		return err
 	}
 
-	return im.IBCModule.OnTimeoutPacket(ctx, channelVersion, packet, relayer)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return im.keeper.OnTimeoutOutgoingInFlightPacket(sdkCtx, packet, inflightPacket)
 }
