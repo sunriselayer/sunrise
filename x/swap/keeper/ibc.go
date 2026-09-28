@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	stderrors "errors"
 	"time"
 
 	errors "cosmossdk.io/errors"
@@ -513,7 +514,7 @@ func (k Keeper) ShouldDeleteCompletedWaitingPacket(
 			packet.TimeoutTimestamp,
 		),
 		channeltypes.NewResultAcknowledgement(bz),
-	); err != nil && !errors.Is(err, channeltypes.ErrAcknowledgementExists) {
+	); err != nil && !stderrors.Is(err, channeltypes.ErrAcknowledgementExists) {
 		return false, err
 	}
 
