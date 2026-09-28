@@ -40,6 +40,11 @@ type Keeper struct {
 	// The application sets this from the upgrade module. Nil means the upgrade
 	// has not completed and packet handling stays on the pre-shutdown path.
 	ShutdownActive func(ctx context.Context) bool
+
+	// InFlightCompletionEnabled reports whether stuck swap packets may be
+	// acknowledged or retried. It stays false through the recovery upgrade so
+	// that work cannot disturb the sweep, then becomes true in the follow-up upgrade.
+	InFlightCompletionEnabled func(ctx context.Context) bool
 }
 
 func NewKeeper(
