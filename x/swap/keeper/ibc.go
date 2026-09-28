@@ -407,8 +407,17 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 			return err
 		}
 
+		timedOutIndex := outgoingPacket.Index
 		outgoingPacket.Index.Sequence = sequence
 		err = k.SetOutgoingInFlightPacket(ctx, outgoingPacket)
+		if err != nil {
+			return err
+		}
+
+		// The waiting incoming packet still refers to the timed-out sequence.
+		// Point it at the resent packet so that its acknowledgement, or its
+		// timeout once retries run out, completes the incoming packet.
+		err = k.updateWaitingPacketOutgoingIndex(ctx, outgoingPacket.AckWaitingIndex, timedOutIndex, outgoingPacket.Index)
 		if err != nil {
 			return err
 		}
@@ -459,6 +468,52 @@ func (k Keeper) OnTimeoutOutgoingInFlightPacket(
 	}
 
 	return nil
+}
+
+// updateWaitingPacketOutgoingIndex replaces oldIndex with newIndex in the
+// change or forward that the incoming packet at waitingIndex is waiting on.
+// Acknowledgement and timeout handling match outgoing packets by this index.
+func (k Keeper) updateWaitingPacketOutgoingIndex(
+	ctx sdk.Context,
+	waitingIndex types.PacketIndex,
+	oldIndex types.PacketIndex,
+	newIndex types.PacketIndex,
+) error {
+	waitingPacket, found, err := k.GetIncomingInFlightPacket(ctx, waitingIndex.PortId, waitingIndex.ChannelId, waitingIndex.Sequence)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return nil
+	}
+
+	updated := false
+
+	switch t := waitingPacket.Change.(type) {
+	case *types.IncomingInFlightPacket_OutgoingIndexChange:
+		if t != nil && t.OutgoingIndexChange != nil && t.OutgoingIndexChange.Equal(oldIndex) {
+			waitingPacket.Change = &types.IncomingInFlightPacket_OutgoingIndexChange{
+				OutgoingIndexChange: &newIndex,
+			}
+			updated = true
+		}
+	}
+
+	switch t := waitingPacket.Forward.(type) {
+	case *types.IncomingInFlightPacket_OutgoingIndexForward:
+		if t != nil && t.OutgoingIndexForward != nil && t.OutgoingIndexForward.Equal(oldIndex) {
+			waitingPacket.Forward = &types.IncomingInFlightPacket_OutgoingIndexForward{
+				OutgoingIndexForward: &newIndex,
+			}
+			updated = true
+		}
+	}
+
+	if !updated {
+		return nil
+	}
+
+	return k.SetIncomingInFlightPacket(ctx, waitingPacket)
 }
 
 func (k Keeper) ShouldDeleteCompletedWaitingPacket(
