@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 
 	"cosmossdk.io/collections"
@@ -34,6 +35,11 @@ type Keeper struct {
 	liquidityPoolKeeper types.LiquidityPoolKeeper
 
 	IbcKeeperFn func() *ibckeeper.Keeper
+
+	// ShutdownActive reports whether the shutdown upgrade has completed.
+	// The application sets this from the upgrade module. Nil means the upgrade
+	// has not completed and packet handling stays on the pre-shutdown path.
+	ShutdownActive func(ctx context.Context) bool
 }
 
 func NewKeeper(

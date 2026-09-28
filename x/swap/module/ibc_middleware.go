@@ -83,6 +83,10 @@ func (im IBCMiddleware) OnRecvPacket(
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) exported.Acknowledgement {
+	if im.keeper.IsShutdownActive(ctx) {
+		return channeltypes.NewErrorAcknowledgement(fmt.Errorf("OnRecvPacket: incoming IBC is disabled after the shutdown upgrade"))
+	}
+
 	var data transfertypes.FungibleTokenPacketData
 	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
 		// If this happens either a) a user has crafted an invalid packet, b) a
@@ -204,6 +208,9 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 	if err != nil {
 		return err
 	}
+	if err := im.keeper.ErrIfShutdownInFlight(ctx, found, "OnAcknowledgementPacket", packet.SourcePort, packet.SourceChannel, packet.Sequence); err != nil {
+		return err
+	}
 	if !found {
 		return im.IBCModule.OnAcknowledgementPacket(ctx, channelVersion, packet, acknowledgement, relayer)
 	}
@@ -231,6 +238,9 @@ func (im IBCMiddleware) OnTimeoutPacket(
 
 	inflightPacket, found, err := im.keeper.GetOutgoingInFlightPacket(ctx, packet.SourcePort, packet.SourceChannel, packet.Sequence)
 	if err != nil {
+		return err
+	}
+	if err := im.keeper.ErrIfShutdownInFlight(ctx, found, "OnTimeoutPacket", packet.SourcePort, packet.SourceChannel, packet.Sequence); err != nil {
 		return err
 	}
 	if !found {
