@@ -79,7 +79,7 @@ import (
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	"github.com/sunriselayer/sunrise/app/upgrades/v1_2_0"
-	"github.com/sunriselayer/sunrise/app/upgrades/v1_3_0"
+	"github.com/sunriselayer/sunrise/app/upgrades/v2_0_0"
 )
 
 const (
@@ -474,7 +474,7 @@ func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.
 	}
 
 	app.SwapKeeper.ShutdownActive = func(ctx context.Context) bool {
-		height, err := app.UpgradeKeeper.GetDoneHeight(ctx, v1_3_0.UpgradeName)
+		height, err := app.UpgradeKeeper.GetDoneHeight(ctx, v2_0_0.UpgradeName)
 		if err != nil {
 			return false
 		}
@@ -490,8 +490,8 @@ func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.
 		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
 	)
 	app.UpgradeKeeper.SetUpgradeHandler(
-		v1_3_0.UpgradeName,
-		v1_3_0.CreateUpgradeHandler(
+		v2_0_0.UpgradeName,
+		v2_0_0.CreateUpgradeHandler(
 			app.ModuleManager,
 			app.Configurator(),
 			app.appCodec,

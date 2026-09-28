@@ -1,4 +1,4 @@
-package v1_3_0
+package v2_0_0
 
 import (
 	"crypto/sha256"
@@ -50,7 +50,7 @@ func WritePreUpgradeFile(
 		Consensus:     genutiltypes.NewConsensusGenesis(consensusParams, validators),
 	}
 	doc.AppName = "sunrise"
-	doc.AppVersion = "v1.3.0"
+	doc.AppVersion = "v2.0.0"
 
 	dir := filepath.Join(homeDir, "shutdown")
 	path := filepath.Join(dir, PreUpgradeFileName)

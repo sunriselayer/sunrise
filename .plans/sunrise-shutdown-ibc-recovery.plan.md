@@ -89,7 +89,7 @@ export の genesis JSON では、銀行残高とポジションは最初から�
 
 ## アップグレードの実行
 
-認識どおり、ガバナンス Proposal の `MsgSoftwareUpgrade` で名前 `v1.3.0` と高さ H を指定する。可決後、高さ H のブロックでハンドラが走る。バリデータはその前に、ハンドラ入りのバイナリを cosmovisor へ入れておく。入っていないノードは高さ H で停止する。
+認識どおり、ガバナンス Proposal の `MsgSoftwareUpgrade` で名前 `v2.0.0` と高さ H を指定する。可決後、高さ H のブロックでハンドラが走る。バリデータはその前に、ハンドラ入りのバイナリを cosmovisor へ入れておく。入っていないノードは高さ H で停止する。
 
 台帳コマンドの入力は、ハンドラが回収前に書いた `pre-upgrade-state.json` である。高さ H の後に `sunrised export` したものは、回収後の状態なので使わない。
 
@@ -102,7 +102,7 @@ export の genesis JSON では、銀行残高とポジションは最初から�
 - `ibc/` は `bank.json` に保有者を残したあと、アップグレードで集権口座へ集める。コントラクトは銀行残高のアドレスを保有者とし、内部台帳は分解しない
 - 未着の実トークンは transfer エスクローに残す
 
-## アップグレード v1.3.0 がやること
+## アップグレード v2.0.0 がやること
 
 1. 回収の前に全モジュールの genesis JSON を `DAEMON_HOME/shutdown/pre-upgrade-state.json` へ書く。ディスク不足でも回収は止めない
 2. `ibc/` を集権口座へ `SendCoins` する。transfer エスクローと集権口座自身は除く

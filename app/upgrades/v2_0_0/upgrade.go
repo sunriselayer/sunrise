@@ -1,5 +1,5 @@
 // This file contains the upgrade handler for the shutdown upgrade.
-package v1_3_0
+package v2_0_0
 
 import (
 	"context"
