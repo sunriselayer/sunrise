@@ -220,7 +220,7 @@ func (app *App) registerWasmAndIBCModules(appOpts servertypes.AppOptions, nodeCo
 
 	// <sunrise>
 	ibcRouterV2 := ibcapi.NewRouter().
-		AddRoute(ibctransfertypes.PortID, transferv2.NewIBCModule(app.TransferKeeper))
+		AddRoute(ibctransfertypes.PortID, swapmodule.NewIBCMiddlewareV2(transferv2.NewIBCModule(app.TransferKeeper), &app.SwapKeeper))
 	app.IBCKeeper.SetRouterV2(ibcRouterV2)
 	// </sunrise>
 

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"io"
 
@@ -17,9 +18,11 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	cmtos "github.com/cometbft/cometbft/libs/os"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmttypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -45,6 +48,7 @@ import (
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	poolkeeper "github.com/cosmos/cosmos-sdk/x/protocolpool/keeper"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	staking "github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	ibcwasmkeeper "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/v10/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/controller/keeper"
@@ -75,6 +79,7 @@ import (
 	"github.com/sunriselayer/sunrise/app/mint"
 
 	"github.com/sunriselayer/sunrise/app/upgrades/v1_2_0"
+	"github.com/sunriselayer/sunrise/app/upgrades/v2_0_0"
 )
 
 const (
@@ -338,7 +343,7 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
-	app.setupUpgradeHandlers()
+	app.setupUpgradeHandlers(appOpts, logger)
 
 	// <wasmd>
 	// must be before Loading version
@@ -462,7 +467,20 @@ func BlockedAddresses() map[string]bool {
 	return result
 }
 
-func (app *App) setupUpgradeHandlers() {
+func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.Logger) {
+	homeDir, _ := appOpts.Get(flags.FlagHome).(string)
+	if homeDir == "" {
+		homeDir = DefaultNodeHome
+	}
+
+	app.SwapKeeper.ShutdownActive = func(ctx context.Context) bool {
+		height, err := app.UpgradeKeeper.GetDoneHeight(ctx, v2_0_0.UpgradeName)
+		if err != nil {
+			return false
+		}
+		return height > 0
+	}
+
 	// Example upgrade handler.
 	// When a planned upgrade height is reached, the old binary will panic and shut down, and the new binary
 	// (which requires a PR) will take over with the new upgrade name defined below.
@@ -470,6 +488,20 @@ func (app *App) setupUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v1_2_0.UpgradeName,
 		v1_2_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
+	)
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v2_0_0.UpgradeName,
+		v2_0_0.CreateUpgradeHandler(
+			app.ModuleManager,
+			app.Configurator(),
+			app.appCodec,
+			homeDir,
+			logger,
+			app.BankKeeper,
+			app.IBCKeeper.ChannelKeeper,
+			stakingValidatorExporter{keeper: app.StakingKeeper},
+			app.BaseApp.GetConsensusParams,
+		),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
@@ -485,4 +517,13 @@ func (app *App) setupUpgradeHandlers() {
 		// configure store loader that checks if version == upgradeHeight and applies store upgrades
 		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v1_2_0.StoreUpgrades))
 	}
+}
+
+// stakingValidatorExporter copies the bonded validator set into the pre-upgrade state file.
+type stakingValidatorExporter struct {
+	keeper *stakingkeeper.Keeper
+}
+
+func (s stakingValidatorExporter) ExportValidators(ctx sdk.Context) ([]cmttypes.GenesisValidator, error) {
+	return staking.WriteValidators(ctx, s.keeper)
 }

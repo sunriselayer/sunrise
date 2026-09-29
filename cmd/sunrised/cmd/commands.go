@@ -40,6 +40,7 @@ func initRootCmd(
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),
 		snapshot.Cmd(newApp),
+		ShutdownLedgerCmd(),
 	)
 
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{AddFlags: func(cmd *cobra.Command) {

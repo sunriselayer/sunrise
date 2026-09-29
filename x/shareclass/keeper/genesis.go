@@ -2,9 +2,12 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sunriselayer/sunrise/x/shareclass/types"
 )
@@ -75,14 +78,83 @@ func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) er
 }
 
 // ExportGenesis returns the module's exported genesis.
+// Unbondings and reward indexes are included so a shutdown snapshot can rebuild holder records.
 func (k Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) {
-	var err error
-
 	genesis := types.DefaultGenesis()
-	genesis.Params, err = k.Params.Get(ctx)
+	params, err := k.Params.Get(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ExportGenesis: get params: %w", err)
+	}
+	genesis.Params = params
+
+	genesis.Unbondings, err = k.GetAllUnbondings(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("ExportGenesis: get unbondings: %w", err)
+	}
+	genesis.UnbondingCount, err = k.GetUnbondingId(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("ExportGenesis: get unbonding count: %w", err)
 	}
 
+	if err := k.exportRewardState(ctx, genesis); err != nil {
+		return nil, err
+	}
 	return genesis, nil
+}
+
+// exportRewardState copies reward indexes into genesis.
+// Walk order follows the store key order so the JSON is the same on every node.
+func (k Keeper) exportRewardState(ctx context.Context, genesis *types.GenesisState) error {
+	err := k.RewardMultiplier.Walk(ctx, nil, func(key collections.Pair[[]byte, string], value string) (bool, error) {
+		validator, err := k.stakingKeeper.ValidatorAddressCodec().BytesToString(key.K1())
+		if err != nil {
+			return true, fmt.Errorf("ExportGenesis: validator address for reward multiplier denom %s: %w", key.K2(), err)
+		}
+		genesis.RewardMultipliers = append(genesis.RewardMultipliers, types.GenesisRewardMultiplier{
+			Validator:        validator,
+			Denom:            key.K2(),
+			RewardMultiplier: value,
+		})
+		return false, nil
+	})
+	if err != nil {
+		return fmt.Errorf("ExportGenesis: walk reward multipliers: %w", err)
+	}
+
+	err = k.UsersLastRewardMultiplier.Walk(ctx, nil, func(key collections.Triple[sdk.AccAddress, []byte, string], value string) (bool, error) {
+		user, err := k.addressCodec.BytesToString(key.K1())
+		if err != nil {
+			return true, fmt.Errorf("ExportGenesis: user address for last reward multiplier denom %s: %w", key.K3(), err)
+		}
+		validator, err := k.stakingKeeper.ValidatorAddressCodec().BytesToString(key.K2())
+		if err != nil {
+			return true, fmt.Errorf("ExportGenesis: validator address for user %s last reward multiplier denom %s: %w", user, key.K3(), err)
+		}
+		genesis.UserLastRewardMultipliers = append(genesis.UserLastRewardMultipliers, types.GenesisUserLastRewardMultiplier{
+			User:             user,
+			Validator:        validator,
+			Denom:            key.K3(),
+			RewardMultiplier: value,
+		})
+		return false, nil
+	})
+	if err != nil {
+		return fmt.Errorf("ExportGenesis: walk user last reward multipliers: %w", err)
+	}
+
+	err = k.LastRewardHandlingTime.Walk(ctx, nil, func(key []byte, value int64) (bool, error) {
+		validator, err := k.stakingKeeper.ValidatorAddressCodec().BytesToString(key)
+		if err != nil {
+			return true, fmt.Errorf("ExportGenesis: validator address for last reward handling time: %w", err)
+		}
+		genesis.LastRewardHandlingTimes = append(genesis.LastRewardHandlingTimes, types.GenesisLastRewardHandlingTime{
+			Validator:              validator,
+			LastRewardHandlingTime: value,
+		})
+		return false, nil
+	})
+	if err != nil {
+		return fmt.Errorf("ExportGenesis: walk last reward handling times: %w", err)
+	}
+	return nil
 }

@@ -7,14 +7,19 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v10/modules/core/04-channel/types"
+	channeltypesv2 "github.com/cosmos/ibc-go/v10/modules/core/04-channel/v2/types"
 	porttypes "github.com/cosmos/ibc-go/v10/modules/core/05-port/types"
+	ibcapi "github.com/cosmos/ibc-go/v10/modules/core/api"
 	exported "github.com/cosmos/ibc-go/v10/modules/core/exported"
 
 	keeper "github.com/sunriselayer/sunrise/x/swap/keeper"
 	types "github.com/sunriselayer/sunrise/x/swap/types"
 )
 
-var _ porttypes.IBCModule = IBCMiddleware{}
+var (
+	_ porttypes.IBCModule = IBCMiddleware{}
+	_ ibcapi.IBCModule    = IBCMiddlewareV2{}
+)
 
 type IBCMiddleware struct {
 	porttypes.IBCModule
@@ -83,6 +88,10 @@ func (im IBCMiddleware) OnRecvPacket(
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) exported.Acknowledgement {
+	if im.keeper.IsShutdownActive(ctx) {
+		return channeltypes.NewErrorAcknowledgement(fmt.Errorf("OnRecvPacket: incoming IBC is disabled after the shutdown upgrade"))
+	}
+
 	var data transfertypes.FungibleTokenPacketData
 	if err := transfertypes.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
 		// If this happens either a) a user has crafted an invalid packet, b) a
@@ -204,6 +213,9 @@ func (im IBCMiddleware) OnAcknowledgementPacket(
 	if err != nil {
 		return err
 	}
+	if err := im.keeper.ErrIfShutdownInFlight(ctx, found, "OnAcknowledgementPacket", packet.SourcePort, packet.SourceChannel, packet.Sequence); err != nil {
+		return err
+	}
 	if !found {
 		return im.IBCModule.OnAcknowledgementPacket(ctx, channelVersion, packet, acknowledgement, relayer)
 	}
@@ -233,6 +245,9 @@ func (im IBCMiddleware) OnTimeoutPacket(
 	if err != nil {
 		return err
 	}
+	if err := im.keeper.ErrIfShutdownInFlight(ctx, found, "OnTimeoutPacket", packet.SourcePort, packet.SourceChannel, packet.Sequence); err != nil {
+		return err
+	}
 	if !found {
 		return im.IBCModule.OnTimeoutPacket(ctx, channelVersion, packet, relayer)
 	}
@@ -243,4 +258,46 @@ func (im IBCMiddleware) OnTimeoutPacket(
 	}
 
 	return im.IBCModule.OnTimeoutPacket(ctx, channelVersion, packet, relayer)
+}
+
+// IBCMiddlewareV2 wraps the IBC v2 transfer application.
+// IBC v2 packets on the transfer port do not pass through IBCMiddleware,
+// so incoming packets are rejected here after the shutdown upgrade as well.
+type IBCMiddlewareV2 struct {
+	ibcapi.IBCModule
+	keeper *keeper.Keeper
+}
+
+// NewIBCMiddlewareV2 creates a new IBCMiddlewareV2 given the keeper and underlying IBC v2 application.
+func NewIBCMiddlewareV2(
+	app ibcapi.IBCModule,
+	k *keeper.Keeper,
+) IBCMiddlewareV2 {
+	return IBCMiddlewareV2{
+		IBCModule: app,
+		keeper:    k,
+	}
+}
+
+// OnRecvPacket rejects incoming IBC v2 packets after the shutdown upgrade.
+// Before the upgrade the packet is passed to the underlying application unchanged.
+func (im IBCMiddlewareV2) OnRecvPacket(
+	ctx sdk.Context,
+	sourceClient string,
+	destinationClient string,
+	sequence uint64,
+	payload channeltypesv2.Payload,
+	relayer sdk.AccAddress,
+) channeltypesv2.RecvPacketResult {
+	if im.keeper.IsShutdownActive(ctx) {
+		im.keeper.Logger().Error(
+			"OnRecvPacket: incoming IBC is disabled after the shutdown upgrade",
+			"source_client", sourceClient,
+			"destination_client", destinationClient,
+			"sequence", sequence,
+		)
+		return channeltypesv2.RecvPacketResult{Status: channeltypesv2.PacketStatus_Failure}
+	}
+
+	return im.IBCModule.OnRecvPacket(ctx, sourceClient, destinationClient, sequence, payload, relayer)
 }
