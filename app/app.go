@@ -80,6 +80,7 @@ import (
 
 	"github.com/sunriselayer/sunrise/app/upgrades/v1_2_0"
 	"github.com/sunriselayer/sunrise/app/upgrades/v2_0_0"
+	"github.com/sunriselayer/sunrise/app/upgrades/v2_1_0"
 )
 
 const (
@@ -480,6 +481,13 @@ func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.
 		}
 		return height > 0
 	}
+	app.SwapKeeper.InFlightCompletionEnabled = func(ctx context.Context) bool {
+		height, err := app.UpgradeKeeper.GetDoneHeight(ctx, v2_1_0.UpgradeName)
+		if err != nil {
+			return false
+		}
+		return height > 0
+	}
 
 	// Example upgrade handler.
 	// When a planned upgrade height is reached, the old binary will panic and shut down, and the new binary
@@ -502,6 +510,10 @@ func (app *App) setupUpgradeHandlers(appOpts servertypes.AppOptions, logger log.
 			stakingValidatorExporter{keeper: app.StakingKeeper},
 			app.BaseApp.GetConsensusParams,
 		),
+	)
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v2_1_0.UpgradeName,
+		v2_1_0.CreateUpgradeHandler(app.ModuleManager, app.Configurator()),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
