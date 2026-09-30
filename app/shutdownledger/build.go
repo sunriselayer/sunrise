@@ -30,6 +30,7 @@ const (
 	LockupFile    = "lockup.json"
 	InFlightFile  = "in_flight.json"
 	StakingFile   = "staking.json"
+	ClaimsFile    = "claims.json"
 )
 
 // Build reads an application export and writes the holder files.
@@ -40,9 +41,7 @@ func Build(inputPath, outputDir string) error {
 	if err != nil {
 		return fmt.Errorf("Build: read %s: %w", inputPath, err)
 	}
-	var doc struct {
-		AppState map[string]json.RawMessage `json:"app_state"`
-	}
+	var doc exportDocument
 	if err := json.Unmarshal(raw, &doc); err != nil {
 		return fmt.Errorf("Build: unmarshal %s: %w", inputPath, err)
 	}
@@ -51,6 +50,10 @@ func Build(inputPath, outputDir string) error {
 	}
 
 	bankFile, positionsFile, lockupFile, inFlightFile, stakingFile, err := buildFiles(doc.AppState)
+	if err != nil {
+		return err
+	}
+	claims, err := buildClaims(doc)
 	if err != nil {
 		return err
 	}
@@ -63,6 +66,7 @@ func Build(inputPath, outputDir string) error {
 		LockupFile:    lockupFile,
 		InFlightFile:  inFlightFile,
 		StakingFile:   stakingFile,
+		ClaimsFile:    claims,
 	}
 	for name, value := range files {
 		path := filepath.Join(outputDir, name)

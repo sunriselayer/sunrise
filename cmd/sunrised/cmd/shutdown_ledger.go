@@ -34,6 +34,6 @@ func ShutdownLedgerCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().String("input", "", "Path to pre-upgrade-state.json")
-	cmd.Flags().String("output-dir", "", "Directory for bank.json, positions.json, lockup.json, in_flight.json, and staking.json")
+	cmd.Flags().String("output-dir", "", "Directory for bank.json, positions.json, lockup.json, in_flight.json, staking.json, and claims.json")
 	return cmd
 }
