@@ -41,6 +41,7 @@ func initRootCmd(
 		pruning.Cmd(newApp, app.DefaultNodeHome),
 		snapshot.Cmd(newApp),
 		ShutdownLedgerCmd(),
+		ClaimPayoutCmd(),
 	)
 
 	server.AddCommandsWithStartCmdOptions(rootCmd, app.DefaultNodeHome, newApp, appExport, server.StartCmdOptions{AddFlags: func(cmd *cobra.Command) {

@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,19 +31,20 @@ const (
 	LockupFile    = "lockup.json"
 	InFlightFile  = "in_flight.json"
 	StakingFile   = "staking.json"
+	ClaimsFile    = "claims.json"
 )
 
 // Build reads an application export and writes the holder files.
 // Bank balances are copied as stored. Position token amounts are calculated separately
 // and are not added to the bank file.
-func Build(inputPath, outputDir string) error {
+// snapshotTime is the block time at the export height. The export does not record it,
+// so claims.json vests lockups at this time.
+func Build(inputPath, outputDir string, snapshotTime time.Time) error {
 	raw, err := os.ReadFile(inputPath)
 	if err != nil {
 		return fmt.Errorf("Build: read %s: %w", inputPath, err)
 	}
-	var doc struct {
-		AppState map[string]json.RawMessage `json:"app_state"`
-	}
+	var doc exportDocument
 	if err := json.Unmarshal(raw, &doc); err != nil {
 		return fmt.Errorf("Build: unmarshal %s: %w", inputPath, err)
 	}
@@ -51,6 +53,10 @@ func Build(inputPath, outputDir string) error {
 	}
 
 	bankFile, positionsFile, lockupFile, inFlightFile, stakingFile, err := buildFiles(doc.AppState)
+	if err != nil {
+		return err
+	}
+	claims, err := buildClaims(doc, snapshotTime)
 	if err != nil {
 		return err
 	}
@@ -63,6 +69,7 @@ func Build(inputPath, outputDir string) error {
 		LockupFile:    lockupFile,
 		InFlightFile:  inFlightFile,
 		StakingFile:   stakingFile,
+		ClaimsFile:    claims,
 	}
 	for name, value := range files {
 		path := filepath.Join(outputDir, name)
