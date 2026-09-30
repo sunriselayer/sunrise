@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -36,7 +37,9 @@ const (
 // Build reads an application export and writes the holder files.
 // Bank balances are copied as stored. Position token amounts are calculated separately
 // and are not added to the bank file.
-func Build(inputPath, outputDir string) error {
+// snapshotTime is the block time at the export height. The export does not record it,
+// so claims.json vests lockups at this time.
+func Build(inputPath, outputDir string, snapshotTime time.Time) error {
 	raw, err := os.ReadFile(inputPath)
 	if err != nil {
 		return fmt.Errorf("Build: read %s: %w", inputPath, err)
@@ -53,7 +56,7 @@ func Build(inputPath, outputDir string) error {
 	if err != nil {
 		return err
 	}
-	claims, err := buildClaims(doc)
+	claims, err := buildClaims(doc, snapshotTime)
 	if err != nil {
 		return err
 	}

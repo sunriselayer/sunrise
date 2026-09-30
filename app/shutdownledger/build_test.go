@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -99,7 +100,7 @@ func TestBuildSeparatesBankBalancesFromPositions(t *testing.T) {
 	require.NoError(t, os.WriteFile(input, encoded, 0o600))
 
 	output := filepath.Join(dir, "ledger")
-	require.NoError(t, Build(input, output))
+	require.NoError(t, Build(input, output, time.Date(2026, 10, 5, 12, 0, 0, 0, time.UTC)))
 
 	var bank struct {
 		Balances []struct {

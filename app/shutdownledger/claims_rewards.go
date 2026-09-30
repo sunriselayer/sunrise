@@ -28,13 +28,15 @@ type distributionExport struct {
 			Period  flexUint64   `json:"period"`
 		} `json:"rewards"`
 	} `json:"validator_current_rewards"`
+	// Genesis JSON writes the starting height under its proto name, height.
+	// creation_height is only the Go struct and amino name.
 	Starting []struct {
 		DelegatorAddress string `json:"delegator_address"`
 		ValidatorAddress string `json:"validator_address"`
 		StartingInfo     struct {
 			PreviousPeriod flexUint64     `json:"previous_period"`
 			Stake          math.LegacyDec `json:"stake"`
-			Height         flexUint64     `json:"creation_height"`
+			Height         flexUint64     `json:"height"`
 		} `json:"starting_info"`
 	} `json:"delegator_starting_infos"`
 	Slashes []struct {

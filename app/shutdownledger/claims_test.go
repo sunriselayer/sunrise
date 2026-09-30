@@ -9,7 +9,9 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	disttypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	transfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	"github.com/stretchr/testify/require"
 	pooltypes "github.com/sunriselayer/sunrise/x/liquiditypool/types"
@@ -33,6 +35,7 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	shareDenom := shareclasstypes.NonVotingShareTokenDenom(valB)
 
 	snapshot := time.Date(2026, 10, 5, 12, 0, 0, 0, time.UTC)
+	launch := snapshot.AddDate(-1, 0, 0)
 	pool := pooltypes.Pool{
 		Id:               1,
 		DenomBase:        "ibc/ATOM",
@@ -49,7 +52,7 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	require.NoError(t, err)
 
 	doc := map[string]any{
-		"genesis_time":   snapshot.Format(time.RFC3339),
+		"genesis_time":   launch.Format(time.RFC3339),
 		"initial_height": "10",
 		"app_state": map[string]any{
 			"bank": map[string]any{
@@ -180,19 +183,19 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 					map[string]any{
 						"delegator_address": user, "validator_address": valA,
 						"starting_info": map[string]any{
-							"previous_period": "0", "stake": "100.000000000000000000", "creation_height": "1",
+							"previous_period": "0", "stake": "100.000000000000000000", "height": "1",
 						},
 					},
 					map[string]any{
 						"delegator_address": module, "validator_address": valB,
 						"starting_info": map[string]any{
-							"previous_period": "0", "stake": "40.000000000000000000", "creation_height": "10",
+							"previous_period": "0", "stake": "40.000000000000000000", "height": "10",
 						},
 					},
 					map[string]any{
 						"delegator_address": lockup, "validator_address": valC,
 						"starting_info": map[string]any{
-							"previous_period": "0", "stake": "60.000000000000000000", "creation_height": "10",
+							"previous_period": "0", "stake": "60.000000000000000000", "height": "10",
 						},
 					},
 				},
@@ -222,7 +225,7 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, os.WriteFile(input, encoded, 0o600))
 	output := filepath.Join(dir, "ledger")
-	require.NoError(t, Build(input, output))
+	require.NoError(t, Build(input, output, snapshot))
 
 	var file claimsFile
 	readJSON(t, filepath.Join(output, ClaimsFile), &file)
@@ -310,13 +313,13 @@ func TestDelegationRewardsIncludeSlashPeriods(t *testing.T) {
 			StartingInfo     struct {
 				PreviousPeriod flexUint64     `json:"previous_period"`
 				Stake          math.LegacyDec `json:"stake"`
-				Height         flexUint64     `json:"creation_height"`
+				Height         flexUint64     `json:"height"`
 			} `json:"starting_info"`
 		}{
 			{DelegatorAddress: delegator, ValidatorAddress: validator, StartingInfo: struct {
 				PreviousPeriod flexUint64     `json:"previous_period"`
 				Stake          math.LegacyDec `json:"stake"`
-				Height         flexUint64     `json:"creation_height"`
+				Height         flexUint64     `json:"height"`
 			}{PreviousPeriod: 0, Stake: math.LegacyNewDec(1000), Height: 1}},
 		},
 		Slashes: []struct {
@@ -346,6 +349,101 @@ func TestDelegationRewardsIncludeSlashPeriods(t *testing.T) {
 	coins, err := state.delegationRewards(delegator, validator, math.LegacyNewDec(1000))
 	require.NoError(t, err)
 	require.Equal(t, "200"+denomURise, coins.String())
+}
+
+func TestStartingInfoHeightMatchesSDKGenesisJSON(t *testing.T) {
+	genesis := disttypes.DefaultGenesisState()
+	genesis.DelegatorStartingInfos = []disttypes.DelegatorStartingInfoRecord{{
+		DelegatorAddress: sdk.AccAddress([]byte("height-delegator-adr")).String(),
+		ValidatorAddress: sdk.ValAddress([]byte("height-validator-adr")).String(),
+		StartingInfo: disttypes.DelegatorStartingInfo{
+			PreviousPeriod: 3,
+			Stake:          math.LegacyNewDec(100),
+			Height:         42,
+		},
+	}}
+	raw, err := moduletestutil.MakeTestEncodingConfig().Codec.MarshalJSON(genesis)
+	require.NoError(t, err)
+
+	var distribution distributionExport
+	require.NoError(t, json.Unmarshal(raw, &distribution))
+	require.Len(t, distribution.Starting, 1)
+	require.Equal(t, flexUint64(3), distribution.Starting[0].StartingInfo.PreviousPeriod)
+	require.Equal(t, flexUint64(42), distribution.Starting[0].StartingInfo.Height)
+}
+
+func TestBuildClaimsVestsLockupAtSnapshotTimeAndSkipsNativeDenoms(t *testing.T) {
+	holder := sdk.AccAddress([]byte("native-holder-addr01")).String()
+	lockOwner := sdk.AccAddress([]byte("vest-owner-address01")).String()
+	lockup := sdk.AccAddress([]byte("vest-lockup-address1")).String()
+	factoryDenom := "factory/" + holder + "/meme"
+	snapshot := time.Date(2026, 10, 5, 12, 0, 0, 0, time.UTC)
+	launch := snapshot.AddDate(-1, 0, 0)
+
+	doc := map[string]any{
+		"genesis_time":   launch.Format(time.RFC3339),
+		"initial_height": "20",
+		"app_state": map[string]any{
+			"bank": map[string]any{
+				"balances": []any{
+					map[string]any{"address": holder, "coins": []any{
+						map[string]any{"denom": factoryDenom, "amount": "5"},
+						map[string]any{"denom": "ibc/ATOM", "amount": "7"},
+					}},
+					map[string]any{"address": lockup, "coins": []any{
+						map[string]any{"denom": denomURise, "amount": "80"},
+						map[string]any{"denom": denomUVRise, "amount": "30"},
+					}},
+				},
+				"supply": []any{},
+			},
+			"lockup": map[string]any{
+				"lockup_accounts": []any{
+					map[string]any{
+						"address": lockup, "owner": lockOwner, "id": "3",
+						"start_time": snapshot.Unix() - 500, "end_time": snapshot.Unix() + 500,
+						"original_locking": "100", "additional_locking": "0",
+						"delegated_free": "0", "delegated_locking": "0",
+					},
+				},
+			},
+		},
+	}
+
+	dir := t.TempDir()
+	input := filepath.Join(dir, "pre-upgrade-state.json")
+	encoded, err := json.Marshal(doc)
+	require.NoError(t, err)
+	require.NoError(t, os.WriteFile(input, encoded, 0o600))
+	require.Error(t, Build(input, filepath.Join(dir, "no-snapshot-time"), time.Time{}))
+	output := filepath.Join(dir, "ledger")
+	require.NoError(t, Build(input, output, snapshot))
+
+	var file claimsFile
+	readJSON(t, filepath.Join(output, ClaimsFile), &file)
+	require.Equal(t, snapshot.Unix(), file.SnapshotUnix)
+
+	// Half of the lockup has vested at the snapshot, so 50 of the urise balance stays locked.
+	locked := findClaim(t, file.Claims, lockOwner, SourceLockup, "3:bank:"+denomURise+":locked")
+	require.Equal(t, "50", locked.Amount)
+	require.Equal(t, snapshot.Unix()+500, locked.ClaimableAt)
+	unlocked := findClaim(t, file.Claims, lockOwner, SourceLockup, "3:bank:"+denomURise+":unlocked")
+	require.Equal(t, "30", unlocked.Amount)
+	require.Equal(t, snapshot.Unix(), unlocked.ClaimableAt)
+	// The lockup module locks only urise, so uvrise in the account is free.
+	vrise := findClaim(t, file.Claims, lockOwner, SourceLockup, "3:bank:"+denomUVRise)
+	require.Equal(t, "30", vrise.Amount)
+	require.Equal(t, snapshot.Unix(), vrise.ClaimableAt)
+
+	require.Equal(t, PayoutCosmos, findClaim(t, file.Claims, holder, SourceBank, "ibc/ATOM").Payout)
+	lockupRows := 0
+	for _, claim := range file.Claims {
+		require.NotEqual(t, factoryDenom, claim.Asset)
+		if claim.Owner == lockOwner {
+			lockupRows++
+		}
+	}
+	require.Equal(t, 3, lockupRows)
 }
 
 func findClaim(t *testing.T, claims []Claim, owner, source, sourceID string) Claim {

@@ -8,7 +8,13 @@
 // swept. Pool, pool-fee, transfer-escrow, and protocol module balances are
 // omitted because those coins are represented by positions, in-flight packets,
 // delegations, or reward formulas. The USDN held by the USDrise wrapper is
-// omitted because uusdrise is paid as USDC instead.
+// omitted because uusdrise is paid as USDC instead. Other native denoms, such
+// as tokenfactory tokens, are omitted because only ibc/ vouchers are swept and
+// can be paid on Cosmos.
+//
+// The export does not record its block time. genesis_time is the chain launch
+// time in a standard export and is unset in the upgrade handler's file, so the
+// caller supplies the snapshot time used for lockup vesting.
 package shutdownledger
 
 import (
@@ -96,7 +102,6 @@ type claimsFile struct {
 }
 
 type exportDocument struct {
-	GenesisTime   string                     `json:"genesis_time"`
 	InitialHeight json.RawMessage            `json:"initial_height"`
 	AppState      map[string]json.RawMessage `json:"app_state"`
 }
@@ -150,8 +155,12 @@ type claimBuilder struct {
 	claims       []Claim
 }
 
-func buildClaims(doc exportDocument) (claimsFile, error) {
-	snapshot, height, err := snapshotMeta(doc)
+func buildClaims(doc exportDocument, snapshotTime time.Time) (claimsFile, error) {
+	if snapshotTime.IsZero() {
+		return claimsFile{}, fmt.Errorf("buildClaims: snapshot time is required for lockup vesting")
+	}
+	snapshot := snapshotTime.Unix()
+	height, err := snapshotHeight(doc)
 	if err != nil {
 		return claimsFile{}, err
 	}
@@ -223,7 +232,7 @@ func buildClaims(doc exportDocument) (claimsFile, error) {
 	}
 	builder.sortClaims()
 	return claimsFile{
-		SnapshotTime:   doc.GenesisTime,
+		SnapshotTime:   snapshotTime.UTC().Format(time.RFC3339Nano),
 		SnapshotUnix:   snapshot,
 		SnapshotHeight: height,
 		Slippage:       slippageNote,
@@ -231,23 +240,17 @@ func buildClaims(doc exportDocument) (claimsFile, error) {
 	}, nil
 }
 
-func snapshotMeta(doc exportDocument) (int64, int64, error) {
-	var snapshot int64
-	if doc.GenesisTime != "" {
-		parsed, err := time.Parse(time.RFC3339Nano, doc.GenesisTime)
-		if err != nil {
-			return 0, 0, fmt.Errorf("snapshotMeta: genesis_time %q: %w", doc.GenesisTime, err)
-		}
-		snapshot = parsed.Unix()
-	}
+// snapshotHeight reads the export height. The block time at that height is
+// not in the export, so buildClaims takes it from the caller.
+func snapshotHeight(doc exportDocument) (int64, error) {
 	if len(bytes.TrimSpace(doc.InitialHeight)) == 0 || string(doc.InitialHeight) == "null" {
-		return snapshot, 0, nil
+		return 0, nil
 	}
 	height, err := parseIntegerString(doc.InitialHeight)
 	if err != nil {
-		return 0, 0, fmt.Errorf("snapshotMeta: initial_height %s: %w", doc.InitialHeight, err)
+		return 0, fmt.Errorf("snapshotHeight: initial_height %s: %w", doc.InitialHeight, err)
 	}
-	return snapshot, height, nil
+	return height, nil
 }
 
 func lockupIndex(genesis claimsLockupExport) map[string]lockuptypes.LockupAccount {
@@ -407,13 +410,12 @@ func classifyDenom(denom string) (asset, payout string, include bool) {
 	case usdnIBCDenom:
 		return AssetUSDN, PayoutUSDC, true
 	default:
-		if strings.HasPrefix(denom, "shareclass/") {
-			return "", "", false
-		}
 		if strings.HasPrefix(denom, "ibc/") {
 			return denom, PayoutCosmos, true
 		}
-		return denom, PayoutCosmos, true
+		// Share tokens are paid as their stake. Other native denoms, such as
+		// tokenfactory tokens, are not swept and have no payout outside sunrise.
+		return "", "", false
 	}
 }
 
@@ -432,7 +434,7 @@ func (b *claimBuilder) addBank(bank banktypes.GenesisState) error {
 			}
 			account, lockedAccount := b.lockups[balance.Address]
 			if lockedAccount && asset == AssetRise {
-				if err := b.addLockupLiquid(account, coin.Amount); err != nil {
+				if err := b.addLockupLiquid(account, coin); err != nil {
 					return err
 				}
 				continue
@@ -453,20 +455,23 @@ func (b *claimBuilder) addBank(bank banktypes.GenesisState) error {
 	return nil
 }
 
-func (b *claimBuilder) addLockupLiquid(account lockuptypes.LockupAccount, amount math.Int) error {
-	sourceID := fmt.Sprintf("%d:bank:%s", account.Id, denomURise)
-	if !vestingOpen(account, b.snapshot) {
-		return b.add(account.Owner, AssetRise, amount, SourceLockup, sourceID, PayoutEdge, b.snapshot)
+// addLockupLiquid splits one RISE coin held by a lockup account. The lockup
+// module locks only urise, so the not-bonded locked amount is held back from
+// the urise balance alone and other RISE denoms are free.
+func (b *claimBuilder) addLockupLiquid(account lockuptypes.LockupAccount, coin sdk.Coin) error {
+	sourceID := fmt.Sprintf("%d:bank:%s", account.Id, coin.Denom)
+	if coin.Denom != denomURise || !vestingOpen(account, b.snapshot) {
+		return b.add(account.Owner, AssetRise, coin.Amount, SourceLockup, sourceID, PayoutEdge, b.snapshot)
 	}
 	_, locked, err := lockAmounts(account, b.snapshot)
 	if err != nil {
 		return fmt.Errorf("addLockupLiquid: lockup %d owner %s: %w", account.Id, account.Owner, err)
 	}
 	lockedLiquid := account.GetNotBondedLockedAmount(locked)
-	if lockedLiquid.GT(amount) {
-		lockedLiquid = amount
+	if lockedLiquid.GT(coin.Amount) {
+		lockedLiquid = coin.Amount
 	}
-	unlockedLiquid := amount.Sub(lockedLiquid)
+	unlockedLiquid := coin.Amount.Sub(lockedLiquid)
 	if err := b.add(account.Owner, AssetRise, lockedLiquid, SourceLockup, sourceID+":locked", PayoutEdge, account.EndTime); err != nil {
 		return err
 	}
