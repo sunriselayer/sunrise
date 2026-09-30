@@ -238,9 +238,9 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	require.Equal(t, PayoutEdge, findClaim(t, file.Claims, user, SourceBank, denomUVRise).Payout)
 	require.Equal(t, "8", claimAmount(t, file.Claims, user, SourceBank, denomUUSDRise))
 	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Asset)
-	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Payout)
+	require.Equal(t, PayoutEdge, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Payout)
 	require.Equal(t, "4", claimAmount(t, file.Claims, user, SourceBank, usdnIBCDenom))
-	require.Equal(t, AssetUSDN, findClaim(t, file.Claims, user, SourceBank, usdnIBCDenom).Asset)
+	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, usdnIBCDenom).Asset)
 	require.Equal(t, "9", claimAmount(t, file.Claims, user, SourceBank, "ibc/ATOM"))
 	require.Equal(t, PayoutCosmos, findClaim(t, file.Claims, user, SourceBank, "ibc/ATOM").Payout)
 
@@ -272,7 +272,7 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 		require.NotEqual(t, module, claim.Owner)
 		require.NotEqual(t, lockup, claim.Owner)
 		if claim.Owner == usdriseWrapper {
-			require.NotEqual(t, AssetUSDN, claim.Asset)
+			require.NotEqual(t, AssetUSDrise, claim.Asset)
 		}
 	}
 }

@@ -51,10 +51,8 @@ import (
 const (
 	// AssetRise is urise and uvrise, paid later as an Edge coin.
 	AssetRise = "rise"
-	// AssetUSDrise is uusdrise, paid as USDC.
+	// AssetUSDrise is uusdrise plus unwrapped USDN and USDC.
 	AssetUSDrise = "usdrise"
-	// AssetUSDN is unwrapped IBC USDN, paid as USDC.
-	AssetUSDN = "usdn"
 
 	PayoutEdge   = "edge"
 	PayoutUSDC   = "usdc"
@@ -72,9 +70,13 @@ const (
 	denomURise    = "urise"
 	denomUVRise   = "uvrise"
 	denomUUSDRise = "uusdrise"
+	// denomStRise is the tokenfactory wrapped RISE.
+	denomStRise = "factory/sunrise1ghd753shjuwexxywmgs4xz7x2q732vcnkm6h2pyv9s6ah3hylvrqz5nv4h/strise"
 
-	// usdnIBCDenom is the transfer denom of USDN on sunrise-1.
-	usdnIBCDenom = "ibc/A7AD825A4B48DDA0138D118655E60100D22A4D690C45B95221520B58C9A64B63"
+	// nobleUsdcIBC is Noble USDC on channel-0. injectiveUsdcIBC is Injective native USDC that arrived through Cosmos Hub.
+	nobleUsdcIBC     = "ibc/8E27BA2D5493AF5636760E354E46004562C46AB7EC0CC4C1CA14E9E20E2545B5"
+	injectiveUsdcIBC = "ibc/361B5A15BD029B92BC57500263F926EA0D59901A48A35A40F84696EF153C7B1D"
+	usdnIBCDenom     = "ibc/A7AD825A4B48DDA0138D118655E60100D22A4D690C45B95221520B58C9A64B63"
 	// usdriseWrapper is the USDRise contract that custodies wrapped USDN.
 	// Its USDN balance is the backing for uusdrise and is not a second claim.
 	usdriseWrapper = "sunrise14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s2v9j75"
@@ -403,12 +405,10 @@ func (b *claimBuilder) add(owner, asset string, amount math.Int, source, sourceI
 
 func classifyDenom(denom string) (asset, payout string, include bool) {
 	switch denom {
-	case denomURise, denomUVRise:
+	case denomURise, denomUVRise, denomStRise:
 		return AssetRise, PayoutEdge, true
-	case denomUUSDRise:
-		return AssetUSDrise, PayoutUSDC, true
-	case usdnIBCDenom:
-		return AssetUSDN, PayoutUSDC, true
+	case denomUUSDRise, usdnIBCDenom, nobleUsdcIBC, injectiveUsdcIBC:
+		return AssetUSDrise, PayoutEdge, true
 	default:
 		if strings.HasPrefix(denom, "ibc/") {
 			return denom, PayoutCosmos, true
