@@ -51,7 +51,7 @@ import (
 const (
 	// AssetRise is urise and uvrise, paid later as an Edge coin.
 	AssetRise = "rise"
-	// AssetUSDrise is uusdrise plus unwrapped USDN and USDC.
+	// AssetUSDrise is uusdrise plus unwrapped USDN and USDC, paid as USDC.
 	AssetUSDrise = "usdrise"
 
 	PayoutEdge   = "edge"
@@ -81,7 +81,7 @@ const (
 	// Its USDN balance is the backing for uusdrise and is not a second claim.
 	usdriseWrapper = "sunrise14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s2v9j75"
 
-	slippageNote = "usdrise and usdn amounts are ledger base units. USDC sent from the hot wallet can be lower after the USDN to USDC swap."
+	slippageNote = "usdrise amounts are ledger base units. USDC sent from the hot wallet can be lower after the USDN to USDC swap."
 )
 
 // Claim is one payable row in claims.json.
@@ -408,7 +408,7 @@ func classifyDenom(denom string) (asset, payout string, include bool) {
 	case denomURise, denomUVRise, denomStRise:
 		return AssetRise, PayoutEdge, true
 	case denomUUSDRise, usdnIBCDenom, nobleUsdcIBC, injectiveUsdcIBC:
-		return AssetUSDrise, PayoutEdge, true
+		return AssetUSDrise, PayoutUSDC, true
 	default:
 		if strings.HasPrefix(denom, "ibc/") {
 			return denom, PayoutCosmos, true

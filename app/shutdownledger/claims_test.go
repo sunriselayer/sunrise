@@ -61,6 +61,7 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 						map[string]any{"denom": denomUVRise, "amount": "6"},
 						map[string]any{"denom": denomUUSDRise, "amount": "8"},
 						map[string]any{"denom": usdnIBCDenom, "amount": "4"},
+						map[string]any{"denom": nobleUsdcIBC, "amount": "5"},
 						map[string]any{"denom": "ibc/ATOM", "amount": "9"},
 						map[string]any{"denom": shareDenom, "amount": "4"},
 					}},
@@ -238,9 +239,13 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	require.Equal(t, PayoutEdge, findClaim(t, file.Claims, user, SourceBank, denomUVRise).Payout)
 	require.Equal(t, "8", claimAmount(t, file.Claims, user, SourceBank, denomUUSDRise))
 	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Asset)
-	require.Equal(t, PayoutEdge, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Payout)
+	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Payout)
 	require.Equal(t, "4", claimAmount(t, file.Claims, user, SourceBank, usdnIBCDenom))
 	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, usdnIBCDenom).Asset)
+	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourceBank, usdnIBCDenom).Payout)
+	require.Equal(t, "5", claimAmount(t, file.Claims, user, SourceBank, nobleUsdcIBC))
+	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, nobleUsdcIBC).Asset)
+	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourceBank, nobleUsdcIBC).Payout)
 	require.Equal(t, "9", claimAmount(t, file.Claims, user, SourceBank, "ibc/ATOM"))
 	require.Equal(t, PayoutCosmos, findClaim(t, file.Claims, user, SourceBank, "ibc/ATOM").Payout)
 
@@ -253,6 +258,7 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	require.Equal(t, wantBase.String(), claimAmount(t, file.Claims, user, SourcePosition, "1:base"))
 	require.Equal(t, wantQuote.String(), claimAmount(t, file.Claims, user, SourcePosition, "1:quote"))
 	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourcePosition, "1:quote").Asset)
+	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourcePosition, "1:quote").Payout)
 	require.Equal(t, "3", claimAmount(t, file.Claims, user, SourcePositionReward, "1:"+denomUUSDRise))
 
 	lockedBank := findClaim(t, file.Claims, lockOwner, SourceLockup, "7:bank:"+denomURise+":locked")
