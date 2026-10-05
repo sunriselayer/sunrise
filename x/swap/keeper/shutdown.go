@@ -15,11 +15,21 @@ func (k Keeper) IsShutdownActive(ctx context.Context) bool {
 }
 
 // ErrIfShutdownInFlight returns an error when a recorded in-flight packet is
-// delivered after the shutdown upgrade. The caller must not refund, resend, or
-// call the IBC keeper. Packets that are not in the in-flight index are unaffected.
+// delivered after the recovery upgrade and before in-flight completion is enabled.
+// The caller must not refund, resend, or call the IBC keeper. Packets that are
+// not in the in-flight index are unaffected.
 func (k Keeper) ErrIfShutdownInFlight(ctx context.Context, found bool, caller, portID, channelID string, sequence uint64) error {
-	if !found || !k.IsShutdownActive(ctx) {
+	if !found || !k.IsShutdownActive(ctx) || k.IsInFlightCompletionEnabled(ctx) {
 		return nil
 	}
 	return fmt.Errorf("%s: in-flight packet %s/%s/%d is left in escrow and is not completed", caller, portID, channelID, sequence)
+}
+
+// IsInFlightCompletionEnabled reports whether a later upgrade has allowed
+// acknowledgement write-back and timeout retry of packets recorded before recovery.
+func (k Keeper) IsInFlightCompletionEnabled(ctx context.Context) bool {
+	if k.InFlightCompletionEnabled == nil {
+		return false
+	}
+	return k.InFlightCompletionEnabled(ctx)
 }

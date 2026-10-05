@@ -20,6 +20,10 @@ func TestErrIfShutdownInFlightLeavesOrdinaryPacketsAlone(t *testing.T) {
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "OnTimeoutPacket")
 	require.Contains(t, err.Error(), "transfer/channel-0/7")
+
+	active.InFlightCompletionEnabled = func(context.Context) bool { return true }
+	err = active.ErrIfShutdownInFlight(context.Background(), true, "OnTimeoutPacket", "transfer", "channel-0", 9631)
+	require.NoError(t, err)
 }
 
 func TestIsShutdownActive(t *testing.T) {
