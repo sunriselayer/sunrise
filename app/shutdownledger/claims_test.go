@@ -238,9 +238,10 @@ func TestBuildClaimsSeparatesSourcesAndSkipsProtocolPots(t *testing.T) {
 	require.Equal(t, PayoutEdge, findClaim(t, file.Claims, user, SourceBank, denomUVRise).Payout)
 	require.Equal(t, "8", claimAmount(t, file.Claims, user, SourceBank, denomUUSDRise))
 	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Asset)
-	require.Equal(t, PayoutEdge, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Payout)
+	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourceBank, denomUUSDRise).Payout)
 	require.Equal(t, "4", claimAmount(t, file.Claims, user, SourceBank, usdnIBCDenom))
 	require.Equal(t, AssetUSDrise, findClaim(t, file.Claims, user, SourceBank, usdnIBCDenom).Asset)
+	require.Equal(t, PayoutUSDC, findClaim(t, file.Claims, user, SourceBank, usdnIBCDenom).Payout)
 	require.Equal(t, "9", claimAmount(t, file.Claims, user, SourceBank, "ibc/ATOM"))
 	require.Equal(t, PayoutCosmos, findClaim(t, file.Claims, user, SourceBank, "ibc/ATOM").Payout)
 
@@ -444,6 +445,79 @@ func TestBuildClaimsVestsLockupAtSnapshotTimeAndSkipsNativeDenoms(t *testing.T) 
 		}
 	}
 	require.Equal(t, 3, lockupRows)
+}
+
+func TestBuildClaimsLocksOnlyUnvestedLockupStake(t *testing.T) {
+	lockOwner := sdk.AccAddress([]byte("stake-owner-address1")).String()
+	lockup := sdk.AccAddress([]byte("stake-lockup-addres1")).String()
+	valA := sdk.ValAddress([]byte("stake-validator-a-01")).String()
+	valB := sdk.ValAddress([]byte("stake-validator-b-01")).String()
+	snapshot := time.Date(2026, 10, 5, 12, 0, 0, 0, time.UTC)
+
+	doc := map[string]any{
+		"initial_height": "40",
+		"app_state": map[string]any{
+			"lockup": map[string]any{
+				"lockup_accounts": []any{
+					map[string]any{
+						"address": lockup, "owner": lockOwner, "id": "5",
+						"start_time": snapshot.Unix() - 500, "end_time": snapshot.Unix() + 500,
+						"original_locking": "100", "additional_locking": "0",
+						"delegated_free": "0", "delegated_locking": "100",
+					},
+				},
+			},
+			"staking": map[string]any{
+				"params": map[string]any{"bond_denom": denomUVRise},
+				"validators": []any{
+					map[string]any{"operator_address": valA, "tokens": "60", "delegator_shares": "60.000000000000000000"},
+				},
+				"delegations": []any{
+					map[string]any{"delegator_address": lockup, "validator_address": valA, "shares": "60.000000000000000000"},
+				},
+				"unbonding_delegations": []any{
+					map[string]any{"delegator_address": lockup, "validator_address": valB, "entries": []any{
+						map[string]any{"balance": "40"},
+					}},
+				},
+			},
+			"distribution": map[string]any{
+				"delegator_starting_infos": []any{
+					map[string]any{
+						"delegator_address": lockup, "validator_address": valA,
+						"starting_info": map[string]any{
+							"previous_period": "0", "stake": "60.000000000000000000", "height": "40",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	dir := t.TempDir()
+	input := filepath.Join(dir, "pre-upgrade-state.json")
+	encoded, err := json.Marshal(doc)
+	require.NoError(t, err)
+	require.NoError(t, os.WriteFile(input, encoded, 0o600))
+	output := filepath.Join(dir, "ledger")
+	require.NoError(t, Build(input, output, snapshot))
+
+	var file claimsFile
+	readJSON(t, filepath.Join(output, ClaimsFile), &file)
+
+	// All 100 was delegated while locked, but half has vested at the snapshot,
+	// so only 50 of DelegatedLocking stays locked. The delegation holds it and
+	// the unbonding is claimable now.
+	locked := findClaim(t, file.Claims, lockOwner, SourceLockup, "5:delegation:"+valA+":locked")
+	require.Equal(t, "50", locked.Amount)
+	require.Equal(t, snapshot.Unix()+500, locked.ClaimableAt)
+	unlocked := findClaim(t, file.Claims, lockOwner, SourceLockup, "5:delegation:"+valA+":unlocked")
+	require.Equal(t, "10", unlocked.Amount)
+	require.Equal(t, snapshot.Unix(), unlocked.ClaimableAt)
+	unbonding := findClaim(t, file.Claims, lockOwner, SourceLockup, "5:unbonding:"+valB+":unlocked")
+	require.Equal(t, "40", unbonding.Amount)
+	require.Equal(t, snapshot.Unix(), unbonding.ClaimableAt)
+	require.Len(t, file.Claims, 3)
 }
 
 func findClaim(t *testing.T, claims []Claim, owner, source, sourceID string) Claim {

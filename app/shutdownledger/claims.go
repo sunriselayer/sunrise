@@ -51,7 +51,7 @@ import (
 const (
 	// AssetRise is urise and uvrise, paid later as an Edge coin.
 	AssetRise = "rise"
-	// AssetUSDrise is uusdrise plus unwrapped USDN and USDC.
+	// AssetUSDrise is uusdrise plus unwrapped USDN and USDC, paid as hot-wallet USDC.
 	AssetUSDrise = "usdrise"
 
 	PayoutEdge   = "edge"
@@ -408,7 +408,7 @@ func classifyDenom(denom string) (asset, payout string, include bool) {
 	case denomURise, denomUVRise, denomStRise:
 		return AssetRise, PayoutEdge, true
 	case denomUUSDRise, usdnIBCDenom, nobleUsdcIBC, injectiveUsdcIBC:
-		return AssetUSDrise, PayoutEdge, true
+		return AssetUSDrise, PayoutUSDC, true
 	default:
 		if strings.HasPrefix(denom, "ibc/") {
 			return denom, PayoutCosmos, true
@@ -570,10 +570,10 @@ func (b *claimBuilder) addStaking(staking stakingExport, bank banktypes.GenesisS
 	if err != nil {
 		return err
 	}
-	grouped := map[string][]stakingRecord{}
+	lockupDelegations := map[string][]stakingRecord{}
 	for _, record := range records.Delegations {
 		if _, ok := b.lockups[record.Owner]; ok {
-			grouped[record.Owner] = append(grouped[record.Owner], record)
+			lockupDelegations[record.Owner] = append(lockupDelegations[record.Owner], record)
 			continue
 		}
 		amount, err := parseInt(record.Amount)
@@ -584,26 +584,26 @@ func (b *claimBuilder) addStaking(staking stakingExport, bank banktypes.GenesisS
 			return err
 		}
 	}
-	for address, rows := range grouped {
-		if err := b.addLockupDelegations(b.lockups[address], rows); err != nil {
-			return err
-		}
-	}
+	lockupUnbondings := map[string][]stakingRecord{}
 	for _, record := range records.Unbondings {
+		if _, ok := b.lockups[record.Owner]; ok {
+			lockupUnbondings[record.Owner] = append(lockupUnbondings[record.Owner], record)
+			continue
+		}
 		amount, err := parseInt(record.Amount)
 		if err != nil {
 			return fmt.Errorf("addStaking: unbonding %s from %s amount %q: %w", record.Owner, record.Validator, record.Amount, err)
 		}
-		if account, ok := b.lockups[record.Owner]; ok {
-			if record.Denom != denomURise && record.Denom != denomUVRise {
-				return fmt.Errorf("addStaking: lockup %d unbonding denom %s is not rise", account.Id, record.Denom)
-			}
-			if err := b.addLockupRise(account, amount, "unbonding:"+record.Validator, true); err != nil {
-				return err
-			}
+		if err := b.addClassified(record.Owner, record.Denom, amount, SourceUnbonding, record.Validator); err != nil {
+			return err
+		}
+	}
+	for address, account := range b.lockups {
+		delegations, unbondings := lockupDelegations[address], lockupUnbondings[address]
+		if len(delegations) == 0 && len(unbondings) == 0 {
 			continue
 		}
-		if err := b.addClassified(record.Owner, record.Denom, amount, SourceUnbonding, record.Validator); err != nil {
+		if err := b.addLockupStake(account, delegations, unbondings); err != nil {
 			return err
 		}
 	}
@@ -645,45 +645,57 @@ func (b *claimBuilder) addStaking(staking stakingExport, bank banktypes.GenesisS
 	return nil
 }
 
-func (b *claimBuilder) addLockupDelegations(account lockuptypes.LockupAccount, rows []stakingRecord) error {
-	sort.Slice(rows, func(i, j int) bool { return rows[i].Validator < rows[j].Validator })
+// addLockupStake splits the RISE a lockup account has delegated or is
+// unbonding. DelegatedLocking is set at delegation time and is not lowered as
+// tokens vest, so only min(locked, DelegatedLocking) is held back, the part
+// GetNotBondedLockedAmount leaves out of the liquid balance. Unbonding entries
+// stay in DelegatedLocking until they mature, so they share that amount after
+// the delegations, as a matured unbonding lowers DelegatedFree first.
+func (b *claimBuilder) addLockupStake(account lockuptypes.LockupAccount, delegations, unbondings []stakingRecord) error {
 	remainingLocked := math.ZeroInt()
 	if vestingOpen(account, b.snapshot) {
-		remainingLocked = account.DelegatedLocking
-	}
-	for _, row := range rows {
-		amount, err := parseInt(row.Amount)
+		_, locked, err := lockAmounts(account, b.snapshot)
 		if err != nil {
-			return fmt.Errorf("addLockupDelegations: lockup %d validator %s amount %q: %w", account.Id, row.Validator, row.Amount, err)
+			return fmt.Errorf("addLockupStake: lockup %d owner %s: %w", account.Id, account.Owner, err)
 		}
-		if row.Denom != denomURise && row.Denom != denomUVRise {
-			return fmt.Errorf("addLockupDelegations: lockup %d validator %s denom %s is not rise", account.Id, row.Validator, row.Denom)
-		}
-		locked := math.ZeroInt()
-		if remainingLocked.IsPositive() {
-			locked = amount
-			if locked.GT(remainingLocked) {
-				locked = remainingLocked
+		remainingLocked = math.MinInt(locked, account.DelegatedLocking)
+	}
+	for _, group := range []struct {
+		kind string
+		rows []stakingRecord
+	}{
+		{kind: "delegation", rows: delegations},
+		{kind: "unbonding", rows: unbondings},
+	} {
+		rows := group.rows
+		sort.Slice(rows, func(i, j int) bool { return rows[i].Validator < rows[j].Validator })
+		for _, row := range rows {
+			amount, err := parseInt(row.Amount)
+			if err != nil {
+				return fmt.Errorf("addLockupStake: lockup %d %s %s amount %q: %w", account.Id, group.kind, row.Validator, row.Amount, err)
 			}
-			remainingLocked = remainingLocked.Sub(locked)
-		}
-		unlocked := amount.Sub(locked)
-		if err := b.add(account.Owner, AssetRise, locked, SourceLockup, fmt.Sprintf("%d:delegation:%s:locked", account.Id, row.Validator), PayoutEdge, account.EndTime); err != nil {
-			return err
-		}
-		if err := b.add(account.Owner, AssetRise, unlocked, SourceLockup, fmt.Sprintf("%d:delegation:%s:unlocked", account.Id, row.Validator), PayoutEdge, b.snapshot); err != nil {
-			return err
+			if row.Denom != denomURise && row.Denom != denomUVRise {
+				return fmt.Errorf("addLockupStake: lockup %d %s %s denom %s is not rise", account.Id, group.kind, row.Validator, row.Denom)
+			}
+			locked := math.ZeroInt()
+			if remainingLocked.IsPositive() {
+				locked = amount
+				if locked.GT(remainingLocked) {
+					locked = remainingLocked
+				}
+				remainingLocked = remainingLocked.Sub(locked)
+			}
+			unlocked := amount.Sub(locked)
+			sourceID := fmt.Sprintf("%d:%s:%s", account.Id, group.kind, row.Validator)
+			if err := b.add(account.Owner, AssetRise, locked, SourceLockup, sourceID+":locked", PayoutEdge, account.EndTime); err != nil {
+				return err
+			}
+			if err := b.add(account.Owner, AssetRise, unlocked, SourceLockup, sourceID+":unlocked", PayoutEdge, b.snapshot); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
-}
-
-func (b *claimBuilder) addLockupRise(account lockuptypes.LockupAccount, amount math.Int, sourceID string, followVest bool) error {
-	fullID := fmt.Sprintf("%d:%s", account.Id, sourceID)
-	if !followVest || !vestingOpen(account, b.snapshot) {
-		return b.add(account.Owner, AssetRise, amount, SourceLockup, fullID, PayoutEdge, b.snapshot)
-	}
-	return b.add(account.Owner, AssetRise, amount, SourceLockup, fullID, PayoutEdge, account.EndTime)
 }
 
 func (b *claimBuilder) addMaybeLocked(account lockuptypes.LockupAccount, denom string, amount math.Int, sourceID string) error {
