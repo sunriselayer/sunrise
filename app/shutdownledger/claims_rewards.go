@@ -237,6 +237,10 @@ func (s *rewardState) delegationRewards(delegator, validator string, shares math
 	startingPeriod := info.period
 	var rewards sdk.DecCoins
 	if s.height > info.height {
+		// IterateValidatorSlashEventsBetween includes the current height, so a
+		// slash at the snapshot height is applied. A recorded slash has already
+		// removed validator tokens; skipping it would leave stake above
+		// currentStake.
 		for _, event := range s.slashes[validator] {
 			if event.height < info.height || event.height > s.height {
 				continue

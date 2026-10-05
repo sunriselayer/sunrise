@@ -352,6 +352,73 @@ func TestDelegationRewardsIncludeSlashPeriods(t *testing.T) {
 	require.Equal(t, "200"+denomURise, coins.String())
 }
 
+func TestDelegationRewardsApplySlashAtSnapshotHeight(t *testing.T) {
+	delegator := sdk.AccAddress([]byte("edge-slash-delegator")).String()
+	validator := sdk.ValAddress([]byte("edge-slash-validator")).String()
+	rawDistribution, err := json.Marshal(map[string]any{
+		"validator_historical_rewards": []any{
+			map[string]any{
+				"validator_address": validator, "period": "0",
+				"rewards": map[string]any{"cumulative_reward_ratio": []any{}},
+			},
+			map[string]any{
+				"validator_address": validator, "period": "1",
+				"rewards": map[string]any{"cumulative_reward_ratio": []any{
+					map[string]any{"denom": denomURise, "amount": "0.200000000000000000"},
+				}},
+			},
+		},
+		"validator_current_rewards": []any{
+			map[string]any{
+				"validator_address": validator,
+				"rewards": map[string]any{
+					"period": "2",
+					"rewards": []any{
+						map[string]any{"denom": denomURise, "amount": "90.000000000000000000"},
+					},
+				},
+			},
+		},
+		"delegator_starting_infos": []any{
+			map[string]any{
+				"delegator_address": delegator, "validator_address": validator,
+				"starting_info": map[string]any{
+					"previous_period": "0", "stake": "1000.000000000000000000", "height": "1",
+				},
+			},
+		},
+		"validator_slash_events": []any{
+			map[string]any{
+				"validator_address": validator, "height": "10",
+				"validator_slash_event": map[string]any{
+					"validator_period": "1", "fraction": "0.100000000000000000",
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	var distribution distributionExport
+	require.NoError(t, json.Unmarshal(rawDistribution, &distribution))
+
+	rawStaking, err := json.Marshal(map[string]any{
+		"validators": []any{
+			map[string]any{"operator_address": validator, "tokens": "900", "delegator_shares": "1000.000000000000000000"},
+		},
+	})
+	require.NoError(t, err)
+	var staking stakingExport
+	require.NoError(t, json.Unmarshal(rawStaking, &staking))
+
+	state, err := prepareRewards(distribution, staking, 10)
+	require.NoError(t, err)
+
+	// The slash at the snapshot height already cut the validator to 900 tokens.
+	// Period 1 pays 0.2 on 1000 and period 2 pays 0.1 on the slashed 900.
+	coins, err := state.delegationRewards(delegator, validator, math.LegacyNewDec(1000))
+	require.NoError(t, err)
+	require.Equal(t, "290"+denomURise, coins.String())
+}
+
 func TestStartingInfoHeightMatchesSDKGenesisJSON(t *testing.T) {
 	genesis := disttypes.DefaultGenesisState()
 	genesis.DelegatorStartingInfos = []disttypes.DelegatorStartingInfoRecord{{
