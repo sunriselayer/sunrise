@@ -132,7 +132,7 @@ type exportedLockupAccount struct {
 }
 
 type shareclassRewardExport struct {
-	Unbondings  []shareclasstypes.Unbonding `json:"unbondings"`
+	Unbondings  []exportedShareclassUnbonding `json:"unbondings"`
 	Multipliers []struct {
 		Validator        string `json:"validator"`
 		Denom            string `json:"denom"`

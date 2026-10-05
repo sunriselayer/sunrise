@@ -261,7 +261,16 @@ type exportedLockup struct {
 }
 
 type shareclassExport struct {
-	Unbondings []shareclasstypes.Unbonding `json:"unbondings"`
+	Unbondings []exportedShareclassUnbonding `json:"unbondings"`
+}
+
+// exportedShareclassUnbonding accepts the upgrade export, which writes uint64 ids as strings.
+type exportedShareclassUnbonding struct {
+	ID               flexUint64 `json:"id"`
+	RecipientAddress string     `json:"recipient_address"`
+	DelegatorAddress string     `json:"delegator_address"`
+	ValidatorAddress string     `json:"validator_address"`
+	Amount           sdk.Coin   `json:"amount"`
 }
 
 type stakingExport struct {
